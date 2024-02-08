@@ -1,1 +1,1 @@
-# Rocket.Chat-Open-API
+# Rocket.Chat-OpenAPI
