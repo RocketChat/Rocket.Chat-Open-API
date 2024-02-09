@@ -1,13 +1,13 @@
 openapi: 3.0.0
 info:
-  version: ''
+  version: 1.0.0
   title: Authentication
-  description: Rocket.Chat Authentication
-  termsOfService: 'https://rocket.chat/'
-  contact:
-    name: Rocket.Chat
-    url: 'https://rocket.chat/'
-    email: contact@rocket.chat
+  description: |-
+    To securely interact with the Rocket.Chat API, authentication is required using your `username` and `password`. This  grants you the ability to make requests on the Rocket.Chat workspace as an authenticated user, ensuring the security of your interactions.
+
+    Upon successful authentication, the API responds with a JSON object containing an authentication token (`authToken`) and a unique user identifier (`userId`). The `authToken` is passed as `X-Auth-Token` header, while the `userId` as `X-User-Id` header when making  requests to protected endpoints that mandate authentication.
+
+    Additionally, the Rocket.Chat API provides alternative authentication methods through OAuth apps like Facebook, Google and Twitter.
 servers:
   - url: 'http://localhost:3000'
 paths:
@@ -17,6 +17,12 @@ paths:
         - Authentication
       summary: Login with Username and Password
       description: |-
+        -  Although none of the body parameters are required, it's mandatory to include  either the `user` AND `password`  or only the `resume` parameter.
+
+        - To authenticate a request, you need to pass the `userId` and `authToken` values from this JSON response object as Headers in the request. The `authToken` is passed as `X-Auth-Token` header, while the `userId` as `X-User-Id` header.
+
+        -  If LDAP authentication is enabled, you must maintain the login in the same way as you normally do. Similarly, if 2FA is enabled for an LDAP user, everything stays the same.
+          
         ### Changelog
         | Version      | Description | 
          | ---------------- | ------------|
@@ -25,11 +31,7 @@ paths:
          |0.60.0            | Added      |
       operationId: post-api-v1-login
       requestBody:
-        description: |- 
-          * Whilst none of the arguments are required in every request, every request requires some arguments to be provided. You must provide either `user` AND `password`, or provide `resume`.
-          * You will need to provide the `authToken` and `userId` for any of the authenticated methods.
-          * If your user has two-factor(2FA) authentication enabled, you must send a request like [this](https://developer.rocket.chat/reference/api/rest-api/endpoints/authentication-endpoints/rest-two-factor-authentication).
-          * If LDAP authentication is enabled, you must maintain the login in the same way as you normally do. Similarly, if 2FA is enabled for an LDAP user, everything stays the same."
+        description: ''
         content:
           application/json:
             schema:
@@ -47,10 +49,14 @@ paths:
                   type: string
                   description: Your previously issued `authToken`.
                   example: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq
+                code:
+                  type: string
+                  description: The 2FA code. It is required if your account has two-factor authentication enabled .
+                  example: 224610
             examples:
-              Example 1:
+              Example:
                 value:
-                  user: funke.olasupo@rocket.chat
+                  user: test@rocket.test
                   password: vanvica32
       responses:
         '200':
@@ -65,34 +71,16 @@ paths:
                   data:
                     type: object
                     properties:
-                      userId:
-                        type: string
                       authToken:
+                        type: string
+                      userId:
                         type: string
                       me:
                         type: object
                         properties:
                           _id:
                             type: string
-                          services:
-                            type: object
-                            properties:
-                              password:
-                                type: object
-                                properties:
-                                  bcrypt:
-                                    type: string
-                              email2fa:
-                                type: object
-                                properties:
-                                  enabled:
-                                    type: boolean
-                              totp:
-                                type: object
-                                properties:
-                                  enabled:
-                                    type: boolean
-                          username:
+                          name:
                             type: string
                           emails:
                             type: array
@@ -105,428 +93,70 @@ paths:
                                   type: boolean
                           status:
                             type: string
+                          statusConnection:
+                            type: string
+                          username:
+                            type: string
+                          utcOffset:
+                            type: integer
                           active:
                             type: boolean
-                          _updatedAt:
-                            type: string
                           roles:
                             type: array
                             items:
                               type: string
-                          name:
-                            type: string
                           settings:
                             type: object
                             properties:
-                              profile:
-                                type: object
                               preferences:
                                 type: object
-                                properties:
-                                  enableAutoAway:
-                                    type: boolean
-                                  idleTimeLimit:
-                                    type: integer
-                                  desktopNotificationRequireInteraction:
-                                    type: boolean
-                                  desktopNotifications:
-                                    type: string
-                                  pushNotifications:
-                                    type: string
-                                  unreadAlert:
-                                    type: boolean
-                                  useEmojis:
-                                    type: boolean
-                                  convertAsciiEmoji:
-                                    type: boolean
-                                  autoImageLoad:
-                                    type: boolean
-                                  saveMobileBandwidth:
-                                    type: boolean
-                                  collapseMediaByDefault:
-                                    type: boolean
-                                  hideUsernames:
-                                    type: boolean
-                                  hideRoles:
-                                    type: boolean
-                                  hideFlexTab:
-                                    type: boolean
-                                  displayAvatars:
-                                    type: boolean
-                                  sidebarGroupByType:
-                                    type: boolean
-                                  sidebarViewMode:
-                                    type: string
-                                  sidebarDisplayAvatar:
-                                    type: boolean
-                                  sidebarShowUnread:
-                                    type: boolean
-                                  sidebarSortby:
-                                    type: string
-                                  alsoSendThreadToChannel:
-                                    type: string
-                                  sidebarShowFavorites:
-                                    type: boolean
-                                  sendOnEnter:
-                                    type: string
-                                  emailNotificationMode:
-                                    type: string
-                                  newRoomNotification:
-                                    type: string
-                                  newMessageNotification:
-                                    type: string
-                                  muteFocusedConversations:
-                                    type: boolean
-                                  notificationsSoundVolume:
-                                    type: integer
-                                  themeAppearence:
-                                    type: string
-                                  omnichannelTranscriptEmail:
-                                    type: boolean
-                                  omnichannelTranscriptPDF:
-                                    type: boolean
-                                  showThreadsInMainChannel:
-                                    type: boolean
-                                  notifyCalendarEvents:
-                                    type: boolean
-                          statusConnection:
-                            type: string
-                          utcOffset:
-                            type: integer
-                          banners:
-                            type: object
-                            properties:
-                              versionUpdate-6_0_0:
-                                type: object
-                                properties:
-                                  id:
-                                    type: string
-                                  priority:
-                                    type: integer
-                                  title:
-                                    type: string
-                                  text:
-                                    type: string
-                                  textArguments:
-                                    type: array
-                                    items:
-                                      type: string
-                                  link:
-                                    type: string
-                                  modifiers:
-                                    type: array
-                                    items:
-                                      type: object
-                                  read:
-                                    type: boolean
-                              versionUpdate-6_0_1:
-                                type: object
-                                properties:
-                                  id:
-                                    type: string
-                                  priority:
-                                    type: integer
-                                  title:
-                                    type: string
-                                  text:
-                                    type: string
-                                  textArguments:
-                                    type: array
-                                    items:
-                                      type: string
-                                  link:
-                                    type: string
-                                  modifiers:
-                                    type: array
-                                    items:
-                                      type: object
-                                  read:
-                                    type: boolean
-                              versionUpdate-6_1_0:
-                                type: object
-                                properties:
-                                  id:
-                                    type: string
-                                  priority:
-                                    type: integer
-                                  title:
-                                    type: string
-                                  text:
-                                    type: string
-                                  textArguments:
-                                    type: array
-                                    items:
-                                      type: string
-                                  link:
-                                    type: string
-                                  modifiers:
-                                    type: array
-                                    items:
-                                      type: object
-                              versionUpdate-6_1_1:
-                                type: object
-                                properties:
-                                  id:
-                                    type: string
-                                  priority:
-                                    type: integer
-                                  title:
-                                    type: string
-                                  text:
-                                    type: string
-                                  textArguments:
-                                    type: array
-                                    items:
-                                      type: string
-                                  link:
-                                    type: string
-                                  modifiers:
-                                    type: array
-                                    items:
-                                      type: object
-                              versionUpdate-6_1_3:
-                                type: object
-                                properties:
-                                  id:
-                                    type: string
-                                  priority:
-                                    type: integer
-                                  title:
-                                    type: string
-                                  text:
-                                    type: string
-                                  textArguments:
-                                    type: array
-                                    items:
-                                      type: string
-                                  link:
-                                    type: string
-                                  modifiers:
-                                    type: array
-                                    items:
-                                      type: object
-                              versionUpdate-6_1_4:
-                                type: object
-                                properties:
-                                  id:
-                                    type: string
-                                  priority:
-                                    type: integer
-                                  title:
-                                    type: string
-                                  text:
-                                    type: string
-                                  textArguments:
-                                    type: array
-                                    items:
-                                      type: string
-                                  link:
-                                    type: string
-                                  modifiers:
-                                    type: array
-                                    items:
-                                      type: object
-                              versionUpdate-6_1_5:
-                                type: object
-                                properties:
-                                  id:
-                                    type: string
-                                  priority:
-                                    type: integer
-                                  title:
-                                    type: string
-                                  text:
-                                    type: string
-                                  textArguments:
-                                    type: array
-                                    items:
-                                      type: string
-                                  link:
-                                    type: string
-                                  modifiers:
-                                    type: array
-                                    items:
-                                      type: object
-                              versionUpdate-6_1_6:
-                                type: object
-                                properties:
-                                  id:
-                                    type: string
-                                  priority:
-                                    type: integer
-                                  title:
-                                    type: string
-                                  text:
-                                    type: string
-                                  textArguments:
-                                    type: array
-                                    items:
-                                      type: string
-                                  link:
-                                    type: string
-                                  modifiers:
-                                    type: array
-                                    items:
-                                      type: object
-                              versionUpdate-6_1_7:
-                                type: object
-                                properties:
-                                  id:
-                                    type: string
-                                  priority:
-                                    type: integer
-                                  title:
-                                    type: string
-                                  text:
-                                    type: string
-                                  textArguments:
-                                    type: array
-                                    items:
-                                      type: string
-                                  link:
-                                    type: string
-                                  modifiers:
-                                    type: array
-                                    items:
-                                      type: object
-                              versionUpdate-6_2_2:
-                                type: object
-                                properties:
-                                  id:
-                                    type: string
-                                  priority:
-                                    type: integer
-                                  title:
-                                    type: string
-                                  text:
-                                    type: string
-                                  textArguments:
-                                    type: array
-                                    items:
-                                      type: string
-                                  link:
-                                    type: string
-                                  modifiers:
-                                    type: array
-                                    items:
-                                      type: object
-                              versionUpdate-6_2_3:
-                                type: object
-                                properties:
-                                  id:
-                                    type: string
-                                  priority:
-                                    type: integer
-                                  title:
-                                    type: string
-                                  text:
-                                    type: string
-                                  textArguments:
-                                    type: array
-                                    items:
-                                      type: string
-                                  link:
-                                    type: string
-                                  modifiers:
-                                    type: array
-                                    items:
-                                      type: object
-                              versionUpdate-6_2_4:
-                                type: object
-                                properties:
-                                  id:
-                                    type: string
-                                  priority:
-                                    type: integer
-                                  title:
-                                    type: string
-                                  text:
-                                    type: string
-                                  textArguments:
-                                    type: array
-                                    items:
-                                      type: string
-                                  link:
-                                    type: string
-                                  modifiers:
-                                    type: array
-                                    items:
-                                      type: object
-                              versionUpdate-6_2_5:
-                                type: object
-                                properties:
-                                  id:
-                                    type: string
-                                  priority:
-                                    type: integer
-                                  title:
-                                    type: string
-                                  text:
-                                    type: string
-                                  textArguments:
-                                    type: array
-                                    items:
-                                      type: string
-                                  link:
-                                    type: string
-                                  modifiers:
-                                    type: array
-                                    items:
-                                      type: object
-                              versionUpdate-6_2_6:
-                                type: object
-                                properties:
-                                  id:
-                                    type: string
-                                  priority:
-                                    type: integer
-                                  title:
-                                    type: string
-                                  text:
-                                    type: string
-                                  textArguments:
-                                    type: array
-                                    items:
-                                      type: string
-                                  link:
-                                    type: string
-                                  modifiers:
-                                    type: array
-                                    items:
-                                      type: object
-                              versionUpdate-6_2_8:
-                                type: object
-                                properties:
-                                  id:
-                                    type: string
-                                  priority:
-                                    type: integer
-                                  title:
-                                    type: string
-                                  text:
-                                    type: string
-                                  textArguments:
-                                    type: array
-                                    items:
-                                      type: string
-                                  link:
-                                    type: string
-                                  modifiers:
-                                    type: array
-                                    items:
-                                      type: object
-                          statusDefault:
-                            type: string
-                          statusText:
-                            type: string
-                          statusLivechat:
-                            type: string
-                          requirePasswordChange:
-                            type: boolean
-                          email:
-                            type: string
                           avatarUrl:
                             type: string
+                x-examples:
+                  Example 1:
+                    status: success
+                    data:
+                      authToken: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq
+                      userId: aobEdbYhXfu5hkeqG
+                      me:
+                        _id: aYjNnig8BEAWeQzMh
+                        name: Rocket Cat
+                        emails:
+                          - address: rocket.cat@rocket.chat
+                            verified: false
+                        status: offline
+                        statusConnection: offline
+                        username: rocket.cat
+                        utcOffset: -3
+                        active: true
+                        roles:
+                          - admin
+                        settings:
+                          preferences: {}
+                        avatarUrl: 'http://localhost:3000/avatar/test'
+              examples:
+                Example:
+                  value:
+                    status: success
+                    data:
+                      authToken: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq
+                      userId: aobEdbYhXfu5hkeqG
+                      me:
+                        _id: aYjNnig8BEAWeQzMh
+                        name: Rocket Cat
+                        emails:
+                          - address: rocket.cat@rocket.chat
+                            verified: false
+                        status: offline
+                        statusConnection: offline
+                        username: rocket.cat
+                        utcOffset: -3
+                        active: true
+                        roles:
+                          - admin
+                        settings:
+                          preferences: {}
+                        avatarUrl: 'http://localhost:3000/avatar/test'
       servers:
         - url: 'http://localhost:3000'
   /api/v1/login - with Facebook:
@@ -1081,9 +711,9 @@ paths:
             type: string
       responses:
         '200':
-          description: |- 
+          description: |-
             OK 
-            
+
             The `customFields` parameter won't be returned if it doesn't exist on the workspace.
           content:
             application/json:
@@ -1293,5 +923,194 @@ paths:
                     success: true
       servers:
         - url: 'http://localhost:3000'
+  /api/v1/users.2fa.enableEmail:
+    post:
+      tags:
+        - Two-Factor Authentication
+      summary: Enable 2FA via Email
+      description: This endpoint only works if the user has at least one verified email.
+      operationId: post-api-v1-users.2fa.enableEmail
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/users.2fa.sendEmailCode:
+    post:
+      tags:
+        - Two-Factor Authentication
+      summary: Request a new Email Code
+      description: Request a two-factor authentication code by email
+      operationId: post-api-v1-users.2fa.sendEmailCode
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                emailOrUsername:
+                  type: string
+                  description: The email or username of the user.
+              required:
+                - emailOrUsername
+              x-examples:
+                Example 1:
+                  emailOrUsername: test-funke
+            examples:
+              Example:
+                value:
+                  emailOrUsername: test-funke
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                x-examples:
+                  Example 1:
+                    success: false
+                    error: 'emailOrUsername is required [error-parameter-required]'
+                    errorType: error-parameter-required
+              examples:
+                Example:
+                  value:
+                    success: false
+                    error: 'emailOrUsername is required [error-parameter-required]'
+                    errorType: error-parameter-required
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/users.2fa.disableEmail:
+    post:
+      tags:
+        - Two-Factor Authentication
+      summary: Disable 2FA via Email
+      description: ''
+      operationId: post-api-v1-users.2fa.disableEmail
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - name: X-2fa-Code
+          in: header
+          description: 'The 2FA code. '
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: |- 
+            TOTP Required 
+            
+            The 2FA code is passed as the `X-2fa-Code` query parameter.
+            
+            It's important to note the **required TOTP method** returned from the response.
+            
+            - If it's `password`, add the hashed password of the user as the `X-2fa-Code` query parameter. 
+            - If it's `email`, add the 2FA code sent via email as the `X-2fa-Code` query parameter.
+            - If it's `totp`, add the code from your authenticator app as the `X-2fa-Code` query parameter.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+                      codeGenerated:
+                        type: boolean
+                      availableMethods:
+                        type: array
+                        items:
+                          type: object
+                example:
+                    success: false
+                    error: 'TOTP Required [totp-required]'
+                    errorType: totp-required
+                    details:
+                      method: password
+                      codeGenerated: false
+                      availableMethods: []
+      servers:
+        - url: 'http://localhost:3000'
 tags:
   - name: Authentication
+  - name: Two-Factor Authentication
+components:
+  parameters:
+    Auth-Token:
+      name: X-Auth-Token
+      in: header
+      description: The `authToken` of the authenticated user.
+      required: true
+      schema:
+        type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+    UserId:
+      name: X-User-Id
+      in: header
+      description: The `userId` of the authenticated user.
+      required: true
+      schema:
+        type: string
+        example: rbAXPnMktTFbNpwtJ
+  responses:
+    trueSuccess:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+            x-examples:
+              Example 1:
+                success: true
+          examples:
+            Success:
+              value:
+                success: true
+    authorizationError:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              message:
+                type: string
+            x-examples:
+              Example 1:
+                status: error
+                message: You must be logged in to do this.
+          examples:
+            Authorization Error:
+              value:
+                status: error
+                message: You must be logged in to do this.
