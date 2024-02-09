@@ -83,7 +83,7 @@ paths:
     post:
       summary: Update permissions
       description: |-
-        Edits permissions on the workspace.
+        Update the permissions on the workspace.
         Permission required: `access-permissions`
         ### Changelog
         | Version      | Description |
