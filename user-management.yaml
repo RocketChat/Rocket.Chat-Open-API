@@ -1,14 +1,13 @@
 openapi: 3.0.0
 info:
-  version: ''
+  version: 1.0.0
   title: User Management
-  contact:
-    name: Rocket.Chat
-    url: 'https://rocket.chat/'
-    email: contact@rocket.chat
-  license:
-    url: 'https://rocket.chat/'
-    name: Apache2.0
+  description: |-
+    User management in Rocket.Chat includes the following:
+      * **Users**: Manage users, preferences, and tokens.
+      * **Permissions**: Manage user permissions and access.
+      * **Roles**: Assign and manage user roles.
+      * **LDAP**: Test and sync LDAP connection.
 servers:
   - url: 'http://localhost:3000'
 paths:
@@ -2536,12 +2535,11 @@ paths:
                     type: string
                   errorType:
                     type: string
-                    errorType: invalid-params
               examples:
                 Example 1:
                   value:
                     success: false
-                    error: >-
+                    error: |-
                       must have required property 'activeStatus'
                       [invalid-params]
                     errorType: invalid-params
