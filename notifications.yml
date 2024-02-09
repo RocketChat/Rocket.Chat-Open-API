@@ -1,0 +1,637 @@
+openapi: 3.0.0
+info:
+  version: ''
+  title: Notifications
+  description: ''
+  termsOfService: 'https://rocket.chat/'
+  contact:
+    name: Rocket.Chat
+    url: 'https://rocket.chat/'
+    email: contact@rocket.chat
+  license:
+    url: 'https://rocket.chat/'
+    name: Apache2.0
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  '/api/v1/banners/{id}':
+    parameters:
+      - schema:
+          type: string
+          example: ByehQjC44FwMeiLbX
+        name: id
+        in: path
+        required: true
+        description: The banner ID.
+    get:
+      summary: Get Banner by ID
+      tags:
+        - Banners
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  banners:
+                    type: array
+                    items:
+                      type: object
+                      properties: {}
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    banners: []
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'Match error: Missing key ''platform'''
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-banners-id
+      description: Gets the banner to be shown to the authenticated user.
+      parameters:
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/X-User-Id'
+        - schema:
+            type: string
+            example: web
+          in: query
+          name: platform
+          description: The platform rendering the banner.
+          required: true
+  /api/v1/banners:
+    parameters: []
+    get:
+      summary: Get Banners
+      operationId: get-api-v1-banners
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  banners:
+                    type: array
+                    items:
+                      type: object
+                      properties: {}
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    banners: []
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'Match error: Missing key ''platform'''
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      description: Gets the banners to be shown to the authenticated user.
+      parameters:
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/X-User-Id'
+        - schema:
+            type: string
+            example: web
+          in: query
+          name: platform
+          description: The platform rendering the banner
+          required: true
+      tags:
+        - Banners
+  /api/v1/banners.dismiss:
+    parameters: []
+    post:
+      summary: Dismiss a Banner
+      operationId: post-api-v1-banners.dismiss
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'Match error: Missing key ''bannerId'''
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      parameters:
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/X-User-Id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bannerId:
+                  type: string
+                  description: The banner ID that you want to dismiss.
+                  example: ByehQjC44FwMeiLbX
+              required:
+                - bannerId
+            examples:
+              Example 1:
+                value:
+                  bannerId: ByehQjC44FwMeiLbX
+      tags:
+        - Banners
+  /api/v1/push.get:
+    parameters: []
+    get:
+      summary: Get Push Notification
+      operationId: get-api-v1-push.get
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          rid:
+                            type: string
+                          msg:
+                            type: string
+                          ts:
+                            type: string
+                          u:
+                            type: object
+                            properties:
+                              _id:
+                                type: string
+                              username:
+                                type: string
+                              name:
+                                type: string
+                          urls:
+                            type: array
+                            items:
+                              type: object
+                              properties: {}
+                          mentions:
+                            type: array
+                            items:
+                              type: object
+                              properties: {}
+                          channels:
+                            type: array
+                            items:
+                              type: object
+                              properties: {}
+                          md:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                type:
+                                  type: string
+                                value:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      type:
+                                        type: string
+                                      value:
+                                        type: string
+                          _updatedAt:
+                            type: string
+                      notification:
+                        type: object
+                        properties:
+                          from:
+                            type: string
+                          badge:
+                            type: integer
+                          sound:
+                            type: string
+                          priority:
+                            type: integer
+                          title:
+                            type: string
+                          text:
+                            type: string
+                          payload:
+                            type: object
+                            properties:
+                              host:
+                                type: string
+                              messageId:
+                                type: string
+                              notificationType:
+                                type: string
+                              rid:
+                                type: string
+                              sender:
+                                type: object
+                                properties:
+                                  _id:
+                                    type: string
+                                  username:
+                                    type: string
+                                  name:
+                                    type: string
+                              senderName:
+                                type: string
+                              type:
+                                type: string
+                              name:
+                                type: string
+                          userId:
+                            type: string
+                          notId:
+                            type: integer
+                          gcm:
+                            type: object
+                            properties:
+                              style:
+                                type: string
+                              image:
+                                type: string
+                          apn:
+                            type: object
+                            properties:
+                              category:
+                                type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    data:
+                      message:
+                        _id: WkbwSntxt8D3jLp8G
+                        rid: iu7jtPAhvEeAS5tNq
+                        msg: fsfs
+                        ts: '2021-10-22T14:29:23.581Z'
+                        u:
+                          _id: d26x6zSkaPSe5gCyy
+                          username: rodriq
+                          name: Rodriq
+                        urls: []
+                        mentions: []
+                        channels: []
+                        md:
+                          - type: PARAGRAPH
+                            value:
+                              - type: PLAIN_TEXT
+                                value: fsfs
+                        _updatedAt: '2021-10-22T14:29:23.603Z'
+                      notification:
+                        from: push
+                        badge: 2
+                        sound: default
+                        priority: 10
+                        title: '#vb'
+                        text: 'rodriq: fsfs'
+                        payload:
+                          host: 'http://localhost:3000/'
+                          messageId: WkbwSntxt8D3jLp8G
+                          notificationType: message
+                          rid: iu7jtPAhvEeAS5tNq
+                          sender:
+                            _id: d26x6zSkaPSe5gCyy
+                            username: rodriq
+                            name: Rodriq
+                          senderName: rodriq
+                          type: c
+                          name: vb
+                        userId: d26x6zSkaPSe5gCyy
+                        notId: 654494840
+                        gcm:
+                          style: inbox
+                          image: 'http://localhost:3000/images/logo/android-chrome-192x192.png'
+                        apn:
+                          category: MESSAGE
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'Match error: Missing key ''id'''
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      description: |-
+        Get push notification for a message.
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |3.5.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/X-User-Id'
+        - schema:
+            type: string
+            example: WkbwSntxt8D3jLp8G
+          in: query
+          name: id
+          description: The message ID.
+          required: true
+      tags:
+        - Push Token
+  /api/v1/push.token:
+    parameters: []
+    delete:
+      summary: Delete Push Token
+      operationId: delete-api-v1-push.token
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The required "token" body param is missing or invalid. [error-token-param-not-valid]'
+                    errorType: error-token-param-not-valid
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      description: |-
+        Removes push token from the workspace.
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |0.60.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/X-User-Id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+            examples:
+              Example 1:
+                value:
+                  token: abc
+      tags:
+        - Push Token
+    post:
+      summary: Create Push Token
+      operationId: post-api-v1-push.token
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: object
+                    properties:
+                      token:
+                        type: object
+                        properties:
+                          gcm:
+                            type: string
+                      appName:
+                        type: string
+                      userId:
+                        type: string
+                      enabled:
+                        type: boolean
+                      createdAt:
+                        type: string
+                      updatedAt:
+                        type: string
+                      _id:
+                        type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    result:
+                      token:
+                        gcm: TOKEN
+                      appName: RocketAPP
+                      userId: 52d5Rw8LT3TeDa59Z
+                      enabled: true
+                      createdAt: '2018-09-11T18:22:55.006Z'
+                      updatedAt: '2018-09-11T18:22:55.006Z'
+                      _id: DMMjKG2hFoLvM2hk7
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The required "type" body param is missing or invalid. [error-type-param-not-valid]'
+                    errorType: error-type-param-not-valid
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      tags:
+        - Push Token
+      parameters:
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/X-User-Id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              x-examples:
+                Example 1:
+                  type: gcm
+                  value: TOKEN
+                  appName: MyApp
+              properties:
+                type:
+                  type: string
+                  description: The possible values are `apn` or `gcm`.
+                value:
+                  type: string
+                  description: The token value.
+                appName:
+                  type: string
+                  description: The name of the application to associate the token with
+              required:
+                - type
+                - value
+                - appName
+            examples:
+              Example 1:
+                value:
+                  type: gcm
+                  value: TOKEN
+                  appName: MyApp
+      description: |-
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |0.60.0            | Added       |
+components:
+  parameters:
+    X-Auth-Token:
+      name: X-Auth-Token
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq
+      description: The authorization token of the user.
+    X-User-Id:
+      name: X-User-Id
+      in: header
+      required: true
+      schema:
+        type: string
+        example: aobEdbYhXfu5hkeqG
+      description: The user ID of the user.
+    offset:
+      name: offset
+      in: query
+      required: false
+      schema:
+        type: integer
+        example: 50
+      description: 'Number of items to "skip" in the query, i.e. requests return count items, skipping the first offset items.'
+    count:
+      name: count
+      in: query
+      required: false
+      schema:
+        type: integer
+        example: 50
+      description: The number of items to return.
+    sort:
+      name: sort
+      in: query
+      required: false
+      schema: {}
+      description: 'List of fields to order by, and in which direction. This is a JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending. For example, {"value": -1, "_id": 1}'
+    query:
+      name: query
+      in: query
+      required: false
+      schema: {}
+      description: 'This parameter allows you to use MongoDB query operators to search for specific data. For example, to query users with a name that contains the letter "g": query={ "name": { "$regex": "g" } }'
+    fields:
+      name: fields
+      in: query
+      required: false
+      schema:
+        type: string
+      description: 'This parameter accepts a JSON object with properties that have a value of 1 or 0 to include or exclude them in the response. For example, to only retrieve the usernames of users: fields={ "username": 1 }'
+  responses:
+    authorizationError:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              message:
+                type: string
+          examples:
+            Authorization Error:
+              value:
+                status: error
+                message: You must be logged in to do this.
+    trueSuccess:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+          examples:
+            Example 1:
+              value:
+                success: true
