@@ -4,10 +4,10 @@ info:
   title: User Management
   description: |-
     User management in Rocket.Chat includes the following:
-      * **Users**: Manage users, preferences, and tokens.
-      * **Permissions**: Manage user permissions and access.
-      * **Roles**: Assign and manage user roles.
-      * **LDAP**: Test and sync LDAP connection.
+      * **Users**: Manage [users](https://docs.rocket.chat/use-rocket.chat/workspace-administration/users), preferences, and tokens.
+      * **Permissions**: Manage user [permissions](https://docs.rocket.chat/use-rocket.chat/workspace-administration/permissions) and access.
+      * **Roles**: Assign and manage user [roles](https://docs.rocket.chat/use-rocket.chat/workspace-administration/permissions#roles).
+      * **LDAP**: Test and sync [LDAP](https://docs.rocket.chat/use-rocket.chat/authentication/ldap) connection.
 servers:
   - url: 'http://localhost:3000'
 paths:
@@ -119,9 +119,6 @@ paths:
                     - _id: access-permissions
                       roles:
                         - admin
-          multipart/form-data:
-            schema:
-              type: object
         description: ''
       responses:
         '200':
@@ -142,17 +139,6 @@ paths:
                           type: array
                           items:
                             type: string
-                        _updatedAt:
-                          type: string
-                        meta:
-                          type: object
-                          properties:
-                            revision:
-                              type: integer
-                            created:
-                              type: integer
-                            version:
-                              type: integer
                   success:
                     type: boolean
               examples:
@@ -162,13 +148,6 @@ paths:
                       - _id: access-permissions
                         roles:
                           - admin
-                        _updatedAt: '2018-01-25T13:03:20.879Z'
-                        meta:
-                          revision: 0
-                          created: 1516980515815
-                          version: 0
-                        $loki: 1
-                      - ...: null
                     success: true
         '400':
           description: Bad Request
