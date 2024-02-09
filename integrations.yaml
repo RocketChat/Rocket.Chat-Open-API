@@ -1,0 +1,1524 @@
+openapi: 3.0.0
+info:
+  version: ''
+  title: Integrations
+  contact:
+    name: Rocket.Chat
+    url: 'https://rocket.chat/'
+    email: contact@rocket.chat
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  /api/v1/integrations.create:
+    post:
+      tags:
+        - Integration
+      summary: Create Integration
+      description: |- 
+        Creates an integration, if the callee has the permissions.
+        
+        Permissions required to create incoming integrations:
+        * `manage-incoming-integrations`
+        * `manage-own-incoming-integrations`
+        
+        Permissions required to create outgoing integrations:
+        * `manage-outgoing-integrations`
+        * `manage-own-outgoing-integrations`
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |1.1.0            | Separate permissions in incoming and outgoing.       |
+        |0.49.0            | Added       |
+      operationId: post-api-v1-integrations-create
+      parameters:
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/X-User-Id'
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  description: "The type of integration to create. The possible values are:\r\n* `webhook-incoming`\r\n* `webhook-outgoing`"
+                username:
+                  type: string
+                  description: The username to post this the messages as.
+                channel:
+                  type: string
+                  description: 'The channel, group, or @username. The value can also be `all_public_channels`, `all_private_groups`, or `all_direct_messages`. Comma separated for more than one.'
+                  example: '#general'
+                scriptEnabled:
+                  type: boolean
+                  description: Whether the script should be enabled.
+                script:
+                  type: string
+                  description: The script that is triggered when this integration is triggered.
+                name:
+                  type: string
+                  description: The name of the integration.
+                enabled:
+                  type: boolean
+                  description: Whether this integration should be enabled or not.
+                alias:
+                  type: string
+                  description: The alias which should be applied to messages when this integration is processed.
+                avatar:
+                  type: string
+                  description: 'The logo to apply to the messages that this integration sends. For example, http://res.guggy.com/logo_128.png'
+                emoji:
+                  type: string
+                  description: The emoji which should be displayed as the avatar for messages from this integration.
+                  example: ':ghost:'
+                event:
+                  type: string
+                  description: |-
+                    **Required for outgoing integrations.**
+                    
+                    The type of event can be any of the following: 
+                    * `sendMessage`
+                    * `fileUploaded`
+                    * `roomArchived`
+                    * `roomCreated`
+                    * `roomJoined`
+                    * `roomLeft`
+                    * `userCreated`
+                urls:
+                  type: array
+                  description: |-
+                    **Required for outgoing integrations.**
+                    
+                    The urls to call whenever this integration is triggered.
+                  items:
+                    type: string
+                triggerWords:
+                  type: string
+                  description: |-
+                    This is an outgoing integration parameter.
+                    Specific words, separated by commas, which should trigger this integration.
+                token:
+                  type: string
+                  description: |-
+                    This is an outgoing integration parameter.
+                    If your integration requires a special token from the server (api key), use this.
+              required:
+                - type
+                - username
+                - channel
+                - scriptEnabled
+                - name
+                - enabled
+                - event
+                - urls
+              x-examples:
+                Example 1:
+                  type: webhook-incoming
+                  username: rocket.cat
+                  channel: '#general'
+                  scriptEnabled: false
+            examples:
+              Incoming integration example:
+                value:
+                  type: webhook-incoming
+                  username: test.cat
+                  channel: '#general'
+                  scriptEnabled: true
+                  name: test.cat
+                  enabled: true
+              Outgoing integration example:
+                value:
+                  type: webhook-outgoing
+                  username: test.cat
+                  channel: '#general'
+                  scriptEnabled: true
+                  name: test.cat
+                  enabled: true
+                  event: sendMessage
+                  urls:
+                    - 'https://text2gif.guggy.com/guggify'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  integration:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                      username:
+                        type: string
+                      channel:
+                        type: array
+                        items:
+                          type: string
+                      scriptEnabled:
+                        type: boolean
+                      name:
+                        type: string
+                      enabled:
+                        type: boolean
+                      scriptEngine:
+                        type: string
+                      overrideDestinationChannelEnabled:
+                        type: boolean
+                      token:
+                        type: string
+                      userId:
+                        type: string
+                      _createdAt:
+                        type: string
+                      _createdBy:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          username:
+                            type: string
+                      _id:
+                        type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    integration:
+                      type: webhook-incoming
+                      username: test.cat
+                      channel:
+                        - '#exo'
+                      scriptEnabled: true
+                      name: test.cat
+                      enabled: true
+                      scriptEngine: isolated-vm
+                      overrideDestinationChannelEnabled: false
+                      token: XuHp73MccmCvJ9m3fKdQK6HKW9tjhBcbTKKHCSSLsv7qn4fk
+                      userId: CkCPNcvsvCDfmWLqC
+                      _createdAt: '2024-01-10T14:12:07.739Z'
+                      _createdBy:
+                        _id: CkCPNcvsvCDfmWLqC
+                        username: test.cat
+                      _id: 659ea5b72dd9f928ada3e43e
+                    success: true
+              examples:
+                Incoming integration example:
+                  value:
+                    integration:
+                      type: webhook-incoming
+                      username: test.cat
+                      channel:
+                        - '#general'
+                      scriptEnabled: true
+                      name: test.cat
+                      enabled: true
+                      scriptEngine: isolated-vm
+                      overrideDestinationChannelEnabled: false
+                      token: XuHp73MccmCvJ9m3fKdQK6HKW9tjhBcbTKKHCSSLsv7qn4fk
+                      userId: CkCPNcvsvCDfmWLqC
+                      _createdAt: '2024-01-10T14:12:07.739Z'
+                      _createdBy:
+                        _id: CkCPNcvsvCDfmWLqC
+                        username: test.cat
+                      _id: 659ea5b72dd9f928ada3e43e
+                    success: true
+                Outgoing integration example:
+                  value:
+                    integration:
+                      type: webhook-outgoing
+                      username: test.cat
+                      channel:
+                        - '#general'
+                      scriptEnabled: true
+                      name: test.cat
+                      enabled: true
+                      event: sendMessage
+                      urls:
+                        - 'https://text2gif.guggy.com/guggify'
+                      scriptEngine: isolated-vm
+                      userId: CkCPNcvsvCDfmWLqC
+                      _createdAt: '2024-01-10T14:12:52.201Z'
+                      _createdBy:
+                        _id: CkCPNcvsvCDfmWLqC
+                        username: test.cat
+                      _id: 659ea5e42dd9f928ada3e451
+                    success: true
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/integrations.get:
+    get:
+      tags:
+        - Integration
+      summary: Get Integration
+      description: |- 
+        Get integration information.
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |2.4.0            | Added       |
+      operationId: get-api-v1-integrations-get
+      parameters:
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/X-User-Id'
+        - name: integrationId
+          in: query
+          description: The integration ID.
+          required: true
+          schema:
+            type: string
+        - name: createdBy
+          in: query
+          description: The user ID who created the integration.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  integration:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      type:
+                        type: string
+                      username:
+                        type: string
+                      channel:
+                        type: array
+                        items:
+                          type: string
+                      scriptEnabled:
+                        type: boolean
+                      name:
+                        type: string
+                      enabled:
+                        type: boolean
+                      event:
+                        type: string
+                      urls:
+                        type: array
+                        items:
+                          type: string
+                      scriptEngine:
+                        type: string
+                      userId:
+                        type: string
+                      _createdAt:
+                        type: string
+                      _createdBy:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          username:
+                            type: string
+                      _updatedAt:
+                        type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    integration:
+                      _id: 659ea5e42dd9f928ada3e451
+                      type: webhook-outgoing
+                      username: test.cat
+                      channel:
+                        - '#exo'
+                      scriptEnabled: true
+                      name: test.cat
+                      enabled: true
+                      event: sendMessage
+                      urls:
+                        - 'https://text2gif.guggy.com/guggify'
+                      scriptEngine: isolated-vm
+                      userId: CkCPNcvsvCDfmWLqC
+                      _createdAt: '2024-01-10T14:12:52.201Z'
+                      _createdBy:
+                        _id: CkCPNcvsvCDfmWLqC
+                        username: test.cat
+                      _updatedAt: '2024-01-10T14:12:52.203Z'
+                    success: true
+              examples:
+                Success Example:
+                  value:
+                    integration:
+                      _id: 659ea5e42dd9f928ada3e451
+                      type: webhook-outgoing
+                      username: test.cat
+                      channel:
+                        - '#general'
+                      scriptEnabled: true
+                      name: test.cat
+                      enabled: true
+                      event: sendMessage
+                      urls:
+                        - 'https://text2gif.guggy.com/guggify'
+                      scriptEngine: isolated-vm
+                      userId: CkCPNcvsvCDfmWLqC
+                      _createdAt: '2024-01-10T14:12:52.201Z'
+                      _createdBy:
+                        _id: CkCPNcvsvCDfmWLqC
+                        username: test.cat
+                      _updatedAt: '2024-01-10T14:12:52.203Z'
+                    success: true
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/integrations.history:
+    get:
+      tags:
+        - Integration
+      summary: Get Integration History
+      description: |-
+        Permissions required:
+        * `manage-outgoing-integrations`
+        * `manage-own-outgoing-integrations`
+        
+        The endpoint returns the integration history based on user permissions.
+        ### Changelog
+        |Version      | Description | 
+        | ---------------- | ------------|
+        |1.1.0            | Separate permissions in incoming and outgoing.       |
+        |0.53.0            | Added       |
+      operationId: get-api-v1-integrations-history
+      parameters:
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/X-User-Id'
+        - name: id
+          in: query
+          description: The integration ID.
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/query'
+        - $ref: '#/components/parameters/fields'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  history:
+                    type: array
+                    items:
+                      type: object
+                  offset:
+                    type: integer
+                  items:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    history: []
+                    offset: 0
+                    items: 0
+                    total: 0
+                    success: true
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/integrations.list:
+    get:
+      tags:
+        - Integration
+      summary: Get List of Integrations
+      description: |-
+        Permissions required:
+        * `manage-incoming-integrations`
+        * `manage-own-incoming-integrations`
+        * `manage-outgoing-integrations`
+        * `manage-own-outgoing-integrations`
+        
+        The endpoint returns the integrations based on user permissions.
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        |1.1.0            | Separate permissions in incoming and outgoing.       |
+        |0.49.0            | Added       |
+      operationId: get-api-v1-integrations-list
+      parameters:
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/query'
+        - $ref: '#/components/parameters/fields'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  integrations:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        enabled:
+                          type: boolean
+                        username:
+                          type: string
+                        alias:
+                          type: string
+                        avatar:
+                          type: string
+                        name:
+                          type: string
+                        triggerWords:
+                          type: array
+                          items:
+                            type: string
+                        urls:
+                          type: array
+                          items:
+                            type: string
+                        token:
+                          type: string
+                        script:
+                          type: string
+                        scriptEnabled:
+                          type: boolean
+                        impersonateUser:
+                          type: boolean
+                        scriptCompiled:
+                          type: string
+                        scriptError:
+                          type: string
+                        type:
+                          type: string
+                        userId:
+                          type: string
+                        channel:
+                          type: array
+                          items:
+                            type: object
+                        _createdAt:
+                          type: string
+                        _createdBy:
+                          type: object
+                          properties:
+                            username:
+                              type: string
+                            _id:
+                              type: string
+                        _updatedAt:
+                          type: string
+                  offset:
+                    type: integer
+                  items:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    integrations:
+                      - _id: WMQDChpnYTRmFre9h
+                        enabled: true
+                        username: rocket.cat
+                        alias: Guggy
+                        avatar: 'https://image.crisp.im/avatar/website/17651a90-e082-43f6-b308-957cea6e323c/128'
+                        name: Guggy
+                        triggerWords:
+                          - '!guggy'
+                          - guggy
+                          - gif+
+                        urls:
+                          - 'http://text2gif.guggy.com/guggify'
+                        token: aobEdbYhXfu5hkeqG
+                        script: ...
+                        scriptEnabled: true
+                        impersonateUser: false
+                        scriptCompiled: ...
+                        scriptError: null
+                        type: webhook-outgoing
+                        userId: rocket.cat
+                        channel: []
+                        _createdAt: '2017-01-05T17:06:05.660Z'
+                        _createdBy:
+                          username: graywolf336
+                          _id: R4jgcQaQhvvK6K3iY
+                        _updatedAt: '2017-01-05T17:06:05.660Z'
+                      - _id: 3aazpZ2WzoBP8msi9
+                        type: webhook-outgoing
+                        name: Testing via REST API
+                        enabled: false
+                        username: rocket.cat
+                        urls:
+                          - 'http://text2gif.guggy.com/guggify'
+                        scriptEnabled: false
+                        userId: rocket.cat
+                        channel: []
+                        _createdAt: '2017-01-06T13:23:46.018Z'
+                        _createdBy:
+                          username: graywolf336
+                          _id: R4jgcQaQhvvK6K3iY
+                        _updatedAt: '2017-01-06T13:23:46.018Z'
+                    offset: 0
+                    items: 2
+                    total: 2
+                    success: true
+              examples:
+                Success Example:
+                  value:
+                    integrations:
+                      - _id: WMQDChpnYTRmFre9h
+                        enabled: true
+                        username: rocket.cat
+                        alias: Guggy
+                        avatar: 'https://image.crisp.im/avatar/website/17651a90-e082-43f6-b308-957cea6e323c/128'
+                        name: Guggy
+                        triggerWords:
+                          - '!guggy'
+                          - guggy
+                          - gif+
+                        urls:
+                          - 'http://text2gif.guggy.com/guggify'
+                        token: aobEdbYhXfu5hkeqG
+                        script: ...
+                        scriptEnabled: true
+                        impersonateUser: false
+                        scriptCompiled: ...
+                        scriptError: null
+                        type: webhook-outgoing
+                        userId: rocket.cat
+                        channel: []
+                        _createdAt: '2017-01-05T17:06:05.660Z'
+                        _createdBy:
+                          username: graywolf336
+                          _id: R4jgcQaQhvvK6K3iY
+                        _updatedAt: '2017-01-05T17:06:05.660Z'
+                      - _id: 3aazpZ2WzoBP8msi9
+                        type: webhook-outgoing
+                        name: Testing via REST API
+                        enabled: false
+                        username: rocket.cat
+                        urls:
+                          - 'http://text2gif.guggy.com/guggify'
+                        scriptEnabled: false
+                        userId: rocket.cat
+                        channel: []
+                        _createdAt: '2017-01-06T13:23:46.018Z'
+                        _createdBy:
+                          username: graywolf336
+                          _id: R4jgcQaQhvvK6K3iY
+                        _updatedAt: '2017-01-06T13:23:46.018Z'
+                    offset: 0
+                    items: 2
+                    total: 2
+                    success: true
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/integrations.update:
+    put:
+      tags:
+        - Integration
+      summary: Update Integration
+      description: |-
+        Update an existing integration.
+        
+        Permissions required:
+        * `manage-incoming-integrations`
+        * `manage-own-incoming-integrations`
+        * `manage-outgoing-integrations`
+        * `manage-own-outgoing-integrations`
+        
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        |3.4.0            | Added       |
+      operationId: put-api-v1-integrations.update
+      parameters:
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/X-User-Id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  description: "The type of integration. The possible values are:\r\n* `webhook-outgoing`\r\n* `webhook-incoming`"
+                name:
+                  type: string
+                  description: The name of the integration.
+                enabled:
+                  type: boolean
+                  description: Whether this integration should be enabled or not.
+                username:
+                  type: string
+                  description: The username to post this the messages as.
+                scriptEnabled:
+                  type: boolean
+                  description: Whether the script should be enabled.
+                channel:
+                  type: string
+                  description: 'The channel, group, or @username. The values can also be `all_public_channels`, `all_private_groups`, or `all_direct_messages`. Comma separated for more than one.'
+                integrationId:
+                  type: string
+                  description: The integration ID.
+                urls:
+                  type: array
+                  description: The urls to call whenever this integration is triggered.
+                  items:
+                    type: string
+                event:
+                  type: string
+                  description: "This field is required only for outgoing integrations. \r\nThe type of event, can be any of these: sendMessage, fileUploaded, roomArchived, roomCreated, roomJoined, roomLeft, userCreated."
+                triggerWords:
+                  type: string
+                  description: 'Specific words, separated by commas, which should trigger this integration.'
+                alias:
+                  type: string
+                  description: The alias which should be applied to messages when this integration is processed.
+                avatar:
+                  type: string
+                  description: The logo to apply to the messages that this integration sends.
+                  example: 'http://res.guggy.com/logo_128.png'
+                emoji:
+                  type: string
+                  description: The emoji which should be displayed as the avatar for messages from this integration.
+                  example: ':ghost:'
+                token:
+                  type: string
+                  description: 'If your integration requires a special token from the server (api key), use this.'
+                script:
+                  type: string
+                  description: Script triggered when this integration is triggered.
+                targetChannel:
+                  type: string
+                  description: The channel where messages will be sent to.
+                target_url:
+                  type: string
+                  description: The target url to set.
+              required:
+                - type
+                - name
+                - enabled
+                - username
+                - scriptEnabled
+                - channel
+                - integrationId
+              x-examples:
+                Example 1:
+                  type: webhook-incoming
+                  name: Test
+                  enabled: false
+                  username: rocket.cat
+                  scriptEnabled: false
+                  channel: '#test'
+                  integrationId: x3tPXa9XXRqW6Xp2M
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  integration:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      enabled:
+                        type: boolean
+                      channel:
+                        type: array
+                        items:
+                          type: string
+                      username:
+                        type: string
+                      name:
+                        type: string
+                      alias:
+                        type: string
+                      avatarUrl:
+                        type: string
+                      emoji:
+                        type: string
+                      scriptEnabled:
+                        type: boolean
+                      script:
+                        type: string
+                      type:
+                        type: string
+                      token:
+                        type: string
+                      userId:
+                        type: string
+                      _createdAt:
+                        type: string
+                      _createdBy:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          username:
+                            type: string
+                      _updatedAt:
+                        type: string
+                      _updatedBy:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          username:
+                            type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    integration:
+                      _id: x3tPXa9XXRqW6Xp2M
+                      enabled: false
+                      channel:
+                        - '#test'
+                      username: rodriq
+                      name: Test
+                      alias: Jim
+                      avatarUrl: ''
+                      emoji: ':ghost:'
+                      scriptEnabled: false
+                      script: console.log("MANNNNN ---------------------------------------------------------")
+                      type: webhook-incoming
+                      token: XYsrkngRr5PBkWhCqJWk5ZfKzQoxSv4QhxkK5trSgJENwbRL
+                      userId: d26x6zSkaPSe5gCyy
+                      _createdAt: '2021-10-22T14:48:46.025Z'
+                      _createdBy:
+                        _id: d26x6zSkaPSe5gCyy
+                        username: rodriq
+                      _updatedAt: '2021-10-22T16:08:39.843Z'
+                      _updatedBy:
+                        _id: d26x6zSkaPSe5gCyy
+                        username: rodriq
+                    success: true
+              examples:
+                Success Example:
+                  value:
+                    integration:
+                      _id: x3tPXa9XXRqW6Xp2M
+                      enabled: false
+                      channel:
+                        - '#test'
+                      username: rodriq
+                      name: Test
+                      alias: Jim
+                      avatarUrl: ''
+                      emoji: ':ghost:'
+                      scriptEnabled: false
+                      script: console.log("MANNNNN ---------------------------------------------------------")
+                      type: webhook-incoming
+                      token: XYsrkngRr5PBkWhCqJWk5ZfKzQoxSv4QhxkK5trSgJENwbRL
+                      userId: d26x6zSkaPSe5gCyy
+                      _createdAt: '2021-10-22T14:48:46.025Z'
+                      _createdBy:
+                        _id: d26x6zSkaPSe5gCyy
+                        username: rodriq
+                      _updatedAt: '2021-10-22T16:08:39.843Z'
+                      _updatedBy:
+                        _id: d26x6zSkaPSe5gCyy
+                        username: rodriq
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                x-examples:
+                  Example 1:
+                    success: false
+                    error: 'Match error: Missing key ''<key name>'''
+              examples:
+                Missing Key:
+                  value:
+                    success: false
+                    error: 'Match error: Missing key ''<key name>'''
+                No Integration Found:
+                  value:
+                    success: false
+                    error: No integration found.
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/integrations.remove:
+    post:
+      tags:
+        - Integration
+      summary: Remove Integration
+      description: |-
+        Remove an integration from the workspace.
+        
+        Permissions required:
+          * `manage-incoming-integrations`
+          * `manage-own-incoming-integrations`
+          * `manage-outgoing-integrations`
+          * `manage-own-outgoing-integrations`
+          
+          ### Changelog
+          | Version      | Description |
+          | ---------------- | ------------|
+          |1.1.0            | Separate permissions in incoming and outgoing.       |
+          |0.49.0            | Added       |
+      operationId: post-api-v1-integrations.remove
+      parameters:
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/X-User-Id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                integrationId:
+                  type: string
+                  description: The integration ID to remove.
+                type:
+                  type: string
+                  description: "The type of integration. The possible values are:\r\n* `webhook-outgoing`\r\n* `webhook-incoming`"
+              required:
+                - integrationId
+                - type
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  integration:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                      username:
+                        type: string
+                      channel:
+                        type: boolean
+                      scriptEnabled:
+                        type: string
+                      name:
+                        type: string
+                      enabled:
+                        type: string
+                x-examples:
+                  Example 1:
+                    integration:
+                      type: webhook-incoming
+                      username: rocket.cat
+                      channel: false
+                      scriptEnabled: sendMessage
+                      name: sendMessage
+                      enabled: sendMessage
+              examples:
+                Incoming integration example:
+                  value:
+                    integration:
+                      type: webhook-incoming
+                      username: rocket.cat
+                      channel: false
+                      scriptEnabled: sendMessage
+                      name: sendMessage
+                      enabled: sendMessage
+                Outgoing integration example:
+                  value:
+                    integration:
+                      _id: oNLthAt9RwMw39N2B
+                      type: webhook-outgoing
+                      name: Testing via REST API
+                      enabled: false
+                      username: rocket.cat
+                      urls:
+                        - 'http://text2gif.guggy.com/guggify'
+                      scriptEnabled: false
+                      userId: rocket.cat
+                      channel: []
+                      _createdAt: '2017-01-06T13:42:14.143Z'
+                      _createdBy:
+                        username: graywolf336
+                        _id: R4jgcQaQhvvK6K3iY
+                      _updatedAt: '2017-01-06T13:42:14.144Z'
+                    success: true
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/webdav.getMyAccounts:
+    get:
+      tags:
+        - WebDAV
+      summary: Get WebDAV Accounts
+      description: |-
+          Retrieves the user's [WebDAV](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/webdav-integration) accounts.
+          ### Changelog
+          | Version      | Description | 
+          | ---------------- | ------------|
+          |2.4.0            | Added       |
+      operationId: get-api-v1-webdav.getMyAccounts
+      parameters:
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/X-User-Id'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accounts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        server_url:
+                          type: string
+                        username:
+                          type: string
+                        name:
+                          type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    accounts:
+                      - _id: P3Gru7ocFCd4vpKEs
+                        server_url: 'http://localhost:8080/remote.php/webdav/'
+                        username: admin
+                        name: Webdav account
+                    success: true
+              examples:
+                Success Example:
+                  value:
+                    accounts:
+                      - _id: P3Gru7ocFCd4vpKEs
+                        server_url: 'http://localhost:8080/remote.php/webdav/'
+                        username: admin
+                        name: Webdav account
+                    success: true
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/webdav.removeWebdavAccount:
+    post:
+      tags:
+        - WebDAV
+      summary: Remove WebDAV Account
+      description: Remove a specific WebDAV account.
+      operationId: post-api-v1-webdav.removeWebdavAccount
+      parameters:
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/X-User-Id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                accountId:
+                  type: string
+                  description: The WebDAV account ID that you want to remove.
+              required:
+                - accountId
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/oauth-apps.create:
+    post:
+      tags:
+        - OAuth Apps
+      summary: Create OAuth App
+      description: 'Permission required: `manage-oauth-apps`'
+      operationId: post-api-v1-oauth-apps.create
+      parameters:
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/X-User-Id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Name of the app that you want to create.
+                redirectUri:
+                  type: string
+                  description: The URL to redirect the OAuth app.
+                active:
+                  type: boolean
+                  description: 'Whether the app will be active or not. Enter a boolean value, `true` or `false`.'
+              required:
+                - name
+                - redirectUri
+                - active
+              x-examples:
+                Example 1:
+                  name: test-oauth-app
+                  redirectUri: 'https://testuri.com'
+                  active: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  application:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      redirectUri:
+                        type: string
+                      active:
+                        type: boolean
+                      clientId:
+                        type: string
+                      clientSecret:
+                        type: string
+                      _createdAt:
+                        type: string
+                      _updatedAt:
+                        type: string
+                      _createdBy:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          username:
+                            type: string
+                      _id:
+                        type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    application:
+                      name: test-oauth-app
+                      redirectUri: 'https://testuri.com'
+                      active: true
+                      clientId: bN9D5TjY8Cv8GqWfE
+                      clientSecret: l3HAl0lSr2VaTYZVED6EabyhNzovS8Je2JYmbjNT-V1
+                      _createdAt: '2024-01-17T13:30:41.521Z'
+                      _updatedAt: '2024-01-17T13:30:41.521Z'
+                      _createdBy:
+                        _id: JFTcMhEAFbNPfnp49
+                        username: math.bar
+                      _id: 65a7d68142a7e12453052d56
+                    success: true
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/oauth-apps.update:
+    post:
+      tags:
+        - OAuth Apps
+      summary: Update OAuth App
+      description: 'Permission required: `manage-oauth-apps`'
+      operationId: post-api-v1-oauth-apps.update
+      parameters:
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/X-User-Id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Name of the app that you want to create.
+                redirectUri:
+                  type: string
+                  description: The URL to redirect the OAuth app.
+                active:
+                  type: boolean
+                  description: 'Whether the app will be active or not. Enter a boolean value, `true` or `false`.'
+                appId:
+                  type: string
+                  description: The app ID.
+              required:
+                - name
+                - redirectUri
+                - active
+                - appId
+              x-examples:
+                Example 1:
+                  name: test-oauth-app
+                  redirectUri: 'https://testuri.com'
+                  active: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  name:
+                    type: string
+                  redirectUri:
+                    type: string
+                  active:
+                    type: boolean
+                  clientId:
+                    type: string
+                  clientSecret:
+                    type: string
+                  _createdAt:
+                    type: string
+                  _updatedAt:
+                    type: string
+                  _createdBy:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      username:
+                        type: string
+                  _updatedBy:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      username:
+                        type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    _id: 65a7d77142a7e12453052d59
+                    name: test-oauth-app2
+                    redirectUri: 'https://testuri2.com'
+                    active: false
+                    clientId: fxHAgLRjP3RswMe67
+                    clientSecret: QwIAYE1_8M02p-Js8SHZyTPg7HpJm-1ZtbjuSp8bXpP
+                    _createdAt: '2024-01-17T13:34:41.445Z'
+                    _updatedAt: '2024-01-17T13:37:16.966Z'
+                    _createdBy:
+                      _id: JFTcMhEAFbNPfnp49
+                      username: matheus.barbosa
+                    _updatedBy:
+                      _id: JFTcMhEAFbNPfnp49
+                      username: matheus.barbosa
+                    success: true
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/oauth-apps.list:
+    get:
+      tags:
+        - OAuth Apps
+      summary: Get List of OAuth Apps
+      description: |-
+        Permission required: `manage-oauth-apps`
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |2.4.0            | Added       |
+      operationId: get-api-v1-oauth-apps.list
+      parameters:
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/X-User-Id'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  oauthApps:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        active:
+                          type: boolean
+                        clientId:
+                          type: string
+                        clientSecret:
+                          type: string
+                        redirectUri:
+                          type: string
+                        _createdAt:
+                          type: string
+                        _createdBy:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                        _updatedAt:
+                          type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    oauthApps:
+                      - _id: zapier
+                        name: Zapier
+                        active: true
+                        clientId: zapier
+                        clientSecret: RTK6TlndaCIolhQhZ7_KHIGOKj41RnlaOq_o-7JKwLr
+                        redirectUri: 'https://zapier.com/dashboard/auth/oauth/return/RocketChatDevAPI/'
+                        _createdAt: '2019-10-17T22:55:32.787Z'
+                        _createdBy:
+                          _id: system
+                          username: system
+                        _updatedAt: '2019-10-17T22:55:32.787Z'
+                    success: true
+              examples:
+                Success Example:
+                  value:
+                    oauthApps:
+                      - _id: zapier
+                        name: Zapier
+                        active: true
+                        clientId: zapier
+                        clientSecret: RTK6TlndaCIolhQhZ7_KHIGOKj41RnlaOq_o-7JKwLr
+                        redirectUri: 'https://zapier.com/dashboard/auth/oauth/return/RocketChatDevAPI/'
+                        _createdAt: '2019-10-17T22:55:32.787Z'
+                        _createdBy:
+                          _id: system
+                          username: system
+                        _updatedAt: '2019-10-17T22:55:32.787Z'
+                    success: true
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/oauth-apps.get:
+    get:
+      tags:
+        - OAuth Apps
+      summary: Get OAuth App
+      description: |-
+        Retrieves an OAuth app by ID or client ID.
+        
+        Permission required: `manage-oauth-apps`
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |2.4.0            | Added       |
+      operationId: get-api-v1-oauth-apps.get
+      parameters:
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/X-User-Id'
+        - name: appId
+          in: query
+          description: The app ID.  This value is required if `clientId` is not used.
+          schema:
+            type: string
+        - name: clientId
+          in: query
+          description: The client ID.  This value is required if `appId` is not used.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  oauthApp:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      name:
+                        type: string
+                      active:
+                        type: boolean
+                      clientId:
+                        type: string
+                      clientSecret:
+                        type: string
+                      redirectUri:
+                        type: string
+                      _createdAt:
+                        type: string
+                      _createdBy:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          username:
+                            type: string
+                      _updatedAt:
+                        type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    oauthApp:
+                      _id: zapier
+                      name: Zapier
+                      active: true
+                      clientId: zapier
+                      clientSecret: RTK6TlndaCIolhQhZ7_KHIGOKj41RnlaOq_o-7JKwLr
+                      redirectUri: 'https://zapier.com/dashboard/auth/oauth/return/RocketChatDevAPI/'
+                      _createdAt: '2019-10-17T22:55:32.787Z'
+                      _createdBy:
+                        _id: system
+                        username: system
+                      _updatedAt: '2019-10-17T22:55:32.787Z'
+                    success: true
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/oauth-apps.delete:
+    post:
+      tags:
+        - OAuth Apps
+      summary: Delete OAuth App
+      description: 'Permission required: `manage-oauth-apps`'
+      operationId: post-api-v1-oauth-apps.delete
+      parameters:
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/X-User-Id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                appId:
+                  type: string
+                  description: The OAuth app ID that you want to delete.
+              required:
+                - appId
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+      servers:
+        - url: 'http://localhost:3000'
+tags:
+  - name: Integration
+  - name: OAuth Apps
+  - name: WebDAV
+components:
+  parameters:
+    offset:
+      name: offset
+      in: query
+      description: 'Number of items to "skip" in the query, i.e. requests return count items, skipping the first offset items.'
+      required: false
+      schema:
+        type: integer
+        example: 50
+    count:
+      name: count
+      in: query
+      description: The number of items to return.
+      required: false
+      schema:
+        type: integer
+        example: 50
+    sort:
+      name: sort
+      in: query
+      description: 'List of fields to order by, and in which direction. This is a JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending. For example, {"value": -1, "_id": 1}'
+      required: false
+      schema: {}
+    query:
+      name: query
+      in: query
+      description: 'This parameter allows you to use MongoDB query operators to search for specific data. For example, to query users with a name that contains the letter "g": query={ "name": { "$regex": "g" } }'
+      required: false
+      schema: {}
+    fields:
+      name: fields
+      in: query
+      description: 'This parameter accepts a JSON object with properties that have a value of 1 or 0 to include or exclude them in the response. For example, to only retrieve the usernames of users: fields={ "username": 1 }'
+      required: false
+      schema:
+        type: string
+    X-Auth-Token:
+      name: X-Auth-Token
+      in: header
+      description: The authorization token of the user.
+      required: true
+      schema:
+        type: string
+        example: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq
+    X-User-Id:
+      name: X-User-Id
+      in: header
+      description: The user ID of the user.
+      required: true
+      schema:
+        type: string
+        example: aobEdbYhXfu5hkeqG
+  responses:
+    authorizationError:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              message:
+                type: string
+            x-examples:
+              Example 1:
+                status: error
+                message: You must be logged in to do this.
+          examples:
+            Authorization Error:
+              value:
+                status: error
+                message: You must be logged in to do this.

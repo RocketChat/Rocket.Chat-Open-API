@@ -1,0 +1,4669 @@
+openapi: 3.0.0
+info:
+  version: ''
+  title: Messaging
+  contact:
+    name: Rocket.Chat
+    url: 'https://rocket.chat/'
+    email: contact@rocket.chat
+servers:
+  - url: 'http://localhost:3000/'
+paths:
+  /api/v1/chat.delete:
+    post:
+      tags:
+        - Chat
+      summary: Delete Chat Message
+      description: |
+        Delete a chat message.
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        | 0.48.0           | Added       |
+      operationId: post-api-v1-chat.delete
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roomId:
+                  type: string
+                  description: The room id
+                msgId:
+                  type: string
+                  description: The message id
+                asUser:
+                  type: boolean
+                  description: Should the message  be deleted as the user who sent it? It is `false` by default.
+              required:
+                - roomId
+                - msgId
+              x-examples:
+                Example 1:
+                  roomId: ByehQjC44FwMeiLbX
+                  msgId: 7aDSXtjMA3KPLxLjt
+                  asUser: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  ts:
+                    type: string
+                  message:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      rid:
+                        type: string
+                      u:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          username:
+                            type: string
+                          name:
+                            type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    _id: jEnjsxuoDJamGjbH2
+                    ts: '1696533809813'
+                    message:
+                      _id: jEnjsxuoDJamGjbH2
+                      rid: 6GFJ3tbmHiyHbahmC
+                      u:
+                        _id: 5fRTXMt7DMJbpPJfh
+                        username: test.funke
+                        name: TestFunke
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                x-examples:
+                  Example 1:
+                    success: false
+                    error: The room id provided does not match where the message is from.
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/chat.react:
+    post:
+      tags:
+        - Chat
+      summary: React to Message
+      description: |-
+        React/Unreact to a chat message.
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        |0.64.0            | Added parameter "shouldReact" to make endpoint work like a setter|
+        |0.63.0            | Emoji has to exist                                               |
+        |0.62.2             |Added                                                             |
+      operationId: post-api-v1-chat.react
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        description: 'The emoji doesn''t have to contain `:`. However, the emoji must exist.'
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                messageId:
+                  type: string
+                  description: The message id to react to.
+                emoji:
+                  type: string
+                  description: The emoji to react with.
+                shouldReact:
+                  type: boolean
+                  description: Boolean to specify if the reaction should be added or removed.
+              required:
+                - messageId
+                - emoji
+              x-examples:
+                Example 1:
+                  messageId: 7aDSXtjMA3KPLxLjt
+                  emoji: smile
+                  shouldReact: true
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/chat.update:
+    post:
+      tags:
+        - Chat
+      summary: Update Message
+      description: |-
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        | 0.49.0           | Added       |
+        | 6.4.0           | Add previewUrls param       |
+      operationId: post-api-v1-chat.update
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roomId:
+                  type: string
+                  description: The room id of where the message is.
+                msgId:
+                  type: string
+                  description: The message id to update.
+                text:
+                  type: string
+                  description: Updated text for the message.
+                previewUrls:
+                  type: array
+                  description: An array to define which URL previews should be retrieved from each message.
+                  items:
+                    type: string
+              required:
+                - roomId
+                - msgId
+                - text
+              x-examples:
+                Example 1:
+                  roomId: 64f0f82c2c26843a68c1f7ba
+                  msgId: vzGBzSwy6jJQDwtZe
+                  text: 'Updated list of links! https://google.com https://hola.org/ https://www.usepayday.com/ https://www.getbumpa.com/ https://www.atlassian.com/software/jira http://localhost:3000/'
+                  previewUrls:
+                    - 'https://google.com'
+                    - 'http://localhost:3000/'
+            examples:
+              Example:
+                value:
+                  roomId: 64f0f82c2c26843a68c1f7ba
+                  msgId: vzGBzSwy6jJQDwtZe
+                  text: 'Updated list of links! https://google.com https://hola.org/ https://www.usepayday.com/ https://www.getbumpa.com/ https://www.atlassian.com/software/jira http://localhost:3000/'
+                  previewUrls:
+                    - 'https://google.com'
+                    - 'http://localhost:3000/'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      rid:
+                        type: string
+                      msg:
+                        type: string
+                      ts:
+                        type: string
+                      u:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          username:
+                            type: string
+                          name:
+                            type: string
+                      _updatedAt:
+                        type: string
+                      urls:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                            meta:
+                              type: object
+                            ignoreParse:
+                              type: boolean
+                      mentions:
+                        type: array
+                        items:
+                          type: object
+                      channels:
+                        type: array
+                        items:
+                          type: object
+                      md:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                            value:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  type:
+                                    type: string
+                                  value:
+                                    type: string
+                      editedAt:
+                        type: string
+                      editedBy:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          username:
+                            type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    message:
+                      _id: vzGBzSwy6jJQDwtZe
+                      rid: 64f0f82c2c26843a68c1f7ba
+                      msg: 'Updated list of links! https://google.com https://hola.org/ https://www.usepayday.com/ https://www.getbumpa.com/ https://www.atlassian.com/software/jira http://localhost:3000/'
+                      ts: '2023-09-20T17:27:59.945Z'
+                      u:
+                        _id: rbAXPnMktTFbNpwtJ
+                        username: roxie
+                        name: Funke Olasupo
+                      _updatedAt: '2023-09-20T22:22:45.793Z'
+                      urls:
+                        - url: 'https://google.com'
+                          meta: {}
+                        - url: 'https://hola.org/'
+                          meta: {}
+                          ignoreParse: true
+                        - url: 'https://www.usepayday.com/'
+                          meta: {}
+                          ignoreParse: true
+                        - url: 'https://www.getbumpa.com/'
+                          meta: {}
+                          ignoreParse: true
+                        - url: 'https://www.atlassian.com/software/jira'
+                          meta: {}
+                          ignoreParse: true
+                        - url: 'http://localhost:3000/'
+                          meta: {}
+                      mentions: []
+                      channels: []
+                      md:
+                        - type: PARAGRAPH
+                          value:
+                            - type: PLAIN_TEXT
+                              value: 'Updated list of links! '
+                            - type: LINK
+                              value:
+                                src:
+                                  type: PLAIN_TEXT
+                                  value: 'https://google.com'
+                                label:
+                                  - type: PLAIN_TEXT
+                                    value: 'https://google.com'
+                            - type: PLAIN_TEXT
+                              value: ' '
+                            - type: LINK
+                              value:
+                                src:
+                                  type: PLAIN_TEXT
+                                  value: 'https://hola.org/'
+                                label:
+                                  - type: PLAIN_TEXT
+                                    value: 'https://hola.org/'
+                            - type: PLAIN_TEXT
+                              value: ' '
+                            - type: LINK
+                              value:
+                                src:
+                                  type: PLAIN_TEXT
+                                  value: 'https://www.usepayday.com/'
+                                label:
+                                  - type: PLAIN_TEXT
+                                    value: 'https://www.usepayday.com/'
+                            - type: PLAIN_TEXT
+                              value: ' '
+                            - type: LINK
+                              value:
+                                src:
+                                  type: PLAIN_TEXT
+                                  value: 'https://www.getbumpa.com/'
+                                label:
+                                  - type: PLAIN_TEXT
+                                    value: 'https://www.getbumpa.com/'
+                            - type: PLAIN_TEXT
+                              value: ' '
+                            - type: LINK
+                              value:
+                                src:
+                                  type: PLAIN_TEXT
+                                  value: 'https://www.atlassian.com/software/jira'
+                                label:
+                                  - type: PLAIN_TEXT
+                                    value: 'https://www.atlassian.com/software/jira'
+                            - type: PLAIN_TEXT
+                              value: ' '
+                            - type: LINK
+                              value:
+                                src:
+                                  type: PLAIN_TEXT
+                                  value: 'http://localhost:3000/'
+                                label:
+                                  - type: PLAIN_TEXT
+                                    value: 'http://localhost:3000/'
+                      editedAt: '2023-09-20T22:22:45.737Z'
+                      editedBy:
+                        _id: rbAXPnMktTFbNpwtJ
+                        username: roxie
+                    success: true
+              examples:
+                Example:
+                  value:
+                    message:
+                      _id: vzGBzSwy6jJQDwtZe
+                      rid: 64f0f82c2c26843a68c1f7ba
+                      msg: 'Updated list of links! https://google.com https://hola.org/ https://www.usepayday.com/ https://www.getbumpa.com/ https://www.atlassian.com/software/jira http://localhost:3000/'
+                      ts: '2023-09-20T17:27:59.945Z'
+                      u:
+                        _id: rbAXPnMktTFbNpwtJ
+                        username: roxie
+                        name: Funke Olasupo
+                      _updatedAt: '2023-09-20T22:22:45.793Z'
+                      urls:
+                        - url: 'https://google.com'
+                          meta: {}
+                        - url: 'https://hola.org/'
+                          meta: {}
+                          ignoreParse: true
+                        - url: 'https://www.usepayday.com/'
+                          meta: {}
+                          ignoreParse: true
+                        - url: 'https://www.getbumpa.com/'
+                          meta: {}
+                          ignoreParse: true
+                        - url: 'https://www.atlassian.com/software/jira'
+                          meta: {}
+                          ignoreParse: true
+                        - url: 'http://localhost:3000/'
+                          meta: {}
+                      mentions: []
+                      channels: []
+                      md:
+                        - type: PARAGRAPH
+                          value:
+                            - type: PLAIN_TEXT
+                              value: 'Updated list of links! '
+                            - type: LINK
+                              value:
+                                src:
+                                  type: PLAIN_TEXT
+                                  value: 'https://google.com'
+                                label:
+                                  - type: PLAIN_TEXT
+                                    value: 'https://google.com'
+                            - type: PLAIN_TEXT
+                              value: ' '
+                            - type: LINK
+                              value:
+                                src:
+                                  type: PLAIN_TEXT
+                                  value: 'https://hola.org/'
+                                label:
+                                  - type: PLAIN_TEXT
+                                    value: 'https://hola.org/'
+                            - type: PLAIN_TEXT
+                              value: ' '
+                            - type: LINK
+                              value:
+                                src:
+                                  type: PLAIN_TEXT
+                                  value: 'https://www.usepayday.com/'
+                                label:
+                                  - type: PLAIN_TEXT
+                                    value: 'https://www.usepayday.com/'
+                            - type: PLAIN_TEXT
+                              value: ' '
+                            - type: LINK
+                              value:
+                                src:
+                                  type: PLAIN_TEXT
+                                  value: 'https://www.getbumpa.com/'
+                                label:
+                                  - type: PLAIN_TEXT
+                                    value: 'https://www.getbumpa.com/'
+                            - type: PLAIN_TEXT
+                              value: ' '
+                            - type: LINK
+                              value:
+                                src:
+                                  type: PLAIN_TEXT
+                                  value: 'https://www.atlassian.com/software/jira'
+                                label:
+                                  - type: PLAIN_TEXT
+                                    value: 'https://www.atlassian.com/software/jira'
+                            - type: PLAIN_TEXT
+                              value: ' '
+                            - type: LINK
+                              value:
+                                src:
+                                  type: PLAIN_TEXT
+                                  value: 'http://localhost:3000/'
+                                label:
+                                  - type: PLAIN_TEXT
+                                    value: 'http://localhost:3000/'
+                      editedAt: '2023-09-20T22:22:45.737Z'
+                      editedBy:
+                        _id: rbAXPnMktTFbNpwtJ
+                        username: roxie
+                    success: true
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/chat.reportMessage:
+    post:
+      tags:
+        - Chat
+      summary: Report Message
+      description: |-
+        Report a message.
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        | 0.64.0           | Added       |
+      operationId: post-api-v1-chat.reportMessage
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                messageId:
+                  type: string
+                  description: The message id to report.
+                description:
+                  type: string
+                  description: The description of report.
+              required:
+                - messageId
+                - description
+              x-examples:
+                Example 1:
+                  messageId: 7aDSXtjMA3KPLxLjt
+                  description: test
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/chat.followMessage:
+    post:
+      tags:
+        - Chat
+      summary: Follow Message
+      description: |-
+        Follow a message.
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        | 1.0.0            | Added       |
+      operationId: post-api-v1-chat.followMessage
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                mid:
+                  type: string
+                  description: The id of the message to follow
+              required:
+                - mid
+              x-examples:
+                Example 1:
+                  mid: 7aDSXtjMA3KPLxLjt
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/chat.unfollowMessage:
+    post:
+      tags:
+        - Chat
+      summary: Unfollow Message
+      description: |-
+        Unfollow a message.
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        | 1.0.0            | Added       |
+      operationId: post-api-v1-chat.unfollowMessage
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                mid:
+                  type: string
+                  description: The id of the message to unfollow
+              required:
+                - mid
+              x-examples:
+                Example 1:
+                  mid: 7aDSXtjMA3KPLxLjt
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/chat.getMessage:
+    get:
+      tags:
+        - Chat
+      summary: Get Message
+      description: |-
+        Get a single chat message. You must have permission to access the room where the message resides.
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        | 0.47.0           | Added       |
+      operationId: get-api-v1-chat.getMessage
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - name: msgId
+          in: query
+          description: The message id
+          required: true
+          schema:
+            type: string
+            example: 7aDSXtjMA3KPLxLjt
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+      servers:
+        - url: 'http://localhost:3000/'
+  /chat.getThreadsList:
+    get:
+      tags:
+        - Chat
+      summary: List Threads
+      description: |-
+        List threads in a room.
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        |1.0.0             | Added       |
+      operationId: get-chat.getThreadsList
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/query'
+        - $ref: '#/components/parameters/fields'
+        - name: rid
+          in: query
+          description: The id of the room
+          schema:
+            type: string
+            example: 7aDSXtjMA3KPLxLjt
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  threads:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        rid:
+                          type: string
+                        msg:
+                          type: string
+                        ts:
+                          type: string
+                        u:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                            name:
+                              type: string
+                        _updatedAt:
+                          type: string
+                        urls:
+                          type: array
+                          items:
+                            type: object
+                        mentions:
+                          type: array
+                          items:
+                            type: object
+                        channels:
+                          type: array
+                          items:
+                            type: object
+                        md:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              type:
+                                type: string
+                              value:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                    value:
+                                      type: string
+                        reactions:
+                          type: object
+                          properties:
+                            ':smile:':
+                              type: object
+                              properties:
+                                usernames:
+                                  type: array
+                                  items:
+                                    type: string
+                        starred:
+                          type: array
+                          items:
+                            type: object
+                        pinned:
+                          type: boolean
+                        pinnedAt:
+                          type: string
+                        pinnedBy:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                        replies:
+                          type: array
+                          items:
+                            type: string
+                        tcount:
+                          type: integer
+                        tlm:
+                          type: string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    threads:
+                      - _id: NZieMNQDEdMDmLLip
+                        rid: 6GFJ3tbmHiyHbahmC
+                        msg: hola
+                        ts: '2023-10-05T20:30:51.052Z'
+                        u:
+                          _id: rbAXPnMktTFbNpwtJ
+                          username: roxie
+                          name: Funke Olasupo
+                        _updatedAt: '2023-10-16T22:57:27.362Z'
+                        urls: []
+                        mentions: []
+                        channels: []
+                        md:
+                          - type: PARAGRAPH
+                            value:
+                              - type: PLAIN_TEXT
+                                value: hola
+                        reactions:
+                          ':smile:':
+                            usernames:
+                              - test.funke
+                        starred: []
+                        pinned: true
+                        pinnedAt: '2023-10-05T20:59:44.433Z'
+                        pinnedBy:
+                          _id: 5fRTXMt7DMJbpPJfh
+                          username: test.funke
+                        replies:
+                          - rbAXPnMktTFbNpwtJ
+                        tcount: 2
+                        tlm: '2023-10-16T22:57:27.158Z'
+                    count: 1
+                    offset: 0
+                    total: 1
+                    success: true
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/chat.getDeletedMessages:
+    get:
+      tags:
+        - Chat
+      summary: Get Deleted Messages
+      description: |-
+        Get deleted messages from a specific date.
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        | 0.73.0           | Added       |
+      operationId: get-api-v1-chat.getDeletedMessages
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - name: since
+          in: query
+          description: A valid date (ISODate) to search deleted messages from.
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/RoomId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    messages:
+                      - _id: wKBW2YwrPahpag4zA
+                      - _id: SJXYBbageAo8bo7rX
+                      - _id: jEnjsxuoDJamGjbH2
+                    count: 3
+                    offset: 0
+                    total: 3
+                    success: true
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/chat.getDiscussions:
+    get:
+      tags:
+        - Chat
+      summary: Get Discussions of A Room
+      description: |-
+        Gets the discussions in a room. 
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        | 2.4.0            | Added       |
+      operationId: get-api-v1-chat.getDiscussions
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/RoomId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        t:
+                          type: string
+                        rid:
+                          type: string
+                        ts:
+                          type: string
+                        msg:
+                          type: string
+                        u:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                            name:
+                              type: string
+                        groupable:
+                          type: boolean
+                        drid:
+                          type: string
+                        _updatedAt:
+                          type: string
+                        dcount:
+                          type: integer
+                        dlm:
+                          type: string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    messages:
+                      - _id: 652dc4dda2f73c7460e18df8
+                        t: discussion-created
+                        rid: 6GFJ3tbmHiyHbahmC
+                        ts: '2023-10-16T23:18:53.926Z'
+                        msg: test discuss
+                        u:
+                          _id: rbAXPnMktTFbNpwtJ
+                          username: roxie
+                          name: Funke Olasupo
+                        groupable: false
+                        drid: 652dc4dda2f73c7460e18df6
+                        _updatedAt: '2023-10-16T23:19:18.992Z'
+                        dcount: 2
+                        dlm: '2023-10-16T23:19:18.748Z'
+                    count: 1
+                    offset: 0
+                    total: 1
+                    success: true
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/chat.getMentionedMessages:
+    get:
+      tags:
+        - Chat
+      summary: Get Mentioned Messages
+      description: |-
+        Get mentioned messages. 
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        | 2.2.0           | Added       |
+      operationId: get-api-v1-chat.getMentionedMessages
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/RoomId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        rid:
+                          type: string
+                        msg:
+                          type: string
+                        ts:
+                          type: string
+                        u:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                            name:
+                              type: string
+                        _updatedAt:
+                          type: string
+                        urls:
+                          type: array
+                          items:
+                            type: object
+                        mentions:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              _id:
+                                type: string
+                              username:
+                                type: string
+                              name:
+                                type: string
+                              type:
+                                type: string
+                        channels:
+                          type: array
+                          items:
+                            type: object
+                        md:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              type:
+                                type: string
+                              value:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                    value:
+                                      type: string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    messages:
+                      - _id: p93m92bPRudzoJ7oW
+                        rid: 6GFJ3tbmHiyHbahmC
+                        msg: '@test.john hello'
+                        ts: '2023-10-16T23:27:02.945Z'
+                        u:
+                          _id: rbAXPnMktTFbNpwtJ
+                          username: roxie
+                          name: Funke Olasupo
+                        _updatedAt: '2023-10-16T23:27:03.071Z'
+                        urls: []
+                        mentions:
+                          - _id: 5fRTXMt7DMJbpPJfh
+                            username: test.john
+                            name: Test John
+                            type: user
+                        channels: []
+                        md:
+                          - type: PARAGRAPH
+                            value:
+                              - type: MENTION_USER
+                                value:
+                                  type: PLAIN_TEXT
+                                  value: test.john
+                              - type: PLAIN_TEXT
+                                value: ' hello'
+                      - _id: 4Q8nmha5doDHus5YR
+                        rid: 6GFJ3tbmHiyHbahmC
+                        msg: '@test.john'
+                        ts: '2023-10-16T23:26:38.611Z'
+                        u:
+                          _id: rbAXPnMktTFbNpwtJ
+                          username: roxie
+                          name: Funke Olasupo
+                        _updatedAt: '2023-10-16T23:26:38.728Z'
+                        urls: []
+                        mentions:
+                          - _id: 5fRTXMt7DMJbpPJfh
+                            username: test.john
+                            name: Test John
+                            type: user
+                        channels: []
+                        md:
+                          - type: PARAGRAPH
+                            value:
+                              - type: MENTION_USER
+                                value:
+                                  type: PLAIN_TEXT
+                                  value: test.john
+                    count: 2
+                    offset: 0
+                    total: 2
+                    success: true
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/chat.getMessageReadReceipts:
+    get:
+      tags:
+        - Chat
+      summary: Get Message Read Receipts
+      description: |-
+        ## Premium
+        Retrieve message read receipts.
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        | 0.63.0          | Added       |
+      operationId: get-api-v1-chat.getMessageReadReceipts
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - name: messageId
+          in: query
+          description: The message id
+          required: true
+          schema:
+            type: string
+            example: ByehQjC44FwMeiLbX
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  receipts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        roomId:
+                          type: string
+                        userId:
+                          type: string
+                        messageId:
+                          type: string
+                        ts:
+                          type: string
+                        user:
+                          type: object
+                          properties:
+                            username:
+                              type: string
+                            name:
+                              type: string
+                            _id:
+                              type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    receipts:
+                      - _id: HksCYdTpCiM9DZ7Sa
+                        roomId: GENERAL
+                        userId: nvw6PBrXTejp4sfQt
+                        messageId: WyDsZzjk2wHogtWK2
+                        ts: '2018-02-26T20:34:03.907Z'
+                        user:
+                          username: rocket.cat
+                          name: Rocket cat
+                          _id: nvw6PBrXTejp4sfQt
+                    success: true
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/chat.getPinnedMessages:
+    get:
+      tags:
+        - Chat
+      summary: Get Pinned Messages
+      description: |- 
+        Get pinned messages in a room. 
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        | 2.0.0           | Added       |
+      operationId: get-api-v1-chat.getPinnedMessages
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/RoomId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        rid:
+                          type: string
+                        msg:
+                          type: string
+                        ts:
+                          type: string
+                        u:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                            name:
+                              type: string
+                        _updatedAt:
+                          type: string
+                        urls:
+                          type: array
+                          items:
+                            type: object
+                        mentions:
+                          type: array
+                          items:
+                            type: object
+                        channels:
+                          type: array
+                          items:
+                            type: object
+                        md:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              type:
+                                type: string
+                              value:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                    value:
+                                      type: string
+                        pinned:
+                          type: boolean
+                        pinnedAt:
+                          type: string
+                        pinnedBy:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                        reactions:
+                          type: object
+                          properties:
+                            ':smile:':
+                              type: object
+                              properties:
+                                usernames:
+                                  type: array
+                                  items:
+                                    type: string
+                        starred:
+                          type: array
+                          items:
+                            type: object
+                        replies:
+                          type: array
+                          items:
+                            type: string
+                        tcount:
+                          type: integer
+                        tlm:
+                          type: string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    messages:
+                      - _id: ycHhPqyoN2BZHt3Ag
+                        rid: 6GFJ3tbmHiyHbahmC
+                        msg: ekaara
+                        ts: '2023-02-25T16:08:30.000Z'
+                        u:
+                          _id: rbAXPnMktTFbNpwtJ
+                          username: roxie
+                          name: Funke Olasupo
+                        _updatedAt: '2023-10-16T23:30:58.917Z'
+                        urls: []
+                        mentions: []
+                        channels: []
+                        md:
+                          - type: PARAGRAPH
+                            value:
+                              - type: PLAIN_TEXT
+                                value: ekaara
+                        pinned: true
+                        pinnedAt: '2023-10-16T23:30:58.917Z'
+                        pinnedBy:
+                          _id: rbAXPnMktTFbNpwtJ
+                          username: roxie
+                      - _id: Ay9jYg48gzjfpy7pk
+                        rid: 6GFJ3tbmHiyHbahmC
+                        msg: wassup
+                        ts: '2023-10-05T19:10:10.055Z'
+                        u:
+                          _id: 5fRTXMt7DMJbpPJfh
+                          username: test.john
+                          name: TestFunke
+                        _updatedAt: '2023-10-16T23:30:42.393Z'
+                        urls: []
+                        mentions: []
+                        channels: []
+                        md:
+                          - type: PARAGRAPH
+                            value:
+                              - type: PLAIN_TEXT
+                                value: wassup
+                        pinned: true
+                        pinnedAt: '2023-10-16T23:30:42.393Z'
+                        pinnedBy:
+                          _id: rbAXPnMktTFbNpwtJ
+                          username: roxie
+                      - _id: NZieMNQDEdMDmLLip
+                        rid: 6GFJ3tbmHiyHbahmC
+                        msg: hola
+                        ts: '2023-10-05T20:30:51.052Z'
+                        u:
+                          _id: rbAXPnMktTFbNpwtJ
+                          username: roxie
+                          name: Funke Olasupo
+                        _updatedAt: '2023-10-16T22:57:27.362Z'
+                        urls: []
+                        mentions: []
+                        channels: []
+                        md:
+                          - type: PARAGRAPH
+                            value:
+                              - type: PLAIN_TEXT
+                                value: hola
+                        reactions:
+                          ':smile:':
+                            usernames:
+                              - test.funke
+                        starred: []
+                        pinned: true
+                        pinnedAt: '2023-10-05T20:59:44.433Z'
+                        pinnedBy:
+                          _id: 5fRTXMt7DMJbpPJfh
+                          username: test.funke
+                        replies:
+                          - rbAXPnMktTFbNpwtJ
+                        tcount: 2
+                        tlm: '2023-10-16T22:57:27.158Z'
+                    count: 3
+                    offset: 0
+                    total: 3
+                    success: true
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/chat.getSnippetedMessages:
+    get:
+      tags:
+        - Chat
+      summary: Get Snippeted Messages
+      description: |- 
+        Retrieve snippeted messages. 
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |2.3.0          | Added       |
+      operationId: get-api-v1-chat.getSnippetedMessages
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/RoomId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        rid:
+                          type: string
+                        msg:
+                          type: string
+                        ts:
+                          type: string
+                        u:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                            name:
+                              type: string
+                        _updatedAt:
+                          type: string
+                        mentions:
+                          type: array
+                          items:
+                            type: object
+                        channels:
+                          type: array
+                          items:
+                            type: object
+                        snippetName:
+                          type: string
+                        snippeted:
+                          type: boolean
+                        snippetedBy:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    messages:
+                      - _id: QQuPFFcLmsqHWeqhn
+                        rid: GENERAL
+                        msg: |-
+                          ``````
+                          test
+                          ``````
+                        ts: '2019-10-25T21:42:39.022Z'
+                        u:
+                          _id: CaevAPDbXN252kyXa
+                          username: marcos.defendi
+                          name: Marcos Defendi
+                        _updatedAt: '2019-10-25T22:54:02.094Z'
+                        mentions: []
+                        channels: []
+                        snippetName: ee
+                        snippeted: true
+                        snippetedBy:
+                          _id: CaevAPDbXN252kyXa
+                          username: marcos.defendi
+                    count: 1
+                    offset: 0
+                    total: 1
+                    success: true
+              examples:
+                Example:
+                  value:
+                    messages:
+                      - _id: string
+                        rid: string
+                        msg: string
+                        ts: string
+                        u:
+                          _id: string
+                          username: string
+                          name: string
+                        _updatedAt: string
+                        mentions:
+                          - {}
+                        channels:
+                          - {}
+                        snippetName: string
+                        snippeted: true
+                        snippetedBy:
+                          _id: string
+                          username: string
+                    count: 0
+                    offset: 0
+                    total: 0
+                    success: true
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/chat.getSnippetedMessageById:
+    get:
+      tags:
+        - Chat
+      summary: Get Snippeted Message By Id
+      description: |- 
+        Retrieve snippeted message by Id.
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        | 2.3.0           | Added       |
+      operationId: get-api-v1-chat.getSnippetedMessageById
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - name: messageId
+          in: query
+          description: The message id
+          required: true
+          schema:
+            type: string
+            example: ByehQjC44FwMeiLbX
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      rid:
+                        type: string
+                      msg:
+                        type: string
+                      ts:
+                        type: string
+                      u:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          username:
+                            type: string
+                          name:
+                            type: string
+                      _updatedAt:
+                        type: string
+                      mentions:
+                        type: array
+                        items:
+                          type: object
+                      channels:
+                        type: array
+                        items:
+                          type: object
+                      snippetName:
+                        type: string
+                      snippeted:
+                        type: boolean
+                      snippetedBy:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          username:
+                            type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    message:
+                      _id: 48sifqi7ezh4ifKaK
+                      rid: GENERAL
+                      msg: '```dsfsdfsdf```'
+                      ts: '2019-10-25T23:26:31.550Z'
+                      u:
+                        _id: CaevAPDbXN252kyXa
+                        username: marcos.defendi
+                        name: Marcos Defendi
+                      _updatedAt: '2019-10-25T23:27:51.300Z'
+                      mentions: []
+                      channels: []
+                      snippetName: rr
+                      snippeted: true
+                      snippetedBy:
+                        _id: CaevAPDbXN252kyXa
+                        username: marcos.defendi
+                    success: true
+              examples:
+                Example:
+                  value:
+                    message:
+                      _id: 48sifqi7ezh4ifKaK
+                      rid: GENERAL
+                      msg: '```dsfsdfsdf```'
+                      ts: '2019-10-25T23:26:31.550Z'
+                      u:
+                        _id: CaevAPDbXN252kyXa
+                        username: marcos.defendi
+                        name: Marcos Defendi
+                      _updatedAt: '2019-10-25T23:27:51.300Z'
+                      mentions: []
+                      channels: []
+                      snippetName: rr
+                      snippeted: true
+                      snippetedBy:
+                        _id: CaevAPDbXN252kyXa
+                        username: marcos.defendi
+                    success: true
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/chat.getStarredMessages:
+    get:
+      tags:
+        - Chat
+      summary: Get Starred Messages
+      description: |-
+        Get starred messages of the authenticated user in a room. 
+        
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        | 2.2.0           | Added       |
+      operationId: get-api-v1-chat.getStarredMessages
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/RoomId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        t:
+                          type: string
+                        rid:
+                          type: string
+                        ts:
+                          type: string
+                        msg:
+                          type: string
+                        u:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                            name:
+                              type: string
+                        groupable:
+                          type: boolean
+                        drid:
+                          type: string
+                        _updatedAt:
+                          type: string
+                        dcount:
+                          type: integer
+                        dlm:
+                          type: string
+                        starred:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              _id:
+                                type: string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    messages:
+                      - _id: 652dc4dda2f73c7460e18df8
+                        t: discussion-created
+                        rid: 6GFJ3tbmHiyHbahmC
+                        ts: '2023-10-16T23:18:53.926Z'
+                        msg: test discuss
+                        u:
+                          _id: rbAXPnMktTFbNpwtJ
+                          username: roxie
+                          name: Funke Olasupo
+                        groupable: false
+                        drid: 652dc4dda2f73c7460e18df6
+                        _updatedAt: '2023-10-17T12:51:07.826Z'
+                        dcount: 3
+                        dlm: '2023-10-16T23:25:58.375Z'
+                        starred:
+                          - _id: 5fRTXMt7DMJbpPJfh
+                    count: 1
+                    offset: 0
+                    total: 1
+                    success: true
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/chat.getThreadMessages:
+    get:
+      tags:
+        - Chat
+      summary: Get Thread Messages
+      description: |-
+        Get thread messages.
+
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        | 1.2.0           | Remove tlm field, which is not supported|
+        | 1.1.0           | Update Example Results - original message in thread is not returned.|
+        | 1.0.0           | Added       |
+      operationId: get-api-v1-chat.getThreadMessages
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/query'
+        - $ref: '#/components/parameters/fields'
+        - name: tmid
+          in: query
+          description: The id of the the thread message.
+          required: true
+          schema:
+            type: string
+            example: 7aDSXtjMA3KPLxLjt
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        rid:
+                          type: string
+                        msg:
+                          type: string
+                        ts:
+                          type: string
+                        u:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                            name:
+                              type: string
+                        _updatedAt:
+                          type: string
+                        mentions:
+                          type: array
+                          items:
+                            type: object
+                        channels:
+                          type: array
+                          items:
+                            type: object
+                        replies:
+                          type: array
+                          items:
+                            type: string
+                        tcount:
+                          type: integer
+                        tlm:
+                          type: string
+                        tmid:
+                          type: string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    messages:
+                      - _id: gcGai9bRREqokjyPc
+                        rid: GENERAL
+                        msg: Test
+                        ts: '2019-04-08T13:15:52.017Z'
+                        u:
+                          _id: p4a8YxvLQEHmiBKTS
+                          username: marcos.defendi
+                          name: Marcos Defendi
+                        _updatedAt: '2019-04-08T14:40:27.789Z'
+                        mentions: []
+                        channels: []
+                        replies:
+                          - p4a8YxvLQEHmiBKTS
+                        tcount: 5
+                        tlm: '2019-04-08T14:40:27.724Z'
+                      - _id: GfhiiJjcjKFyYMuMY
+                        rid: GENERAL
+                        tmid: gcGai9bRREqokjyPc
+                        msg: This is a test!
+                        ts: '2019-04-08T13:20:22.238Z'
+                        u:
+                          _id: p4a8YxvLQEHmiBKTS
+                          username: marcos.defendi
+                          name: Marcos Defendi
+                        _updatedAt: '2019-04-08T13:20:22.265Z'
+                        mentions: []
+                        channels: []
+                    count: 2
+                    offset: 0
+                    total: 2
+                    success: true
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/chat.ignoreUser:
+    get:
+      tags:
+        - Chat
+      summary: Ignore User
+      description: |-
+        Ignore or Unignore a user in chat.
+
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        | 0.64.0           | Added       |
+      operationId: get-api-v1-chat.ignoreUser
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - name: rid
+          in: query
+          description: The room id
+          required: true
+          schema:
+            type: string
+        - name: userId
+          in: query
+          description: The user id
+          required: true
+          schema:
+            type: string
+        - name: ignore
+          in: query
+          description: 'If the user will be ignored or not, default is true.'
+          schema:
+            type: boolean
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/chat.pinMessage:
+    post:
+      tags:
+        - Chat
+      summary: Pin Message
+      description: |-
+        Pins a chat message to the channel.
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        | 0.59.0           | Added       |
+      operationId: post-api-v1-chat.pinMessage
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                messageId:
+                  type: string
+                  description: The id of the message to pin
+              required:
+                - messageId
+              x-examples:
+                Example 1:
+                  messageId: 7aDSXtjMA3KPLxLjt
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      t:
+                        type: string
+                      rid:
+                        type: string
+                      ts:
+                        type: string
+                      msg:
+                        type: string
+                      u:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          username:
+                            type: string
+                          name:
+                            type: string
+                      groupable:
+                        type: boolean
+                      attachments:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            text:
+                              type: string
+                            author_name:
+                              type: string
+                            author_icon:
+                              type: string
+                            ts:
+                              type: string
+                            attachments:
+                              type: array
+                              items:
+                                type: object
+                      _updatedAt:
+                        type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    message:
+                      _id: 651f23c0a2f73c7460e18d1a
+                      t: message_pinned
+                      rid: 6GFJ3tbmHiyHbahmC
+                      ts: '2023-10-05T20:59:44.503Z'
+                      msg: ''
+                      u:
+                        _id: 5fRTXMt7DMJbpPJfh
+                        username: test.funke
+                        name: TestFunke
+                      groupable: false
+                      attachments:
+                        - text: hola
+                          author_name: roxie
+                          author_icon: /avatar/roxie
+                          ts: '2023-10-05T20:30:51.052Z'
+                          attachments: []
+                      _updatedAt: '2023-10-05T20:59:44.521Z'
+                    success: true
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/chat.postMessage:
+    post:
+      tags:
+        - Chat
+      summary: Post Message
+      description: |- 
+        Note: You only can send alias and avatar properties if your user has the bot role. We implement this rule to avoid users to impersonate other users
+        ### Change Log
+        | Version | Description |
+        | ------- |---------------------------------------------------------------------------- |
+        | 2.4.1   | Document existing method to post reply/threaded messages                     |
+        | 2.4.0   | Added validation on user's identity                                          |
+        | 0.49.0  | The `channel` can now be a room's id.                                        |
+        | 0.48.0  | Information about the sent message is now returned.                          |
+        | 0.17.0  | Messages aren't always processed as from BOT and urls are parsed by default. |
+        | 0.14.0  | Internally using `processWebhookMessage` which enabled more features.        |
+        | 0.13.0  | Added                                                                        |
+      operationId: post-api-v1-chat.postMessage
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                alias:
+                  type: string
+                  description: 'This will cause the message''s name to appear as the given alias, but your username will still display.'
+                avatar:
+                  type: string
+                  description: 'If provided, this will make the avatar use the provided image url.'
+                channel:
+                  type: string
+                emoji:
+                  type: string
+                  description: 'If provided, this will make the avatar on this message be an emoji. '
+                roomId:
+                  type: string
+                  description: The room id of where the message is to be sent. You can use channel name or username. The channel name must have the `#` prefix. `@` refers to username.
+                text:
+                  type: string
+                  description: 'The text of the message to send, is optional because of attachments.'
+                attachments:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      audio_url:
+                        type: string
+                        description: 'Audio file to play, only supports what [html audio](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio) does.'
+                      author_icon:
+                        type: string
+                        description: Displays a tiny icon to the left of the Author's name.
+                      author_link:
+                        type: string
+                        description: Providing this makes the author name clickable and points to this link.
+                      author_name:
+                        type: string
+                        description: Name of the author.
+                      collapsed:
+                        type: boolean
+                        description: 'Causes the image, audio, and video sections to be hiding when collapsed is true.'
+                      color:
+                        type: string
+                        description: 'The color you want the order on the left side to be, any value [background-css](https://developer.mozilla.org/en-US/docs/Web/CSS/background-color) supports.'
+                      fields:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            short:
+                              type: boolean
+                              description: Whether this field should be a short field.
+                            title:
+                              type: string
+                              description: The title of this field.
+                            value:
+                              type: string
+                              description: 'The value of this field, displayed underneath the title value.'
+                          required:
+                            - title
+                            - value
+                      image_url:
+                        type: string
+                        description: 'The image to display, will be "big" and easy to see.'
+                      message_link:
+                        type: string
+                        description: 'Only applicable if the ts is provided, as it makes the time clickable to this link.'
+                      text:
+                        type: string
+                        description: 'The text to display for this attachment, it is different than the message''s text.'
+                      thumb_url:
+                        type: string
+                        description: 'An image that displays to the left of the text, looks better when this is relatively small.'
+                      title:
+                        type: string
+                        description: 'Title to display for this attachment, displays under the author.'
+                      title_link:
+                        type: string
+                        description: 'Providing this makes the title clickable, pointing to this link.'
+                      title_link_download:
+                        type: boolean
+                        description: 'When this is true, a download icon appears and clicking this saves the link to file.'
+                      ts:
+                        type: string
+                        description: Displays the time next to the text portion.
+                      video_url:
+                        type: string
+                        description: 'Video file to play, only supports what [html video](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video) does.'
+                tmid:
+                  type: string
+                  description: The message id of the original message to reply to/create a thread on.
+                tmshow:
+                  type: boolean
+                  description: Defaults to true when tmid is specified. Message will also be shown in the channel/room if value is true.
+              required:
+                - roomId
+              x-examples:
+                Example 1:
+                  alias: Gruggy
+                  avatar: 'http://res.guggy.com/logo_128.png'
+                  channel: '#general'
+                  emoji: ':smirk:'
+                  roomId: Xnb2kLD2Pnhdwe3RH
+                  text: Sample message
+                  attachments:
+                    - audio_url: 'http://www.w3schools.com/tags/horse.mp3'
+                      author_icon: 'https://avatars.githubusercontent.com/u/850391?v=3'
+                      author_link: 'https://rocket.chat/'
+                      author_name: Bradley Hilton
+                      collapsed: false
+                      color: '#ff0000'
+                      fields:
+                        - short: true
+                          title: Test
+                          value: Testing out something or other
+                        - short: true
+                          title: Another Test
+                          value: '[Link](https://google.com/) something and this and that.'
+                      image_url: 'http://res.guggy.com/logo_128.png'
+                      message_link: 'https://google.com'
+                      text: Yay for gruggy!
+                      thumb_url: 'http://res.guggy.com/logo_128.png'
+                      title: Attachment Example
+                      title_link: 'https://youtube.com'
+                      title_link_download: true
+                      ts: '2016-12-09T16:53:06.761Z'
+                      video_url: 'http://www.w3schools.com/tags/movie.mp4'
+            examples:
+              Example:
+                value:
+                  alias: Gruggy
+                  avatar: 'http://res.guggy.com/logo_128.png'
+                  channel: '#general'
+                  emoji: ':smirk:'
+                  roomId: Xnb2kLD2Pnhdwe3RH
+                  text: Sample message
+                  attachments:
+                    - audio_url: 'http://www.w3schools.com/tags/horse.mp3'
+                      author_icon: 'https://avatars.githubusercontent.com/u/850391?v=3'
+                      author_link: 'https://rocket.chat/'
+                      author_name: Bradley Hilton
+                      collapsed: false
+                      color: '#ff0000'
+                      fields:
+                        - short: true
+                          title: Test
+                          value: Testing out something or other
+                        - short: true
+                          title: Another Test
+                          value: '[Link](https://google.com/) something and this and that.'
+                      image_url: 'http://res.guggy.com/logo_128.png'
+                      message_link: 'https://google.com'
+                      text: Yay for gruggy!
+                      thumb_url: 'http://res.guggy.com/logo_128.png'
+                      title: Attachment Example
+                      title_link: 'https://youtube.com'
+                      title_link_download: true
+                      ts: '2016-12-09T16:53:06.761Z'
+                      video_url: 'http://www.w3schools.com/tags/movie.mp4'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ts:
+                    type: integer
+                  channel:
+                    type: string
+                  message:
+                    type: object
+                    properties:
+                      alias:
+                        type: string
+                      msg:
+                        type: string
+                      parseUrls:
+                        type: boolean
+                      groupable:
+                        type: boolean
+                      ts:
+                        type: string
+                      u:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          username:
+                            type: string
+                      rid:
+                        type: string
+                      _updatedAt:
+                        type: string
+                      _id:
+                        type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    ts: 1481748965123
+                    channel: general
+                    message:
+                      alias: ''
+                      msg: This is a test!
+                      parseUrls: true
+                      groupable: false
+                      ts: '2016-12-14T20:56:05.117Z'
+                      u:
+                        _id: y65tAmHs93aDChMWu
+                        username: graywolf336
+                      rid: GENERAL
+                      _updatedAt: '2016-12-14T20:56:05.119Z'
+                      _id: jC9chsFddTvsbFQG7
+                    success: true
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/chat.unPinMessage:
+    post:
+      tags:
+        - Chat
+      summary: Unpin a message
+      description: |-
+        Remove a pinned message from the channel.
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        | 0.59.0           | Added       |
+      operationId: post-api-v1-chat.unPinMessage
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                messageId:
+                  type: string
+                  description: The id of the message to unpin
+              required:
+                - messageId
+              x-examples:
+                Example 1:
+                  messageId: 7aDSXtjMA3KPLxLjt
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/chat.search:
+    get:
+      tags:
+        - Chat
+      summary: Search Message
+      description: |
+        Search for messages in a channel by id and text message. 
+
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        | 0.67.0           | Changed limit query parameter to count|
+        | 0.60.0           | Added       |
+      operationId: get-api-v1-chat.search
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/count'
+        - name: roomId
+          in: query
+          description: The room id
+          required: true
+          schema:
+            type: string
+        - name: searchText
+          in: query
+          description: The text to search for in messages.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        rid:
+                          type: string
+                        msg:
+                          type: string
+                        ts:
+                          type: string
+                        u:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                            name:
+                              type: string
+                        mentions:
+                          type: array
+                          items:
+                            type: object
+                        channels:
+                          type: array
+                          items:
+                            type: object
+                        _updatedAt:
+                          type: string
+                        score:
+                          type: number
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    messages:
+                      - _id: px9KLW9G2SfD5DKFt
+                        rid: GENERAL
+                        msg: this is a test
+                        ts: '2018-03-27T14:44:00.549Z'
+                        u:
+                          _id: RtMDEYc28fQ5aHpf4
+                          username: marcos.defendi
+                          name: Marcos Defendi
+                        mentions: []
+                        channels: []
+                        _updatedAt: '2018-03-27T14:44:00.550Z'
+                        score: 0.5833333333333334
+                    success: true
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/chat.sendMessage:
+    post:
+      tags:
+        - Chat
+      summary: Send Message
+      description: |- 
+        The difference between `chat.postMessage` and `chat.sendMessage` is that `chat.sendMessage` allows for passing a value for `_id` and the other one doesn't. Also, `chat.sendMessage` only sends it to one channel whereas the other one allows for sending to more than one channel at a time.
+        Note: You can only send alias and avatar properties if your user has the `message-impersonate permission`. We implemented this rule to avoid users impersonating other users. By default, only the bot role has this permission, but that can be changed in Administration -> Permissions -> message-impersonate.
+        ### Change Log
+        | Version | Description                         |
+        | ------- | ----------------------------------- |
+        | 2.4.0   | Added validation on user's identity |
+        | 0.60.0  | Added                               |
+        | 6.4.0   | Add `previewUrls` param             |
+      operationId: post-api-v1-chat.sendMessage
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        description: |- 
+          **Some important things to note about `previewUrls`  include:**
+          * If the `previewUrls` array is empty, no URL will be previewed.
+          * If the `previewUrls` parameter isn't sent, all URLs (up to a maximum of five external URLs) will be previewed.
+          * If the message contains attachments or quotes, no URL is previewed.
+          * Internal URLs are not considered in the `previewUrls` array.
+          * A maximum of five external URLs is previewed  per message. If there are more than 5 external URLs, no URL is previewed
+          > URLs that include the same text as the [**Site URL**](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/general#general-settings) are referred to as Internal URLs."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: object
+                  properties:
+                    rid:
+                      type: string
+                      description: The room id of where the message is to be sent.
+                    msg:
+                      type: string
+                      description: 'The text of the message to send, is optional because of attachments.'
+                    alias:
+                      type: string
+                      description: 'This will cause the message''s name to appear as the given alias, but your username will still display. Require the `impersonate-other-user` role'
+                    emoji:
+                      type: string
+                      description: 'If provided, this will make the avatar on this message be an emoji. '
+                    avatar:
+                      type: string
+                      description: 'If provided, this will make the avatar use the provided image url. Require  `impersonate-other-user` permission.'
+                    attachments:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          audio_url:
+                            type: string
+                            description: 'Audio file to play, only supports what [html audio](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio) does.'
+                          author_icon:
+                            type: string
+                            description: Displays a tiny icon to the left of the Author's name.
+                          author_link:
+                            type: string
+                            description: Providing this makes the author name clickable and points to this link.
+                          author_name:
+                            type: string
+                            description: Name of the author.
+                          collapsed:
+                            type: boolean
+                            description: 'Causes the image, audio, and video sections to be hiding when collapsed is true.'
+                          color:
+                            type: string
+                            description: 'The color you want the order on the left side to be, any value [background-css](https://developer.mozilla.org/en-US/docs/Web/CSS/background-color) supports.'
+                          fields:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                short:
+                                  type: boolean
+                                  description: Whether this field should be a short field.
+                                title:
+                                  type: string
+                                  description: The title of this field.
+                                value:
+                                  type: string
+                                  description: 'The value of this field, displayed underneath the title value.'
+                              required:
+                                - title
+                                - value
+                          image_url:
+                            type: string
+                            description: 'The image to display, will be "big" and easy to see.'
+                          message_link:
+                            type: string
+                            description: 'Only applicable if the ts is provided, as it makes the time clickable to this link.'
+                          text:
+                            type: string
+                            description: 'The text to display for this attachment, it is different than the message''s text.'
+                          thumb_url:
+                            type: string
+                            description: 'An image that displays to the left of the text, looks better when this is relatively small.'
+                          title:
+                            type: string
+                            description: 'Title to display for this attachment, displays under the author.'
+                          title_link:
+                            type: string
+                            description: 'Providing this makes the title clickable, pointing to this link.'
+                          title_link_download:
+                            type: boolean
+                            description: 'When this is true, a download icon appears and clicking this saves the link to file.'
+                          ts:
+                            type: string
+                            description: Displays the time next to the text portion.
+                          video_url:
+                            type: string
+                            description: 'Video file to play, only supports what [html video](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video) does.'
+                    tmid:
+                      type: string
+                      description: The message's id to create a thread.
+                    tshow:
+                      type: string
+                      description: Used when replying in a thread. Message will be sent in channel also if value is true
+                    blocks:
+                      type: object
+                      description: |- 
+                        A message block is an array of objects with any of the following properties. A Blocks can have many sections:
+                        - type
+                        - text
+                        - fields"
+                  required:
+                    - rid
+                'previewUrls ':
+                  type: array
+                  description: An array to define which URL previews should be retrieved from each message.
+                  items:
+                    type: string
+              x-examples:
+                Example 1:
+                  message:
+                    rid: Xnb2kLD2Pnhdwe3RH
+                    msg: Sample message
+                    alias: Gruggy
+                    emoji: ':smirk:'
+                    avatar: 'http://res.guggy.com/logo_128.png'
+                    attachments:
+                      - color: '#ff0000'
+                        text: Yay for gruggy!
+                        ts: '2016-12-09T16:53:06.761Z'
+                        thumb_url: 'http://res.guggy.com/logo_128.png'
+                        message_link: 'https://google.com'
+                        collapsed: false
+                        author_name: Bradley Hilton
+                        author_link: 'https://rocket.chat/'
+                        author_icon: 'https://avatars.githubusercontent.com/u/850391?v=3'
+                        title: Attachment Example
+                        title_link: 'https://youtube.com'
+                        title_link_download: true
+                        image_url: 'http://res.guggy.com/logo_128.png'
+                        audio_url: 'http://www.w3schools.com/tags/horse.mp3'
+                        video_url: 'http://www.w3schools.com/tags/movie.mp4'
+                        fields:
+                          - short: true
+                            title: Test
+                            value: Testing out something or other
+                          - short: true
+                            title: Another Test
+                            value: '[Link](https://google.com/) something and this and that.'
+            examples:
+              Message with Attachments:
+                value:
+                  message:
+                    rid: Xnb2kLD2Pnhdwe3RH
+                    msg: Sample message
+                    alias: Gruggy
+                    emoji: ':smirk:'
+                    avatar: 'http://res.guggy.com/logo_128.png'
+                    attachments:
+                      - color: '#ff0000'
+                        text: Yay for gruggy!
+                        ts: '2016-12-09T16:53:06.761Z'
+                        thumb_url: 'http://res.guggy.com/logo_128.png'
+                        message_link: 'https://google.com'
+                        collapsed: false
+                        author_name: Bradley Hilton
+                        author_link: 'https://rocket.chat/'
+                        author_icon: 'https://avatars.githubusercontent.com/u/850391?v=3'
+                        title: Attachment Example
+                        title_link: 'https://youtube.com'
+                        title_link_download: true
+                        image_url: 'http://res.guggy.com/logo_128.png'
+                        audio_url: 'http://www.w3schools.com/tags/horse.mp3'
+                        video_url: 'http://www.w3schools.com/tags/movie.mp4'
+                        fields:
+                          - short: true
+                            title: Test
+                            value: Testing out something or other
+                          - short: true
+                            title: Another Test
+                            value: '[Link](https://google.com/) something and this and that.'
+              Message with Blocks:
+                value:
+                  message:
+                    rid: GENERAL
+                    blocks:
+                      - type: section
+                        text:
+                          type: mrkdwn
+                          text: '*Text example* Normal message `code` here'
+                      - type: divider
+                      - type: section
+                        fields:
+                          - type: mrkdwn
+                            text: '*Field 1*'
+                          - type: mrkdwn
+                            text: Field 2
+              Message with PreviewURLs:
+                value:
+                  message:
+                    rid: 64f0f82c2c26843a68c1f7ba
+                    msg: 'This is a list of links! https://google.com https://hola.org/ https://www.usepayday.com/ https://www.getbumpa.com/ https://www.atlassian.com/software/jira http://localhost:3000/'
+                  previewUrls:
+                    - 'https://google.com'
+                    - 'http://localhost:3000/'
+                    - 'https://hola.org/'
+                    - 'https://www.usepayday.com/'
+                    - 'https://www.getbumpa.com/'
+                    - 'https://www.atlassian.com/software/jira'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      rid:
+                        type: string
+                      msg:
+                        type: string
+                      ts:
+                        type: string
+                      u:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          username:
+                            type: string
+                          name:
+                            type: string
+                      unread:
+                        type: boolean
+                      mentions:
+                        type: array
+                        items:
+                          type: object
+                      channels:
+                        type: array
+                        items:
+                          type: object
+                      _updatedAt:
+                        type: string
+                      _id:
+                        type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    message:
+                      rid: GENERAL
+                      msg: '123456789'
+                      ts: '2018-03-01T18:02:26.825Z'
+                      u:
+                        _id: i5FdM4ssFgAcQP62k
+                        username: rocket.cat
+                        name: test
+                      unread: true
+                      mentions: []
+                      channels: []
+                      _updatedAt: '2018-03-01T18:02:26.828Z'
+                      _id: LnCSJxxNkCy6K9X8X
+                    success: true
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/chat.starMessage:
+    post:
+      tags:
+        - Chat
+      summary: Star Message
+      description: |-
+        Star a message.
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        | 0.59.0           | Added       |
+      operationId: post-api-v1-chat.starMessage
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                messageId:
+                  type: string
+                  description: The id of the message to star
+              required:
+                - messageId
+              x-examples:
+                Example 1:
+                  messageId: 7aDSXtjMA3KPLxLjt
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/chat.unStarMessage:
+    post:
+      tags:
+        - Chat
+      summary: UnStar Message
+      description: |-
+        UnStar a message.
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        | 0.59.0           | Added       |
+      operationId: post-api-v1-chat.unStarMessage
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                messageId:
+                  type: string
+                  description: The id of the message to unstar
+              required:
+                - messageId
+              x-examples:
+                Example 1:
+                  messageId: 7aDSXtjMA3KPLxLjt
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/chat.syncThreadsList:
+    get:
+      tags:
+        - Chat
+      summary: Sync Thread List
+      description: |-
+
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        | 1.0.0            | Added       |
+      operationId: get-api-v1-chat.syncThreadsList
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Optional-RoomId'
+        - $ref: '#/components/parameters/Optional-RoomName'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+        - name: updatedSince
+          in: query
+          description: Date as an ISO string. When you provide the updatedSince query parameter in the URL then the update and remove in the response will contain only those updated and removed since this date and time.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  threads:
+                    type: object
+                    properties:
+                      update:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            rid:
+                              type: string
+                            msg:
+                              type: string
+                            ts:
+                              type: string
+                            u:
+                              type: object
+                              properties:
+                                _id:
+                                  type: string
+                                username:
+                                  type: string
+                                name:
+                                  type: string
+                            _updatedAt:
+                              type: string
+                            mentions:
+                              type: array
+                              items:
+                                type: object
+                            channels:
+                              type: array
+                              items:
+                                type: object
+                            replies:
+                              type: array
+                              items:
+                                type: string
+                            tcount:
+                              type: integer
+                            tlm:
+                              type: string
+                      remove:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            rid:
+                              type: string
+                            msg:
+                              type: string
+                            ts:
+                              type: string
+                            u:
+                              type: object
+                              properties:
+                                _id:
+                                  type: string
+                                username:
+                                  type: string
+                                name:
+                                  type: string
+                            _updatedAt:
+                              type: string
+                            mentions:
+                              type: array
+                              items:
+                                type: object
+                            channels:
+                              type: array
+                              items:
+                                type: object
+                            replies:
+                              type: array
+                              items:
+                                type: string
+                            tcount:
+                              type: integer
+                            tlm:
+                              type: string
+                            _deletedAt:
+                              type: string
+                            __collection__:
+                              type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    threads:
+                      update:
+                        - _id: J8Sqi5zPw62WgE4Md
+                          rid: GENERAL
+                          msg: test1
+                          ts: '2019-04-16T18:16:00.614Z'
+                          u:
+                            _id: rocketchat.internal.admin.test
+                            username: rocketchat.internal.admin.test
+                            name: RocketChat Internal Admin Test
+                          _updatedAt: '2019-04-16T18:17:09.749Z'
+                          mentions: []
+                          channels: []
+                          replies:
+                            - rocketchat.internal.admin.test
+                          tcount: 1
+                          tlm: '2019-04-16T18:17:09.672Z'
+                        - _id: hbs2ZAjHH2JXrP7C7
+                          rid: GENERAL
+                          msg: another test
+                          ts: '2019-04-16T18:13:20.403Z'
+                          u:
+                            _id: rocketchat.internal.admin.test
+                            username: rocketchat.internal.admin.test
+                            name: RocketChat Internal Admin Test
+                          _updatedAt: '2019-04-16T18:30:46.722Z'
+                          mentions: []
+                          channels: []
+                          replies:
+                            - rocketchat.internal.admin.test
+                          tcount: 1
+                          tlm: '2019-04-16T18:30:46.615Z'
+                      remove:
+                        - _id: GXwCSs4cx6456WBJk
+                          rid: GENERAL
+                          msg: test
+                          ts: '2019-04-16T18:13:39.217Z'
+                          u:
+                            _id: rocketchat.internal.admin.test
+                            username: rocketchat.internal.admin.test
+                            name: RocketChat Internal Admin Test
+                          _updatedAt: '2019-04-16T18:16:00.696Z'
+                          mentions: []
+                          channels: []
+                          replies:
+                            - rocketchat.internal.admin.test
+                          tcount: 1
+                          tlm: '2019-04-16T18:16:00.614Z'
+                          _deletedAt: '2019-04-16T18:16:13.508Z'
+                          __collection__: message
+                    success: true
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/chat.syncThreadMessages:
+    get:
+      tags:
+        - Chat
+      summary: Sync Thread Messages
+      description: |-
+        Sync Thread Messages. 
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        | 1.0.0           | Added       |
+      operationId: get-api-v1-chat.syncThreadMessages
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+        - name: updatedSince
+          in: query
+          description: Date as an ISO string. When you provide the updatedSince query parameter in the URL then the update and remove in the response will contain only those updated and removed since this date and time.
+          required: true
+          schema:
+            type: string
+        - name: tmid
+          in: query
+          description: Thread's message ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    type: object
+                    properties:
+                      update:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            rid:
+                              type: string
+                            tmid:
+                              type: string
+                            msg:
+                              type: string
+                            ts:
+                              type: string
+                            u:
+                              type: object
+                              properties:
+                                _id:
+                                  type: string
+                                username:
+                                  type: string
+                                name:
+                                  type: string
+                            _updatedAt:
+                              type: string
+                            mentions:
+                              type: array
+                              items:
+                                type: object
+                            channels:
+                              type: array
+                              items:
+                                type: object
+                      remove:
+                        type: array
+                        items:
+                          type: object
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    messages:
+                      update:
+                        - _id: 8BciMkvotHLpmpDEG
+                          rid: GENERAL
+                          tmid: hbs2ZAjHH2JXrP7C7
+                          msg: test
+                          ts: '2019-04-16T18:30:46.615Z'
+                          u:
+                            _id: rocketchat.internal.admin.test
+                            username: rocketchat.internal.admin.test
+                            name: RocketChat Internal Admin Test
+                          _updatedAt: '2019-04-16T18:30:46.669Z'
+                          mentions: []
+                          channels: []
+                      remove: []
+                    success: true
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/chat.syncMessages:
+    get:
+      tags:
+        - Chat
+      summary: Sync Messages
+      description: |-
+        Sync Messages. 
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        | 1.0.0           | Added       |
+      operationId: get-api-v1-chat.syncMessages
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/RoomId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+        - name: lastUpdate
+          in: query
+          description: The Date as an ISO string
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: object
+                    properties:
+                      updated:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            rid:
+                              type: string
+                            u:
+                              type: object
+                              properties:
+                                _id:
+                                  type: string
+                                username:
+                                  type: string
+                                name:
+                                  type: string
+                            msg:
+                              type: string
+                            ts:
+                              type: string
+                            _updatedAt:
+                              type: string
+                            alias:
+                              type: string
+                            token:
+                              type: string
+                            unread:
+                              type: boolean
+                            urls:
+                              type: array
+                              items:
+                                type: object
+                            mentions:
+                              type: array
+                              items:
+                                type: object
+                            channels:
+                              type: array
+                              items:
+                                type: object
+                            md:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  type:
+                                    type: string
+                                  value:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        type:
+                                          type: string
+                                        value:
+                                          type: string
+                            t:
+                              type: string
+                            groupable:
+                              type: boolean
+                      deleted:
+                        type: array
+                        items:
+                          type: object
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+
+                    result:
+                      updated:
+                        - _id: ak3WdaLbf4P7ZW3wQ
+                          rid: 5qW6ssMFyzWjJev69
+                          u:
+                            _id: FWfHnJmcudrCagGDX
+                            username: '555192857993'
+                            name: '555192857993'
+                          msg: teste
+                          ts: '2021-09-24T19:19:47.911Z'
+
+                          _updatedAt: '2021-09-24T19:19:48.048Z'
+                          alias: mauricio pretto
+                          token: do554ryecscmfrrxyxpvm
+                          unread: true
+                          urls: []
+                          mentions: []
+                          channels: []
+                          md:
+                            - type: PARAGRAPH
+                              value:
+                                - type: PLAIN_TEXT
+                                  value: teste
+                        - _id: 2ttrNPABcCKbsbEtB
+                          t: livechat-started
+                          msg: ''
+                          groupable: false
+                          ts: '2021-09-24T19:19:46.523Z'
+                          u:
+                            _id: FWfHnJmcudrCagGDX
+                            username: '555192857993'
+                            name: '555192857993'
+                          rid: 5qW6ssMFyzWjJev69
+                          unread: true
+                          _updatedAt: '2021-09-24T19:19:46.691Z'
+                          urls: []
+                          mentions: []
+                          channels: []
+                      deleted: []
+                    success: true
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/im.close:
+    post:
+      tags:
+        - IM
+      summary: Close DM
+      description: |-
+        Removes the direct message from the user's list of direct messages.
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        | 0.48.0           | Added       |
+      operationId: post-api-v1-im.close
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roomId:
+                  type: string
+                  description: The room id
+              required:
+                - roomId
+              x-examples:
+                Example 1:
+                  roomId: ByehQjC44FwMeiLbX
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/im.counters:
+    get:
+      tags:
+        - IM
+      summary: Get DM Counters
+      description: |-
+        Gets counters of direct messages. Permission required: `view-room-administration`.
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        | 0.65.0           | Added       |
+      operationId: get-api-v1-im.counters
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - name: roomId
+          in: query
+          description: The id of Direct Messages room
+          required: true
+          schema:
+            type: string
+        - name: userId
+          in: query
+          description: The user id to provide counters for
+          schema:
+            type: string
+      responses:
+        '200':
+          description: |- 
+            OK
+            
+            **Note**
+            - joined - boolean flag that shows that user is joined the room or not
+            - members - count of current room members
+            - unreads - count of unread messages for specified user (calling user or provided userId)
+            - unreadsFrom - start date-time of unread interval for specified user
+            - msgs - count of messages in the room
+            - latest - end date-time of unread interval for specified user (or date-time of last posted message)
+            - userMentions - count of user mentions in messages"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  joined:
+                    type: boolean
+                  members:
+                    type: integer
+                  unreads:
+                    type: integer
+                  unreadsFrom:
+                    type: string
+                  msgs:
+                    type: integer
+                  latest:
+                    type: string
+                  userMentions:
+                    type: integer
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    joined: true
+                    members: 2
+                    unreads: 4
+                    unreadsFrom: '2023-10-30T20:30:47.975Z'
+                    msgs: 10
+                    latest: '2023-10-30T20:37:17.160Z'
+                    userMentions: 0
+                    success: true
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/im.create:
+    post:
+      tags:
+        - IM
+      summary: Create DM
+      description: |-
+        Create a direct message session with another user.
+        
+        #### Change Log
+        | Version | Description              |
+        | ------- | ------------------------ |
+        | 0.59.0  | Added                    |
+        | 3.1.0   | Added usernames fields   |
+        | 3.18.0  | Added excludeSelf option |
+      operationId: post-api-v1-im.create
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: 'The username to open a direct message session, required if usernames is not provided'
+                usernames:
+                  type: string
+                  description: 'List of usernames to open a multiple direct message session, required if username is not provided'
+                excludeSelf:
+                  type: boolean
+                  description: Creates the direct message session excluding the current authenticated user. The session will only be opened if the current user has the `view-room-administration` permission
+              x-examples:
+                Example 1:
+                  username: rocket.cat
+            examples:
+              Example:
+                value:
+                  username: string
+                  excludeSelf: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  room:
+                    type: object
+                    properties:
+                      t:
+                        type: string
+                      rid:
+                        type: string
+                      usernames:
+                        type: array
+                        items:
+                          type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    room:
+                      t: d
+                      rid: PMrDaS4axRqkjY7errocket.cat
+                      usernames:
+                        - g1
+                        - rocket.cat
+                    success: true
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/im.delete:
+    post:
+      tags:
+        - IM
+      summary: Delete DM
+      description: |-
+        Delete a DM. Permission required: `view-room-administration`.
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        |3.18.0           | Added       |
+      operationId: post-api-v1-im.delete
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              oneOf:
+                - type: object
+                  properties:
+                    roomId:
+                      type: string
+                      description: The roomId of the DM
+                - type: object
+                  properties:
+                    username:
+                      type: string
+                      description: The username of the user in the DM
+              x-examples:
+                Example 1:
+                  roomId: ByehQjC44FwMeiLbX
+            examples:
+              Example:
+                value:
+                  roomId: hdy9972092873h8s7s0
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/im.files:
+    get:
+      tags:
+        - IM
+      summary: Get DM Files
+      description: |-
+        Get all files in a DM. 
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        |0.64.0            | Change `userId` to `user` object in response|
+        |0.59.0            | Added       |
+      operationId: get-api-v1-im.files
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/query'
+        - $ref: '#/components/parameters/fields'
+        - name: roomId
+          in: query
+          description: The roomId of the DM. It is required if `username` is not provided.
+          schema:
+            type: string
+        - $ref: '#/components/parameters/Optional-Username'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  files:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        size:
+                          type: integer
+                        type:
+                          type: string
+                        rid:
+                          type: string
+                        userId:
+                          type: string
+                        store:
+                          type: string
+                        _updatedAt:
+                          type: string
+                        complete:
+                          type: boolean
+                        etag:
+                          type: string
+                        path:
+                          type: string
+                        progress:
+                          type: integer
+                        token:
+                          type: string
+                        uploadedAt:
+                          type: string
+                        uploading:
+                          type: boolean
+                        url:
+                          type: string
+                        typeGroup:
+                          type: string
+                        user:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                            name:
+                              type: string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    files:
+                      - _id: 6542e355a2f73c7460e18ef6
+                        name: 2023-11-01_21-13-38.snagx
+                        size: 652277
+                        type: application/octet-stream
+                        rid: 5fRTXMt7DMJbpPJfhgzvcvpov9G4TxbGFS
+                        userId: 5fRTXMt7DMJbpPJfh
+                        store: 'GridFS:Uploads'
+                        _updatedAt: '2023-11-01T23:46:29.216Z'
+                        complete: true
+                        etag: 7qDc9jBurptfmrAxr
+                        path: '/ufs/GridFS:Uploads/6542e355a2f73c7460e18ef6/2023-11-01_21-13-38.snagx'
+                        progress: 1
+                        token: eAD959d9A8
+                        uploadedAt: '2023-11-01T23:46:29.196Z'
+                        uploading: false
+                        url: 'http://localhost:3000//ufs/GridFS:Uploads/6542e355a2f73c7460e18ef6/2023-11-01_21-13-38.snagx'
+                        typeGroup: application
+                        user:
+                          _id: 5fRTXMt7DMJbpPJfh
+                          username: test.john
+                          name: Test John
+                    count: 1
+                    offset: 0
+                    total: 1
+                    success: true
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/im.history:
+    get:
+      tags:
+        - IM
+      summary: DM History
+      description: |-
+        Retrieves the messages from a direct message
+        ### Change Log
+        | Version | Description             |
+        | ------- | ----------------------- |
+        | 0.75.0  | Added `offset` property |
+        | 0.48.0  | Added                   |
+      operationId: get-api-v1-im.history
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/RoomId'
+        - name: latest
+          in: query
+          description: The end of time range of messages to retrieve
+          schema:
+            type: string
+            example: '2016-09-30T13:42:25.304Z'
+        - name: oldest
+          in: query
+          description: The start of the time range of messages to retrieve
+          schema:
+            type: string
+            example: '2016-05-30T13:42:25.304Z'
+        - name: inclusive
+          in: query
+          description: Whether messages which land on latest and oldest should be included
+          schema:
+            type: string
+            example: 'true'
+        - name: offset
+          in: query
+          description: The offset of the list messages to retrieve
+          schema:
+            type: string
+            example: '10'
+        - name: count
+          in: query
+          description: The amount of messages to retrieve. It is 20 by default
+          schema:
+            type: string
+            example: '100'
+        - name: unreads
+          in: query
+          description: Whether the amount of unreads should be included.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        rid:
+                          type: string
+                        msg:
+                          type: string
+                        ts:
+                          type: string
+                        u:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                        _updatedAt:
+                          type: string
+                        t:
+                          type: string
+                        groupable:
+                          type: boolean
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    messages:
+                      - _id: AkzpHAvZpdnuchw2a
+                        rid: ByehQjC44FwMeiLbX
+                        msg: hi
+                        ts: '2016-12-09T12:50:51.555Z'
+                        u:
+                          _id: y65tAmHs93aDChMWu
+                          username: testing
+                        _updatedAt: '2016-12-09T12:50:51.562Z'
+                      - _id: vkLMxcctR4MuTxreF
+                        t: uj
+                        rid: ByehQjC44FwMeiLbX
+                        ts: '2016-12-08T15:41:37.730Z'
+                        msg: testing2
+                        u:
+                          _id: bRtgdhzM6PD9F8pSx
+                          username: testing2
+                        groupable: false
+                        _updatedAt: '2016-12-08T16:03:25.235Z'
+                      - _id: bfRW658nEyEBg75rc
+                        t: uj
+                        rid: ByehQjC44FwMeiLbX
+                        ts: '2016-12-07T15:47:49.099Z'
+                        msg: testing
+                        u:
+                          _id: nSYqWzZ4GsKTX4dyK
+                          username: testing1
+                        groupable: false
+                        _updatedAt: '2016-12-07T15:47:49.099Z'
+                      - _id: pbuFiGadhRZTKouhB
+                        t: uj
+                        rid: ByehQjC44FwMeiLbX
+                        ts: '2016-12-06T17:57:38.635Z'
+                        msg: testing
+                        u:
+                          _id: y65tAmHs93aDChMWu
+                          username: testing
+                        groupable: false
+                        _updatedAt: '2016-12-06T17:57:38.635Z'
+                    success: true
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/im.list.everyone:
+    get:
+      tags:
+        - IM
+      summary: List All DMs
+      description: |-
+        List all DMs in the workspace.  
+        
+        Permission required:`view-room-administration`.
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        |0.49.0            | Added       |
+      operationId: get-api-v1-im.list.everyone
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/query'
+        - $ref: '#/components/parameters/fields'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ims:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        t:
+                          type: string
+                        usernames:
+                          type: array
+                          items:
+                            type: string
+                        usersCount:
+                          type: integer
+                        msgs:
+                          type: integer
+                        ts:
+                          type: string
+                        uids:
+                          type: array
+                          items:
+                            type: string
+                        default:
+                          type: boolean
+                        ro:
+                          type: boolean
+                        sysMes:
+                          type: boolean
+                        _updatedAt:
+                          type: string
+                        _USERNAMES:
+                          type: array
+                          items:
+                            type: string
+                        lastMessage:
+                          type: object
+                          properties:
+                            rid:
+                              type: string
+                            msg:
+                              type: string
+                            ts:
+                              type: string
+                            u:
+                              type: object
+                              properties:
+                                _id:
+                                  type: string
+                                username:
+                                  type: string
+                                name:
+                                  type: string
+                            _id:
+                              type: string
+                            _updatedAt:
+                              type: string
+                            urls:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  url:
+                                    type: string
+                                  meta:
+                                    type: object
+                            mentions:
+                              type: array
+                              items:
+                                type: object
+                            channels:
+                              type: array
+                              items:
+                                type: object
+                            md:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  type:
+                                    type: string
+                                  value:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        type:
+                                          type: string
+                                        value:
+                                          type: array
+                                          items:
+                                            type: object
+                                            properties:
+                                              type:
+                                                type: string
+                                              value:
+                                                type: string
+                                              src:
+                                                type: object
+                                                properties:
+                                                  type:
+                                                    type: string
+                                                  value:
+                                                    type: string
+                                              label:
+                                                type: array
+                                                items:
+                                                  type: object
+                                                  properties:
+                                                    type:
+                                                      type: string
+                                                    value:
+                                                      type: string
+                        lm:
+                          type: string
+                  offset:
+                    type: integer
+                  count:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    ims:
+                      - _id: rYhzFRd2QZjNwAAXXrocket.cat
+                        t: d
+                        usernames:
+                          - rocket.cat
+                          - rodriq
+                        usersCount: 2
+                        msgs: 20
+                        ts: '2023-01-25T02:00:18.095Z'
+                        uids:
+                          - rYhzFRd2QZjNwAAXX
+                          - rocket.cat
+                        default: false
+                        ro: false
+                        sysMes: true
+                        _updatedAt: '2023-06-22T02:00:10.474Z'
+                        _USERNAMES:
+                          - rocket.cat
+                          - rodriq
+                        lastMessage:
+                          rid: rYhzFRd2QZjNwAAXXrocket.cat
+                          msg: |-
+                            *Update your Rocket.Chat*
+                            New version available (6.2.8)
+                            https://github.com/RocketChat/Rocket.Chat/releases/tag/6.2.8
+                          ts: '2023-06-22T02:00:10.367Z'
+                          u:
+                            _id: rocket.cat
+                            username: rocket.cat
+                            name: Rocket.Cat
+                          _id: T2KoWNeAgJM4zvTvt
+                          _updatedAt: '2023-06-22T02:00:10.453Z'
+                          urls:
+                            - url: 'https://github.com/RocketChat/Rocket.Chat/releases/tag/6.2.8'
+                              meta: {}
+                          mentions: []
+                          channels: []
+                          md:
+                            - type: PARAGRAPH
+                              value:
+                                - type: BOLD
+                                  value:
+                                    - type: PLAIN_TEXT
+                                      value: Update your Rocket.Chat
+                            - type: PARAGRAPH
+                              value:
+                                - type: PLAIN_TEXT
+                                  value: New version available (6.2.8)
+                            - type: PARAGRAPH
+                              value:
+                                - type: LINK
+                                  value:
+                                    src:
+                                      type: PLAIN_TEXT
+                                      value: 'https://github.com/RocketChat/Rocket.Chat/releases/tag/6.2.8'
+                                    label:
+                                      - type: PLAIN_TEXT
+                                        value: 'https://github.com/RocketChat/Rocket.Chat/releases/tag/6.2.8'
+                        lm: '2023-06-22T02:00:10.367Z'
+                      - _id: 6xia7f5JEYM4Fjxzt
+                        t: d
+                        usernames:
+                          - rodriq
+                        usersCount: 2
+                        msgs: 0
+                        ts: '2023-01-30T11:43:22.047Z'
+                        uids:
+                          - rYhzFRd2QZjNwAAXX
+                        default: false
+                        ro: false
+                        sysMes: true
+                        _updatedAt: '2023-01-31T14:40:37.483Z'
+                        _USERNAMES:
+                          - rodriq
+                        lm: '2023-01-30T11:43:30.046Z'
+                    offset: 0
+                    count: 2
+                    total: 2
+                    success: true
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/im.list:
+    get:
+      tags:
+        - IM
+      summary: List DMs
+      description: |-
+        List all the DMs of the authenticated user. 
+
+        ### Change Log
+
+        | Version | Description                                  |
+        | ------- | -------------------------------------------- |
+        | 0.67.0  | Remove `query` parameter support.            |
+        | 0.62.0  | Add `query` parameter support.               |
+        | 0.49.0  | Count and offset query parameters supported. |
+        | 0.48.0  | Added                                        |
+      operationId: get-api-v1-im.list
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ims:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        t:
+                          type: string
+                        usernames:
+                          type: array
+                          items:
+                            type: string
+                        usersCount:
+                          type: integer
+                        msgs:
+                          type: integer
+                        ts:
+                          type: string
+                        uids:
+                          type: array
+                          items:
+                            type: string
+                        encrypted:
+                          type: boolean
+                        default:
+                          type: boolean
+                        ro:
+                          type: boolean
+                        sysMes:
+                          type: boolean
+                        _updatedAt:
+                          type: string
+                        _USERNAMES:
+                          type: array
+                          items:
+                            type: string
+                        e2eKeyId:
+                          type: string
+                        lastMessage:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            rid:
+                              type: string
+                            msg:
+                              type: string
+                            ts:
+                              type: string
+                            u:
+                              type: object
+                              properties:
+                                _id:
+                                  type: string
+                                username:
+                                  type: string
+                                name:
+                                  type: string
+                            _updatedAt:
+                              type: string
+                            urls:
+                              type: array
+                              items:
+                                type: object
+                            mentions:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  _id:
+                                    type: string
+                                  username:
+                                    type: string
+                                  name:
+                                    type: string
+                                  type:
+                                    type: string
+                            channels:
+                              type: array
+                              items:
+                                type: object
+                            md:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  type:
+                                    type: string
+                                  value:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        type:
+                                          type: string
+                                        value:
+                                          type: string
+                        lm:
+                          type: string
+                        topic:
+                          type: string
+                  offset:
+                    type: integer
+                  count:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    ims:
+                      - _id: 5fRTXMt7DMJbpPJfhrbAXPnMktTFbNpwtJ
+                        t: d
+                        usernames:
+                          - roxie
+                          - test.john
+                        usersCount: 2
+                        msgs: 10
+                        ts: '2023-07-11T01:37:04.552Z'
+                        uids:
+                          - 5fRTXMt7DMJbpPJfh
+                          - rbAXPnMktTFbNpwtJ
+                        encrypted: true
+                        default: false
+                        ro: false
+                        sysMes: true
+                        _updatedAt: '2023-10-30T20:37:17.317Z'
+                        _USERNAMES:
+                          - funke.olasupo
+                          - test.funke
+                        e2eKeyId: eyJhbGciOiJB
+                        lastMessage:
+                          _id: qpx24HcNoTZCoj7jZ
+                          rid: 5fRTXMt7DMJbpPJfhrbAXPnMktTFbNpwtJ
+                          msg: gvjkbvjjgi
+                          ts: '2023-10-30T20:37:17.160Z'
+                          u:
+                            _id: rbAXPnMktTFbNpwtJ
+                            username: roxie
+                            name: Funke Olasupo
+                          _updatedAt: '2023-10-30T20:37:17.267Z'
+                          urls: []
+                          mentions: []
+                          channels: []
+                          md:
+                            - type: PARAGRAPH
+                              value:
+                                - type: PLAIN_TEXT
+                                  value: gvjkbvjjgi
+                        lm: '2023-10-30T20:37:17.160Z'
+                        topic: Discuss all of the testing
+                      - _id: 65400fc3a2f73c7460e18e9f
+                        t: d
+                        usernames:
+                          - roxie
+                          - hookdeck.write
+                          - test.john
+                        usersCount: 3
+                        msgs: 8
+                        ts: '2023-10-30T20:19:15.092Z'
+                        uids:
+                          - 5fRTXMt7DMJbpPJfh
+                          - hFDuCPam7sWziWFYa
+                          - rbAXPnMktTFbNpwtJ
+                        encrypted: true
+                        default: false
+                        ro: false
+                        sysMes: true
+                        _updatedAt: '2023-10-30T20:36:41.696Z'
+                        _USERNAMES:
+                          - roxie
+                          - hookdeck.write
+                          - test.john
+                        topic: Discuss all of the testing
+                        lastMessage:
+                          _id: dgDTvDAXN4eCLptr8
+                          rid: 65400fc3a2f73c7460e18e9f
+                          msg: '@test.john'
+                          ts: '2023-10-30T20:36:41.494Z'
+                          u:
+                            _id: rbAXPnMktTFbNpwtJ
+                            username: roxie
+                            name: Funke Olasupo
+                          _updatedAt: '2023-10-30T20:36:41.613Z'
+                          urls: []
+                          mentions:
+                            - _id: 5fRTXMt7DMJbpPJfh
+                              username: test.john
+                              name: Test John
+                              type: user
+                          channels: []
+                          md:
+                            - type: PARAGRAPH
+                              value:
+                                - type: MENTION_USER
+                                  value:
+                                    type: PLAIN_TEXT
+                                    value: test.john
+                        lm: '2023-10-30T20:36:41.494Z'
+                    offset: 0
+                    count: 2
+                    total: 2
+                    success: true
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/im.members:
+    get:
+      tags:
+        - IM
+      summary: List DM Members
+      description: |-
+        List all the members of a DM. 
+        
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        |0.59.0             | Added       |
+      operationId: get-api-v1-im.members
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+        - name: roomId
+          in: query
+          description: The roomId of the DM. It is required if `username` is not provided.
+          schema:
+            type: string
+        - $ref: '#/components/parameters/Optional-Username'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  members:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        username:
+                          type: string
+                        status:
+                          type: string
+                        name:
+                          type: string
+                        utcOffset:
+                          type: integer
+                        statusText:
+                          type: string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    members:
+                      - _id: 5fRTXMt7DMJbpPJfh
+                        username: test.john
+                        status: online
+                        name: Test John
+                        utcOffset: 1
+                        statusText: ''
+                      - _id: rbAXPnMktTFbNpwtJ
+                        username: roxie
+                        status: offline
+                        name: Funke Olasupo
+                        utcOffset: 1
+                        statusText: On a vacation
+                      - _id: hFDuCPam7sWziWFYa
+                        status: offline
+                        name: Hookdeck Write
+                        utcOffset: 1
+                        username: hookdeck.write
+                    count: 3
+                    offset: 0
+                    total: 3
+                    success: true
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/im.messages:
+    get:
+      tags:
+        - IM
+      summary: List DM Messages
+      description: |-
+        List all the messages in a DM. 
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        |0.59.0            | Added       |
+      operationId: get-api-v1-im.messages
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/query'
+        - $ref: '#/components/parameters/fields'
+        - name: roomId
+          in: query
+          description: The roomId of the DM. It is required if `username` is not provided.
+          schema:
+            type: string
+        - $ref: '#/components/parameters/Optional-Username'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        rid:
+                          type: string
+                        msg:
+                          type: string
+                        ts:
+                          type: string
+                        u:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                            name:
+                              type: string
+                        _updatedAt:
+                          type: string
+                        urls:
+                          type: array
+                          items:
+                            type: object
+                        mentions:
+                          type: array
+                          items:
+                            type: object
+                        channels:
+                          type: array
+                          items:
+                            type: object
+                        md:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              type:
+                                type: string
+                              value:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                    value:
+                                      type: string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    messages:
+                      - _id: dGNzxH29pFm4Qhufh
+                        rid: 5fRTXMt7DMJbpPJfhgzvcvpov9G4TxbGFS
+                        msg: DO we have any updates today?
+                        ts: '2023-11-01T23:20:57.357Z'
+                        u:
+                          _id: 5fRTXMt7DMJbpPJfh
+                          username: test.john
+                          name: Test John
+                        _updatedAt: '2023-11-01T23:20:57.406Z'
+                        urls: []
+                        mentions: []
+                        channels: []
+                        md:
+                          - type: PARAGRAPH
+                            value:
+                              - type: PLAIN_TEXT
+                                value: DO we have any updates today?
+                      - _id: aiaCSRkxPcNGHqvtC
+                        rid: 5fRTXMt7DMJbpPJfhgzvcvpov9G4TxbGFS
+                        msg: Hows it going?
+                        ts: '2023-11-01T23:20:51.504Z'
+                        u:
+                          _id: 5fRTXMt7DMJbpPJfh
+                          username: test.john
+                          name: Test John
+                        _updatedAt: '2023-11-01T23:20:51.549Z'
+                        urls: []
+                        mentions: []
+                        channels: []
+                        md:
+                          - type: PARAGRAPH
+                            value:
+                              - type: PLAIN_TEXT
+                                value: Hows it going?
+                      - _id: dLjcNr8ovyeCqqJW5
+                        rid: 5fRTXMt7DMJbpPJfhgzvcvpov9G4TxbGFS
+                        msg: Hi buddy
+                        ts: '2023-11-01T23:20:47.991Z'
+                        u:
+                          _id: 5fRTXMt7DMJbpPJfh
+                          username: test.john
+                          name: Test John
+                        _updatedAt: '2023-11-01T23:20:48.085Z'
+                        urls: []
+                        mentions: []
+                        channels: []
+                        md:
+                          - type: PARAGRAPH
+                            value:
+                              - type: PLAIN_TEXT
+                                value: Hi buddy
+                    count: 3
+                    offset: 0
+                    total: 3
+                    success: true
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/im.messages.others:
+    get:
+      tags:
+        - IM
+      summary: Message Others
+      description: |-
+        Retrieves the messages from any direct message in the server.  For this method to work, navigate to  **Administration > Workspace > Settings > General > REST API > Enable Direct Message History Endpoint** and enable it. Permission required: `view-room-administration`.
+        ### Change Log
+        | Version | Description             |
+        | ------- | ----------------------- |
+        | 0.50.0  | Added                   |
+      operationId: get-api-v1-im.messages.others
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/RoomId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/query'
+        - $ref: '#/components/parameters/fields'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        rid:
+                          type: string
+                        msg:
+                          type: string
+                        ts:
+                          type: string
+                        u:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                        _updatedAt:
+                          type: string
+                        t:
+                          type: string
+                        groupable:
+                          type: boolean
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    messages:
+                      - _id: AkzpHAvZpdnuchw2a
+                        rid: ByehQjC44FwMeiLbX
+                        msg: hi
+                        ts: '2016-12-09T12:50:51.555Z'
+                        u:
+                          _id: y65tAmHs93aDChMWu
+                          username: testing
+                        _updatedAt: '2016-12-09T12:50:51.562Z'
+                      - _id: vkLMxcctR4MuTxreF
+                        t: uj
+                        rid: ByehQjC44FwMeiLbX
+                        ts: '2016-12-08T15:41:37.730Z'
+                        msg: testing2
+                        u:
+                          _id: bRtgdhzM6PD9F8pSx
+                          username: testing2
+                        groupable: false
+                        _updatedAt: '2016-12-08T16:03:25.235Z'
+                      - _id: bfRW658nEyEBg75rc
+                        t: uj
+                        rid: ByehQjC44FwMeiLbX
+                        ts: '2016-12-07T15:47:49.099Z'
+                        msg: testing
+                        u:
+                          _id: nSYqWzZ4GsKTX4dyK
+                          username: testing1
+                        groupable: false
+                        _updatedAt: '2016-12-07T15:47:49.099Z'
+                      - _id: pbuFiGadhRZTKouhB
+                        t: uj
+                        rid: ByehQjC44FwMeiLbX
+                        ts: '2016-12-06T17:57:38.635Z'
+                        msg: testing
+                        u:
+                          _id: y65tAmHs93aDChMWu
+                          username: testing
+                        groupable: false
+                        _updatedAt: '2016-12-06T17:57:38.635Z'
+                    success: true
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/im.open:
+    post:
+      tags:
+        - IM
+      summary: Open DM
+      description: |-
+        Adds a DM back to the user's list of direct messages.
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        | 0.48.0           | Added       |
+      operationId: post-api-v1-im.open
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roomId:
+                  type: string
+                  description: The room Id
+              required:
+                - roomId
+              x-examples:
+                Example 1:
+                  roomId: 5fRTXMt7DMJbpPJfhrbAXPnMktTFbNpwtJ
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+      servers:
+        - url: 'http://localhost:3000/'
+  /api/v1/im.setTopic:
+    post:
+      tags:
+        - IM
+      summary: Set DM Topic
+      description: |-
+        Set the topic of a DM.
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        | 0.48.0           | Added       |
+      operationId: post-api-v1-im.setTopic
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roomId:
+                  type: string
+                  description: The roomId of the direct message
+                topic:
+                  type: string
+                  description: The topic of the DM
+              required:
+                - roomId
+                - topic
+              x-examples:
+                Example 1:
+                  roomId: ByehQjC44FwMeiLbX
+                  topic: Discuss all of the testing
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  topic:
+                    type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    topic: Discuss all of the testing
+                    success: true
+      servers:
+        - url: 'http://localhost:3000/'
+tags:
+  - name: Chat
+    description: Everything about Rocket.Chat Chat Endpoints
+  - name: IM
+    description: Everything about Rocket.Chat Direct Messages Endpoints
+components:
+  parameters:
+    Optional-RoomId:
+      name: roomId
+      in: query
+      description: The room id. It is required if the `roomName` is not provided.
+      schema:
+        type: string
+        example: dlp
+    Optional-RoomName:
+      name: roomName
+      in: query
+      description: The room name.  It is required if the `roomId` is not provided.
+      required: false
+      schema:
+        type: string
+        example: WDuJLFkjwk6L7LdFC
+    RoomId:
+      name: roomId
+      in: query
+      description: The room id.
+      required: true
+      schema:
+        type: string
+        example: 6GFJ3tbmHiyHbahmC
+    Optional-Username:
+      name: username
+      in: query
+      description: The username of the user in the DM. It is required if `roomId` is not provided.
+      required: false
+      schema:
+        type: string
+    Auth-Token:
+      name: X-Auth-Token
+      in: header
+      description: The `authToken` of the authenticated user.
+      required: true
+      schema:
+        type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+    UserId:
+      name: X-User-Id
+      in: header
+      description: The `userId` of the authenticated user.
+      required: true
+      schema:
+        type: string
+        example: rbAXPnMktTFbNpwtJ
+    offset:
+      name: offset
+      in: query
+      description: 'Number of items to "skip" in the query, i.e. requests return count items, skipping the first offset items.'
+      required: false
+      schema:
+        type: integer
+        example: 50
+    count:
+      name: count
+      in: query
+      description: The number of items to return.
+      required: false
+      schema:
+        type: integer
+        example: 50
+    sort:
+      name: sort
+      in: query
+      description: 'List of fields to order by, and in which direction. This is a JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending. For example, {"value": -1, "_id": 1}'
+      required: false
+      schema: {}
+    query:
+      name: query
+      in: query
+      description: 'This parameter allows you to use MongoDB query operators to search for specific data. For example, to query users with a name that contains the letter "g": query={ "name": { "$regex": "g" } }'
+      required: false
+      schema: {}
+    fields:
+      name: fields
+      in: query
+      description: 'This parameter accepts a JSON object with properties that have a value of 1 or 0 to include or exclude them in the response. For example, to only retrieve the usernames of users: fields={ "username": 1 }'
+      required: false
+      schema:
+        type: string
+  responses:
+    trueSuccess:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+            x-examples:
+              Example 1:
+                success: true
+          examples:
+            Success:
+              value:
+                success: true
+    authorizationError:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              message:
+                type: string
+            x-examples:
+              Example 1:
+                status: error
+                message: You must be logged in to do this.
+          examples:
+            Authorization Error:
+              value:
+                status: error
+                message: You must be logged in to do this.
