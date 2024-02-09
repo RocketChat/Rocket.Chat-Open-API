@@ -1,0 +1,5038 @@
+openapi: 3.0.0
+info:
+  version: ''
+  title: User Management
+  contact:
+    name: Rocket.Chat
+    url: 'https://rocket.chat/'
+    email: contact@rocket.chat
+  license:
+    url: 'https://rocket.chat/'
+    name: Apache2.0
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  /api/v1/permissions.listAll:
+    get:
+      tags:
+        - Permissions
+      summary: List all permissions
+      description: |-
+        Returns all permissions from the workspace.
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |0.73.0            | Added       |
+      operationId: get-permissions.listAll
+      parameters:
+        - name: updatedSince
+          in: query
+          description: |-
+            Date as ISO string. If you include this parameter, the `update` and
+            `remove` fields in the response will contain only those permissions
+            updated and removed since this date and time.
+          schema:
+            type: string
+            example: '2017-11-25T15:08:17.248Z'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  update:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        _updatedAt:
+                          type: string
+                        roles:
+                          type: array
+                          items:
+                            type: string
+                  remove:
+                    type: array
+                    items:
+                      type: object
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    update:
+                      - _id: access-permissions
+                        _updatedAt: '2018-11-28T11:55:49.106Z'
+                        roles:
+                          - admin
+                      - _id: add-oauth-service
+                        _updatedAt: '2018-11-28T12:59:51.974Z'
+                        roles:
+                          - admin
+                          - user
+                    remove: []
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  /api/v1/permissions.update:
+    post:
+      summary: Update permissions
+      description: |-
+        Edits permissions on the workspace.
+        Permission required: `access-permissions`
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |0.66.0            | Added       |
+      operationId: post-api-v1-permissions.update
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                permissions:
+                  type: array
+                  description: The array of roles to overwrite.
+                  items:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                        example: access-permissions
+                      roles:
+                        type: array
+                        items:
+                          type: string
+                          example: admin
+              required:
+                - permissions
+            examples:
+              Example 1:
+                value:
+                  permissions:
+                    - _id: access-permissions
+                      roles:
+                        - admin
+          multipart/form-data:
+            schema:
+              type: object
+        description: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  permissions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        roles:
+                          type: array
+                          items:
+                            type: string
+                        _updatedAt:
+                          type: string
+                        meta:
+                          type: object
+                          properties:
+                            revision:
+                              type: integer
+                            created:
+                              type: integer
+                            version:
+                              type: integer
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    permissions:
+                      - _id: access-permissions
+                        roles:
+                          - admin
+                        _updatedAt: '2018-01-25T13:03:20.879Z'
+                        meta:
+                          revision: 0
+                          created: 1516980515815
+                          version: 0
+                        $loki: 1
+                      - ...: null
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: Invalid body params
+                    errorType: error-invalid-body-params
+                Example 2:
+                  value:
+                    success: false
+                    error: Editing permissions is not allowed
+                    errorType: error-edit-permissions-not-allowed
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+      tags:
+        - Permissions
+  /api/v1/roles.create:
+    post:
+      tags:
+        - Roles
+      summary: Create Role
+      description: |-
+        <h2>Premium</h2>
+        Create a new role in the workspace.
+        - You can't create new roles with the same name as existing roles. For example, it is not possible to create a new role with the name `admin`.
+        - The scope can either be `Users`(user level) or `Subscriptions`(room level).
+        - Permission required: `access-permissions`
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |6.0.0            | Moved to Enterprise plan.       |
+        |3.15.0            | The endpoint is no longer used to update roles.       |
+        |0.70.0            | Added       |
+      operationId: post-api-v1-roles.create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the new role.
+                  example: newRole
+                scope:
+                  type: string
+                  description: The scope of the new role. The default value is `Users`.
+                  example: Subscriptions
+                description:
+                  type: string
+                  description: A description for the new role.
+                  example: Role description
+                mandatory2fa:
+                  type: boolean
+                  description: >-
+                    Whether the role should have a mandatory 2FA. The default
+                    value is `false`.
+                  default: false
+              required:
+                - name
+            examples:
+              Example 1:
+                value:
+                  name: Test Role
+                  scope: Users
+                  description: Testing Role for API
+                  mandatory2fa: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  role:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      name:
+                        type: string
+                      scope:
+                        type: string
+                      description:
+                        type: string
+                      protected:
+                        type: boolean
+                      mandatory2fa:
+                        type: boolean
+                      _updatedAt:
+                        type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    role:
+                      _id: 646c431fa8c3a3ba32d0e1c4
+                      name: support1
+                      scope: Subscriptions
+                      description: Role support tier 1
+                      protected: false
+                      mandatory2fa: false
+                      _updatedAt: '2023-05-23T04:37:51.161Z'
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: >-
+                      The role properties are invalid.
+                      [error-invalid-role-properties]
+                    errorType: error-invalid-role-properties
+                Example 2:
+                  value:
+                    success: false
+                    error: >-
+                      Role name already exists
+                      [error-duplicate-role-names-not-allowed]
+                    errorType: error-duplicate-role-names-not-allowed
+                Example 3:
+                  value:
+                    success: false
+                    error: >-
+                      Accessing permissions is not allowed
+                      [error-action-not-allowed]
+                    errorType: error-action-not-allowed
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+  /api/v1/roles.update:
+    post:
+      tags:
+        - Roles
+      summary: Update Role
+      description: |-
+        <h2>Premium</h2>
+        Update a role in the workspace.
+        Permission required: `access-permissions`
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |6.0.0            | Moved to Enterprise plan.       |
+      operationId: post-api-v1-roles.update
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roleId:
+                  type: string
+                  example: 646c431fa8c3a3ba32d0e1c4
+                  description: The role ID that you want to update.
+                name:
+                  type: string
+                  example: newRole
+                  description: The updated name of the role.
+                scope:
+                  type: string
+                  example: Subscriptions
+                  description: >-
+                    The updated  scope of the role. The default value is
+                    `Users`.
+                description:
+                  type: string
+                  example: Role description
+                  description: Updated description for the role.
+                mandatory2fa:
+                  type: boolean
+                  default: false
+                  description: >-
+                    Whether the role should have a mandatory 2FA. The default
+                    value is `false`.
+              required:
+                - roleId
+                - name
+            examples:
+              Example 1:
+                value:
+                  roleId: 646c431fa8c3a3ba32d0e1c4
+                  name: Test Role
+                  scope: Users
+                  description: Testing Role for API
+                  mandatory2fa: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  role:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      name:
+                        type: string
+                      scope:
+                        type: string
+                      description:
+                        type: string
+                      protected:
+                        type: boolean
+                      mandatory2fa:
+                        type: boolean
+                      _updatedAt:
+                        type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    role:
+                      _id: 646c431fa8c3a3ba32d0e1c4
+                      name: update role
+                      scope: Users
+                      description: Update Role support tier 1
+                      protected: false
+                      mandatory2fa: false
+                      _updatedAt: '2023-05-23T05:33:33.730Z'
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: >-
+                      The role properties are invalid.
+                      [error-invalid-role-properties]
+                    errorType: error-invalid-role-properties
+                Example 2:
+                  value:
+                    success: false
+                    error: >-
+                      Accessing permissions is not allowed
+                      [error-action-not-allowed]
+                    errorType: error-action-not-allowed
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+  /api/v1/roles.addUserToRole:
+    post:
+      tags:
+        - Roles
+      summary: Assign Role to User
+      description: |-
+        Assign a role to a user. Optionally, you can set this role to a user for a specific room.
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |0.70.0            | Added       |
+      operationId: post-api-v1-roles.addUserToRole
+      requestBody:
+        description: >-
+          By default, the three major room roles available in Rocket.Chat are
+          `Owner`, `Leader`, and `Moderator`. Creating custom roles is an
+          Enterprise workspace feature. Refer [Room
+          Roles](https://docs.rocket.chat/use-rocket.chat/user-guides/rooms/room-roles)
+          for more information.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roleName:
+                  type: string
+                  description: The role name.
+                  example: auditor-log
+                username:
+                  type: string
+                  description: The user name.
+                  example: test.fun
+                roomId:
+                  type: string
+                  description: The room ID for which the user is assigned the role.
+                  example: 4adb09baa5ad42
+              required:
+                - roleName
+                - username
+            examples:
+              Example 1:
+                value:
+                  roleName: auditor-log
+                  username: test.fun
+                  roomId: 64adb09baa5ad4273bfc
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  role:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      scope:
+                        type: string
+                      description:
+                        type: string
+                      mandatory2fa:
+                        type: boolean
+                      name:
+                        type: string
+                      protected:
+                        type: boolean
+                      _updatedAt:
+                        type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    role:
+                      _id: auditor-log
+                      scope: Users
+                      description: ''
+                      mandatory2fa: false
+                      name: auditor-log
+                      protected: true
+                      _updatedAt: '2023-07-10T23:20:56.702Z'
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: >-
+                      must have required property 'username'
+                      [error-invalid-role-properties]
+                    errorType: error-invalid-role-properties
+                Example 2:
+                  value:
+                    success: false
+                    error: >-
+                      The required "userId" or "username" param provided does
+                      not match any users [error-invalid-user]
+                    errorType: error-invalid-user
+                Example 3:
+                  value:
+                    success: false
+                    error: error-invalid-role-properties
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+  /api/v1/roles.getUsersInRole:
+    get:
+      tags:
+        - Roles
+      summary: Get Users of a Role
+      operationId: get-api-v1-roles.getUsersInRole
+      parameters:
+        - name: role
+          in: query
+          description: The role.
+          required: true
+          schema:
+            type: string
+            example: admin
+        - name: roomId
+          in: query
+          description: The room ID.
+          schema:
+            type: string
+            example: GENERAL
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        username:
+                          type: string
+                        type:
+                          type: string
+                        status:
+                          type: string
+                        active:
+                          type: boolean
+                        name:
+                          type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    users:
+                      - _id: voakrL3cHjYBwwRPq
+                        username: a
+                        type: user
+                        status: offline
+                        active: true
+                        name: a
+                      - _id: N2s7KG6YkzgJfXbyn
+                        username: b
+                        type: user
+                        status: offline
+                        active: true
+                        name: b
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'Query param "role" is required [error-param-not-provided]'
+                    errorType: error-param-not-provided
+                Example 2:
+                  value:
+                    success: false
+                    error: '[error-invalid-roleId]'
+                    errorType: error-invalid-roleId
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      description: |-
+        Gets the users that belong to a specific role.
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |1.3.0            | Added       |
+  /api/v1/roles.list:
+    get:
+      tags:
+        - Roles
+      summary: Get Roles
+      description: |-
+        Gets all the roles in the workspace.
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        |0.73.0            | Added `mandatory2fa` property       |
+        |0.70.0            | Added       |
+      operationId: get-api-v1-roles.list
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  roles:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        description:
+                          type: string
+                        mandatory2fa:
+                          type: boolean
+                        protected:
+                          type: boolean
+                        scope:
+                          type: string
+                        name:
+                          type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    roles:
+                      - _id: admin
+                        description: Admin
+                        mandatory2fa: false
+                        protected: true
+                        scope: Users
+                      - _id: moderator
+                        description: Moderator
+                        mandatory2fa: false
+                        protected: true
+                        scope: Subscriptions
+                      - _id: leader
+                        description: Leader
+                        mandatory2fa: false
+                        protected: true
+                        scope: Subscriptions
+                      - _id: owner
+                        description: Owner
+                        mandatory2fa: false
+                        protected: true
+                        scope: Subscriptions
+                      - _id: user
+                        description: ''
+                        mandatory2fa: false
+                        protected: true
+                        scope: Users
+                      - _id: bot
+                        description: ''
+                        mandatory2fa: false
+                        protected: true
+                        scope: Users
+                      - _id: guest
+                        description: ''
+                        mandatory2fa: false
+                        protected: true
+                        scope: Users
+                      - _id: anonymous
+                        description: ''
+                        mandatory2fa: false
+                        protected: true
+                        scope: Users
+                      - _id: livechat-agent
+                        name: livechat-agent
+                        scope: Users
+                      - _id: livechat-manager
+                        name: livechat-manager
+                        scope: Users
+                      - _id: livechat-guest
+                        name: livechat-guest
+                        scope: Users
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+  /api/v1/roles.sync:
+    get:
+      tags:
+        - Roles
+      summary: Get Updated Roles
+      description: |-
+        Gets all the roles in the workspace which are updated after a given date.
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |3.1.0            | Added       |
+      operationId: get-api-v1-roles.sync
+      parameters:
+        - name: updatedSince
+          in: query
+          description: Date as ISO string.
+          required: true
+          schema:
+            type: string
+            example: '2017-11-25T15:08:17.248Z'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  roles:
+                    type: object
+                    properties:
+                      update:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            description:
+                              type: string
+                            mandatory2fa:
+                              type: boolean
+                            protected:
+                              type: boolean
+                            scope:
+                              type: string
+                      remove:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            description:
+                              type: string
+                            mandatory2fa:
+                              type: boolean
+                            protected:
+                              type: boolean
+                            scope:
+                              type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    roles:
+                      update:
+                        - _id: admin
+                          description: Admin
+                          mandatory2fa: false
+                          protected: true
+                          scope: Users
+                      remove:
+                        - _id: user
+                          description: User
+                          mandatory2fa: false
+                          protected: true
+                          scope: Users
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'Match error: Missing key ''updatedSince'''
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  /api/v1/roles.delete:
+    post:
+      summary: Delete Role
+      tags:
+        - Roles
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: >-
+                      The role properties are invalid.
+                      [error-invalid-role-properties]
+                    errorType: error-invalid-role-properties
+                Example 2:
+                  value:
+                    success: false
+                    error: >-
+                      Accessing permissions is not allowed
+                      [error-action-not-allowed]
+                    errorType: error-action-not-allowed
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-roles.delete
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+      description: |-
+        Permission required: `access-permissions`
+        - Roles that have the protected value as true can't be deleted (such as: `admin`, `moderator`, `user` and so on).
+        - You cannot delete roles that are assigned to users. To do that, you must first remove this role from all the users.
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |3.17.0            | Added       |
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roleId:
+                  type: string
+                  example: 6579adcf2dd9f9d9514f6
+                  description: The ID of an existing role.
+              required:
+                - roleId
+    parameters: []
+  /api/v1/roles.removeUserFromRole:
+    post:
+      summary: Remove Role from User
+      tags:
+        - Roles
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: >-
+                      The role properties are invalid.
+                      [error-invalid-role-properties]
+                    errorType: error-invalid-role-properties
+                Example 2:
+                  value:
+                    success: false
+                    error: >-
+                      Accessing permissions is not allowed
+                      [error-action-not-allowed]
+                    errorType: error-action-not-allowed
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-roles.removeUserFromRole
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+      description: |-
+        Permission required: `access-permissions`
+        Remove a role from a user. Optionally, you can remove this role from a specified scope.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roleId:
+                  type: string
+                  example: 6579adcf2dd9f9d9514f6
+                  description: The ID of an existing role.
+              required:
+                - roleId
+    parameters: []
+  /api/v1/users.create:
+    post:
+      tags:
+        - Users
+      summary: Create User
+      description: |-
+        Create a new user in your workspace.
+
+        Permission required: `create-user`
+
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        |0.48.0            | `role` property is now `roles` which is an array of strings for the roles to create the user with.       |
+        |0.45.0            | Users created via this now join the default channels.       |
+        |0.40.0            | Added       |
+      operationId: post-api-v1-users.create
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - email
+                - password
+                - username
+              properties:
+                name:
+                  type: string
+                  description: The display name of the user.
+                  example: Test User
+                email:
+                  type: string
+                  description: The email address for the user.
+                  example: email@user.tld1
+                password:
+                  type: string
+                  description: The password for the user.
+                  example: anypassyouwant
+                username:
+                  type: string
+                  description: The username for the user.
+                  example: uniqueusername1
+                active:
+                  type: boolean
+                  description: >-
+                    Set the users' active status.  If the user is deactivated,
+                    they can not login. By default, the user is active.
+                  example: true
+                  default: true
+                nickname:
+                  type: string
+                  description: 'The nickname for the user. '
+                  example: testusername
+                bio:
+                  type: string
+                  description: The bio for the user.
+                  example: All about the user
+                joinDefaultChannels:
+                  type: boolean
+                  description: >-
+                    Select whether users should automatically join default
+                    channels once they are created. By default, it is set to
+                    `true`.
+                  example: true
+                  default: true
+                statusText:
+                  type: string
+                  description: The status text of the user.
+                  example: On a vacation
+                roles:
+                  type: array
+                  description: |-
+                    The roles to be assigned to this user. If it is not specified, the `user` role is assigned by default.
+                    **Note:**
+                    * For default roles, the role name and ID are the same. For custom roles, the name and ID are different. 
+                    * If you are setting a custom role for a user, make sure to enter the custom role ID, and not the role name.
+                    Refer to [Roles](https://docs.rocket.chat/use-rocket.chat/workspace-administration/permissions#roles) for more information.
+                  example:
+                    - bot
+                  items:
+                    type: string
+                    example: bot
+                requirePasswordChange:
+                  type: boolean
+                  description: >-
+                    Should the user be required to change their password when
+                    they login? It is set to `false` by default
+                  example: false
+                  default: false
+                setRandomPassword:
+                  type: boolean
+                  description: >-
+                    Should the user be assigned a random password once they are
+                    created? It is set to `false` by defualt.
+                  example: false
+                  default: false
+                sendWelcomeEmail:
+                  type: boolean
+                  description: >-
+                    Should the user get a welcome email? It is set to `true` by
+                    default.
+                  example: false
+                  default: false
+                verified:
+                  type: boolean
+                  description: >-
+                    Should the user's email address be verified when created? It
+                    is set to `false` by default.
+                  example: false
+                  default: false
+                customFields:
+                  type: object
+                  description: >-
+                    A valid JSON of key-value pairs of additional fields to be
+                    added during user registration. Before saving custom
+                    fields,  you must define them in [workspace admin
+                    settings](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/account-settings#registration).
+                    The customFields will not be returned if it does not exist
+                    on the server.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      createdAt:
+                        type: string
+                      username:
+                        type: string
+                      emails:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            address:
+                              type: string
+                            verified:
+                              type: boolean
+                      type:
+                        type: string
+                      roles:
+                        type: array
+                        items:
+                          type: string
+                      status:
+                        type: string
+                      active:
+                        type: boolean
+                      _updatedAt:
+                        type: string
+                      bio:
+                        type: string
+                      name:
+                        type: string
+                      nickname:
+                        type: string
+                      requirePasswordChange:
+                        type: boolean
+                      settings:
+                        type: object
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    user:
+                      _id: BsNr28znDkG8aeo7W
+                      createdAt: '2016-09-13T14:57:56.037Z'
+                      services:
+                        password:
+                          bcrypt: $2a$i7BFS55uFYRf5TE4ErSUH8HymMNAbpMAvsOcl2C
+                      username: uniqueusername
+                      emails:
+                        - address: email@user.tld
+                          verified: false
+                      type: user
+                      status: offline
+                      active: true
+                      roles:
+                        - user
+                      _updatedAt: '2016-09-13T14:57:56.175Z'
+                      name: name
+                      settings: {}
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+                      action:
+                        type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: 'Adding user is not allowed [error-action-not-allowed]'
+                    errorType: error-action-not-allowed
+                    details:
+                      method: insertOrUpdateUser
+                      action: Adding_user
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  /api/v1/users.register:
+    post:
+      tags:
+        - Users
+      summary: Register User
+      description: |-
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |0.50.0            | Added       |
+      operationId: post-api-v1-users.register
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: The username for the user.
+                  example: rogersmith
+                email:
+                  type: string
+                  description: The email for the user.
+                  example: roger@example.com
+                password:
+                  type: string
+                  description: The password for the user.
+                  example: passw0rd
+                name:
+                  type: string
+                  description: |-
+                    The name of the user. 
+                    The value can be an empty string if `Require Name For Signup` is disabled in [account registration](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/accounts#registration).
+                  example: Roger Smith
+                secretURL:
+                  type: string
+                  description: String appended to secret registration URL.
+                  example: Jjwjg6gouWLXhMGKW
+              required:
+                - username
+                - email
+                - password
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      type:
+                        type: string
+                      status:
+                        type: string
+                      active:
+                        type: boolean
+                      name:
+                        type: string
+                      utcOffset:
+                        type: integer
+                      username:
+                        type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    user:
+                      _id: nSYqWzZ4GsKTX4dyK
+                      type: user
+                      status: offline
+                      active: true
+                      name: Example User
+                      utcOffset: 0
+                      username: example
+                    success: true
+    parameters: []
+  /api/v1/users.update:
+    post:
+      tags:
+        - Users
+      summary: Update User
+      description: |-
+        * To update the password for the user, `edit-other-user-password`
+        permission is required.
+        * To save `customFields` you must first define the custom fields in
+        admin panel (Accounts -> Registration -> Custom fields).
+        * This endpoint required 2FA.
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        |0.48.0            | Renamed to `users.update`       |
+        |0.35.0            | Added       |
+      operationId: post-api-v1-users.update
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/x-2fa-code'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  description: The user ID to update.
+                  example: BsNr28znDkG8aeo7W
+                data:
+                  type: object
+                  description: |-
+                    The object that includes the user information to update with the following parameters. Note: If you provide an empty object, the user details are returned.
+                  properties:
+                    name:
+                      type: string
+                      description: The name of the user.
+                      example: Example User
+                    email:
+                      type: string
+                      example: example@example.com
+                      description: The email ID of the user.
+                    password:
+                      type: string
+                      example: passw0rd
+                      description: The password for the user.
+                    username:
+                      type: string
+                      example: example
+                      description: The username for the user.
+                    active:
+                      type: boolean
+                      description: >-
+                        Whether the user is active, which determines if they can
+                        login or not.
+                      default: true
+                    roles:
+                      type: array
+                      description: The roles the user has been assigned.
+                      items:
+                        type: string
+                    joinDefaultChannels:
+                      type: boolean
+                      description: Whether the user should join the default channels.
+                      default: true
+                    requirePasswordChange:
+                      type: boolean
+                      description: >-
+                        Whether the user should be required to change their
+                        password when they login.
+                      default: false
+                    sendWelcomeEmail:
+                      type: boolean
+                      default: false
+                      description: Whether the user should get a welcome email.
+                    verified:
+                      type: boolean
+                      description: Whether the user's email address should be verified.
+                      default: true
+                    customFields:
+                      type: object
+                      description: Any custom fields the user should have on their account.
+              required:
+                - userId
+                - data
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      createdAt:
+                        type: string
+                      services:
+                        type: object
+                        properties:
+                          password:
+                            type: object
+                            properties:
+                              bcrypt:
+                                type: string
+                      username:
+                        type: string
+                      emails:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            address:
+                              type: string
+                            verified:
+                              type: boolean
+                      type:
+                        type: string
+                      status:
+                        type: string
+                      active:
+                        type: boolean
+                      roles:
+                        type: array
+                        items:
+                          type: string
+                      _updatedAt:
+                        type: string
+                      name:
+                        type: string
+                      customFields:
+                        type: object
+                        properties:
+                          twitter:
+                            type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    user:
+                      _id: BsNr28znDkG8aeo7W
+                      createdAt: '2016-09-13T14:57:56.037Z'
+                      services:
+                        password:
+                          bcrypt: >-
+                            $2a$10$5I5nUzqNEs8jKhi7BFS55uFYRf5TE4ErSUH8HymMNAbpMAvsOcl2C
+                      username: uniqueusername
+                      emails:
+                        - address: newemail@user.tld
+                          verified: false
+                      type: user
+                      status: offline
+                      active: true
+                      roles:
+                        - user
+                      _updatedAt: '2016-09-13T14:57:56.175Z'
+                      name: new name
+                      customFields:
+                        twitter: userstwitter
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+                      action:
+                        type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'Editing user is not allowed [error-action-not-allowed]'
+                    errorType: error-action-not-allowed
+                    details:
+                      method: insertOrUpdateUser
+                      action: Editing_user
+        '401':
+          $ref: '#/components/responses/authorizationError'
+    parameters: []
+  /api/v1/users.updateOwnBasicInfo:
+    post:
+      tags:
+        - Users
+      summary: Update Own Basic Information
+      description: |-
+        * This endpoint requires 2FA.
+        * If you do not have 2FA enabled, the endpoint requires the current
+        password for verification. Add the `currentPassword` encrypted in SHA256
+        to the body parameters and the request won't require TOTP again.
+
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |6.4.0            | Add `bio` and `statusType` parameters.       |
+        |0.62.2            | Added       |
+      operationId: post-api-v1-users.updateOwnBasicInfo
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/x-2fa-code'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              x-examples:
+                Example 1:
+                  data:
+                    email: funke@test.com
+                    newPassword: testbb
+                    currentPassword: >-
+                      aa856615052ee58e557a2945d53bc90a228915e7d7687ea250f3b4b1581d6e53
+                    nickname: baby girl
+                    bio: Auspicious baby
+                    username: roxie
+                    name: Funke Olasupo
+                    statusType: offline
+                    statusText: On a vacation
+                  customFields: {}
+              properties:
+                data:
+                  type: object
+                  description: >-
+                    An object of user data to be updated with the following
+                    parameters.
+                  properties:
+                    email:
+                      type: string
+                      example: example@example.com
+                      description: Email ID of the user.
+                    newPassword:
+                      type: string
+                      example: passw0rd
+                      description: The new password of the user.
+                    currentPassword:
+                      type: string
+                      description: The password for the user encrypted in SHA256.
+                      example: >-
+                        5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5
+                    nickname:
+                      type: string
+                      example: cake
+                      description: The nickname of the user.
+                    bio:
+                      type: string
+                      example: Engineer
+                      description: The bio of the user.
+                    username:
+                      type: string
+                      example: example
+                      description: The username of the user.
+                    name:
+                      type: string
+                      example: Example User
+                      description: Name of the user.
+                    statusType:
+                      type: string
+                      example: offline
+                      description: >-
+                        The status type of the user. It can be `online`, `busy`,
+                        `away`, or `offline`.
+                    statusText:
+                      type: string
+                      example: On a vacation
+                      description: The status text of the user.
+                customFields:
+                  type: object
+                  description: Any custom fields the user should have on their account.
+              required:
+                - data
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      createdAt:
+                        type: string
+                      services:
+                        type: object
+                        properties:
+                          password:
+                            type: object
+                            properties:
+                              bcrypt:
+                                type: string
+                          email2fa:
+                            type: object
+                            properties:
+                              enabled:
+                                type: boolean
+                              changedAt:
+                                type: string
+                          resume:
+                            type: object
+                            properties:
+                              loginTokens:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    when:
+                                      type: string
+                                    hashedToken:
+                                      type: string
+                                    twoFactorAuthorizedHash:
+                                      type: string
+                                    twoFactorAuthorizedUntil:
+                                      type: string
+                          email:
+                            type: object
+                            properties:
+                              verificationTokens:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    token:
+                                      type: string
+                                    address:
+                                      type: string
+                                    when:
+                                      type: string
+                          totp:
+                            type: object
+                            properties:
+                              enabled:
+                                type: boolean
+                          passwordHistory:
+                            type: array
+                            items:
+                              type: string
+                      username:
+                        type: string
+                      emails:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            address:
+                              type: string
+                            verified:
+                              type: boolean
+                      type:
+                        type: string
+                      status:
+                        type: string
+                      active:
+                        type: boolean
+                      _updatedAt:
+                        type: string
+                      __rooms:
+                        type: array
+                        items:
+                          type: string
+                      roles:
+                        type: array
+                        items:
+                          type: string
+                      name:
+                        type: string
+                      settings:
+                        type: object
+                        properties:
+                          preferences:
+                            type: object
+                            properties:
+                              themeAppearence:
+                                type: string
+                          profile:
+                            type: object
+                            properties: {}
+                      lastLogin:
+                        type: string
+                      statusConnection:
+                        type: string
+                      utcOffset:
+                        type: integer
+                      banners:
+                        type: object
+                        properties:
+                          versionUpdate-6_0_0:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              priority:
+                                type: integer
+                              title:
+                                type: string
+                              text:
+                                type: string
+                              textArguments:
+                                type: array
+                                items:
+                                  type: string
+                              link:
+                                type: string
+                              modifiers:
+                                type: array
+                                items:
+                                  type: object
+                                  properties: {}
+                              read:
+                                type: boolean
+                          versionUpdate-6_2_8:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              priority:
+                                type: integer
+                              title:
+                                type: string
+                              text:
+                                type: string
+                              textArguments:
+                                type: array
+                                items:
+                                  type: string
+                              link:
+                                type: string
+                              modifiers:
+                                type: array
+                                items:
+                                  type: object
+                                  properties: {}
+                      statusDefault:
+                        type: string
+                      statusText:
+                        type: string
+                      operator:
+                        type: boolean
+                      livechatStatusSystemModified:
+                        type: boolean
+                      statusLivechat:
+                        type: string
+                      livechatCount:
+                        type: integer
+                      livechat:
+                        type: object
+                        properties:
+                          maxNumberSimultaneousChat:
+                            type: string
+                      bio:
+                        type: string
+                      nickname:
+                        type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    user:
+                      _id: rbAXPnMktTFbNpwtJ
+                      createdAt: '2023-02-20T13:42:07.119Z'
+                      services:
+                        password:
+                          bcrypt: >-
+                            $2b$10$E9ppW3T2itbMEcDvOdWBR.NXiW3YbifRHwBhjVkt26r1XS8yNhh6u
+                        email2fa:
+                          enabled: true
+                          changedAt: '2023-02-20T13:42:07.118Z'
+                        resume:
+                          loginTokens:
+                            - when: '2023-09-16T09:27:10.959Z'
+                              hashedToken: A1jmsVCHHH2SkXHrEJDfumN+VtUP3tcuJ/OGseGrRbA=
+                              twoFactorAuthorizedHash: 3067196228a830eacd6181a6977fe86a
+                              twoFactorAuthorizedUntil: '2023-09-19T16:40:58.767Z'
+                            - when: '2023-09-18T10:37:58.218Z'
+                              hashedToken: RLdxvu9dDnk6QRwFdaK3my1AoPeGaR5lTkK+zEhTuPk=
+                            - when: '2023-09-18T10:41:25.814Z'
+                              hashedToken: zWZ8wW9PNlVuI2Q65vK/9vytaONk1BXxaWcNld4qvEc=
+                        email:
+                          verificationTokens:
+                            - token: lHq_4L8Orgxu2p5NhfVb0V9kA7kO1VaBXA5GmaJiuX3
+                              address: funke@test.com
+                              when: '2023-05-23T18:47:07.142Z'
+                        totp:
+                          enabled: false
+                        passwordHistory:
+                          - >-
+                            $2b$10$n1.FV8S2mxz7GzXA392V5OaDa5X0WR1DQ4eGGFKI/wpdhS9sVIC6S
+                          - >-
+                            $2b$10$4I68O5mlR.C8dRhtZ4Mj6us6EMwRHNIUqEWQe/nOhISs4e8RtOliW
+                          - >-
+                            $2b$10$AU9Ncfd8bO5TpE.5iLMjyujdd6RVJaoeKckVqo3MMO9Ngc3oyMAs2
+                      username: roxie
+                      emails:
+                        - address: funke@test.com
+                          verified: true
+                      type: user
+                      status: offline
+                      active: true
+                      _updatedAt: '2023-09-19T16:10:58.873Z'
+                      __rooms:
+                        - GENERAL
+                        - siyr2oWQJBjQjhLwr
+                        - 6GFJ3tbmHiyHbahmC
+                        - 64f0f82c2c26843a68c1f7ba
+                      roles:
+                        - user
+                        - admin
+                        - livechat-agent
+                        - livechat-manager
+                      name: Funke Olasupo
+                      settings:
+                        preferences:
+                          themeAppearence: light
+                        profile: {}
+                      lastLogin: '2023-09-19T16:00:19.657Z'
+                      statusConnection: away
+                      utcOffset: 1
+                      banners:
+                        versionUpdate-6_0_0:
+                          id: versionUpdate-6_0_0
+                          priority: 10
+                          title: Update_your_RocketChat
+                          text: New_version_available_(s)
+                          textArguments:
+                            - 6.0.0
+                          link: >-
+                            https://github.com/RocketChat/Rocket.Chat/releases/tag/6.0.0
+                          modifiers: []
+                          read: true
+                        versionUpdate-6_2_8:
+                          id: versionUpdate-6_2_8
+                          priority: 10
+                          title: Update_your_RocketChat
+                          text: New_version_available_(s)
+                          textArguments:
+                            - 6.2.8
+                          link: >-
+                            https://github.com/RocketChat/Rocket.Chat/releases/tag/6.2.8
+                          modifiers: []
+                      statusDefault: offline
+                      statusText: On a vacation
+                      operator: true
+                      livechatStatusSystemModified: false
+                      statusLivechat: available
+                      livechatCount: 8
+                      livechat:
+                        maxNumberSimultaneousChat: ''
+                      bio: Engineer
+                      nickname: ''
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+    parameters: []
+  /api/v1/users.info:
+    get:
+      tags:
+        - Users
+      summary: Get User's Info
+      description: |-
+        * Retrieves information about a user. The result is only limited to what the callee has access to view.
+        * This endpoint supports the `field` query parameter with `userRooms` that returns the rooms that the user is part of. 
+        * The `rooms` field returns the `unread` property based on the [Unread Count setting](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/general#general-settings).
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |3.4.0            | Added `unread` property inside `rooms` object       |
+        |0.70.0            | Added `rooms` property to response if the user request it and has the `view-other-user-channels` permission       |
+        |0.49.0            | Updated to support `userId` or `username`       |
+        |0.48.0            | Renamed to `users.info`       |
+        |0.35.0            | Added       |
+      operationId: get-api-v1-users.info
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - name: userId
+          in: query
+          description: >-
+            The `userId` of the user. Alternatively, you can use the `username`
+            parameter and value.
+          required: true
+          schema:
+            type: string
+            example: W7NHuX5ri2e3mu2Fc
+        - $ref: '#/components/parameters/fields'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      createdAt:
+                        type: string
+                      username:
+                        type: string
+                      emails:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            address:
+                              type: string
+                            verified:
+                              type: boolean
+                      type:
+                        type: string
+                      status:
+                        type: string
+                      active:
+                        type: boolean
+                      roles:
+                        type: array
+                        items:
+                          type: string
+                      name:
+                        type: string
+                      requirePasswordChange:
+                        type: boolean
+                      lastLogin:
+                        type: string
+                      statusConnection:
+                        type: string
+                      utcOffset:
+                        type: integer
+                      canViewAllInfo:
+                        type: boolean
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    user:
+                      _id: 5fRTXMt7DMJbpPJfh
+                      createdAt: '2023-07-10T16:44:58.548Z'
+                      services:
+                        password: true
+                        email2fa:
+                          enabled: true
+                          changedAt: '2023-07-10T16:44:58.546Z'
+                        resume:
+                          loginTokens:
+                            - when: '2023-10-05T18:55:02.996Z'
+                              hashedToken: ...
+                            - when: '2023-10-05T19:09:30.415Z'
+                              hashedToken: ....
+                            - when: '2023-10-10T23:40:46.098Z'
+                              hashedToken: ....
+                      username: test.john
+                      emails:
+                        - address: test.john@test.com
+                          verified: true
+                      type: user
+                      status: offline
+                      active: true
+                      roles:
+                        - user
+                        - admin
+                      name: Test John
+                      requirePasswordChange: false
+                      lastLogin: '2023-10-10T23:40:46.093Z'
+                      statusConnection: offline
+                      utcOffset: 1
+                      statusText: ''
+                      avatarETag: GFoEi6wv3uAxnzDcD
+                      nickname: tesuser2
+                      canViewAllInfo: true
+                      rooms:
+                        - _id: 651667dda2f73c7460e18cce
+                          unread: 1
+                          rid: JKa7R9zu2DinBhBN9
+                          name: Livestream
+                          t: c
+                        - _id: 64ac358a79f5c6e276cfe718
+                          unread: 0
+                          rid: GENERAL
+                          name: general
+                          t: c
+                        - _id: 64aca0e5aa5ad4273bfbfdb8
+                          unread: 0
+                          rid: 6GFJ3tbmHiyHbahmC
+                          name: test-audit
+                          t: c
+                        - _id: 64adb09baa5ad4273bfc0cc0
+                          unread: 0
+                          rid: 64adb09baa5ad4273bfc0cbf
+                          name: test-room
+                          t: c
+                          roles:
+                            - owner
+                        - _id: 64fd791c2c26843a68c1f7e5
+                          unread: 0
+                          rid: siyr2oWQJBjQjhLwr
+                          name: try
+                          t: c
+                          roles: []
+                        - _id: g5xHGWAGLA7vZXwW8
+                          rid: 5fRTXMt7DMJbpPJfhrbAXPnMktTFbNpwtJ
+                          name: roxie
+                          t: d
+                          unread: 2
+                        - _id: 64ef8a982c26843a68c1f7ae
+                          unread: 0
+                          rid: WDuJLFkjwk6L7LdFC
+                          name: new
+                          t: p
+                          roles:
+                            - leader
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: |-
+                      must have required property 'userId'
+                       must have required property 'username'
+                       must have required property 'importId'
+                       must match a schema in anyOf [invalid-params]
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: User not found.
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  /api/v1/users.list:
+    get:
+      tags:
+        - Users
+      summary: Get Users List
+      description: |-
+        Gets all of the users in the system and their information, the result is only limited to what the request sender has access to view.
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |0.49.0            | `Count` and `offset` query parameters supported.       |
+        |0.35.0            | Added       |
+      operationId: get-api-v1-users.list
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/query'
+        - $ref: '#/components/parameters/fields'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/count'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        username:
+                          type: string
+                        emails:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              address:
+                                type: string
+                              verified:
+                                type: boolean
+                        type:
+                          type: string
+                        status:
+                          type: string
+                        active:
+                          type: boolean
+                        roles:
+                          type: array
+                          items:
+                            type: string
+                        name:
+                          type: string
+                        lastLogin:
+                          type: string
+                        nameInsensitive:
+                          type: string
+                        avatarETag:
+                          type: string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    users:
+                      - _id: DGsmi2J4WjizYn7jc
+                        username: uniqueusername
+                        emails:
+                          - address: email@user.tld
+                            verified: false
+                        type: user
+                        status: offline
+                        active: true
+                        roles:
+                          - bot
+                          - user
+                        name: name
+                        nameInsensitive: name
+                      - _id: uZ5JvvioeHK8Coyqe
+                        active: true
+                        type: user
+                        status: offline
+                        roles:
+                          - anonymous
+                          - user
+                        lastLogin: '2023-05-16T20:50:33.579Z'
+                        username: user-0
+                        nameInsensitive: ''
+                      - _id: aspKK7FHe7iQgzexX
+                        active: true
+                        type: user
+                        status: offline
+                        roles:
+                          - anonymous
+                          - user
+                        lastLogin: '2023-05-12T10:44:46.703Z'
+                        username: user-00
+                        name: User 00
+                        emails:
+                          - address: user00@mail.cm
+                            verified: false
+                        nameInsensitive: user 00
+                    count: 3
+                    offset: 0
+                    total: 3
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+    parameters: []
+  /api/v1/users.setAvatar:
+    post:
+      summary: Set User Avatar
+      operationId: post-api-v1-users.setAvatar
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: Missing Content-Type
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      description: |-
+        Permission required: `edit-other-user-avatar`, if the `AllowUserAvatarChange` setting is enabled.
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |0.56.0            | Add support for `username` argument.       |
+        |0.48.0            | Set other users avatars if the callee has permission.       |
+        |0.46.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                avatarUrl:
+                  type: string
+                  description: Enter the image URL you want to set as the user avatar.
+                  example: 'http://domain.tld/to/my/own/avatar.jpg'
+                userId:
+                  type: string
+                  description: >-
+                    The ID or username of the user. If not provided, the avatar
+                    of the user who is sending the request is updated.
+                    Alternatively, you can enter the `username` parameter.
+              required:
+                - avatarUrl
+            examples:
+              Example 1:
+                value:
+                  avatarUrl: 'http://domain.tld/to/my/own/avatar.jpg'
+        description: |-
+          You have 2 options to set the user avatar:
+            * Upload the image file to use as the new avatar, as form data. For example, `image=@my-own-avatar.png`.
+            * Enter the image URL you want to set as the user avatar in the request body.
+      tags:
+        - Users
+    parameters: []
+  /api/v1/users.getAvatar:
+    parameters: []
+    get:
+      summary: Get User Avatar
+      tags:
+        - Users
+      responses:
+        '200':
+          description: You will get the user avatar image or a redirect to the image URL.
+          content: {}
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: >-
+                      The required "userId" or "username" param was not provided
+                      [error-user-param-not-provided]
+                    errorType: error-user-param-not-provided
+      operationId: get-api-v1-users.getAvatar
+      parameters:
+        - schema:
+            type: string
+            example: BsNr28znDkG8aeo7W
+          in: query
+          name: userId
+          description: 'The user ID. Alternatively, you can enter the `username` parameter.'
+          required: true
+      description: |-
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |0.50.0            | Added       |
+  /api/v1/users.resetAvatar:
+    parameters: []
+    post:
+      summary: Reset Avatar
+      operationId: post-api-v1-users.resetAvatar
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: >-
+                      The required "userId" or "username" param was not provided
+                      [error-user-param-not-provided]
+                    errorType: error-user-param-not-provided
+                Example 2:
+                  value:
+                    success: false
+                    error: 'Reset avatar is not allowed [error-not-allowed]'
+                    errorType: error-not-allowed
+                    details:
+                      method: users.resetAvatar
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      description: |-
+        Permissions required, if the setting `AllowUserAvatarChange` is enabled: 
+          * `edit-other-user-avatar`
+          * `manage-moderation-actions`
+          
+          ### Changelog
+          | Version      | Description |
+          | ---------------- | ------------|
+          |0.55.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  description: >-
+                    The user ID. Alternatively, you can enter the `username`
+                    parameter.
+                  example: BsNr28znDkG8aeo7W
+              required:
+                - userId
+            examples:
+              Example 1:
+                value:
+                  userId: BsNr28znDkG8aeo7W
+      tags:
+        - Users
+  /api/v1/users.setStatus:
+    parameters: []
+    post:
+      summary: Set User Status
+      operationId: post-api-v1-users.setStatus
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      description: |-
+        Permission required, if the setting `AllowUserStatusMessageChange` is enabled: 
+          * `edit-other-user-info`
+          
+          ### Changelog
+          | Version      | Description |
+          | ---------------- | ------------|
+          |1.2.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: The user's status message.
+                  example: My status update
+                status:
+                  type: string
+                  description: >-
+                    The user's status like `online`, `away`, `busy`, or
+                    `offline`.
+                  example: online
+                userId:
+                  type: string
+                  example: zXuq7SvPKYbzYmfpo
+                  description: The user ID for which to set the status.
+                username:
+                  type: string
+                  description: The user name for which to set the status.
+                  example: bob
+              required:
+                - message
+            examples:
+              Example 1:
+                value:
+                  message: My status update
+                  status: online
+                  userId: zXuq7SvPKYbzYmfpo
+                  username: bob
+      tags:
+        - Users
+  /api/v1/users.getStatus:
+    get:
+      tags:
+        - Users
+      summary: Get Status
+      description: |-
+        Gets a user's status in your workspace.
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |1.2.0            | Added       |
+      operationId: get-api-v1-users.getStatus
+      parameters:
+        - name: userId
+          in: query
+          description: >-
+            The `userId` of the user. Alternatively, you can use the `username`
+            property and value. If the value is not provided, the authenticated
+            user is used. 
+          schema:
+            type: string
+            example: W7NHuX5ri2e3mu2Fc
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  connectionStatus:
+                    type: string
+                  status:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    message: Latest status
+                    connectionStatus: online
+                    status: online
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  /api/v1/users.setActiveStatus:
+    post:
+      summary: Set User's Status Active
+      operationId: post-api-v1-users.setActiveStatus
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      active:
+                        type: boolean
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    user:
+                      _id: jJNyu4BQFqdgEcqnR
+                      active: false
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                    errorType: invalid-params
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: >-
+                      must have required property 'activeStatus'
+                      [invalid-params]
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      description: |-
+        Permissions required:
+          * `edit-other-user-active-status`
+          * `manage-moderation-actions`
+          
+          ### Changelog
+          | Version      | Description |
+          | ---------------- | ------------|
+          |3.7.0            | Added `confirmRelinquish` to the payload.       |
+          |0.75.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              x-examples:
+                Example 1:
+                  activeStatus: false
+                  userId: 5HmCfpoB7jp2uibTC
+              properties:
+                activeStatus:
+                  type: boolean
+                  description: The value of the active status.
+                  default: true
+                userId:
+                  type: string
+                  description: The user ID whose status value is to be changed.
+                  example: 5HmCfpoB7jp2uibTC
+                confirmRelinquish:
+                  type: boolean
+                  default: false
+                  description: >-
+                    Allows the user to be deactivated even if it is the last
+                    owner of a room. If `activeStatus=false` &
+                    `confirmRelinquish=true` and the user is the last remaining
+                    owner of a room, the oldest member of that room will be
+                    chosen as the new owner.
+              required:
+                - activeStatus
+                - userId
+        description: >-
+          If `activeStatus=false` & `confirmRelinquish=true` and the user is the
+          last remaining owner of a room, the oldest member of that room will be
+          chosen as the new owner.
+      tags:
+        - Users
+    parameters: []
+  /api/v1/users.deactivateIdle:
+    post:
+      summary: Deactivate Idle Users
+      operationId: post-api-v1-users.deactivateIdle
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    count: 1
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''daysIdle'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: unauthorized
+      description: |-
+        Permission required:
+          * `edit-other-user-active-status`
+          
+          ### Changelog
+          | Version      | Description |
+          | ---------------- | ------------|
+          |3.1.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                daysIdle:
+                  type: integer
+                  description: The number of days that the user is idle.
+                  example: 2
+                role:
+                  type: string
+                  description: The user role.
+                  example: admin
+                  default: user
+              required:
+                - daysIdle
+            examples:
+              Example 1:
+                value:
+                  daysIdle: 2
+                  role: user
+      tags:
+        - Users
+    parameters: []
+  /api/v1/users.getPresence:
+    parameters: []
+    get:
+      summary: Get Specific User's Presence
+      operationId: get-api-v1-users.getPresence
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  presence:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    presence: offline
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+        - schema:
+            type: string
+            example: BsNr28znDkG8aeo7W
+          in: query
+          name: userId
+          description: >-
+            The user ID. Alternatively, you can enter the `username` parameter.
+            If not provided, the user who sending the request is retrieved.
+      tags:
+        - Users
+      description: |-
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |0.49.0            | Updated to support `userId` or `username`       |
+        |0.48.0            | Renamed to `users.getPresence`       |
+        |0.35.0            | Added       |
+  /api/v1/users.presence:
+    parameters: []
+    get:
+      summary: Get Users Presence
+      operationId: get-api-v1-users.presence
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        username:
+                          type: string
+                        status:
+                          type: string
+                        utcOffset:
+                          type: integer
+                        avatarETag:
+                          type: string
+                  full:
+                    type: boolean
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    users:
+                      - _id: rocket.cat
+                        name: Rocket.Cat
+                        username: rocket.cat
+                        status: online
+                        utcOffset: 0
+                        avatarETag: 5BB9B5ny5DkKdrwkq
+                      - _id: rocketchat.internal.admin.test
+                        name: RocketChat Internal Admin Test
+                        username: rocketchat.internal.admin.test
+                        status: online
+                        utcOffset: -2
+                        avatarETag: iEbEm4bTT327NJjXt
+                    full: true
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+        - schema:
+            type: string
+            example: '2019-05-22T12:11:45.392Z'
+          in: query
+          name: from
+          description: >-
+            The last date when the status was changed. Format: ISO 8601
+            datetime. Timezone, milliseconds and seconds are optional. If you
+            don't pass `from` parameter, you'll get a list of all users'
+            presence and the result will have a `full` field with value `true` .
+        - schema:
+            type: string
+            example: J4sWseCgs8eEnWvhE
+          in: query
+          name: ids
+          description: The user IDs whose status you want.
+      description: |-
+        If the `Presence_broadcast_disabled` setting is true, the endpoint returns an empty array.
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |1.1.0            | Added       |
+      tags:
+        - Users
+  /api/v1/users.delete:
+    post:
+      tags:
+        - Users
+      summary: Delete User
+      description: |-
+        Deletes an existing user from your workspace. Permission required: `delete-user`
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |3.7.0            | Added `confirmRelinquish` to the payload.       |
+        |0.35.0            | Added       |
+      operationId: post-api-v1-users.delete
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - userId
+              properties:
+                userId:
+                  type: string
+                  description: >-
+                    The `userId` of the user. Alternatively, you can use the
+                    username property and value.
+                confirmRelinquish:
+                  type: boolean
+                  description: >-
+                    Deletes user even if it is the last owner of a room. By
+                    default, it is set to `false`.
+                  default: false
+            examples:
+              Example 1:
+                value:
+                  userId: BsNr28znDkG8aeo7W
+                  confirmRelinquish: true
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: >-
+                      The required "userId" or "username" param was not provided
+                      [error-user-param-not-provided]
+                    errorType: error-user-param-not-provided
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: unauthorized
+  /api/v1/users.deleteOwnAccount:
+    post:
+      tags:
+        - Users
+      summary: Delete Own Account
+      description: |-
+        Deletes your own user. Requires `Allow Users to Delete Own Account` enabled. Accessible from Administration -> Accounts.
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |3.7.0            | Added `confirmRelinquish` to the payload.       |
+        |0.67.0            | Added       |
+      operationId: post-api-v1-users.deleteOwnAccount
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              x-examples:
+                Example 1:
+                  userId: BsNr28znDkG8aeo7W
+              properties:
+                password:
+                  type: string
+                  description: The password of user (encrypted in SHA256).
+                  example: BsNr28znDkG8aeo7W
+                confirmRelinquish:
+                  type: boolean
+                  description: >-
+                    Deletes own account even if user is the last owner of a
+                    room.
+              required:
+                - password
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: Body parameter "password" is required.
+        '401':
+          $ref: '#/components/responses/authorizationError'
+    parameters: []
+  /api/v1/users.createToken:
+    post:
+      tags:
+        - Users
+      summary: Create Users Token
+      description: |-
+        Create a user authentication token. This is the same type of session token a user would get via login and will expire the same way.
+        * To be able to use this endpoint, you must set the [environment variable](https://docs.rocket.chat/setup-and-configure/environment-configuration/deployment-environment-variables) `CREATE_TOKENS_FOR_USERS=true`.
+        * For SaaS workspaces, contact support to set this variable.
+        * Permission required: `user-generate-access-token`
+        
+        For example, if you use Snaps to deploy, set the environment variable as shown below:
+          ```
+          echo "CREATE_TOKENS_FOR_USERS=true" > /var/snap/rocketchat-server/common/create-tokens.env
+          
+          sudo systemctl restart snap.rocketchat-server.rocketchat-server.service
+          ```
+          
+          ### Changelog
+          | Version      | Description |
+          | ---------------- | ------------|
+          |2.1.0            | Added ENV VAR to be able to use this endpoint (process.env.CREATE_TOKENS_FOR_USERS).       |
+          |0.56.0            | Added       |
+      operationId: post-api-v1-users.createToken
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  description: >-
+                    The user ID. Alternatively, you can use the `username`
+                    parameter and value.
+                  example: BsNr28znDkG8aeo7W
+              required:
+                - userId
+            examples:
+              Example 1:
+                value:
+                  userId: BsNr28znDkG8aeo7W
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      userId:
+                        type: string
+                      authToken:
+                        type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    data:
+                      userId: BsNr28znDkG8aeo7W
+                      authToken: 2jdk99wuSjXPO201XlAks9sjDjAhSJmskAKW301mSuj9Sk
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: >-
+                      The required "userId" or "username" param was not provided
+                      [error-user-param-not-provided]
+                    errorType: error-user-param-not-provided
+                Example 2:
+                  value:
+                    success: false
+                    error: 'Not authorized [error-not-authorized]'
+                    errorType: error-not-authorized
+                    details:
+                      method: createToken
+        '401':
+          $ref: '#/components/responses/authorizationError'
+    parameters: []
+  /api/v1/users.getPreferences:
+    get:
+      tags:
+        - Users
+      summary: Get User's Preferences
+      description: Gets all the preferences of the authenticated user in the workspace.
+      operationId: get-api-v1-users.getPreferences
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  preferences:
+                    type: object
+                    properties:
+                      newRoomNotification:
+                        type: string
+                      newMessageNotification:
+                        type: string
+                      muteFocusedConversations:
+                        type: boolean
+                      useEmojis:
+                        type: boolean
+                      convertAsciiEmoji:
+                        type: boolean
+                      saveMobileBandwidth:
+                        type: boolean
+                      collapseMediaByDefault:
+                        type: boolean
+                      autoImageLoad:
+                        type: boolean
+                      emailNotificationMode:
+                        type: string
+                      roomsListExhibitionMode:
+                        type: string
+                      unreadAlert:
+                        type: boolean
+                      notificationsSoundVolume:
+                        type: integer
+                      desktopNotifications:
+                        type: string
+                      mobileNotifications:
+                        type: string
+                      enableAutoAway:
+                        type: boolean
+                      highlights:
+                        type: array
+                        items:
+                          type: object
+                      desktopNotificationDuration:
+                        type: integer
+                      viewMode:
+                        type: integer
+                      hideUsernames:
+                        type: boolean
+                      hideRoles:
+                        type: boolean
+                      hideAvatars:
+                        type: boolean
+                      hideFlexTab:
+                        type: boolean
+                      sendOnEnter:
+                        type: string
+                      roomCounterSidebar:
+                        type: boolean
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    preferences:
+                      newRoomNotification: door
+                      newMessageNotification: chime
+                      muteFocusedConversations: true
+                      useEmojis: true
+                      convertAsciiEmoji: true
+                      saveMobileBandwidth: true
+                      collapseMediaByDefault: false
+                      autoImageLoad: true
+                      emailNotificationMode: all
+                      roomsListExhibitionMode: category
+                      unreadAlert: true
+                      notificationsSoundVolume: 100
+                      desktopNotifications: default
+                      mobileNotifications: default
+                      enableAutoAway: true
+                      highlights: []
+                      desktopNotificationDuration: 0
+                      viewMode: 0
+                      hideUsernames: false
+                      hideRoles: false
+                      hideAvatars: false
+                      hideFlexTab: false
+                      sendOnEnter: normal
+                      roomCounterSidebar: false
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  /api/v1/users.setPreferences:
+    parameters: []
+    post:
+      summary: Set User Preferences
+      operationId: post-api-v1-users.setPreferences
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      settings:
+                        type: object
+                        properties:
+                          preferences:
+                            type: object
+                            properties:
+                              enableAutoAway:
+                                type: boolean
+                              idleTimeLimit:
+                                type: integer
+                              desktopNotificationRequireInteraction:
+                                type: boolean
+                              desktopNotifications:
+                                type: string
+                              pushNotifications:
+                                type: string
+                              unreadAlert:
+                                type: boolean
+                              useEmojis:
+                                type: boolean
+                              convertAsciiEmoji:
+                                type: boolean
+                              autoImageLoad:
+                                type: boolean
+                              saveMobileBandwidth:
+                                type: boolean
+                              collapseMediaByDefault:
+                                type: boolean
+                              hideUsernames:
+                                type: boolean
+                              hideRoles:
+                                type: boolean
+                              hideFlexTab:
+                                type: boolean
+                              displayAvatars:
+                                type: boolean
+                              sidebarGroupByType:
+                                type: boolean
+                              sidebarViewMode:
+                                type: string
+                              sidebarDisplayAvatar:
+                                type: boolean
+                              sidebarShowUnread:
+                                type: boolean
+                              sidebarSortby:
+                                type: string
+                              showMessageInMainThread:
+                                type: boolean
+                              sidebarShowFavorites:
+                                type: boolean
+                              sendOnEnter:
+                                type: string
+                              messageViewMode:
+                                type: integer
+                              emailNotificationMode:
+                                type: string
+                              newRoomNotification:
+                                type: string
+                              newMessageNotification:
+                                type: string
+                              muteFocusedConversations:
+                                type: boolean
+                              notificationsSoundVolume:
+                                type: integer
+                              enableMessageParserEarlyAdoption:
+                                type: boolean
+                              mobileNotifications:
+                                type: string
+                              desktopNotificationDuration:
+                                type: integer
+                              dontAskAgainList:
+                                type: array
+                                items:
+                                  type: object
+                                  properties: {}
+                              highlights:
+                                type: array
+                                items:
+                                  type: object
+                                  properties: {}
+                              language:
+                                type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    preferences:
+                      enableAutoAway: true
+                      idleTimeLimit: 300
+                      desktopNotificationRequireInteraction: false
+                      desktopNotifications: default
+                      pushNotifications: all
+                      unreadAlert: false
+                      useEmojis: true
+                      convertAsciiEmoji: true
+                      autoImageLoad: true
+                      saveMobileBandwidth: true
+                      collapseMediaByDefault: false
+                      hideUsernames: false
+                      hideRoles: false
+                      hideFlexTab: false
+                      displayAvatars: true
+                      sidebarGroupByType: true
+                      sidebarViewMode: condensed
+                      sidebarDisplayAvatar: true
+                      sidebarShowUnread: true
+                      sidebarSortby: activity
+                      showMessageInMainThread: false
+                      sidebarShowFavorites: true
+                      sendOnEnter: normal
+                      messageViewMode: 0
+                      emailNotificationMode: mentions
+                      newRoomNotification: door
+                      newMessageNotification: chime
+                      muteFocusedConversations: true
+                      notificationsSoundVolume: 100
+                      enableMessageParserEarlyAdoption: false
+                      mobileNotifications: default
+                      desktopNotificationDuration: 0
+                      dontAskAgainList: []
+                      highlights: []
+                      language: en
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''data'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      description: |-
+        If you want to edit another user's preferences, you need the permission `edit-other-user-info`.
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |2.3.0            | Added `desktopNotificationRequireInteraction` property.       |
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              x-examples:
+                Example 1:
+                  userId: BsNr28znDkG8aeo7W
+                  data: {}
+              properties:
+                userId:
+                  type: string
+                  description: |-
+                    The user ID whose preferences you want to change. If an ID is not provided, the preferences will be set for the user who is sending the request.
+                data:
+                  type: object
+                  description: The object with the following preference details.
+                  properties:
+                    language:
+                      type: string
+                      description: The preferred language for the user.
+                      example: en
+                    newRoomNotification:
+                      type: string
+                      example: door
+                      description: New room notification sound.
+                    newMessageNotification:
+                      type: string
+                      example: chime
+                      description: New message notification sound.
+                    muteFocusedConversations:
+                      type: boolean
+                      description: >-
+                        A boolean value that indicates whether the user has
+                        enabled the option to mute focused conversations.
+                    clockMode:
+                      type: integer
+                      description: |-
+                        The valid display formats for the clock. You can enter the values 0, 1, or 2.
+                        * `0`: System default
+                        * `1`: 12-hour clock
+                        * `2`: 24-hour clock
+                    useEmojis:
+                      type: boolean
+                      description: >-
+                        A boolean value that indicates whether the user has
+                        enabled the option to use emojis.
+                    convertAsciiEmoji:
+                      type: boolean
+                      description: >-
+                        A boolean value that indicates whether the user has
+                        enabled the option to convert ASCII emojis.
+                    saveMobileBandwidth:
+                      type: boolean
+                      description: >-
+                        A boolean value that indicates whether the user has
+                        enabled the option to save mobile bandwidth.
+                    collapseMediaByDefault:
+                      type: boolean
+                      description: >-
+                        A boolean value that indicates whether the user has
+                        enabled the option to collapse media by default.
+                    autoImageLoad:
+                      type: boolean
+                      description: >-
+                        A boolean value indicates whether the user has enabled
+                        the option to load images automatically.
+                    emailNotificationMode:
+                      type: string
+                      example: mentions
+                      description: |-
+                        The preferred mode for email notifications. The options are:
+                          * `all`: Get desktop notifications for all messages.
+                          * `mentions`: Get the notifications only for mentions.
+                          * `nothing`: Get no desktop notifications.
+                    unreadAlert:
+                      type: boolean
+                      description: >-
+                        A boolean value indicates whether the user has enabled
+                        the option.
+                    notificationsSoundVolume:
+                      type: integer
+                      description: The sound volume for notifications.
+                    desktopNotifications:
+                      type: string
+                      description: |-
+                        The type of desktop notifications.
+                        * `all`: Get desktop notifications for all messages.
+                        * `mentions`: Get the notifications only for mentions.
+                        * `nothing`: Get no desktop notifications.
+                      example: mentions
+                    pushNotifications:
+                      type: string
+                      example: mentions
+                      description: |-
+                        The type of push notifications.
+                        * `all`: Get push notifications for all messages.
+                        * `mentions`: Get the notifications only for mentions.
+                        * `nothing`: Get no push notifications.
+                    enableAutoAway:
+                      type: boolean
+                      description: >-
+                        A boolean value that indicates whether the user has
+                        enabled the option to update the status as away after a
+                        certain amount of idle time.
+                    highlights:
+                      type: array
+                      description: >-
+                        The message highlights section. You will be notified
+                        when someone mentions a word or phrase that you add
+                        here. Highlight words are not case-sensitive.
+                      items:
+                        type: string
+                        example: '["deploy", "docker"]'
+                    messageViewMode:
+                      type: integer
+                      description: |-
+                        The preferred view mode for the messages. The available options are:
+                          * `0` - Normal
+                          * `1` - Cozy
+                          * `2` - Compact
+                    hideUsernames:
+                      type: boolean
+                      description: >-
+                        A boolean value that indicates whether the user has
+                        enabled the option to hide usernames.
+                    hideRoles:
+                      type: boolean
+                      description: >-
+                        A boolean value that indicates whether the user has
+                        enabled the option to hide roles.
+                    displayAvatars:
+                      type: boolean
+                      description: >-
+                        A boolean value that indicates whether the user has
+                        enabled the option to display user avatars.
+                    hideFlexTab:
+                      type: boolean
+                      description: >-
+                        A boolean value that indicates whether the user has
+                        enabled the option.
+                    sendOnEnter:
+                      type: string
+                      description: |-
+                        Set how you want the **Enter** key to behave when sending messages.
+                        
+                        * `normal` - Send messages with the **Enter** key.
+                        * `alternative` - Send messages with **Enter** + **Ctrl/Alt/Shift/Cmd**.
+                        * `desktop` - Send messages with **Enter** only on the desktop.
+                    idleTimeLimit:
+                      type: integer
+                      description: The time limit that is to be considered as idle time.
+                      example: 300
+                    sidebarShowFavorites:
+                      type: boolean
+                      description: >-
+                        A boolean value that indicates whether the user has
+                        enabled the option to show favorites on the sidebar.
+                    sidebarShowUnread:
+                      type: boolean
+                      description: >-
+                        A boolean value that indicates whether the user has
+                        enabled the option to show unread messages in the
+                        sidebar.
+                    sidebarSortby:
+                      type: string
+                      description: |-
+                        To sort the messages in the sidebar alphabetically or by activity. The values can be:
+                          * `activity`
+                          * `alphabetical`
+                    sidebarViewMode:
+                      type: string
+                      description: |-
+                        The view mode of the sidebar. The values can be:
+                          * `extended`
+                          * `medium`
+                          * `condensed`
+                    sidebarDisplayAvatar:
+                      type: boolean
+                      description: >-
+                        A boolean value that indicates whether the user has
+                        enabled the option to display avatars in the sidebar.
+                    sidebarGroupByType:
+                      type: boolean
+                      description: >-
+                        A boolean value that indicates whether the user has
+                        enabled the option to show the grouped values in the
+                        sidebar.
+                    dontAskAgainList:
+                      type: array
+                      description: |-
+                        This field stores all the "warnings" a user opted not to be displayed again. An example where this works is when hiding a room.
+                        "dontAskAgainList\":[{\"action\":\"hideRoom\",\"label\":\"Hide\"}]"
+                      items:
+                        type: object
+              required:
+                - data
+      tags:
+        - Users
+  /api/v1/users.forgotPassword:
+    parameters: []
+    post:
+      summary: Forgot Password
+      operationId: post-api-v1-users.forgotPassword
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+              examples:
+                Success Example:
+                  value:
+                    status: success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: The 'email' param is required
+      description: |-
+        Send an email to reset your password. Please ensure that you have completed the configuration of the email; otherwise, your users will not receive the mail normally. Accessible from Administration -> Email inboxes.
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |0.64.0            | Added       |
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: The email to send password reset link.
+                  example: email@rocket.cat
+              required:
+                - email
+            examples:
+              Example 1:
+                value:
+                  email: email@rocket.cat
+      tags:
+        - Users
+  /api/v1/users.getUsernameSuggestion:
+    get:
+      tags:
+        - Users
+      summary: Get Username Suggestion
+      description: |-
+        Get a username suggestion for the authenticated user.
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |0.65.0            | Added       |
+      operationId: get-api-v1-users.getUsernameSuggestion
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    result: rocket.mic
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  /api/v1/users.generatePersonalAccessToken:
+    parameters: []
+    post:
+      summary: Generate Personal Access Token
+      operationId: post-api-v1-users.generatePersonalAccessToken
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    token: 2jdk99wuSjXPO201XlAks9sjDjAhSJmskAKW301mSuj9Sk
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+                      codeGenerated:
+                        type: boolean
+                      availableMethods:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'TOTP Required [totp-required]'
+                    errorType: totp-required
+                    details:
+                      method: password
+                      codeGenerated: false
+                      availableMethods: []
+                Example 2:
+                  value:
+                    success: false
+                    error: The 'tokenName' param is required
+                Example 3:
+                  value:
+                    success: false
+                    error: 'Not Authorized [not-authorized]'
+                    errorType: not-authorized
+                    details:
+                      method: 'personalAccessTokens:generateToken'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      description: |-
+        Permission required: `create-personal-access-tokens`.
+        This endpoint requires 2FA.
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |3.1.0            | Added `bypassTwoFactor` param       |
+        |0.69.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/x-2fa-code'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tokenName:
+                  type: string
+                  description: The name of the token.
+                bypassTwoFactor:
+                  type: boolean
+                  description: If 2FA requirement should be ignored when using this token.
+                  default: false
+              required:
+                - tokenName
+            examples:
+              Example 1:
+                value:
+                  tokenName: mypersonaltoken
+                  bypassTwoFactor: false
+      tags:
+        - Users
+  /api/v1/users.regeneratePersonalAccessToken:
+    parameters: []
+    post:
+      summary: Regenerate Personal Access Token
+      operationId: post-api-v1-users.regeneratePersonalAccessToken
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    token: 2jdk99wuSjXPO201XlAks9sjDjAhSJmskAKW301mSuj9Sk
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+                      codeGenerated:
+                        type: boolean
+                      availableMethods:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'TOTP Required [totp-required]'
+                    errorType: totp-required
+                    details:
+                      method: password
+                      codeGenerated: false
+                      availableMethods: []
+                Example 2:
+                  value:
+                    success: false
+                    error: The 'tokenName' param is required
+                Example 3:
+                  value:
+                    success: false
+                    error: 'Not Authorized [not-authorized]'
+                    errorType: not-authorized
+                    details:
+                      method: 'personalAccessTokens:generateToken'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      description: |-
+        Permission required: `create-personal-access-tokens`.
+        This endpoint requires 2FA.
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |0.69.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/x-2fa-code'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tokenName:
+                  type: string
+                  description: The name of the token.
+              required:
+                - tokenName
+            examples:
+              Example 1:
+                value:
+                  tokenName: mypersonaltoken
+      tags:
+        - Users
+  /api/v1/users.getPersonalAccessTokens:
+    parameters: []
+    get:
+      summary: Get Personal Access Tokens
+      operationId: get-api-v1-users.getPersonalAccessTokens
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tokens:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        createdAt:
+                          type: string
+                        lastTokenPart:
+                          type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    tokens:
+                      - name: myToken
+                        createdAt: '2018-08-01T17:17:48.068Z'
+                        lastTokenPart: R8Agh3
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'Not Authorized [not-authorized]'
+                    errorType: not-authorized
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      tags:
+        - Users
+      description: |-
+        Permission required: `create-personal-access-tokens`
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |0.69.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+  /api/v1/users.removePersonalAccessToken:
+    parameters: []
+    post:
+      summary: Remove Personal Access Token
+      operationId: post-api-v1-users.removePersonalAccessToken
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+                      codeGenerated:
+                        type: boolean
+                      availableMethods:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'TOTP Required [totp-required]'
+                    errorType: totp-required
+                    details:
+                      method: password
+                      codeGenerated: false
+                      availableMethods: []
+                Example 2:
+                  value:
+                    success: false
+                    error: The 'tokenName' param is required
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      description: |-
+        This endpoint requires 2FA.
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |0.69.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/x-2fa-code'
+      tags:
+        - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tokenName:
+                  type: string
+                  description: The name of the token.
+              required:
+                - tokenName
+            examples:
+              Example 1:
+                value:
+                  tokenName: mytoken
+  /api/v1/users.2fa.enableEmail:
+    parameters: []
+    post:
+      summary: Enable 2FA with Email
+      operationId: post-api-v1-users.2fa.enableEmail
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      description: ''
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      tags:
+        - Users
+      requestBody:
+        content: {}
+  /api/v1/users.2fa.disableEmail:
+    parameters: []
+    post:
+      summary: Disable 2FA Email
+      operationId: post-api-v1-users.2fa.disableEmail
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+                      codeGenerated:
+                        type: boolean
+                      availableMethods:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'TOTP Required [totp-required]'
+                    errorType: totp-required
+                    details:
+                      method: password
+                      codeGenerated: false
+                      availableMethods: []
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      description: This endpoint requires 2FA.
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/x-2fa-code'
+      tags:
+        - Users
+      requestBody:
+        content: {}
+  /api/v1/users.2fa.sendEmailCode:
+    parameters: []
+    post:
+      summary: Send 2FA Email Code
+      operationId: post-api-v1-users.2fa.sendEmailCode
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'emailOrUsername is required [error-parameter-required]'
+                    errorType: error-parameter-required
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      description: ''
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      tags:
+        - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                emailOrUsername:
+                  type: string
+                  description: Enter the email or username.
+                  example: test@email.com
+              required:
+                - emailOrUsername
+            examples:
+              Example 1:
+                value:
+                  emailOrUsername: test@email.com
+  /api/v1/users.requestDataDownload:
+    parameters: []
+    get:
+      summary: Request Data Download
+      operationId: get-api-v1-users.requestDataDownload
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requested:
+                    type: boolean
+                  exportOperation:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      createdAt:
+                        type: string
+                      userId:
+                        type: string
+                      roomList:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            roomId:
+                              type: string
+                            roomName:
+                              type: string
+                            userId:
+                              type: string
+                              nullable: true
+                            exportedCount:
+                              type: integer
+                            status:
+                              type: string
+                            targetFile:
+                              type: string
+                            type:
+                              type: string
+                      status:
+                        type: string
+                      exportPath:
+                        type: string
+                      assetsPath:
+                        type: string
+                      fileList:
+                        type: array
+                        items:
+                          type: object
+                      generatedFile:
+                        type: string
+                      fullExport:
+                        type: boolean
+                      _updatedAt:
+                        type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    requested: false
+                    exportOperation:
+                      _id: uDSuaW7vGd9B7j8qD
+                      createdAt: '2019-06-07T23:02:13.359Z'
+                      userId: hjwGZafNqExtFNmN7
+                      roomList:
+                        - roomId: GENERAL
+                          roomName: general
+                          userId: null
+                          exportedCount: 8
+                          status: completed
+                          targetFile: general.html
+                          type: c
+                      status: uploading
+                      exportPath: /tmp/userData/hjwGZafNqExtFNmN7/partial
+                      assetsPath: /tmp/userData/hjwGZafNqExtFNmN7/partial/assets
+                      fileList: []
+                      generatedFile: /tmp/zipFiles/hjwGZafNqExtFNmN7.zip
+                      fullExport: false
+                      _updatedAt: '2019-06-07T23:15:00.326Z'
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      tags:
+        - Users
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - schema:
+            type: boolean
+            default: false
+          in: query
+          name: fullExport
+          description: >-
+            Whether you want a full export or not. By default, the value is
+            false.
+      description: |-
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |1.2.0            | Added as `users.requestDataDownload`       |
+  /api/v1/users.logoutOtherClients:
+    parameters: []
+    post:
+      summary: Logout Other Clients
+      operationId: post-api-v1-users.logoutOtherClients
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  tokenExpires:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    token: SnS70r0VkngGFrSbxVK-pdwFMEzhefcjQgdnXaPeAaq
+                    tokenExpires: '2021-12-27T14:33:09.851Z'
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      tags:
+        - Users
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+  /api/v1/users.autocomplete:
+    parameters: []
+    get:
+      summary: Autocomplete User
+      operationId: get-api-v1-users.autocomplete
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        username:
+                          type: string
+                        status:
+                          type: string
+                        name:
+                          type: string
+                        nickname:
+                          type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    items:
+                      - _id: 6esQ6cpqSQYvoLTvC
+                        username: Aaron.altamirano
+                        status: offline
+                        name: 'Aaron Altamirano '
+                        nickname: aaron.altamirano@rocket.chat
+                      - _id: AySWYsyzToxy3239z
+                        username: Balazs.Nemethi
+                        status: offline
+                        name: Balázs Némethi
+                      - _id: gxcJTYapi5mPxuAme
+                        username: Bruno.Solis
+                        status: offline
+                        name: Bruno Solis
+                        avatarETag: ZAHMxLQ6bW426Knwm
+                      - _id: kvqbntLso8y2dEx7C
+                        username: Ivan.Belousov
+                        status: offline
+                        name: Ivan
+                      - _id: AkFjhgJFHAhNK3e6o
+                        status: offline
+                        name: Karina Monarkh
+                        username: Karina
+                      - _id: M3ajjGeyg8SfKXopd
+                        username: Rucks_guest2
+                        status: offline
+                        name: Rucks_guest2
+                        nickname: anonymous3
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''selector'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      description: List the users whose names match a given pattern.
+      tags:
+        - Users
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - schema:
+            type: array
+          in: query
+          name: selector
+          required: true
+          description: >-
+            Filter the response with the parameters. For example, `{
+            "exceptions" : [], "conditions": [], "term": "user"}`
+  /api/v1/users.removeOtherTokens:
+    parameters: []
+    post:
+      summary: Remove Other Tokens
+      operationId: post-api-v1-users.removeOtherTokens
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      tags:
+        - Users
+      description: |-
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |3.1.0            | Added       |
+  /api/v1/users.resetE2EKey:
+    parameters: []
+    post:
+      summary: Reset Users E2E Key
+      operationId: post-api-v1-users.resetE2EKey
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+                      codeGenerated:
+                        type: boolean
+                      availableMethods:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'TOTP Required [totp-required]'
+                    errorType: totp-required
+                    details:
+                      method: password
+                      codeGenerated: false
+                      availableMethods: []
+                Example 2:
+                  value:
+                    success: false
+                    error: 'Not allowed [error-not-allowed]'
+                    errorType: error-not-allowed
+                Example 3:
+                  value:
+                    success: false
+                    error: >-
+                      The required "userId" or "username" param provided does
+                      not match any users [error-invalid-user]
+                    errorType: error-invalid-user
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/x-2fa-code'
+      description: |-
+        [Reset the E2E key](https://docs.rocket.chat/use-rocket.chat/user-guides/user-panel/account#reset-e2e-key) for a user in the workspace.
+        * It requires the `edit-other-user-e2ee` permission.
+        * This endpoint requires 2FA.
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |3.6.0            | Added       |
+      tags:
+        - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  description: >-
+                    The `userId` of the user whose e2e key you want to reset.
+                    You can also use the username. If you don't enter a value,
+                    the sender's E2E value is reset.
+            examples:
+              Example 1:
+                value:
+                  userId: GonjPyg3gB3Z9ur9s
+  /api/v1/users.resetTOTP:
+    parameters: []
+    post:
+      summary: Reset Users TOTP
+      operationId: post-api-v1-users.resetTOTP
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+                      codeGenerated:
+                        type: boolean
+                      availableMethods:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'TOTP Required [totp-required]'
+                    errorType: totp-required
+                    details:
+                      method: password
+                      codeGenerated: false
+                      availableMethods: []
+                Example 2:
+                  value:
+                    success: false
+                    error: 'Not allowed [error-not-allowed]'
+                    errorType: error-not-allowed
+                Example 3:
+                  value:
+                    success: false
+                    error: >-
+                      The required "userId" or "username" param provided does
+                      not match any users [error-invalid-user]
+                    errorType: error-invalid-user
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/x-2fa-code'
+      description: |-
+        Reset 2FA via TOTP for a user in the workspace.
+        * It requires the `edit-other-user-totp` permission.
+        * It requires two-factor authentication.
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |3.6.0            | Added       |
+      tags:
+        - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  description: >-
+                    The `userId` of the user whose TOTP you want to reset. You
+                    can also use the username. If you do not enter a value, the
+                    sender's TOTP is reset.
+            examples:
+              Example 1:
+                value:
+                  userId: GonjPyg3gB3Z9ur9s
+  /api/v1/users.listTeams:
+    get:
+      tags:
+        - Users
+      summary: List User's Teams
+      description: ''
+      operationId: get-api-v1-users.listTeams
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - name: userId
+          in: query
+          description: The `userId` of the user.
+          required: true
+          schema:
+            type: string
+            example: rbAXPnMktTFbNpwtJ
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  teams:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        type:
+                          type: integer
+                        createdAt:
+                          type: string
+                        createdBy:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                        _updatedAt:
+                          type: string
+                        roomId:
+                          type: string
+                        isOwner:
+                          type: boolean
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    teams:
+                      - _id: 612b8ae982d286c3
+                        name: documentation-team
+                        type: 0
+                        createdAt: '2021-08-29T13:26:01.750Z'
+                        createdBy:
+                          _id: JxemcN9PDCdfzJe
+                          username: renato.b
+                        _updatedAt: '2021-08-29T13:26:01.762Z'
+                        roomId: GwktYAajqw4RiWiBK
+                        isOwner: true
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''userId'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  /api/v1/moderation.reportUser:
+    parameters: []
+    post:
+      summary: Report User
+      operationId: post-api-v1-moderation.reportUser
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''userId'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      tags:
+        - Users
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  description: The ID of the user to be reported.
+                  example: ByehQjC44FwMeiLbX
+                description:
+                  type: string
+                  description: The reason for reporting the user.
+                  example: test
+              required:
+                - userId
+                - description
+            examples:
+              Example 1:
+                value:
+                  userId: ByehQjC44FwMeiLbX
+                  description: test
+      description: |-
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |6.4.0            | Added       |
+  /api/v1/users.logout:
+    parameters: []
+    post:
+      summary: Logout User
+      operationId: post-api-v1-users.logout
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    message: User JxemcN9PDCdfzJeZr has been logged out!
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      tags:
+        - Users
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content: {}
+  /api/v1/ldap.syncNow:
+    post:
+      tags:
+        - LDAP
+      summary: LDAP Sync
+      description: |-
+        Syncs your [LDAP data](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/ldap) based on the [data sync configurations](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/ldap/ldap-data-sync-settings). 
+        Permission required: `sync-auth-services-users`
+        This endpoints requies 2FA.
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |5.2.0            | Include `syncAvatars`       |
+        |4.0.0            | Added       |
+      operationId: post-api-v1-ldap.syncNow
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/x-2fa-code'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    message: Sync_in_progress
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+                      codeGenerated:
+                        type: boolean
+                      availableMethods:
+                        type: array
+                        items:
+                          type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'TOTP Required [totp-required]'
+                    errorType: totp-required
+                    details:
+                      method: totp
+                      codeGenerated: false
+                      availableMethods:
+                        - totp
+                Example 2:
+                  value:
+                    success: false
+                    error: LDAP_disabled
+                Example 3:
+                  value:
+                    success: false
+                    error: error-not-authorized
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  /api/v1/ldap.testConnection:
+    post:
+      tags:
+        - LDAP
+      summary: Test LDAP Connection
+      description: |-
+        Test if Rocket.Chat can connect to the specified LDAP server using the port and host provided in the Rocket.Chat settings.
+        Permission required: `test-admin-options`
+      operationId: post-api-v1-ldap.testConnection
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    message: Connection_success
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+    parameters: []
+  /api/v1/ldap.testSearch:
+    post:
+      tags:
+        - LDAP
+      summary: Test LDAP User Search
+      description: |-
+        Test if a given username can be found in the LDAP server using the authentication and filter settings provided to Rocket.Chat.
+        Permission required: `test-admin-options`
+      operationId: post-api-v1-ldap.testSearch
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    message: LDAP_User_Found
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: The username that you want to search.
+                  example: bob
+              required:
+                - username
+            examples:
+              Example 1:
+                value:
+                  username: bob
+    parameters: []
+  '/api/v1/avatar/{subject}':
+    parameters:
+      - schema:
+          type: string
+          example: 'alice, @general'
+        name: subject
+        in: path
+        required: true
+        description: >-
+          Name of the user or channel.  Channels are always preceded by an @
+          symbol. Rooms that are DMs are always represented by the other
+          participant's user avatar.
+    get:
+      summary: Get Avatars
+      operationId: get-api-v1-avatar-subject
+      responses:
+        '200':
+          description: OK
+      description: |-
+        Note:
+          * This is a RESTful endpoint that sits separately from the REST API in the server codebase and behaves slightly differently.
+          * The `rc_uid` and `rc_token` can alternately be provided as cookies (already present in the web interface), but not as auth headers.
+          * When requesting the avatar of a user, if they have a custom avatar set, this will override the user's choices of format or size.
+          * If no uploaded avatar exists for a user, a default one will be generated for them based on the initial of their username in a randomly colored square.
+          * If `UI_Use_Name_Avatar` is set AND the user has a real name set; the generated avatar will be based on their actual name instead of the username.
+          * If no format is requested, or the format requested isn't supported, the format returned will be SVG.
+      parameters:
+        - schema:
+            type: string
+            example: png
+          in: query
+          name: format
+          description: >-
+            Format of the image requested.  The values can be one of: jpg, jpeg,
+            png.
+        - schema:
+            type: integer
+            example: 50
+          in: query
+          name: size
+          description: 'Width and height of the image. Default: 200'
+        - schema:
+            type: string
+            example: aobEdbYhXfu5hkeqG
+          in: query
+          name: rc_uid
+          description: >-
+            User ID for authenticating is only required if
+            `Accounts_AvatarBlockUnauthenticatedAccess` is enabled.
+        - schema:
+            type: string
+            example: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq
+          in: query
+          name: rc_token
+          description: >-
+            User auth token for authenticating is only required if
+            `Accounts_AvatarBlockUnauthenticatedAccess` is enabled.
+      tags:
+        - Users
+tags:
+  - name: LDAP
+  - name: Permissions
+  - name: Roles
+  - name: Users
+components:
+  parameters:
+    Auth-Token:
+      name: X-Auth-Token
+      in: header
+      description: The `authToken` of the authenticated user.
+      required: true
+      schema:
+        type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+    UserId:
+      name: X-User-Id
+      in: header
+      description: The `userId` of the authenticated user.
+      required: true
+      schema:
+        type: string
+        example: rbAXPnMktTFbNpwtJ
+    x-2fa-code:
+      name: x-2fa-code
+      in: header
+      description: >-
+        The 2fa code. See the [REST Two Factor
+        Authentication](https://developer.rocket.chat/reference/api/rest-api/endpoints/authentication-endpoints/rest-two-factor-authentication#calling-an-endpoint-with-two-factor).
+      required: true
+      schema:
+        type: string
+        example: '148750'
+    query:
+      name: query
+      in: query
+      required: false
+      schema: {}
+      description: >-
+        This parameter allows you to use [MongoDB
+        query](https://www.mongodb.com/docs/manual/reference/operator/query/)
+        operators to search for specific data. For example, to query users with
+        a name that contains the letter "g": query={ "name": { "$regex": "g" }
+        } 
+      allowEmptyValue: false
+    fields:
+      name: fields
+      in: query
+      required: false
+      schema: {}
+      description: ' This parameter accepts a JSON object with properties that have a value of 1 or 0 to include or exclude them in the response. For example, to only retrieve the usernames of users: fields={ "username": 1 }'
+    offset:
+      name: offset
+      in: query
+      required: false
+      schema:
+        type: integer
+        example: 50
+      description: >-
+        Number of items to "skip" in the query, i.e. requests return count
+        items, skipping the first offset items.
+    sort:
+      name: sort
+      in: query
+      required: false
+      schema: {}
+      description: >-
+        List of fields to order by, and in which direction. JSON object, with
+        properties listed in desired order, with values of 1 for ascending, or
+        -1 for descending. For example, {"value": -1, "_id": 1}
+    count:
+      name: count
+      in: query
+      required: false
+      schema:
+        type: integer
+        example: 50
+      description: How many items to return.
+  responses:
+    authorizationError:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              message:
+                type: string
+          examples:
+            Authorization Error:
+              value:
+                status: error
+                message: You must be logged in to do this.
+    trueSuccess:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+          examples:
+            Example 1:
+              value:
+                success: true
