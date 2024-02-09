@@ -1,0 +1,882 @@
+openapi: 3.0.0
+info:
+  version: ''
+  title: Content Management
+  description: ''
+  contact:
+    name: Rocket.Chat
+    url: 'https://rocket.chat/'
+    email: contact@rocket.chat
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  /api/v1/emoji-custom.all:
+    get:
+      tags:
+        - Custom Emoji
+      summary: List All Custom Emojis
+      description: |-
+        List all custom emojis.
+
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        |0.63.0            | Added       |
+      operationId: get-api-v1-emoji-custom.all
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  emojis:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        aliases:
+                          type: array
+                          items:
+                            type: string
+                        extension:
+                          type: string
+                        _updatedAt:
+                          type: string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    emojis:
+                      - _id: 6542e83aa2f73c7460e18efb
+                        name: happy
+                        aliases:
+                          - happy-gang
+                        extension: png
+                        _updatedAt: '2023-11-02T00:07:22.433Z'
+                    count: 1
+                    offset: 0
+                    total: 1
+                    success: true
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/emoji-custom.create:
+    post:
+      tags:
+        - Custom Emoji
+      summary: Create an Emoji
+      description: |
+        Create a custom emoji.
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        |0.74.0            | Added       |
+      operationId: post-api-v1-emoji-custom.create
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                emoji:
+                  type: string
+                  description: The image file to use as the new custom emoji.
+                name:
+                  type: string
+                  description: The name of the new custom emoji.
+                aliases:
+                  type: string
+                  description: The alias of the new custom emoji.
+              required:
+                - emoji
+                - name
+                - aliases
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+      servers:
+        - url: 'http:localhost:3000'
+  /api/v1/emoji-custom.delete:
+    post:
+      tags:
+        - Custom Emoji
+      summary: Delete a Custom Emoji
+      description: |-
+        Delete a custom emoji.
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        |0.74.0            | Added       |
+      operationId: post-api-v1-emoji-custom.delete
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                emojiId:
+                  type: string
+                  description: The id of the emoji to delete
+              required:
+                - emojiId
+              x-examples:
+                Example 1:
+                  emojiId: 6542e83aa2f73c7460e18efb
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/emoji-custom.list:
+    get:
+      tags:
+        - Custom Emoji
+      summary: Get Updated List of Custom Emojis
+      description: |-
+        Get an updated list of custom emojis.
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        |0.75.0            | Added       |
+      operationId: get-api-v1-emoji-custom.list
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - name: updatedSince
+          in: query
+          description: 'Date since the emojis were updated. Format: ISO string. When you provide the `updatedSince` query parameter in the URL then the `update` and `remove` in the response will contain only those updated and removed since this date and time.'
+          schema:
+            type: string
+            example: '2017-11-25T15:08:17.248Z'
+        - $ref: '#/components/parameters/query'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  emojis:
+                    type: object
+                    properties:
+                      update:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            name:
+                              type: string
+                            aliases:
+                              type: array
+                              items:
+                                type: object
+                            extension:
+                              type: string
+                            _updatedAt:
+                              type: string
+                      remove:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            name:
+                              type: string
+                            aliases:
+                              type: array
+                              items:
+                                type: object
+                            extension:
+                              type: string
+                            _updatedAt:
+                              type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    emojis:
+                      update:
+                        - _id: S5XvYppoLrLd9JvQm
+                          name: teste
+                          aliases: []
+                          extension: jpg
+                          _updatedAt: '2019-02-18T16:48:35.119Z'
+                      remove:
+                        - _id: 2dbVBG434dnsdh23
+                          name: teste3
+                          aliases: []
+                          extension: jpg
+                          _updatedAt: '2019-02-18T16:48:35.119Z'
+                    success: true
+              examples:
+                Success Example:
+                  value:
+                    emojis:
+                      update:
+                        - _id: S5XvYppoLrLd9JvQm
+                          name: teste
+                          aliases: []
+                          extension: jpg
+                          _updatedAt: '2019-02-18T16:48:35.119Z'
+                      remove:
+                        - _id: 2dbVBG434dnsdh23
+                          name: teste3
+                          aliases: []
+                          extension: jpg
+                          _updatedAt: '2019-02-18T16:48:35.119Z'
+                    success: true
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/emoji-custom.update:
+    post:
+      tags:
+        - Custom Emoji
+      summary: Update a Custom Emoji
+      description: |-
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        |0.74.0            | Added       |
+      operationId: post-api-v1-emoji-custom.update
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+      requestBody:
+        description: 'If you are updating the image, provide the image file as form data.'
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                emoji:
+                  type: string
+                  description: 'The image file to use as custom emoji, as form data.'
+                  example: '@my-custom-emoji.png'
+                _id:
+                  type: string
+                  description: The ID of the custom emoji.
+                  example: AG7DSB2H32YHS
+                name:
+                  type: string
+                  description: The name of the custom emoji.
+                  example: my-custom-emoji
+                aliases:
+                  type: string
+                  description: The alias of the custom emoji.
+                  example: emoji-alias
+              required:
+                - _id
+                - name
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/custom-sounds.list:
+    get:
+      tags:
+        - Custom Sounds
+      summary: List Custom Sounds
+      description: |-
+        List all custom sounds. 
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        |2.4.0            | Added       |
+      operationId: get-api-v1-custom-sounds.list
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/query'
+        - $ref: '#/components/parameters/fields'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sounds:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        extension:
+                          type: string
+                        _updatedAt:
+                          type: string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    sounds:
+                      - _id: 65462caea2f73c7460e18f83
+                        name: doremi
+                        extension: mp3
+                        _updatedAt: '2023-11-04T11:36:14.171Z'
+                    count: 1
+                    offset: 0
+                    total: 1
+                    success: true
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/custom-user-status.list:
+    get:
+      tags:
+        - Custom User Status
+      summary: List Custom User Status
+      description: |-
+        Lists all available custom user's status.
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        |2.4.0            | Added       |
+      operationId: get-api-v1-custom-user-status.list
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statuses:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        statusType:
+                          type: string
+                        _updatedAt:
+                          type: string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    statuses:
+                      - _id: 63f61be0b000b6b6d86704c8
+                        name: brb
+                        statusType: away
+                        _updatedAt: '2023-02-22T13:42:56.811Z'
+                    count: 1
+                    offset: 0
+                    total: 1
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/custom-user-status.create:
+    post:
+      tags:
+        - Custom User Status
+      summary: Create Custom Status
+      description: |
+        Create a custom user status. 
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        |2.4.0            | Added       |
+      operationId: post-api-v1-custom-user-status.create
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the custom status.
+                statusType:
+                  type: string
+                  description: 'The `statusType` of the custom status. Valid status type includes: `Online`, `Busy`, `Away`, `Offline`.'
+              required:
+                - name
+                - statusType
+              x-examples:
+                Example 1:
+                  name: caught up
+                  statusType: busy
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  customUserStatus:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      name:
+                        type: string
+                      statusType:
+                        type: string
+                      _updatedAt:
+                        type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    customUserStatus:
+                      _id: 65462e97a2f73c7460e18f84
+                      name: caught up
+                      statusType: busy
+                      _updatedAt: '2023-11-04T11:44:23.366Z'
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+                x-examples:
+                  Example 1:
+                    success: false
+                    error: 'The custom user status name is already in use [Custom_User_Status_Error_Name_Already_In_Use]'
+                    errorType: Custom_User_Status_Error_Name_Already_In_Use
+                    details:
+                      method: insertOrUpdateUserStatus
+              examples:
+                Name Param:
+                  value:
+                    success: false
+                    error: 'The field Name is required [error-the-field-is-required]'
+                    errorType: error-the-field-is-required
+                    details:
+                      method: insertOrUpdateUserStatus
+                      field: Name
+                Status name already in use:
+                  value:
+                    success: false
+                    error: 'The custom user status name is already in use [Custom_User_Status_Error_Name_Already_In_Use]'
+                    errorType: Custom_User_Status_Error_Name_Already_In_Use
+                    details:
+                      method: insertOrUpdateUserStatus
+                Invalid Status Type:
+                  value:
+                    success: false
+                    error: 'Offline is not a valid status type [error-input-is-not-a-valid-field]'
+                    errorType: error-input-is-not-a-valid-field
+                    details:
+                      method: insertOrUpdateUserStatus
+                      input: Offline
+                      field: StatusType
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/custom-user-status.update:
+    post:
+      tags:
+        - Custom User Status
+      summary: Update Custom Status
+      description: |-
+        Update a custom status. 
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        |2.4.0            | Added       |
+      operationId: post-api-v1-custom-user-status.update
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                _id:
+                  type: string
+                  description: The `_id` of the custom status.
+                name:
+                  type: string
+                  description: The updated name of the custom status.
+                statusType:
+                  type: string
+                  description: The updated `statusType` of the custom status
+              required:
+                - _id
+                - name
+                - statusType
+              x-examples:
+                Example 1:
+                  _id: 65462e97a2f73c7460e18f84
+                  name: caught up again
+                  statusType: busy
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  customUserStatus:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      name:
+                        type: string
+                      statusType:
+                        type: string
+                      _updatedAt:
+                        type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    customUserStatus:
+                      _id: 65462e97a2f73c7460e18f84
+                      name: caught up again
+                      statusType: busy
+                      _updatedAt: '2023-11-04T11:51:28.353Z'
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                x-examples:
+                  Example 1:
+                    success: false
+                    error: The "customUserStatusId" params is required!
+              examples:
+                Custom user status not found:
+                  value:
+                    success: false
+                    error: No custom user status found with the id of "SeZHHb77QXWRbnDh".
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/custom-user-status.delete:
+    post:
+      tags:
+        - Custom User Status
+      summary: Delete Custom User Status
+      description: |-
+        Delete a custom user status.
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        |2.4.0            | Added       |
+      operationId: post-api-v1-custom-user-status.delete
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customUserStatusId:
+                  type: string
+                  description: The `_id` of the custom status
+              required:
+                - customUserStatusId
+              x-examples:
+                Example 1:
+                  customUserStatusId: 65462e97a2f73c7460e18f84
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                x-examples:
+                  Example 1:
+                    success: false
+                    error: The "customUserStatusId" params is required!
+              examples:
+                customUserStatusId is required:
+                  value:
+                    success: false
+                    error: The "customUserStatusId" params is required!
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/assets.setAsset:
+    post:
+      tags:
+        - Assets
+      summary: Set Asset
+      description: |-
+        Set an asset by name. Permissions required: `manage-assets` 
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        |0.69.0           | Added       |
+      operationId: post-api-v1-assets.setAsset
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                asset:
+                  type: string
+                  description: Asset File to upload.
+                assetName:
+                  type: string
+                  description: "Type of asset to upload. `assetName` can be one of these:`logo`, `background`, `favicon_ico`, `favicon`, `favicon_16`, `favicon_32`, `favicon_192`, `favicon_512`, `touchicon_180`, `touchicon_180_pre`, `tile_70`, `tile_144`, `tile_150`, `tile_310_square`, `tile_310_wide`, `safari_pinned`.\r\n"
+                refreshAllClients:
+                  type: string
+                  description: If needs refresh all clients to apply changes immediately.
+              required:
+                - asset
+                - assetName
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                asset:
+                  type: string
+                  description: Asset File to upload.
+                assetName:
+                  type: string
+                  description: "Type of asset to upload. `assetName` can be one of these:`logo`, `background`, `favicon_ico`, `favicon`, `favicon_16`, `favicon_32`, `favicon_192`, `favicon_512`, `touchicon_180`, `touchicon_180_pre`, `tile_70`, `tile_144`, `tile_150`, `tile_310_square`, `tile_310_wide`, `safari_pinned ]`\r\n"
+                refreshAllClients:
+                  type: string
+              required:
+                - asset
+                - assetName
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/assets.unsetAsset:
+    post:
+      tags:
+        - Assets
+      summary: Unset Asset
+      description: |-
+        Unset an asset by name. Permissions required: `manage-assets` .
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        |0.69.0           | Added       |
+      operationId: post-api-v1-assets.unsetAsset
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                assetName:
+                  type: string
+                  description: "Asset name to unset. `assetName` can be one of these:`logo`, `background`, `favicon_ico`, `favicon`, `favicon_16`, `favicon_32`, `favicon_192`, `favicon_512`, `touchicon_180`, `touchicon_180_pre`, `tile_70`, `tile_144`, `tile_150`, `tile_310_square`, `tile_310_wide`, `safari_pinned`.\r\n"
+                refreshAllClients:
+                  type: boolean
+                  description: If needs refresh all clients to apply changes immediately.
+              required:
+                - assetName
+              x-examples:
+                Example 1:
+                  assetName: logo
+                  refreshAllClients: true
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+      servers:
+        - url: 'http://localhost:3000'
+tags:
+  - name: Assets
+  - name: Custom Emoji
+  - name: Custom Sounds
+  - name: Custom User Status
+components:
+  parameters:
+    offset:
+      name: offset
+      in: query
+      description: 'Number of items to "skip" in the query, i.e. requests return count items, skipping the first offset items.'
+      required: false
+      schema:
+        type: integer
+        example: 50
+    count:
+      name: count
+      in: query
+      description: The number of items to return.
+      required: false
+      schema:
+        type: integer
+        example: 50
+    sort:
+      name: sort
+      in: query
+      description: 'List of fields to order by, and in which direction. This is a JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending. For example, {"value": -1, "_id": 1}'
+      required: false
+      schema: {}
+    query:
+      name: query
+      in: query
+      description: 'This parameter allows you to use MongoDB query operators to search for specific data. For example, to query users with a name that contains the letter "g": query={ "name": { "$regex": "g" } }'
+      required: false
+      schema: {}
+    fields:
+      name: fields
+      in: query
+      description: 'This parameter accepts a JSON object with properties that have a value of 1 or 0 to include or exclude them in the response. For example, to only retrieve the usernames of users: fields={ "username": 1 }'
+      required: false
+      schema:
+        type: string
+    Auth-Token:
+      name: X-Auth-Token
+      in: header
+      description: The `authToken` of the authenticated user.
+      required: true
+      schema:
+        type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+    UserId:
+      name: X-User-Id
+      in: header
+      description: The `userId` of the authenticated user.
+      required: true
+      schema:
+        type: string
+        example: rbAXPnMktTFbNpwtJ
+  responses:
+    trueSuccess:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+            x-examples:
+              Example 1:
+                success: true
+          examples:
+            Success:
+              value:
+                success: true
+    authorizationError:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              message:
+                type: string
+            x-examples:
+              Example 1:
+                status: error
+                message: You must be logged in to do this.
+          examples:
+            Authorization Error:
+              value:
+                status: error
+                message: You must be logged in to do this.

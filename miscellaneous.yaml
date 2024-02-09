@@ -1,0 +1,2881 @@
+openapi: 3.0.0
+info:
+  version: ''
+  title: Miscellaneous
+  description: "To use the auto translate feature, you must enable it on the admin panel under (Admin -> Message -> Auto-Translate) and the user must have the necessary permission (auto-translate) in addition to a valid Google Translate API token.\r\n"
+  contact:
+    name: Rocket.Chat
+    url: 'https://rocket.chat/'
+    email: contact@rocket.chat
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  /api/v1/autotranslate.getSupportedLanguages:
+    get:
+      tags:
+        - Auto Translate
+      summary: Get Supported Languages
+      description: |- 
+        Gets the supported languages by the autotranslate.
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |1.3.0          | Added       |
+      operationId: get-api-v1-autotranslate.getSupportedLanguages
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - name: targetLanguage
+          in: query
+          description: Language in which language names will be returned.
+          schema:
+            type: string
+            example: en
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  languages:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        language:
+                          type: string
+                        name:
+                          type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    languages:
+                      - language: af
+                        name: Africâner
+                      - language: sq
+                        name: Albanês
+                      - language: de
+                        name: Alemão
+                      - language: am
+                        name: Amárico
+                    success: true
+          headers:
+            header-0:
+              schema:
+                type: string
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/autotranslate.saveSettings:
+    post:
+      tags:
+        - Auto Translate
+      summary: Save Settings
+      description: |- 
+        Saves settings about autotranslate.
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |1.3.0          | Added       |
+      operationId: post-api-v1-autotranslate.saveSettings
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roomId:
+                  type: string
+                  description: The room's id to apply setting.
+                field:
+                  type: string
+                  description: The setting to apply to user's subscription.
+                value:
+                  type: boolean
+                  description: Boolean if the setting is autoTranslate and a string (the language) if the setting is autoTranslateLanguage.
+                defaultLanguage:
+                  type: string
+                  description: The default language.
+              required:
+                - roomId
+                - field
+                - value
+              x-examples:
+                Example 1:
+                  roomId: 7aDSXtjMA3KPLxLjt
+                  field: autoTranslate
+                  value: true
+                  defaultLanguage: en
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/autotranslate.translateMessage:
+    post:
+      tags:
+        - Auto Translate
+      summary: Translate Message
+      description: |- 
+        Auto-translates the provided message.
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |1.3.0          | Added       |
+      operationId: post-api-v1-autotranslate.translateMessage
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                messageId:
+                  type: string
+                  description: The message's id to be translated.
+                targetLanguage:
+                  type: string
+                  description: The target language that the message will be translated.
+              required:
+                - messageId
+              x-examples:
+                Example 1:
+                  messageId: Fq7sQNSnDEfzj8qoS
+                  targetLanguage: en
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      rid:
+                        type: string
+                      msg:
+                        type: string
+                      ts:
+                        type: string
+                      u:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          username:
+                            type: string
+                          name:
+                            type: string
+                      _updatedAt:
+                        type: string
+                      mentions:
+                        type: array
+                        items:
+                          type: object
+                      channels:
+                        type: array
+                        items:
+                          type: object
+                      translations:
+                        type: object
+                        properties:
+                          en:
+                            type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    message:
+                      _id: Fq7sQNSnDEfzj8qoS
+                      rid: GENERAL
+                      msg: Isso é um teste
+                      ts: '2019-06-27T15:35:20.753Z'
+                      u:
+                        _id: pC6Z2N2ijivxdsYSu
+                        username: marcos
+                        name: marcos
+                      _updatedAt: '2019-06-27T15:47:01.486Z'
+                      mentions: []
+                      channels: []
+                      translations:
+                        en: This is a test
+                    success: true
+              examples:
+                Success:
+                  value:
+                    message:
+                      _id: Fq7sQNSnDEfzj8qoS
+                      rid: GENERAL
+                      msg: Isso é um teste
+                      ts: '2019-06-27T15:35:20.753Z'
+                      u:
+                        _id: pC6Z2N2ijivxdsYSu
+                        username: marcos
+                        name: marcos
+                      _updatedAt: '2019-06-27T15:47:01.486Z'
+                      mentions: []
+                      channels: []
+                      translations:
+                        en: This is a test
+                    success: true
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/email-inbox.list:
+    get:
+      tags:
+        - Email Inbox
+      summary: List Email Inbox
+      description: |- 
+        Gets email inbox list.
+        
+        Permissions required:- `manage-email-inbox`
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |3.11.0-rc.0         | Added       |
+      operationId: get-api-v1-email-inbox.list
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/query'
+        - $ref: '#/components/parameters/fields'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  emailInboxes:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        active:
+                          type: boolean
+                        name:
+                          type: string
+                        email:
+                          type: string
+                        description:
+                          type: string
+                        senderInfo:
+                          type: string
+                        department:
+                          type: string
+                        smtp:
+                          type: object
+                          properties:
+                            server:
+                              type: string
+                            port:
+                              type: integer
+                            username:
+                              type: string
+                            password:
+                              type: string
+                            secure:
+                              type: boolean
+                        imap:
+                          type: object
+                          properties:
+                            server:
+                              type: string
+                            port:
+                              type: integer
+                            username:
+                              type: string
+                            password:
+                              type: string
+                            secure:
+                              type: boolean
+                        _createdAt:
+                          type: string
+                        _updatedAt:
+                          type: string
+                        _createdBy:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    emailInboxes:
+                      - _id: 60197e8ff82d6c83b96c53ff
+                        active: false
+                        name: Rocket.Chat sample account
+                        email: info@rocket.chat
+                        description: ''
+                        senderInfo: ''
+                        department: GgYvrkAF63aeQmsh4
+                        smtp:
+                          server: smtp.gmail.com
+                          port: 465
+                          username: info@rocket.chat
+                          password: kkviepoenakbccwf
+                          secure: true
+                        imap:
+                          server: imap.gmail.com
+                          port: 993
+                          username: info@rocket.chat
+                          password: kkviepoenakbccwf
+                          secure: true
+                        _createdAt: '2021-02-02T16:32:15.069Z'
+                        _updatedAt: '2021-09-06T17:43:49.257Z'
+                        _createdBy:
+                          _id: JxemcN9PDCdfzJeZr
+                          username: renato.becker
+                    count: 1
+                    offset: 0
+                    total: 1
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/email-inbox:
+    post:
+      tags:
+        - Email Inbox
+      summary: Set Email Inbox
+      description: |- 
+        Sets the email inbox for your server.
+        
+        Permissions required:- `manage-email-inbox`
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |3.11.0-rc.0         | Added       |
+      operationId: post-api-v1-email-inbox
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                _id:
+                  type: string
+                  description: Email Id
+                name:
+                  type: string
+                  description: The name you wish to set for your email.
+                email:
+                  type: string
+                  description: The email to be used
+                active:
+                  type: boolean
+                  description: Set whether or not the email is active.
+                description:
+                  type: string
+                  description: The description for this entry.
+                senderInfo:
+                  type: string
+                  description: Sender info to be attached on outgoing emails.
+                department:
+                  type: string
+                  description: The department to which the email will be available.
+                smtp:
+                  type: object
+                  description: An object with your SMTP credentials to be used for outgoing emails.
+                  properties:
+                    password:
+                      type: string
+                    port:
+                      type: integer
+                    secure:
+                      type: boolean
+                    server:
+                      type: string
+                    username:
+                      type: string
+                imap:
+                  type: object
+                  description: An object having your IMAP credentials to be used for incomming emails.
+                  properties:
+                    password:
+                      type: string
+                    port:
+                      type: integer
+                    secure:
+                      type: boolean
+                    server:
+                      type: string
+                    username:
+                      type: string
+              required:
+                - name
+                - email
+                - active
+                - smtp
+                - imap
+              x-examples:
+                Example 1:
+                  name: new email
+                  email: mdyemaasil@rocket.chat
+                  active: false
+                  description: This email has been set
+                  senderInfo: email sender
+                  department: awesome department
+                  smtp:
+                    password: 10fae4dc374fb87d
+                    port: 25
+                    secure: true
+                    server: smtp.mailtrap.io
+                    username: b5ef5safd6cb806c
+                  imap:
+                    password: 10fae4374sdfb87d
+                    port: 993
+                    secure: true
+                    server: imap.mailtrap.io
+                    username: b5ef5aafd6cb806c
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    _id: JdVkn_dkOlms_
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                x-examples:
+                  Example 1:
+                    success: false
+                    error: 'E11000 duplicate key error index: rocketchat.rocketchat_email_inbox.$email_1 dup key: { : "mdyemail@rocket.chat" }'
+              examples:
+                Duplicate:
+                  value:
+                    success: false
+                    error: 'E11000 duplicate key error index: rocketchat.rocketchat_email_inbox.$email_1 dup key: { : "mdyemail@rocket.chat" }'
+                Invalid Inbox:
+                  value:
+                    success: false
+                    error: error-invalid-email-inbox
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      servers:
+        - url: 'http://localhost:3000'
+  '/api/v1/email-inbox/{_id}':
+    get:
+      tags:
+        - Email Inbox
+      summary: Email Inbox by Id
+      description: |- 
+        Gets email inbox by id.
+        
+        Permissions required: `manage-email-inbox`
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |5.3.0       | Not Found Error Added       |
+        |3.11.0-rc.0         | Added       |
+        
+      operationId: get-api-v1-email-inbox-id
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - name: _id
+          in: path
+          description: Email inbox id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  active:
+                    type: boolean
+                  name:
+                    type: string
+                  email:
+                    type: string
+                  description:
+                    type: string
+                  senderInfo:
+                    type: string
+                  department:
+                    type: string
+                  smtp:
+                    type: object
+                    properties:
+                      server:
+                        type: string
+                      port:
+                        type: integer
+                      username:
+                        type: string
+                      password:
+                        type: string
+                      secure:
+                        type: boolean
+                  imap:
+                    type: object
+                    properties:
+                      server:
+                        type: string
+                      port:
+                        type: integer
+                      username:
+                        type: string
+                      password:
+                        type: string
+                      secure:
+                        type: boolean
+                  _createdAt:
+                    type: string
+                  _updatedAt:
+                    type: string
+                  _createdBy:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      username:
+                        type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    _id: 60197e8ff82d6c83b96c53ff
+                    active: false
+                    name: Rocket.Chat sample account
+                    email: info@rocket.chat
+                    description: ''
+                    senderInfo: ''
+                    department: GgYvrkAF63aeQmsh4
+                    smtp:
+                      server: smtp.gmail.com
+                      port: 465
+                      username: info@rocket.chat
+                      password: kkviepoenakbccwf
+                      secure: true
+                    imap:
+                      server: imap.gmail.com
+                      port: 993
+                      username: info@rocket.chat
+                      password: kkviepoenakbccwf
+                      secure: true
+                    _createdAt: '2021-02-02T16:32:15.069Z'
+                    _updatedAt: '2021-09-06T17:43:49.257Z'
+                    _createdBy:
+                      _id: JxemcN9PDCdfzJeZr
+                      username: renato.becker
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                x-examples:
+                  Example 1:
+                    success: false
+                    error: Resource not found
+              examples:
+                Resource not found:
+                  value:
+                    success: false
+                    error: Resource not found
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      servers:
+        - url: 'http://localhost:3000'
+    delete:
+      tags:
+        - Email Inbox
+      summary: Delete Email Inbox by Id
+      description: |- 
+        Deletes email inbox using id.
+        
+        Permissions required: `manage-email-inbox`
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |3.11.0-rc.0         | Added       |
+      operationId: delete-api-v1-email-inbox-_id
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - name: _id
+          in: path
+          description: Email inbox id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    _id: 61717dd1066bc500096cb36d
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                x-examples:
+                  Example 1:
+                    success: false
+                    error: Resource not found
+              examples:
+                Email not found:
+                  value:
+                    success: false
+                    error: Resource not found
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/email-inbox.search:
+    get:
+      tags:
+        - Email Inbox
+      summary: Search Email Inbox
+      description: |- 
+        Searches email inbox by email address.
+        
+        Permissions required: `manage-email-inbox`
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |3.11.0-rc.0         | Added       |
+      operationId: get-api-v1-email-inbox.search
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - name: email
+          in: query
+          description: Email inbox address
+          required: true
+          schema:
+            type: string
+            example: info@rocket.chat
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  emailInbox:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      active:
+                        type: boolean
+                      name:
+                        type: string
+                      email:
+                        type: string
+                      description:
+                        type: string
+                      senderInfo:
+                        type: string
+                      department:
+                        type: string
+                      smtp:
+                        type: object
+                        properties:
+                          server:
+                            type: string
+                          port:
+                            type: integer
+                          username:
+                            type: string
+                          password:
+                            type: string
+                          secure:
+                            type: boolean
+                      imap:
+                        type: object
+                        properties:
+                          server:
+                            type: string
+                          port:
+                            type: integer
+                          username:
+                            type: string
+                          password:
+                            type: string
+                          secure:
+                            type: boolean
+                      _createdAt:
+                        type: string
+                      _updatedAt:
+                        type: string
+                      _createdBy:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          username:
+                            type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    emailInbox:
+                      _id: 60197e8ff82d6c83b96c53ff
+                      active: false
+                      name: Rocket.Chat sample account
+                      email: info@rocket.chat
+                      description: ''
+                      senderInfo: ''
+                      department: GgYvrkAF63aeQmsh4
+                      smtp:
+                        server: smtp.gmail.com
+                        port: 465
+                        username: info@rocket.chat
+                        password: kkviepoenakbccwf
+                        secure: true
+                      imap:
+                        server: imap.gmail.com
+                        port: 993
+                        username: info@rocket.chat
+                        password: kkviepoenakbccwf
+                        secure: true
+                      _createdAt: '2021-02-02T16:32:15.069Z'
+                      _updatedAt: '2021-09-06T17:43:49.257Z'
+                      _createdBy:
+                        _id: JxemcN9PDCdfzJeZr
+                        username: renato.becker
+                    success: true
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      servers:
+        - url: 'http://localhost:3000'
+  '/api/v1/email-inbox.send-test/{_id}':
+    get:
+      tags:
+        - Email Inbox
+      summary: Send test email to email inbox
+      description: |- 
+        Permissions required: `manage-email-inbox`
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |3.11.0-rc.0         | Added       |
+      operationId: get-api-v1-email-inbox.send-test-id
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - name: _id
+          in: path
+          description: Email inbox id
+          required: true
+          schema:
+            type: string
+            example: 60197e8ff82d6c83b96c53ff
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    _id: 60197e8ff82d6c83b96c53ff
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/shield.svg:
+    get:
+      summary: Shield SVG
+      description: |-  
+        A simple method, requires no authentication, that returns the shield svg(badge) to add in your website. It must have `API_Enable_Shields` enabled.
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |0.55.0        | Added       |
+      operationId: get-api-v1-shield.svg
+      parameters:
+        - name: type
+          in: query
+          description: 'Can either be `online`, `user`, `channel`'
+          schema:
+            type: string
+            example: online
+        - name: icon
+          in: query
+          schema:
+            type: string
+            example: 'false'
+        - name: channel
+          in: query
+          description: Name of the channel
+          required: true
+          schema:
+            type: string
+            example: general
+        - name: name
+          in: query
+          description: Name to show
+          required: true
+          schema:
+            type: string
+            example: Rocket.Chat
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: object
+              examples:
+                Example:
+                  value: '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="141" height="20"> <linearGradient id="b" x2="0" y2="100%"> <stop offset="0" stop-color="#bbb" stop-opacity=".1"/> <stop offset="1" stop-opacity=".1"/> </linearGradient> <mask id="a"> <rect width="141" height="20" rx="3" fill="#fff"/> </mask> <g mask="url(#a)"> <path fill="#555" d="M0 0h67v20H0z"/> <path fill="#4c1" d="M67 0h74v20H67z"/> <path fill="url(#b)" d="M0 0h141v20H0z"/> </g> <image x="5" y="3" width="14" height="14" xlink:href="/assets/favicon.svg"/> <g fill="#fff" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="11"> <text x="24" y="15" fill="#010101" fill-opacity=".3">Rocket</text> <text x="24" y="14">Rocket</text> <text x="74" y="15" fill="#010101" fill-opacity=".3">JOIN CHAT</text> <text x="74" y="14">JOIN CHAT</text> </g> </svg>'
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: image/svg+xml;charset=utf-8
+              description: image/svg+xml;charset=utf-8
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/spotlight:
+    get:
+      summary: Spotlight
+      description: |- 
+        Searches for users or rooms that are visible to the user. It will only return rooms that user didn't join yet.
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |0.64.0       | Added support to '#' and '@' searches, for channels and users respectively.       |
+        |0.61.0      | Added       |
+      operationId: get-api-v1-spotlight
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - name: query
+          in: query
+          description: The term to be searched. Supports '#' for channels and '@' for users
+          required: true
+          schema:
+            type: string
+            example: john
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        username:
+                          type: string
+                        status:
+                          type: string
+                        avatarETag:
+                          type: string
+                  rooms:
+                    type: array
+                    items:
+                      type: object
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    users:
+                      - _id: rocket.cat
+                        name: Rocket.Cat
+                        username: rocket.cat
+                        status: online
+                        avatarETag: 5BB9B5ny5DkKdrwkq
+                    rooms: []
+                    success: true
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/stdout.queue:
+    get:
+      summary: Get stdout queue
+      description: |- 
+        Retrieves last 1000 lines of server logs
+        
+        Permissions required: `view-logs`
+      operationId: get-api-v1-stdout.queue
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  queue:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        string:
+                          type: string
+                        ts:
+                          type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    queue:
+                      - id: logid-0
+                        string: |
+                          LocalStore: store created at 
+                        ts: '2024-01-26T13:16:11.945Z'
+                      - id: logid-1
+                        string: |
+                          LocalStore: store created at 
+                        ts: '2024-01-26T13:16:11.946Z'
+                      - id: logid-2
+                        string: |
+                          LocalStore: store created at 
+                        ts: '2024-01-26T13:16:11.947Z'
+                      - id: logid-3
+                        string: |
+                          {"level":40,"time":"2024-01-26T13:16:12.803Z","pid":1,"hostname":"cb52a01481fa","name":"VoIPService","msg":"Voip is not enabled. Cant start the service"}
+                        ts: '2024-01-26T13:16:12.804Z'
+                      - id: logid-4
+                        string: |
+                          {"level":51,"time":"2024-01-26T13:16:16.856Z","pid":1,"hostname":"cb52a01481fa","name":"Migrations","msg":"Not migrating, already at version 304"}
+                        ts: '2024-01-26T13:16:16.856Z'
+                      - id: logid-5
+                        string: |
+                          [2024-01-26T13:16:16.929Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/BROKER: Moleculer v0.14.31 is starting...
+                        ts: '2024-01-26T13:16:16.929Z'
+                      - id: logid-6
+                        string: |
+                          [2024-01-26T13:16:16.929Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/BROKER: Namespace: <not defined>
+                        ts: '2024-01-26T13:16:16.929Z'
+                      - id: logid-7
+                        string: |
+                          [2024-01-26T13:16:16.929Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/BROKER: Node ID: 5da8aab5-e32e-4a0a-b53e-62b027b331cf
+                        ts: '2024-01-26T13:16:16.930Z'
+                      - id: logid-8
+                        string: |
+                          [2024-01-26T13:16:16.931Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/REGISTRY: Strategy: RoundRobinStrategy
+                        ts: '2024-01-26T13:16:16.931Z'
+                      - id: logid-9
+                        string: |
+                          [2024-01-26T13:16:16.932Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/REGISTRY: Discoverer: LocalDiscoverer
+                        ts: '2024-01-26T13:16:16.932Z'
+                      - id: logid-10
+                        string: |
+                          [2024-01-26T13:16:16.933Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/BROKER: Serializer: JSONSerializer
+                        ts: '2024-01-26T13:16:16.933Z'
+                      - id: logid-11
+                        string: |
+                          [2024-01-26T13:16:16.965Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/BROKER: Validator: FastestValidator
+                        ts: '2024-01-26T13:16:16.965Z'
+                      - id: logid-12
+                        string: |
+                          [2024-01-26T13:16:16.968Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/BROKER: Registered 13 middleware(s).
+                        ts: '2024-01-26T13:16:16.968Z'
+                      - id: logid-13
+                        string: |
+                          [2024-01-26T13:16:16.970Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/BROKER: Transporter: TcpTransporter
+                        ts: '2024-01-26T13:16:16.970Z'
+                      - id: logid-14
+                        string: |
+                          {"level":51,"time":"2024-01-26T13:16:17.015Z","pid":1,"hostname":"cb52a01481fa","name":"DatabaseWatcher","msg":"Using change streams"}
+                        ts: '2024-01-26T13:16:17.016Z'
+                      - id: logid-15
+                        string: |
+                          [2024-01-26T13:16:17.031Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/TRANSIT: Connecting to the transporter...
+                        ts: '2024-01-26T13:16:17.032Z'
+                      - id: logid-16
+                        string: |
+                          [2024-01-26T13:16:17.261Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/TRANSPORTER: TCP server is listening on port 32911
+                        ts: '2024-01-26T13:16:17.262Z'
+                      - id: logid-17
+                        string: |
+                          [2024-01-26T13:16:17.263Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/TRANSPORTER: UDP Discovery is disabled.
+                        ts: '2024-01-26T13:16:17.263Z'
+                      - id: logid-18
+                        string: |
+                          [2024-01-26T13:16:17.263Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/TRANSPORTER: TCP Transporter started.
+                        ts: '2024-01-26T13:16:17.264Z'
+                      - id: logid-19
+                        string: |
+                          [2024-01-26T13:16:17.786Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/REGISTRY: '$node' service is registered.
+                        ts: '2024-01-26T13:16:17.787Z'
+                      - id: logid-20
+                        string: |
+                          [2024-01-26T13:16:17.788Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/REGISTRY: 'matrix' service is registered.
+                        ts: '2024-01-26T13:16:17.788Z'
+                      - id: logid-21
+                        string: |
+                          [2024-01-26T13:16:17.790Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/$NODE: Service '$node' started.
+                        ts: '2024-01-26T13:16:17.791Z'
+                      - id: logid-22
+                        string: |
+                          [2024-01-26T13:16:17.791Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/MATRIX: Service 'matrix' started.
+                        ts: '2024-01-26T13:16:17.791Z'
+                      - id: logid-23
+                        string: |
+                          [2024-01-26T13:16:17.793Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/BROKER: ✔ ServiceBroker with 2 service(s) started successfully in 788ms.
+                        ts: '2024-01-26T13:16:17.793Z'
+                      - id: logid-24
+                        string: |
+                          +----------------------------------------------+
+                        ts: '2024-01-26T13:16:18.723Z'
+                      - id: logid-25
+                        string: |
+                          |                SERVER RUNNING                |
+                        ts: '2024-01-26T13:16:18.723Z'
+                      - id: logid-26
+                        string: |
+                          +----------------------------------------------+
+                        ts: '2024-01-26T13:16:18.724Z'
+                      - id: logid-27
+                        string: |
+                          |                                              |
+                        ts: '2024-01-26T13:16:18.726Z'
+                      - id: logid-28
+                        string: |
+                          |  Rocket.Chat Version: 6.5.3                  |
+                        ts: '2024-01-26T13:16:18.726Z'
+                      - id: logid-29
+                        string: |
+                          |       NodeJS Version: 14.21.3 - x64          |
+                        ts: '2024-01-26T13:16:18.726Z'
+                      - id: logid-30
+                        string: |
+                          |      MongoDB Version: 5.0.23                 |
+                        ts: '2024-01-26T13:16:18.726Z'
+                      - id: logid-31
+                        string: |
+                          |       MongoDB Engine: wiredTiger             |
+                        ts: '2024-01-26T13:16:18.726Z'
+                      - id: logid-32
+                        string: |
+                          |             Platform: linux                  |
+                        ts: '2024-01-26T13:16:18.726Z'
+                      - id: logid-33
+                        string: |
+                          |         Process Port: 3000                   |
+                        ts: '2024-01-26T13:16:18.726Z'
+                      - id: logid-34
+                        string: |
+                          |             Site URL: http://localhost:3000  |
+                        ts: '2024-01-26T13:16:18.727Z'
+                      - id: logid-35
+                        string: |
+                          |     ReplicaSet OpLog: Enabled                |
+                        ts: '2024-01-26T13:16:18.727Z'
+                      - id: logid-36
+                        string: |
+                          |          Commit Hash: 726574cfe3             |
+                        ts: '2024-01-26T13:16:18.730Z'
+                      - id: logid-37
+                        string: |
+                          |        Commit Branch: HEAD                   |
+                        ts: '2024-01-26T13:16:18.730Z'
+                      - id: logid-38
+                        string: |
+                          |                                              |
+                        ts: '2024-01-26T13:16:18.731Z'
+                      - id: logid-39
+                        string: |
+                          +----------------------------------------------+
+                        ts: '2024-01-26T13:16:18.731Z'
+                    success: true
+              examples:
+                Example:
+                  value:
+                    queue:
+                      - id: logid-0
+                        string: |
+                          LocalStore: store created at 
+                        ts: '2024-01-26T13:16:11.945Z'
+                      - id: logid-1
+                        string: |
+                          LocalStore: store created at 
+                        ts: '2024-01-26T13:16:11.946Z'
+                      - id: logid-2
+                        string: |
+                          LocalStore: store created at 
+                        ts: '2024-01-26T13:16:11.947Z'
+                      - id: logid-3
+                        string: |
+                          {"level":40,"time":"2024-01-26T13:16:12.803Z","pid":1,"hostname":"cb52a01481fa","name":"VoIPService","msg":"Voip is not enabled. Cant start the service"}
+                        ts: '2024-01-26T13:16:12.804Z'
+                      - id: logid-4
+                        string: |
+                          {"level":51,"time":"2024-01-26T13:16:16.856Z","pid":1,"hostname":"cb52a01481fa","name":"Migrations","msg":"Not migrating, already at version 304"}
+                        ts: '2024-01-26T13:16:16.856Z'
+                      - id: logid-5
+                        string: |
+                          [2024-01-26T13:16:16.929Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/BROKER: Moleculer v0.14.31 is starting...
+                        ts: '2024-01-26T13:16:16.929Z'
+                      - id: logid-6
+                        string: |
+                          [2024-01-26T13:16:16.929Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/BROKER: Namespace: <not defined>
+                        ts: '2024-01-26T13:16:16.929Z'
+                      - id: logid-7
+                        string: |
+                          [2024-01-26T13:16:16.929Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/BROKER: Node ID: 5da8aab5-e32e-4a0a-b53e-62b027b331cf
+                        ts: '2024-01-26T13:16:16.930Z'
+                      - id: logid-8
+                        string: |
+                          [2024-01-26T13:16:16.931Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/REGISTRY: Strategy: RoundRobinStrategy
+                        ts: '2024-01-26T13:16:16.931Z'
+                      - id: logid-9
+                        string: |
+                          [2024-01-26T13:16:16.932Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/REGISTRY: Discoverer: LocalDiscoverer
+                        ts: '2024-01-26T13:16:16.932Z'
+                      - id: logid-10
+                        string: |
+                          [2024-01-26T13:16:16.933Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/BROKER: Serializer: JSONSerializer
+                        ts: '2024-01-26T13:16:16.933Z'
+                      - id: logid-11
+                        string: |
+                          [2024-01-26T13:16:16.965Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/BROKER: Validator: FastestValidator
+                        ts: '2024-01-26T13:16:16.965Z'
+                      - id: logid-12
+                        string: |
+                          [2024-01-26T13:16:16.968Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/BROKER: Registered 13 middleware(s).
+                        ts: '2024-01-26T13:16:16.968Z'
+                      - id: logid-13
+                        string: |
+                          [2024-01-26T13:16:16.970Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/BROKER: Transporter: TcpTransporter
+                        ts: '2024-01-26T13:16:16.970Z'
+                      - id: logid-14
+                        string: |
+                          {"level":51,"time":"2024-01-26T13:16:17.015Z","pid":1,"hostname":"cb52a01481fa","name":"DatabaseWatcher","msg":"Using change streams"}
+                        ts: '2024-01-26T13:16:17.016Z'
+                      - id: logid-15
+                        string: |
+                          [2024-01-26T13:16:17.031Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/TRANSIT: Connecting to the transporter...
+                        ts: '2024-01-26T13:16:17.032Z'
+                      - id: logid-16
+                        string: |
+                          [2024-01-26T13:16:17.261Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/TRANSPORTER: TCP server is listening on port 32911
+                        ts: '2024-01-26T13:16:17.262Z'
+                      - id: logid-17
+                        string: |
+                          [2024-01-26T13:16:17.263Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/TRANSPORTER: UDP Discovery is disabled.
+                        ts: '2024-01-26T13:16:17.263Z'
+                      - id: logid-18
+                        string: |
+                          [2024-01-26T13:16:17.263Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/TRANSPORTER: TCP Transporter started.
+                        ts: '2024-01-26T13:16:17.264Z'
+                      - id: logid-19
+                        string: |
+                          [2024-01-26T13:16:17.786Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/REGISTRY: '$node' service is registered.
+                        ts: '2024-01-26T13:16:17.787Z'
+                      - id: logid-20
+                        string: |
+                          [2024-01-26T13:16:17.788Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/REGISTRY: 'matrix' service is registered.
+                        ts: '2024-01-26T13:16:17.788Z'
+                      - id: logid-21
+                        string: |
+                          [2024-01-26T13:16:17.790Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/$NODE: Service '$node' started.
+                        ts: '2024-01-26T13:16:17.791Z'
+                      - id: logid-22
+                        string: |
+                          [2024-01-26T13:16:17.791Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/MATRIX: Service 'matrix' started.
+                        ts: '2024-01-26T13:16:17.791Z'
+                      - id: logid-23
+                        string: |
+                          [2024-01-26T13:16:17.793Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/BROKER: ✔ ServiceBroker with 2 service(s) started successfully in 788ms.
+                        ts: '2024-01-26T13:16:17.793Z'
+                      - id: logid-24
+                        string: |
+                          +----------------------------------------------+
+                        ts: '2024-01-26T13:16:18.723Z'
+                      - id: logid-25
+                        string: |
+                          |                SERVER RUNNING                |
+                        ts: '2024-01-26T13:16:18.723Z'
+                      - id: logid-26
+                        string: |
+                          +----------------------------------------------+
+                        ts: '2024-01-26T13:16:18.724Z'
+                      - id: logid-27
+                        string: |
+                          |                                              |
+                        ts: '2024-01-26T13:16:18.726Z'
+                      - id: logid-28
+                        string: |
+                          |  Rocket.Chat Version: 6.5.3                  |
+                        ts: '2024-01-26T13:16:18.726Z'
+                      - id: logid-29
+                        string: |
+                          |       NodeJS Version: 14.21.3 - x64          |
+                        ts: '2024-01-26T13:16:18.726Z'
+                      - id: logid-30
+                        string: |
+                          |      MongoDB Version: 5.0.23                 |
+                        ts: '2024-01-26T13:16:18.726Z'
+                      - id: logid-31
+                        string: |
+                          |       MongoDB Engine: wiredTiger             |
+                        ts: '2024-01-26T13:16:18.726Z'
+                      - id: logid-32
+                        string: |
+                          |             Platform: linux                  |
+                        ts: '2024-01-26T13:16:18.726Z'
+                      - id: logid-33
+                        string: |
+                          |         Process Port: 3000                   |
+                        ts: '2024-01-26T13:16:18.726Z'
+                      - id: logid-34
+                        string: |
+                          |             Site URL: http://localhost:3000  |
+                        ts: '2024-01-26T13:16:18.727Z'
+                      - id: logid-35
+                        string: |
+                          |     ReplicaSet OpLog: Enabled                |
+                        ts: '2024-01-26T13:16:18.727Z'
+                      - id: logid-36
+                        string: |
+                          |          Commit Hash: 726574cfe3             |
+                        ts: '2024-01-26T13:16:18.730Z'
+                      - id: logid-37
+                        string: |
+                          |        Commit Branch: HEAD                   |
+                        ts: '2024-01-26T13:16:18.730Z'
+                      - id: logid-38
+                        string: |
+                          |                                              |
+                        ts: '2024-01-26T13:16:18.731Z'
+                      - id: logid-39
+                        string: |
+                          +----------------------------------------------+
+                        ts: '2024-01-26T13:16:18.731Z'
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/licenses.get:
+    get:
+      tags:
+        - Licenses
+      summary: Get Licenses
+      description: |- 
+        Retrieves a list of all registered licenses in the workspace.
+        
+        Permissions required: `view-privileged-setting`
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |3.10.0         | Added       |
+      operationId: get-api-v1-licenses.get
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  licenses:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        version:
+                          type: integer
+                        url:
+                          type: string
+                        expiry:
+                          type: string
+                        maxActiveUsers:
+                          type: integer
+                        maxGuestUsers:
+                          type: integer
+                        maxRoomsPerGuest:
+                          type: integer
+                        modules:
+                          type: array
+                          items:
+                            type: string
+                        tag:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                            color:
+                              type: string
+                        meta:
+                          type: object
+                          properties:
+                            trial:
+                              type: boolean
+                            trialEnd:
+                              type: string
+                            workspaceId:
+                              type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    licenses:
+                      - version: 2
+                        url: 'localhost:3000'
+                        expiry: '2023-07-13'
+                        maxActiveUsers: 25
+                        maxGuestUsers: 125
+                        maxRoomsPerGuest: 1
+                        modules:
+                          - auditing
+                          - canned-responses
+                          - ldap-enterprise
+                          - livechat-enterprise
+                          - voip-enterprise
+                          - omnichannel-mobile-enterprise
+                          - engagement-dashboard
+                          - push-privacy
+                          - scalability
+                          - teams-mention
+                          - saml-enterprise
+                          - oauth-enterprise
+                          - device-management
+                          - federation
+                          - videoconference-enterprise
+                          - message-read-receipt
+                        tag:
+                          name: Enterprise
+                          color: '#F3BE08'
+                        meta:
+                          trial: false
+                          trialEnd: '2023-04-27T23:00:00Z'
+                          workspaceId: 63cfe8550c95db00013d7798
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/licenses.add:
+    post:
+      tags:
+        - Licenses
+      summary: Add License
+      description: |- 
+        ## Premium
+        
+        You may want to [deploy your workspace in an air-gapped environment](https://docs.rocket.chat/setup-and-configure/rocket.chat-air-gapped-deployment). Since the server has no internet to communicate with the cloud, we provide a license for your subscribed plan that you can apply manually to upgrade your workspace.
+        
+        Permission required: `edit-privileged-setting`
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |3.10.0         | Added       |
+        
+        A successful response only means the license provided follows the accepted format. Check your [workspace log](https://docs.rocket.chat/use-rocket.chat/workspace-administration/info) or [administration info](https://docs.rocket.chat/use-rocket.chat/workspace-administration/info) to confirm if the license is valid and was applied to your workspace. Alternatively, you can check Confirm Enterprise License endpoint.
+      operationId: post-api-v1-licenses.add
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                license:
+                  type: string
+              x-examples:
+                Example 1:
+                  license: VFJ0vHf3Jm9AR0minB342MLaHRlZdc3Du5nf0E5Sv0QJ4SUkEIaU2boCYaDsxQ2N1UL4uhLjCF9M7iCZ/yxafJjxbHvOu1D5rOfdgO4RKlAGE9tGHDidJR9crJyXVb16jPHHvLSkUFzb7HoIq/nUXxU8gEgT3uJ9u2+Dw5ukDLX3SG2AFq1hLoPSZqsP6giSOKBXTx9t8qVrT5COEn4CWCaVdApOdWC2nsROTJPJPbyjdZ9uSXQEr4raeHZXgtb9L3u2+wUej7NwDJ+C9+/6jUjmUD+CZyvpiv1YBWFudCjsgm8chrtzab70ndw1hjSXVMiuO00/wcHg8aTwZ7GSUA+OH1h1DCG4Bxrd94eZwZxEOgQtP01aNaM/RyYaleib88o6zjD0oDDISaN7nwv6F85v7FfRPEWAVZ5HUNVWxiqJqx/fEgYHpxBC3iDWcb/cexjofti/FwqOC4JRowGaGJ/n+WGl0sg1YEjULZdM759sw8VSwDDQ7Tv2H66/mSGwtP/zAGvr9tTwtfnBwpcZXssJytefriAqDsslZYTl7FzAxryo9pDioNSozLMwhCfAVm0VdIt0Ma4s0i72eUtgRnvAAq1bZK6UkE0zE8xMQjOykoiCoQLzwza+g762AQo=
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/licenses.isEnterprise:
+    get:
+      tags:
+        - Licenses
+      summary: Confirm Enterprise License
+      description: |- 
+        Confirm if the current workspace is subscribed to the [Enterprise plan](https://docs.rocket.chat/readme/our-plans#enterprise-plan).
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |5.0.0         | Added       |
+      operationId: get-api-v1-licenses.isEnterprise
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: The `authToken` of the authenticated user.
+          schema:
+            type: string
+        - name: X-User-Id
+          in: header
+          description: The `userId` of the authenticated user.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isEnterprise:
+                    type: boolean
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    isEnterprise: true
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      servers:
+        - url: 'http://localhost:3000'
+  /licenses.maxActiveUsers:
+    get:
+      tags:
+        - Licenses
+      summary: Get Maximum Active User
+      description: |- 
+        ## Premium
+        
+        Retrieves a list of the maximum active users.
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |4.0.0         | Added       |
+      operationId: get-licenses.maxActiveUsers
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  maxActiveUsers:
+                    type: integer
+                  activeUsers:
+                    type: integer
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    maxActiveUsers: 25
+                    activeUsers: 0
+                    success: true
+              examples:
+                Example:
+                  value:
+                    maxActiveUsers: 25
+                    activeUsers: 0
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/video-conference/jitsi.update-timeout:
+    post:
+      tags:
+        - Video Conference
+      summary: Update Jitsi Timeout
+      description: |- 
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |0.74.0        | Added       |
+      operationId: post-api-v1-video-conference-jitsi.update-timeout
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roomId:
+                  type: string
+                  description: The room Id of the room to update the jitsi timeout.
+              required:
+                - roomId
+              x-examples:
+                Example 1:
+                  roomId: hyoM5JSQi94RwqPE7
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jitsiTimeout:
+                    type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    jitsiTimeout: '2019-01-16T13:17:11.951Z'
+                    success: true
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/commands.get:
+    get:
+      tags:
+        - Commands
+      summary: Get Slash Commands
+      description: |- 
+        Get specification of the slash command.
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |0.60.2       | Added       |
+      operationId: get-api-v1-commands.get
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - name: command
+          in: query
+          description: The name of the command.
+          required: true
+          schema:
+            type: string
+            example: me
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  command:
+                    type: object
+                    properties:
+                      command:
+                        type: string
+                      params:
+                        type: string
+                      description:
+                        type: string
+                      clientOnly:
+                        type: boolean
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    command:
+                      command: me
+                      params: your_message
+                      description: Displays_action_text
+                      clientOnly: false
+                    success: true
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/commands.list:
+    get:
+      tags:
+        - Commands
+      summary: List Slash Commands
+      description: |- 
+        Lists all available slash commands.
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |0.60.2      | Added       |
+      operationId: get-api-v1-commands.list
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  commands:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        command:
+                          type: string
+                        clientOnly:
+                          type: boolean
+                  offset:
+                    type: integer
+                  count:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    commands:
+                      - command: invite-all-from
+                        clientOnly: false
+                      - command: slackbridge-import
+                        clientOnly: false
+                      - command: gimme
+                        params: your_message_optional
+                        description: Slash_Gimme_Description
+                        clientOnly: false
+                      - command: lennyface
+                        params: your_message_optional
+                        description: Slash_LennyFace_Description
+                        clientOnly: false
+                      - command: shrug
+                        params: your_message_optional
+                        description: Slash_Shrug_Description
+                        clientOnly: false
+                      - command: tableflip
+                        params: your_message_optional
+                        description: Slash_Tableflip_Description
+                        clientOnly: false
+                      - command: unflip
+                        params: your_message_optional
+                        description: Slash_TableUnflip_Description
+                        clientOnly: false
+                      - command: create
+                        clientOnly: false
+                      - command: help
+                        clientOnly: false
+                      - command: invite
+                        clientOnly: false
+                      - command: invite-all-to
+                        clientOnly: false
+                      - command: archive
+                        clientOnly: false
+                      - command: join
+                        clientOnly: false
+                      - command: kick
+                        clientOnly: false
+                      - command: leave
+                        clientOnly: false
+                      - command: part
+                        clientOnly: false
+                      - command: me
+                        params: your_message
+                        description: Displays_action_text
+                        clientOnly: false
+                      - command: msg
+                        clientOnly: false
+                      - command: mute
+                        clientOnly: false
+                      - command: unmute
+                        clientOnly: false
+                      - command: topic
+                        params: Slash_Topic_Params
+                        description: Slash_Topic_Description
+                        clientOnly: false
+                      - command: unarchive
+                        clientOnly: false
+                    offset: 0
+                    count: 22
+                    total: 22
+                    success: true
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/commands.preview:
+    get:
+      tags:
+        - Commands
+      summary: Get Command's Preview Data
+      description: Fetches the command's preview data or executes the preview item
+      operationId: get-api-v1-commands.preview
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - name: command
+          in: query
+          description: The name of the command to be executed.
+          required: true
+          schema:
+            type: string
+            example: unmute
+        - name: roomId
+          in: query
+          description: The ID of the room.
+          required: true
+          schema:
+            type: string
+            example: ByehQjC44FwMeiLbX
+        - name: params
+          in: query
+          description: Parameters of the command if required. It is `undefined` by default.
+          schema:
+            type: string
+            example: '@user123'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+      servers:
+        - url: 'http://localhost:3000'
+    post:
+      tags:
+        - Commands
+      summary: Execute command's preview item
+      description: |- 
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |3.0.0      | Added `tmid` and `triggerId` fields       |
+        |0.65.0      | Added|
+      operationId: post-api-v1-commands.preview
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                command:
+                  type: string
+                  description: The name of the command to be executed.
+                roomId:
+                  type: string
+                  description: The ID of the room.
+                tmid:
+                  type: string
+                  description: The ID of the thread to run the command.
+                params:
+                  type: string
+                  description: Parameters of the command if required. It is `undefined` by default.
+                triggerId:
+                  type: string
+                  description: The triggerId generated by the client that allows the command to interact with the UI
+                previewItem:
+                  type: object
+                  description: The data of the preview item to be executed by the command
+                  properties:
+                    id:
+                      type: string
+                      description: The ID of the selected preview item
+                    type:
+                      type: string
+                      description: The type of the selected preview item
+                    value:
+                      type: string
+                      description: The value of the selected preview item
+                  required:
+                    - id
+                    - type
+                    - value
+              required:
+                - command
+                - roomId
+                - tmid
+                - previewItem
+              x-examples:
+                Example 1:
+                  command: unmute
+                  roomId: ByehQjC44FwMeiLbX
+                  tmid: Hsj2435g4bvrj4bjh
+                  params: '@user123'
+                  triggerId: awovufbukuefzuper
+                  previewItem:
+                    id: nucobdipokaikazia
+                    type: image
+                    value: 'https://dev.null/gif'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/commands.run:
+    post:
+      tags:
+        - Commands
+      summary: Execute a Slash Command
+      description: |- 
+          Execute a slash command in the specified room.
+          ### Changelog
+          | Version      | Description |
+          | ---------------- | ------------|
+          |3.0.0      | Added `triggerId` property       |
+          |2.0.0      | Added `tmid` property      |
+          |0.60.2      | Added        |
+      operationId: post-api-v1-commands.run
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                command:
+                  type: string
+                  description: The name of the command to be executed.
+                roomId:
+                  type: string
+                  description: The ID of the room.
+                params:
+                  type: string
+                  description: Parameters of the command if required. It is `undefined` by default
+                tmid:
+                  type: string
+                  description: The ID of the thread to run the command.
+                triggerId:
+                  type: string
+                  description: The triggerId generated by the client that allows the command to interact with the UI
+              required:
+                - command
+                - roomId
+              x-examples:
+                Example 1:
+                  command: unmute
+                  roomId: ByehQjC44FwMeiLbX
+                  params: '@user123'
+                  tmid: Hsj2435g4bvrj4bjh
+                  triggerId: awovufbukuefzuper
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+      servers:
+        - url: 'http://localhost:3000'
+  /api/apps:
+    post:
+      tags:
+        - Apps
+      summary: Install Private Apps
+      description: |- 
+        Install a [private app](https://docs.rocket.chat/extend-rocket.chat-capabilities/rocket.chat-marketplace#private-apps) via URL.
+        [Permission](https://docs.rocket.chat/use-rocket.chat/workspace-administration/permissions) required: `manage-apps`
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |3.1.0     | Added       |
+      operationId: post-api-apps
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  description: The app URL where the zip file is located.
+              required:
+                - url
+              x-examples:
+                Example 1:
+                  url: 'https://github.com/RocketChat/Apps.RocketChat.Tester/blob/master/dist/appsrocketchattester_0.0.5.zip?raw=true'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  app:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      version:
+                        type: string
+                      requiredApiVersion:
+                        type: string
+                      iconFile:
+                        type: string
+                      author:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          homepage:
+                            type: string
+                          support:
+                            type: string
+                      name:
+                        type: string
+                      nameSlug:
+                        type: string
+                      classFile:
+                        type: string
+                      description:
+                        type: string
+                      implements:
+                        type: array
+                        items:
+                          type: object
+                      iconFileContent:
+                        type: string
+                      status:
+                        type: string
+                  implemented:
+                    type: object
+                    properties:
+                      IPreMessageSentPrevent:
+                        type: boolean
+                      IPreMessageSentExtend:
+                        type: boolean
+                      IPreMessageSentModify:
+                        type: boolean
+                      IPostMessageSent:
+                        type: boolean
+                      IPreMessageDeletePrevent:
+                        type: boolean
+                      IPostMessageDeleted:
+                        type: boolean
+                      IPreMessageUpdatedPrevent:
+                        type: boolean
+                      IPreMessageUpdatedExtend:
+                        type: boolean
+                      IPreMessageUpdatedModify:
+                        type: boolean
+                      IPostMessageUpdated:
+                        type: boolean
+                      IPostMessageReacted:
+                        type: boolean
+                      IPostMessageFollowed:
+                        type: boolean
+                      IPostMessagePinned:
+                        type: boolean
+                      IPostMessageStarred:
+                        type: boolean
+                      IPostMessageReported:
+                        type: boolean
+                      IPreRoomCreatePrevent:
+                        type: boolean
+                      IPreRoomCreateExtend:
+                        type: boolean
+                      IPreRoomCreateModify:
+                        type: boolean
+                      IPostRoomCreate:
+                        type: boolean
+                      IPreRoomDeletePrevent:
+                        type: boolean
+                      IPostRoomDeleted:
+                        type: boolean
+                      IPreRoomUserJoined:
+                        type: boolean
+                      IPostRoomUserJoined:
+                        type: boolean
+                      IPreRoomUserLeave:
+                        type: boolean
+                      IPostRoomUserLeave:
+                        type: boolean
+                      IPostExternalComponentOpened:
+                        type: boolean
+                      IPostExternalComponentClosed:
+                        type: boolean
+                      IUIKitInteractionHandler:
+                        type: boolean
+                      IUIKitLivechatInteractionHandler:
+                        type: boolean
+                      IPostLivechatRoomStarted:
+                        type: boolean
+                      IPostLivechatRoomClosed:
+                        type: boolean
+                      ILivechatRoomClosedHandler:
+                        type: boolean
+                      IPostLivechatAgentAssigned:
+                        type: boolean
+                      IPostLivechatAgentUnassigned:
+                        type: boolean
+                      IPostLivechatRoomTransferred:
+                        type: boolean
+                      IPostLivechatGuestSaved:
+                        type: boolean
+                      IPostLivechatRoomSaved:
+                        type: boolean
+                      IPreFileUpload:
+                        type: boolean
+                      IPreEmailSent:
+                        type: boolean
+                      IPostUserCreated:
+                        type: boolean
+                      IPostUserUpdated:
+                        type: boolean
+                      IPostUserDeleted:
+                        type: boolean
+                      IPostUserLoggedIn:
+                        type: boolean
+                      IPostUserLoggedOut:
+                        type: boolean
+                      IPostUserStatusChanged:
+                        type: boolean
+                  licenseValidation:
+                    type: object
+                    properties:
+                      errors:
+                        type: object
+                      warnings:
+                        type: object
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    app:
+                      id: bc4dd4a1-bf9b-408e-83a4-aba7eba0bf02
+                      version: 0.0.5
+                      requiredApiVersion: ^1.33.0
+                      iconFile: icon.png
+                      author:
+                        name: Rocket.Chat
+                        homepage: 'https://github.com/RocketChat'
+                        support: a
+                      name: Apps.RocketChat.Tester
+                      nameSlug: appsrocketchattester
+                      classFile: AppsRocketChatTesterApp.js
+                      description: An app that provides endpoints to test Apps integration to Rocket.Chat
+                      implements: []
+                      iconFileContent: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQBAMAAACAGwOrAAAAG1BMVEUAAAD///9fX19/f38/Pz+fn5/f398fHx+/v7+TbuY3AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAJ80lEQVR4nO3bzVvbRgLHcWMb5GMmBMdHHOg2xzqEJkdMeEKPdShpj/Z2m80RU5ZwjJptmj+7kub9xVhGDs+zz34/z9OnZmzJMz9Jo5mR02oBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADU8uVjk62zDxdr2tP9ax9U9o/qbyIe3P3rfv8shHj/5qL5ngoHzxptvrpNofz2bd1NGjTxB/Vl/Z+b7qnQFuJi+afWyYQlxH9rblKjiVm6FTdFTGcH58XZ9bDunlofFr5TVP275duv06Z48aFw/E0uxF/1NqnRxMnDVGl3Jn6tUrz8vnZYm2J30VsbA/Fx6fZrZSvzVPTrndV3DmssTPFp3T3dEtbw0eTx0u3XyqnMa/HvWpvcNaxudDSahZVPx9tLt18rpzLZbKfWJncN6zo6GI3CysSPW/2l26+VW5lxvbvLXcOaRJd5o7A64mhTHC3dwTq5lenVu7vcMayuiAobhVWcVl3x49IdrJNbmXa9775jWL14743CKjusWbNR7arcynTr3YrvGFbiIm8U1uhR8V/yrvvV3F9Yk8Fd9rQ4rNm0OADxPr+mBWFlxyf+edC1BakmZlfe51NhzR5FRXJPJ96m2Yn398KwumUHuxWerVfhJDcqaCLZZ2Uvy/nbG/up7PtyPvT+efWHDeuXP1VdX82Kt/+wn0+E1U1kXBZ1cjNVLFy+raaOPyXrF1T8orwjmndviq9v5041ooLm3Mro19lEThb/qd/QBfJObVp9owdO/3E/X65j5INqLeO580WdxN2j2FN7Vm0q35PHpPSv6u+9g4OX4lO1q6Nw243yCszstTDeKWfWTrWjgubcsLbUsOW16D87vXoqTPPGxWl2crL3Vn5Wh9WdqR6jqNOb0w/F2VWNPHp2au6eX6lxSbGnifh1/8lEyOFwV4jB2ZOT47fqsOR2V7vhtsNq9J6bCU+RTS4+nV59o6sdFTTnhjUcqCr3j+RbJgxZ0Pr9SDVRflw3fyR+lh+r6r8grK3EAFI86FWHPRvJXXX76lx8Labl/24LS8Y0MhOe8U5Prpt0VPJRQXPedEc27lofibF6MfcPjQprU2fR1i/GJo9En7WRmB6IB7lsR0dUTc/09roqi/ssdQHOzYRnvDPZ1tXYTRY051TmRnUAub4fd4W8geX+kZFhZbk63Yosd/Xnp+ojibDmIv5ysa0PQx5sMNR1WBSW6tp75viM+/pE78quNCpozlamO5Nzt7bd9agvC6beJjKsa7P8NTFZ5np0kAhrnJj0CnOBDIMB04aOdlFYPaEqa/tVUw15RkUFzZnKFHfZv1Q1TPVkP7MV1LcKq2uqkgm3k1W1S4SVGD8KczPbCM67nr5oF4U1H6gvn+r920Mqr82ooDm5Unp1/Iu5wzp7bleNCc+JKqyRaUTb3r63dJMTYYXnTrUn04+Fo0uznrAoLD3RMSez0zHJazMqaM6uweux28j2UPKkGQUncRnWphoJtbzmmCbWDct8VdgcM9pcFJaeQg/1Lpypp7w2o4LmTFhmAT53piXV6zyYpxRhFb27qcmWW6ld+aJuWGbPYSbLwjKLM+b6dc7/LLwgsjUt1m+Ks3KA/Nku+QpnYbvqGUWw0l2E9do5VBu2UqYJdcMye+6sGNZm9L7bJ1YdRVTQnP4yM3XJ3HtfeZJnwc2w+GY1/JTmtlLmCNa9G5o2dOz4/vjwy+d375aEZXpH02O62VQD1qigOVMZPZjqutmUXxgt3IgHI7cF47WG1c79IfuCsExXZc5OL5tHqYLmTGWuVRfrZVO2MA5r4A3yhv1z45awkoPSKKxOEdOfB+X8eTeon29iWm+G6YPg3aigOTvOUg1tu9mUw4h2FJb/2HwoHFNVudR05ygqi8LKZuLThfx7N6ifJxM7+vjk6oz1snmYKmjOVkYtztUIa+A9ux72v1iLO/heotVRWNf6NwRLwmq7B0geufsNy6w5fLTvpi/Dx95DrbE/c1xUuc30epYiw8pm2+bv3bB+rp54p6mFofu9DPUaih9WuoPviEf+Z0KJsMIZptyTfiXDsoHGQwPP3B2uTKNqfPUOXi9l+kOHQXLoUPRTu+bPeb2wMrFoDV5+eRmWzWBJWM4sQ3cf9zp0MBNidwBXzXTCEV3xd9cZaIVz4FKqj8jjyzUMa+hMf3bD+rnchx8quPsclLbMTdib7jxsxY9lym92hvDRE5ZWOqzhbc8NZVh2s41bw/LGgmpMEg33UuO/hpzKqGGju/gzexwUlMomZjNTlVRzUg8/t+JF+DAse5zMkkE4D1Jf6exKnYRje4LriXRQ0JzTVP2t7hLNtFWODfxNqiaa6VE8tGjFCxXyc1HHsTisiQ0rijg4mTvy++2atmpIVNCcE5Zq9Vb4JeGjBtnEiV5VTj099cLST8TyaMITXYZ6T11xa1je1En1tWN7zPTiX1DQnHsRyVZ3nGdxQhZMvU1kE+3wYRTfDoduZ66fZ8yjiyEMy2S8ZcJKXkF+xyDX752fFepl5Yfpz9+dG5a6r5iRoRoj2qGipJpohg/X8cH3xl72KVB4PwzDMmdMvq13nvz9hX9By9H0WOgLQD+wCAuac8Oay67AdK76cc/YT0M10azTuOMIf0/q8/oIj8Kf+IZh6XvAjXii65DFPV3YS8ovGw9mavFWPwoLC5rzH99/Jyu+UzVVP+4pCgbyhXyup5tohg/qIWvxvg7V+y2WCasjxAv5qn3ecvekw+rI2NuzbbPmmhqeBf21fNY9HqgzvD3TA6+goDn/VzTT6v8j8dtRq3WZm7N3JAbfFlG8yqsIdBOL4YMOU5T/ZiJ7ZX5b1haDcg8yO9t3vBbi02nrw/FL9aw7mkjn4o+LrPwdgA1rWM6tsz23znN/xCbv2eNBcXBfVNX+WBVHBc15oyT1HLg7E6I/sw/1qgIx07/fiH8YUoTQf1/+QxPT+IkQxRRXVtKGlY30SoHcdRRWT/8sxIa1Wez7nfDuIeEdRaip4I2stl3g8gua88LSIyq5XLljj59av5Q/+Xci0cOHp9Xb/TdmC/njGHktOj950D+TkYtWicW/f6jnTDYsWeRdSOHj6+opb3lP+cGtdlTwtWR7h2f7Xsnx4fmzo8UbdPfOz/bdSmV75wepfw10dXB+sH9L7V8dHpwGRZeHZ8+Wt7e6ARd7f76wAEa0UnTPP6H8n0JYKyCsFRDWCghrBYS1AsJaAWGtgLBWQFgrIKwVENYKLveXFQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADA/6+/AXriofigfACKAAAAAElFTkSuQmCC'
+                      status: auto_enabled
+                    implemented:
+                      IPreMessageSentPrevent: false
+                      IPreMessageSentExtend: false
+                      IPreMessageSentModify: false
+                      IPostMessageSent: false
+                      IPreMessageDeletePrevent: false
+                      IPostMessageDeleted: false
+                      IPreMessageUpdatedPrevent: false
+                      IPreMessageUpdatedExtend: false
+                      IPreMessageUpdatedModify: false
+                      IPostMessageUpdated: false
+                      IPostMessageReacted: false
+                      IPostMessageFollowed: false
+                      IPostMessagePinned: false
+                      IPostMessageStarred: false
+                      IPostMessageReported: false
+                      IPreRoomCreatePrevent: false
+                      IPreRoomCreateExtend: false
+                      IPreRoomCreateModify: false
+                      IPostRoomCreate: false
+                      IPreRoomDeletePrevent: false
+                      IPostRoomDeleted: false
+                      IPreRoomUserJoined: false
+                      IPostRoomUserJoined: false
+                      IPreRoomUserLeave: false
+                      IPostRoomUserLeave: false
+                      IPostExternalComponentOpened: false
+                      IPostExternalComponentClosed: false
+                      IUIKitInteractionHandler: false
+                      IUIKitLivechatInteractionHandler: false
+                      IPostLivechatRoomStarted: false
+                      IPostLivechatRoomClosed: false
+                      ILivechatRoomClosedHandler: false
+                      IPostLivechatAgentAssigned: false
+                      IPostLivechatAgentUnassigned: false
+                      IPostLivechatRoomTransferred: false
+                      IPostLivechatGuestSaved: false
+                      IPostLivechatRoomSaved: false
+                      IPreFileUpload: false
+                      IPreEmailSent: false
+                      IPostUserCreated: false
+                      IPostUserUpdated: false
+                      IPostUserDeleted: false
+                      IPostUserLoggedIn: false
+                      IPostUserLoggedOut: false
+                      IPostUserStatusChanged: false
+                    licenseValidation:
+                      errors: {}
+                      warnings: {}
+                    success: true
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/mailer:
+    post:
+      tags:
+        - Mailer
+      summary: Send Mailer Endpoint
+      description: |- 
+        Send emails to users from your workspace.
+        
+        | Version      | Description |
+        | ---------------- | ------------|
+        |5.4.0      | Added      |
+      operationId: post-api-v1-mailer
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                from:
+                  type: string
+                  description: A valid email address to send mails from.
+                subject:
+                  type: string
+                  description: The subject of the email.
+                body:
+                  type: string
+                  description: 'The body of the email. You must use `[unsubscribe]` for the unsubscription link. You may use `[name]`, `[fname]`, `[lname]` for the user''s full name, first name or last name, respectively. You may use `[email]` for the user''s email.'
+                dryrun:
+                  type: string
+                  description: 'A boolean value. If true, will only send one email to the same address as in the `From` parameter.'
+              required:
+                - from
+                - subject
+              x-examples:
+                Example 1:
+                  from: test.funke@test.com
+                  subject: Welcome to the Test Newsletter
+                  body: 'Thank you for subscribing to the Test Newsletter. If this was not you feelfree to unsubscribe by hitting the following button [unsubscribe]'
+                  dryrun: 'true'
+      responses:
+        '200':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      function:
+                        type: string
+                x-examples:
+                  Example 1:
+                    success: false
+                    error: 'Invalid from address [error-invalid-from-address]'
+                    errorType: error-invalid-from-address
+                    details:
+                      function: Mailer.sendMail
+              examples:
+                Invalid From Address:
+                  value:
+                    success: false
+                    error: 'Invalid from address [error-invalid-from-address]'
+                    errorType: error-invalid-from-address
+                    details:
+                      function: Mailer.sendMail
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/mailer.unsubscribe:
+    post:
+      tags:
+        - Mailer
+      summary: Mailer Unsubscribe Endpoint
+      description: |- 
+        Send emails to users from your workspace.
+        | Version      | Description |
+        | ---------------- | ------------|
+        |5.4.0      | Added      |
+      operationId: post-api-v1-mailer.unsubscribe
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                _id:
+                  type: string
+                  description: The user id of the user that created the mailer
+                createdAt:
+                  type: string
+                  description: The time the mailer was created
+              required:
+                - _id
+                - createdAt
+              x-examples:
+                Example 1:
+                  _id: c6Lsa9SFVFxJLR56H
+                  createdAt: '1692284808957'
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/findOrCreateInvite:
+    post:
+      tags:
+        - Invite
+      summary: Find or Create Invite
+      description: |- 
+        Creates or return an existing invite with the specified parameters. 
+        
+        [Permission](https://docs.rocket.chat/use-rocket.chat/workspace-administration/permissions) required: `create-invite-links`
+      operationId: post-api-v1-findOrCreateInvite
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rid:
+                  type: string
+                  description: The id of the room that the invite is being created for.
+                days:
+                  type: integer
+                  description: The number of days that the invite will be valid for. Send 0 for unlimited.
+                maxUses:
+                  type: integer
+                  description: The number of times that the invite can be used. Send 0 for unlimited.
+              required:
+                - rid
+                - days
+                - maxUses
+              x-examples:
+                Example 1:
+                  rid: csFYrDeixJG7PnrAh
+                  days: 10
+                  maxUses: 0
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                    days:
+                      type: integer
+                    maxUses:
+                      type: integer
+                    rid:
+                      type: string
+                    userId:
+                      type: string
+                    createdAt:
+                      type: string
+                    expires:
+                      type: string
+                      nullable: true
+                    uses:
+                      type: integer
+                    _updatedAt:
+                      type: string
+                x-examples:
+                  Example 1:
+                    - _id: kDKQ3H
+                      days: 1
+                      maxUses: 1
+                      rid: s7CE842q9WtvLctD7
+                      userId: sNiDqHit5nGAGFg8X
+                      createdAt: '2019-12-20T03:31:56.774Z'
+                      expires: '2019-12-21T03:31:56.774Z'
+                      uses: 1
+                      _updatedAt: '2019-12-20T03:33:40.065Z'
+                    - _id: 99ScEP
+                      days: 1
+                      maxUses: 0
+                      rid: s7CE842q9WtvLctD7
+                      userId: sNiDqHit5nGAGFg8X
+                      createdAt: '2019-12-20T03:38:20.485Z'
+                      expires: '2019-12-21T03:38:20.485Z'
+                      uses: 0
+                      _updatedAt: '2019-12-20T03:38:20.485Z'
+                    - _id: Y5JKM4
+                      days: 0
+                      maxUses: 1
+                      rid: s7CE842q9WtvLctD7
+                      userId: sNiDqHit5nGAGFg8X
+                      createdAt: '2019-12-20T03:38:25.313Z'
+                      expires: null
+                      uses: 1
+                      _updatedAt: '2019-12-20T03:38:40.116Z'
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/listInvites:
+    get:
+      tags:
+        - Invite
+      summary: List Invites
+      description: |- 
+        Lists all of the invites on the server. 
+        
+        [Permission](https://docs.rocket.chat/use-rocket.chat/workspace-administration/permissions) required: `create-invite-links`
+      operationId: get-api-v1-listInvites
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                    days:
+                      type: integer
+                    maxUses:
+                      type: integer
+                    rid:
+                      type: string
+                    userId:
+                      type: string
+                    createdAt:
+                      type: string
+                    expires:
+                      type: string
+                      nullable: true
+                    uses:
+                      type: integer
+                    _updatedAt:
+                      type: string
+                x-examples:
+                  Example 1:
+                    - _id: kDKQ3H
+                      days: 1
+                      maxUses: 1
+                      rid: s7CE842q9WtvLctD7
+                      userId: sNiDqHit5nGAGFg8X
+                      createdAt: '2019-12-20T03:31:56.774Z'
+                      expires: '2019-12-21T03:31:56.774Z'
+                      uses: 1
+                      _updatedAt: '2019-12-20T03:33:40.065Z'
+                    - _id: 99ScEP
+                      days: 1
+                      maxUses: 0
+                      rid: s7CE842q9WtvLctD7
+                      userId: sNiDqHit5nGAGFg8X
+                      createdAt: '2019-12-20T03:38:20.485Z'
+                      expires: '2019-12-21T03:38:20.485Z'
+                      uses: 0
+                      _updatedAt: '2019-12-20T03:38:20.485Z'
+                    - _id: Y5JKM4
+                      days: 0
+                      maxUses: 1
+                      rid: s7CE842q9WtvLctD7
+                      userId: sNiDqHit5nGAGFg8X
+                      createdAt: '2019-12-20T03:38:25.313Z'
+                      expires: null
+                      uses: 1
+                      _updatedAt: '2019-12-20T03:38:40.116Z'
+      servers:
+        - url: 'http://localhost:3000'
+  '/api/v1/removeInvite/{_id}':
+    delete:
+      tags:
+        - Invite
+      summary: Delete Invite by Id
+      description: "Deletes an invite from the workspace.\r\n\r\n[Permission](https://docs.rocket.chat/use-rocket.chat/workspace-administration/permissions) required: `create-invite-links`"
+      operationId: delete-api-v1-removeInvite-_id
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - name: _id
+          in: path
+          description: The id of the invite to be deleted.
+          required: true
+          schema:
+            type: string
+            example: kDKQ3H
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+                x-examples:
+                  Example 1:
+                    success: false
+                    error: 'Invalid Invitation _id [invalid-invitation-id]'
+                    errorType: invalid-invitation-id
+                    details:
+                      method: removeInvite
+              examples:
+                Invalid Invitation Id:
+                  value:
+                    success: false
+                    error: 'Invalid Invitation _id [invalid-invitation-id]'
+                    errorType: invalid-invitation-id
+                    details:
+                      method: removeInvite
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/useInviteToken:
+    post:
+      tags:
+        - Invite
+      summary: Report use Invite Token
+      description: Report to the workspace that an invite token was used.
+      operationId: post-api-v1-useInviteToken
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  description: The id of the invite being used.
+              required:
+                - token
+              x-examples:
+                Example 1:
+                  token: iS7pza
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  room:
+                    type: object
+                    properties:
+                      rid:
+                        type: string
+                      fname:
+                        type: string
+                      name:
+                        type: string
+                      t:
+                        type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    room:
+                      rid: QqsWiqNH2TnxtvZQq
+                      fname: a-room-name
+                      name: a-room-name
+                      t: p
+                    success: true
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/validateInviteToken:
+    post:
+      tags:
+        - Invite
+      summary: Validate Invite Token
+      description: Checks if an invite token is valid.
+      operationId: post-api-v1-validateInviteToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  description: The id of the invite being validated.
+              required:
+                - token
+              x-examples:
+                Example 1:
+                  token: iS7pza
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  valid:
+                    type: boolean
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    valid: true
+                    success: true
+      servers:
+        - url: 'http://localhost:3000'
+  '/api/apps/public/{appId}/templateMessage':
+    post:
+      tags:
+        - Apps
+      summary: Send a Template WhatsApp Message
+      description: 'The appropriate endpoint URL including the `appId` for sending Whatsapp template messages on your workspace is displayed in the  **Details tab** of the Whatsapp **App Info** page. '
+      operationId: post-api-apps-public-app_id-templateMessage
+      parameters:
+        - name: appId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: 'We strongly recommend including the + prefix for all phone numbers in the payload. While you can submit numbers without the leading + sign, we have encountered cases where WhatsApp will return an invalid response despite the number being in use.'
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phoneNumbers:
+                  type: array
+                  description: 'Recipient WhatsApp IDs where you want to send the template message. You can validate a WhatsApp id from [here](https://developers.facebook.com/docs/whatsapp/on-premises/reference/contacts).'
+                  items:
+                    type: string
+                connectedWhatsAppNo:
+                  type: string
+                  description: The WhatsApp Number from which you want to send this template message.
+                targetAgent:
+                  type: string
+                  description: Username of the agent you want to transfer the chat to when the WhatsApp user replies.
+                targetDepartment:
+                  type: string
+                  description: Department name or ID where you want to transfer the chat to when the WhatsApp user replies.
+                template:
+                  type: object
+                  description: 'Provide information about the template message you wish to send. Kindly refer to [Message Templates](https://developers.facebook.com/docs/whatsapp/api/messages/message-templates#the-template-object) for an example'
+                  properties:
+                    namespace:
+                      type: string
+                    name:
+                      type: string
+                    language:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                        policy:
+                          type: string
+                    components:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          type:
+                            type: string
+                          parameters:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                type:
+                                  type: string
+                                text:
+                                  type: string
+              required:
+                - phoneNumbers
+                - connectedWhatsAppNo
+              x-examples:
+                Example 1:
+                  phoneNumbers:
+                    - '+917785887264'
+                    - '+551452001478'
+                  connectedWhatsAppNo: '+565412001234'
+                  targetAgent: murtaza98
+                  targetDepartment: SalesDepartment
+                  template:
+                    namespace: your-namespace
+                    name: your-template-name
+                    language:
+                      code: your-language-and-locale-code
+                      policy: deterministic
+                    components:
+                      - type: header
+                        parameters:
+                          - type: text
+                            text: your-text-string
+                      - type: body
+                        parameters:
+                          - type: text
+                            text: your-text-string
+                          - type: text
+                            text: your-text-string
+                      - type: footer
+                        parameters:
+                          - type: text
+                            text: your-text-string
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      servers:
+        - url: 'http://localhost:3000'
+tags:
+  - name: Apps
+  - name: Auto Translate
+  - name: Commands
+  - name: Email Inbox
+  - name: Invite
+  - name: Licenses
+  - name: Mailer
+  - name: Video Conference
+components:
+  parameters:
+    offset:
+      name: offset
+      in: query
+      description: 'Number of items to "skip" in the query, i.e. requests return count items, skipping the first offset items.'
+      required: false
+      schema:
+        type: integer
+        example: 50
+    count:
+      name: count
+      in: query
+      description: The number of items to return.
+      required: false
+      schema:
+        type: integer
+        example: 50
+    sort:
+      name: sort
+      in: query
+      description: 'List of fields to order by, and in which direction. This is a JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending. For example, {"value": -1, "_id": 1}'
+      required: false
+      schema: {}
+    query:
+      name: query
+      in: query
+      description: 'This parameter allows you to use MongoDB query operators to search for specific data. For example, to query users with a name that contains the letter "g": query={ "name": { "$regex": "g" } }'
+      required: false
+      schema: {}
+    fields:
+      name: fields
+      in: query
+      description: 'This parameter accepts a JSON object with properties that have a value of 1 or 0 to include or exclude them in the response. For example, to only retrieve the usernames of users: fields={ "username": 1 }'
+      required: false
+      schema:
+        type: string
+    Auth-Token:
+      name: X-Auth-Token
+      in: header
+      description: The `authToken` of the authenticated user.
+      required: true
+      schema:
+        type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+    UserId:
+      name: X-User-Id
+      in: header
+      description: The `userId` of the authenticated user.
+      required: true
+      schema:
+        type: string
+        example: rbAXPnMktTFbNpwtJ
+  responses:
+    trueSuccess:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+            x-examples:
+              Example 1:
+                success: true
+          examples:
+            Success:
+              value:
+                success: true
+    authorizationError:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              message:
+                type: string
+            x-examples:
+              Example 1:
+                status: error
+                message: You must be logged in to do this.
+          examples:
+            Authorization Error:
+              value:
+                status: error
+                message: You must be logged in to do this.
+    forbiddenError:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+              error:
+                type: string
+            x-examples:
+              Example 1:
+                success: false
+                error: 'User does not have the permissions required for this action [error-unauthorized]'
+          examples:
+            Permission Error:
+              value:
+                success: false
+                error: 'User does not have the permissions required for this action [error-unauthorized]'

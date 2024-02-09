@@ -1,0 +1,1297 @@
+openapi: 3.0.0
+info:
+  version: ''
+  title: Authentication
+  description: Rocket.Chat Authentication
+  termsOfService: 'https://rocket.chat/'
+  contact:
+    name: Rocket.Chat
+    url: 'https://rocket.chat/'
+    email: contact@rocket.chat
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  /api/v1/login:
+    post:
+      tags:
+        - Authentication
+      summary: Login with Username and Password
+      description: |-
+        ### Changelog
+        | Version      | Description | 
+         | ---------------- | ------------|
+         |1.0.0            | Added `avatarUrl` property to response       |
+         |0.64.0            | Added `me` property.      |
+         |0.60.0            | Added      |
+      operationId: post-api-v1-login
+      requestBody:
+        description: |- 
+          * Whilst none of the arguments are required in every request, every request requires some arguments to be provided. You must provide either `user` AND `password`, or provide `resume`.
+          * You will need to provide the `authToken` and `userId` for any of the authenticated methods.
+          * If your user has two-factor(2FA) authentication enabled, you must send a request like [this](https://developer.rocket.chat/reference/api/rest-api/endpoints/authentication-endpoints/rest-two-factor-authentication).
+          * If LDAP authentication is enabled, you must maintain the login in the same way as you normally do. Similarly, if 2FA is enabled for an LDAP user, everything stays the same."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: string
+                  description: Your user name or email.
+                  example: myusername
+                password:
+                  type: string
+                  description: Your pasword.
+                  example: my$up3erP@ssw0rd
+                resume:
+                  type: string
+                  description: Your previously issued `authToken`.
+                  example: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq
+            examples:
+              Example 1:
+                value:
+                  user: funke.olasupo@rocket.chat
+                  password: vanvica32
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      userId:
+                        type: string
+                      authToken:
+                        type: string
+                      me:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          services:
+                            type: object
+                            properties:
+                              password:
+                                type: object
+                                properties:
+                                  bcrypt:
+                                    type: string
+                              email2fa:
+                                type: object
+                                properties:
+                                  enabled:
+                                    type: boolean
+                              totp:
+                                type: object
+                                properties:
+                                  enabled:
+                                    type: boolean
+                          username:
+                            type: string
+                          emails:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                address:
+                                  type: string
+                                verified:
+                                  type: boolean
+                          status:
+                            type: string
+                          active:
+                            type: boolean
+                          _updatedAt:
+                            type: string
+                          roles:
+                            type: array
+                            items:
+                              type: string
+                          name:
+                            type: string
+                          settings:
+                            type: object
+                            properties:
+                              profile:
+                                type: object
+                              preferences:
+                                type: object
+                                properties:
+                                  enableAutoAway:
+                                    type: boolean
+                                  idleTimeLimit:
+                                    type: integer
+                                  desktopNotificationRequireInteraction:
+                                    type: boolean
+                                  desktopNotifications:
+                                    type: string
+                                  pushNotifications:
+                                    type: string
+                                  unreadAlert:
+                                    type: boolean
+                                  useEmojis:
+                                    type: boolean
+                                  convertAsciiEmoji:
+                                    type: boolean
+                                  autoImageLoad:
+                                    type: boolean
+                                  saveMobileBandwidth:
+                                    type: boolean
+                                  collapseMediaByDefault:
+                                    type: boolean
+                                  hideUsernames:
+                                    type: boolean
+                                  hideRoles:
+                                    type: boolean
+                                  hideFlexTab:
+                                    type: boolean
+                                  displayAvatars:
+                                    type: boolean
+                                  sidebarGroupByType:
+                                    type: boolean
+                                  sidebarViewMode:
+                                    type: string
+                                  sidebarDisplayAvatar:
+                                    type: boolean
+                                  sidebarShowUnread:
+                                    type: boolean
+                                  sidebarSortby:
+                                    type: string
+                                  alsoSendThreadToChannel:
+                                    type: string
+                                  sidebarShowFavorites:
+                                    type: boolean
+                                  sendOnEnter:
+                                    type: string
+                                  emailNotificationMode:
+                                    type: string
+                                  newRoomNotification:
+                                    type: string
+                                  newMessageNotification:
+                                    type: string
+                                  muteFocusedConversations:
+                                    type: boolean
+                                  notificationsSoundVolume:
+                                    type: integer
+                                  themeAppearence:
+                                    type: string
+                                  omnichannelTranscriptEmail:
+                                    type: boolean
+                                  omnichannelTranscriptPDF:
+                                    type: boolean
+                                  showThreadsInMainChannel:
+                                    type: boolean
+                                  notifyCalendarEvents:
+                                    type: boolean
+                          statusConnection:
+                            type: string
+                          utcOffset:
+                            type: integer
+                          banners:
+                            type: object
+                            properties:
+                              versionUpdate-6_0_0:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  priority:
+                                    type: integer
+                                  title:
+                                    type: string
+                                  text:
+                                    type: string
+                                  textArguments:
+                                    type: array
+                                    items:
+                                      type: string
+                                  link:
+                                    type: string
+                                  modifiers:
+                                    type: array
+                                    items:
+                                      type: object
+                                  read:
+                                    type: boolean
+                              versionUpdate-6_0_1:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  priority:
+                                    type: integer
+                                  title:
+                                    type: string
+                                  text:
+                                    type: string
+                                  textArguments:
+                                    type: array
+                                    items:
+                                      type: string
+                                  link:
+                                    type: string
+                                  modifiers:
+                                    type: array
+                                    items:
+                                      type: object
+                                  read:
+                                    type: boolean
+                              versionUpdate-6_1_0:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  priority:
+                                    type: integer
+                                  title:
+                                    type: string
+                                  text:
+                                    type: string
+                                  textArguments:
+                                    type: array
+                                    items:
+                                      type: string
+                                  link:
+                                    type: string
+                                  modifiers:
+                                    type: array
+                                    items:
+                                      type: object
+                              versionUpdate-6_1_1:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  priority:
+                                    type: integer
+                                  title:
+                                    type: string
+                                  text:
+                                    type: string
+                                  textArguments:
+                                    type: array
+                                    items:
+                                      type: string
+                                  link:
+                                    type: string
+                                  modifiers:
+                                    type: array
+                                    items:
+                                      type: object
+                              versionUpdate-6_1_3:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  priority:
+                                    type: integer
+                                  title:
+                                    type: string
+                                  text:
+                                    type: string
+                                  textArguments:
+                                    type: array
+                                    items:
+                                      type: string
+                                  link:
+                                    type: string
+                                  modifiers:
+                                    type: array
+                                    items:
+                                      type: object
+                              versionUpdate-6_1_4:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  priority:
+                                    type: integer
+                                  title:
+                                    type: string
+                                  text:
+                                    type: string
+                                  textArguments:
+                                    type: array
+                                    items:
+                                      type: string
+                                  link:
+                                    type: string
+                                  modifiers:
+                                    type: array
+                                    items:
+                                      type: object
+                              versionUpdate-6_1_5:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  priority:
+                                    type: integer
+                                  title:
+                                    type: string
+                                  text:
+                                    type: string
+                                  textArguments:
+                                    type: array
+                                    items:
+                                      type: string
+                                  link:
+                                    type: string
+                                  modifiers:
+                                    type: array
+                                    items:
+                                      type: object
+                              versionUpdate-6_1_6:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  priority:
+                                    type: integer
+                                  title:
+                                    type: string
+                                  text:
+                                    type: string
+                                  textArguments:
+                                    type: array
+                                    items:
+                                      type: string
+                                  link:
+                                    type: string
+                                  modifiers:
+                                    type: array
+                                    items:
+                                      type: object
+                              versionUpdate-6_1_7:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  priority:
+                                    type: integer
+                                  title:
+                                    type: string
+                                  text:
+                                    type: string
+                                  textArguments:
+                                    type: array
+                                    items:
+                                      type: string
+                                  link:
+                                    type: string
+                                  modifiers:
+                                    type: array
+                                    items:
+                                      type: object
+                              versionUpdate-6_2_2:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  priority:
+                                    type: integer
+                                  title:
+                                    type: string
+                                  text:
+                                    type: string
+                                  textArguments:
+                                    type: array
+                                    items:
+                                      type: string
+                                  link:
+                                    type: string
+                                  modifiers:
+                                    type: array
+                                    items:
+                                      type: object
+                              versionUpdate-6_2_3:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  priority:
+                                    type: integer
+                                  title:
+                                    type: string
+                                  text:
+                                    type: string
+                                  textArguments:
+                                    type: array
+                                    items:
+                                      type: string
+                                  link:
+                                    type: string
+                                  modifiers:
+                                    type: array
+                                    items:
+                                      type: object
+                              versionUpdate-6_2_4:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  priority:
+                                    type: integer
+                                  title:
+                                    type: string
+                                  text:
+                                    type: string
+                                  textArguments:
+                                    type: array
+                                    items:
+                                      type: string
+                                  link:
+                                    type: string
+                                  modifiers:
+                                    type: array
+                                    items:
+                                      type: object
+                              versionUpdate-6_2_5:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  priority:
+                                    type: integer
+                                  title:
+                                    type: string
+                                  text:
+                                    type: string
+                                  textArguments:
+                                    type: array
+                                    items:
+                                      type: string
+                                  link:
+                                    type: string
+                                  modifiers:
+                                    type: array
+                                    items:
+                                      type: object
+                              versionUpdate-6_2_6:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  priority:
+                                    type: integer
+                                  title:
+                                    type: string
+                                  text:
+                                    type: string
+                                  textArguments:
+                                    type: array
+                                    items:
+                                      type: string
+                                  link:
+                                    type: string
+                                  modifiers:
+                                    type: array
+                                    items:
+                                      type: object
+                              versionUpdate-6_2_8:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  priority:
+                                    type: integer
+                                  title:
+                                    type: string
+                                  text:
+                                    type: string
+                                  textArguments:
+                                    type: array
+                                    items:
+                                      type: string
+                                  link:
+                                    type: string
+                                  modifiers:
+                                    type: array
+                                    items:
+                                      type: object
+                          statusDefault:
+                            type: string
+                          statusText:
+                            type: string
+                          statusLivechat:
+                            type: string
+                          requirePasswordChange:
+                            type: boolean
+                          email:
+                            type: string
+                          avatarUrl:
+                            type: string
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/login - with Facebook:
+    post:
+      tags:
+        - Authentication
+      summary: Login with Facebook
+      description: |-
+        ### Changelog
+        | Version      | Description | 
+         | ---------------- | ------------|
+         |1.0.0            | Added `avatarUrl` property to response       |
+         |0.64.0            | Added `me` property.      |
+         |0.63.0            | Added      |
+      operationId: post-api-v1-login-facebook
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                serviceName:
+                  type: string
+                  description: 'The desired OAuth service name. In this case, `facebook`.'
+                  example: facebook
+                accessToken:
+                  type: string
+                  description: Access token provided by Facebook oauth.
+                  example: hash
+                secret:
+                  type: string
+                  description: The secret provided by Facebook.
+                  example: hash
+                expiresIn:
+                  type: integer
+                  description: Lifetime of token (in seconds).
+                  example: 200
+              required:
+                - serviceName
+                - accessToken
+                - secret
+                - expiresIn
+              x-examples:
+                Example 1:
+                  serviceName: facebook
+                  accessToken: hash
+                  secret: hash
+                  expiresIn: 200
+            examples:
+              Example 1:
+                value:
+                  serviceName: facebook
+                  accessToken: hash
+                  secret: hash
+                  expiresIn: 200
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      authToken:
+                        type: string
+                      userId:
+                        type: string
+                      me:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          name:
+                            type: string
+                          emails:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                address:
+                                  type: string
+                                verified:
+                                  type: boolean
+                          status:
+                            type: string
+                          statusConnection:
+                            type: string
+                          username:
+                            type: string
+                          utcOffset:
+                            type: integer
+                          active:
+                            type: boolean
+                          roles:
+                            type: array
+                            items:
+                              type: string
+                          settings:
+                            type: object
+                            properties:
+                              preferences:
+                                type: object
+                          avatarUrl:
+                            type: string
+                x-examples:
+                  Example 1:
+                    status: success
+                    data:
+                      authToken: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq
+                      userId: aobEdbYhXfu5hkeqG
+                      me:
+                        _id: aYjNnig8BEAWeQzMh
+                        name: Rocket Cat
+                        emails:
+                          - address: rocket.cat@rocket.chat
+                            verified: false
+                        status: offline
+                        statusConnection: offline
+                        username: rocket.cat
+                        utcOffset: -3
+                        active: true
+                        roles:
+                          - admin
+                        settings:
+                          preferences: {}
+                        avatarUrl: 'http://localhost:3000/avatar/test'
+              examples:
+                Success Example:
+                  value:
+                    status: success
+                    data:
+                      authToken: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq
+                      userId: aobEdbYhXfu5hkeqG
+                      me:
+                        _id: aYjNnig8BEAWeQzMh
+                        name: Rocket Cat
+                        emails:
+                          - address: rocket.cat@rocket.chat
+                            verified: false
+                        status: offline
+                        statusConnection: offline
+                        username: rocket.cat
+                        utcOffset: -3
+                        active: true
+                        roles:
+                          - admin
+                        settings:
+                          preferences: {}
+                        avatarUrl: 'http://localhost:3000/avatar/test'
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/login - with Twitter:
+    post:
+      tags:
+        - Authentication
+      summary: Login with Twitter
+      description: |-
+        ### Changelog
+        | Version      | Description | 
+         | ---------------- | ------------|
+         |1.0.0            | Added `avatarUrl` property to response       |
+         |0.64.0            | Added `me` property.      |
+         |0.63.0            | Added      |
+      operationId: post-api-v1-login-twitter
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                serviceName:
+                  type: string
+                  description: 'The desired OAuth service name. In this case, `twitter`.'
+                  example: twitter
+                accessToken:
+                  type: string
+                  description: Access token provided by Twitter OAuth.
+                  example: hash
+                accessTokenSecret:
+                  type: string
+                  description: The access token secret provided by Twitter OAuth.
+                  example: hash
+                appSecret:
+                  type: string
+                  description: The app secret provided by Twitter.
+                  example: hash
+                appId:
+                  type: string
+                  description: The app ID provided by Twitter.
+                  example: hash
+                expiresIn:
+                  type: integer
+                  description: Lifetime of token (in seconds).
+                  example: 200
+              required:
+                - serviceName
+                - accessToken
+                - accessTokenSecret
+                - appSecret
+                - appId
+                - expiresIn
+              x-examples:
+                Example 1:
+                  serviceName: twitter
+                  accessToken: hash
+                  accessTokenSecret: hash
+                  appSecret: hash
+                  appId: hash
+                  expiresIn: 200
+            examples:
+              Example 1:
+                value:
+                  serviceName: twitter
+                  accessToken: hash
+                  accessTokenSecret: hash
+                  appSecret: hash
+                  appId: hash
+                  expiresIn: 200
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      authToken:
+                        type: string
+                      userId:
+                        type: string
+                      me:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          name:
+                            type: string
+                          emails:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                address:
+                                  type: string
+                                verified:
+                                  type: boolean
+                          status:
+                            type: string
+                          statusConnection:
+                            type: string
+                          username:
+                            type: string
+                          utcOffset:
+                            type: integer
+                          active:
+                            type: boolean
+                          roles:
+                            type: array
+                            items:
+                              type: string
+                          settings:
+                            type: object
+                            properties:
+                              preferences:
+                                type: object
+                          avatarUrl:
+                            type: string
+                x-examples:
+                  Example 1:
+                    status: success
+                    data:
+                      authToken: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq
+                      userId: aobEdbYhXfu5hkeqG
+                      me:
+                        _id: aYjNnig8BEAWeQzMh
+                        name: Rocket Cat
+                        emails:
+                          - address: rocket.cat@rocket.chat
+                            verified: false
+                        status: offline
+                        statusConnection: offline
+                        username: rocket.cat
+                        utcOffset: -3
+                        active: true
+                        roles:
+                          - admin
+                        settings:
+                          preferences: {}
+                        avatarUrl: 'http://localhost:3000/avatar/test'
+              examples:
+                Success Example:
+                  value:
+                    status: success
+                    data:
+                      authToken: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq
+                      userId: aobEdbYhXfu5hkeqG
+                      me:
+                        _id: aYjNnig8BEAWeQzMh
+                        name: Rocket Cat
+                        emails:
+                          - address: rocket.cat@rocket.chat
+                            verified: false
+                        status: offline
+                        statusConnection: offline
+                        username: rocket.cat
+                        utcOffset: -3
+                        active: true
+                        roles:
+                          - admin
+                        settings:
+                          preferences: {}
+                        avatarUrl: 'http://localhost:3000/avatar/test'
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/login - with Google:
+    post:
+      tags:
+        - Authentication
+      summary: Login with Google
+      description: |-
+        ### Changelog
+        | Version      | Description | 
+         | ---------------- | ------------|
+         |1.0.0            | Added `avatarUrl` property to response       |
+         |0.64.0            | Added `me` property.      |
+         |0.60.0            | Added      |
+      operationId: post-api-v1-login-google
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                serviceName:
+                  type: string
+                  description: 'The desired OAuth service name. In this case, `google`.'
+                accessToken:
+                  type: string
+                  description: Access token provided by Google OAuth.
+                idToken:
+                  type: string
+                  description: The ID token provided by Google OAuth.
+                expiresIn:
+                  type: integer
+                  description: Lifetime of token (in seconds).
+                scope:
+                  type: string
+                  description: Google scopes for API.
+              required:
+                - serviceName
+                - accessToken
+                - idToken
+                - expiresIn
+              x-examples:
+                Example 1:
+                  serviceName: google
+                  accessToken: hash
+                  idToken: hash
+                  expiresIn: 200
+                  scope: profile
+            examples:
+              Example 1:
+                value:
+                  serviceName: google
+                  accessToken: hash
+                  idToken: hash
+                  expiresIn: 200
+                  scope: profile
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      authToken:
+                        type: string
+                      userId:
+                        type: string
+                      me:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          name:
+                            type: string
+                          emails:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                address:
+                                  type: string
+                                verified:
+                                  type: boolean
+                          status:
+                            type: string
+                          statusConnection:
+                            type: string
+                          username:
+                            type: string
+                          utcOffset:
+                            type: integer
+                          active:
+                            type: boolean
+                          roles:
+                            type: array
+                            items:
+                              type: string
+                          settings:
+                            type: object
+                            properties:
+                              preferences:
+                                type: object
+                          avatarUrl:
+                            type: string
+                x-examples:
+                  Example 1:
+                    status: success
+                    data:
+                      authToken: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq
+                      userId: aobEdbYhXfu5hkeqG
+                      me:
+                        _id: aYjNnig8BEAWeQzMh
+                        name: Rocket Cat
+                        emails:
+                          - address: rocket.cat@rocket.chat
+                            verified: false
+                        status: offline
+                        statusConnection: offline
+                        username: rocket.cat
+                        utcOffset: -3
+                        active: true
+                        roles:
+                          - admin
+                        settings:
+                          preferences: {}
+                        avatarUrl: 'http://localhost:3000/avatar/test'
+              examples:
+                Success Example:
+                  value:
+                    status: success
+                    data:
+                      authToken: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq
+                      userId: aobEdbYhXfu5hkeqG
+                      me:
+                        _id: aYjNnig8BEAWeQzMh
+                        name: Rocket Cat
+                        emails:
+                          - address: rocket.cat@rocket.chat
+                            verified: false
+                        status: offline
+                        statusConnection: offline
+                        username: rocket.cat
+                        utcOffset: -3
+                        active: true
+                        roles:
+                          - admin
+                        settings:
+                          preferences: {}
+                        avatarUrl: 'http://localhost:3000/avatar/test'
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/logout:
+    post:
+      tags:
+        - Authentication
+      summary: Logout
+      description: Invalidate your REST API authentication token.
+      operationId: post-api-v1-logout
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: The authorization token of the user
+          required: true
+          schema:
+            type: string
+        - name: X-User-Id
+          in: header
+          description: The user id of the user
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+              examples:
+                Example:
+                  value:
+                    status: success
+                    data:
+                      message: You've been logged out!
+      servers:
+        - url: 'http://localhost:3000'
+  /api/v1/me:
+    get:
+      tags:
+        - Authentication
+      summary: Get Profile Information
+      description: |-
+        Quick information about the authenticated user.
+        ### Changelog
+         | Version      | Description | 
+         | ---------------- | ------------|
+         |1.0.0            | Added `avatarUrl` property to response       |
+         |0.68.0            | Added `customFields` property.      |
+         |0.48.0            | Added      |
+      operationId: get-api-v1-me
+      parameters:
+        - name: X-User-Id
+          in: header
+          description: The user ID of the user.
+          required: true
+          schema:
+            type: string
+        - name: X-Auth-Token
+          in: header
+          description: The authorization token of the user.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: |- 
+            OK 
+            
+            The `customFields` parameter won't be returned if it doesn't exist on the workspace.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  name:
+                    type: string
+                  emails:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        address:
+                          type: string
+                        verified:
+                          type: boolean
+                  status:
+                    type: string
+                  statusConnection:
+                    type: string
+                  username:
+                    type: string
+                  utcOffset:
+                    type: integer
+                  active:
+                    type: boolean
+                  roles:
+                    type: array
+                    items:
+                      type: string
+                  settings:
+                    type: object
+                    properties:
+                      preferences:
+                        type: object
+                        properties:
+                          enableAutoAway:
+                            type: boolean
+                          idleTimeoutLimit:
+                            type: integer
+                          desktopNotificationDuration:
+                            type: integer
+                          audioNotifications:
+                            type: string
+                          desktopNotifications:
+                            type: string
+                          mobileNotifications:
+                            type: string
+                          unreadAlert:
+                            type: boolean
+                          useEmojis:
+                            type: boolean
+                          convertAsciiEmoji:
+                            type: boolean
+                          autoImageLoad:
+                            type: boolean
+                          saveMobileBandwidth:
+                            type: boolean
+                          collapseMediaByDefault:
+                            type: boolean
+                          hideUsernames:
+                            type: boolean
+                          hideRoles:
+                            type: boolean
+                          hideFlexTab:
+                            type: boolean
+                          hideAvatars:
+                            type: boolean
+                          roomsListExhibitionMode:
+                            type: string
+                          sidebarViewMode:
+                            type: string
+                          sidebarHideAvatar:
+                            type: boolean
+                          sidebarShowUnread:
+                            type: boolean
+                          sidebarShowFavorites:
+                            type: boolean
+                          sendOnEnter:
+                            type: string
+                          messageViewMode:
+                            type: integer
+                          emailNotificationMode:
+                            type: string
+                          roomCounterSidebar:
+                            type: boolean
+                          newRoomNotification:
+                            type: string
+                          newMessageNotification:
+                            type: string
+                          muteFocusedConversations:
+                            type: boolean
+                          notificationsSoundVolume:
+                            type: integer
+                  customFields:
+                    type: object
+                    properties:
+                      twitter:
+                        type: string
+                  avatarUrl:
+                    type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    _id: aobEdbYhXfu5hkeqG
+                    name: Example User
+                    emails:
+                      - address: example@example.com
+                        verified: true
+                    status: offline
+                    statusConnection: offline
+                    username: example
+                    utcOffset: 0
+                    active: true
+                    roles:
+                      - user
+                      - admin
+                    settings:
+                      preferences:
+                        enableAutoAway: false
+                        idleTimeoutLimit: 300
+                        desktopNotificationDuration: 0
+                        audioNotifications: mentions
+                        desktopNotifications: mentions
+                        mobileNotifications: mentions
+                        unreadAlert: true
+                        useEmojis: true
+                        convertAsciiEmoji: true
+                        autoImageLoad: true
+                        saveMobileBandwidth: true
+                        collapseMediaByDefault: false
+                        hideUsernames: false
+                        hideRoles: false
+                        hideFlexTab: false
+                        hideAvatars: false
+                        roomsListExhibitionMode: category
+                        sidebarViewMode: medium
+                        sidebarHideAvatar: false
+                        sidebarShowUnread: false
+                        sidebarShowFavorites: true
+                        sendOnEnter: normal
+                        messageViewMode: 0
+                        emailNotificationMode: all
+                        roomCounterSidebar: false
+                        newRoomNotification: door
+                        newMessageNotification: chime
+                        muteFocusedConversations: true
+                        notificationsSoundVolume: 100
+                    customFields:
+                      twitter: '@userstwi'
+                    avatarUrl: 'http://localhost:3000/avatar/test'
+                    success: true
+              examples:
+                Example:
+                  value:
+                    _id: aobEdbYhXfu5hkeqG
+                    name: Example User
+                    emails:
+                      - address: example@example.com
+                        verified: true
+                    status: offline
+                    statusConnection: offline
+                    username: example
+                    utcOffset: 0
+                    active: true
+                    roles:
+                      - user
+                      - admin
+                    settings:
+                      preferences:
+                        enableAutoAway: false
+                        idleTimeoutLimit: 300
+                        desktopNotificationDuration: 0
+                        audioNotifications: mentions
+                        desktopNotifications: mentions
+                        mobileNotifications: mentions
+                        unreadAlert: true
+                        useEmojis: true
+                        convertAsciiEmoji: true
+                        autoImageLoad: true
+                        saveMobileBandwidth: true
+                        collapseMediaByDefault: false
+                        hideUsernames: false
+                        hideRoles: false
+                        hideFlexTab: false
+                        hideAvatars: false
+                        roomsListExhibitionMode: category
+                        sidebarViewMode: medium
+                        sidebarHideAvatar: false
+                        sidebarShowUnread: false
+                        sidebarShowFavorites: true
+                        sendOnEnter: normal
+                        messageViewMode: 0
+                        emailNotificationMode: all
+                        roomCounterSidebar: false
+                        newRoomNotification: door
+                        newMessageNotification: chime
+                        muteFocusedConversations: true
+                        notificationsSoundVolume: 100
+                    customFields:
+                      twitter: '@userstwi'
+                    avatarUrl: 'http://localhost:3000/avatar/test'
+                    success: true
+      servers:
+        - url: 'http://localhost:3000'
+tags:
+  - name: Authentication
