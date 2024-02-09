@@ -1,0 +1,3569 @@
+openapi: 3.0.0
+info:
+  version: ''
+  title: Settings
+  description: ''
+  termsOfService: ''
+  contact:
+    name: ''
+    url: ''
+    email: ''
+  license:
+    url: ''
+    name: ''
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  /api/v1/settings.public:
+    parameters: []
+    get:
+      summary: Get Public Settings
+      operationId: get-api-v1-settings.public
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  settings:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        value:
+                          type:
+                            - boolean
+                            - string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    settings:
+                      - _id: API_Drupal_URL
+                        value: ''
+                      - _id: API_Embed
+                        value: true
+                    count: 2
+                    offset: 0
+                    total: 2
+                    success: true
+      tags:
+        - Settings
+      description: 'List all public settings. Learn how this can be used in configuring your workspace in this [guide](https://docs.rocket.chat/setup-and-configure/environment-configuration/deployment-environment-variables/manage-settings-using-environmental-variables). '
+      parameters:
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/query'
+        - $ref: '#/components/parameters/fields'
+  /api/v1/settings.oauth:
+    parameters: []
+    get:
+      summary: Get OAuth Settings
+      operationId: get-api-v1-settings.oauth
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  services:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        clientId:
+                          type: string
+                        buttonLabelText:
+                          type: string
+                        buttonColor:
+                          type: string
+                        buttonLabelColor:
+                          type: string
+                        custom:
+                          type: boolean
+                        service:
+                          type: string
+                        serverURL:
+                          type: string
+                        tokenPath:
+                          type: string
+                        identityPath:
+                          type: string
+                        authorizePath:
+                          type: string
+                        scope:
+                          type: string
+                        loginStyle:
+                          type: string
+                        tokenSentVia:
+                          type: string
+                        identityTokenSentVia:
+                          type: string
+                        usernameField:
+                          type: string
+                        mergeUsers:
+                          type: boolean
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    services:
+                      - _id: iJeY7x4wxnh2p3pLr
+                        name: facebook
+                        clientId: test
+                        buttonLabelText: test
+                        buttonColor: '#13679A'
+                        buttonLabelColor: '#FFFFFF'
+                        custom: false
+                      - _id: iJeY7x4wxnh2p3pLr
+                        name: twitter
+                        clientId: test
+                        buttonLabelText: ''
+                        buttonColor: ''
+                        buttonLabelColor: ''
+                        custom: false
+                      - _id: 5RQ4SBL3NuZKsqxaF
+                        service: test
+                        clientId: test
+                        custom: true
+                        serverURL: /test/test
+                        tokenPath: /oauth/token
+                        identityPath: /me
+                        authorizePath: /oauth/authorize
+                        scope: openid
+                        buttonLabelText: test
+                        buttonLabelColor: '#FFFFFF'
+                        loginStyle: popup
+                        buttonColor: '#13679A'
+                        tokenSentVia: payload
+                        identityTokenSentVia: default
+                        usernameField: dfsgdfgdfgdfgsd
+                        mergeUsers: true
+                    success: true
+      tags:
+        - Settings
+      description: |-
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |0.64.0            | Renamed field `appId` to `clientId` and added flag `custom` to indicate whether the OAuth service is customized and fix `id` inconsistence (set all cases to `_id`)       |
+        |0.63.0            | Added       |
+      parameters: []
+  /api/v1/settings:
+    parameters: []
+    get:
+      summary: Get Private Settings
+      operationId: get-api-v1-settings
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  settings:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        value:
+                          type:
+                            - boolean
+                            - string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    settings:
+                      - _id: API_Allow_Infinite_Count
+                        value: true
+                      - _id: API_CORS_Origin
+                        value: '*'
+                    count: 50
+                    offset: 0
+                    total: 299
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      tags:
+        - Settings
+      description: 'List all private settings. Learn how this can be used in configuring your server in this [guide](https://docs.rocket.chat/setup-and-configure/environment-configuration/deployment-environment-variables).'
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+  /api/v1/settings.addCustomOAuth:
+    parameters: []
+    post:
+      summary: Add Custom OAuth
+      operationId: post-api-v1-settings.addCustomOAuth
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The parameter "name" is required [error-name-param-not-provided]'
+                    errorType: error-name-param-not-provided
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      tags:
+        - Settings
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/x-2fa-code'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the custom OAuth method that you want to add.
+              required:
+                - name
+  '/api/v1/settings/{_id}':
+    parameters:
+      - schema:
+          type: string
+        name: _id
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: _id
+        in: path
+        required: true
+        description: The unique ID of the setting that you want to update.
+    post:
+      summary: Update Setting
+      tags:
+        - Settings
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-settings-_id
+      description: |-
+        Permission required: `edit-privileged-setting`
+        
+        The `_id` of a setting is the first argument of the `RocketChat.settings.add` method used in `Rocket.Chat/packages/rocketchat-lib/server/startup/settings.js` (among other files). 
+        
+        For example, the following code in `settings.js` file:
+          ```json
+          this.add('Accounts_AllowAnonymousRead', false, {
+            type: 'boolean',
+            public: true  });
+          ```
+          This means that the setting labeled `Allow anonymous read` in the section `Accounts` has `_id` equal to `Accounts_AllowAnonymousRead`. The second argument is the default value (false). The third argument specifies the variable's type and whether it is public, hidden, and so on. 
+          
+          To set a color, you can send:
+          ```json
+          { value: '<color-code>',
+            editor: 'color' }
+          ```
+          
+          And also to trigger a action-button, use:
+          ```json
+          { execute: true }
+          ```
+          ### Changelog
+          | Version      | Description |
+          | ---------------- | ------------|
+          |0.65.0            | Added option to set a color and trigger an action       |
+          |0.42.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/x-2fa-code'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                value:
+                  type: string
+                  description: The value to update the setting.
+                color:
+                  type: string
+                  description: The color code to update the setting.
+                editor:
+                  type: string
+                  description: 'The editor key, with color value. Required, if color was set.'
+                execute:
+                  type: boolean
+                  description: To trigger a action-button.
+              required:
+                - value
+    get:
+      summary: Get Setting
+      tags:
+        - Settings
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  value:
+                    type: boolean
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    _id: Livechat_enabled
+                    value: false
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-settings-_id
+      description: |-
+        Get the settings for a specific ID.
+        Permission required: `view-privileged-setting`
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |0.42.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+  /api/v1/service.configurations:
+    parameters: []
+    get:
+      summary: Get OAuth Service Configuration
+      operationId: get-api-v1-service.configurations
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  configurations:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        service:
+                          type: string
+                        clientId:
+                          type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    configurations:
+                      - _id: Hq5ahzz9MWWCdeDJ8
+                        service: google
+                        clientId: xxxxx
+                      - _id: 57kavS22achLH33PE
+                        service: apple
+                        clientId: xxxxxx
+                    success: true
+      description: List out all the active OAuth services configured with details.
+      tags:
+        - Settings
+  /api/v1/cloud.manualRegister:
+    parameters: []
+    post:
+      summary: Manual Cloud Register
+      operationId: post-api-v1-cloud.manualRegister
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: Workspace is already registered
+                Example 2:
+                  value:
+                    success: false
+                    error: 'Match error: Missing key ''cloudBlob'''
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      description: |-
+        Manually register a workspace on [Rocket.Chat Cloud](https://docs.rocket.chat/use-rocket.chat/rocket.chat-cloud).
+        Permission required: `register-on-cloud`
+      tags:
+        - Cloud
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cloudBlob:
+                  type: string
+                  description: Enter the workspace deployment ID.
+              required:
+                - cloudBlob
+            examples:
+              Example 1:
+                value:
+                  cloudBlob: jfiscsm38urc3ujd
+  /api/v1/dns.resolve.txt:
+    parameters: []
+    post:
+      summary: Resolve DNS Text Records
+      operationId: post-api-v1-dns.resolve.txt
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: querySrv ENOTFOUND .rocket.chat/
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      description: Resolves DNS text records (TXT records) for a hostname.
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - schema:
+            type: string
+          in: query
+          name: url
+          description: The hostname.
+          required: true
+      requestBody:
+        content: {}
+      tags:
+        - DNS
+  /api/v1/dns.resolve.srv:
+    parameters: []
+    post:
+      summary: Resolve DNS URL Records
+      operationId: post-api-v1-dns.resolve.srv
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: querySrv ENOTFOUND .rocket.chat/
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      description: Resolves DNS URL records for a hostname.
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - schema:
+            type: string
+          in: query
+          name: url
+          description: The hostname.
+          required: true
+      requestBody:
+        content: {}
+      tags:
+        - DNS
+  /api/v1/e2e.fetchMyKeys:
+    parameters: []
+    get:
+      summary: Get E2E Keys
+      operationId: get-api-v1-e2e.fetchMyKeys
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  public_key:
+                    type: string
+                  private_key:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    public_key: '{"alg":"RSA-OAEP-256","e":"AQAB","ext":true,"key_ops":["encrypt"],"kty":"RSA","n":"oP23XEagSGIdo18Yc7TUwsM1qoRDa-pMg64lEctMQ6Dx-Q"}'
+                    private_key: '{"$binary":"2j5AaYO39PcQNK7lT3h5Zv7j7y3rVKsqlERVgty+Z2pjzuG5pCMnx63WFJCrt8Sx2KDwWvYycGs0V5TzXJhKFEpE3l5hpoP51wO1Xztnfl9TdVtCZ5ERSDhXp+t3ays0QLdD2EtZu9M+Ffgiy2gqTasB0UFXAZyDA=="}'
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      description: Retrieves E2E keys of logged in user.
+      tags:
+        - E2E
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+  /api/v1/e2e.getUsersOfRoomWithoutKey:
+    parameters: []
+    get:
+      summary: Get Users of Room Without E2E key
+      operationId: get-api-v1-e2e.getUsersOfRoomWithoutKey
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        e2e:
+                          type: object
+                          properties:
+                            public_key:
+                              type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    users:
+                      - _id: XycfA5CetCPuEjqxw
+                        e2e:
+                          public_key: '{"alg":"RSA-OAEP-256","e":"AQAB","ext":true,"key_ops":["encrypt"],"kty":"RSA","n":"oMO9ydjRxD3JzcAgMvyBZAc_pIOBIxOLVUChZ8mB3JNtLREC751hHT-WPZVZquWA6X4CihHejFfpIyAD_w-0MIToudTGO-f1aeE4Wc9-SBKjSQPphCuZMTwZ7iRtfUwHeGy5yM94uQPp07sEi9BmJSZqHscHc-6G520MyBhNU6uznQf-Sp85Q4etl4Ifs09khM-VMnBqKwh2QJx8w0880Vc3Zufve6udg0aSQ"}'
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''rid'' [invalid-params]'
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: 'Invalid room [error-invalid-room]'
+                    errorType: error-invalid-room
+                    details:
+                      method: e2e.getUsersOfRoomWithoutKey
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      description: Retrieves user IDs Of room without E2E key.
+      tags:
+        - E2E
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - schema:
+            type: string
+          in: query
+          name: rid
+          description: The room ID.
+          required: true
+  /api/v1/e2e.setRoomKeyID:
+    parameters: []
+    post:
+      summary: Set Room E2E Key
+      operationId: post-api-v1-e2e.setRoomKeyID
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                    errorType: invalid-params
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''rid'' [invalid-params]'
+                    errorType: invalid-params
+                Example 3:
+                  value:
+                    success: false
+                    error: 'E2E Key ID already exists [error-room-e2e-key-already-exists]'
+                    errorType: error-room-e2e-key-already-exists
+                    details:
+                      method: e2e.setRoomKeyID
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      tags:
+        - E2E
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rid:
+                  type: string
+                  description: The room ID.
+                keyID:
+                  type: string
+                  description: The key that you want to set for the room. Enter a unique string.
+              required:
+                - rid
+                - keyID
+            examples:
+              Example 1:
+                value:
+                  rid: wCiXndNp5NqNY3uCc
+                  keyID: my-UniQu3_ke4_Id
+  /api/v1/e2e.setUserPublicAndPrivateKeys:
+    parameters: []
+    post:
+      summary: Set User Key
+      operationId: post-api-v1-e2e.setUserPublicAndPrivateKeys
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 2:
+                  value:
+                    success: false
+                    error: 'must have required property ''public_key'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      tags:
+        - E2E
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                public_key:
+                  type: string
+                  description: Enter a unique string as your public key.
+                private_key:
+                  type: string
+                  description: Enter a unique string as your private key.
+              required:
+                - public_key
+                - private_key
+            examples:
+              Example 1:
+                value:
+                  public_key: My-9UbLiK-k34
+                  private_key: 9R1V4t3_k3Y
+  /api/v1/e2e.updateGroupKey:
+    parameters: []
+    post:
+      summary: Update User E2E Key in Room
+      operationId: post-api-v1-e2e.updateGroupKey
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''rid'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      tags:
+        - E2E
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                uid:
+                  type: string
+                  description: The user ID whose key you want to update.
+                rid:
+                  type: string
+                  description: The room ID.
+                key:
+                  type: string
+                  description: The updated key.
+              required:
+                - uid
+                - rid
+                - key
+            examples:
+              Example 1:
+                value:
+                  uid: d26x6zSkaPSe5gCyy
+                  rid: 9R1V4t3_k3Y
+                  key: M4-Ubd4T3d-k39
+  /api/v1/uploadImportFile:
+    parameters: []
+    post:
+      summary: Upload Import File
+      operationId: post-api-v1-uploadImportFile
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The importer (png) has no import class defined. [error-importer-not-defined]'
+                    errorType: error-importer-not-defined
+                    details: uploadImportFile
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                binaryContent:
+                  type: string
+                  description: The uploaded file.
+                importerKey:
+                  type: string
+                  description: |-
+                    It indicates how Rocket.Chat should handle the uploaded file. The accepted importer keys are:
+                      * `csv`
+                      * `hipchatenterprise`
+                      * `pending-avatars`
+                      * `pending-files`
+                      * `slack`
+                      * `slack-users`
+                fileName:
+                  type: string
+                  description: The name of the file to be imported.
+                contentType:
+                  type: string
+                  description: 'The imported file [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types).'
+              required:
+                - binaryContent
+                - importerKey
+                - fileName
+                - contentType
+            examples:
+              Example 1:
+                value:
+                  binaryContent: /testfile.csv
+                  importerKey: csv
+                  fileName: Testfile
+                  contentType: text/csv
+      tags:
+        - Import
+      description: |-
+        This endpoint takes in the binary content of the imported file, along with additional information about its content, and stores it in a buffer.
+
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |3.0.0            | Added       |
+  /api/v1/downloadPublicImportFile:
+    parameters: []
+    post:
+      summary: Download Public Import File
+      operationId: post-api-v1-downloadPublicImportFile
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The importer (png) has no import class defined. [error-importer-not-defined]'
+                    errorType: error-importer-not-defined
+                    details: uploadImportFile
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fileUrl:
+                  type: string
+                  description: The url of the file. It must start with `http` or `https`.
+                importerKey:
+                  type: string
+                  description: |-
+                    It indicates how Rocket.Chat should handle the uploaded file. The accepted importer keys are:
+                      * `csv`
+                      * `hipchatenterprise`
+                      * `pending-avatars`
+                      * `pending-files`
+                      * `slack`
+                      * `slack-users`
+              required:
+                - fileUrl
+                - importerKey
+            examples:
+              Example 1:
+                value:
+                  fileUrl: 'https://www.freepik.com/photos/dog'
+                  importerKey: pending-avatars
+      tags:
+        - Import
+      description: |-
+        Permission required: `run-import`
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |3.0.0            | Added       |
+  /api/v1/startImport:
+    parameters: []
+    post:
+      summary: Start Import
+      operationId: post-api-v1-startImport
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                input:
+                  type: object
+                  required:
+                    - users
+                    - channels
+                  description: 'The input object contains two arrays: `users` and `channels`.'
+                  properties:
+                    users:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          user_id:
+                            type: string
+                            description: 'The unique user identifier (which is the username, since the user may not have a proper `_id` yet).'
+                            example: bradley.hilton
+                          username:
+                            type: string
+                            description: The user name.
+                            example: bradley.hilton
+                          email:
+                            type: string
+                            description: The user's email address.
+                            example: bradley.hilton@example.com
+                          is_deleted:
+                            type: boolean
+                            description: Was the described user deleted?
+                          is_bot:
+                            type: boolean
+                            description: Is the described user a bot?
+                          do_import:
+                            type: boolean
+                            description: Should the described user be imported?
+                          is_email_taken:
+                            type: boolean
+                            description: Is there an existing user with the same email?
+                        required:
+                          - user_id
+                          - username
+                          - email
+                          - is_deleted
+                          - is_bot
+                          - do_import
+                          - is_email_taken
+                    channels:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          channel_id:
+                            type: string
+                            description: The unique room identifier.
+                            example: 4K2ovcvP5LqfxXnd5
+                          name:
+                            type: string
+                            description: The name of the room.
+                            example: newRoom
+                          is_archived:
+                            type: boolean
+                            description: Is the described room archived?
+                          do_import:
+                            type: boolean
+                            description: Should the described room be imported?
+                          is_private:
+                            type: boolean
+                            description: Is the described room private?
+                          is_direct:
+                            type: boolean
+                            description: 'Is the described room of type [Direct Messages](https://docs.rocket.chat/use-rocket.chat/user-guides/rooms/direct-messages)?'
+                          creator:
+                            type: string
+                            description: The identifier of the room owner.
+                            default: undefined
+                            example: MF72rfNWNcv9EFZsx
+                        required:
+                          - channel_id
+                          - name
+                          - is_archived
+                          - do_import
+                          - is_private
+                          - is_direct
+              required:
+                - input
+            examples:
+              Example 1:
+                value:
+                  input:
+                    users:
+                      - user_id: testbh
+                        username: testbh
+                        email: testbh@gmail.com
+                        is_deleted: false
+                        is_bot: false
+                        do_import: true
+                        is_email_taken: false
+                    channels:
+                      - channel_id: WDuJLFkjwk6L7LdFC
+                        name: dlp
+                        is_archived: false
+                        do_import: true
+                        is_private: false
+                        is_direct: false
+      tags:
+        - Import
+      description: |-
+        Triggers the process of importing users, rooms and messages to the workspace.
+        Permission required: `run-import`
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |3.0.0            | Added       |
+  /api/v1/getImportFileData:
+    parameters: []
+    get:
+      summary: Get Import File Data
+      tags:
+        - Import
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      type: object
+                      properties: {}
+                  channels:
+                    type: array
+                    items:
+                      type: object
+                      properties: {}
+                  message_count:
+                    type: integer
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    users: []
+                    channels: []
+                    message_count: 0
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      operationId: get-api-v1-getImportFileData
+      description: |-
+        Permission required: `run-import`
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |3.0.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+  /api/v1/getImportProgress:
+    parameters: []
+    get:
+      summary: Get Import Progress
+      tags:
+        - Import
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  key:
+                    type: string
+                  name:
+                    type: string
+                  step:
+                    type: string
+                  count:
+                    type: object
+                    properties:
+                      completed:
+                        type: integer
+                      total:
+                        type: integer
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    key: pending-avatars
+                    name: Pending Avatars
+                    step: importer_user_selection
+                    count:
+                      completed: 0
+                      total: 0
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      operationId: get-api-v1-getImportProgress
+      description: |-
+        Permission required: `run-import`
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |3.0.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+  /api/v1/getLatestImportOperations:
+    parameters: []
+    get:
+      summary: Get Latest Import Operations
+      tags:
+        - Import
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                    type:
+                      type: string
+                    importerKey:
+                      type: string
+                    ts:
+                      type: integer
+                    status:
+                      type: string
+                    valid:
+                      type: boolean
+                    user:
+                      type: string
+                    _updatedAt:
+                      type: string
+              examples:
+                Example 1:
+                  value:
+                    - _id: MJxTRZsYdho8Ww2qq
+                      type: Pending Avatars
+                      importerKey: pending-avatars
+                      ts: 1635280600083
+                      status: importer_user_selection
+                      valid: false
+                      user: d26x6zSkaPSe5gCyy
+                      _updatedAt: '2021-10-27T11:26:24.430Z'
+                    - _id: YzSCu9WgqJ3wutF4T
+                      type: Pending Files
+                      importerKey: pending-files
+                      ts: 1635280596592
+                      status: importer_done
+                      valid: false
+                      user: d26x6zSkaPSe5gCyy
+                      _updatedAt: '2021-10-27T08:32:42.609Z'
+                    - _id: 96WJDaxXpwXC3fTD5
+                      type: Pending Files
+                      importerKey: pending-files
+                      ts: 1635277590992
+                      status: importer_user_selection
+                      valid: false
+                      user: d26x6zSkaPSe5gCyy
+                      _updatedAt: '2021-10-27T08:32:42.609Z'
+                    - _id: zYc5kuFRaszfqCegB
+                      type: Pending Avatars
+                      importerKey: pending-avatars
+                      ts: 1635277492185
+                      status: importer_done
+                      valid: false
+                      user: d26x6zSkaPSe5gCyy
+                      _updatedAt: '2021-10-27T08:32:42.609Z'
+                    - _id: XckCNn9ZsdywHso4f
+                      type: Pending Avatars
+                      importerKey: pending-avatars
+                      ts: 1635277452755
+                      status: importer_done
+                      valid: false
+                      user: d26x6zSkaPSe5gCyy
+                      _updatedAt: '2021-10-27T08:32:42.609Z'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      operationId: get-api-v1-getLatestImportOperations
+      description: |-
+        Permission required: `view-import-operations`
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |3.0.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+  /api/v1/downloadPendingFiles:
+    parameters: []
+    post:
+      summary: Download Pending Files
+      operationId: post-api-v1-downloadPendingFiles
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  count:
+                    type: integer
+                x-examples:
+                  Example 1:
+                    success: true
+                    count: 0
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      description: |-
+        Permission required: `run-import`
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |3.0.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      tags:
+        - Import
+  /api/v1/downloadPendingAvatars:
+    parameters: []
+    post:
+      summary: Download Pending Avatars
+      operationId: post-api-v1-downloadPendingAvatars
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  count:
+                    type: integer
+                x-examples:
+                  Example 1:
+                    success: true
+                    count: 0
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      description: |-
+        Permission required: `run-import`
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |3.0.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      tags:
+        - Import
+  /api/v1/getCurrentImportOperation:
+    parameters: []
+    post:
+      summary: Get Current Import Operations
+      operationId: post-api-v1-getCurrentImportOperation
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  operation:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      type:
+                        type: string
+                      importerKey:
+                        type: string
+                      ts:
+                        type: integer
+                      status:
+                        type: string
+                      valid:
+                        type: boolean
+                      user:
+                        type: string
+                      _updatedAt:
+                        type: string
+              examples:
+                Example 1:
+                  value:
+                    success: true
+                    operation:
+                      _id: 7PbvsnKJD9ZAqw38C
+                      type: Pending Avatars
+                      importerKey: pending-avatars
+                      ts: 1635337234169
+                      status: importer_done
+                      valid: true
+                      user: d26x6zSkaPSe5gCyy
+                      _updatedAt: '2021-10-27T12:20:34.184Z'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      description: |-
+        Permission required: `run-import`
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |3.0.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      tags:
+        - Import
+  /api/v1/import.new:
+    parameters: []
+    post:
+      summary: Create New Import Operation
+      operationId: post-api-v1-import.new
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  operation:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      type:
+                        type: string
+                      importerKey:
+                        type: string
+                      ts:
+                        type: string
+                      status:
+                        type: string
+                      valid:
+                        type: boolean
+                      user:
+                        type: string
+                      _updatedAt:
+                        type: string
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    operation:
+                      _id: 64d69545ee8ae821983005f5
+                      type: api
+                      importerKey: api
+                      ts: '2023-08-11T20:08:37.655Z'
+                      status: importer_new
+                      valid: true
+                      user: rbAXPnMktTFbNpwtJ
+                      _updatedAt: '2023-08-11T20:08:37.655Z'
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      description: |-
+        Creates a new import operation; if an operation was already running, it will be aborted. Any data from previous imports will be cleared automatically.
+        Permission required: `run-import`
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |6.3.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      tags:
+        - Bulk User Import
+  /api/v1/import.addUsers:
+    parameters: []
+    post:
+      summary: Add Users
+      operationId: post-api-v1-import.addUsers
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      description: |-
+        Adds user data to the import staging area. It requires the current import operation status to be either `new` or `ready`. If successful, it changes the operation state to `ready`.
+        Permission required: `run-import`
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |6.3.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      tags:
+        - Bulk User Import
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                users:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      username:
+                        type: string
+                        description: The user name.
+                      emails:
+                        type: array
+                        description: The user email addresses.
+                        items:
+                          type: string
+                      importIds:
+                        type: array
+                        description: A list of IDs that can identify the user.
+                        items:
+                          type: string
+                      name:
+                        type: string
+                        description: The user's display name.
+                      password:
+                        type: string
+                        description: A password to assign to this user.
+                      utcOffset:
+                        type: number
+                        description: 'The user''s timezone, in number of hours relative to UTC.'
+                      roles:
+                        type: array
+                        description: A list of roles to assign to the user
+                        items:
+                          type: string
+                      type:
+                        type: string
+                        description: 'The user type, must be either "user" or "bot".'
+                      bio:
+                        type: string
+                        description: The user's profile bio.
+                      deleted:
+                        type: boolean
+                        description: Was the user deleted from the previous system?
+                      avatarUrl:
+                        type: string
+                        description: A URL pointing to the user's avatar picture.
+                    required:
+                      - emails
+                      - importIds
+            examples:
+              Example 1:
+                value:
+                  users:
+                    - username: john.doe
+                      emails:
+                        - john.doe@example.com
+                      importIds:
+                        - '1523'
+                      name: John Doe
+                      password: P@ssw0rd
+                    - username: jane.doe
+                      emails:
+                        - jane.doe@example.com
+                      importIds:
+                        - '1524'
+                      name: Jane Doe
+        description: |-
+          Note:
+            1. A minimum of one email address and one import ID is required. If any user is missing those, the endpoint will fail and no user will be added to the operation.
+            2. Emails and usernames will not be validated, but they must be unique or the user creation will fail.
+            3. If roles are added, they must be valid Rocket.Chat roles, or the endpoint will fail and no user will be added to the operation.
+            4. The default roles will be added to all users automatically.
+            5. If no password is added, a temporary random password will be generated automatically.
+            6. Users flagged as `deleted` will be created as `Deactivated` on Rocket.Chat.
+            7. Avatar URLs will not be fetched automatically. The workspace administrator needs to use the **Download Pending Avatars** button in **Administration** > **Workspace** > **Import** on the workspace after the import is completed.
+            8. Import IDs will not be used as IDs by Rocket.Chat, but you can query users by their import ID with the [users.info](https://developer.rocket.chat/reference/api/rest-api/endpoints/user-management/users-endpoints/get-users-info) endpoint.
+  /api/v1/import.run:
+    parameters: []
+    post:
+      summary: Run Import Operation
+      operationId: post-api-v1-import.run
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      description: |-
+        Process the data from the current import operation, creating the users on Rocket.Chat. It requires the current import operation state to be `ready` and it changes the operation state to `importing`. It will return success if the conditions to start the process are met, without waiting for the import to finish.
+        Permission required: `run-import`
+        
+        1. If a user can not be imported successfully it'll be flagged but the operation will not stop.
+        2. If a user's email or username is already in use, it will not be created.
+        3. Only the users that were imported successfully will be removed from the staging area.
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |6.3.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      tags:
+        - Bulk User Import
+      requestBody:
+        content: {}
+        description: ''
+  /api/v1/import.status:
+    parameters: []
+    get:
+      summary: Get Import Operation Status
+      operationId: get-api-v1-import.status
+      responses:
+        '200':
+          description: |-
+            The following operation statuses are possible for the operation:
+              * `none`: No import operation was ever created.
+              * `new`: An operation was created but no data was added to it.
+              * `loading`: A traditional importer is currently loading data from a file to the import operation.
+              * `ready`: An operation was created and has data ready to import.
+              * `importing`: The import operation is running and the users are being created.
+              * `error`: An error caused the operation to stop running.
+              * `canceled`: The operation was interrupted by an administrator.
+              * `done`: The operation was completed successfully.
+              
+              Note the following points:
+                1. The operation is considered successful if it processes every user in the staging area, even if no user is imported.
+                2. You can check how many users have been imported or failed to import with the `operation.count.completed` and `operation.count.error` attributes.
+                3. The data from users that failed to import will remain in the staging area after the operation is complete.
+                4. While the operation is running, the values on `operation.count` are only updated once after every 50 users are processed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  state:
+                    type: string
+                  operation:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      type:
+                        type: string
+                      importerKey:
+                        type: string
+                      ts:
+                        type: string
+                      status:
+                        type: string
+                      valid:
+                        type: boolean
+                      user:
+                        type: string
+                      _updatedAt:
+                        type: string
+                      count:
+                        type: object
+                        properties:
+                          total:
+                            type: integer
+                          users:
+                            type: integer
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    state: ready
+                    operation:
+                      _id: 64d51ea91558939980aab371
+                      type: api
+                      importerKey: api
+                      ts: '2023-08-10T17:30:17.519Z'
+                      status: importer_user_selection
+                      valid: true
+                      user: 7TY57bBj3xQXvf2i2
+                      _updatedAt: '2023-08-10T17:41:20.052Z'
+                      count:
+                        total: 2
+                        users: 2
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      description: |-
+        Get the status of the current import operation.Permission required: `run-import`
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |6.3.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      tags:
+        - Bulk User Import
+  /api/v1/import.clear:
+    parameters: []
+    post:
+      summary: Abort Import Operation
+      operationId: post-api-v1-import.clear
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      tags:
+        - Bulk User Import
+      description: |-
+        Abort any import operation currently in progress. Clear any remaining data that may have been left by any previous operation.
+        Permission required: `run-import`
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |6.3.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+  /api/v1/instances.get:
+    parameters: []
+    get:
+      summary: Get Instances
+      operationId: get-api-v1-instances.get
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  instances:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        _createdAt:
+                          type: string
+                        _updatedAt:
+                          type: string
+                        extraInformation:
+                          type: object
+                          properties:
+                            host:
+                              type: string
+                            port:
+                              type: string
+                            os:
+                              type: object
+                              properties:
+                                type:
+                                  type: string
+                                platform:
+                                  type: string
+                                arch:
+                                  type: string
+                                release:
+                                  type: string
+                                uptime:
+                                  type: integer
+                                loadavg:
+                                  type: array
+                                  items:
+                                    type: number
+                                totalmem:
+                                  type: integer
+                                freemem:
+                                  type: integer
+                                cpus:
+                                  type: integer
+                            nodeVersion:
+                              type: string
+                        name:
+                          type: string
+                        pid:
+                          type: integer
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    instances:
+                      - _id: vQZbiEj9fChaa9kjw
+                        _createdAt: '2021-09-01T18:29:30.430Z'
+                        _updatedAt: '2021-09-30T11:20:44.678Z'
+                        extraInformation:
+                          host: 10.42.15.191
+                          port: '3000'
+                          os:
+                            type: Linux
+                            platform: linux
+                            arch: x64
+                            release: 4.15.0-109-generic
+                            uptime: 36801050
+                            loadavg:
+                              - 8.66
+                              - 9.46
+                              - 9.89
+                            totalmem: 270450634752
+                            freemem: 105877463040
+                            cpus: 32
+                          nodeVersion: v12.22.1
+                        name: rocket.chat
+                        pid: 1
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      tags:
+        - Instances
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      description: 'Permission required: `view-statistics`'
+  /api/v1/federation/addServerByUser:
+    parameters: []
+    post:
+      summary: Add Federated Server
+      operationId: post-api-v1-federation-addServerByUser
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      description: |-
+        <h2>Premium</h2>
+        Add a new federated server.
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |6.0.0            | Added       |
+      tags:
+        - Federation
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                serverName:
+                  type: string
+                  description: The public server name.
+              required:
+                - serverName
+            examples:
+              Example 1:
+                value:
+                  serverName: my-server.rocket.chat
+  /api/v1/federation/listServersByUser:
+    parameters: []
+    get:
+      summary: Get Federated Servers
+      operationId: get-api-v1-federation-listServersByUser
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  servers:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        default:
+                          type: boolean
+                        local:
+                          type: boolean
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    servers:
+                      - name: my-local.server
+                        default: true
+                        local: true
+                      - name: matrix.org
+                        default: true
+                        local: false
+                      - name: gitter.im
+                        default: true
+                        local: false
+                      - name: libera.chat
+                        default: true
+                        local: false
+                      - name: my-added-server.rocket.chat
+                        default: false
+                        local: false
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      description: |-
+        <h2>Premium</h2>
+        Lists all the servers the user has already saved.
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |6.0.0            | Added       |
+      tags:
+        - Federation
+  /api/v1/federation/removeServerByUser:
+    parameters: []
+    post:
+      summary: Remove Federated Server
+      operationId: post-api-v1-federation-removeServerByUser
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: cannot-remove-default-server
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      description: |-
+        <h2>Premium</h2>
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |6.0.0            | Added       |
+      tags:
+        - Federation
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              x-examples:
+                Example 1:
+                  serverName: my-server.rocket.chat
+              properties:
+                serverName:
+                  type: string
+                  description: The public server name that you want to remove.
+              required:
+                - serverName
+  /api/v1/federation/searchPublicRooms:
+    parameters: []
+    get:
+      summary: Search Public Rooms
+      operationId: get-api-v1-federation-searchPublicRooms
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rooms:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        canJoin:
+                          type: boolean
+                        canonicalAlias:
+                          type: string
+                        joinedMembers:
+                          type: integer
+                        topic:
+                          type: string
+                  count:
+                    type: integer
+                  total:
+                    type: integer
+                  nextPageToken:
+                    type: string
+                  prevPageToken:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    rooms:
+                      - id: '!OGEhHVWSdvArJzumhm:matrix.org'
+                        name: Matrix HQ
+                        canJoin: true
+                        canonicalAlias: '#matrix:matrix.org'
+                        joinedMembers: 44461
+                        topic: 'The Official Matrix HQ - chat about Matrix here! | https://matrix.org | https://spec.matrix.org | To support Matrix.org development: https://patreon.com/matrixdotorg | Code of Conduct: https://matrix.org/legal/code-of-conduct/ | This is an English speaking room'
+                    count: 1
+                    total: 73080
+                    nextPageToken: g6FtzZa3oXK+IUpkemFiTlVQUFh6bENKQWhFbDpmYWJyaWMucHVioWTD
+                    prevPageToken: g6FtzYqIoXK+IWNOd2pkUXdWcFJNc0lNa1VweDptYXRyaXgub3JnoWTC
+                    success: true
+        '401':
+          description: Unauthorized
+      description: |-
+        <h2>Premium</h2>
+        Search for federated public rooms by the server name or room name.
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |6.0.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - schema:
+            type: string
+            example: matrix.org
+          in: query
+          name: serverName
+          description: The server name.
+          required: true
+        - schema:
+            type: string
+            example: my public room name
+          in: query
+          name: roomName
+          description: The room name you want to search for in the server.
+        - schema:
+            type: string
+            example: g6FtzRlCoXK+IUpmS
+          in: query
+          name: pageToken
+          description: 'The page you want to retrieve, use it for pagination. Make sure to URL encode this.'
+        - $ref: '#/components/parameters/count'
+      tags:
+        - Federation
+  /api/v1/federation/joinExternalPublicRoom:
+    parameters: []
+    post:
+      summary: Join External Public Room
+      operationId: post-api-v1-federation-joinExternalPublicRoom
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      description: |-
+        <h2>Premium</h2>
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |6.0.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                externalRoomId:
+                  type: string
+                  description: The external public room ID.
+                  example: '!externalRoomId:server.com'
+              required:
+                - externalRoomId
+            examples:
+              Example 1:
+                value:
+                  externalRoomId: '!externalRoomId:server.com'
+      tags:
+        - Federation
+  /api/v1/moderation.reportsByUsers:
+    parameters: []
+    get:
+      summary: Get Reported Messages
+      operationId: get-api-v1-moderation.reportsByUsers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reports:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        rooms:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              _id:
+                                type: string
+                              t:
+                                type: string
+                              federated:
+                                type: boolean
+                        count:
+                          type: integer
+                        message:
+                          type: string
+                        msgId:
+                          type: string
+                        ts:
+                          type: string
+                        username:
+                          type: string
+                        name:
+                          type: string
+                        userId:
+                          type: string
+                        isUserDeleted:
+                          type: boolean
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    reports:
+                      - rooms:
+                          - _id: 6423ce62c29657e5b3ba2675rbAXPnMktTFbNpwtJ
+                            t: d
+                            federated: true
+                        count: 1
+                        message: hi
+                        msgId: tDNLALSFk2LET2JZH
+                        ts: '2023-08-30T09:38:38.792Z'
+                        username: funke.olasupo
+                        name: Funke Olasupo
+                        userId: rbAXPnMktTFbNpwtJ
+                        isUserDeleted: false
+                      - rooms:
+                          - _id: 5fRTXMt7DMJbpPJfhrbAXPnMktTFbNpwtJ
+                            t: d
+                        count: 2
+                        message: himm
+                        msgId: xY8cN7yuPQfBgJ9xz
+                        ts: '2023-08-30T09:33:15.621Z'
+                        username: test.funke
+                        name: TestFunke
+                        userId: 5fRTXMt7DMJbpPJfh
+                        isUserDeleted: false
+                    count: 2
+                    offset: 0
+                    total: 3
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      description: |-
+        Retrieves all the reported messages grouped by users.
+        Permission required: `view-moderation-console`
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |6.2.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - schema:
+            type: string
+            example: '2021-09-30T09:33:15.621Z'
+          in: query
+          name: oldest
+          description: It represents the oldest point in time for which you want to retrieve moderation reports.
+        - schema:
+            type: string
+            example: '2023-08-30T09:33:15.621Z'
+          in: query
+          name: latest
+          description: It represents the oldest point in time for which you want to retrieve moderation reports.
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+      tags:
+        - Moderation
+  /api/v1/moderation.user.reportedMessages:
+    parameters: []
+    get:
+      summary: Get User's Reported Messages
+      operationId: get-api-v1-moderation.user.reportedMessages
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      username:
+                        type: string
+                      name:
+                        type: string
+                  messages:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        message:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            rid:
+                              type: string
+                            msg:
+                              type: string
+                            ts:
+                              type: string
+                            u:
+                              type: object
+                              properties:
+                                _id:
+                                  type: string
+                                username:
+                                  type: string
+                                name:
+                                  type: string
+                            _updatedAt:
+                              type: string
+                            urls:
+                              type: array
+                              items:
+                                type: object
+                                properties: {}
+                            mentions:
+                              type: array
+                              items:
+                                type: object
+                                properties: {}
+                            channels:
+                              type: array
+                              items:
+                                type: object
+                                properties: {}
+                            md:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  type:
+                                    type: string
+                                  value:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        type:
+                                          type: string
+                                        value:
+                                          type: string
+                        room:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            t:
+                              type: string
+                        ts:
+                          type: string
+                  count:
+                    type: integer
+                  total:
+                    type: integer
+                  offset:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    user:
+                      _id: 5fRTXMt7DMJbpPJfh
+                      username: test.funke
+                      name: TestFunke
+                    messages:
+                      - _id: 64ef0f992c26843a68c1f785
+                        message:
+                          _id: EbhcT4vjrCDyZuHKq
+                          rid: 5fRTXMt7DMJbpPJfhrbAXPnMktTFbNpwtJ
+                          msg: hola
+                          ts: '2023-08-30T09:44:30.805Z'
+                          u:
+                            _id: 5fRTXMt7DMJbpPJfh
+                            username: test.funke
+                            name: TestFunke
+                          _updatedAt: '2023-08-30T09:44:30.968Z'
+                          urls: []
+                          mentions: []
+                          channels: []
+                          md:
+                            - type: PARAGRAPH
+                              value:
+                                - type: PLAIN_TEXT
+                                  value: hola
+                        room:
+                          _id: 5fRTXMt7DMJbpPJfhrbAXPnMktTFbNpwtJ
+                          t: d
+                        ts: '2023-08-30T09:44:57.912Z'
+                      - _id: 64ef0cdb2c26843a68c1f780
+                        message:
+                          _id: xY8cN7yuPQfBgJ9xz
+                          rid: 5fRTXMt7DMJbpPJfhrbAXPnMktTFbNpwtJ
+                          msg: himm
+                          ts: '2023-07-11T01:37:07.951Z'
+                          u:
+                            _id: 5fRTXMt7DMJbpPJfh
+                            username: test.funke
+                            name: TestFunke
+                          _updatedAt: '2023-07-11T01:37:08.024Z'
+                          urls: []
+                          mentions: []
+                          channels: []
+                          md:
+                            - type: PARAGRAPH
+                              value:
+                                - type: PLAIN_TEXT
+                                  value: himm
+                        room:
+                          _id: 5fRTXMt7DMJbpPJfhrbAXPnMktTFbNpwtJ
+                          t: d
+                        ts: '2023-08-30T09:33:15.621Z'
+                    count: 2
+                    total: 2
+                    offset: 0
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      description: |-
+        Retrieve all reported messages of a user.
+        Permission required: `view-moderation-console`
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |6.2.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+        - schema:
+            type: string
+          in: query
+          description: The id of the user whose reported messages should be retrieved.
+          name: userId
+          required: true
+      tags:
+        - Moderation
+  /api/v1/moderation.reports:
+    parameters: []
+    get:
+      summary: Get Reports of a Message
+      operationId: get-api-v1-moderation.reports
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reports:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        description:
+                          type: string
+                        reportedBy:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                            name:
+                              type: string
+                            createdAt:
+                              type: string
+                        room:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            t:
+                              type: string
+                        ts:
+                          type: string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    reports:
+                      - _id: 64ef0f992c26843a68c1f785
+                        description: |
+                          test report
+                        reportedBy:
+                          _id: rbAXPnMktTFbNpwtJ
+                          username: funke.olasupo
+                          name: Funke Olasupo
+                          createdAt: '2023-02-20T13:42:07.119Z'
+                        room:
+                          _id: 5fRTXMt7DMJbpPJfhrbAXPnMktTFbNpwtJ
+                          t: d
+                        ts: '2023-08-30T09:44:57.912Z'
+                    count: 1
+                    offset: 0
+                    total: 1
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      description: |-
+        Retrieve all the reports of a single message. A message can have many reports.
+        Permission required: `view-moderation-console`
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |6.2.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+        - schema:
+            type: string
+          in: query
+          description: The ID of the message to fetch reports for.
+          name: msgId
+          required: true
+      tags:
+        - Moderation
+  /api/v1/moderation.reportInfo:
+    parameters: []
+    get:
+      summary: Get Report Information
+      operationId: get-api-v1-moderation.reportInfo
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      description: |-
+        Get more details of a single report. A message can be reported multiple times by various users.
+        Permission required: `view-moderation-console`
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |6.2.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - schema:
+            type: string
+          in: query
+          description: The ID of the report to fetch details for.
+          name: reportId
+          required: true
+      tags:
+        - Moderation
+  /api/v1/moderation.dismissReports:
+    parameters: []
+    post:
+      summary: Dismiss Reports
+      operationId: post-api-v1-moderation.dismissReports
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      description: |-
+        You can dismiss all the reports of a particular user by the `userId`. You can also dismiss the report of a message by the `msgId`.
+        Permission required: `manage-moderation-actions`
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |6.2.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  description: The ID of the user whose reports to dismiss. This parameter is required if `msgId` is not provided.
+                msgId:
+                  type: string
+                  description: The ID of the message which reports to dismiss. This parameter is required if `userId` is not provided.
+      tags:
+        - Moderation
+  /api/v1/moderation.user.deleteReportedMessages:
+    parameters: []
+    post:
+      summary: Delete Reported Messages of a User
+      operationId: post-api-v1-moderation.user.deleteReportedMessages
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      description: |-
+        Delete all the reports of messages that belongs to user. Permission required: `manage-moderation-actions`
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |6.2.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  description: The ID of the user whose reports to dismiss.
+              required:
+                - userId
+      tags:
+        - Moderation
+  /api/v1/sessions/list:
+    parameters: []
+    get:
+      summary: Get Current User Sessions
+      operationId: get-api-v1-sessions-list
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sessions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        sessionId:
+                          type: string
+                        userId:
+                          type: string
+                        device:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                            name:
+                              type: string
+                            longVersion:
+                              type: string
+                            os:
+                              type: object
+                              properties:
+                                name:
+                                  type: string
+                                version:
+                                  type: string
+                            version:
+                              type: string
+                        host:
+                          type: string
+                        ip:
+                          type: string
+                        loginAt:
+                          type: string
+                        _id:
+                          type: string
+                  total:
+                    type: integer
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    sessions:
+                      - sessionId: QoYYFw2t9oKks2niG
+                        userId: rbAXPnMktTFbNpwtJ
+                        device:
+                          type: browser
+                          name: Chrome
+                          longVersion: 113.0.0.0
+                          os:
+                            name: Windows
+                            version: '10'
+                          version: 113.0.0
+                        host: 'localhost:3000'
+                        ip: 172.20.0.2
+                        loginAt: '2023-05-23T16:33:45.202Z'
+                        _id: QoYYFw2t9oKks2niG
+                      - sessionId: WJ2giBwm4B9mcojFi
+                        userId: rbAXPnMktTFbNpwtJ
+                        device:
+                          type: mobile
+                          name: Chrome
+                          longVersion: 112.0.0.0
+                          os:
+                            name: Android
+                            version: '10'
+                          version: 112.0.0
+                        host: 'localhost:3000'
+                        ip: 172.20.0.2
+                        loginAt: '2023-05-23T12:43:52.023Z'
+                        _id: WJ2giBwm4B9mcojFi
+                    total: 2
+                    count: 50
+                    offset: 0
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      description: |-
+        <h2>Premium></h2>
+        Retrieves all sessions of the authenticated user making the request.
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |5.0.0            | Added       |
+      tags:
+        - Device Management
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - schema:
+            type: string
+            example: windows
+          in: query
+          name: filter
+          description: Filter sessions list using regex.
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+  /api/v1/sessions/list.all:
+    parameters: []
+    get:
+      summary: Get All Current User Sessions
+      operationId: get-api-v1-sessions-list.all
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sessions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        sessionId:
+                          type: string
+                        userId:
+                          type: string
+                        device:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                            name:
+                              type: string
+                            longVersion:
+                              type: string
+                            os:
+                              type: object
+                              properties:
+                                name:
+                                  type: string
+                                version:
+                                  type: string
+                            version:
+                              type: string
+                        host:
+                          type: string
+                        ip:
+                          type: string
+                        loginAt:
+                          type: string
+                        _user:
+                          type: object
+                          properties:
+                            username:
+                              type: string
+                            name:
+                              type: string
+                        _id:
+                          type: string
+                  total:
+                    type: integer
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  success:
+                    type: boolean
+              x-examples:
+                 Example 1:
+                  value:
+                    sessions:
+                      - sessionId: o94SveQp6fyPsoiNC
+                        userId: 2tTEqR7ZNMJ4HGGNa
+                        device:
+                          type: browser
+                          name: Chrome
+                          longVersion: 113.0.0.0
+                          os:
+                            name: Windows
+                            version: '10'
+                          version: 113.0.0
+                        host: 'localhost:3000'
+                        ip: 172.20.0.2
+                        loginAt: '2023-05-24T00:25:54.234Z'
+                        _user:
+                          username: testroxie
+                          name: Test
+                        _id: o94SveQp6fyPsoiNC
+                      - sessionId: BdSrCZXNKCbRi8Eqn
+                        userId: rbAXPnMktTFbNpwtJ
+                        device:
+                          type: browser
+                          name: Chrome
+                          longVersion: 113.0.0.0
+                          os:
+                            name: Windows
+                            version: '10'
+                          version: 113.0.0
+                        host: 'localhost:3000'
+                        ip: 172.20.0.2
+                        loginAt: '2023-05-24T00:25:52.246Z'
+                        _user:
+                          username: funke.olasupo
+                          name: Funke Olasupo
+                        _id: BdSrCZXNKCbRi8Eqn
+                      - sessionId: tTouumJMrHMjnedWf
+                        userId: GonjPyg3gB3Z9ur9s
+                        device:
+                          type: browser
+                          name: Chrome
+                          longVersion: 113.0.0.0
+                          os:
+                            name: Windows
+                            version: '10'
+                          version: 113.0.0
+                        host: 'localhost:3000'
+                        ip: 172.20.0.2
+                        loginAt: '2023-05-23T19:14:29.865Z'
+                        _user:
+                          name: Funke
+                          username: funke.test
+                        _id: tTouumJMrHMjnedWf
+                      - sessionId: 7ykYEK3KWnk4EeA7s
+                        userId: 2tTEqR7ZNMJ4HGGNa
+                        device:
+                          type: browser
+                          name: Chrome
+                          longVersion: 113.0.0.0
+                          os:
+                            name: Windows
+                            version: '10'
+                          version: 113.0.0
+                        host: 'localhost:3000'
+                        ip: 172.20.0.2
+                        loginAt: '2023-05-23T19:14:28.717Z'
+                        _user:
+                          username: testroxie
+                          name: Test
+                        _id: 7ykYEK3KWnk4EeA7s
+                      - sessionId: jfD6mnHnrEJdPq9MF
+                        userId: stjxrXYBWy3EcDugH
+                        device:
+                          type: browser
+                          name: Chrome
+                          longVersion: 113.0.0.0
+                          os:
+                            name: Windows
+                            version: '10'
+                          version: 113.0.0
+                        host: 'localhost:3000'
+                        ip: 172.20.0.2
+                        loginAt: '2023-05-23T15:21:57.188Z'
+                        _user:
+                          username: rocket.agent
+                          name: Rocket Agent
+                        _id: jfD6mnHnrEJdPq9MF
+                      - sessionId: 2jQnfG74X3EZYL9tj
+                        userId: rYhzFRd2QZjNwAAXX
+                        device:
+                          type: browser
+                          name: Chrome
+                          longVersion: 113.0.0.0
+                          os:
+                            name: Windows
+                            version: '10'
+                          version: 113.0.0
+                        host: 'localhost:3000'
+                        ip: 172.20.0.2
+                        loginAt: '2023-05-23T15:19:48.723Z'
+                        _user:
+                          name: Rodriq
+                          username: rodriq
+                        _id: 2jQnfG74X3EZYL9tj
+                      - sessionId: fsfE772s78AmPxGKk
+                        userId: uZ5JvvioeHK8Coyqe
+                        device:
+                          type: browser
+                          name: Firefox
+                          longVersion: '112.0'
+                          os:
+                            name: Windows
+                            version: '10'
+                          version: '112.0'
+                        host: 'localhost:3000'
+                        ip: 172.18.0.4
+                        loginAt: '2023-05-16T20:50:33.608Z'
+                        _user:
+                          username: user-0
+                        _id: fsfE772s78AmPxGKk
+                      - sessionId: W4y9xkjyqFvbjENco
+                        userId: b66oZ8i9pkeSko33v
+                        device:
+                          type: browser
+                          name: Chrome
+                          longVersion: 113.0.0.0
+                          os:
+                            name: Windows
+                            version: '10'
+                          version: 113.0.0
+                        host: 'localhost:3000'
+                        ip: 172.18.0.4
+                        loginAt: '2023-05-16T12:46:09.469Z'
+                        _user:
+                          username: guester
+                          name: Guester
+                        _id: W4y9xkjyqFvbjENco
+                      - sessionId: 94yTWFkADGBvE9t7P
+                        userId: aspKK7FHe7iQgzexX
+                        device:
+                          type: browser
+                          name: Firefox
+                          longVersion: '112.0'
+                          os:
+                            name: Windows
+                            version: '10'
+                          version: '112.0'
+                        host: 'localhost:3000'
+                        ip: 172.18.0.4
+                        loginAt: '2023-05-11T18:47:13.865Z'
+                        _user:
+                          username: user-00
+                          name: User 00
+                        _id: 94yTWFkADGBvE9t7P
+                    total: 13
+                    count: 50
+                    offset: 0
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+                      codeGenerated:
+                        type: boolean
+                      availableMethods:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+              examples:
+                TOTP Error:
+                  value:
+                    success: false
+                    error: 'TOTP Required [totp-required]'
+                    errorType: totp-required
+                    details:
+                      method: password
+                      codeGenerated: false
+                      availableMethods: []
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      description: |-
+        <h2>Premium</h2>
+        Retrieve the sessions of all users on the workspace. This endpoint required 2FA.
+        Permission required: `view-device-management`
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |5.0.0            | Added       |
+      tags:
+        - Device Management
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - schema:
+            type: string
+            example: windows
+          in: query
+          name: filter
+          description: Filter sessions list using regex.
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/x-2fa-code'
+  /api/v1/sessions/info:
+    parameters: []
+    get:
+      summary: Get All Current User Sessions
+      operationId: get-api-v1-sessions-info
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  type:
+                    type: string
+                  sessionId:
+                    type: string
+                  instanceId:
+                    type: string
+                  loginToken:
+                    type: string
+                  ip:
+                    type: string
+                  host:
+                    type: string
+                  device:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                      name:
+                        type: string
+                      longVersion:
+                        type: string
+                      os:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          version:
+                            type: string
+                      version:
+                        type: string
+                  userId:
+                    type: string
+                  roles:
+                    type: array
+                    items:
+                      type: string
+                  mostImportantRole:
+                    type: string
+                  loginAt:
+                    type: string
+                  day:
+                    type: integer
+                  month:
+                    type: integer
+                  year:
+                    type: integer
+                  searchTerm:
+                    type: string
+                  createdAt:
+                    type: string
+                  _updatedAt:
+                    type: string
+                  closedAt:
+                    type: string
+                  lastActivityAt:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    _id: 646ceae9a8c3a3ba32d0e897
+                    type: session
+                    sessionId: QoYYFw2t9oKks2niG
+                    instanceId: f0313fa9-ebe6-4a84-8580-3104f6a09988
+                    loginToken: orklPYtfnjnG6mG7OMuLbOBDzs8I9myfcLl2yzv7WoU=
+                    ip: 172.20.0.2
+                    host: 'localhost:3000'
+                    device:
+                      type: browser
+                      name: Chrome
+                      longVersion: 113.0.0.0
+                      os:
+                        name: Windows
+                        version: '10'
+                      version: 113.0.0
+                    userId: rbAXPnMktTFbNpwtJ
+                    roles:
+                      - user
+                      - admin
+                      - livechat-agent
+                      - livechat-manager
+                    mostImportantRole: admin
+                    loginAt: '2023-05-23T16:33:45.202Z'
+                    day: 23
+                    month: 5
+                    year: 2023
+                    searchTerm: ChromebrowserWindowsQoYYFw2t9oKks2niGrbAXPnMktTFbNpwtJ
+                    createdAt: '2023-05-23T16:33:45.203Z'
+                    _updatedAt: '2023-05-23T17:56:31.599Z'
+                    closedAt: '2023-05-23T17:56:31.599Z'
+                    lastActivityAt: '2023-05-23T17:56:31.599Z'
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: Session not found
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      description: |-
+        <h2>Premium></h2>
+        Retrieve session information for sessions owned by the authenticated user. This endpoint provides detailed information about the user's sessions on the workspace. It does not grant access to the session information of other users on the workspace.
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |5.0.0            | Added       |
+      tags:
+        - Device Management
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - schema:
+            type: string
+            example: windows
+          in: query
+          name: sessionId
+          description: The session ID.
+          required: true
+  /api/v1/sessions/info.admin:
+    parameters: []
+    get:
+      summary: Get Session Information
+      operationId: get-api-v1-sessions-info.admin
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sessionId:
+                    type: string
+                  userId:
+                    type: string
+                  device:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                      name:
+                        type: string
+                      longVersion:
+                        type: string
+                      os:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          version:
+                            type: string
+                      version:
+                        type: string
+                  host:
+                    type: string
+                  ip:
+                    type: string
+                  loginAt:
+                    type: string
+                  _user:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      username:
+                        type: string
+                  _id:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    sessionId: uBNL9dTjJ4s6Pjp4K
+                    userId: rYhzFRd2QZjNwAAXX
+                    device:
+                      type: browser
+                      name: Chrome
+                      longVersion: 113.0.0.0
+                      os:
+                        name: Windows
+                        version: '10'
+                      version: 113.0.0
+                    host: 'localhost:3000'
+                    ip: 172.20.0.2
+                    loginAt: '2023-05-24T05:08:42.806Z'
+                    _user:
+                      name: Rod
+                      username: Rod
+                    _id: uBNL9dTjJ4s6Pjp4K
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: Session not found
+                TOTP Error:
+                  value:
+                    success: false
+                    error: 'TOTP Required [totp-required]'
+                    errorType: totp-required
+                    details:
+                      method: password
+                      codeGenerated: false
+                      availableMethods: []
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      description: |-
+        <h2>Premium></h2>
+        Retrieve session information for any session on the workspace, regardless of the session owner. This endpoint allows authorized users to access session details across the workspace and requires 2FA.
+        Permission required: `view-device-management`
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |5.0.0            | Added       |
+      tags:
+        - Device Management
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - schema:
+            type: string
+            example: windows
+          in: query
+          name: sessionId
+          description: The session ID.
+          required: true
+        - $ref: '#/components/parameters/x-2fa-code'
+  /api/v1/sessions/logout.me:
+    parameters: []
+    post:
+      summary: Logout Current User Session
+      operationId: post-api-v1-sessions-logout.me
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sessionId:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    sessionId: WJ2giBwm4B9mcojFi
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: Session not found
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      description: |-
+        <h2>Premium</h2>
+        This endpoint allows an authenticated user to log out of any of their sessions on the workspace. It is designed specifically for the user to terminate their sessions and cannot be used to log out sessions belonging to other users on the workspace.
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |5.0.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      tags:
+        - Device Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sessionId:
+                  type: string
+                  description: The session ID.
+              required:
+                - sessionId
+            examples:
+              Example 1:
+                value:
+                  sessionId: WJ2giBwm4B9mcojFi
+  /api/v1/sessions/logout:
+    parameters: []
+    post:
+      summary: Logout Session
+      operationId: post-api-v1-sessions-logout
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sessionId:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    sessionId: tTouumJMrHMjnedWf
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+                      codeGenerated:
+                        type: boolean
+                      availableMethods:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+              examples:
+                TOTP Error:
+                  value:
+                    success: false
+                    error: 'TOTP Required [totp-required]'
+                    errorType: totp-required
+                    details:
+                      method: password
+                      codeGenerated: false
+                      availableMethods: []
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      description: |-
+        <h2>Premium</h2>
+        This endpoint allows an authorized user to log out other user's session on the workspace and required 2FA. It provides the capability to terminate sessions of other users, ensuring workspace security and management.
+        Permission required: `logout-device-management`
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |5.0.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/x-2fa-code'
+      tags:
+        - Device Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sessionId:
+                  type: string
+                  description: The session ID.
+              required:
+                - sessionId
+tags:
+  - name: Settings
+  - name: Cloud
+  - name: DNS
+  - name: E2E
+  - name: Import
+  - name: Bulk User Import
+  - name: Instances
+  - name: Federation
+  - name: Moderation
+  - name: Device Management
+components:
+  parameters:
+    X-User-Id:
+      name: X-User-Id
+      in: header
+      required: true
+      schema:
+        type: string
+        example: CkCPNctrgCDfmWLqC
+      description: The user ID.
+    X-Auth-Token:
+      name: X-Auth-Token
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 1Dd4iN_ClKn5jl-xPC36snQ4s9Zd5GZnXCQuCNSKcVE
+      description: The authentication token.
+    offset:
+      name: offset
+      in: query
+      required: false
+      schema:
+        type: integer
+        example: 50
+      description: 'Number of items to "skip" in the query, i.e. requests return count items, skipping the first offset items.'
+    count:
+      name: count
+      in: query
+      required: false
+      schema:
+        type: integer
+        example: 50
+      description: How many items to return.
+    sort:
+      name: sort
+      in: query
+      required: false
+      schema: {}
+      description: 'List of fields to order by, and in which direction. This is a JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending. For example, {"value": -1, "_id": 1}'
+    query:
+      name: query
+      in: query
+      required: false
+      schema: {}
+      description: 'This parameter allows you to use MongoDB query operators to search for specific data. For example, to query users with a name that contains the letter "g": query={ "name": { "$regex": "g" } } '
+    fields:
+      name: fields
+      in: query
+      required: false
+      schema: {}
+      description: 'This parameter accepts a JSON object with properties that have a value of 1 or 0 to include or exclude them in the response. For example, to only retrieve the usernames of users: fields={ "username": 1 }'
+    x-2fa-code:
+      name: X-2fa-Code
+      in: header
+      required: true
+      schema:
+        type: string
+      description: 'The 2FA code from the authentication method. If the method is password, encrypt it as SHA256.'
+  schemas: {}
+  responses:
+    authorizationError:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              message:
+                type: string
+          examples:
+            Authorization Error:
+              value:
+                status: error
+                message: You must be logged in to do this.
+    trueSuccess:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+          examples:
+            Success:
+              value:
+                success: true
+    forbiddenError:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+              error:
+                type: string
+          examples:
+            Permission Error:
+              value:
+                success: false
+                error: 'User does not have the permissions required for this action [error-unauthorized]'

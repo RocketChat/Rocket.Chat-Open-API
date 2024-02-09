@@ -1,0 +1,289 @@
+openapi: 3.0.0
+info:
+  version: ''
+  title: Marketplace Apps
+  contact:
+    name: Rocket.Chat
+    url: 'https://rocket.chat/'
+    email: contact@rocket.chat
+  description: ''
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  '/api/apps/public/{app-id}/incoming':
+    parameters:
+      - schema:
+          type: string
+        name: app-id
+        in: path
+        required: true
+        description: The app id. Navigate to App Info > Details > APIs > POST incoming to get the complete URL for this endpoint.
+    post:
+      summary: Close Chat or Perform Handover
+      tags:
+        - Rasa App
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+              examples:
+                Example  1:
+                  value:
+                    msg: ' Close chat request handled successfully'
+                Example 2:
+                  value:
+                    msg: ' Perform Handover request handled successfully'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-apps-public-app-id-incoming
+      description: |-
+        Close a chat session or perform handover. The appropriate endpoint URL including the `appId` for  closing chat or perfoming handover in your workspace is displayed under **App Info > Details > APIs > POST incoming** section of the Rasa app.
+
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |5.0.0     | Added       |
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              x-examples:
+                Example 1:
+                  action: close-chat
+                  sessionId: 2Sfq8wXw4fYPMf6r4
+              required:
+                - action
+                - sessionId
+              properties:
+                action:
+                  type: string
+                  description: 'The action can either be `handover` or `close-chat`. '
+                sessionId:
+                  type: string
+                  description: The ID of the Rasa session.
+                actionData:
+                  type: object
+                  properties:
+                    targetDepartment:
+                      type: string
+                      description: The targeted department.
+        description: ''
+  '/api/apps/public/{appId}/templateMessage':
+    parameters:
+      - schema:
+          type: string
+        name: appId
+        in: path
+        required: true
+    post:
+      summary: Send a Template WhatsApp Message
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - properties:
+                      success:
+                        type: boolean
+                      invalidContacts:
+                        type: array
+                        items:
+                          type: string
+                type: object
+              examples:
+                Success Example:
+                  value:
+                    success: true
+                    invalidContacts:
+                      - '917738772967'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: Too many phone numbers! Please make sure that phoneNumbers are <= 250
+                Example 2:
+                  value:
+                    success: false
+                    error: No Agent found with username abc98
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'Error occurred while processing request. Details: [Error Details]'
+      operationId: post-api-apps-public-app_id-templateMessage
+      description: |-
+        REST API URL can be found in the **Details** tab of the **App Info** page.
+        For example, `http://localhost:3000/api/apps/public/30bf52a3-d65b-4ab1-9b11-7cfdddf1ef29/templateMessage`
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - phoneNumbers
+                - connectedWhatsAppNo
+              properties:
+                phoneNumbers:
+                  type: array
+                  description: 'Recipient WhatsApp IDs where you want to send the template message. You can validate a WhatsApp id from [here](https://developers.facebook.com/docs/whatsapp/on-premises/reference/contacts).'
+                  items:
+                    type: string
+                connectedWhatsAppNo:
+                  type: string
+                  description: The WhatsApp Number from which you want to send this template message.
+                targetAgent:
+                  type: string
+                  description: Username of the agent you want to transfer the chat to when the WhatsApp user replies.
+                targetDepartment:
+                  type: string
+                  description: Department name or ID where you want to transfer the chat to when the WhatsApp user replies.
+                template:
+                  type: object
+                  description: 'Provide information about the template message you wish to send. Kindly refer to [Message Templates](https://developers.facebook.com/docs/whatsapp/api/messages/message-templates#the-template-object) for an example'
+                  properties:
+                    namespace:
+                      type: string
+                    name:
+                      type: string
+                    language:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                        policy:
+                          type: string
+                    components:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          type:
+                            type: string
+                          parameters:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                type:
+                                  type: string
+                                text:
+                                  type: string
+            examples:
+              Example 1:
+                value:
+                  phoneNumbers:
+                    - '+917785887264'
+                    - '+551452001478'
+                  connectedWhatsAppNo: '+565412001234'
+                  targetAgent: murtaza98
+                  targetDepartment: SalesDepartment
+                  template:
+                    namespace: your-namespace
+                    name: your-template-name
+                    language:
+                      code: your-language-and-locale-code
+                      policy: deterministic
+                    components:
+                      - type: header
+                        parameters:
+                          - type: text
+                            text: your-text-string
+                      - type: body
+                        parameters:
+                          - type: text
+                            text: your-text-string
+                          - type: text
+                            text: your-text-string
+                      - type: footer
+                        parameters:
+                          - type: text
+                            text: your-text-string
+        description: 'We strongly recommend including the + prefix for all phone numbers in the payload. While you can submit numbers without the leading + sign, we have encountered cases where WhatsApp will return an invalid response despite the number being in use.'
+      tags:
+        - WhatsApp
+components:
+  schemas: {}
+  parameters:
+    Auth-Token:
+      name: X-Auth-Token
+      in: header
+      description: The `authToken` of the authenticated user.
+      required: true
+      schema:
+        type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+    UserId:
+      name: X-User-Id
+      in: header
+      description: The `userId` of the authenticated user.
+      required: true
+      schema:
+        type: string
+        example: rbAXPnMktTFbNpwtJ
+  responses:
+    trueSuccess:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+          examples:
+            Example 1:
+              value:
+                success: true
+    authorizationError:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              message:
+                type: string
+          examples:
+            Authorization Error:
+              value:
+                status: error
+                message: You must be logged in to do this.
+tags:
+  - name: Rasa App
+  - name: WhatsApp
