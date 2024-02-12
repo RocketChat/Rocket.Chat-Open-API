@@ -1,14 +1,14 @@
 openapi: 3.0.0
 info:
-  version: ''
+  version: 1.0.0
   title: Statistics
-  contact:
-    name: ''
-    url: ''
-    email: ''
-  license:
-    url: ''
-    name: ''
+  description: |-
+      * View your Rocket.Chat workspace **statistics**.
+      * Get the following workspace [engagement](https://docs.rocket.chat/use-rocket.chat/workspace-administration/engagement) details:
+          * **Channels**
+          * **Messages**
+          * **Users**
+      * View and manage channel **subscription** information.
 servers:
   - url: 'http://localhost:3000'
 paths:

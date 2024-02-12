@@ -1,16 +1,11 @@
 openapi: 3.0.0
 info:
-  version: ''
+  version: 1.0.0
   title: Notifications
-  description: ''
-  termsOfService: 'https://rocket.chat/'
-  contact:
-    name: Rocket.Chat
-    url: 'https://rocket.chat/'
-    email: contact@rocket.chat
-  license:
-    url: 'https://rocket.chat/'
-    name: Apache2.0
+  description: |- 
+    The Rocket.Chat notifications endpoints are as follows:
+    * **Banners**: Get and dismiss banners.
+    * **Push token**: Create and manage push tokens.
 servers:
   - url: 'http://localhost:3000'
 paths:

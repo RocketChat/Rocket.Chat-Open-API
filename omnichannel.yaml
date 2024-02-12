@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: ''
+  version: 1.0.0
   title: Omnichannel
   description: |-
     With the Rocket.Chat [Omnichannel](https://docs.rocket.chat/use-rocket.chat/omnichannel) feature, you can talk to your customers and website visitors, regardless of the channel they choose to connect with you.
@@ -9,13 +9,6 @@ info:
 
     - **Endpoints requiring authentication:** The workspace admins and managers use the endpoints that require authentication with a login method.
     - **Endpoints not requiring authentication:** Visitors can use the endpoints that require no authentication. These endpoints require a visitor `token` which is like an authentication parameter for visitors. Visitors can [register themselves](livechat-endpoints/visitor/register-a-new-livechat-visitor.md) by providing a random unique string as the `token` which can be used for other such endpoints.
-  contact:
-    name: Rocket.Chat
-    url: 'https://rocket.chat/'
-    email: contact@rocket.chat
-  license:
-    url: 'https://rocket.chat/'
-    name: Apache2.0
 servers:
   - url: 'http://localhost:3000'
 paths:
@@ -1022,22 +1015,6 @@ paths:
             application/json:
               schema:
                 type: array
-                x-examples:
-                  Example 1:
-                    - title: Total_conversations
-                      value: 1086
-                    - title: Open_conversations
-                      value: 119
-                    - title: On_Hold_conversations
-                      value: 1
-                    - title: Total_messages
-                      value: 4892
-                    - title: Busiest_day
-                      value: Tuesday
-                    - title: Conversations_per_day
-                      value: '0.74'
-                    - title: Busiest_time
-                      value: 7AM- 8AM
                 items:
                   type: object
                   properties:
@@ -1045,9 +1022,9 @@ paths:
                       type:
                         - string
                     value:
-                      type:
-                        - string
-                        - integer
+                      oneOf:
+                        - type: string
+                        - type: integer
               examples:
                 Success Example:
                   value:
