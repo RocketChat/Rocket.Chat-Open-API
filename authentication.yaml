@@ -3,11 +3,66 @@ info:
   version: 1.0.0
   title: Authentication
   description: |-
-    To securely interact with the Rocket.Chat API, authentication is required using your `username` and `password`. This  grants you the ability to make requests on the Rocket.Chat workspace as an authenticated user, ensuring the security of your interactions.
+    To securely interact with the Rocket.Chat API, authentication is required using your `username` and `password`. This offers you with the ability to make requests on the Rocket.Chat workspace as an authenticated user, ensuring the security of your interactions.
 
-    Upon successful authentication, the API responds with a JSON object containing an authentication token (`authToken`) and a unique user identifier (`userId`). The `authToken` is passed as `X-Auth-Token` header, while the `userId` as `X-User-Id` header when making  requests to protected endpoints that mandate authentication.
+    Upon successful authentication, the API responds with a JSON object containing an authentication token (`authToken`) and a unique user identifier (`userId`). The `authToken` is passed as `X-Auth-Token` header, while the `userId` as `X-User-Id` header when making  requests to subsequent protected endpoints that mandate authentication.
 
     Additionally, the Rocket.Chat API provides alternative authentication methods through OAuth apps like Facebook, Google and Twitter.
+    
+    ## Two-Factor Authentication
+    
+    Rocket.Chat offers various methods for two-factor authentication in a workspace. Kindly refer to the official [Two-Factor Authentication guide](https://developer.rocket.chat/getting-started/two-factor-authentication) for more details.
+    
+    When making requests to endpoints that require two-factor authentication, add the following headers to the request:
+    
+    - **x-2fa-code**: (string) The 2FA code
+    - **x-2fa-method**: (string) The desired method to check for the 2FA code, usually returned in the 2FA error.
+    
+    If you attempt to send a request to certain endpoints without the appropriate 2FA headers, you receive an error of type `totp-require`. The error message includes a `details` object, that specifies the required 2FA method. It's useful for informing the user where to obtain their 2FA code.
+    - **method**: The required 2FA method for the user selected by the workspace. 
+    - **codeGenerated**: Used to inform if the code was generated or if there are tokens available already. It is specific to 2FA by Email.
+    - **codeCount**: (optional) The number of available codes already sent via email. It is specific to 2FA by Email.
+    - **codeExpires**: (optional) A list of expiration dates of the tokens.It is specific to 2FA by Email.
+    - **availableMethods**: The list of available 2FA methods for the user's account.
+    
+    ```
+    {
+      "success": false,
+      "error": "TOTP Required [totp-required]",
+      "errorType": "totp-required",
+      "details": {
+        "method": "email",
+        "codeGenerated": false,
+        "codeCount": 1,
+        "codeExpires": [
+          "2020-01-02T13:06:42.408Z"
+        ],
+        "availableMethods": [
+          "email"
+        ]
+      }
+    }
+    ```
+    If the 2FA code is wrong, a `totp-invalid` response is returned:
+
+    ```
+    {
+      "success": false,
+      "error": "TOTP Invalid [totp-invalid]",
+      "errorType": "totp-invalid",
+      "details": {
+        "method": "email"
+      }
+    }
+    ```
+    ### Handling 2FA Method Errors
+      It's important to note the  required TOTP **method** returned in the error response when making requests that require 2FA.
+    
+    - If it's `password`, add the hashed password of the user as the `X-2fa-Code` header parameter. 
+    - If it's `email`, add the 2FA code sent via email as the `X-2fa-Code` header parameter.
+    - If it's `totp`, add the code from your authenticator app as the `X-2fa-Code` header parameter.
+
+
 servers:
   - url: 'http://localhost:3000'
 paths:
@@ -928,7 +983,8 @@ paths:
       tags:
         - Two-Factor Authentication
       summary: Enable 2FA via Email
-      description: This endpoint only works if the user has at least one verified email.
+      description: |- 
+       This endpoint only works if the user has at least one verified email. 
       operationId: post-api-v1-users.2fa.enableEmail
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -945,7 +1001,8 @@ paths:
       tags:
         - Two-Factor Authentication
       summary: Request a new Email Code
-      description: Request a two-factor authentication code by email
+      description: |-
+        If a user didn't recieve thier 2FA code, use this endpoint to request a new 2FA code by email.
       operationId: post-api-v1-users.2fa.sendEmailCode
       requestBody:
         content:
@@ -964,7 +1021,7 @@ paths:
             examples:
               Example:
                 value:
-                  emailOrUsername: test-funke
+                  emailOrUsername: test-user
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
@@ -999,7 +1056,7 @@ paths:
       tags:
         - Two-Factor Authentication
       summary: Disable 2FA via Email
-      description: ''
+      description: 'Disable two-factor authentication via email. The 2FA code is required.'
       operationId: post-api-v1-users.2fa.disableEmail
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -1021,9 +1078,9 @@ paths:
             
             It's important to note the **required TOTP method** returned from the response.
             
-            - If it's `password`, add the hashed password of the user as the `X-2fa-Code` query parameter. 
-            - If it's `email`, add the 2FA code sent via email as the `X-2fa-Code` query parameter.
-            - If it's `totp`, add the code from your authenticator app as the `X-2fa-Code` query parameter.
+            - If it's `password`, add the hashed password of the user as the `X-2fa-Code` header parameter. 
+            - If it's `email`, add the 2FA code sent via email as the `X-2fa-Code` header parameter.
+            - If it's `totp`, add the code from your authenticator app as the `X-2fa-Code` header parameter.
           content:
             application/json:
               schema:
