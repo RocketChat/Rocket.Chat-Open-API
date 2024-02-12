@@ -1,6 +1,8 @@
 # Rocket.Chat-OpenAPI
 
-This repository contains the Rocket.Chat OpenAPI definitions in the YAML format for the following REST API endpoints:
+Welcome to the official Rocket.Chat OpenAPI definitions repository. It contains OpenAPI (Swagger) YAML files for Rocket.Chat REST API endpoints, designed to streamline your chat operations, integration, and exploration efforts.
+
+It contains YAML files for REST API endpoints, including:
 * Authentication
 * User Management
 * Rooms
