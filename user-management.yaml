@@ -189,9 +189,10 @@ paths:
       description: |-
         <h2>Premium</h2>
         Create a new role in the workspace.
-        - You can't create new roles with the same name as existing roles. For example, it is not possible to create a new role with the name `admin`.
-        - The scope can either be `Users`(user level) or `Subscriptions`(room level).
-        - Permission required: `access-permissions`
+
+        * You can't create new roles with the same name as existing roles. For example, it is not possible to create a new role with the name `admin`.
+        * The scope can either be `Users`(user level) or `Subscriptions`(room level).
+        * Permission required: `access-permissions`
         
         ### Changelog
         | Version      | Description |
@@ -319,9 +320,10 @@ paths:
       summary: Update Role
       description: |-
         <h2>Premium</h2>
+        
         Update a role in the workspace.
         Permission required: `access-permissions`
-        
+                
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
