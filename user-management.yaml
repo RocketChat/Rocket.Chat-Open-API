@@ -18,6 +18,7 @@ paths:
       summary: List all permissions
       description: |-
         Returns all permissions from the workspace.
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -320,6 +321,7 @@ paths:
         <h2>Premium</h2>
         Update a role in the workspace.
         Permission required: `access-permissions`
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
