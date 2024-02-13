@@ -9,6 +9,11 @@ info:
 
     Additionally, the Rocket.Chat API provides alternative authentication methods through OAuth apps like Facebook, Google and Twitter.
     
+    ## Access Tokens
+    To use the Rocket.Chat REST API without logging in, you can use personal access tokens. However, the administrator must grant your user role the `create-personal-access-tokens` [permission](https://docs.rocket.chat/use-rocket.chat/workspace-administration/permissions).
+
+    To generate personal access tokens, refer to the  [Personal Access Token](https://docs.rocket.chat/use-rocket.chat/user-guides/user-panel/account#personal-access-tokens) guide. It's important to note that the generated tokens are irrecoverable, so storing them safely is essential. If a token is lost or forgotten, it can be regenerated or deleted. When making calls to the API, include the generated token in the `X-Auth-Token` header and your user ID in the `X-User-Id` header to authenticate the requests.
+    
 #     The following 2FA introduction is under the 2FA section in the published API documentation
 
 #      ## Two-Factor Authentication
@@ -63,6 +68,7 @@ info:
 #    - If it's `password`, add the hashed password of the user as the `X-2fa-Code` header parameter. 
 #    - If it's `email`, add the 2FA code sent via email as the `X-2fa-Code` header parameter.
 #    - If it's `totp`, add the code from your authenticator app as the `X-2fa-Code` header parameter.
+
 
 
 servers:
