@@ -1245,7 +1245,7 @@ paths:
                   type: string
                   description: The email for the user.
                   example: roger@example.com
-                password:
+                pass:
                   type: string
                   description: The password for the user.
                   example: passw0rd
