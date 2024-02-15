@@ -72,7 +72,7 @@ info:
 
 
 servers:
-  - url: 'http://localhost:3000'
+  - url: 'https://apiexplorer.support.rocket.chat'
 paths:
   /api/v1/login:
     post:
