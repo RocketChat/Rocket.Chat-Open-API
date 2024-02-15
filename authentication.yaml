@@ -72,7 +72,7 @@ info:
 
 
 servers:
-  - url: 'https://apiexplorer.support.rocket.chat'
+  - url: https://apiexplorer.support.rocket.chat
 paths:
   /api/v1/login:
     post:
@@ -220,8 +220,6 @@ paths:
                         settings:
                           preferences: {}
                         avatarUrl: 'http://localhost:3000/avatar/test'
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/login - with Facebook:
     post:
       tags:
@@ -375,8 +373,6 @@ paths:
                         settings:
                           preferences: {}
                         avatarUrl: 'http://localhost:3000/avatar/test'
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/login - with Twitter:
     post:
       tags:
@@ -544,8 +540,6 @@ paths:
                         settings:
                           preferences: {}
                         avatarUrl: 'http://localhost:3000/avatar/test'
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/login - with Google:
     post:
       tags:
@@ -700,8 +694,6 @@ paths:
                         settings:
                           preferences: {}
                         avatarUrl: 'http://localhost:3000/avatar/test'
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/logout:
     post:
       tags:
@@ -743,8 +735,6 @@ paths:
                     status: success
                     data:
                       message: You've been logged out!
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/me:
     get:
       tags:
@@ -984,8 +974,6 @@ paths:
                       twitter: '@userstwi'
                     avatarUrl: 'http://localhost:3000/avatar/test'
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/users.2fa.enableEmail:
     post:
       tags:
@@ -1057,8 +1045,6 @@ paths:
                     success: false
                     error: 'emailOrUsername is required [error-parameter-required]'
                     errorType: error-parameter-required
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/users.2fa.disableEmail:
     post:
       tags:
@@ -1119,8 +1105,6 @@ paths:
                       method: password
                       codeGenerated: false
                       availableMethods: []
-      servers:
-        - url: 'http://localhost:3000'
 tags:
   - name: Authentication
   - name: Two-Factor Authentication
