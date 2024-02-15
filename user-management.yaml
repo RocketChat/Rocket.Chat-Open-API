@@ -1262,7 +1262,7 @@ paths:
               required:
                 - username
                 - email
-                - password
+                - pass
       responses:
         '200':
           description: OK
