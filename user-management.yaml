@@ -1263,6 +1263,7 @@ paths:
                 - username
                 - email
                 - pass
+                - name
       responses:
         '200':
           description: OK
