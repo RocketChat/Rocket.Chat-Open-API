@@ -9,7 +9,7 @@ info:
       * **Roles**: Assign and manage user [roles](https://docs.rocket.chat/use-rocket.chat/workspace-administration/permissions#roles).
       * **LDAP**: Test and sync [LDAP](https://docs.rocket.chat/use-rocket.chat/authentication/ldap) connection.
 servers:
-  - url: http://localhost:3000
+  - url: https://apiexplorer.support.rocket.chat
 paths:
   /api/v1/permissions.listAll:
     get:
