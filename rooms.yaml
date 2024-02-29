@@ -5531,9 +5531,10 @@ paths:
     get:
       tags:
         - Rooms
-      summary: Get Admin Rooms
+      summary: Get All Room Admins
       description: |-
-        Get all the rooms.
+        Retrieves all rooms and admin information.
+        
         Permission required: `view-room-administration`
         
         ### Change Log
@@ -5546,7 +5547,12 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: types
           in: query
-          description: The type of the room. It can either `c` or `p`. `c`  is for channel and `p` is for private. You can use this parameter twice to request for both types of room. The value must be an array
+          description: |-
+           The room types. The possible room types are:
+            - d: Direct chat
+            - c: Chat
+            - p: Private chat
+            - l: Livechat
           schema:
             type: array
             items:
@@ -5614,66 +5620,25 @@ paths:
                   success:
                     type: boolean
                 x-examples:
-                  Example 1:
+                  Example:
                     rooms:
-                      - _id: DMDsF2QKqqQoXsxha
-                        fname: private-channel
-                        description: ''
-                        broadcast: false
-                        federated: false
-                        name: private-channel
-                        t: p
-                        msgs: 6
-                        usersCount: 2
-                        u:
-                          _id: rYhzFRd2QZjNwAAXX
-                          username: rodriq
-                        ro: false
-                        default: false
-                      - _id: JbX6GtLKsaTWqd5st
-                        fname: test-fed
-                        topic: ''
-                        broadcast: false
-                        federated: true
-                        name: test-fed
-                        t: p
-                        msgs: 4
-                        usersCount: 2
-                        u:
-                          _id: rbAXPnMktTFbNpwtJ
-                          username: roxie
-                        ro: false
-                        default: false
-                      - _id: bPTzNogizz7xMu84s
-                        fname: fff
-                        description: ''
-                        broadcast: false
-                        federated: false
-                        name: fff
-                        t: p
-                        msgs: 1
-                        usersCount: 1
-                        u:
-                          _id: aXjjcPwq4Pcp7xftH
-                          username: user1
-                        ro: false
-                      - _id: WDuJLFkjwk6L7LdFC
-                        fname: new
-                        topic: Discuss all of the testing
-                        broadcast: false
-                        name: new
-                        t: p
-                        msgs: 79
-                        usersCount: 45
-                        u:
-                          _id: rbAXPnMktTFbNpwtJ
-                          username: roxie
-                        ro: false
-                        announcement: Test out everything
-                        description: greetings
-                    count: 4
+                    - _id: 654c9d1ca2f73c7460e1918b
+                      fname: animalGeography
+                      topic: ''
+                      broadcast: false
+                      name: animalGeography
+                      t: p
+                      msgs: 4
+                      usersCount: 1
+                      u:
+                        _id: CkCPNcvsvCDfmWLqC
+                        username: kim.jane
+                        name: kim.jane
+                      ro: false
+                      default: false
+                    count: 1
                     offset: 0
-                    total: 4
+                    total: 1
                     success: true
       servers:
         - url: 'http://localhost:3000'
@@ -6994,9 +6959,9 @@ paths:
     get:
       tags:
         - Rooms
-      summary: Get Admin Rooms
+      summary: Get Admin of Room
       description: |-
-        Retrieves all admin rooms .
+        Retrieves the admin of a room.
         
         Permission required: `view-room-administration`
         
@@ -7008,6 +6973,13 @@ paths:
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
+        - name: rid
+          in: query
+          description: 'The room ID.'
+          schema:
+            type: string
+            example: 654c9d1ca2f73c7460e1918b
+          required: true
       responses:
         '200':
           description: OK
