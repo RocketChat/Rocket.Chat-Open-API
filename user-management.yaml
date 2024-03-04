@@ -4310,7 +4310,7 @@ paths:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
         - schema:
-            type: array
+            type: any
           in: query
           name: selector
           required: true
