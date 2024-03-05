@@ -37,9 +37,9 @@ paths:
                         _id:
                           type: string
                         value:
-                          type:
-                            - boolean
-                            - string
+                          oneOf:
+                            - type: boolean
+                            - type: string
                   count:
                     type: integer
                   offset:
@@ -191,9 +191,9 @@ paths:
                         _id:
                           type: string
                         value:
-                          type:
-                            - boolean
-                            - string
+                          oneOf:
+                            - type: boolean
+                            - type: string
                   count:
                     type: integer
                   offset:
@@ -270,11 +270,6 @@ paths:
                 - name
   '/api/v1/settings/{_id}':
     parameters:
-      - schema:
-          type: string
-        name: _id
-        in: path
-        required: true
       - schema:
           type: string
         name: _id
@@ -682,7 +677,6 @@ paths:
                     type: string
                   errorType:
                     type: string
-                    errorType: invalid-params
               examples:
                 Example 1:
                   value:
