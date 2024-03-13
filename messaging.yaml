@@ -108,8 +108,6 @@ paths:
                     error: The room id provided does not match where the message is from.
         '401':
           $ref: '#/components/responses/authorizationError'
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/chat.react:
     post:
       tags:
@@ -155,8 +153,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/chat.update:
     post:
       tags:
@@ -488,8 +484,6 @@ paths:
                         _id: rbAXPnMktTFbNpwtJ
                         username: roxie
                     success: true
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/chat.reportMessage:
     post:
       tags:
@@ -528,8 +522,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/chat.followMessage:
     post:
       tags:
@@ -564,8 +556,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/chat.unfollowMessage:
     post:
       tags:
@@ -600,8 +590,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/chat.getMessage:
     get:
       tags:
@@ -628,8 +616,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000/'
   /chat.getThreadsList:
     get:
       tags:
@@ -796,8 +782,6 @@ paths:
                     offset: 0
                     total: 1
                     success: true
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/chat.getDeletedMessages:
     get:
       tags:
@@ -854,8 +838,6 @@ paths:
                     offset: 0
                     total: 3
                     success: true
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/chat.getDiscussions:
     get:
       tags:
@@ -947,8 +929,6 @@ paths:
                     offset: 0
                     total: 1
                     success: true
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/chat.getMentionedMessages:
     get:
       tags:
@@ -1101,8 +1081,6 @@ paths:
                     offset: 0
                     total: 2
                     success: true
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/chat.getMessageReadReceipts:
     get:
       tags:
@@ -1176,8 +1154,6 @@ paths:
                           name: Rocket cat
                           _id: nvw6PBrXTejp4sfQt
                     success: true
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/chat.getPinnedMessages:
     get:
       tags:
@@ -1379,8 +1355,6 @@ paths:
                     offset: 0
                     total: 3
                     success: true
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/chat.getSnippetedMessages:
     get:
       tags:
@@ -1512,8 +1486,6 @@ paths:
                     offset: 0
                     total: 0
                     success: true
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/chat.getSnippetedMessageById:
     get:
       tags:
@@ -1628,8 +1600,6 @@ paths:
                         _id: CaevAPDbXN252kyXa
                         username: marcos.defendi
                     success: true
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/chat.getStarredMessages:
     get:
       tags:
@@ -1730,8 +1700,6 @@ paths:
                     offset: 0
                     total: 1
                     success: true
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/chat.getThreadMessages:
     get:
       tags:
@@ -1855,8 +1823,6 @@ paths:
                     offset: 0
                     total: 2
                     success: true
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/chat.ignoreUser:
     get:
       tags:
@@ -1894,8 +1860,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/chat.pinMessage:
     post:
       tags:
@@ -2000,8 +1964,6 @@ paths:
                           attachments: []
                       _updatedAt: '2023-10-05T20:59:44.521Z'
                     success: true
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/chat.postMessage:
     post:
       tags:
@@ -2241,8 +2203,6 @@ paths:
                       _updatedAt: '2016-12-14T20:56:05.119Z'
                       _id: jC9chsFddTvsbFQG7
                     success: true
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/chat.unPinMessage:
     post:
       tags:
@@ -2276,8 +2236,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/chat.search:
     get:
       tags:
@@ -2369,8 +2327,6 @@ paths:
                         _updatedAt: '2018-03-27T14:44:00.550Z'
                         score: 0.5833333333333334
                     success: true
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/chat.sendMessage:
     post:
       tags:
@@ -2657,8 +2613,6 @@ paths:
                       _updatedAt: '2018-03-01T18:02:26.828Z'
                       _id: LnCSJxxNkCy6K9X8X
                     success: true
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/chat.starMessage:
     post:
       tags:
@@ -2692,8 +2646,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/chat.unStarMessage:
     post:
       tags:
@@ -2727,8 +2679,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/chat.syncThreadsList:
     get:
       tags:
@@ -2906,8 +2856,6 @@ paths:
                           _deletedAt: '2019-04-16T18:16:13.508Z'
                           __collection__: message
                     success: true
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/chat.syncThreadMessages:
     get:
       tags:
@@ -3008,8 +2956,6 @@ paths:
                           channels: []
                       remove: []
                     success: true
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/chat.syncMessages:
     get:
       tags:
@@ -3158,8 +3104,6 @@ paths:
                           channels: []
                       deleted: []
                     success: true
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/im.close:
     post:
       tags:
@@ -3193,8 +3137,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/im.counters:
     get:
       tags:
@@ -3266,8 +3208,6 @@ paths:
                     latest: '2023-10-30T20:37:17.160Z'
                     userMentions: 0
                     success: true
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/im.create:
     post:
       tags:
@@ -3339,8 +3279,6 @@ paths:
                         - g1
                         - rocket.cat
                     success: true
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/im.delete:
     post:
       tags:
@@ -3383,8 +3321,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/im.files:
     get:
       tags:
@@ -3505,8 +3441,6 @@ paths:
                     offset: 0
                     total: 1
                     success: true
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/im.history:
     get:
       tags:
@@ -3637,8 +3571,6 @@ paths:
                         groupable: false
                         _updatedAt: '2016-12-06T17:57:38.635Z'
                     success: true
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/im.list.everyone:
     get:
       tags:
@@ -3874,8 +3806,6 @@ paths:
                     count: 2
                     total: 2
                     success: true
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/im.list:
     get:
       tags:
@@ -4112,8 +4042,6 @@ paths:
                     count: 2
                     total: 2
                     success: true
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/im.members:
     get:
       tags:
@@ -4196,8 +4124,6 @@ paths:
                     offset: 0
                     total: 3
                     success: true
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/im.messages:
     get:
       tags:
@@ -4351,8 +4277,6 @@ paths:
                     offset: 0
                     total: 3
                     success: true
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/im.messages.others:
     get:
       tags:
@@ -4452,8 +4376,6 @@ paths:
                         groupable: false
                         _updatedAt: '2016-12-06T17:57:38.635Z'
                     success: true
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/im.open:
     post:
       tags:
@@ -4487,8 +4409,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000/'
   /api/v1/im.setTopic:
     post:
       tags:
@@ -4540,8 +4460,6 @@ paths:
                   Example 1:
                     topic: Discuss all of the testing
                     success: true
-      servers:
-        - url: 'http://localhost:3000/'
 tags:
   - name: Chat
     description: Everything about Rocket.Chat Chat Endpoints
