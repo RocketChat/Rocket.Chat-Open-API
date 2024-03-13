@@ -66,8 +66,6 @@ paths:
             header-0:
               schema:
                 type: string
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/autotranslate.saveSettings:
     post:
       tags:
@@ -114,8 +112,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/autotranslate.translateMessage:
     post:
       tags:
@@ -229,8 +225,6 @@ paths:
                       translations:
                         en: This is a test
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/email-inbox.list:
     get:
       tags:
@@ -361,8 +355,6 @@ paths:
           $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/forbiddenError'
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/email-inbox:
     post:
       tags:
@@ -505,8 +497,6 @@ paths:
           $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/forbiddenError'
-      servers:
-        - url: 'http://localhost:3000'
   '/api/v1/email-inbox/{_id}':
     get:
       tags:
@@ -644,8 +634,6 @@ paths:
           $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/forbiddenError'
-      servers:
-        - url: 'http://localhost:3000'
     delete:
       tags:
         - Email Inbox
@@ -708,8 +696,6 @@ paths:
           $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/forbiddenError'
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/email-inbox.search:
     get:
       tags:
@@ -829,8 +815,6 @@ paths:
                     success: true
         '403':
           $ref: '#/components/responses/forbiddenError'
-      servers:
-        - url: 'http://localhost:3000'
   '/api/v1/email-inbox.send-test/{_id}':
     get:
       tags:
@@ -874,8 +858,6 @@ paths:
           $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/forbiddenError'
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/shield.svg:
     get:
       summary: Shield SVG
@@ -929,8 +911,6 @@ paths:
                 type: string
                 example: image/svg+xml;charset=utf-8
               description: image/svg+xml;charset=utf-8
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/spotlight:
     get:
       summary: Spotlight
@@ -992,8 +972,6 @@ paths:
                         avatarETag: 5BB9B5ny5DkKdrwkq
                     rooms: []
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/stdout.queue:
     get:
       summary: Get stdout queue
@@ -1357,8 +1335,6 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/licenses.get:
     get:
       tags:
@@ -1459,8 +1435,6 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/licenses.add:
     post:
       tags:
@@ -1500,8 +1474,6 @@ paths:
           $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/forbiddenError'
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/licenses.isEnterprise:
     get:
       tags:
@@ -1544,8 +1516,6 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
-      servers:
-        - url: 'http://localhost:3000'
   /licenses.maxActiveUsers:
     get:
       tags:
@@ -1591,8 +1561,6 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/video-conference/jitsi.update-timeout:
     post:
       tags:
@@ -1637,8 +1605,6 @@ paths:
                   Example 1:
                     jitsiTimeout: '2019-01-16T13:17:11.951Z'
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/commands.get:
     get:
       tags:
@@ -1690,8 +1656,6 @@ paths:
                       description: Displays_action_text
                       clientOnly: false
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/commands.list:
     get:
       tags:
@@ -1797,8 +1761,6 @@ paths:
                     count: 22
                     total: 22
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/commands.preview:
     get:
       tags:
@@ -1836,8 +1798,6 @@ paths:
             application/json:
               schema:
                 type: object
-      servers:
-        - url: 'http://localhost:3000'
     post:
       tags:
         - Commands
@@ -1913,8 +1873,6 @@ paths:
             application/json:
               schema:
                 type: object
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/commands.run:
     post:
       tags:
@@ -1966,8 +1924,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000'
   /api/apps:
     post:
       tags:
@@ -2212,8 +2168,6 @@ paths:
                       errors: {}
                       warnings: {}
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/mailer:
     post:
       tags:
@@ -2294,8 +2248,6 @@ paths:
                       function: Mailer.sendMail
         '401':
           $ref: '#/components/responses/authorizationError'
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/mailer.unsubscribe:
     post:
       tags:
@@ -2334,8 +2286,6 @@ paths:
           $ref: '#/components/responses/trueSuccess'
         '401':
           $ref: '#/components/responses/authorizationError'
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/findOrCreateInvite:
     post:
       tags:
@@ -2431,8 +2381,6 @@ paths:
                       expires: null
                       uses: 1
                       _updatedAt: '2019-12-20T03:38:40.116Z'
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/listInvites:
     get:
       tags:
@@ -2501,8 +2449,6 @@ paths:
                       expires: null
                       uses: 1
                       _updatedAt: '2019-12-20T03:38:40.116Z'
-      servers:
-        - url: 'http://localhost:3000'
   '/api/v1/removeInvite/{_id}':
     delete:
       tags:
@@ -2558,8 +2504,6 @@ paths:
                       method: removeInvite
         '401':
           $ref: '#/components/responses/authorizationError'
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/useInviteToken:
     post:
       tags:
@@ -2613,8 +2557,6 @@ paths:
                       name: a-room-name
                       t: p
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/validateInviteToken:
     post:
       tags:
@@ -2652,8 +2594,6 @@ paths:
                   Example 1:
                     valid: true
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   '/api/apps/public/{appId}/templateMessage':
     post:
       tags:
@@ -2758,8 +2698,6 @@ paths:
           $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/forbiddenError'
-      servers:
-        - url: 'http://localhost:3000'
 tags:
   - name: Apps
   - name: Auto Translate
