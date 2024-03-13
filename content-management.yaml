@@ -111,8 +111,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http:localhost:3000'
   /api/v1/emoji-custom.delete:
     post:
       tags:
