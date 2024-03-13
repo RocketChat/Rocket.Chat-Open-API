@@ -164,8 +164,6 @@ paths:
                         username: example
                       ts: '2016-05-30T13:42:25.304Z'
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/channels.addAll:
     post:
       tags:
@@ -360,8 +358,6 @@ paths:
                         username: example
                       ts: '2016-05-30T13:42:25.304Z'
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/channels.addLeader:
     post:
       tags:
@@ -427,8 +423,6 @@ paths:
                     errorType: error-user-already-leader
         '401':
           $ref: '#/components/responses/authorizationError'
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/channels.addModerator:
     post:
       tags:
@@ -495,8 +489,6 @@ paths:
                     errorType: error-user-already-moderator
         '401':
           $ref: '#/components/responses/authorizationError'
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/channels.addOwner:
     post:
       tags:
@@ -571,8 +563,6 @@ paths:
                       method: addRoomOwner
         '401':
           $ref: '#/components/responses/authorizationError'
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/channels.anonymousread:
     get:
       tags:
@@ -925,8 +915,6 @@ paths:
                     offset: 0
                     total: 2
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/channels.archive:
     post:
       tags:
@@ -985,8 +973,6 @@ paths:
                     errorType: error-room-archived
         '401':
           $ref: '#/components/responses/authorizationError'
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/channels.close:
     post:
       tags:
@@ -1041,8 +1027,6 @@ paths:
                     error: 'The channel, dlp, is already closed to the sender'
         '401':
           $ref: '#/components/responses/authorizationError'
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/channels.counters:
     get:
       tags:
@@ -1111,8 +1095,6 @@ paths:
                     latest: '2023-09-25T22:50:07.979Z'
                     userMentions: 0
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/channels.delete:
     post:
       tags:
@@ -1141,8 +1123,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/channels.files:
     get:
       tags:
@@ -1297,8 +1277,6 @@ paths:
                     offset: 0
                     total: 2
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/channels.history:
     get:
       tags:
@@ -1526,8 +1504,6 @@ paths:
                         groupable: false
                         _updatedAt: '2016-12-06T17:57:38.635Z'
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/channels.info:
     get:
       tags:
@@ -1710,8 +1686,6 @@ paths:
                       sysMes: true
                       _updatedAt: '2020-05-21T13:14:07.096Z'
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/channels.invite:
     post:
       tags:
@@ -1948,8 +1922,6 @@ paths:
                       _updatedAt: '2016-12-09T12:50:51.575Z'
                       lm: '2016-12-09T12:50:51.555Z'
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/channels.join:
     post:
       tags:
@@ -2150,8 +2122,7 @@ paths:
                       _updatedAt: '2019-01-16T12:06:30.426Z'
                       joinCodeRequired: true
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/channels.kick:
     post:
       tags:
@@ -2345,8 +2316,6 @@ paths:
                       sysMes: true
                       _updatedAt: '2016-12-09T15:22:40.656Z'
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/channels.leave:
     post:
       tags:
@@ -2442,8 +2411,6 @@ paths:
                       sysMes: true
                       _updatedAt: '2016-12-09T15:22:40.656Z'
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/channels.list.joined:
     get:
       tags:
@@ -2750,8 +2717,6 @@ paths:
                         sysMes: true
                         _updatedAt: '2016-12-09T15:22:40.656Z'
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/channels.list:
     get:
       tags:
@@ -3063,8 +3028,6 @@ paths:
                     offset: 0
                     total: 20
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/channels.members:
     get:
       tags:
@@ -3155,8 +3118,6 @@ paths:
                     offset: 0
                     total: 2
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/channels.membersByHighestRole:
     get:
       tags:
@@ -3293,8 +3254,6 @@ paths:
                     offset: 0
                     total: 35
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/channels.messages:
     get:
       tags:
@@ -3507,8 +3466,6 @@ paths:
                     offset: 0
                     total: 4
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/channels.moderators:
     get:
       tags:
@@ -3564,8 +3521,6 @@ paths:
                         username: rocket.cat
                         name: Rocket.Cat
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/channels.online:
     get:
       tags:
@@ -3629,8 +3584,6 @@ paths:
                       - _id: BsxzC22xQ43taWdff
                         username: uniqueusername
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/channels.open:
     post:
       tags:
@@ -3664,8 +3617,7 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/channels.removeLeader:
     post:
       tags:
@@ -3674,7 +3626,7 @@ paths:
       description: |
         Remove the `leader` role from a user in a channel. 
 
-        Permmission required: `set-leader` .
+        Permission required: `set-leader` .
 
         ### Change Log
 
@@ -3733,8 +3685,7 @@ paths:
                     errorType: error-user-not-leader
         '401':
           $ref: '#/components/responses/authorizationError'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/channels.removeModerator:
     post:
       tags:
@@ -3811,8 +3762,7 @@ paths:
                       method: removeRoomModerator
         '401':
           $ref: '#/components/responses/authorizationError'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/channels.removeOwner:
     post:
       tags:
@@ -3854,8 +3804,7 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/channels.rename:
     post:
       tags:
@@ -3966,8 +3915,7 @@ paths:
                       sysMes: true
                       _updatedAt: '2016-12-09T15:57:44.686Z'
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/channels.roles:
     get:
       tags:
@@ -4036,8 +3984,7 @@ paths:
                         roles:
                           - leader
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/channels.setAnnouncement:
     post:
       tags:
@@ -4089,8 +4036,7 @@ paths:
                   Example 1:
                     announcement: Test out everything
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/channels.setCustomFields:
     post:
       tags:
@@ -4300,8 +4246,7 @@ paths:
                       lm: '2023-09-16T07:37:59.691Z'
                       announcement: Test out everything
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/channels.setDefault:
     post:
       tags:
@@ -4405,8 +4350,7 @@ paths:
                       muted: []
                       default: true
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/channels.setDescription:
     post:
       tags:
@@ -4459,8 +4403,7 @@ paths:
                   Example 1:
                     description: Testing the room
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/channels.setJoinCode:
     post:
       tags:
@@ -4652,8 +4595,7 @@ paths:
                       description: Testing the room
                       joinCodeRequired: true
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/channels.setPurpose:
     post:
       tags:
@@ -4706,8 +4648,7 @@ paths:
                   Example 1:
                     purpose: greetings
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/channels.setReadOnly:
     post:
       tags:
@@ -4830,8 +4771,7 @@ paths:
                       joinCodeRequired: true
                       muted: []
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/channels.setTopic:
     post:
       tags:
@@ -4883,8 +4823,7 @@ paths:
                   Example 1:
                     topic: Discuss all of the testing
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/channels.setType:
     post:
       tags:
@@ -4999,8 +4938,7 @@ paths:
                       joinCodeRequired: true
                       muted: []
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/channels.unarchive:
     post:
       tags:
@@ -5025,8 +4963,7 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/channels.getAllUserMentionsByChannel:
     get:
       tags:
@@ -5158,8 +5095,7 @@ paths:
                     offset: 0
                     total: 1
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/channels.getIntegrations:
     get:
       tags:
@@ -5325,8 +5261,7 @@ paths:
                           _id: R4jgcQaQhvvK6K3iY
                         _updatedAt: '2017-01-05T17:06:05.660Z'
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/channels.convertToTeam:
     post:
       tags:
@@ -5407,8 +5342,7 @@ paths:
                       _updatedAt: '2023-09-27T21:19:58.972Z'
                       roomId: 6513afeda2f73c7460e18c86
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/rooms.saveNotification:
     post:
       tags:
@@ -5525,8 +5459,7 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/rooms.adminRooms:
     get:
       tags:
@@ -5640,8 +5573,7 @@ paths:
                     offset: 0
                     total: 1
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/rooms.cleanHistory:
     post:
       tags:
@@ -5709,8 +5641,7 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/rooms.info:
     get:
       tags:
@@ -5902,8 +5833,7 @@ paths:
                       teamId: 65149c7ea2f73c7460e18cab
                       teamMain: true
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/rooms.getDiscussions:
     get:
       tags:
@@ -6081,8 +6011,7 @@ paths:
                     offset: 0
                     total: 1
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/rooms.get:
     get:
       tags:
@@ -6443,8 +6372,7 @@ paths:
                       - _id: 6512153aa2f73c7460e18c5e
                         _deletedAt: '2023-09-26T00:29:17.723Z'
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/rooms.leave:
     post:
       tags:
@@ -6469,8 +6397,7 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/rooms.delete:
     post:
       tags:
@@ -6495,8 +6422,7 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/rooms.favorite:
     post:
       tags:
@@ -6548,8 +6474,7 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000'
+
   '/api/v1/rooms.upload/{rid}':
     post:
       tags:
@@ -6782,8 +6707,7 @@ paths:
                     errorType: invalid-field
         '401':
           $ref: '#/components/responses/authorizationError'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/rooms.autocomplete.availableForTeams:
     get:
       tags:
@@ -6834,8 +6758,7 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/rooms.autocomplete.channelAndPrivate:
     get:
       tags:
@@ -6953,8 +6876,7 @@ paths:
                     error: The 'selector' param is required
         '401':
           $ref: '#/components/responses/authorizationError'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/rooms.adminRooms.getRoom:
     get:
       tags:
@@ -7046,8 +6968,7 @@ paths:
           $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/forbiddenError'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/rooms.saveRoomSettings:
     post:
       tags:
@@ -7213,8 +7134,7 @@ paths:
                     errorType: error-room-not-found
         '401':
           $ref: '#/components/responses/authorizationError'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/rooms.changeArchivationState:
     post:
       tags:
@@ -7288,8 +7208,7 @@ paths:
                       method: unarchiveRoom
         '401':
           $ref: '#/components/responses/authorizationError'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/rooms.export:
     post:
       tags:
@@ -7382,8 +7301,7 @@ paths:
           $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/forbiddenError'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/rooms.createDiscussion:
     post:
       tags:
@@ -7521,8 +7439,7 @@ paths:
                       _updatedAt: '2019-04-03T01:35:32.280Z'
                       _id: cgk88DHLHexwMaFWh
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/teams.create:
     post:
       tags:
@@ -7620,8 +7537,7 @@ paths:
                       _updatedAt: '2023-09-29T00:27:15.189Z'
                       roomId: 651619e3a2f73c7460e18cc7
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/teams.listAll:
     get:
       tags:
@@ -7723,8 +7639,7 @@ paths:
                     count: 3
                     offset: 0
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/teams.list:
     get:
       tags:
@@ -7815,8 +7730,7 @@ paths:
                     count: 2
                     offset: 0
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/teams.info:
     get:
       tags:
@@ -7877,8 +7791,7 @@ paths:
                       _updatedAt: '2021-04-19T23:09:15.106Z'
                       roomId: Dgh2xwJ3NFKWvKSqY
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/teams.update:
     post:
       tags:
@@ -7921,8 +7834,7 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/teams.addMembers:
     post:
       tags:
@@ -7992,8 +7904,7 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/teams.members:
     get:
       tags:
@@ -8114,8 +8025,7 @@ paths:
                     count: 2
                     offset: 0
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/teams.updateMember:
     post:
       tags:
@@ -8185,8 +8095,7 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/teams.leave:
     post:
       tags:
@@ -8236,8 +8145,7 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/teams.removeMember:
     post:
       tags:
@@ -8299,8 +8207,7 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/teams.delete:
     post:
       tags:
@@ -8322,8 +8229,7 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/teams.autocomplete:
     get:
       tags:
@@ -8375,8 +8281,7 @@ paths:
                         t: p
                         teamId: 607e0d9b49d493189836bfac
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/teams.convertToChannel:
     post:
       tags:
@@ -8430,8 +8335,7 @@ paths:
                     error: missing-teamId-or-teamName
         '401':
           $ref: '#/components/responses/authorizationError'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/teams.addRooms:
     post:
       tags:
@@ -8636,8 +8540,7 @@ paths:
                           channels: []
                         teamId: 63f3efc4b000b6b6d86704b2
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/teams.removeRoom:
     post:
       tags:
@@ -8830,8 +8733,7 @@ paths:
                         mentions: []
                         channels: []
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/teams.updateRoom:
     post:
       tags:
@@ -9170,8 +9072,7 @@ paths:
                       teamId: 63f3efc4b000b6b6d86704b2
                       teamDefault: true
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/teams.listRooms:
     get:
       tags:
@@ -9358,8 +9259,7 @@ paths:
                     count: 1
                     offset: 0
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/teams.listRoomsOfUser:
     get:
       tags:
@@ -9552,8 +9452,7 @@ paths:
                     count: 1
                     offset: 0
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.online:
     get:
       tags:
@@ -9597,8 +9496,7 @@ paths:
                       - _id: BsxzC22xQ43taWdff
                         username: uniqueusername
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.getIntegrations:
     get:
       tags:
@@ -9763,8 +9661,7 @@ paths:
                           _id: R4jgcQaQhvvK6K3iY
                         _updatedAt: '2017-01-05T17:06:05.660Z'
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.addAll:
     post:
       tags:
@@ -9848,8 +9745,7 @@ paths:
                         username: example
                       ts: '2016-05-30T13:42:25.304Z'
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.addLeader:
     post:
       tags:
@@ -9914,8 +9810,7 @@ paths:
                     success: false
                     error: 'User is already a leader [error-user-already-leader]'
                     errorType: error-user-already-leader
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.addModerator:
     post:
       tags:
@@ -9956,8 +9851,7 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.addOwner:
     post:
       tags:
@@ -9993,8 +9887,7 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.archive:
     post:
       tags:
@@ -10020,8 +9913,7 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.close:
     post:
       tags:
@@ -10047,8 +9939,7 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.counters:
     get:
       tags:
@@ -10117,8 +10008,7 @@ paths:
                     latest: '2018-02-23T17:20:17.345Z'
                     userMentions: 0
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.create:
     post:
       tags:
@@ -10282,8 +10172,7 @@ paths:
                       sysMes: true
                       _updatedAt: '2016-12-09T16:53:06.761Z'
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.delete:
     post:
       tags:
@@ -10312,8 +10201,7 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.history:
     get:
       tags:
@@ -10436,8 +10324,7 @@ paths:
                         groupable: false
                         _updatedAt: '2016-12-06T17:57:38.635Z'
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.info:
     get:
       tags:
@@ -10525,8 +10412,7 @@ paths:
                       sysMes: true
                       _updatedAt: '2020-05-21T13:16:24.772Z'
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.invite:
     post:
       tags:
@@ -10665,8 +10551,7 @@ paths:
                     errorType: string
                     details:
                       method: string
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.kick:
     post:
       tags:
@@ -10757,8 +10642,7 @@ paths:
                       sysMes: true
                       _updatedAt: '2016-12-09T15:22:40.656Z'
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /groups.leave:
     post:
       tags:
@@ -10837,8 +10721,7 @@ paths:
                       sysMes: true
                       _updatedAt: '2016-12-09T15:22:40.656Z'
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.listAll:
     get:
       tags:
@@ -10935,8 +10818,7 @@ paths:
                     count: 1
                     total: 1
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.list:
     get:
       tags:
@@ -11032,8 +10914,7 @@ paths:
                     count: 1
                     total: 1
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.members:
     get:
       tags:
@@ -11118,8 +10999,7 @@ paths:
                     offset: 0
                     total: 2
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /groups.membersByHighestRole:
     get:
       tags:
@@ -11233,8 +11113,7 @@ paths:
                     offset: 0
                     total: 2
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.messages:
     get:
       tags:
@@ -11360,8 +11239,7 @@ paths:
                     offset: 0
                     total: 2
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.moderators:
     get:
       tags:
@@ -11394,8 +11272,7 @@ paths:
                       type: object
                   success:
                     type: boolean
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.open:
     post:
       tags:
@@ -11420,8 +11297,7 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.removeLeader:
     post:
       tags:
@@ -11488,8 +11364,7 @@ paths:
                     success: false
                     error: 'User is not a leader [error-user-not-leader]'
                     errorType: error-user-not-leader
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.removeModerator:
     post:
       tags:
@@ -11531,8 +11406,7 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.removeOwner:
     post:
       tags:
@@ -11574,8 +11448,7 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.rename:
     post:
       tags:
@@ -11668,8 +11541,7 @@ paths:
                       sysMes: true
                       _updatedAt: '2016-12-09T15:57:44.686Z'
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.setAnnouncement:
     post:
       tags:
@@ -11721,8 +11593,7 @@ paths:
                   Example 1:
                     announcement: Test out everything.
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.setCustomFields:
     post:
       tags:
@@ -11845,8 +11716,7 @@ paths:
                       username: rocketchat.internal.admin.test
                     success: true
                     developerWarning: '[WARNING]: The "usernames" field has been removed for performance reasons. Please use the "*.members" endpoint to get a list of members/users in a room.'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.setDescription:
     post:
       tags:
@@ -11898,8 +11768,7 @@ paths:
                   Example 1:
                     description: Testing out everything.
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.setPurpose:
     post:
       tags:
@@ -11951,8 +11820,7 @@ paths:
                   Example 1:
                     purpose: Testing out everything.
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.setReadOnly:
     post:
       tags:
@@ -12054,8 +11922,7 @@ paths:
                       joinCodeRequired: true
                       muted: []
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.setTopic:
     post:
       tags:
@@ -12107,8 +11974,7 @@ paths:
                   Example 1:
                     topic: Testing out everything.
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.setType:
     post:
       tags:
@@ -12210,8 +12076,7 @@ paths:
                       joinCodeRequired: true
                       muted: []
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.unarchive:
     post:
       tags:
@@ -12236,8 +12101,7 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.files:
     get:
       tags:
@@ -12357,8 +12221,7 @@ paths:
                     offset: 0
                     total: 1
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.setEncrypted:
     post:
       tags:
@@ -12507,8 +12370,7 @@ paths:
                     errorType: error-room-param-not-provided
         '401':
           $ref: '#/components/responses/authorizationError'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.convertToTeam:
     post:
       tags:
@@ -12608,8 +12470,7 @@ paths:
                     errorType: error-room-not-found
         '401':
           $ref: '#/components/responses/authorizationError'
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/groups.roles:
     get:
       tags:
@@ -12670,8 +12531,7 @@ paths:
                           - moderator
                         _id: ehPuGyZBedznJsQHp
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
   /api/v1/directory:
     get:
       tags:
@@ -12755,8 +12615,7 @@ paths:
                     offset: 0
                     total: 1
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
+
 tags:
   - name: Channels
     description: Everything about Rocket.Chat Channels Endpoints
