@@ -246,8 +246,6 @@ paths:
                         username: test.cat
                       _id: 659ea5e42dd9f928ada3e451
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/integrations.get:
     get:
       tags:
@@ -369,8 +367,6 @@ paths:
                         username: test.cat
                       _updatedAt: '2024-01-10T14:12:52.203Z'
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/integrations.history:
     get:
       tags:
@@ -429,8 +425,6 @@ paths:
                     items: 0
                     total: 0
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/integrations.list:
     get:
       tags:
@@ -627,8 +621,6 @@ paths:
                     items: 2
                     total: 2
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/integrations.update:
     put:
       tags:
@@ -867,9 +859,6 @@ paths:
                     error: No integration found.
         '401':
           $ref: '#/components/responses/authorizationError'
-      servers:
-        - url: 'http://localhost:3000'
-  /api/v1/integrations.remove:
     post:
       tags:
         - Integration
@@ -968,8 +957,6 @@ paths:
                         _id: R4jgcQaQhvvK6K3iY
                       _updatedAt: '2017-01-06T13:42:14.144Z'
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/webdav.getMyAccounts:
     get:
       tags:
@@ -1025,8 +1012,6 @@ paths:
                         username: admin
                         name: Webdav account
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/webdav.removeWebdavAccount:
     post:
       tags:
@@ -1058,8 +1043,6 @@ paths:
                 properties:
                   success:
                     type: boolean
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/oauth-apps.create:
     post:
       tags:
@@ -1145,8 +1128,6 @@ paths:
                         username: math.bar
                       _id: 65a7d68142a7e12453052d56
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/oauth-apps.update:
     post:
       tags:
@@ -1242,8 +1223,6 @@ paths:
                       _id: JFTcMhEAFbNPfnp49
                       username: matheus.barbosa
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/oauth-apps.list:
     get:
       tags:
@@ -1328,8 +1307,6 @@ paths:
                           username: system
                         _updatedAt: '2019-10-17T22:55:32.787Z'
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/oauth-apps.get:
     get:
       tags:
@@ -1409,8 +1386,6 @@ paths:
                         username: system
                       _updatedAt: '2019-10-17T22:55:32.787Z'
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/oauth-apps.delete:
     post:
       tags:
@@ -1442,8 +1417,6 @@ paths:
                 properties:
                   success:
                     type: boolean
-      servers:
-        - url: 'http://localhost:3000'
 tags:
   - name: Integration
   - name: OAuth Apps

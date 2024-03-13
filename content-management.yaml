@@ -73,8 +73,6 @@ paths:
                     offset: 0
                     total: 1
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/emoji-custom.create:
     post:
       tags:
@@ -113,8 +111,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http:localhost:3000'
   /api/v1/emoji-custom.delete:
     post:
       tags:
@@ -148,8 +144,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/emoji-custom.list:
     get:
       tags:
@@ -253,8 +247,6 @@ paths:
                           extension: jpg
                           _updatedAt: '2019-02-18T16:48:35.119Z'
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/emoji-custom.update:
     post:
       tags:
@@ -298,8 +290,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/custom-sounds.list:
     get:
       tags:
@@ -361,8 +351,6 @@ paths:
                     offset: 0
                     total: 1
                     success: true
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/custom-user-status.list:
     get:
       tags:
@@ -421,8 +409,6 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/custom-user-status.create:
     post:
       tags:
@@ -539,8 +525,6 @@ paths:
                       field: StatusType
         '401':
           $ref: '#/components/responses/authorizationError'
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/custom-user-status.update:
     post:
       tags:
@@ -632,8 +616,6 @@ paths:
                     error: No custom user status found with the id of "SeZHHb77QXWRbnDh".
         '401':
           $ref: '#/components/responses/authorizationError'
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/custom-user-status.delete:
     post:
       tags:
@@ -689,8 +671,6 @@ paths:
                     error: The "customUserStatusId" params is required!
         '401':
           $ref: '#/components/responses/authorizationError'
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/assets.setAsset:
     post:
       tags:
@@ -744,8 +724,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/assets.unsetAsset:
     post:
       tags:
@@ -783,8 +761,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-      servers:
-        - url: 'http://localhost:3000'
 tags:
   - name: Assets
   - name: Custom Emoji

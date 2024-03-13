@@ -990,8 +990,6 @@ paths:
           $ref: '#/components/responses/trueSuccess'
         '401':
           $ref: '#/components/responses/authorizationError'
-      servers:
-        - url: 'http://localhost:3000'
   /api/v1/users.2fa.sendEmailCode:
     post:
       tags:
