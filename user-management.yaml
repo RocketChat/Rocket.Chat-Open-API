@@ -4310,13 +4310,15 @@ paths:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
         - schema:
-            type: any
+            type: object
+            example: {
+            "exceptions": ["john.doe"], "conditions": {"status": "offline"}, "term": "user", "$or": [{"type": "user"}, {"roles": ["bot"]}]}
           in: query
           name: selector
           required: true
-          description: >-
+          description: |-
             Filter the response with the parameters. For example, `{
-            "exceptions" : [], "conditions": [], "term": "user"}`
+            "exceptions": ["john.doe"], "conditions": {"status": "offline"}, "term": "user", "$or": [{"type": "user"}, {"roles": ["bot"]}]}`
   /api/v1/users.removeOtherTokens:
     parameters: []
     post:
