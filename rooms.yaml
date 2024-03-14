@@ -6770,13 +6770,12 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - schema:
             type: object
-            example: {
-            "exceptions": ["john.doe"], "conditions": {"status": "offline"}, "term": "user", "$or": [{"type": "user"}, {"roles": ["bot"]}]}
+            example: {"exceptions": ["john.doe"], "conditions": {"status": "offline"}, "term": "user", "$or": [{"type": "user"}, {"roles": ["bot"]}]}
           in: query
           name: selector
           required: true
-          description: >-
-            Filter the response with the parameters.
+          description: |-
+            Filter the response with the parameters. For example, `{"exceptions": ["john.doe"], "conditions": {"status": "offline"}, "term": "user", "$or": [{"type": "user"}, {"roles": ["bot"]}]}`
       responses:
         '200':
           description: OK
