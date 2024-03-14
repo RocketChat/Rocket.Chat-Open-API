@@ -1,13 +1,12 @@
 openapi: 3.0.0
 info:
-  version: ''
+  version: 1.0.0
   title: Messaging
-  contact:
-    name: Rocket.Chat
-    url: 'https://rocket.chat/'
-    email: contact@rocket.chat
+  description: |-
+    * **Chat**: Create and manage chat [messages](https://docs.rocket.chat/use-rocket.chat/user-guides/messages/message-actions).
+    * **IM**: Create and manage direct messages.
 servers:
-  - url: 'http://localhost:3000/'
+  - url: https://apiexplorer.support.rocket.chat
 paths:
   /api/v1/chat.delete:
     post:
@@ -4462,9 +4461,7 @@ paths:
                     success: true
 tags:
   - name: Chat
-    description: Everything about Rocket.Chat Chat Endpoints
   - name: IM
-    description: Everything about Rocket.Chat Direct Messages Endpoints
 components:
   parameters:
     Optional-RoomId:
