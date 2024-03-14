@@ -1,13 +1,16 @@
 openapi: 3.0.0
 info:
-  version: ''
+  version: 1.0.0
   title: Rooms
-  contact:
-    name: Rocket.Chat
-    url: 'https://rocket.chat/'
-    email: contact@rocket.chat
+  description: |-
+    Conversations take place in rooms. This section includes the following:
+    * **Groups**: Organize discussions with groups or channels.
+    * **Channels**: Create and manage dedicated [channels](https://docs.rocket.chat/use-rocket.chat/user-guides/rooms/channels) for various topics.
+    * **Rooms**: Manage rooms and modify room settings.
+    * **Teams**: Create and manage [teams](https://docs.rocket.chat/use-rocket.chat/user-guides/rooms/teams) and team members.
+    * **Directory**: Search workspace users, teams, and channels.
 servers:
-  - url: 'http://localhost:3000'
+  - url: https://apiexplorer.support.rocket.chat
 paths:
   /api/v1/channels.create:
     post:
