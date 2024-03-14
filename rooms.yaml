@@ -6768,12 +6768,15 @@ paths:
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
-        - name: selector
+        - schema:
+            type: object
+            example: {
+            "exceptions": ["john.doe"], "conditions": {"status": "offline"}, "term": "user", "$or": [{"type": "user"}, {"roles": ["bot"]}]}
           in: query
-          description: Provide additional values to filter the results.
+          name: selector
           required: true
-          schema:
-            example: '{ "exceptions" : []}'
+          description: >-
+            Filter the response with the parameters.
       responses:
         '200':
           description: OK
