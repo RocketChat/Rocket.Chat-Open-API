@@ -12623,19 +12623,10 @@ paths:
 
 tags:
   - name: Channels
-    description: Everything about Rocket.Chat Channels Endpoints
-    
   - name: Directory
-    description: Everything about Rocket.Chat Directory Endpoints
-
   - name: Groups
-    description: Everything about Rocket.Chat Groups Endpoints
-
   - name: Rooms
-    description: Everything about Rocket.Chat Rooms Endpoints
-
   - name: Teams
-    description: Everything about Rocket.Chat Teams Endpoints
 
 components:
   parameters:
