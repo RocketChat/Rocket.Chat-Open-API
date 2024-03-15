@@ -7,8 +7,13 @@ info:
 
     The Omnichannel endpoints are of two types:
 
-    - **Endpoints requiring authentication:** The workspace admins and managers use the endpoints that require authentication with a login method.
-    - **Endpoints not requiring authentication:** Visitors can use the endpoints that require no authentication. These endpoints require a visitor `token` which is like an authentication parameter for visitors. Visitors can [register themselves](livechat-endpoints/visitor/register-a-new-livechat-visitor.md) by providing a random unique string as the `token` which can be used for other such endpoints.
+    * **Endpoints requiring authentication**: The workspace admins and managers use the endpoints that require authentication with a login method.
+    * **Endpoints not requiring authentication**: Visitors can use the endpoints that require no authentication. These endpoints require a visitor `token` which is like an authentication parameter for visitors. Visitors can [register themselves](livechat-endpoints/visitor/register-a-new-livechat-visitor.md) by providing a random unique string as the `token` which can be used for other such endpoints.
+    
+    This section includes the following endpoints:
+    * **Livechat**: Manage livechat users, visitors, conversations, and view analytics.
+    * **Voice Channel**: Initiate and receive [calls](https://docs.rocket.chat/use-rocket.chat/rocket.chat-voice-channel) with visitors.
+    * **Canned Responses**: Create and manage [template messages](https://docs.rocket.chat/use-rocket.chat/omnichannel/canned-responses).
 servers:
   - url: 'http://localhost:3000'
 paths:
@@ -46,8 +51,9 @@ paths:
                   description: The user name that you want to register.
               required:
                 - username
-              examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   username: john.doe
       responses:
         '200':
@@ -1019,8 +1025,7 @@ paths:
                   type: object
                   properties:
                     title:
-                      type:
-                        - string
+                      type: string
                     value:
                       oneOf:
                         - type: string
