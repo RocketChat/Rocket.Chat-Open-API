@@ -15,7 +15,7 @@ info:
     * **Voice Channel**: Initiate and receive [calls](https://docs.rocket.chat/use-rocket.chat/rocket.chat-voice-channel) with visitors.
     * **Canned Responses**: Create and manage [template messages](https://docs.rocket.chat/use-rocket.chat/omnichannel/canned-responses).
 servers:
-  - url: 'http://localhost:3000'
+  - url: https://apiexplorer.support.rocket.chat
 paths:
   '/api/v1/livechat/users/{type}':
     post:
