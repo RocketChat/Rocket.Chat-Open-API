@@ -2,9 +2,9 @@ openapi: 3.0.0
 info:
   version: 1.0.0
   title: Messaging
-  description: |-
-    * **Chat**: Create and manage chat [messages](https://docs.rocket.chat/use-rocket.chat/user-guides/messages/message-actions).
-    * **IM**: Create and manage direct messages.
+#  description: |-
+#    * **Chat**: Create and manage chat [messages](https://docs.rocket.chat/use-rocket.chat/user-guides/messages/message-actions).
+#    * **IM**: Create and manage direct messages.
 servers:
   - url: https://apiexplorer.support.rocket.chat
 paths:
