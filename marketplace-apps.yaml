@@ -2,12 +2,12 @@ openapi: 3.0.0
 info:
   version: 1.0.0
   title: Marketplace Apps
-  description: |- 
-    The following marketplace apps endpoints are available:
-    * **WhatsApp**: Send a template [WhatsApp](https://docs.rocket.chat/extend-rocket.chat-capabilities/rocket.chat-marketplace/rocket.chat-public-apps-guides/omnichannel-apps/whatsapp) message.
-    * **Rasa**: Close a [Rasa](https://docs.rocket.chat/extend-rocket.chat-capabilities/rocket.chat-marketplace/rocket.chat-public-apps-guides/omnichannel-apps/rasa-app) app chat or perform handover.
+#  description: |- 
+#    The following marketplace apps endpoints are available:
+#    * **WhatsApp**: Send a template [WhatsApp](https://docs.rocket.chat/extend-rocket.chat-capabilities/rocket.chat-marketplace/rocket.chat-public-apps-guides/omnichannel-apps/whatsapp) message.
+#    * **Rasa**: Close a [Rasa](https://docs.rocket.chat/extend-rocket.chat-capabilities/rocket.chat-marketplace/rocket.chat-public-apps-guides/omnichannel-apps/rasa-app) app chat or perform handover.
 servers:
-  - url: 'http://localhost:3000'
+  - url: https://apiexplorer.support.rocket.chat
 paths:
   '/api/apps/public/{app-id}/incoming':
     parameters:
