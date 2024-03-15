@@ -2,12 +2,12 @@ openapi: 3.0.0
 info:
   version: 1.0.0
   title: Content Management
-  description: |-
-    The following endpoints are used to manage workspace resources:
-    * **Assets**: Set and unset various [assets](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/assets) to customize your workspace.
-    * **Custom Emoji**: Create and manage custom [emojis](https://docs.rocket.chat/use-rocket.chat/workspace-administration/emoji).
-    * **Custom Sounds**: View custom [sounds](https://docs.rocket.chat/use-rocket.chat/workspace-administration/sounds).
-    * **Custom User Status**: Create and manager custom [user status](https://docs.rocket.chat/use-rocket.chat/workspace-administration/user-status).
+#  description: |-
+#    The following endpoints are used to manage workspace resources:
+#    * **Assets**: Set and unset various [assets](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/assets) to customize your workspace.
+#    * **Custom Emoji**: Create and manage custom [emojis](https://docs.rocket.chat/use-rocket.chat/workspace-administration/emoji).
+#    * **Custom Sounds**: View custom [sounds](https://docs.rocket.chat/use-rocket.chat/workspace-administration/sounds).
+#    * **Custom User Status**: Create and manager custom [user status](https://docs.rocket.chat/use-rocket.chat/workspace-administration/user-status).
 servers:
   - url: https://apiexplorer.support.rocket.chat
 paths:
