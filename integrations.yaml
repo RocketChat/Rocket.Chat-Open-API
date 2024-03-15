@@ -1,13 +1,14 @@
 openapi: 3.0.0
 info:
-  version: ''
+  version: 1.0.0
   title: Integrations
-  contact:
-    name: Rocket.Chat
-    url: 'https://rocket.chat/'
-    email: contact@rocket.chat
+description: |-
+    The following endpoints provide integration support for your Rocket.Chat workspaces:
+    * **Integration**: Create and manage [integrations](https://docs.rocket.chat/use-rocket.chat/workspace-administration/integrations).
+    * **WebDAV**: Manage [WebDAV](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/webdav-integration) server accounts.
+    * **OAuth Apps**: Create and manage OAuth apps to authenticate users.
 servers:
-  - url: 'http://localhost:3000'
+  - url: https://apiexplorer.support.rocket.chat
 paths:
   /api/v1/integrations.create:
     post:
