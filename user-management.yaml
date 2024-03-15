@@ -2,12 +2,12 @@ openapi: 3.0.0
 info:
   version: 1.0.0
   title: User Management
-  description: |-
-    User management in Rocket.Chat includes the following:
-      * **Users**: Manage [users](https://docs.rocket.chat/use-rocket.chat/workspace-administration/users), preferences, and tokens.
-      * **Permissions**: Manage user [permissions](https://docs.rocket.chat/use-rocket.chat/workspace-administration/permissions) and access.
-      * **Roles**: Assign and manage user [roles](https://docs.rocket.chat/use-rocket.chat/workspace-administration/permissions#roles).
-      * **LDAP**: Test and sync [LDAP](https://docs.rocket.chat/use-rocket.chat/authentication/ldap) connection.
+#  description: |-
+#    User management in Rocket.Chat includes the following:
+#      * **Users**: Manage [users](https://docs.rocket.chat/use-rocket.chat/workspace-administration/users), preferences, and tokens.
+#      * **Permissions**: Manage user [permissions](https://docs.rocket.chat/use-rocket.chat/workspace-administration/permissions) and access.
+#      * **Roles**: Assign and manage user [roles](https://docs.rocket.chat/use-rocket.chat/workspace-administration/permissions#roles).
+#      * **LDAP**: Test and sync [LDAP](https://docs.rocket.chat/use-rocket.chat/authentication/ldap) connection.
 servers:
   - url: https://apiexplorer.support.rocket.chat
 paths:
