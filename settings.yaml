@@ -2,19 +2,19 @@ openapi: 3.0.0
 info:
   version: ''
   title: Settings
-  description: |-
-    Configure your Rocket.Chat workspace with the following endpoints:
-      * **Settings**: Manage public and private settings.
-      * **Cloud**: Register your workspace on Rocket.Chat Cloud.
-      * **DNS**: Resolve DNS text and URL records.
-      * **E2E**: Create and manage [E2E](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/e2e-encryption) keys.
-      * **Import** and **Bulk user import**: Import users, rooms, and other details to your workspace.
-      * **Instances**: View details of your instances.
-      * **Federation**: Add and manage [federated](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/federation) servers.
-      * **Moderation**: View and manage [reported messages](https://docs.rocket.chat/use-rocket.chat/workspace-administration/moderation).
-      * **Device management**: Manage [user sessions](https://docs.rocket.chat/use-rocket.chat/user-management/device-manager) on the workspace.
+#  description: |-
+#    Configure your Rocket.Chat workspace with the following endpoints:
+#      * **Settings**: Manage public and private settings.
+#      * **Cloud**: Register your workspace on Rocket.Chat Cloud.
+#      * **DNS**: Resolve DNS text and URL records.
+#      * **E2E**: Create and manage [E2E](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/e2e-encryption) keys.
+#      * **Import** and **Bulk user import**: Import users, rooms, and other details to your workspace.
+#      * **Instances**: View details of your instances.
+#      * **Federation**: Add and manage [federated](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/federation) servers.
+#      * **Moderation**: View and manage [reported messages](https://docs.rocket.chat/use-rocket.chat/workspace-administration/moderation).
+#      * **Device management**: Manage [user sessions](https://docs.rocket.chat/use-rocket.chat/user-management/device-manager) on the workspace.
 servers:
-  - url: 'http://localhost:3000'
+  - url: https://apiexplorer.support.rocket.chat
 paths:
   /api/v1/settings.public:
     parameters: []
