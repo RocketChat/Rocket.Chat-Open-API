@@ -2947,9 +2947,9 @@ paths:
         - Users
       summary: Create Users Token
       description: |-
-        Create a user authentication token. This is the same type of session token a user would get via login and will expire the same way.
-        * To be able to use this endpoint, you must set the [environment variable](https://docs.rocket.chat/setup-and-configure/environment-configuration/deployment-environment-variables) `CREATE_TOKENS_FOR_USERS=true`.
-        * For SaaS workspaces, contact support to set this variable.
+        As a workspace admin, you can create temporary authentication tokens for users. This is the same type of session authentication token a user gets via [login](https://rocketchat-developer.us.document360.io/apidocs/login-with-username-and-password) and expires the same way.
+        * To be able to use this endpoint, you must add the [environment variable](https://docs.rocket.chat/setup-and-configure/environment-configuration/deployment-environment-variables) `CREATE_TOKENS_FOR_USERS=true` in your compose file.
+        * For SaaS workspaces, [contact](https://docs.rocket.chat/resources/get-support) support to set this variable.
         * Permission required: `user-generate-access-token`
         
         For example, if you use Snaps to deploy, set the environment variable as shown below:
@@ -2972,18 +2972,26 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                userId:
-                  type: string
-                  description: >-
-                    The user ID. Alternatively, you can use the `username`
-                    parameter and value.
-                  example: BsNr28znDkG8aeo7W
+              oneOf:
+                - type: object
+                  properties:
+                    userId:
+                      type: string
+                      description: >-
+                        The user ID. 
+                      example: BsNr28znDkG8aeo7W
+                - type: object
+                  properties:
+                    username:
+                      type: string
+                      description: >-
+                        The username
+                      example: test.user
               required:
                 - userId
+                - username
             examples:
-              Example 1:
+              Example:
                 value:
                   userId: BsNr28znDkG8aeo7W
       responses:
@@ -3682,8 +3690,13 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       description: |-
-        Permission required: `create-personal-access-tokens`.
-        This endpoint requires 2FA.
+        Permission required: `create-personal-access-tokens`. 
+        
+        This endpoint requires [two-factor authentication](https://rocketchat-developer.us.document360.io/apidocs/introduction-to-two-factor-authentication).
+        
+        It is important to note that the generated access tokens are irrecoverable, so storing them safely is essential. If a token is lost or forgotten, it can be regenerated or deleted.
+        When making calls to the API that mandate authentication, include the generated token in the `X-Auth-Token` header and your user ID in the `X-User-Id` header to authenticate the requests.
+        Visit the [Personal Access Token user guide](https://docs.rocket.chat/use-rocket.chat/user-guides/user-panel/account#personal-access-tokens) for more details.
         
         ### Changelog
         | Version      | Description |
