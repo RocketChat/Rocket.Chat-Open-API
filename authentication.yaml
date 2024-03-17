@@ -3,17 +3,25 @@ info:
   version: 1.0.0
   title: Authentication
   description: |-
-    To securely interact with the Rocket.Chat API, authentication is required using your `username` and `password`. This offers you with the ability to make requests on the Rocket.Chat workspace as an authenticated user, ensuring the security of your interactions.
-
-    Upon successful authentication, the API responds with a JSON object containing an authentication token (`authToken`) and a unique user identifier (`userId`). The `authToken` is passed as `X-Auth-Token` header, while the `userId` as `X-User-Id` header when making  requests to subsequent protected endpoints that mandate authentication.
-
-    Additionally, the Rocket.Chat API provides alternative authentication methods through OAuth apps like Facebook, Google and Twitter.
     
-    ## Access Tokens
-    To use the Rocket.Chat REST API without logging in, you can use personal access tokens. However, the administrator must grant your user role the `create-personal-access-tokens` [permission](https://docs.rocket.chat/use-rocket.chat/workspace-administration/permissions).
+    Rocket.Chat provides diverse authentication methods for secure API communication, spanning from basic username and password authentication to OAuth integration with services such as Google, Facebook, and Twitter.
 
-    To generate personal access tokens, refer to the  [Personal Access Token](https://docs.rocket.chat/use-rocket.chat/user-guides/user-panel/account#personal-access-tokens) guide. It's important to note that the generated tokens are irrecoverable, so storing them safely is essential. If a token is lost or forgotten, it can be regenerated or deleted. When making calls to the API, include the generated token in the `X-Auth-Token` header and your user ID in the `X-User-Id` header to authenticate the requests.
+    To access protected endpoints in the Rocket.Chat API, you must include the userId and a valid authentication token of the user as headers in the request. Add the authentication token as `x-Auth-Token` and the userId as `x-User-Id` in the headers of your request.
     
+    ### Authentication Tokens
+    
+    Authentication tokens are unique identifiers confirming a user's active session within your Rocket.Chat workspace. These tokens validate the user's identity and permissions, providing secure access to various features and resources. When making requests to protected endpoints that mandate authentication, add this authentication token as `x-Auth-Token` header in your request.
+    
+    In Rocket.Chat, there are primarily two types of authentication tokens: **authToken** and **personal access token**.
+    
+    1.  **authToken**
+    
+        `authToken` is a temporary authentication token returned to users after a successful login through any login endpoint. Additionally, workspace administrators can create `authtoken` for a user via the [Create User Token](/v1-api/apidocs/create-users-token) endpoint.
+    
+    2.  **personal access token**
+    
+        [Personal Access Tokens](https://docs.rocket.chat/use-rocket.chat/user-guides/user-panel/account#personal-access-tokens) are permanent authentication tokens that users can generate for themselves to access the API securely without exposing their primary credentials. Visit the Get [Personal Access Tokens API guide](https://developer.rocket.chat/reference/api/rest-api/endpoints/user-management/users-endpoints/generatepersonalaccesstoken) for more details.
+          
 #     The following 2FA introduction is under the 2FA section in the published API documentation
 
 #      ## Two-Factor Authentication
