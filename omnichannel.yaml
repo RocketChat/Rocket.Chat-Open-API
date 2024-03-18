@@ -2119,7 +2119,7 @@ paths:
       summary: Update Livechat Room Visitor
       description: |-
         Update room visitor's information.
-        Permission required: `view-l-room`"
+        Permission required: `view-l-room`
       operationId: put-api-v1-livechat-room.visitor
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -2404,6 +2404,7 @@ paths:
           $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/permissionError'
+      deprecated: true
       tags:
         - Livechat Rooms
   /api/v1/livechat/room.transfer:
