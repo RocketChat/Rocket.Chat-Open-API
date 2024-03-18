@@ -1328,12 +1328,20 @@ paths:
         - $ref: '#/components/parameters/X-User-Id'
         - name: appId
           in: query
-          description: The app ID.  This value is required if `clientId` is not used.
+          description: |-
+            The app ID.  This value is required if `clientId` is not used.
+            
+            The parameter will stop being accepted from 7.0.0 (use the `clientId` or `_id` parameters instead).
           schema:
             type: string
         - name: clientId
           in: query
-          description: The client ID.  This value is required if `appId` is not used.
+          description: The client ID. This value is required if `appId` is not used.
+          schema:
+            type: string
+        - name: _id
+          in: query
+          description: The app ID. This value is required if `clientId` is not used.
           schema:
             type: string
       responses:
