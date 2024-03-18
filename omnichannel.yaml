@@ -8004,8 +8004,133 @@ paths:
       tags:
         - Livechat Inquiries
       summary: List Queued Inquiries
-      description: 'Permission required: `view-l-room`'
+      description: |-
+        Use the `/inquiries.queuedForUser` endpoint instead.
+        
+        Permission required: `view-l-room`
       operationId: get-api-v1-livechat-inquiries.queued
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/AuthToken'
+        - name: department
+          in: query
+          description: The department ID or name.
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  inquiries:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        rid:
+                          type: string
+                        name:
+                          type: string
+                        ts:
+                          type: string
+                        department:
+                          type: string
+                        message:
+                          type: string
+                        status:
+                          type: string
+                        v:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                            token:
+                              type: string
+                            status:
+                              type: string
+                        t:
+                          type: string
+                        queueOrder:
+                          type: integer
+                        estimatedWaitingTimeQueue:
+                          type: integer
+                        estimatedServiceTimeAt:
+                          type: string
+                        _updatedAt:
+                          type: string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    inquiries:
+                      - _id: xn5sKBatdkgDfjDLC
+                        rid: 8AuphbFBSNBjeZQFs
+                        name: hk
+                        ts: '2021-07-22T14:28:57.987Z'
+                        department: CAJioQNAvLnYWTy8i
+                        message: ''
+                        status: queued
+                        v:
+                          _id: hPF84vuahYBZugM8L
+                          username: guest-535
+                          token: zdynf0a9vsiiiq1dlf9abf
+                          status: offline
+                        t: l
+                        queueOrder: 1
+                        estimatedWaitingTimeQueue: 0
+                        estimatedServiceTimeAt: '2021-07-22T14:28:57.987Z'
+                        _updatedAt: '2021-07-22T14:37:28.470Z'
+                      - _id: g6FY2B8PNwneteRG9
+                        rid: iZ7XDSgcjBgczqko9
+                        name: dk
+                        ts: '2021-07-22T14:28:07.350Z'
+                        department: CAJioQNAvLnYWTy8i
+                        message: ''
+                        status: queued
+                        v:
+                          _id: ycwLFcaH4ey9XYYvu
+                          username: guest-534
+                          token: ili20miimhh8x33ld0b5de
+                          status: offline
+                        t: l
+                        queueOrder: 1
+                        estimatedWaitingTimeQueue: 0
+                        estimatedServiceTimeAt: '2021-07-22T14:28:07.350Z'
+                        _updatedAt: '2021-07-22T14:28:24.521Z'
+                    count: 2
+                    offset: 0
+                    total: 2
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/permissionError'
+      deprecated: true
+  /api/v1/livechat/inquiries.queuedForUser:
+    get:
+      tags:
+        - Livechat Inquiries
+      summary: List Queued User Inquiries
+      description: |-
+        Permission required: `view-l-room`
+      operationId: get-api-v1-livechat-inquiries.queuedForUser
       parameters:
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/AuthToken'
@@ -11822,7 +11947,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
   /api/v1/voip/events:
-    get:
+    post:
       tags:
         - Voice Channel Events
       summary: Send Call Center Events
@@ -11893,6 +12018,8 @@ paths:
                 rid:
                   type: string
                 event:
+                  type: string
+                comment:
                   type: string
             examples:
               Example 1:
