@@ -1337,12 +1337,16 @@ paths:
         - Licenses
       summary: Get Licenses
       description: |- 
+        Use the `/licenses.info` endpoint instead.
+        
         Retrieves a list of all registered licenses in the workspace.
         
-        Permissions required: `view-privileged-setting`
+        Permission required: `view-privileged-setting`
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |6.5.0         | Deprecated       |
         |3.10.0         | Added       |
       operationId: get-api-v1-licenses.get
       parameters:
@@ -1395,8 +1399,9 @@ paths:
                               type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     licenses:
                       - version: 2
                         url: 'localhost:3000'
@@ -1428,6 +1433,331 @@ paths:
                           trial: false
                           trialEnd: '2023-04-27T23:00:00Z'
                           workspaceId: 63cfe8550c95db00013d7798
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      deprecated: true
+  /api/v1/licenses.info:
+    get:
+      tags:
+        - Licenses
+      summary: Get Licenses
+      description: |-
+        Retrieves a list of all registered licenses and the details in the workspace.
+
+        Permission required: `view-privileged-setting`
+      operationId: get-api-v1-licenses.info
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  license:
+                    type: object
+                    properties:
+                      license:
+                        type: object
+                        properties:
+                          version:
+                            type: string
+                          information:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              autoRenew:
+                                type: boolean
+                              createdAt:
+                                type: string
+                              visualExpiration:
+                                type: string
+                              notifyAdminsAt:
+                                type: string
+                              notifyUsersAt:
+                                type: string
+                              trial:
+                                type: boolean
+                              cancellable:
+                                type: boolean
+                              offline:
+                                type: boolean
+                              grantedBy:
+                                type: object
+                                properties: {}
+                              grantedTo:
+                                type: object
+                                properties: {}
+                              tags:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    name:
+                                      type: string
+                                    color:
+                                      type: string
+                          validation:
+                            type: object
+                            properties:
+                              serverUrls:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    value:
+                                      type: string
+                                    type:
+                                      type: string
+                              cloudWorkspaceId:
+                                type: string
+                              serverUniqueId:
+                                type: string
+                              validPeriods:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    validUntil:
+                                      type: string
+                                    invalidBehavior:
+                                      type: string
+                              legalTextAgreement:
+                                type: object
+                                properties:
+                                  type:
+                                    type: string
+                                  acceptedVia:
+                                    type: string
+                              statisticsReport:
+                                type: object
+                                properties:
+                                  required:
+                                    type: boolean
+                                  allowedStaleInDays:
+                                    type: integer
+                          grantedModules:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                module:
+                                  type: string
+                          limits:
+                            type: object
+                            properties:
+                              guestUsers:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    max:
+                                      type: integer
+                                    behavior:
+                                      type: string
+                              roomsPerGuest:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    max:
+                                      type: integer
+                                    behavior:
+                                      type: string
+                              monthlyActiveContacts:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    max:
+                                      type: integer
+                                    behavior:
+                                      type: string
+                          cloudMeta:
+                            type: object
+                            properties: {}
+                      activeModules:
+                        type: array
+                        items:
+                          type: string
+                      preventedActions:
+                        type: object
+                        properties:
+                          activeUsers:
+                            type: boolean
+                          guestUsers:
+                            type: boolean
+                          roomsPerGuest:
+                            type: boolean
+                          privateApps:
+                            type: boolean
+                          marketplaceApps:
+                            type: boolean
+                          monthlyActiveContacts:
+                            type: boolean
+                      limits:
+                        type: object
+                        properties:
+                          activeUsers:
+                            type: object
+                            properties:
+                              max:
+                                type: integer
+                          guestUsers:
+                            type: object
+                            properties:
+                              max:
+                                type: integer
+                          privateApps:
+                            type: object
+                            properties:
+                              max:
+                                type: integer
+                          marketplaceApps:
+                            type: object
+                            properties:
+                              max:
+                                type: integer
+                          monthlyActiveContacts:
+                            type: object
+                            properties:
+                              max:
+                                type: integer
+                      tags:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                            color:
+                              type: string
+                      trial:
+                        type: boolean
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    license:
+                      license:
+                        version: '3.0'
+                        information:
+                          id: 6569155ab286e50001b78ec1
+                          autoRenew: true
+                          createdAt: '2024-03-17T00:51:43.529361607Z'
+                          visualExpiration: '2024-03-10T00:00:00Z'
+                          notifyAdminsAt: '2024-03-10T00:00:00Z'
+                          notifyUsersAt: '2024-03-10T00:00:00Z'
+                          trial: true
+                          cancellable: true
+                          offline: false
+                          grantedBy: {}
+                          grantedTo: {}
+                          tags:
+                            - name: Enterprise trial
+                              color: '#F3BE08'
+                        validation:
+                          serverUrls:
+                            - value: testspace.rocket.chat
+                              type: url
+                          cloudWorkspaceId: 64df890111e1f20001d201b4
+                          serverUniqueId: tgxSuzXmWe68S3kWR
+                          validPeriods:
+                            - validUntil: '2024-03-24T00:00:00Z'
+                              invalidBehavior: invalidate_license
+                          legalTextAgreement:
+                            type: required
+                            acceptedVia: cloud
+                          statisticsReport:
+                            required: true
+                            allowedStaleInDays: 2
+                        grantedModules:
+                          - module: auditing
+                          - module: canned-responses
+                          - module: ldap-enterprise
+                          - module: livechat-enterprise
+                          - module: voip-enterprise
+                          - module: omnichannel-mobile-enterprise
+                          - module: engagement-dashboard
+                          - module: push-privacy
+                          - module: scalability
+                          - module: teams-mention
+                          - module: saml-enterprise
+                          - module: oauth-enterprise
+                          - module: device-management
+                          - module: federation
+                          - module: videoconference-enterprise
+                          - module: message-read-receipt
+                          - module: outlook-calendar
+                          - module: hide-watermark
+                          - module: custom-roles
+                          - module: accessibility-certification
+                        limits:
+                          guestUsers:
+                            - max: 235
+                              behavior: start_fair_policy
+                            - max: 235
+                              behavior: prevent_action
+                          roomsPerGuest:
+                            - max: 1
+                              behavior: start_fair_policy
+                            - max: 1
+                              behavior: prevent_action
+                          monthlyActiveContacts:
+                            - max: -1
+                              behavior: start_fair_policy
+                            - max: -1
+                              behavior: prevent_action
+                        cloudMeta: {}
+                      activeModules:
+                        - auditing
+                        - canned-responses
+                        - ldap-enterprise
+                        - livechat-enterprise
+                        - voip-enterprise
+                        - omnichannel-mobile-enterprise
+                        - engagement-dashboard
+                        - push-privacy
+                        - scalability
+                        - teams-mention
+                        - saml-enterprise
+                        - oauth-enterprise
+                        - device-management
+                        - federation
+                        - videoconference-enterprise
+                        - message-read-receipt
+                        - outlook-calendar
+                        - hide-watermark
+                        - custom-roles
+                        - accessibility-certification
+                      preventedActions:
+                        activeUsers: false
+                        guestUsers: false
+                        roomsPerGuest: false
+                        privateApps: false
+                        marketplaceApps: false
+                        monthlyActiveContacts: false
+                      limits:
+                        activeUsers:
+                          max: -1
+                        guestUsers:
+                          max: 235
+                        privateApps:
+                          max: -1
+                        marketplaceApps:
+                          max: -1
+                        monthlyActiveContacts:
+                          max: -1
+                      tags:
+                        - name: Enterprise trial
+                          color: '#F3BE08'
+                      trial: true
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -1476,11 +1806,14 @@ paths:
         - Licenses
       summary: Confirm Enterprise License
       description: |- 
+        Use the `/licenses.info` endpoint instead.
+        
         Confirm if the current workspace is subscribed to the [Enterprise plan](https://docs.rocket.chat/readme/our-plans#enterprise-plan).
         
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |6.5.0         | Deprecated       |
         |5.0.0         | Added       |
       operationId: get-api-v1-licenses.isEnterprise
       parameters:
@@ -1512,6 +1845,7 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
+      deprecated: true
   /licenses.maxActiveUsers:
     get:
       tags:
