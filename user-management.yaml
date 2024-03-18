@@ -470,10 +470,11 @@ paths:
                 roleName:
                   type: string
                   description: |-
-                    The role name. Alternatively, you can use the `roleId` parameter.
+                    The role name. Alternatively, use the `roleId` parameter.
                     Note: 
                       * For default roles, the role name and ID are the same. For custom roles, the name and ID are different. 
                       * If you are setting a custom role for a user, make sure to enter the custom role ID and not the role name.
+                      * The `roleName` parameter will be removed from 7.0.0. Use the `roleId` parameter instead.
                       Refer to [Roles](https://docs.rocket.chat/use-rocket.chat/workspace-administration/permissions#roles) for more information.
                   example: auditor-log
                 username:
@@ -578,11 +579,11 @@ paths:
       parameters:
         - name: role
           in: query
-          description: The role.
+          description: The role name or the role ID. For custom roles, use the role ID.
           required: true
           schema:
             type: string
-            example: admin
+            example: 653ec9873c7460e18e6f
         - name: roomId
           in: query
           description: The room ID.
@@ -988,8 +989,13 @@ paths:
                   type: string
                   example: 6579adcf2dd9f9d9514f6
                   description: The ID of an existing role.
+                username:
+                  type: string
+                  description: The username for which you want to remove the role.
+                  example: user08
               required:
                 - roleId
+                - username
     parameters: []
   /api/v1/users.create:
     post:
