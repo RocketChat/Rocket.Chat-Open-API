@@ -7,7 +7,7 @@ info:
 #    * **Banners**: Get and dismiss banners.
 #    * **Push token**: Create and manage push tokens.
 servers:
-  - url: 'http://localhost:3000'
+  - url: https://apiexplorer.support.rocket.chat
 paths:
   '/api/v1/banners/{id}':
     parameters:
