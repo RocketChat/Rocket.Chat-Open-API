@@ -8959,7 +8959,9 @@ paths:
                           * `chat-opened-by-visitor`: The chat is opened by the visitor.
                           * `after-guest-registration`: The guest is registered to the chat.
                       value:
-                        type: integer
+                        oneOf:
+                        - type: number
+                        - type: string
                         description: 'Enter the value of the `page-url` (string) or the `time-on-site`, in seconds (number). Otherwise, you can enter `null`.'
                 actions:
                   type: array
