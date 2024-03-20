@@ -8872,7 +8872,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
     post:
-      summary: Create Livechat Triggers
+      summary: Create or Update Livechat Triggers
       tags:
         - Livechat Triggers
       responses:
@@ -8902,6 +8902,8 @@ paths:
                     success: false
                     error: 'must be equal to one of the allowed values [invalid-params]'
                     errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/permissionError'
       operationId: post-api-v1-livechat-triggers
@@ -8925,6 +8927,10 @@ paths:
                 - conditions
                 - actions
               properties:
+                _id:
+                  type: string
+                  description: 'If you want to update a trigger, enter the trigger ID.'
+                  example: 65fa8f42482d68e364
                 name:
                   type: string
                   description: Enter a name for the trigger.
