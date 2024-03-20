@@ -8871,6 +8871,145 @@ paths:
           $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/permissionError'
+    post:
+      summary: Create Livechat Triggers
+      tags:
+        - Livechat Triggers
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''description'' [invalid-params]'
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: 'must be equal to one of the allowed values [invalid-params]'
+                    errorType: invalid-params
+        '403':
+          $ref: '#/components/responses/permissionError'
+      operationId: post-api-v1-livechat-triggers
+      description: |-
+        Permission required: `view-livechat-manager`
+        
+        See the [Livechat Triggers](https://docs.rocket.chat/use-rocket.chat/omnichannel/livechat-triggers) guide for more information.
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - description
+                - enabled
+                - runOnce
+                - conditions
+                - actions
+              properties:
+                name:
+                  type: string
+                  description: Enter a name for the trigger.
+                  example: test-trigger
+                description:
+                  type: string
+                  description: Enter a description for the trigger.
+                  example: Test trigger with the endpoint.
+                enabled:
+                  type: boolean
+                  description: Whether the trigger is enabled for use or not.
+                  default: true
+                runOnce:
+                  type: boolean
+                  description: Whether the trigger will be run only once for each visitor.
+                  default: false
+                conditions:
+                  type: array
+                  description: Enter the conditions for the trigger to execute.
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        description: |-
+                          The condition that should take place for the trigger to execute. The possible values are:
+                          * `time-on-site`: The amount of time a visitor is on the site.
+                          * `page-url`: The site URL that a visitor visits.
+                          * `chat-opened-by-visitor`: The chat is opened by the visitor.
+                          * `after-guest-registration`: The guest is registered to the chat.
+                      value:
+                        type: integer
+                        description: 'Enter the value of the `page-url` (string) or the `time-on-site`, in seconds (number). Otherwise, you can enter `null`.'
+                actions:
+                  type: array
+                  description: The actions that take place once the trigger is executed.
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        description: "The name of the trigger action that takes place. The possible values are:\r\n* `send-message`: A message is sent to the visitor.\r\n* `use-external-service`: An external service is used for the trigger action."
+                      params:
+                        type: object
+                        description: Enter the parameter values for the trigger action.
+                        properties:
+                          sender:
+                            type: string
+                            description: "The sender of the trigger action. The possible values are:\r\n* `queue`: Impersonate the next available agent in the queue.\r\n* `custom`: Use a specific agent or bot."
+                          name:
+                            type: string
+                            description: 'Enter the name of the agent or bot that you want to use, if the `sender` is `custom`.'
+                          msg:
+                            type: string
+                            description: 'Enter a message for the visitor, if the action `name` is `send-message`.'
+                          serviceUrl:
+                            type: string
+                            description: 'Enter the external service URL you want to use, if the action `name` is `use-external-service`.'
+                            example: 'http://localhost:3000/api/vX'
+                          serviceTimeout:
+                            type: number
+                            description: 'Enter the service timeout value, in seconds, if the action `name` is `use-external-service`.'
+                            example: 5000
+                          serviceFallbackMessage:
+                            type: string
+                            description: 'Enter a message when the service is not accessible, if the action `name` is `use-external-service`.'
+                            example: 'Were sorry, we cannot complete your request'
+            examples:
+              Example 1:
+                value:
+                  name: api-trigger
+                  description: testing create trigger endpoint
+                  enabled: false
+                  runOnce: true
+                  conditions:
+                    - name: chat-opened-by-visitor
+                      value: 0
+                  actions:
+                    - name: send-message
+                      params:
+                        sender: queue
+                        msg: hello world
   '/api/v1/livechat/triggers/{_id}':
     get:
       tags:
