@@ -9109,6 +9109,29 @@ paths:
           $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/permissionError'
+    delete:
+      summary: Delete a trigger
+      tags:
+        - Livechat Triggers
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/permissionError'
+      operationId: delete-api-v1-livechat-triggers-_id
+      description: 'Permission required: `view-livechat-manager`'
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+        - name: _id
+          in: path
+          description: The trigger ID.
+          required: true
+          schema:
+            type: string
+            example: Lk52shJFYyb55trw8
   /api/v1/livechat/monitors:
     get:
       tags:
