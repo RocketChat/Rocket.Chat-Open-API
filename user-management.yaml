@@ -3625,6 +3625,58 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
+  /api/v1/users.checkUsernameAvailability:
+    get:
+      tags:
+        - Users
+      summary: Check Username Availability
+      description: ''
+      operationId: get-api-v1-users.checkUsernameAvailability
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: boolean
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    result: true
+                    success: true
+                Example 2:
+                  value:
+                    result: false
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''username'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/users.generatePersonalAccessToken:
     parameters: []
     post:
