@@ -7139,7 +7139,66 @@ paths:
                     errorType: error-room-not-found
         '401':
           $ref: '#/components/responses/authorizationError'
-
+  /api/v1/rooms.nameExists:
+    parameters: []
+    get:
+      summary: Check if Room Name Exists
+      tags:
+        - Rooms
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  exists:
+                    type: boolean
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    exists: true
+                    success: true
+                Example 2:
+                  value:
+                    exists: false
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''roomName'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-rooms.nameExists
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - schema:
+            type: string
+            example: test-room
+          in: query
+          name: roomName
+          description: Enter the room name that you want to check.
+          required: true
+  
   /api/v1/rooms.changeArchivationState:
     post:
       tags:
