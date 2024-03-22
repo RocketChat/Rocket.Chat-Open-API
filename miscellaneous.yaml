@@ -11,8 +11,9 @@ paths:
         - Auto Translate
       summary: Get Supported Languages
       description: |- 
-        To use the auto-translate feature, you must enable it on the admin panel under (Admin -> Message -> Auto-Translate) and the user must have the necessary permission (auto-translate) in addition to a valid Google Translate API token.
-        Gets the supported languages by the autotranslate.
+        To learn how to enable the auto-translate feature, see the [Auto-Translate](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/message#ibh8nd40he) user guide.
+        
+        Gets the supported languages by the auto-translate.
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -23,7 +24,8 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: targetLanguage
           in: query
-          description: Language in which language names will be returned.
+          description: Language in which the language names will be returned.
+          required: true
           schema:
             type: string
             example: en
