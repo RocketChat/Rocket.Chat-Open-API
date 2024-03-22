@@ -8,12 +8,12 @@ paths:
   /api/v1/autotranslate.getSupportedLanguages:
     get:
       tags:
-        - Auto Translate
+        - Auto-Translate
       summary: Get Supported Languages
       description: |- 
         To learn how to enable the auto-translate feature, see the [Auto-Translate](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/message#ibh8nd40he) user guide.
         
-        Gets the supported languages by the auto-translate.
+        Get the supported languages by the auto-translate.
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -48,26 +48,52 @@ paths:
                           type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     languages:
-                      - language: af
-                        name: Africâner
-                      - language: sq
-                        name: Albanês
+                      - language: bg
+                        name: Bulgarian
+                      - language: cs
+                        name: Czech
+                      - language: da
+                        name: Danish
                       - language: de
-                        name: Alemão
-                      - language: am
-                        name: Amárico
+                        name: German
+                      - language: el
+                        name: Greek
+                      - language: en
+                        name: English
+                      - language: es
+                        name: Spanish
+                      - language: et
+                        name: Estonian
                     success: true
-          headers:
-            header-0:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
               schema:
-                type: string
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''targetLanguage'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/autotranslate.saveSettings:
     post:
       tags:
-        - Auto Translate
+        - Auto-Translate
       summary: Save Settings
       description: |- 
         Saves settings about autotranslate.
@@ -113,7 +139,7 @@ paths:
   /api/v1/autotranslate.translateMessage:
     post:
       tags:
-        - Auto Translate
+        - Auto-Translate
       summary: Translate Message
       description: |- 
         Auto-translates the provided message.
@@ -3032,7 +3058,7 @@ paths:
           $ref: '#/components/responses/forbiddenError'
 tags:
   - name: Apps
-  - name: Auto Translate
+  - name: Auto-Translate
   - name: Commands
   - name: Email Inbox
   - name: Invite
@@ -3102,9 +3128,6 @@ components:
             properties:
               success:
                 type: boolean
-            x-examples:
-              Example 1:
-                success: true
           examples:
             Success:
               value:
@@ -3120,10 +3143,6 @@ components:
                 type: string
               message:
                 type: string
-            x-examples:
-              Example 1:
-                status: error
-                message: You must be logged in to do this.
           examples:
             Authorization Error:
               value:
@@ -3140,10 +3159,6 @@ components:
                 type: boolean
               error:
                 type: string
-            x-examples:
-              Example 1:
-                success: false
-                error: 'User does not have the permissions required for this action [error-unauthorized]'
           examples:
             Permission Error:
               value:
