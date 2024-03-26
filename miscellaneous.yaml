@@ -28,7 +28,7 @@ paths:
           required: true
           schema:
             type: string
-            example: en
+          example: en
       responses:
         '200':
           description: OK
@@ -744,7 +744,7 @@ paths:
           required: true
           schema:
             type: string
-            example: info@rocket.chat
+          example: info@rockt.chat
       responses:
         '200':
           description: OK
@@ -861,7 +861,7 @@ paths:
           required: true
           schema:
             type: string
-            example: 60197e8ff82d6c83b96c53ff
+          example: 60197e8ff82d6c83b96c53ff
       responses:
         '200':
           description: OK
@@ -899,26 +899,26 @@ paths:
           description: 'Can either be `online`, `user`, `channel`'
           schema:
             type: string
-            example: online
+          example: online
         - name: icon
           in: query
           schema:
             type: string
-            example: 'false'
+          example: 'false'
         - name: channel
           in: query
           description: Name of the channel
           required: true
           schema:
             type: string
-            example: general
+          example: general
         - name: name
           in: query
           description: Name to show
           required: true
           schema:
             type: string
-            example: Rocket.Chat
+          example: Rocket.Chat
       responses:
         '200':
           description: OK
@@ -956,7 +956,7 @@ paths:
           required: true
           schema:
             type: string
-            example: john
+          example: john
       responses:
         '200':
           description: OK
@@ -1984,7 +1984,7 @@ paths:
           required: true
           schema:
             type: string
-            example: me
+          example: me
       responses:
         '200':
           description: OK
@@ -2135,20 +2135,20 @@ paths:
           required: true
           schema:
             type: string
-            example: unmute
+          example: unmute
         - name: roomId
           in: query
           description: The ID of the room.
           required: true
           schema:
             type: string
-            example: ByehQjC44FwMeiLbX
+          example: ByehQjC44FwMeiLbX
         - name: params
           in: query
           description: Parameters of the command if required. It is `undefined` by default.
           schema:
             type: string
-            example: '@user123'
+          example: '@user123'
       responses:
         '200':
           description: OK
@@ -3074,7 +3074,7 @@ components:
       required: false
       schema:
         type: integer
-        example: 50
+      example: 50
     count:
       name: count
       in: query
@@ -3082,7 +3082,7 @@ components:
       required: false
       schema:
         type: integer
-        example: 50
+      example: 50
     sort:
       name: sort
       in: query
@@ -3109,7 +3109,7 @@ components:
       required: true
       schema:
         type: string
-        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
     UserId:
       name: X-User-Id
       in: header
@@ -3117,7 +3117,7 @@ components:
       required: true
       schema:
         type: string
-        example: rbAXPnMktTFbNpwtJ
+      example: rbAXPnMktTFbNpwtJ
   responses:
     trueSuccess:
       description: OK
