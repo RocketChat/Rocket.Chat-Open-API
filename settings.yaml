@@ -3149,7 +3149,7 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       description: |-
-        <h2>Premium></h2>
+        <h2>Premium</h2>
         Retrieve session information for sessions owned by the authenticated user. This endpoint provides detailed information about the user's sessions on the workspace. It does not grant access to the session information of other users on the workspace.
         
         ### Changelog
@@ -3271,7 +3271,7 @@ paths:
         '403':
           $ref: '#/components/responses/forbiddenError'
       description: |-
-        <h2>Premium></h2>
+        <h2>Premium</h2>
         Retrieve session information for any session on the workspace, regardless of the session owner. This endpoint allows authorized users to access session details across the workspace and requires 2FA.
         Permission required: `view-device-management`
         
