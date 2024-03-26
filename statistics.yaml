@@ -2882,15 +2882,15 @@ components:
       required: true
       schema:
         type: string
-        example: '2023-10-29T14:48:00.000Z'
+      example: '2023-10-29T14:48:00.000Z'
     end:
       name: end
       in: query
-      description: The end date
+      description: The end date.
       required: true
       schema:
         type: string
-        example: '2023-11-05T14:48:00.000Z'
+      example: '2023-11-05T14:48:00.000Z'
     Auth-Token:
       name: X-Auth-Token
       in: header
@@ -2898,7 +2898,7 @@ components:
       required: true
       schema:
         type: string
-        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
     UserId:
       name: X-User-Id
       in: header
@@ -2906,14 +2906,14 @@ components:
       required: true
       schema:
         type: string
-        example: rbAXPnMktTFbNpwtJ
+      example: rbAXPnMktTFbNpwtJ
     count:
       name: count
       in: query
       required: false
       schema:
         type: integer
-        example: 50
+      example: 50
       description: The number of items to return.
     offset:
       name: offset
