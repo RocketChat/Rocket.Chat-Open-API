@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: ''
+  version: 1.0.0
   title: Settings
 #  description: |-
 #    Configure your Rocket.Chat workspace with the following endpoints:
@@ -2715,8 +2715,9 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       description: |-
-        <h2>Premium></h2>
+        <h2>Premium</h2>
         Retrieves all sessions of the authenticated user making the request.
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -2738,7 +2739,7 @@ paths:
   /api/v1/sessions/list.all:
     parameters: []
     get:
-      summary: Get All Current User Sessions
+      summary: Get All User Sessions
       operationId: get-api-v1-sessions-list.all
       responses:
         '200':
@@ -3024,7 +3025,7 @@ paths:
   /api/v1/sessions/info:
     parameters: []
     get:
-      summary: Get All Current User Sessions
+      summary: Get Current User Session Information
       operationId: get-api-v1-sessions-info
       responses:
         '200':
