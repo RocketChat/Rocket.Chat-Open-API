@@ -1019,7 +1019,7 @@ paths:
                 - emailOrUsername
               x-examples:
                 Example 1:
-                  emailOrUsername: test-funke
+                  emailOrUsername: test-test
             examples:
               Example:
                 value:
