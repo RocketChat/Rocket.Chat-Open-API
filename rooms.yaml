@@ -1286,7 +1286,7 @@ paths:
         - Channels
       summary: Get Channel History
       description: |-
-        Retrieves the message history of a channel.
+        Retrieves the history of a channel.
         
         ### Change Log
         | Version | Description               |
@@ -1298,6 +1298,10 @@ paths:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/Optional-RoomId'
+        - $ref: '#/components/parameters/Optional-RoomName'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/offset'
         - name: latest
           in: query
           description: The end of time range of messages to retrieve. The default value is the current date and time.
@@ -1316,18 +1320,12 @@ paths:
           schema:
             type: boolean
             example: true
-        - name: offset
+        - name: showThreadMessages
           in: query
-          description: 'The offset of the list messages to retrieve. By default, the value is 0.'
+          description: 'Whether thread messages should be included in the response'
           schema:
-            type: string
-            example: '10'
-        - name: count
-          in: query
-          description: 'The number of messages to retrieve. By default, the value is 20.'
-          schema:
-            type: string
-            example: '100'
+            type: boolean 
+            example: true
         - name: unreads
           in: query
           description: Whether the number of unread messages should be included. The default value is false.
@@ -3274,12 +3272,10 @@ paths:
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
-        - $ref: '#/components/parameters/Optional-RoomId'
-        - $ref: '#/components/parameters/Optional-RoomName'
+        - $ref: '#/components/parameters/RoomId'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/query'
-        - $ref: '#/components/parameters/fields'
         - $ref: '#/components/parameters/offset'
       responses:
         '200':
