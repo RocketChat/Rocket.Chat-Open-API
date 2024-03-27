@@ -2564,7 +2564,7 @@ paths:
                 - subject
               x-examples:
                 Example 1:
-                  from: test.funke@test.com
+                  from: test.test@test.com
                   subject: Welcome to the Test Newsletter
                   body: 'Thank you for subscribing to the Test Newsletter. If this was not you feelfree to unsubscribe by hitting the following button [unsubscribe]'
                   dryrun: 'true'
