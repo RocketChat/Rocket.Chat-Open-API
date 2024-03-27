@@ -5755,7 +5755,7 @@ paths:
               type: object
               x-examples:
                 Example 1:
-                  email: funke@test.com
+                  email: test@test.com
                   subject: Livechat Transcript
               required:
                 - email
