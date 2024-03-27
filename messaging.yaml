@@ -87,8 +87,8 @@ paths:
                       rid: 6GFJ3tbmHiyHbahmC
                       u:
                         _id: 5fRTXMt7DMJbpPJfh
-                        username: test.funke
-                        name: TestFunke
+                        username: test.test
+                        name: Testtest
                     success: true
         '400':
           description: Bad Request
@@ -294,7 +294,7 @@ paths:
                       u:
                         _id: rbAXPnMktTFbNpwtJ
                         username: roxie
-                        name: Funke Olasupo
+                        name: test test
                       _updatedAt: '2023-09-20T22:22:45.793Z'
                       urls:
                         - url: 'https://google.com'
@@ -394,7 +394,7 @@ paths:
                       u:
                         _id: rbAXPnMktTFbNpwtJ
                         username: roxie
-                        name: Funke Olasupo
+                        name: test test
                       _updatedAt: '2023-09-20T22:22:45.793Z'
                       urls:
                         - url: 'https://google.com'
@@ -753,7 +753,7 @@ paths:
                         u:
                           _id: rbAXPnMktTFbNpwtJ
                           username: roxie
-                          name: Funke Olasupo
+                          name: test test
                         _updatedAt: '2023-10-16T22:57:27.362Z'
                         urls: []
                         mentions: []
@@ -766,13 +766,13 @@ paths:
                         reactions:
                           ':smile:':
                             usernames:
-                              - test.funke
+                              - test.test
                         starred: []
                         pinned: true
                         pinnedAt: '2023-10-05T20:59:44.433Z'
                         pinnedBy:
                           _id: 5fRTXMt7DMJbpPJfh
-                          username: test.funke
+                          username: test.test
                         replies:
                           - rbAXPnMktTFbNpwtJ
                         tcount: 2
@@ -918,7 +918,7 @@ paths:
                         u:
                           _id: rbAXPnMktTFbNpwtJ
                           username: roxie
-                          name: Funke Olasupo
+                          name: test test
                         groupable: false
                         drid: 652dc4dda2f73c7460e18df6
                         _updatedAt: '2023-10-16T23:19:18.992Z'
@@ -1035,7 +1035,7 @@ paths:
                         u:
                           _id: rbAXPnMktTFbNpwtJ
                           username: roxie
-                          name: Funke Olasupo
+                          name: test test
                         _updatedAt: '2023-10-16T23:27:03.071Z'
                         urls: []
                         mentions:
@@ -1060,7 +1060,7 @@ paths:
                         u:
                           _id: rbAXPnMktTFbNpwtJ
                           username: roxie
-                          name: Funke Olasupo
+                          name: test test
                         _updatedAt: '2023-10-16T23:26:38.728Z'
                         urls: []
                         mentions:
@@ -1282,7 +1282,7 @@ paths:
                         u:
                           _id: rbAXPnMktTFbNpwtJ
                           username: roxie
-                          name: Funke Olasupo
+                          name: test test
                         _updatedAt: '2023-10-16T23:30:58.917Z'
                         urls: []
                         mentions: []
@@ -1304,7 +1304,7 @@ paths:
                         u:
                           _id: 5fRTXMt7DMJbpPJfh
                           username: test.john
-                          name: TestFunke
+                          name: Testtest
                         _updatedAt: '2023-10-16T23:30:42.393Z'
                         urls: []
                         mentions: []
@@ -1326,7 +1326,7 @@ paths:
                         u:
                           _id: rbAXPnMktTFbNpwtJ
                           username: roxie
-                          name: Funke Olasupo
+                          name: test test
                         _updatedAt: '2023-10-16T22:57:27.362Z'
                         urls: []
                         mentions: []
@@ -1339,13 +1339,13 @@ paths:
                         reactions:
                           ':smile:':
                             usernames:
-                              - test.funke
+                              - test.test
                         starred: []
                         pinned: true
                         pinnedAt: '2023-10-05T20:59:44.433Z'
                         pinnedBy:
                           _id: 5fRTXMt7DMJbpPJfh
-                          username: test.funke
+                          username: test.test
                         replies:
                           - rbAXPnMktTFbNpwtJ
                         tcount: 2
@@ -1687,7 +1687,7 @@ paths:
                         u:
                           _id: rbAXPnMktTFbNpwtJ
                           username: roxie
-                          name: Funke Olasupo
+                          name: test test
                         groupable: false
                         drid: 652dc4dda2f73c7460e18df6
                         _updatedAt: '2023-10-17T12:51:07.826Z'
@@ -1952,8 +1952,8 @@ paths:
                       msg: ''
                       u:
                         _id: 5fRTXMt7DMJbpPJfh
-                        username: test.funke
-                        name: TestFunke
+                        username: test.test
+                        name: Testtest
                       groupable: false
                       attachments:
                         - text: hola
@@ -3966,8 +3966,8 @@ paths:
                         sysMes: true
                         _updatedAt: '2023-10-30T20:37:17.317Z'
                         _USERNAMES:
-                          - funke.olasupo
-                          - test.funke
+                          - test.test
+                          - test.test
                         e2eKeyId: eyJhbGciOiJB
                         lastMessage:
                           _id: qpx24HcNoTZCoj7jZ
@@ -3977,7 +3977,7 @@ paths:
                           u:
                             _id: rbAXPnMktTFbNpwtJ
                             username: roxie
-                            name: Funke Olasupo
+                            name: test test
                           _updatedAt: '2023-10-30T20:37:17.267Z'
                           urls: []
                           mentions: []
@@ -4020,7 +4020,7 @@ paths:
                           u:
                             _id: rbAXPnMktTFbNpwtJ
                             username: roxie
-                            name: Funke Olasupo
+                            name: test test
                           _updatedAt: '2023-10-30T20:36:41.613Z'
                           urls: []
                           mentions:
@@ -4111,7 +4111,7 @@ paths:
                       - _id: rbAXPnMktTFbNpwtJ
                         username: roxie
                         status: offline
-                        name: Funke Olasupo
+                        name: test test
                         utcOffset: 1
                         statusText: On a vacation
                       - _id: hFDuCPam7sWziWFYa
