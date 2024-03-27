@@ -2376,7 +2376,7 @@ paths:
                       - messages: 2
                         t: d
                         usernames:
-                          - funke.olasupo
+                          - test.test
                           - rocket.cat
                       - messages: 1
                         t: d
