@@ -70,7 +70,7 @@ paths:
                   name: test-websocket2
                   members:
                     - uniqueusername
-                    - test.funke
+                    - test.test
                   readOnly: false
             examples:
               Example:
@@ -146,7 +146,7 @@ paths:
                       u:
                         _id: rbAXPnMktTFbNpwtJ
                         username: roxie
-                        name: Funke Olasupo
+                        name: test test
                       ts: '2023-09-25T23:18:18.161Z'
                       ro: false
                       default: false
@@ -332,8 +332,8 @@ paths:
                         ts: '2023-09-16T07:37:59.691Z'
                         u:
                           _id: rbAXPnMktTFbNpwtJ
-                          username: funke.olasupo
-                          name: Funke Olasupo
+                          username: test.test
+                          name: test test
                         _updatedAt: '2023-09-16T07:37:59.815Z'
                         urls: []
                         mentions: []
@@ -687,7 +687,7 @@ paths:
                         u:
                           _id: rbAXPnMktTFbNpwtJ
                           username: roxie
-                          name: Funke Olasupo
+                          name: test test
                         rid: siyr2oWQJBjQjhLwr
                         _updatedAt: '2023-09-16T09:43:42.627Z'
                         urls: []
@@ -697,33 +697,33 @@ paths:
                         t: user-unmuted
                         rid: siyr2oWQJBjQjhLwr
                         ts: '2023-09-10T16:42:13.991Z'
-                        msg: test.funke
+                        msg: test.test
                         u:
                           _id: rbAXPnMktTFbNpwtJ
                           username: roxie
-                          name: Funke Olasupo
+                          name: test test
                         groupable: false
                         _updatedAt: '2023-09-16T09:43:42.627Z'
                       - _id: 64fdf1b82c26843a68c1f7f7
                         t: user-muted
                         rid: siyr2oWQJBjQjhLwr
                         ts: '2023-09-10T16:41:28.715Z'
-                        msg: test.funke
+                        msg: test.test
                         u:
                           _id: rbAXPnMktTFbNpwtJ
                           username: roxie
-                          name: Funke Olasupo
+                          name: test test
                         groupable: false
                         _updatedAt: '2023-09-16T09:43:42.627Z'
                       - _id: 64fdec9b2c26843a68c1f7f3
                         t: subscription-role-removed
                         rid: siyr2oWQJBjQjhLwr
                         ts: '2023-09-10T16:19:39.379Z'
-                        msg: test.funke
+                        msg: test.test
                         u:
                           _id: rbAXPnMktTFbNpwtJ
                           username: roxie
-                          name: Funke Olasupo
+                          name: test test
                         groupable: false
                         role: owner
                         _updatedAt: '2023-09-16T09:43:42.627Z'
@@ -731,11 +731,11 @@ paths:
                         t: subscription-role-added
                         rid: siyr2oWQJBjQjhLwr
                         ts: '2023-09-10T08:29:32.793Z'
-                        msg: test.funke
+                        msg: test.test
                         u:
                           _id: rbAXPnMktTFbNpwtJ
                           username: roxie
-                          name: Funke Olasupo
+                          name: test test
                         groupable: false
                         role: owner
                         _updatedAt: '2023-09-16T09:43:42.627Z'
@@ -747,14 +747,14 @@ paths:
                         u:
                           _id: rbAXPnMktTFbNpwtJ
                           username: roxie
-                          name: Funke Olasupo
+                          name: test test
                         groupable: false
                         _updatedAt: '2023-09-16T09:43:42.627Z'
                       - _id: 64fd791c2c26843a68c1f7e6
                         t: au
                         rid: siyr2oWQJBjQjhLwr
                         ts: '2023-09-10T08:06:52.128Z'
-                        msg: test.funke
+                        msg: test.test
                         u:
                           _id: rbAXPnMktTFbNpwtJ
                           username: roxie
@@ -768,7 +768,7 @@ paths:
                         u:
                           _id: rbAXPnMktTFbNpwtJ
                           username: roxie
-                          name: Funke Olasupo
+                          name: test test
                         groupable: false
                         role: moderator
                         _updatedAt: '2023-09-16T09:43:42.627Z'
@@ -806,7 +806,7 @@ paths:
                         u:
                           _id: rbAXPnMktTFbNpwtJ
                           username: roxie
-                          name: Funke Olasupo
+                          name: test test
                         _updatedAt: '2023-09-16T09:43:42.627Z'
                         urls: []
                         mentions: []
@@ -818,7 +818,7 @@ paths:
                         u:
                           _id: rbAXPnMktTFbNpwtJ
                           username: roxie
-                          name: Funke Olasupo
+                          name: test test
                         _updatedAt: '2023-09-16T09:43:42.627Z'
                         urls: []
                         mentions: []
@@ -1254,7 +1254,7 @@ paths:
                         user:
                           _id: rbAXPnMktTFbNpwtJ
                           username: roxie
-                          name: Funke Olasupo
+                          name: test test
                       - _id: 64b589e6aa5ad4273bfc4db6
                         name: eicar.zip
                         size: 266
@@ -1275,7 +1275,7 @@ paths:
                         user:
                           _id: rbAXPnMktTFbNpwtJ
                           username: roxie
-                          name: Funke Olasupo
+                          name: test test
                     count: 2
                     offset: 0
                     total: 2
@@ -1438,7 +1438,7 @@ paths:
                         user:
                           _id: rbAXPnMktTFbNpwtJ
                           username: roxie
-                          name: Funke Olasupo
+                          name: test test
                       - _id: 64b589e6aa5ad4273bfc4db6
                         name: eicar.zip
                         size: 266
@@ -1459,7 +1459,7 @@ paths:
                         user:
                           _id: rbAXPnMktTFbNpwtJ
                           username: roxie
-                          name: Funke Olasupo
+                          name: test test
                     count: 2
                     offset: 0
                     total: 2
@@ -1654,8 +1654,8 @@ paths:
                         ts: '2023-09-16T07:37:59.691Z'
                         u:
                           _id: rbAXPnMktTFbNpwtJ
-                          username: funke.olasupo
-                          name: Funke Olasupo
+                          username: test.test
+                          name: test test
                         _updatedAt: '2023-09-16T07:37:59.815Z'
                         urls: []
                         mentions: []
@@ -1890,8 +1890,8 @@ paths:
                         ts: '2023-09-14T12:06:00.594Z'
                         u:
                           _id: rbAXPnMktTFbNpwtJ
-                          username: funke.olasupo
-                          name: Funke Olasupo
+                          username: test.test
+                          name: test test
                         rid: JKa7R9zu2DinBhBN9
                         _updatedAt: '2023-09-14T12:06:00.685Z'
                         urls: []
@@ -2089,8 +2089,8 @@ paths:
                         ts: '2023-09-16T07:37:59.691Z'
                         u:
                           _id: rbAXPnMktTFbNpwtJ
-                          username: funke.olasupo
-                          name: Funke Olasupo
+                          username: test.test
+                          name: test test
                         _updatedAt: '2023-09-16T07:37:59.815Z'
                         urls: []
                         mentions: []
@@ -2288,8 +2288,8 @@ paths:
                         ts: '2023-09-16T07:37:59.691Z'
                         u:
                           _id: rbAXPnMktTFbNpwtJ
-                          username: funke.olasupo
-                          name: Funke Olasupo
+                          username: test.test
+                          name: test test
                         _updatedAt: '2023-09-16T07:37:59.815Z'
                         urls: []
                         mentions: []
@@ -2611,8 +2611,8 @@ paths:
                           ts: '2023-09-14T12:06:00.594Z'
                           u:
                             _id: rbAXPnMktTFbNpwtJ
-                            username: funke.olasupo
-                            name: Funke Olasupo
+                            username: test.test
+                            name: test test
                           rid: JKa7R9zu2DinBhBN9
                           _updatedAt: '2023-09-14T12:06:00.685Z'
                           urls: []
@@ -2643,8 +2643,8 @@ paths:
                           ts: '2023-09-16T07:37:59.691Z'
                           u:
                             _id: rbAXPnMktTFbNpwtJ
-                            username: funke.olasupo
-                            name: Funke Olasupo
+                            username: test.test
+                            name: test test
                           _updatedAt: '2023-09-16T07:37:59.815Z'
                           urls: []
                           mentions: []
@@ -2687,8 +2687,8 @@ paths:
                           ts: '2023-09-14T14:29:25.911Z'
                           u:
                             _id: rbAXPnMktTFbNpwtJ
-                            username: funke.olasupo
-                            name: Funke Olasupo
+                            username: test.test
+                            name: test test
                           rid: siyr2oWQJBjQjhLwr
                           _updatedAt: '2023-09-14T14:29:25.980Z'
                           urls: []
@@ -2697,7 +2697,7 @@ paths:
                         lm: '2023-09-14T14:29:25.911Z'
                         muted: []
                         unmuted:
-                          - test.funke
+                          - test.test
                     offset: 0
                     count: 3
                     total: 3
@@ -2942,8 +2942,8 @@ paths:
                           ts: '2023-09-16T07:37:59.691Z'
                           u:
                             _id: rbAXPnMktTFbNpwtJ
-                            username: funke.olasupo
-                            name: Funke Olasupo
+                            username: test.test
+                            name: test test
                           _updatedAt: '2023-09-16T07:37:59.815Z'
                           urls: []
                           mentions: []
@@ -3108,15 +3108,15 @@ paths:
                         username: roxie
                         status: offline
                         _updatedAt: '2023-09-24T22:27:33.610Z'
-                        name: Funke Olasupo
+                        name: test test
                         nickname: baby girl
                       - _id: 5fRTXMt7DMJbpPJfh
-                        username: test.funke
+                        username: test.test
                         status: offline
                         _updatedAt: '2023-09-16T08:33:38.123Z'
-                        name: TestFunke
+                        name: Testtest
                         avatarETag: GFoEi6wv3uAxnzDcD
-                        nickname: funke.olasupo
+                        nickname: test.test
                     count: 2
                     offset: 0
                     total: 2
@@ -3388,7 +3388,7 @@ paths:
                         u:
                           _id: rbAXPnMktTFbNpwtJ
                           username: roxie
-                          name: Funke Olasupo
+                          name: test test
                         _updatedAt: '2023-09-27T04:36:47.698Z'
                         urls: []
                         mentions: []
@@ -3405,7 +3405,7 @@ paths:
                         u:
                           _id: rbAXPnMktTFbNpwtJ
                           username: roxie
-                          name: Funke Olasupo
+                          name: test test
                         _updatedAt: '2023-09-27T04:34:38.900Z'
                         urls: []
                         mentions: []
@@ -3422,7 +3422,7 @@ paths:
                         u:
                           _id: rbAXPnMktTFbNpwtJ
                           username: roxie
-                          name: Funke Olasupo
+                          name: test test
                         _updatedAt: '2023-09-27T04:36:38.258Z'
                         urls: []
                         mentions: []
@@ -3445,7 +3445,7 @@ paths:
                         u:
                           _id: rbAXPnMktTFbNpwtJ
                           username: roxie
-                          name: Funke Olasupo
+                          name: test test
                         _updatedAt: '2023-09-27T04:36:19.486Z'
                         urls: []
                         mentions: []
@@ -3574,7 +3574,7 @@ paths:
                       - _id: rocket.cat
                         username: rocket.cat
                       - _id: 6423ce62c29657e5b3ba2675
-                        username: 'funke.olasupo:matrix.org'
+                        username: 'test.test:matrix.org'
                       - _id: T3ereg8JaZmA5fsfn
                         username: zoom.bot
                     success: true
@@ -3982,8 +3982,8 @@ paths:
                         rid: WDuJLFkjwk6L7LdFC
                         u:
                           _id: 5fRTXMt7DMJbpPJfh
-                          username: test.funke
-                          name: TestFunke
+                          username: test.test
+                          name: Testtest
                         roles:
                           - leader
                     success: true
@@ -4235,8 +4235,8 @@ paths:
                         ts: '2023-09-16T07:37:59.691Z'
                         u:
                           _id: rbAXPnMktTFbNpwtJ
-                          username: funke.olasupo
-                          name: Funke Olasupo
+                          username: test.test
+                          name: test test
                         _updatedAt: '2023-09-16T07:37:59.815Z'
                         urls: []
                         mentions: []
@@ -4582,8 +4582,8 @@ paths:
                         ts: '2023-09-16T07:37:59.691Z'
                         u:
                           _id: rbAXPnMktTFbNpwtJ
-                          username: funke.olasupo
-                          name: Funke Olasupo
+                          username: test.test
+                          name: test test
                         _updatedAt: '2023-09-16T07:37:59.815Z'
                         urls: []
                         mentions: []
@@ -5078,13 +5078,13 @@ paths:
                         u:
                           _id: rbAXPnMktTFbNpwtJ
                           username: roxie
-                          name: Funke Olasupo
+                          name: test test
                         _updatedAt: '2023-09-27T20:32:59.171Z'
                         urls: []
                         mentions:
                           - _id: rbAXPnMktTFbNpwtJ
                             username: roxie
-                            name: Funke Olasupo
+                            name: test test
                             type: user
                         channels: []
                         md:
@@ -5800,7 +5800,7 @@ paths:
                       u:
                         _id: rbAXPnMktTFbNpwtJ
                         username: roxie
-                        name: Funke Olasupo
+                        name: test test
                       ts: '2023-09-27T04:30:37.236Z'
                       ro: false
                       default: false
@@ -5813,7 +5813,7 @@ paths:
                         u:
                           _id: rbAXPnMktTFbNpwtJ
                           username: roxie
-                          name: Funke Olasupo
+                          name: test test
                         _updatedAt: '2023-09-27T20:33:10.314Z'
                         urls: []
                         mentions:
@@ -5986,7 +5986,7 @@ paths:
                         u:
                           _id: rbAXPnMktTFbNpwtJ
                           username: roxie
-                          name: Funke Olasupo
+                          name: test test
                         ts: '2023-09-28T01:13:50.574Z'
                         ro: false
                         default: false
@@ -5999,7 +5999,7 @@ paths:
                           u:
                             _id: rbAXPnMktTFbNpwtJ
                             username: roxie
-                            name: Funke Olasupo
+                            name: test test
                           _updatedAt: '2023-09-28T01:14:04.233Z'
                           urls: []
                           mentions: []
@@ -6186,7 +6186,7 @@ paths:
                         t: d
                         usernames:
                           - roxie
-                          - test.funke
+                          - test.test
                         usersCount: 2
                         msgs: 5
                         ts: '2023-07-11T01:37:04.552Z'
@@ -6212,8 +6212,8 @@ paths:
                           ts: '2023-09-14T14:29:56.295Z'
                           u:
                             _id: rbAXPnMktTFbNpwtJ
-                            username: funke.olasupo
-                            name: Funke Olasupo
+                            username: test.test
+                            name: test test
                           rid: 5fRTXMt7DMJbpPJfhrbAXPnMktTFbNpwtJ
                           _updatedAt: '2023-09-14T14:29:56.340Z'
                           urls: []
@@ -6269,8 +6269,8 @@ paths:
                           groupable: false
                           u:
                             _id: rbAXPnMktTFbNpwtJ
-                            username: funke.olasupo
-                            name: Funke Olasupo
+                            username: test.test
+                            name: test test
                           _id: yGEPxxKAfJzt96M6a
                           _updatedAt: '2023-03-13T00:03:07.876Z'
                           urls: []
@@ -6299,7 +6299,7 @@ paths:
                             _id: J7oi3eBcRYFRnb8x3
                             username: instagram.bot
                             name: Instagram Direct
-                          msg: 'Any existing authentication between Rocket.Chat and Instagram has been revoked by @funke.olasupo. As a result, no new messages can be sent out nor will any be received. If this is a mistake, please run `/instagram authorize` command to reauthorize.'
+                          msg: 'Any existing authentication between Rocket.Chat and Instagram has been revoked by @test.test. As a result, no new messages can be sent out nor will any be received. If this is a mistake, please run `/instagram authorize` command to reauthorize.'
                           ts: '2023-05-30T12:01:42.438Z'
                           _updatedAt: '2023-05-30T12:01:42.612Z'
                           groupable: false
@@ -6324,7 +6324,7 @@ paths:
                                 - type: MENTION_USER
                                   value:
                                     type: PLAIN_TEXT
-                                    value: funke.olasupo.
+                                    value: test.test.
                                 - type: PLAIN_TEXT
                                   value: ' As a result, no new messages can be sent out nor will any be received. If this is a mistake, please run '
                                 - type: INLINE_CODE
@@ -6347,7 +6347,7 @@ paths:
                         u:
                           _id: rbAXPnMktTFbNpwtJ
                           username: roxie
-                          name: Funke Olasupo
+                          name: test test
                         ts: '2023-09-28T01:13:50.574Z'
                         ro: false
                         default: false
@@ -6360,7 +6360,7 @@ paths:
                           u:
                             _id: rbAXPnMktTFbNpwtJ
                             username: roxie
-                            name: Funke Olasupo
+                            name: test test
                           _updatedAt: '2023-09-28T01:14:04.233Z'
                           urls: []
                           mentions: []
@@ -7672,7 +7672,7 @@ paths:
                         createdAt: '2023-02-20T22:10:12.733Z'
                         createdBy:
                           _id: rbAXPnMktTFbNpwtJ
-                          username: funke.olasupo
+                          username: test.test
                         _updatedAt: '2023-02-20T22:10:12.843Z'
                         roomId: 6GFJ3tbmHiyHbahmC
                         rooms: 0
@@ -7774,7 +7774,7 @@ paths:
                         createdAt: '2023-02-20T22:10:12.733Z'
                         createdBy:
                           _id: rbAXPnMktTFbNpwtJ
-                          username: funke.olasupo
+                          username: test.test
                         _updatedAt: '2023-02-20T22:10:12.843Z'
                         roomId: 6GFJ3tbmHiyHbahmC
                         rooms: 0
@@ -7986,13 +7986,13 @@ paths:
           description: 'Search filter for the user''s name '
           schema:
             type: string
-            example: Funke Test
+            example: test Test
         - name: username
           in: query
           description: 'Search filter for the user''s username '
           schema:
             type: string
-            example: funke.test
+            example: test.test
         - name: status
           in: query
           description: Search filter for the user's status
@@ -8062,7 +8062,7 @@ paths:
                       - user:
                           _id: rbAXPnMktTFbNpwtJ
                           username: roxie
-                          name: Funke Olasupo
+                          name: test test
                           status: offline
                           settings:
                             preferences:
@@ -8072,18 +8072,18 @@ paths:
                           - owner
                         createdBy:
                           _id: rbAXPnMktTFbNpwtJ
-                          username: funke.olasupo
+                          username: test.test
                         createdAt: '2023-02-20T22:10:12.740Z'
                       - user:
                           _id: 5fRTXMt7DMJbpPJfh
-                          username: test.funke
-                          name: TestFunke
+                          username: test.test
+                          name: Testtest
                           status: offline
                           settings:
                             profile: {}
                         createdBy:
                           _id: rbAXPnMktTFbNpwtJ
-                          username: funke.olasupo
+                          username: test.test
                         createdAt: '2023-07-11T00:23:01.346Z'
                     total: 2
                     count: 2
@@ -8595,8 +8595,8 @@ paths:
                           ts: '2023-09-14T12:06:00.594Z'
                           u:
                             _id: rbAXPnMktTFbNpwtJ
-                            username: funke.olasupo
-                            name: Funke Olasupo
+                            username: test.test
+                            name: test test
                           rid: JKa7R9zu2DinBhBN9
                           _updatedAt: '2023-09-14T12:06:00.685Z'
                           urls: []
@@ -8789,8 +8789,8 @@ paths:
                         ts: '2023-09-14T12:06:00.594Z'
                         u:
                           _id: rbAXPnMktTFbNpwtJ
-                          username: funke.olasupo
-                          name: Funke Olasupo
+                          username: test.test
+                          name: test test
                         rid: JKa7R9zu2DinBhBN9
                         _updatedAt: '2023-09-14T12:06:00.685Z'
                         urls: []
@@ -8975,8 +8975,8 @@ paths:
                         ts: '2023-09-14T12:06:00.594Z'
                         u:
                           _id: rbAXPnMktTFbNpwtJ
-                          username: funke.olasupo
-                          name: Funke Olasupo
+                          username: test.test
+                          name: test test
                         rid: JKa7R9zu2DinBhBN9
                         _updatedAt: '2023-09-14T12:06:00.685Z'
                         urls: []
@@ -9126,8 +9126,8 @@ paths:
                         ts: '2023-09-14T12:06:00.594Z'
                         u:
                           _id: rbAXPnMktTFbNpwtJ
-                          username: funke.olasupo
-                          name: Funke Olasupo
+                          username: test.test
+                          name: test test
                         rid: JKa7R9zu2DinBhBN9
                         _updatedAt: '2023-09-14T12:06:00.685Z'
                         urls: []
@@ -9310,8 +9310,8 @@ paths:
                           ts: '2023-09-14T12:06:00.594Z'
                           u:
                             _id: rbAXPnMktTFbNpwtJ
-                            username: funke.olasupo
-                            name: Funke Olasupo
+                            username: test.test
+                            name: test test
                           rid: JKa7R9zu2DinBhBN9
                           _updatedAt: '2023-09-14T12:06:00.685Z'
                           urls: []
@@ -9502,8 +9502,8 @@ paths:
                           ts: '2023-09-14T12:06:00.594Z'
                           u:
                             _id: rbAXPnMktTFbNpwtJ
-                            username: funke.olasupo
-                            name: Funke Olasupo
+                            username: test.test
+                            name: test test
                           rid: JKa7R9zu2DinBhBN9
                           _updatedAt: '2023-09-14T12:06:00.685Z'
                           urls: []
