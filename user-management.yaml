@@ -1538,14 +1538,14 @@ paths:
               x-examples:
                 Example 1:
                   data:
-                    email: funke@test.com
+                    email: test@test.com
                     newPassword: testbb
                     currentPassword: >-
                       aa856615052ee58e557a2945d53bc90a228915e7d7687ea250f3b4b1581d6e53
                     nickname: baby girl
                     bio: Auspicious baby
                     username: roxie
-                    name: Funke Olasupo
+                    name: test test
                     statusType: offline
                     statusText: On a vacation
                   customFields: {}
@@ -1813,7 +1813,7 @@ paths:
                         email:
                           verificationTokens:
                             - token: lHq_4L8Orgxu2p5NhfVb0V9kA7kO1VaBXA5GmaJiuX3
-                              address: funke@test.com
+                              address: test@test.com
                               when: '2023-05-23T18:47:07.142Z'
                         totp:
                           enabled: false
@@ -1826,7 +1826,7 @@ paths:
                             $2b$10$AU9Ncfd8bO5TpE.5iLMjyujdd6RVJaoeKckVqo3MMO9Ngc3oyMAs2
                       username: roxie
                       emails:
-                        - address: funke@test.com
+                        - address: test@test.com
                           verified: true
                       type: user
                       status: offline
@@ -1842,7 +1842,7 @@ paths:
                         - admin
                         - livechat-agent
                         - livechat-manager
-                      name: Funke Olasupo
+                      name: test test
                       settings:
                         preferences:
                           themeAppearence: light
