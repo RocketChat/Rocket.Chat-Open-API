@@ -2193,8 +2193,8 @@ paths:
                         message: hi
                         msgId: tDNLALSFk2LET2JZH
                         ts: '2023-08-30T09:38:38.792Z'
-                        username: funke.olasupo
-                        name: Funke Olasupo
+                        username: test.test
+                        name: test test
                         userId: rbAXPnMktTFbNpwtJ
                         isUserDeleted: false
                       - rooms:
@@ -2204,8 +2204,8 @@ paths:
                         message: himm
                         msgId: xY8cN7yuPQfBgJ9xz
                         ts: '2023-08-30T09:33:15.621Z'
-                        username: test.funke
-                        name: TestFunke
+                        username: test.test
+                        name: Testtest
                         userId: 5fRTXMt7DMJbpPJfh
                         isUserDeleted: false
                     count: 2
@@ -2347,8 +2347,8 @@ paths:
                   value:
                     user:
                       _id: 5fRTXMt7DMJbpPJfh
-                      username: test.funke
-                      name: TestFunke
+                      username: test.test
+                      name: Testtest
                     messages:
                       - _id: 64ef0f992c26843a68c1f785
                         message:
@@ -2358,8 +2358,8 @@ paths:
                           ts: '2023-08-30T09:44:30.805Z'
                           u:
                             _id: 5fRTXMt7DMJbpPJfh
-                            username: test.funke
-                            name: TestFunke
+                            username: test.test
+                            name: Testtest
                           _updatedAt: '2023-08-30T09:44:30.968Z'
                           urls: []
                           mentions: []
@@ -2381,8 +2381,8 @@ paths:
                           ts: '2023-07-11T01:37:07.951Z'
                           u:
                             _id: 5fRTXMt7DMJbpPJfh
-                            username: test.funke
-                            name: TestFunke
+                            username: test.test
+                            name: Testtest
                           _updatedAt: '2023-07-11T01:37:08.024Z'
                           urls: []
                           mentions: []
@@ -2484,8 +2484,8 @@ paths:
                           test report
                         reportedBy:
                           _id: rbAXPnMktTFbNpwtJ
-                          username: funke.olasupo
-                          name: Funke Olasupo
+                          username: test.test
+                          name: test test
                           createdAt: '2023-02-20T13:42:07.119Z'
                         room:
                           _id: 5fRTXMt7DMJbpPJfhrbAXPnMktTFbNpwtJ
@@ -2834,8 +2834,8 @@ paths:
                         ip: 172.20.0.2
                         loginAt: '2023-05-24T00:25:52.246Z'
                         _user:
-                          username: funke.olasupo
-                          name: Funke Olasupo
+                          username: test.test
+                          name: test test
                         _id: BdSrCZXNKCbRi8Eqn
                       - sessionId: tTouumJMrHMjnedWf
                         userId: GonjPyg3gB3Z9ur9s
@@ -2851,8 +2851,8 @@ paths:
                         ip: 172.20.0.2
                         loginAt: '2023-05-23T19:14:29.865Z'
                         _user:
-                          name: Funke
-                          username: funke.test
+                          name: test
+                          username: test.test
                         _id: tTouumJMrHMjnedWf
                       - sessionId: 7ykYEK3KWnk4EeA7s
                         userId: 2tTEqR7ZNMJ4HGGNa
