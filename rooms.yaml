@@ -65,13 +65,6 @@ paths:
                     For more information, see [Channels](https://docs.rocket.chat/use-rocket.chat/user-guides/rooms/channels#channel-privacy-and-encryption).
               required:
                 - name
-              x-examples:
-                Example 1:
-                  name: test-websocket2
-                  members:
-                    - uniqueusername
-                    - test.test
-                  readOnly: false
             examples:
               Example:
                 value:
@@ -132,26 +125,6 @@ paths:
                         type: boolean
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    channel:
-                      _id: 6512153aa2f73c7460e18c5e
-                      fname: test-websocket2
-                      _updatedAt: '2023-09-25T23:18:18.334Z'
-                      customFields: {}
-                      name: test-websocket2
-                      t: c
-                      msgs: 0
-                      usersCount: 3
-                      u:
-                        _id: rbAXPnMktTFbNpwtJ
-                        username: roxie
-                        name: test test
-                      ts: '2023-09-25T23:18:18.161Z'
-                      ro: false
-                      default: false
-                      sysMes: true
-                    success: true
               examples:
                 Example:
                   value:
@@ -167,6 +140,8 @@ paths:
                         username: example
                       ts: '2016-05-30T13:42:25.304Z'
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/channels.addAll:
     post:
       tags:
@@ -198,8 +173,9 @@ paths:
                   description: Add only active users. It is `false` by default.
               required:
                 - roomId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: WDuJLFkjwk6L7LdFC
                   activeUsersOnly: true
       responses:
@@ -304,47 +280,6 @@ paths:
                         type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    channel:
-                      _id: WDuJLFkjwk6L7LdFC
-                      fname: dlp
-                      customFields: {}
-                      topic: ''
-                      broadcast: false
-                      encrypted: false
-                      name: dlp
-                      t: c
-                      msgs: 57
-                      usersCount: 46
-                      u:
-                        _id: rbAXPnMktTFbNpwtJ
-                        username: roxie
-                      ts: '2023-04-05T22:34:38.936Z'
-                      ro: false
-                      default: false
-                      sysMes: true
-                      _updatedAt: '2023-09-25T13:53:02.750Z'
-                      lastMessage:
-                        _id: mBfC3sbNhfwcL4AQu
-                        rid: WDuJLFkjwk6L7LdFC
-                        msg: It should be good
-                        ts: '2023-09-16T07:37:59.691Z'
-                        u:
-                          _id: rbAXPnMktTFbNpwtJ
-                          username: test.test
-                          name: test test
-                        _updatedAt: '2023-09-16T07:37:59.815Z'
-                        urls: []
-                        mentions: []
-                        channels: []
-                        md:
-                          - type: PARAGRAPH
-                            value:
-                              - type: PLAIN_TEXT
-                                value: It should be good
-                      lm: '2023-09-16T07:37:59.691Z'
-                    success: true
               examples:
                 Example:
                   value:
@@ -361,6 +296,8 @@ paths:
                         username: example
                       ts: '2016-05-30T13:42:25.304Z'
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/channels.addLeader:
     post:
       tags:
@@ -393,8 +330,9 @@ paths:
               required:
                 - roomId
                 - userId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: WDuJLFkjwk6L7LdFC
                   userId: b66oZ8i9pkeSko33v
       responses:
@@ -413,13 +351,8 @@ paths:
                     type: string
                   errorType:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'User is already a leader [error-user-already-leader]'
-                    errorType: error-user-already-leader
               examples:
-                'User is already a leader ':
+                Example 1:
                   value:
                     success: false
                     error: 'User is already a leader [error-user-already-leader]'
@@ -459,8 +392,9 @@ paths:
               required:
                 - roomId
                 - userId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: WDuJLFkjwk6L7LdFC
                   userId: b66oZ8i9pkeSko33v
       responses:
@@ -479,13 +413,8 @@ paths:
                     type: string
                   errorType:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'User is already a moderator [error-user-already-moderator]'
-                    errorType: error-user-already-moderator
               examples:
-                User is already a moderator:
+                Example 1:
                   value:
                     success: false
                     error: 'User is already a moderator [error-user-already-moderator]'
@@ -524,8 +453,9 @@ paths:
               required:
                 - roomId
                 - userId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: WDuJLFkjwk6L7LdFC
                   userId: b66oZ8i9pkeSko33v
       responses:
@@ -549,15 +479,8 @@ paths:
                     properties:
                       method:
                         type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'User is already an owner [error-user-already-owner]'
-                    errorType: error-user-already-owner
-                    details:
-                      method: addRoomOwner
               examples:
-                User is already an owner:
+                Example 1:
                   value:
                     success: false
                     error: 'User is already an owner [error-user-already-owner]'
@@ -671,167 +594,6 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    messages:
-                      - _id: 899KDY7xBNsCnLjyE
-                        t: videoconf
-                        msg: ''
-                        groupable: false
-                        blocks:
-                          - type: video_conf
-                            blockId: 650318c5a2f73c7460df7cf8
-                            callId: 650318c5a2f73c7460df7cf8
-                            appId: videoconf-core
-                        ts: '2023-09-14T14:29:25.911Z'
-                        u:
-                          _id: rbAXPnMktTFbNpwtJ
-                          username: roxie
-                          name: test test
-                        rid: siyr2oWQJBjQjhLwr
-                        _updatedAt: '2023-09-16T09:43:42.627Z'
-                        urls: []
-                        mentions: []
-                        channels: []
-                      - _id: 64fdf1e52c26843a68c1f7f8
-                        t: user-unmuted
-                        rid: siyr2oWQJBjQjhLwr
-                        ts: '2023-09-10T16:42:13.991Z'
-                        msg: test.test
-                        u:
-                          _id: rbAXPnMktTFbNpwtJ
-                          username: roxie
-                          name: test test
-                        groupable: false
-                        _updatedAt: '2023-09-16T09:43:42.627Z'
-                      - _id: 64fdf1b82c26843a68c1f7f7
-                        t: user-muted
-                        rid: siyr2oWQJBjQjhLwr
-                        ts: '2023-09-10T16:41:28.715Z'
-                        msg: test.test
-                        u:
-                          _id: rbAXPnMktTFbNpwtJ
-                          username: roxie
-                          name: test test
-                        groupable: false
-                        _updatedAt: '2023-09-16T09:43:42.627Z'
-                      - _id: 64fdec9b2c26843a68c1f7f3
-                        t: subscription-role-removed
-                        rid: siyr2oWQJBjQjhLwr
-                        ts: '2023-09-10T16:19:39.379Z'
-                        msg: test.test
-                        u:
-                          _id: rbAXPnMktTFbNpwtJ
-                          username: roxie
-                          name: test test
-                        groupable: false
-                        role: owner
-                        _updatedAt: '2023-09-16T09:43:42.627Z'
-                      - _id: 64fd7e6c2c26843a68c1f7eb
-                        t: subscription-role-added
-                        rid: siyr2oWQJBjQjhLwr
-                        ts: '2023-09-10T08:29:32.793Z'
-                        msg: test.test
-                        u:
-                          _id: rbAXPnMktTFbNpwtJ
-                          username: roxie
-                          name: test test
-                        groupable: false
-                        role: owner
-                        _updatedAt: '2023-09-16T09:43:42.627Z'
-                      - _id: 64fd7c2b2c26843a68c1f7e7
-                        t: room_changed_privacy
-                        rid: siyr2oWQJBjQjhLwr
-                        ts: '2023-09-10T08:19:55.595Z'
-                        msg: public
-                        u:
-                          _id: rbAXPnMktTFbNpwtJ
-                          username: roxie
-                          name: test test
-                        groupable: false
-                        _updatedAt: '2023-09-16T09:43:42.627Z'
-                      - _id: 64fd791c2c26843a68c1f7e6
-                        t: au
-                        rid: siyr2oWQJBjQjhLwr
-                        ts: '2023-09-10T08:06:52.128Z'
-                        msg: test.test
-                        u:
-                          _id: rbAXPnMktTFbNpwtJ
-                          username: roxie
-                        groupable: false
-                        _updatedAt: '2023-09-16T09:43:42.627Z'
-                      - _id: 64b73712aa5ad4273bfc5d79
-                        t: subscription-role-added
-                        rid: siyr2oWQJBjQjhLwr
-                        ts: '2023-07-19T01:06:26.062Z'
-                        msg: rasa_test
-                        u:
-                          _id: rbAXPnMktTFbNpwtJ
-                          username: roxie
-                          name: test test
-                        groupable: false
-                        role: moderator
-                        _updatedAt: '2023-09-16T09:43:42.627Z'
-                      - _id: 64b736faaa5ad4273bfc5d78
-                        t: au
-                        rid: siyr2oWQJBjQjhLwr
-                        ts: '2023-07-19T01:06:02.448Z'
-                        msg: rasa_test
-                        u:
-                          _id: rbAXPnMktTFbNpwtJ
-                          username: roxie
-                        groupable: false
-                        _updatedAt: '2023-09-16T09:43:42.627Z'
-                      - _id: haggP793FFy8jTv2f
-                        rid: siyr2oWQJBjQjhLwr
-                        ts: '2023-07-17T18:35:18.246Z'
-                        file:
-                          _id: 64b589e6aa5ad4273bfc4db6
-                          name: eicar.zip
-                          type: application/x-zip-compressed
-                        files:
-                          - _id: 64b589e6aa5ad4273bfc4db6
-                            name: eicar.zip
-                            type: application/x-zip-compressed
-                        attachments:
-                          - ts: '1970-01-01T00:00:00.000Z'
-                            title: eicar.zip
-                            title_link: /file-upload/64b589e6aa5ad4273bfc4db6/eicar.zip
-                            title_link_download: true
-                            type: file
-                            format: ZIP
-                            size: 266
-                        msg: ''
-                        groupable: false
-                        u:
-                          _id: rbAXPnMktTFbNpwtJ
-                          username: roxie
-                          name: test test
-                        _updatedAt: '2023-09-16T09:43:42.627Z'
-                        urls: []
-                        mentions: []
-                        channels: []
-                      - _id: KBWGiEjrt7jq3HG9A
-                        rid: siyr2oWQJBjQjhLwr
-                        msg: jfjhjs
-                        ts: '2023-02-20T22:00:46.997Z'
-                        u:
-                          _id: rbAXPnMktTFbNpwtJ
-                          username: roxie
-                          name: test test
-                        _updatedAt: '2023-09-16T09:43:42.627Z'
-                        urls: []
-                        mentions: []
-                        channels: []
-                        md:
-                          - type: PARAGRAPH
-                            value:
-                              - type: PLAIN_TEXT
-                                value: jfjhjs
-                    count: 11
-                    offset: 0
-                    total: 11
-                    success: true
               examples:
                 Example:
                   value:
@@ -854,7 +616,7 @@ paths:
                         reactions:
                           ':grin:':
                             usernames:
-                              - marcos.defendi
+                              - marco.zoo
                         mentions: []
                         channels: []
                         starred:
@@ -944,8 +706,9 @@ paths:
                   description: The channel ID that you want to archive.
               required:
                 - roomId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: ByehQjC44FwMeiLbX
       responses:
         '200':
@@ -963,13 +726,8 @@ paths:
                     type: string
                   errorType:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'The channel, add-room-websocket, is archived [error-room-archived]'
-                    errorType: error-room-archived
               examples:
-                Room Archived:
+                Example 1:
                   value:
                     success: false
                     error: 'The channel, add-room-websocket, is archived [error-room-archived]'
@@ -1002,8 +760,9 @@ paths:
                   description: The channel ID that you want to close from your list.
               required:
                 - roomId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: ByehQjC44FwMeiLbX
       responses:
         '200':
@@ -1019,12 +778,8 @@ paths:
                     type: boolean
                   error:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'The channel, dlp, is already closed to the sender'
               examples:
-                Channel is already closed:
+                Example 1:
                   value:
                     success: false
                     error: 'The channel, dlp, is already closed to the sender'
@@ -1059,14 +814,15 @@ paths:
         '200':
           description: |-
             OK
+            
             **Note** 
-            - joined - boolean flag that shows that user has joined the room or not
-            - members - count of current room members
-            - unreads - count of unread messages for specified user (calling user or provided userId)
-            - unreadsFrom - start date-time of unread interval for specified user
-            - msgs - count of messages in the room
-            - latest - end date-time of unread interval for specified user (or date-time of last posted message)
-            - userMentions - count of user mentions in messages"
+            - `joined` boolean flag whether the user has joined the room or not.
+            - `members` is the count of current room members.
+            - `unreads` is the count of unread messages for the specified user (for the calling user or the provided user ID).
+            - `unreadsFrom` is the start date-time of unread interval for the specified user.
+            - `msgs` is the count of messages in the room.
+            - `latest` is the end date-time of unread interval for the specified user (or date-time of last posted message).
+            - `userMentions` is the count of user mentions in messages.
           content:
             application/json:
               schema:
@@ -1088,8 +844,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     joined: true
                     members: 23
                     unreads: 2
@@ -1120,9 +877,16 @@ paths:
         content:
           application/json:
             schema:
-              oneOf:
-                - $ref: '#/components/schemas/roomId'
-                - $ref: '#/components/schemas/roomName'
+              type: object
+              properties:
+                roomId:
+                  type: string
+                  example: ByehQjC44FwMeiLbX
+                  description: Enter the room ID. This parameter is required if no `roomName` is provided.
+                roomName:
+                  type: string
+                  example: general
+                  description: Enter the room name. This parameter is required if no `roomId` is provided.
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
@@ -1226,8 +990,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     files:
                       - _id: 651227bea2f73c7460e18c63
                         name: Screenshot (317).png
@@ -1307,31 +1072,31 @@ paths:
           description: The end of time range of messages to retrieve. The default value is the current date and time.
           schema:
             type: string
-            example: '2016-09-30T13:42:25.304Z'
+          example: '2016-09-30T13:42:25.304Z'
         - name: oldest
           in: query
           description: The start of the time range of messages to retrieve
           schema:
             type: string
-            example: '2016-05-30T13:42:25.304Z'
+          example: '2016-05-30T13:42:25.304Z'
         - name: inclusive
           in: query
           description: Whether messages which land on the latest and oldest dates should be included. The default value is false.
           schema:
             type: boolean
-            example: true
+          example: true
         - name: showThreadMessages
           in: query
           description: 'Whether thread messages should be included in the response'
           schema:
             type: boolean 
-            example: true
+          example: true
         - name: unreads
           in: query
           description: Whether the number of unread messages should be included. The default value is false.
           schema:
             type: boolean
-            example: false
+          example: false
       responses:
         '200':
           description: OK
@@ -1408,60 +1173,6 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    files:
-                      - _id: 651227bea2f73c7460e18c63
-                        name: Screenshot (317).png
-                        size: 288727
-                        type: image/png
-                        rid: siyr2oWQJBjQjhLwr
-                        userId: rbAXPnMktTFbNpwtJ
-                        store: 'GridFS:Uploads'
-                        _updatedAt: '2023-09-26T00:37:19.598Z'
-                        identify:
-                          format: png
-                          size:
-                            width: 1920
-                            height: 1080
-                        complete: true
-                        etag: 2Q2D8hSxCdhQLzcpx
-                        path: '/ufs/GridFS:Uploads/651227bea2f73c7460e18c63/Screenshot%20(317).png'
-                        progress: 1
-                        token: da2aCAf88a
-                        uploadedAt: '2023-09-26T00:37:18.168Z'
-                        uploading: false
-                        url: 'http://localhost:3000/ufs/GridFS:Uploads/651227bea2f73c7460e18c63/Screenshot%20(317).png'
-                        typeGroup: image
-                        user:
-                          _id: rbAXPnMktTFbNpwtJ
-                          username: roxie
-                          name: test test
-                      - _id: 64b589e6aa5ad4273bfc4db6
-                        name: eicar.zip
-                        size: 266
-                        type: application/x-zip-compressed
-                        rid: siyr2oWQJBjQjhLwr
-                        userId: rbAXPnMktTFbNpwtJ
-                        store: 'GridFS:Uploads'
-                        _updatedAt: '2023-07-17T18:35:18.242Z'
-                        complete: true
-                        etag: JYaAzzFQSnxYQ7rWW
-                        path: '/ufs/GridFS:Uploads/64b589e6aa5ad4273bfc4db6/eicar.zip'
-                        progress: 1
-                        token: 7a1A38Cb5a
-                        uploadedAt: '2023-07-17T18:35:18.216Z'
-                        uploading: false
-                        url: 'http://localhost:3000/ufs/GridFS:Uploads/64b589e6aa5ad4273bfc4db6/eicar.zip'
-                        typeGroup: application
-                        user:
-                          _id: rbAXPnMktTFbNpwtJ
-                          username: roxie
-                          name: test test
-                    count: 2
-                    offset: 0
-                    total: 2
-                    success: true
               examples:
                 Example:
                   value:
@@ -1624,47 +1335,6 @@ paths:
                         type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    channel:
-                      _id: WDuJLFkjwk6L7LdFC
-                      fname: dlp
-                      customFields: {}
-                      topic: ''
-                      broadcast: false
-                      encrypted: false
-                      name: dlp
-                      t: c
-                      msgs: 13
-                      usersCount: 2
-                      u:
-                        _id: rbAXPnMktTFbNpwtJ
-                        username: roxie
-                      ts: '2023-04-05T22:34:38.936Z'
-                      ro: false
-                      default: false
-                      sysMes: true
-                      _updatedAt: '2023-09-16T09:43:42.870Z'
-                      lastMessage:
-                        _id: mBfC3sbNhfwcL4AQu
-                        rid: WDuJLFkjwk6L7LdFC
-                        msg: It should be good
-                        ts: '2023-09-16T07:37:59.691Z'
-                        u:
-                          _id: rbAXPnMktTFbNpwtJ
-                          username: test.test
-                          name: test test
-                        _updatedAt: '2023-09-16T07:37:59.815Z'
-                        urls: []
-                        mentions: []
-                        channels: []
-                        md:
-                          - type: PARAGRAPH
-                            value:
-                              - type: PLAIN_TEXT
-                                value: It should be good
-                      lm: '2023-09-16T07:37:59.691Z'
-                    success: true
               examples:
                 Example:
                   value:
@@ -1852,52 +1522,8 @@ paths:
                               type: object
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    channel:
-                      _id: JKa7R9zu2DinBhBN9
-                      fname: Livestream
-                      customFields: {}
-                      description: ''
-                      broadcast: false
-                      encrypted: false
-                      federated: false
-                      name: Livestream
-                      t: c
-                      msgs: 15
-                      usersCount: 3
-                      u:
-                        _id: rbAXPnMktTFbNpwtJ
-                        username: roxie
-                      ts: '2023-02-22T17:15:26.989Z'
-                      ro: false
-                      default: false
-                      sysMes: true
-                      _updatedAt: '2023-09-26T01:05:39.641Z'
-                      lm: '2023-09-14T12:06:00.594Z'
-                      lastMessage:
-                        _id: rtf5JoPLQup3X7Aof
-                        t: videoconf
-                        msg: ''
-                        groupable: false
-                        blocks:
-                          - type: video_conf
-                            blockId: 6502f728a2f73c7460df6f71
-                            callId: 6502f728a2f73c7460df6f71
-                            appId: videoconf-core
-                        ts: '2023-09-14T12:06:00.594Z'
-                        u:
-                          _id: rbAXPnMktTFbNpwtJ
-                          username: test.test
-                          name: test test
-                        rid: JKa7R9zu2DinBhBN9
-                        _updatedAt: '2023-09-14T12:06:00.685Z'
-                        urls: []
-                        mentions: []
-                        channels: []
-                    success: true
               examples:
-                Add Bulk Users:
+                Example 1:
                   value:
                     channel:
                       _id: ByehQjC44FwMeiLbX
@@ -1911,7 +1537,7 @@ paths:
                       _updatedAt: '2016-12-09T12:50:51.575Z'
                       lm: '2016-12-09T12:50:51.555Z'
                     success: true
-                Add a User:
+                Example 2:
                   value:
                     channel:
                       _id: ByehQjC44FwMeiLbX
@@ -1953,8 +1579,9 @@ paths:
                   description: The join code of the room. The join code isn't needed if the user has the `join-without-join-code` permission.
               required:
                 - roomId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: ByehQjC44FwMeiLbX
                   joinCode: '1234'
       responses:
@@ -2059,47 +1686,6 @@ paths:
                         type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    channel:
-                      _id: WDuJLFkjwk6L7LdFC
-                      fname: dlp
-                      customFields: {}
-                      topic: ''
-                      broadcast: false
-                      encrypted: false
-                      name: dlp
-                      t: c
-                      msgs: 64
-                      usersCount: 46
-                      u:
-                        _id: rbAXPnMktTFbNpwtJ
-                        username: roxie
-                      ts: '2023-04-05T22:34:38.936Z'
-                      ro: false
-                      default: false
-                      sysMes: true
-                      _updatedAt: '2023-09-26T23:00:37.654Z'
-                      lastMessage:
-                        _id: mBfC3sbNhfwcL4AQu
-                        rid: WDuJLFkjwk6L7LdFC
-                        msg: It should be good
-                        ts: '2023-09-16T07:37:59.691Z'
-                        u:
-                          _id: rbAXPnMktTFbNpwtJ
-                          username: test.test
-                          name: test test
-                        _updatedAt: '2023-09-16T07:37:59.815Z'
-                        urls: []
-                        mentions: []
-                        channels: []
-                        md:
-                          - type: PARAGRAPH
-                            value:
-                              - type: PLAIN_TEXT
-                                value: It should be good
-                      lm: '2023-09-16T07:37:59.691Z'
-                    success: true
               examples:
                 Example:
                   value:
@@ -2152,8 +1738,9 @@ paths:
               required:
                 - roomId
                 - userId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: WDuJLFkjwk6L7LdFC
                   userId: rYhzFRd2QZjNwAAXX
       responses:
@@ -2336,7 +1923,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/roomId'
+              type: object
+              properties:
+                roomId:
+                  type: string
+                  example: ByehQjC44FwMeiLbX
+                  description: The channel ID that you want to leave.
       responses:
         '200':
           description: OK
@@ -2377,23 +1969,6 @@ paths:
                         type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    channel:
-                      _id: ByehQjC44FwMeiLbX
-                      name: invite-me
-                      t: c
-                      usernames:
-                        - testing2
-                      msgs: 0
-                      u:
-                        _id: aobEdbYhXfu5hkeqG
-                        username: testing1
-                      ts: '2016-12-09T15:08:58.042Z'
-                      ro: false
-                      sysMes: true
-                      _updatedAt: '2016-12-09T15:22:40.656Z'
-                    success: true
               examples:
                 Example:
                   value:
@@ -2573,133 +2148,6 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    channels:
-                      - _id: JKa7R9zu2DinBhBN9
-                        fname: Livestream
-                        customFields: {}
-                        description: ''
-                        broadcast: false
-                        encrypted: false
-                        federated: false
-                        name: Livestream
-                        t: c
-                        msgs: 13
-                        usersCount: 1
-                        u:
-                          _id: rbAXPnMktTFbNpwtJ
-                          username: roxie
-                        ts: '2023-02-22T17:15:26.989Z'
-                        ro: false
-                        default: false
-                        sysMes: true
-                        _updatedAt: '2023-09-16T09:43:42.870Z'
-                        lm: '2023-09-14T12:06:00.594Z'
-                        lastMessage:
-                          _id: rtf5JoPLQup3X7Aof
-                          t: videoconf
-                          msg: ''
-                          groupable: false
-                          blocks:
-                            - type: video_conf
-                              blockId: 6502f728a2f73c7460df6f71
-                              callId: 6502f728a2f73c7460df6f71
-                              appId: videoconf-core
-                          ts: '2023-09-14T12:06:00.594Z'
-                          u:
-                            _id: rbAXPnMktTFbNpwtJ
-                            username: test.test
-                            name: test test
-                          rid: JKa7R9zu2DinBhBN9
-                          _updatedAt: '2023-09-14T12:06:00.685Z'
-                          urls: []
-                          mentions: []
-                          channels: []
-                      - _id: WDuJLFkjwk6L7LdFC
-                        fname: dlp
-                        customFields: {}
-                        topic: ''
-                        broadcast: false
-                        encrypted: false
-                        name: dlp
-                        t: c
-                        msgs: 13
-                        usersCount: 2
-                        u:
-                          _id: rbAXPnMktTFbNpwtJ
-                          username: roxie
-                        ts: '2023-04-05T22:34:38.936Z'
-                        ro: false
-                        default: false
-                        sysMes: true
-                        _updatedAt: '2023-09-16T09:43:42.870Z'
-                        lastMessage:
-                          _id: mBfC3sbNhfwcL4AQu
-                          rid: WDuJLFkjwk6L7LdFC
-                          msg: It should be good
-                          ts: '2023-09-16T07:37:59.691Z'
-                          u:
-                            _id: rbAXPnMktTFbNpwtJ
-                            username: test.test
-                            name: test test
-                          _updatedAt: '2023-09-16T07:37:59.815Z'
-                          urls: []
-                          mentions: []
-                          channels: []
-                          md:
-                            - type: PARAGRAPH
-                              value:
-                                - type: PLAIN_TEXT
-                                  value: It should be good
-                        lm: '2023-09-16T07:37:59.691Z'
-                      - _id: siyr2oWQJBjQjhLwr
-                        fname: try
-                        customFields: {}
-                        description: ''
-                        broadcast: false
-                        encrypted: false
-                        federated: false
-                        name: try
-                        t: c
-                        msgs: 11
-                        usersCount: 3
-                        u:
-                          _id: rbAXPnMktTFbNpwtJ
-                          username: roxie
-                        ts: '2023-02-20T22:00:39.862Z'
-                        ro: false
-                        default: false
-                        sysMes: true
-                        _updatedAt: '2023-09-16T09:43:42.870Z'
-                        lastMessage:
-                          _id: 899KDY7xBNsCnLjyE
-                          t: videoconf
-                          msg: ''
-                          groupable: false
-                          blocks:
-                            - type: video_conf
-                              blockId: 650318c5a2f73c7460df7cf8
-                              callId: 650318c5a2f73c7460df7cf8
-                              appId: videoconf-core
-                          ts: '2023-09-14T14:29:25.911Z'
-                          u:
-                            _id: rbAXPnMktTFbNpwtJ
-                            username: test.test
-                            name: test test
-                          rid: siyr2oWQJBjQjhLwr
-                          _updatedAt: '2023-09-14T14:29:25.980Z'
-                          urls: []
-                          mentions: []
-                          channels: []
-                        lm: '2023-09-14T14:29:25.911Z'
-                        muted: []
-                        unmuted:
-                          - test.test
-                    offset: 0
-                    count: 3
-                    total: 3
-                    success: true
               examples:
                 Example:
                   value:
@@ -2894,141 +2342,47 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     channels:
-                      - _id: RpvxbYiHquzXpXKmc
-                        fname: created-by-guest
+                      - _id: GENERAL
+                        ts: '2024-02-14T14:34:49.365Z'
+                        t: c
+                        name: general
+                        usernames: []
+                        msgs: 6
+                        usersCount: 6
+                        _updatedAt: '2024-03-26T17:40:18.321Z'
+                        u:
+                          _id: rocket.cat
+                          username: rocket.cat
+                          name: Rocket.Cat
+                        default: true
+                      - _id: 65fd8a6bf581e473b56471ba
+                        fname: test-channel
+                        _updatedAt: '2024-03-22T13:40:59.620Z'
                         customFields: {}
                         topic: ''
                         broadcast: false
                         encrypted: false
-                        name: created-by-guest
+                        name: test-channel
                         t: c
                         msgs: 0
-                        usersCount: 2
-                        u:
-                          _id: uZ5JvvioeHK8Coyqe
-                          username: user-0
-                        ts: '2023-05-11T17:30:36.615Z'
-                        ro: false
-                        default: false
-                        sysMes: true
-                        _updatedAt: '2023-05-11T17:30:36.689Z'
-                      - _id: WDuJLFkjwk6L7LdFC
-                        fname: dlp
-                        customFields: {}
-                        topic: ''
-                        broadcast: false
-                        encrypted: false
-                        name: dlp
-                        t: c
-                        msgs: 13
-                        usersCount: 2
-                        u:
-                          _id: rbAXPnMktTFbNpwtJ
-                          username: roxie
-                        ts: '2023-04-05T22:34:38.936Z'
-                        ro: false
-                        default: false
-                        sysMes: true
-                        _updatedAt: '2023-09-16T09:43:42.870Z'
-                        lastMessage:
-                          _id: mBfC3sbNhfwcL4AQu
-                          rid: WDuJLFkjwk6L7LdFC
-                          msg: It should be good
-                          ts: '2023-09-16T07:37:59.691Z'
-                          u:
-                            _id: rbAXPnMktTFbNpwtJ
-                            username: test.test
-                            name: test test
-                          _updatedAt: '2023-09-16T07:37:59.815Z'
-                          urls: []
-                          mentions: []
-                          channels: []
-                          md:
-                            - type: PARAGRAPH
-                              value:
-                                - type: PLAIN_TEXT
-                                  value: It should be good
-                        lm: '2023-09-16T07:37:59.691Z'
-                      - _id: BCNTsPgCxMGPLaNaj
-                        fname: dlp-channel
-                        customFields: {}
-                        description: ''
-                        broadcast: false
-                        encrypted: false
-                        federated: false
-                        name: dlp-channel
-                        t: c
-                        msgs: 9
                         usersCount: 1
                         u:
-                          _id: rYhzFRd2QZjNwAAXX
-                          username: rodriq
-                        ts: '2023-02-07T14:27:52.928Z'
+                          _id: GdEsNbLxzoBgG8XoQ
+                          username: apiadmin
+                          name: apiadmin
+                        ts: '2024-03-22T13:40:59.577Z'
                         ro: false
                         default: false
                         sysMes: true
-                        _updatedAt: '2023-03-09T21:22:56.990Z'
-                        lastMessage:
-                          _id: WB4ZJbXNxsTTRNAKR
-                          rid: BCNTsPgCxMGPLaNaj
-                          u:
-                            _id: mRFuxft9pidHreJbA
-                            username: dlp.bot
-                            name: Data Loss Prevention
-                          msg: ''
-                          ts: '2023-03-08T16:19:35.172Z'
-                          _updatedAt: '2023-03-09T21:22:56.953Z'
-                          groupable: false
-                          blocks:
-                            - type: section
-                              text:
-                                type: mrkdwn
-                                text: |-
-                                  **Rule(s): **Phone number
-
-                                  **@google-drive.bot** is trying to share sensitive content in a direct message between ****@google-drive.bot** x **@rodriq****
-
-                                  **Original Message:**
-                                  __
-                                      Follow these steps to complete Google Drive app setup
-
-                                          *Google Cloud console configuration*
-                                          - Go to [Google Cloud Console](https://console.cloud.google.com/) and log into your account
-                                          - Follow [these steps](https://support.google.com/googleapi/answer/6158849?hl=en) to create and set up your Google Drive on Google Cloud
-                                          - Inside your Google Drive API, set the redirect_url to: 
-                                  http://localhost:3000/api/apps/public/42212581-0966-44aa-8366-b3e92aa00df4/google-drive-app-callback;
-                                          - Then save both your *Client ID* and *Client Secret*
-
-                                          *Rocket.Chat Drive App configuration*
-                                          - Click the Configuration button below to open the app configuration
-                                          - Fill in the *Client ID* and *Client Secret* fields and save
-
-                                          Enter the slash command, `/google-drive connect` to connect with your Google account.
-                                      __
-                              blockId: 0401de10-bdcd-11ed-9f71-79013e0cdf21
-                              appId: 8a30dc27-0cfe-4639-8e30-c7efb60c17f4
-                            - type: context
-                              elements:
-                                - type: plain_text
-                                  text: Approved by @rodriq
-                                  emoji: false
-                              blockId: 8f5983c0-bec0-11ed-8c9a-1556ba80241b
-                              appId: 8a30dc27-0cfe-4639-8e30-c7efb60c17f4
-                          urls: []
-                          mentions: []
-                          channels: []
-                          editedAt: '2023-03-09T21:22:56.949Z'
-                          editedBy:
-                            _id: mRFuxft9pidHreJbA
-                            username: dlp.bot
-                        lm: '2023-03-08T16:19:35.172Z'
-                    count: 3
+                    count: 2
                     offset: 0
-                    total: 20
+                    total: 3
                     success: true
+                    
   /api/v1/channels.members:
     get:
       tags:
@@ -3099,8 +2453,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     members:
                       - _id: rbAXPnMktTFbNpwtJ
                         username: roxie
@@ -3202,32 +2557,6 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    members:
-                      - _id: JmR3T4TFfppJCfmq9
-                        status: offline
-                        _updatedAt: '2023-07-20T20:43:05.895Z'
-                        name: Matheus Barbosa Silva
-                        statusConnection: offline
-                        username: matheus.barbosa
-                        avatarETag: fdJn5SqCwg4ZwbywD
-                        highestRole:
-                          role: owner
-                          level: 0
-                      - _id: edjvbnb7pGC3MZNSP
-                        status: offline
-                        _updatedAt: '2023-07-17T21:42:31.845Z'
-                        username: john
-                        name: John
-                        statusConnection: offline
-                        highestRole:
-                          role: member
-                          level: 2
-                    count: 2
-                    offset: 0
-                    total: 35
-                    success: true
               examples:
                 Example:
                   value:
@@ -3374,8 +2703,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     messages:
                       - _id: uASTuwBEu7SBDAxxh
                         rid: 6513afeda2f73c7460e18c86
@@ -3505,13 +2835,6 @@ paths:
                           type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    moderators:
-                      - _id: rocket.cat
-                        username: rocket.cat
-                        name: Rocket.Cat
-                    success: true
               examples:
                 Example 1:
                   value:
@@ -3564,16 +2887,6 @@ paths:
                           type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    online:
-                      - _id: rocket.cat
-                        username: rocket.cat
-                      - _id: 6423ce62c29657e5b3ba2675
-                        username: 'test.test:matrix.org'
-                      - _id: T3ereg8JaZmA5fsfn
-                        username: zoom.bot
-                    success: true
               examples:
                 Example:
                   value:
@@ -3610,8 +2923,9 @@ paths:
                   description: The channel's id.
               required:
                 - roomId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: ByehQjC44FwMeiLbX
       responses:
         '200':
@@ -3651,8 +2965,9 @@ paths:
               required:
                 - roomId
                 - userId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: ByehQjC44FwMeiLbX
                   userId: oCHkav5Zf6vmpu2W2
       responses:
@@ -3671,13 +2986,8 @@ paths:
                     type: string
                   errorType:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'User is not a leader [error-user-not-leader]'
-                    errorType: error-user-not-leader
               examples:
-                User is not a leader:
+                Example 1:
                   value:
                     success: false
                     error: 'User is not a leader [error-user-not-leader]'
@@ -3719,8 +3029,9 @@ paths:
               required:
                 - roomId
                 - userId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: ByehQjC44FwMeiLbX
                   userId: oCHkav5Zf6vmpu2W2
       responses:
@@ -3744,15 +3055,8 @@ paths:
                     properties:
                       method:
                         type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'User is not a moderator [error-user-not-moderator]'
-                    errorType: error-user-not-moderator
-                    details:
-                      method: removeRoomModerator
               examples:
-                User is not a moderator:
+                Example 1:
                   value:
                     success: false
                     error: 'User is not a moderator [error-user-not-moderator]'
@@ -3796,8 +3100,9 @@ paths:
               required:
                 - roomId
                 - userId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: ByehQjC44FwMeiLbX
                   userId: oCHkav5Zf6vmpu2W2
       responses:
@@ -3835,8 +3140,9 @@ paths:
               required:
                 - roomId
                 - name
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: WDuJLFkjwk6L7LdFC
                   name: newName
       responses:
@@ -3879,23 +3185,6 @@ paths:
                         type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    channel:
-                      _id: ByehQjC44FwMeiLbX
-                      name: new-name
-                      t: c
-                      usernames:
-                        - testing1
-                      msgs: 4
-                      u:
-                        _id: aobEdbYhXfu5hkeqG
-                        username: testing1
-                      ts: '2016-12-09T15:08:58.042Z'
-                      ro: false
-                      sysMes: true
-                      _updatedAt: '2016-12-09T15:57:44.686Z'
-                    success: true
               examples:
                 Example:
                   value:
@@ -3964,8 +3253,9 @@ paths:
                             type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     roles:
                       - _id: rGNoXwYuZshq9FENQ
                         rid: WDuJLFkjwk6L7LdFC
@@ -4015,8 +3305,9 @@ paths:
               required:
                 - roomId
                 - announcement
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: WDuJLFkjwk6L7LdFC
                   announcement: Test out everything
       responses:
@@ -4031,8 +3322,9 @@ paths:
                     type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     announcement: Test out everything
                     success: true
 
@@ -4090,8 +3382,9 @@ paths:
                   required:
                     - roomName
                     - customFields
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: GENERAL
                   customFields:
                     organization: tra-la-la
@@ -4202,8 +3495,9 @@ paths:
                         type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     channel:
                       _id: WDuJLFkjwk6L7LdFC
                       fname: new
@@ -4276,8 +3570,9 @@ paths:
               required:
                 - roomId
                 - default
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: ByehQjC44FwMeiLbX
                   default: true
       responses:
@@ -4382,8 +3677,9 @@ paths:
               required:
                 - roomId
                 - description
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: ByehQjC44FwMeiLbX
                   description: Test out everything
       responses:
@@ -4430,12 +3726,13 @@ paths:
                   description: The channel's id
                 joinCode:
                   type: string
-                  description: The join code that willl be required for any user to join this channel.
+                  description: The join code that will be required for any user to join this channel.
               required:
                 - roomId
                 - joinCode
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: ByehQjC44FwMeiLbX
                   joinCode: 87hsyi9
       responses:
@@ -4549,8 +3846,9 @@ paths:
                         type: boolean
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     channel:
                       _id: WDuJLFkjwk6L7LdFC
                       fname: new
@@ -4627,8 +3925,9 @@ paths:
               required:
                 - roomId
                 - purpose
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: WDuJLFkjwk6L7LdFC
                   purpose: greetings
       responses:
@@ -4643,8 +3942,9 @@ paths:
                     type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     purpose: greetings
                     success: true
 
@@ -4679,8 +3979,9 @@ paths:
               required:
                 - roomId
                 - readOnly
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: ByehQjC44FwMeiLbX
                   readOnly: true
       responses:
@@ -4729,26 +4030,6 @@ paths:
                           type: object
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    channel:
-                      _id: ByehQjC44FwMeiLbX
-                      name: testing0
-                      t: c
-                      msgs: 0
-                      u:
-                        _id: aiPqNoGkjpNDiRx6d
-                        username: goose160
-                      ts: '2017-01-05T18:02:50.754Z'
-                      ro: true
-                      sysMes: true
-                      _updatedAt: '2017-01-05T19:02:24.429Z'
-                      usernames:
-                        - goose160
-                        - graywolf336
-                      joinCodeRequired: true
-                      muted: []
-                    success: true
               examples:
                 Example:
                   value:
@@ -4802,8 +4083,9 @@ paths:
               required:
                 - roomId
                 - topic
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: WDuJLFkjwk6L7LdFC
                   topic: Discuss all of the testing
       responses:
@@ -4818,8 +4100,9 @@ paths:
                     type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     topic: Discuss all of the testing
                     success: true
 
@@ -4867,8 +4150,9 @@ paths:
                         The channel's type. The type of room this channel should be, either c or p. 
                         
                         `c` is for channel and `p` is for private.
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: WDuJLFkjwk6L7LdFC
                   type: p
       responses:
@@ -4917,8 +4201,9 @@ paths:
                           type: object
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     channel:
                       _id: ByehQjC44FwMeiLbX
                       name: testing0
@@ -4958,7 +4243,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/roomId'
+              type: object
+              properties:
+                roomId:
+                  type: string
+                  example: ByehQjC44FwMeiLbX
+                  description: The channel ID that you want to unarchive.
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
@@ -5064,8 +4354,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     mentions:
                       - _id: mPmJ6cPAazzphJmGe
                         rid: 6513afeda2f73c7460e18c86
@@ -5191,8 +4482,9 @@ paths:
                           type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     integrations:
                       - _id: WMQDChpnYTRmFre9h
                         enabled: true
@@ -5293,8 +4585,9 @@ paths:
                       description: The channel's name
                   required:
                     - channelName
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   channelId: 6513afeda2f73c7460e18c86
       responses:
         '200':
@@ -5328,8 +4621,9 @@ paths:
                         type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     team:
                       _id: 65149c7ea2f73c7460e18cab
                       name: messages
@@ -5442,8 +4736,9 @@ paths:
               required:
                 - roomId
                 - notifications
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: 5of4weEXaH7yncxz9
                   notifications:
                     desktopNotifications: all
@@ -5551,8 +4846,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example:
+              examples:
+                Example:
+                  value:
                     rooms:
                     - _id: 654c9d1ca2f73c7460e1918b
                       fname: animalGeography
@@ -5632,8 +4928,9 @@ paths:
                 - roomId
                 - latest
                 - oldest
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: roomId
                   latest: '2016-12-09T13:42:25.304Z'
                   oldest: '2016-08-30T13:42:25.304Z'
@@ -5779,8 +5076,9 @@ paths:
                         type: boolean
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     room:
                       _id: 6513afeda2f73c7460e18c86
                       fname: messages
@@ -5966,8 +5264,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     discussions:
                       - _id: 6514d34ea2f73c7460e18cb4
                         fname: test-discussion
@@ -6032,7 +5331,7 @@ paths:
           description: 'A date as an ISO string. When you provide the `updatedSince` query parameter, then the update and remove in the response will contain only those updated and removed since the specified date and time.'
           schema:
             type: string
-            example: '2017-11-25T15:08:17.248Z'
+          example: '2017-11-25T15:08:17.248Z'
       responses:
         '200':
           description: OK
@@ -6175,8 +5474,9 @@ paths:
                           type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     update:
                       - _id: 5fRTXMt7DMJbpPJfhrbAXPnMktTFbNpwtJ
                         t: d
@@ -6256,7 +5556,7 @@ paths:
                               image_dimensions:
                                 width: 480
                                 height: 245
-                              image_preview: /9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAQACADASIAAhEBAxEB/8QAGQAAAQUAAAAAAAAAAAAAAAAABAABAgMH/8QAHxABAAICAQUBAAAAAAAAAAAAAQIRAAMhBBQiIzFh/8QAFwEAAwEAAAAAAAAAAAAAAAAAAAECA//EABURAQEAAAAAAAAAAAAAAAAAAABB/9oADAMBAAIRAxEAPwDG5RJTIlODTiG1giYVFDqI81+4PvTuluzNalWR1RW4XivUX6zI7Hy4+YzdOMP/2Q==
+                              image_preview: /9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQ==
                               image_url: '/file-upload/mKF2t96heAkz7Wbm3/Clipboard%20-%20March%2013,%202023%201:03%20AM.png'
                               image_type: image/png
                               image_size: 206457
@@ -6392,7 +5692,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/roomId'
+              type: object
+              properties:
+                roomId:
+                  type: string
+                  example: ByehQjC44FwMeiLbX
+                  description: The room ID that you want to leave.
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
@@ -6417,7 +5722,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/roomId'
+              type: object
+              properties:
+                roomId:
+                  type: string
+                  example: ByehQjC44FwMeiLbX
+                  description: The room ID that you want to delete.
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
@@ -6466,8 +5776,9 @@ paths:
                   required:
                     - roomName
                     - favorite
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: GENERAL
                   favorite: true
       responses:
@@ -6496,6 +5807,7 @@ paths:
           required: true
           schema:
             type: string
+          example: ByehQjC44FwMeiLbX
       requestBody:
         description: |-
           For some file types, when uploading via curl, you may need to set the mime type.
@@ -6610,40 +5922,6 @@ paths:
                                     type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    message:
-                      _id: XhqGxkXYtcYba2F9K
-                      rid: GENERAL
-                      ts: '2022-06-29T07:34:33.736Z'
-                      msg: This is a message with a file
-                      file:
-                        _id: pw6oyrjBStWwMdeMv
-                        name: example.txt
-                        type: text/plain
-                      files:
-                        - _id: pw6oyrjBStWwMdeMv
-                          name: example.txt
-                          type: text/plain
-                      attachments:
-                        - ts: '1970-01-01T00:00:00.000Z'
-                          title: example.txt
-                          title_link: /file-upload/pw6oyrjBStWwMdeMv/example.txt
-                          title_link_download: true
-                          type: file
-                          description: Simple text file
-                      u:
-                        _id: g8aroJivN5R32TxCm
-                        username: rodriq
-                        name: Rodriq
-                      _updatedAt: '2022-06-29T07:34:33.811Z'
-                      urls: []
-                      md:
-                        - type: PARAGRAPH
-                          value:
-                            - type: PLAIN_TEXT
-                              value: This is a message with a file
-                    success: true
               examples:
                 Example:
                   value:
@@ -6690,16 +5968,12 @@ paths:
                     type: boolean
                   error:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'Match error: Unknown key in field dasd'
               examples:
-                Extra payload is sent in the request:
+                Example 1:
                   value:
                     success: false
                     error: 'Match error: Unknown key in field dasd'
-                ' File parameter is invalid':
+                Example 2:
                   value:
                     success: false
                     error: '[invalid-field]'
@@ -6723,7 +5997,7 @@ paths:
           required: true
           schema:
             type: string
-            example: data-loss-prevention
+          example: data-loss-prevention
       responses:
         '200':
           description: OK
@@ -6747,8 +6021,9 @@ paths:
                           type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     items:
                       - _id: siyr2oWQJBjQjhLwr
                         fname: try
@@ -6769,12 +6044,12 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - schema:
             type: object
-            example: {"exceptions": ["john.doe"], "conditions": {"status": "offline"}, "term": "user", "$or": [{"type": "user"}, {"roles": ["bot"]}]}
+          example: {"exceptions": ["john.doe"], "conditions": {"status": "offline"}, "term": "user", "$or": [{"type": "user"}, {"roles": ["bot"]}]}
           in: query
           name: selector
           required: true
           description: |-
-            Filter the response with the parameters. For example, `{"exceptions": ["john.doe"], "conditions": {"status": "offline"}, "term": "user", "$or": [{"type": "user"}, {"roles": ["bot"]}]}`
+            Filter the response with the parameters.
       responses:
         '200':
           description: OK
@@ -6798,34 +6073,6 @@ paths:
                           type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    items:
-                      - _id: osvTu9BnJuSiC8b8M
-                        name: data-loss-prevention
-                        fname: data-loss-prevention
-                        t: p
-                      - _id: H3Li6yWc5tz2hbvmu
-                        name: demo-channel-12-11
-                        fname: demo-channel-12-11
-                        t: p
-                      - _id: ThS4AKxCgBfv5xqQD
-                        fname: Omnichannel Facebook Setup
-                        name: omnichannel-facebook-setup
-                        t: c
-                      - _id: phqYWtZZrGWrEZWue
-                        fname: Omnichannel Instagram Setup
-                        name: omnichannel-instagram-setup
-                        t: p
-                      - _id: ZhB63qsrJMQ7k3RYx
-                        fname: Omnichannel Twitter Setup
-                        name: omnichannel-twitter-setup
-                        t: p
-                      - _id: umr9xvCpqCBtsjYkE
-                        fname: Omnichannel WhatsApp Setup
-                        name: omnichannel-whatsapp-setup
-                        t: c
-                    success: true
               examples:
                 Example:
                   value:
@@ -6866,12 +6113,8 @@ paths:
                     type: boolean
                   error:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: The 'selector' param is required
               examples:
-                Selector param is required:
+                Example 1:
                   value:
                     success: false
                     error: The 'selector' param is required
@@ -6901,7 +6144,7 @@ paths:
           description: 'The room ID.'
           schema:
             type: string
-            example: 654c9d1ca2f73c7460e1918b
+          example: 654c9d1ca2f73c7460e1918b
           required: true
       responses:
         '200':
@@ -6936,20 +6179,6 @@ paths:
                     type: boolean
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    _id: ukFsHiySDhMkQyyyF
-                    name: freightwave
-                    fname: freightwave
-                    t: p
-                    msgs: 4
-                    usersCount: 1
-                    u:
-                      _id: Gd6iymRZBK4C6wqHN
-                      username: bruno.raymundo
-                    ro: false
-                    default: false
-                    success: true
               examples:
                 Example:
                   value:
@@ -7066,33 +6295,9 @@ paths:
             examples:
               Example:
                 value:
-                  rid: string
-                  roomName: string
-                  roomDescription: string
-                  roomAvatar: string
-                  featured: true
-                  roomTopic: string
-                  roomAnnouncement: string
-                  roomCustomFields: {}
-                  roomType: string
-                  readOnly: true
-                  reactWhenReadOnly: true
-                  systemMessages:
-                    - changed-room-name
-                  default: true
-                  joinCode: string
-                  streamingOptions:
-                    type: live
-                  retentionEnabled: true
-                  retentionMaxAge: string
-                  retentionExcludePinned: true
-                  retentionFilesOnly: true
-                  retentionIgnoreThreads: true
-                  retentionOverrideGlobal: true
-                  encrypted: true
-                  favorite:
-                    favorite: true
-                    defaultValue: false
+                  rid: JZ8Y2dLfYhsg323Rf
+                  roomName: Test-Save-Room
+                  roomDescription: This is a test room.
       responses:
         '200':
           description: OK
@@ -7105,8 +6310,9 @@ paths:
                     type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     rid: JZ8Y2dLfYhsg323Rf
                     success: true
         '400':
@@ -7122,13 +6328,8 @@ paths:
                     type: string
                   errorType:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'The required "roomId" or "roomName" param provided does not match any group [error-room-not-found]'
-                    errorType: error-room-not-found
               examples:
-                Invalid Room Id:
+                Example 1:
                   value:
                     success: false
                     error: 'The required "roomId" or "roomName" param provided does not match any group [error-room-not-found]'
@@ -7189,7 +6390,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - schema:
             type: string
-            example: test-room
+          example: test-room
           in: query
           name: roomName
           description: Enter the room name that you want to check.
@@ -7226,8 +6427,9 @@ paths:
               required:
                 - rid
                 - action
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   rid: iu7jtPAhvEeAS5tNq
                   action: archive
       responses:
@@ -7251,15 +6453,8 @@ paths:
                     properties:
                       method:
                         type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'Invalid room [error-invalid-room]'
-                    errorType: error-invalid-room
-                    details:
-                      method: unarchiveRoom
               examples:
-                Invalid Room:
+                Example 1:
                   value:
                     success: false
                     error: 'Invalid room [error-invalid-room]'
@@ -7313,8 +6508,9 @@ paths:
                 - rid
                 - type
                 - format
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   rid: iu7jtPAhvEeAS5tNq
                   type: file
                   dateFrom: '2000-01-01'
@@ -7336,11 +6532,6 @@ paths:
                     type: string
                   errorType:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: '[error-invalid-room]'
-                    errorType: error-invalid-room
               examples:
                 Invalid Room ID:
                   value:
@@ -7404,8 +6595,9 @@ paths:
               required:
                 - prid
                 - t_name
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   prid: GENERAL
                   t_name: Discussion Name
       responses:
@@ -7456,27 +6648,6 @@ paths:
                         type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    discussion:
-                      rid: cgk88DHLHexwMaFWh
-                      name: WJNEAM7W45wRYitHo
-                      fname: Discussion Name
-                      t: p
-                      msgs: 0
-                      usersCount: 0
-                      u:
-                        _id: rocketchat.internal.admin.test
-                        username: rocketchat.internal.admin.test
-                      topic: general
-                      prid: GENERAL
-                      ts: '2019-04-03T01:35:32.271Z'
-                      ro: false
-                      sysMes: true
-                      default: false
-                      _updatedAt: '2019-04-03T01:35:32.280Z'
-                      _id: cgk88DHLHexwMaFWh
-                    success: true
               examples:
                 Example:
                   value:
@@ -7541,8 +6712,9 @@ paths:
               required:
                 - name
                 - type
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   name: teamName
                   type: 0
                   members:
@@ -7554,7 +6726,7 @@ paths:
           description: |-
             OK
             
-            Note that the `roomId` is main room id of the team.
+            Note that the `roomId` is main room ID of the team.
           content:
             application/json:
               schema:
@@ -7584,8 +6756,9 @@ paths:
                         type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     team:
                       _id: 651619e3a2f73c7460e18cc5
                       name: teamName
@@ -7617,7 +6790,7 @@ paths:
         '200':
           description: |-
             OK
-            Note that the `roomId` is main room id of the team.
+            Note that the `roomId` is main room ID of the team.
           content:
             application/json:
               schema:
@@ -7659,8 +6832,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     teams:
                       - _id: 63f3efc4b000b6b6d86704b2
                         name: test-audit
@@ -7761,8 +6935,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     teams:
                       - _id: 63f3efc4b000b6b6d86704b2
                         name: test-audit
@@ -7838,8 +7013,9 @@ paths:
                         type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     teamInfo:
                       _id: 607e0d9b49d493189836bfac
                       name: Team1
@@ -7885,8 +7061,9 @@ paths:
               required:
                 - teamId
                 - data
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   teamId: ByehQjC44FwMeiLbX
                   data:
                     name: newTeamName
@@ -7954,8 +7131,9 @@ paths:
                   required:
                     - teamName
                     - members
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   teamId: 63f3efc4b000b6b6d86704b2
                   members:
                     - userId: rYhzFRd2QZjNwAAXX
@@ -7982,13 +7160,13 @@ paths:
           description: 'Search filter for the user''s name '
           schema:
             type: string
-            example: test Test
+          example: test
         - name: username
           in: query
           description: 'Search filter for the user''s username '
           schema:
             type: string
-            example: test.test
+          example: test.user
         - name: status
           in: query
           description: Search filter for the user's status
@@ -7996,7 +7174,7 @@ paths:
             type: array
             items:
               type: string
-            example: '["online", "away", "busy"]'
+          example: '["online", "away", "busy"]'
       responses:
         '200':
           description: OK
@@ -8052,8 +7230,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     members:
                       - user:
                           _id: rbAXPnMktTFbNpwtJ
@@ -8145,8 +7324,9 @@ paths:
                   required:
                     - teamName
                     - members
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   teamId: 63f3efc4b000b6b6d86704b2
                   members:
                     - userId: rYhzFRd2QZjNwAAXX
@@ -8179,7 +7359,7 @@ paths:
                       description: "The team name"
                     rooms:
                       type: array
-                      description: The team rooms (ids) to remove the  user from.
+                      description: The team rooms (ids) to remove the user from.
                       items:
                         type: string
                   required:
@@ -8197,8 +7377,9 @@ paths:
                         type: string
                   required:
                     - teamId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   teamName: team1
                   rooms:
                     - 8dugqGhuRvCBLdZft
@@ -8258,8 +7439,9 @@ paths:
                   required:
                     - teamName
                     - userId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   teamId: 63f3efc4b000b6b6d86704b2
                   userId: rYhzFRd2QZjNwAAXX
                   rooms:
@@ -8285,7 +7467,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/roomId'
+              type: object
+              properties:
+                teamName:
+                  type: string
+                  description: Enter the team name. This parameter is required if `teamId` is not provided.
+                teamId:
+                  type: string
+                  description: Enter the team ID. This parameter is required if `teamName` is not provided.
+                roomsToRemove:
+                  type: array
+                  description: The room IDs to delete along with the team.
+                  items:
+                    type: string
+                    example: "8dugqGhuRvCBLdZft"
+            examples:
+              Example 1:
+                value:
+                  teamId: mLGZGywfmLGZGywf
+                  roomsToRemove:
+                    - 8dugqGhuRvCBLdZft
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
@@ -8306,7 +7507,7 @@ paths:
           required: true
           schema:
             type: string
-            example: team
+          example: team
       responses:
         '200':
           description: OK
@@ -8332,8 +7533,9 @@ paths:
                           type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     teams:
                       - _id: Dgh2xwJ3NFKWvKSqY
                         name: team1
@@ -8363,8 +7565,9 @@ paths:
                   description: The team ID that you want to convert to a channel.
               required:
                 - teamId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   teamId: 612b8ae982d286c3d1f5db31
       responses:
         '200':
@@ -8380,10 +7583,6 @@ paths:
                     type: boolean
                   error:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: team-does-not-exist
               examples:
                 Invalid Team Id:
                   value:
@@ -8441,8 +7640,9 @@ paths:
                   required:
                     - teamName
                     - rooms
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   teamId: 607e0d9b49d493189836bfac
                   rooms:
                     - 8Z7eRsibvD5AANfmK
@@ -8555,8 +7755,9 @@ paths:
                           type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     rooms:
                       - _id: JKa7R9zu2DinBhBN9
                         fname: Livestream
@@ -8619,29 +7820,22 @@ paths:
           application/json:
             schema:
               type: object
-              oneOf:
-                - type: object
-                  properties:
-                    teamId:
-                      type: string
-                      description: The team id
-                    roomId:
-                      type: string
-                      description: The room ID to be removed from the team.
-                  required:
-                    - teamId
-                - type: object
-                  properties:
-                    teamName:
-                      type: string
-                      description: The team name
-                    roomId:
-                      type: string
-                      description: The room ID to be removed from the team.
-                  required:
-                    - teamName
-              x-examples:
-                Example 1:
+              properties:
+                teamName:
+                  type: string
+                  description: Enter the team name. This parameter is required if `teamId` is not provided.
+                  example: team01
+                teamId:
+                  type: string
+                  description: Enter the team ID. This parameter is required if `teamName` is not provided.
+                  example: d8eiFT9fIwfs
+                roomId:
+                  type: string
+                  description: The room ID to be removed from the team.
+                  example: 8dugqGhuRvCBLdZft
+            examples:
+              Example 1:
+                value:
                   teamId: 63f3efc4b000b6b6d86704b2
                   roomId: JKa7R9zu2DinBhBN9
       responses:
@@ -8749,8 +7943,9 @@ paths:
                               type: object
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     room:
                       _id: JKa7R9zu2DinBhBN9
                       fname: Livestream
@@ -8822,8 +8017,9 @@ paths:
               required:
                 - roomId
                 - isDefault
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: JKa7R9zu2DinBhBN9
                   isDefault: true
       responses:
@@ -8935,159 +8131,9 @@ paths:
                         type: boolean
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    room:
-                      _id: JKa7R9zu2DinBhBN9
-                      fname: Livestream
-                      customFields: {}
-                      description: ''
-                      broadcast: false
-                      encrypted: false
-                      federated: false
-                      name: Livestream
-                      t: c
-                      msgs: 16
-                      usersCount: 4
-                      u:
-                        _id: rbAXPnMktTFbNpwtJ
-                        username: roxie
-                      ts: '2023-02-22T17:15:26.989Z'
-                      ro: false
-                      default: false
-                      sysMes: true
-                      _updatedAt: '2023-09-29T06:00:18.859Z'
-                      lm: '2023-09-14T12:06:00.594Z'
-                      lastMessage:
-                        _id: rtf5JoPLQup3X7Aof
-                        t: videoconf
-                        msg: ''
-                        groupable: false
-                        blocks:
-                          - type: video_conf
-                            blockId: 6502f728a2f73c7460df6f71
-                            callId: 6502f728a2f73c7460df6f71
-                            appId: videoconf-core
-                        ts: '2023-09-14T12:06:00.594Z'
-                        u:
-                          _id: rbAXPnMktTFbNpwtJ
-                          username: test.test
-                          name: test test
-                        rid: JKa7R9zu2DinBhBN9
-                        _updatedAt: '2023-09-14T12:06:00.685Z'
-                        urls: []
-                        mentions: []
-                        channels: []
-                      teamId: 63f3efc4b000b6b6d86704b2
-                      teamDefault: true
-                    success: true
-            application/xml:
-              schema:
-                type: object
-                properties:
-                  room:
-                    type: object
-                    properties:
-                      _id:
-                        type: string
-                      fname:
-                        type: string
-                      customFields:
-                        type: object
-                      description:
-                        type: string
-                      broadcast:
-                        type: boolean
-                      encrypted:
-                        type: boolean
-                      federated:
-                        type: boolean
-                      name:
-                        type: string
-                      t:
-                        type: string
-                      msgs:
-                        type: integer
-                      usersCount:
-                        type: integer
-                      u:
-                        type: object
-                        properties:
-                          _id:
-                            type: string
-                          username:
-                            type: string
-                      ts:
-                        type: string
-                      ro:
-                        type: boolean
-                      default:
-                        type: boolean
-                      sysMes:
-                        type: boolean
-                      _updatedAt:
-                        type: string
-                      lm:
-                        type: string
-                      lastMessage:
-                        type: object
-                        properties:
-                          _id:
-                            type: string
-                          t:
-                            type: string
-                          msg:
-                            type: string
-                          groupable:
-                            type: boolean
-                          blocks:
-                            type: array
-                            items:
-                              type: object
-                              properties:
-                                type:
-                                  type: string
-                                blockId:
-                                  type: string
-                                callId:
-                                  type: string
-                                appId:
-                                  type: string
-                          ts:
-                            type: string
-                          u:
-                            type: object
-                            properties:
-                              _id:
-                                type: string
-                              username:
-                                type: string
-                              name:
-                                type: string
-                          rid:
-                            type: string
-                          _updatedAt:
-                            type: string
-                          urls:
-                            type: array
-                            items:
-                              type: object
-                          mentions:
-                            type: array
-                            items:
-                              type: object
-                          channels:
-                            type: array
-                            items:
-                              type: object
-                      teamId:
-                        type: string
-                      teamDefault:
-                        type: boolean
-                  success:
-                    type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     room:
                       _id: JKa7R9zu2DinBhBN9
                       fname: Livestream
@@ -9150,7 +8196,7 @@ paths:
           description: The room's type (search filter).
           schema:
             type: string
-            example: autoJoin
+          example: autoJoin
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/offset'
       responses:
@@ -9270,8 +8316,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     rooms:
                       - _id: JKa7R9zu2DinBhBN9
                         fname: Livestream
@@ -9341,6 +8388,7 @@ paths:
           required: true
           schema:
             type: string
+          example: rbAXrutTFbNprfn
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
       responses:
@@ -9462,8 +8510,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     rooms:
                       - _id: JKa7R9zu2DinBhBN9
                         fname: Livestream
@@ -9548,8 +8597,9 @@ paths:
                           type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     online:
                       - _id: 47cRd58HnWwpqxhaZ
                         username: test
@@ -9651,8 +8701,9 @@ paths:
                           type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     integrations:
                       - _id: WMQDChpnYTRmFre9h
                         enabled: true
@@ -9752,8 +8803,9 @@ paths:
                   description: Adds all of the users of the Rocket.Chat workspace to the group/channel.
               required:
                 - roomId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: ByehQjC44FwMeiLbX
                   activeUsersOnly: 'true'
       responses:
@@ -9790,8 +8842,9 @@ paths:
                         type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     channel:
                       _id: ByehQjC44FwMeiLbX
                       name: groupname
@@ -9839,8 +8892,9 @@ paths:
               required:
                 - roomId
                 - userId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: ByehQjC44FwMeiLbX
                   userId: oCHkav5Zf6vmpu2W2
       responses:
@@ -9859,13 +8913,8 @@ paths:
                     type: string
                   errorType:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'User is already a leader [error-user-already-leader]'
-                    errorType: error-user-already-leader
               examples:
-                User is already a leader:
+                Example 1:
                   value:
                     success: false
                     error: 'User is already a leader [error-user-already-leader]'
@@ -9904,8 +8953,9 @@ paths:
               required:
                 - roomId
                 - userId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: ByehQjC44FwMeiLbX
                   userId: nSYqWzZ4GsKTX4dyK
       responses:
@@ -9940,8 +8990,9 @@ paths:
               required:
                 - roomId
                 - userId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: ByehQjC44FwMeiLbX
                   userId: nSYqWzZ4GsKTX4dyK
       responses:
@@ -9969,7 +9020,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/roomId'
+              type: object
+              properties:
+                roomId:
+                  type: string
+                  example: ByehQjC44FwMeiLbX
+                  description: The group ID that you want to archive.
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
@@ -9995,7 +9051,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/roomId'
+              type: object
+              properties:
+                roomId:
+                  type: string
+                  example: ByehQjC44FwMeiLbX
+                  description: The group ID that you want to close.
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
@@ -10058,8 +9119,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     joined: true
                     members: 1
                     unreads: 1
@@ -10185,53 +9247,6 @@ paths:
                       sysMes: true
                       _updatedAt: '2016-12-09T16:53:06.761Z'
                     success: true
-            application/xml:
-              schema:
-                type: object
-                properties:
-                  group:
-                    type: object
-                    properties:
-                      _id:
-                        type: string
-                      name:
-                        type: string
-                      t:
-                        type: string
-                      msgs:
-                        type: integer
-                      u:
-                        type: object
-                        properties:
-                          _id:
-                            type: string
-                          username:
-                            type: string
-                      ts:
-                        type: string
-                      ro:
-                        type: boolean
-                      sysMes:
-                        type: boolean
-                      _updatedAt:
-                        type: string
-                  success:
-                    type: boolean
-                x-examples:
-                  Example 1:
-                    group:
-                      _id: NtR6RQ7NvzA9ejecX
-                      name: testing
-                      t: p
-                      msgs: 0
-                      u:
-                        _id: aobEdbYhXfu5hkeqG
-                        username: tester
-                      ts: '2016-12-09T16:53:06.761Z'
-                      ro: false
-                      sysMes: true
-                      _updatedAt: '2016-12-09T16:53:06.761Z'
-                    success: true
 
   /api/v1/groups.delete:
     post:
@@ -10255,9 +9270,16 @@ paths:
         content:
           application/json:
             schema:
-              oneOf:
-                - $ref: '#/components/schemas/roomId'
-                - $ref: '#/components/schemas/roomName'
+              type: object
+              properties:
+                roomId:
+                  type: string
+                  example: ByehQjC44FwMeiLbX
+                  description: Enter the room ID. This parameter is required if no `roomName` is provided.
+                roomName:
+                  type: string
+                  example: general
+                  description: Enter the room name. This parameter is required if no `roomId` is provided.
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
@@ -10285,25 +9307,25 @@ paths:
           description: The end of time range of messages to retrieve. The default value is the current date and time.
           schema:
             type: string
-            example: '2016-09-30T13:42:25.304Z'
+          example: '2016-09-30T13:42:25.304Z'
         - name: oldest
           in: query
           description: The start of the time range of messages to retrieve
           schema:
             type: string
-            example: '2016-05-30T13:42:25.304Z'
+          example: '2016-05-30T13:42:25.304Z'
         - name: inclusive
           in: query
           description: Whether messages which land on latest and oldest should be included. The default value is false.
           schema:
             type: boolean
-            example: 'true'
+          example: true
         - name: unreads
           in: query
           description: Whether the amount of unreads should be included. The default value is false.
           schema:
             type: boolean
-            example: 'false'
+          example: false
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
       responses:
@@ -10342,8 +9364,9 @@ paths:
                           type: boolean
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     messages:
                       - _id: AkzpHAvZpdnuchw2a
                         rid: ByehQjC44FwMeiLbX
@@ -10451,8 +9474,9 @@ paths:
                         type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     group:
                       _id: ByehQjC44FwMeiLbX
                       name: testing
@@ -10462,7 +9486,7 @@ paths:
                       usersCount: 2
                       u:
                         _id: HKKPmF8rZh45GMHWH
-                        username: marcos.defendi
+                        username: marc.anp
                       customFields: {}
                       broadcast: false
                       encrypted: false
@@ -10494,33 +9518,19 @@ paths:
           application/json:
             schema:
               type: object
-              oneOf:
-                - type: object
-                  properties:
+              properties:
                     roomId:
                       type: string
-                      description: The group id
+                      description: The group ID
                     userId:
                       type: string
-                      description: The id of the user to be invited
-                  required:
-                    - roomId
-                    - userId
-                - type: object
-                  properties:
-                    roomId:
-                      type: string
-                      description: The user IDs of the invited users.
-                    userIds:
-                      type: array
-                      description: The user IDs of the invited users.
-                      items:
-                        type: string
-                  required:
-                    - roomId
-                    - userIds
-              x-examples:
-                Example 1:
+                      description: The ID of the user to be invited. You can also use the parameter `userIds` as an array to invite more than one user. For example, `["nSYqWzZ4GsKTX4dyK", "SYqWzZ4Gsasdfgh"]`
+              required:
+                - roomId
+                - userId
+            examples:
+              Example 1:
+                value:
                   roomId: ByehQjC44FwMeiLbX
                   userId: nSYqWzZ4GsKTX4dyK
       responses:
@@ -10561,8 +9571,9 @@ paths:
                         type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     group:
                       _id: ByehQjC44FwMeiLbX
                       ts: '2016-11-30T21:23:04.737Z'
@@ -10596,21 +9607,14 @@ paths:
                     properties:
                       method:
                         type: string
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     success: false
-                    error: 'Not allowed [error-not-allowed]'
+                    error: Not allowed [error-not-allowed]
                     errorType: error-not-allowed
                     details:
                       method: addUsersToRoom
-              examples:
-                You don't have the permission to add users here:
-                  value:
-                    success: true
-                    error: string
-                    errorType: string
-                    details:
-                      method: string
 
   /api/v1/groups.kick:
     post:
@@ -10641,8 +9645,9 @@ paths:
               required:
                 - roomId
                 - userId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: ByehQjC44FwMeiLbX
                   userId: nSYqWzZ4GsKTX4dyK
       responses:
@@ -10685,8 +9690,9 @@ paths:
                         type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     group:
                       _id: ByehQjC44FwMeiLbX
                       name: invite-me
@@ -10703,7 +9709,7 @@ paths:
                       _updatedAt: '2016-12-09T15:22:40.656Z'
                     success: true
 
-  /groups.leave:
+  /api/v1/groups.leave:
     post:
       tags:
         - Groups
@@ -10723,7 +9729,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/roomId'
+              type: object
+              properties:
+                roomId:
+                  type: string
+                  example: ByehQjC44FwMeiLbX
+                  description: The group ID that you want to leave.
       responses:
         '200':
           description: OK
@@ -10764,8 +9775,9 @@ paths:
                         type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     group:
                       _id: ByehQjC44FwMeiLbX
                       name: invite-me
@@ -10857,8 +9869,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     groups:
                       - _id: xA52DRDM7dqx2PfTp
                         name: private1
@@ -10945,8 +9958,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     groups:
                       - _id: ByehQjC44FwMeiLbX
                         name: test-test
@@ -11005,7 +10019,7 @@ paths:
             type: array
             items:
               type: string
-            example: '[''online'', ''away'']'
+          example: '["online", "away"]'
         - name: filter
           in: query
           description: Extra search filters to be applied to the fields defined in the `Accounts_SearchFields` setting.
@@ -11042,14 +10056,15 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     members:
                       - _id: Q4GkX6RMepGDdQ7YJ
                         status: online
-                        name: Marcos Defendi
+                        name: Marc Pow
                         utcOffset: -3
-                        username: marcos.defendi
+                        username: marc.pow
                       - _id: rocket.cat
                         name: Rocket.Cat
                         username: rocket.cat
@@ -11099,7 +10114,7 @@ paths:
             type: array
             items:
               type: string
-            example: '[''online'', ''away'']'
+          example: '["online", "away"]'
         - name: filter
           in: query
           description: Extra search filters to be applied to the fields defined in the `Accounts_SearchFields` setting.
@@ -11147,8 +10162,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     members:
                       - _id: JmR3T4TFfppJCfmq9
                         status: offline
@@ -11265,8 +10281,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     messages:
                       - _id: CeXwh5eBbdrtvnqG6
                         rid: agh2Sucgb54RQ8dDo
@@ -11274,8 +10291,8 @@ paths:
                         ts: '2018-10-05T13:48:21.616Z'
                         u:
                           _id: KPkEYwKKBKZnEEPpt
-                          username: marcos.defendi
-                          name: Marcos Defendi
+                          username: marc.pow
+                          name: Marc Pow
                         _updatedAt: '2018-10-05T13:48:49.535Z'
                         reactions:
                           ':frowning2:':
@@ -11332,6 +10349,14 @@ paths:
                       type: object
                   success:
                     type: boolean
+              examples:
+                Example 1:
+                  value:
+                    moderators:
+                      - _id: hifeRG56fjlsp
+                        username: marc.cat
+                        name: Marc Cat
+                    success: true
 
   /api/v1/groups.open:
     post:
@@ -11353,7 +10378,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/roomId'
+              type: object
+              properties:
+                roomId:
+                  type: string
+                  example: ByehQjC44FwMeiLbX
+                  description: The room ID.
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
@@ -11386,15 +10416,16 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The group id
+                  description: The group ID.
                 userId:
                   type: string
-                  description: The user id
+                  description: The user ID.
               required:
                 - roomId
                 - userId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: ByehQjC44FwMeiLbX
                   userId: oCHkav5Zf6vmpu2W2
       responses:
@@ -11413,13 +10444,8 @@ paths:
                     type: string
                   errorType:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'User is not a leader [error-user-not-leader]'
-                    errorType: error-user-not-leader
               examples:
-                User is a leader:
+                Eaxmple 1:
                   value:
                     success: false
                     error: 'User is not a leader [error-user-not-leader]'
@@ -11459,8 +10485,9 @@ paths:
               required:
                 - roomId
                 - userId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: ByehQjC44FwMeiLbX
                   userId: oCHkav5Zf6vmpu2W2
       responses:
@@ -11501,8 +10528,9 @@ paths:
               required:
                 - roomId
                 - userId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: ByehQjC44FwMeiLbX
                   userId: oCHkav5Zf6vmpu2W2
       responses:
@@ -11533,15 +10561,16 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The group's id
+                  description: The group's ID
                 name:
                   type: string
                   description: The new name of the private group. It can not be the same as another or the existing name.
               required:
                 - roomId
                 - name
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: ByehQjC44FwMeiLbX
                   name: new-name
       responses:
@@ -11584,8 +10613,9 @@ paths:
                         type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     group:
                       _id: ByehQjC44FwMeiLbX
                       name: new-name
@@ -11633,8 +10663,9 @@ paths:
               required:
                 - roomId
                 - announcement
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: ByehQjC44FwMeiLbX
                   announcement: Test out everything
       responses:
@@ -11649,8 +10680,9 @@ paths:
                     type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     announcement: Test out everything.
                     success: true
 
@@ -11675,34 +10707,16 @@ paths:
           application/json:
             schema:
               type: object
-              oneOf:
-                - type: object
-                  properties:
+              properties:
                     roomId:
                       type: string
-                      description: The private group's id
+                      description: The private group's ID. Alternatively, you can use the `roomName` field.
                     customFields:
                       type: object
                       description: The custom fields to set for the private group.
-                  required:
-                    - roomId
-                    - customFields
-                - type: object
-                  properties:
-                    roomName:
-                      type: string
-                      description: The private group's name
-                    customFields:
-                      type: object
-                      description: The custom fields to set for the private group.
-                  required:
-                    - roomName
-                    - customFields
-              x-examples:
-                Example 1:
-                  roomId: euzoT67Gx6nXcn66M
-                  customFields:
-                    company: sell-and-more
+              required:
+                - roomId
+                - customFields
             examples:
               Example:
                 value:
@@ -11756,8 +10770,9 @@ paths:
                     type: boolean
                   developerWarning:
                     type: string
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     group:
                       _id: euzoT67Gx6nXcn66M
                       name: channel.cf.1518990680083
@@ -11808,8 +10823,9 @@ paths:
               required:
                 - roomId
                 - description
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: ByehQjC44FwMeiLbX
                   description: Test out everything
       responses:
@@ -11824,8 +10840,9 @@ paths:
                     type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     description: Testing out everything.
                     success: true
 
@@ -11860,8 +10877,9 @@ paths:
               required:
                 - roomId
                 - purpose
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: ByehQjC44FwMeiLbX
                   purpose: Test out everything
       responses:
@@ -11876,8 +10894,9 @@ paths:
                     type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     purpose: Testing out everything.
                     success: true
 
@@ -11912,8 +10931,9 @@ paths:
               required:
                 - roomId
                 - readOnly
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: ByehQjC44FwMei5LbX
                   readOnly: true
       responses:
@@ -11962,8 +10982,9 @@ paths:
                           type: object
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     group:
                       _id: ByehQjC44FwMei5LbX
                       name: testing-private
@@ -12014,8 +11035,9 @@ paths:
               required:
                 - roomId
                 - topic
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: ByehQjC44FwMeiLbX
                   topic: Discuss all of the testing
       responses:
@@ -12030,8 +11052,9 @@ paths:
                     type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     topic: Testing out everything.
                     success: true
 
@@ -12066,8 +11089,9 @@ paths:
               required:
                 - roomId
                 - type
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: ByehQjC44FwMeiLbX
                   type: c
       responses:
@@ -12116,8 +11140,9 @@ paths:
                           type: object
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     group:
                       _id: ByehQjC44FwMeiLbX
                       name: testing0
@@ -12157,7 +11182,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/roomId'
+              type: object
+              properties:
+                roomId:
+                  type: string
+                  example: ByehQjC44FwMeiLbX
+                  description: The room ID that you want to unarchive.
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
@@ -12252,8 +11282,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     files:
                       - _id: S78TNnvaWGwdYRaCD
                         name: images.jpeg
@@ -12303,31 +11334,19 @@ paths:
           application/json:
             schema:
               type: object
-              oneOf:
-                - type: object
-                  properties:
+              properties:
                     encrypted:
                       type: boolean
                       description: Whether or not to encrypt the room.
                     roomId:
                       type: string
-                      description: The group id
-                  required:
-                    - encrypted
-                    - roomId
-                - type: object
-                  properties:
-                    encrypted:
-                      type: boolean
-                      description: Whether or not to encrypt the room.
-                    roomName:
-                      type: string
-                      description: The group name
-                  required:
+                      description: The group ID. Alternatively, you can use the `roomName` field and enter the group name.
+              required:
                     - encrypted
                     - roomName
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   encrypted: false
                   roomId: JZ8Y2dLfYhsg323Rf
       responses:
@@ -12378,8 +11397,9 @@ paths:
                         type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     group:
                       _id: JZ8Y2dLfYhsg323Rf
                       fname: test
@@ -12412,11 +11432,6 @@ paths:
                     type: string
                   errorType:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'The required "roomId" or "roomName" param provided does not match any group [error-room-not-found]'
-                    errorType: error-room-not-found
               examples:
                 Invalid  RoomId or RoomName:
                   value:
@@ -12451,9 +11466,20 @@ paths:
         content:
           application/json:
             schema:
-              oneOf:
-                - $ref: '#/components/schemas/roomId'
-                - $ref: '#/components/schemas/roomName'
+              type: object
+              properties:
+                teamName:
+                  type: string
+                  description: Enter the team name. This parameter is required if `teamId` is not provided.
+                teamId:
+                  type: string
+                  description: Enter the team ID. This parameter is required if `teamName` is not provided.
+                roomsToRemove:
+                  type: array
+                  description: The room IDs to delete along with the team.
+                  items:
+                    type: string
+                    example: "8dugqGhuRvCBLdZft"
       responses:
         '200':
           description: OK
@@ -12486,8 +11512,9 @@ paths:
                         type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     team:
                       _id: 6172b15bc563fc000acc462e
                       name: ddd
@@ -12510,20 +11537,16 @@ paths:
                     type: boolean
                   error:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: team-name-already-exists
               examples:
-                Team exists:
+                Example 1:
                   value:
                     success: false
                     error: team-name-already-exists
-                No roomId or roomname:
+                Example 2:
                   value:
                     success: false
                     error: The parameter "roomId" or "roomName" is required
-                Invalid room Id:
+                Example 3:
                   value:
                     success: false
                     error: 'The required "roomId" or "roomName" param provided does not match any group [error-room-not-found]'
@@ -12579,8 +11602,9 @@ paths:
                           type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     roles:
                       - rid: BaE62jfDLXK3Xo6BA
                         u:
@@ -12660,8 +11684,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     result:
                       - _id: jRca8kibJx8NkLJxt
                         createdAt: '2018-04-13T12:46:26.517Z'
@@ -12691,7 +11716,7 @@ components:
       description: The room id. It is required if the `roomName` is not provided.
       schema:
         type: string
-        example: dlp
+      example: dlpfuijw7ej
     Optional-RoomName:
       name: roomName
       in: query
@@ -12699,7 +11724,7 @@ components:
       required: false
       schema:
         type: string
-        example: WDuJLFkjwk6L7LdFC
+      example: general
     RoomId:
       name: roomId
       in: query
@@ -12707,13 +11732,14 @@ components:
       required: true
       schema:
         type: string
+      example: jdiue8TGkodp
     Optional-TeamId:
       name: teamId
       in: query
       description: The team id.  It is required if the `teamName` is not provided.
       schema:
         type: string
-        example: 63f3efc4b000b6b6d86704b2
+      example: 63f3efc4b000b6b6d86704b2
     Optional-TeamName:
       name: teamName
       in: query
@@ -12721,7 +11747,7 @@ components:
       required: false
       schema:
         type: string
-        example: livestream
+      example: livestream
     offset:
       name: offset
       in: query
@@ -12729,7 +11755,7 @@ components:
       required: false
       schema:
         type: integer
-        example: 50
+      example: 50
     count:
       name: count
       in: query
@@ -12737,7 +11763,7 @@ components:
       required: false
       schema:
         type: integer
-        example: 50
+      example: 50
     sort:
       name: sort
       in: query
@@ -12764,7 +11790,7 @@ components:
       required: true
       schema:
         type: string
-        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
     UserId:
       name: X-User-Id
       in: header
@@ -12772,7 +11798,7 @@ components:
       required: true
       schema:
         type: string
-        example: rbAXPnMktTFbNpwtJ
+      example: rbAXPnMktTFbNpwtJ
   responses:
     trueSuccess:
       description: OK
@@ -12783,9 +11809,6 @@ components:
             properties:
               success:
                 type: boolean
-            x-examples:
-              Example 1:
-                success: true
           examples:
             Success:
               value:
@@ -12801,10 +11824,6 @@ components:
                 type: string
               message:
                 type: string
-            x-examples:
-              Example 1:
-                status: error
-                message: You must be logged in to do this.
           examples:
             Authorization Error:
               value:
@@ -12821,37 +11840,8 @@ components:
                 type: boolean
               error:
                 type: string
-            x-examples:
-              Example 1:
-                success: false
-                error: 'User does not have the permissions required for this action [error-unauthorized]'
           examples:
             Permission Error:
               value:
                 success: false
                 error: 'User does not have the permissions required for this action [error-unauthorized]'
-  schemas:
-    roomId:
-      type: object
-      title: roomId
-      properties:
-        roomId:
-          type: string
-          description: The room id.
-      required:
-        - roomId
-      x-examples:
-        Example 1:
-          roomId: WDuJLFkjwk6L7LdFC
-    roomName:
-      type: object
-      title: roomName
-      properties:
-        roomName:
-          type: string
-          description: The room name.
-      required:
-        - roomName
-      x-examples:
-        Example 1:
-          roomName: dlp
