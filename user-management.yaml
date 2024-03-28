@@ -33,7 +33,7 @@ paths:
             updated and removed since this date and time.
           schema:
             type: string
-            example: '2017-11-25T15:08:17.248Z'
+          example: '2017-11-25T15:08:17.248Z'
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/Auth-Token'
       responses:
@@ -589,7 +589,7 @@ paths:
           description: The room ID.
           schema:
             type: string
-            example: GENERAL
+          example: hfiec783ifjl
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/offset'
@@ -789,7 +789,7 @@ paths:
           required: true
           schema:
             type: string
-            example: '2017-11-25T15:08:17.248Z'
+          example: '2017-11-25T15:08:17.248Z'
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/Auth-Token'
       responses:
@@ -1916,7 +1916,7 @@ paths:
           required: true
           schema:
             type: string
-            example: W7NHuX5ri2e3mu2Fc
+          example: W7NHuX5ri2e3mu2Fc
         - $ref: '#/components/parameters/fields'
       responses:
         '200':
@@ -2300,7 +2300,7 @@ paths:
       parameters:
         - schema:
             type: string
-            example: BsNr28znDkG8aeo7W
+          example: BsNr28znDkG8aeo7W
           in: query
           name: userId
           description: 'The user ID. Alternatively, you can enter the `username` parameter.'
@@ -2458,7 +2458,7 @@ paths:
             user is used. 
           schema:
             type: string
-            example: W7NHuX5ri2e3mu2Fc
+          example: W7NHuX5ri2e3mu2Fc
       responses:
         '200':
           description: OK
@@ -2644,8 +2644,7 @@ paths:
                     success: false
                     error: unauthorized
       description: |-
-        Permission required:
-          * `edit-other-user-active-status`
+        Permission required: `edit-other-user-active-status`
           
           ### Changelog
           | Version      | Description |
@@ -2708,7 +2707,7 @@ paths:
         - $ref: '#/components/parameters/Auth-Token'
         - schema:
             type: string
-            example: BsNr28znDkG8aeo7W
+          example: BsNr28znDkG8aeo7W
           in: query
           name: userId
           description: >-
@@ -2782,7 +2781,7 @@ paths:
         - $ref: '#/components/parameters/Auth-Token'
         - schema:
             type: string
-            example: '2019-05-22T12:11:45.392Z'
+          example: '2019-05-22T12:11:45.392Z'
           in: query
           name: from
           description: >-
@@ -2792,7 +2791,7 @@ paths:
             presence and the result will have a `full` field with value `true` .
         - schema:
             type: string
-            example: J4sWseCgs8eEnWvhE
+          example: J4sWseCgs8eEnWvhE
           in: query
           name: ids
           description: The user IDs whose status you want.
@@ -4382,14 +4381,13 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - schema:
             type: object
-            example: {
+          example: {
             "exceptions": ["john.doe"], "conditions": {"status": "offline"}, "term": "user", "$or": [{"type": "user"}, {"roles": ["bot"]}]}
           in: query
           name: selector
           required: true
           description: |-
-            Filter the response with the parameters. For example, `{
-            "exceptions": ["john.doe"], "conditions": {"status": "offline"}, "term": "user", "$or": [{"type": "user"}, {"roles": ["bot"]}]}`
+            Filter the response with the parameters.
   /api/v1/users.removeOtherTokens:
     parameters: []
     post:
@@ -4602,7 +4600,7 @@ paths:
           required: true
           schema:
             type: string
-            example: rbAXPnMktTFbNpwtJ
+          example: rbAXPnMktTFbNpwtJ
       responses:
         '200':
           description: OK
@@ -4933,7 +4931,7 @@ paths:
     parameters:
       - schema:
           type: string
-          example: 'alice, @general'
+        example: 'alice, @general'
         name: subject
         in: path
         required: true
@@ -4958,7 +4956,7 @@ paths:
       parameters:
         - schema:
             type: string
-            example: png
+          example: png
           in: query
           name: format
           description: >-
@@ -4966,13 +4964,13 @@ paths:
             png.
         - schema:
             type: integer
-            example: 50
+          example: 50
           in: query
           name: size
           description: 'Width and height of the image. Default: 200'
         - schema:
             type: string
-            example: aobEdbYhXfu5hkeqG
+          example: aobEdbYhXfu5hkeqG
           in: query
           name: rc_uid
           description: >-
@@ -4980,7 +4978,7 @@ paths:
             `Accounts_AvatarBlockUnauthenticatedAccess` is enabled.
         - schema:
             type: string
-            example: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq
+          example: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq
           in: query
           name: rc_token
           description: >-
@@ -5002,7 +5000,7 @@ components:
       required: true
       schema:
         type: string
-        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
     UserId:
       name: X-User-Id
       in: header
@@ -5010,7 +5008,7 @@ components:
       required: true
       schema:
         type: string
-        example: rbAXPnMktTFbNpwtJ
+      example: rbAXPnMktTFbNpwtJ
     x-2fa-code:
       name: x-2fa-code
       in: header
@@ -5020,7 +5018,7 @@ components:
       required: true
       schema:
         type: string
-        example: '148750'
+      example: '148750'
     query:
       name: query
       in: query
@@ -5045,7 +5043,7 @@ components:
       required: false
       schema:
         type: integer
-        example: 50
+      example: 50
       description: >-
         Number of items to "skip" in the query, i.e. requests return count
         items, skipping the first offset items.
@@ -5064,7 +5062,7 @@ components:
       required: false
       schema:
         type: integer
-        example: 50
+      example: 50
       description: How many items to return.
   responses:
     authorizationError:
