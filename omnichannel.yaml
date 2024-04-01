@@ -39,7 +39,7 @@ paths:
           required: true
           schema:
             type: string
-            example: agent
+          example: agent
       requestBody:
         content:
           application/json:
@@ -125,7 +125,7 @@ paths:
           required: true
           schema:
             type: string
-            example: agent
+          example: agent
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
@@ -249,11 +249,11 @@ paths:
             type: string
         - name: _id
           in: path
-          description: The user _id.
+          description: The user ID.
           required: true
           schema:
             type: string
-            example: SQafHvoFPuB57NmBD
+          example: SQafHvoFPuB57NmBD
       responses:
         '200':
           description: OK
@@ -338,7 +338,7 @@ paths:
           required: true
           schema:
             type: string
-            example: SQafHvoFPuB57NmBD
+          example: SQafHvoFPuB57NmBD
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
@@ -361,14 +361,14 @@ paths:
           required: true
           schema:
             type: string
-            example: zRAeTszXor8CCPceB
+          example: zRAeTszXor8CCPceB
         - name: token
           in: path
           description: The visitor token.
           required: true
           schema:
             type: string
-            example: iNKE8a6k6cjbqWhWd
+          example: iNKE8a6k6cjbqWhWd
       responses:
         '200':
           description: OK
@@ -775,13 +775,13 @@ paths:
           description: The contact's phone number.
           schema:
             type: string
-            example: '+1367895436'
+          example: '+1367895436'
         - name: custom
           in: query
           description: The defined custom fields.
           schema:
             type: string
-            example: fieldName=value
+          example: fieldName=value
       responses:
         '200':
           description: OK
@@ -873,7 +873,15 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: name
           in: query
-          description: 'The data that you want to get.  The available options are:  Total_conversations, Avg_chat_duration,  Total_messages, Avg_first_response_time, Best_first_response_time, Avg_response_time, Avg_reaction_time.'
+          description: |-
+            The data that you want to get. The available options are:  
+            * `Total_conversations`
+            * `Avg_chat_duration`
+            * `Total_messages`
+            * `Avg_first_response_time`
+            * `Best_first_response_time`
+            * `Avg_response_time`
+            * `Avg_reaction_time`
           required: true
           schema:
             type: string
@@ -883,20 +891,20 @@ paths:
           required: true
           schema:
             type: string
-            example: '2019-05-22T12:11:45.392Z'
+          example: '2019-05-22T12:11:45.392Z'
         - name: to
           in: query
           description: The end date
           required: true
           schema:
             type: string
-            example: '2023-05-22T12:11:45.392Z'
+          example: '2023-05-22T12:11:45.392Z'
         - name: departmentId
           in: query
           description: The department ID to return results for.
           schema:
             type: string
-            example: The department ID to return results for.
+          example: The department ID to return results for.
       responses:
         '200':
           description: OK
@@ -989,31 +997,31 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: name
           in: query
-          description: 'The data that you want to get. The available options are: Productivity, Conversations'
+          description: 'The data that you want to get. The available options are: `Productivity`, `Conversations`'
           required: true
           schema:
             type: string
-            example: Conversations
+          example: Conversations
         - name: from
           in: query
           description: The start date
           required: true
           schema:
             type: string
-            example: '2019-05-22T12:11:45.392Z'
+          example: '2019-05-22T12:11:45.392Z'
         - name: to
           in: query
           description: The end date
           required: true
           schema:
             type: string
-            example: '2023-05-22T12:11:45.392Z'
+          example: '2023-05-22T12:11:45.392Z'
         - name: departmentId
           in: query
           description: The department ID to return results for.
           schema:
             type: string
-            example: The department ID to return results for.
+          example: jsi9w0oakusss
       responses:
         '200':
           description: OK
@@ -1365,49 +1373,49 @@ paths:
           description: 'A list of agents, can be a list of ids or usernames'
           schema:
             type: string
-            example: '[''b32h3b2hhwb25d'']'
+          example: '[''b32h3b2hhwb25d'']'
         - name: departmentId
           in: query
           description: The department's id
           schema:
             type: string
-            example: AkzpHAvZpdnuchw2a
+          example: AkzpHAvZpdnuchw2a
         - name: open
           in: query
           description: If it should filter by open/closed rooms
           schema:
-            type: string
-            example: 'true'
+            type: boolean
+          example: true
         - name: createdAt
           in: query
           description: An object representing when the room was created(Can also be filtered only with `start` or `end`)
           schema:
             type: string
-            example: '{"start": "2018-01-26T00:11:22.345Z", "end": "2018-01-26T00:11:22.345Z"}'
+          example: '{"start": "2018-01-26T00:11:22.345Z", "end": "2018-01-26T00:11:22.345Z"}'
         - name: closedAt
           in: query
           description: An object representing when the room was created(Can also be filtered only with `start` or `end`)
           schema:
             type: string
-            example: '{"start": "2018-01-26T00:11:22.345Z", "end": "2018-01-26T00:11:22.345Z"}'
+          example: '{"start": "2018-01-26T00:11:22.345Z", "end": "2018-01-26T00:11:22.345Z"}'
         - name: tags
           in: query
           description: A list of tags
           schema:
             type: string
-            example: '[''rocket'', ''chat'']'
+          example: '[''rocket'', ''chat'']'
         - name: customFields
           in: query
           description: An object with custom fields to be filtered(previously created and populated at custom fields endpoints)
           schema:
             type: string
-            example: '{"docId": "aobEdbYhXfu5hkeqG"}'
+          example: '{"docId": "aobEdbYhXfu5hkeqG"}'
         - name: roomName
           in: query
           description: The room's name
           schema:
             type: string
-            example: room name
+          example: room name
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
@@ -1606,19 +1614,19 @@ paths:
           required: true
           schema:
             type: string
-            example: iNKE8a6k6cjbqWhWd
+          example: iNKE8a6k6cjbqWhWd
         - name: rid
           in: query
           description: The room _id.
           schema:
             type: string
-            example: kCJDd5peKiZnGJLPq
+          example: kCJDd5peKiZnGJLPq
         - name: agentId
           in: query
           description: The agent id.
           schema:
             type: string
-            example: The agent id
+          example: XycfA5CetCPuEjqxw
       responses:
         '200':
           description: OK
@@ -1935,10 +1943,6 @@ paths:
           application/json:
             schema:
               type: object
-              x-examples:
-                Example 1:
-                  rid: XFzMqgn33DcsQkpJp
-                  token: iNKE8a6k6cjbqWhWd
               properties:
                 rid:
                   type: string
@@ -1972,7 +1976,7 @@ paths:
           required: true
           schema:
             type: string
-            example: gMMeBpWyLeowCrzBv
+          example: gMMeBpWyLeowCrzBv
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
@@ -2810,7 +2814,7 @@ paths:
           required: true
           schema:
             type: string
-            example: iNKE8a6k6cjyPyOyI
+          example: iNKE8a6k6cjyPyOyI
         - name: rid
           in: path
           description: The room ID.
@@ -3118,31 +3122,31 @@ paths:
           description: Filter the result with any text.
           schema:
             type: string
-            example: fin
+          example: fin
         - name: enabled
           in: query
           description: Filter the result to only show enabled departments. The value can be boolean true or false.
           schema:
-            type: string
-            example: 'true'
+            type: boolean
+          example: true
         - name: showArchived
           in: query
           description: You can include the archived departments in the result. The value can be boolean true or false.
           schema:
-            type: string
-            example: 'true'
+            type: boolean
+          example: true
         - name: onlyMyDepartments
           in: query
           description: This parameter is for users with managers or admin roles. It only displays the departments that you are an agent of.
           schema:
-            type: string
-            example: 'true'
+            type: boolean
+          example: true
         - name: excludeDepartmentId
           in: query
           description: The department ID that you want to exclude from the result.
           schema:
             type: string
-            example: 64181a0728384134ed600dcc
+          example: 64181a0728384134ed600dcc
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
@@ -3440,8 +3444,8 @@ paths:
           in: query
           description: 'If agents should be included in the result. By default, the value is true and the list of agents is returned. The agents field will only be returned if the user has the `view-livechat-departments` permission.'
           schema:
-            type: string
-            example: 'true'
+            type: boolean
+          example: true
         - name: _id
           in: path
           description: The department _id.
@@ -3749,17 +3753,17 @@ paths:
           required: true
           schema:
             type: string
-            example: '{ "exceptions" : [], "conditions" : {}}'
+          example: '{"exceptions" : ["${dep1._id}"], "conditions": {"enabled": true}, "term":"test"}'
         - name: onlyMyDepartments
           in: query
           description: Only displays the departments that you are assigned to. The value can be boolean `true` or `false`
           schema:
-            type: string
+            type: boolean
         - name: showArchived
           in: query
           description: The result includes archived departments. The value can be Boolean `true` or `false`.
           schema:
-            type: string
+            type: boolean
       responses:
         '200':
           description: OK
@@ -4225,7 +4229,7 @@ paths:
         - $ref: '#/components/parameters/count'
         - schema:
             type: string
-            example: CAJioQNAvLnYWTy8i
+          example: CAJioQNAvLnYWTy8i
           in: query
           name: departmentId
           description: Enter the department ID for which you want the average service time.
@@ -4293,7 +4297,7 @@ paths:
         - $ref: '#/components/parameters/count'
         - schema:
             type: string
-            example: 64cf6c6feb07a913d946f34d
+          example: 64cf6c6feb07a913d946f34d
           in: query
           name: departmentId
           description: Enter the department ID for which you want the average chat duration.
@@ -4359,7 +4363,7 @@ paths:
         - $ref: '#/components/parameters/count'
         - schema:
             type: string
-            example: 64cf6c6feb07a913d946f34d
+          example: 64cf6c6feb07a913d946f34d
           in: query
           name: departmentId
           description: Enter the department ID for which you want the total service time.
@@ -4429,7 +4433,7 @@ paths:
         - $ref: '#/components/parameters/count'
         - schema:
             type: string
-            example: 64181a0728384134ed600dcc
+          example: 64181a0728384134ed600dcc
           in: query
           name: departmentId
           description: Enter the department ID for which you want the average waiting time.
@@ -4495,7 +4499,7 @@ paths:
         - $ref: '#/components/parameters/count'
         - schema:
             type: string
-            example: GgYvrkAF63aeQmsh4
+          example: GgYvrkAF63aeQmsh4
           in: query
           name: departmentId
           description: Enter the department ID for which you want the total transferred chats.
@@ -4563,7 +4567,7 @@ paths:
         - $ref: '#/components/parameters/count'
         - schema:
             type: string
-            example: 4LCeYmCHHnQ3EDBgf
+          example: 4LCeYmCHHnQ3EDBgf
           in: query
           name: departmentId
           description: Enter the department ID for which you want the total abandoned chats.
@@ -4639,7 +4643,7 @@ paths:
         - $ref: '#/components/parameters/count'
         - schema:
             type: string
-            example: 64cf6c6feb07a913d946f34d
+          example: 64cf6c6feb07a913d946f34d
           in: query
           name: departmentId
           description: Enter the department ID for which you want the percentage of abandoned chats.
@@ -5363,7 +5367,7 @@ paths:
           required: true
           schema:
             type: string
-            example: address
+          example: address
       responses:
         '200':
           description: OK
@@ -5433,7 +5437,7 @@ paths:
         - Livechat Audio Video Calls
       summary: Start Call
       description: |-
-        Note: WebRTC is no longer supported with Omnichannel Livechat audio/video calls. To configure audio/video calls, see [Omnichannel Video/Audio Call Configuration](https://docs.rocket.chat/use-rocket.chat/rocket.chat-conference-call/omnichannel-video-audio-call-configuration).
+        **Note**: WebRTC is no longer supported with Omnichannel Livechat audio/video calls. To configure audio/video calls, see [Omnichannel Video/Audio Call Configuration](https://docs.rocket.chat/use-rocket.chat/rocket.chat-conference-call/omnichannel-video-audio-call-configuration).
         To configure voice channel, see [Voice Channel](https://docs.rocket.chat/use-rocket.chat/rocket.chat-voice-channel).
         Start a WebRTC audio/video call in a room. It requires the `view-l-room` [permission](https://docs.rocket.chat/use-rocket.chat/workspace-administration/permissions).
       operationId: get-api-v1-livechat-webrtc.call
@@ -5474,6 +5478,8 @@ paths:
                     success: true
   '/api/v1/livechat/webrtc.call/{callId}':
     put:
+      tags:
+        - Livechat Audio Video Calls
       summary: Update Call Status
       description: |-
         Note: WebRTC is no longer supported with Omnichannel Livechat audio/video calls. To configure audio/video calls, see [Omnichannel Video/Audio Call Configuration](https://docs.rocket.chat/use-rocket.chat/rocket.chat-conference-call/omnichannel-video-audio-call-configuration).
@@ -5489,7 +5495,7 @@ paths:
           required: true
           schema:
             type: string
-            example: zRAeTszXor8CCPceB
+          example: zRAeTszXor8CCPceB
       requestBody:
         content:
           application/json:
@@ -6098,7 +6104,7 @@ paths:
         - Livechat Agent Stats
       summary: Get History of Agents Available for Service
       description: |-
-        <h2>Premium</>
+        <h2>Premium</h2>
         Return the list of agents and their available time for the provided time frame.
         Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-agents-available-for-service-history
@@ -6111,8 +6117,8 @@ paths:
           in: query
           description: 'If set to true, it shares the service history which will contain more granular data such as the time of the day the agent was available.'
           schema:
-            type: string
-            example: 'true'
+            type: boolean
+          example: true
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
       responses:
@@ -8717,7 +8723,7 @@ paths:
           required: true
           schema:
             type: string
-            example: twilio
+          example: twilio
       requestBody:
         content:
           application/json:
@@ -9035,7 +9041,7 @@ paths:
           required: true
           schema:
             type: string
-            example: Lk52shJFYyb55trw8
+          example: Lk52shJFYyb55trw8
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
       responses:
@@ -9131,7 +9137,7 @@ paths:
           required: true
           schema:
             type: string
-            example: Lk52shJFYyb55trw8
+          example: Lk52shJFYyb55trw8
   /api/v1/livechat/monitors:
     get:
       tags:
@@ -9240,7 +9246,7 @@ paths:
           required: true
           schema:
             type: string
-            example: 1-agent
+          example: 1-agent
       responses:
         '200':
           description: OK
@@ -9594,7 +9600,7 @@ paths:
           required: true
           schema:
             type: string
-            example: 64007cc2fa0ed7dd905092e3
+          example: 64007cc2fa0ed7dd905092e3
       requestBody:
         content:
           application/json:
@@ -10011,7 +10017,7 @@ paths:
           required: true
           schema:
             type: string
-            example: pXkCRLGxD34y2FEZq
+          example: pXkCRLGxD34y2FEZq
       responses:
         '200':
           description: OK
@@ -11085,7 +11091,7 @@ paths:
                         monitorId: cLNSTRsipLCSq7qno
                         unitId: sriw2wmP2Zz2pPrre
                         _updatedAt: '2021-06-28T22:10:01.342Z'
-                        username: milton.rucks
+                        username: miln.ru
                     success: true
               examples: {}
       description: "<h2>Premium</h2>\r\nThis endpoint has been renamed to Get List of Unit Monitors from Rocket.Chat 5.0."
@@ -14545,12 +14551,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
-        - name: _id
-          in: path
-          description: The canned response's ID.
-          required: true
-          schema:
-            type: string
       responses:
         '200':
           description: OK
@@ -14607,7 +14607,7 @@ paths:
     parameters:
       - schema:
           type: string
-          example: EwmbZ9nLSx7kFamYB
+        example: EwmbZ9nLSx7kFamYB
         name: _id
         in: path
         required: true
@@ -14881,7 +14881,7 @@ paths:
     parameters:
       - schema:
           type: string
-          example: ZKWP8LfGnRHQ3ozWa
+        example: ZKWP8LfGnRHQ3ozWa
         name: _id
         in: path
         required: true
@@ -15081,14 +15081,14 @@ paths:
       parameters:
         - schema:
             type: string
-            example: 8s7e9ony6ctl27e1qf8kue
+          example: 8s7e9ony6ctl27e1qf8kue
           in: query
           name: token
           description: The visitor token.
           required: true
         - schema:
             type: string
-            example: mmqCzYgiL8fzRYfuY
+          example: mmqCzYgiL8fzRYfuY
           in: query
           name: rid
           description: The room ID.
@@ -15288,25 +15288,25 @@ paths:
       parameters:
         - schema:
             type: string
-            example: iNKE8a6k6cjbqWhWd
+          example: iNKE8a6k6cjbqWhWd
           in: query
           name: token
           description: The visitor token.
           required: true
         - schema:
             format: date-time
-            example: '2018-09-14T13:31:33.201Z'
+          example: '2018-09-14T13:31:33.201Z'
           in: query
           name: ls
           description: The timestamp to start loading the messages.
         - schema:
             format: date-time
-            example: '2018-09-14T14:31:33.201Z'
+          example: '2018-09-14T14:31:33.201Z'
           in: query
           name: end
         - schema:
             type: number
-            example: 25
+          example: 25
           in: query
           name: limit
           description: The number of messages to load.
@@ -15432,7 +15432,7 @@ components:
       required: true
       schema:
         type: string
-        example: '2020-09-10T23:59:22.345Z'
+      example: '2020-09-10T23:59:22.345Z'
     end:
       name: end
       in: query
@@ -15440,7 +15440,7 @@ components:
       required: true
       schema:
         type: string
-        example: '2020-09-09T00:11:22.345Z'
+      example: '2020-09-09T00:11:22.345Z'
     departmentId:
       name: departmentId
       in: query
@@ -15455,7 +15455,7 @@ components:
       required: true
       schema:
         type: string
-        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
     UserId:
       name: X-User-Id
       in: header
@@ -15463,14 +15463,14 @@ components:
       required: true
       schema:
         type: string
-        example: rbAXPnMktTFbNpwtJ
+      example: rbAXPnMktTFbNpwtJ
     offset:
       name: offset
       in: query
       required: false
       schema:
         type: integer
-        example: 50
+      example: 50
       description: 'Number of items to "skip" in the query, i.e. requests return count items, skipping the first offset items.'
     count:
       name: count
@@ -15478,7 +15478,7 @@ components:
       required: false
       schema:
         type: integer
-        example: 25
+      example: 25
       description: The number of items to return.
     sort:
       name: sort
@@ -15509,9 +15509,6 @@ components:
             properties:
               success:
                 type: boolean
-            x-examples:
-              Example 1:
-                success: true
           examples:
             Example 1:
               value:
@@ -15527,10 +15524,6 @@ components:
                 type: string
               message:
                 type: string
-            x-examples:
-              Example 1:
-                status: error
-                message: You must be logged in to do this.
           examples:
             Authorization Error:
               value:
@@ -15547,10 +15540,6 @@ components:
                 type: boolean
               error:
                 type: string
-            x-examples:
-              Example 1:
-                success: false
-                error: 'User does not have the permissions required for this action [error-unauthorized]'
           examples:
             Example 1:
               value:
