@@ -39,12 +39,13 @@ paths:
                   description: The message id
                 asUser:
                   type: boolean
-                  description: Should the message  be deleted as the user who sent it? It is `false` by default.
+                  description: Should the message be deleted as the user who sent it? It is `false` by default.
               required:
                 - roomId
                 - msgId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: ByehQjC44FwMeiLbX
                   msgId: 7aDSXtjMA3KPLxLjt
                   asUser: false
@@ -78,8 +79,9 @@ paths:
                             type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     _id: jEnjsxuoDJamGjbH2
                     ts: '1696533809813'
                     message:
@@ -101,8 +103,9 @@ paths:
                     type: boolean
                   error:
                     type: string
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     success: false
                     error: The room id provided does not match where the message is from.
         '401':
@@ -144,8 +147,9 @@ paths:
               required:
                 - messageId
                 - emoji
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   messageId: 7aDSXtjMA3KPLxLjt
                   emoji: smile
                   shouldReact: true
@@ -191,14 +195,6 @@ paths:
                 - roomId
                 - msgId
                 - text
-              x-examples:
-                Example 1:
-                  roomId: 64f0f82c2c26843a68c1f7ba
-                  msgId: vzGBzSwy6jJQDwtZe
-                  text: 'Updated list of links! https://google.com https://hola.org/ https://www.usepayday.com/ https://www.getbumpa.com/ https://www.atlassian.com/software/jira http://localhost:3000/'
-                  previewUrls:
-                    - 'https://google.com'
-                    - 'http://localhost:3000/'
             examples:
               Example:
                 value:
@@ -284,105 +280,6 @@ paths:
                             type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    message:
-                      _id: vzGBzSwy6jJQDwtZe
-                      rid: 64f0f82c2c26843a68c1f7ba
-                      msg: 'Updated list of links! https://google.com https://hola.org/ https://www.usepayday.com/ https://www.getbumpa.com/ https://www.atlassian.com/software/jira http://localhost:3000/'
-                      ts: '2023-09-20T17:27:59.945Z'
-                      u:
-                        _id: rbAXPnMktTFbNpwtJ
-                        username: roxie
-                        name: test test
-                      _updatedAt: '2023-09-20T22:22:45.793Z'
-                      urls:
-                        - url: 'https://google.com'
-                          meta: {}
-                        - url: 'https://hola.org/'
-                          meta: {}
-                          ignoreParse: true
-                        - url: 'https://www.usepayday.com/'
-                          meta: {}
-                          ignoreParse: true
-                        - url: 'https://www.getbumpa.com/'
-                          meta: {}
-                          ignoreParse: true
-                        - url: 'https://www.atlassian.com/software/jira'
-                          meta: {}
-                          ignoreParse: true
-                        - url: 'http://localhost:3000/'
-                          meta: {}
-                      mentions: []
-                      channels: []
-                      md:
-                        - type: PARAGRAPH
-                          value:
-                            - type: PLAIN_TEXT
-                              value: 'Updated list of links! '
-                            - type: LINK
-                              value:
-                                src:
-                                  type: PLAIN_TEXT
-                                  value: 'https://google.com'
-                                label:
-                                  - type: PLAIN_TEXT
-                                    value: 'https://google.com'
-                            - type: PLAIN_TEXT
-                              value: ' '
-                            - type: LINK
-                              value:
-                                src:
-                                  type: PLAIN_TEXT
-                                  value: 'https://hola.org/'
-                                label:
-                                  - type: PLAIN_TEXT
-                                    value: 'https://hola.org/'
-                            - type: PLAIN_TEXT
-                              value: ' '
-                            - type: LINK
-                              value:
-                                src:
-                                  type: PLAIN_TEXT
-                                  value: 'https://www.usepayday.com/'
-                                label:
-                                  - type: PLAIN_TEXT
-                                    value: 'https://www.usepayday.com/'
-                            - type: PLAIN_TEXT
-                              value: ' '
-                            - type: LINK
-                              value:
-                                src:
-                                  type: PLAIN_TEXT
-                                  value: 'https://www.getbumpa.com/'
-                                label:
-                                  - type: PLAIN_TEXT
-                                    value: 'https://www.getbumpa.com/'
-                            - type: PLAIN_TEXT
-                              value: ' '
-                            - type: LINK
-                              value:
-                                src:
-                                  type: PLAIN_TEXT
-                                  value: 'https://www.atlassian.com/software/jira'
-                                label:
-                                  - type: PLAIN_TEXT
-                                    value: 'https://www.atlassian.com/software/jira'
-                            - type: PLAIN_TEXT
-                              value: ' '
-                            - type: LINK
-                              value:
-                                src:
-                                  type: PLAIN_TEXT
-                                  value: 'http://localhost:3000/'
-                                label:
-                                  - type: PLAIN_TEXT
-                                    value: 'http://localhost:3000/'
-                      editedAt: '2023-09-20T22:22:45.737Z'
-                      editedBy:
-                        _id: rbAXPnMktTFbNpwtJ
-                        username: roxie
-                    success: true
               examples:
                 Example:
                   value:
@@ -514,8 +411,9 @@ paths:
               required:
                 - messageId
                 - description
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   messageId: 7aDSXtjMA3KPLxLjt
                   description: test
       responses:
@@ -549,8 +447,9 @@ paths:
                   description: The id of the message to follow
               required:
                 - mid
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   mid: 7aDSXtjMA3KPLxLjt
       responses:
         '200':
@@ -583,8 +482,9 @@ paths:
                   description: The id of the message to unfollow
               required:
                 - mid
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   mid: 7aDSXtjMA3KPLxLjt
       responses:
         '200':
@@ -611,7 +511,7 @@ paths:
           required: true
           schema:
             type: string
-            example: 7aDSXtjMA3KPLxLjt
+          example: 7aDSXtjMA3KPLxLjt
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
@@ -641,7 +541,7 @@ paths:
           description: The id of the room
           schema:
             type: string
-            example: 7aDSXtjMA3KPLxLjt
+          example: 7aDSXtjMA3KPLxLjt
       responses:
         '200':
           description: OK
@@ -743,8 +643,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     threads:
                       - _id: NZieMNQDEdMDmLLip
                         rid: 6GFJ3tbmHiyHbahmC
@@ -803,6 +704,7 @@ paths:
           required: true
           schema:
             type: string
+          example: 2018-12-12T00:11:22.345Z
         - $ref: '#/components/parameters/RoomId'
       responses:
         '200':
@@ -827,8 +729,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     messages:
                       - _id: wKBW2YwrPahpag4zA
                       - _id: SJXYBbageAo8bo7rX
@@ -907,8 +810,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     messages:
                       - _id: 652dc4dda2f73c7460e18df8
                         t: discussion-created
@@ -1025,8 +929,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     messages:
                       - _id: p93m92bPRudzoJ7oW
                         rid: 6GFJ3tbmHiyHbahmC
@@ -1105,7 +1010,7 @@ paths:
           required: true
           schema:
             type: string
-            example: ByehQjC44FwMeiLbX
+          example: ByehQjC44FwMeiLbX
       responses:
         '200':
           description: OK
@@ -1140,8 +1045,9 @@ paths:
                               type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     receipts:
                       - _id: HksCYdTpCiM9DZ7Sa
                         roomId: GENERAL
@@ -1272,8 +1178,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     messages:
                       - _id: ycHhPqyoN2BZHt3Ag
                         rid: 6GFJ3tbmHiyHbahmC
@@ -1433,32 +1340,6 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    messages:
-                      - _id: QQuPFFcLmsqHWeqhn
-                        rid: GENERAL
-                        msg: |-
-                          ``````
-                          test
-                          ``````
-                        ts: '2019-10-25T21:42:39.022Z'
-                        u:
-                          _id: CaevAPDbXN252kyXa
-                          username: marcos.defendi
-                          name: Marcos Defendi
-                        _updatedAt: '2019-10-25T22:54:02.094Z'
-                        mentions: []
-                        channels: []
-                        snippetName: ee
-                        snippeted: true
-                        snippetedBy:
-                          _id: CaevAPDbXN252kyXa
-                          username: marcos.defendi
-                    count: 1
-                    offset: 0
-                    total: 1
-                    success: true
               examples:
                 Example:
                   value:
@@ -1506,7 +1387,7 @@ paths:
           required: true
           schema:
             type: string
-            example: ByehQjC44FwMeiLbX
+          example: ByehQjC44FwMeiLbX
       responses:
         '200':
           description: OK
@@ -1558,26 +1439,6 @@ paths:
                             type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    message:
-                      _id: 48sifqi7ezh4ifKaK
-                      rid: GENERAL
-                      msg: '```dsfsdfsdf```'
-                      ts: '2019-10-25T23:26:31.550Z'
-                      u:
-                        _id: CaevAPDbXN252kyXa
-                        username: marcos.defendi
-                        name: Marcos Defendi
-                      _updatedAt: '2019-10-25T23:27:51.300Z'
-                      mentions: []
-                      channels: []
-                      snippetName: rr
-                      snippeted: true
-                      snippetedBy:
-                        _id: CaevAPDbXN252kyXa
-                        username: marcos.defendi
-                    success: true
               examples:
                 Example:
                   value:
@@ -1676,8 +1537,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     messages:
                       - _id: 652dc4dda2f73c7460e18df8
                         t: discussion-created
@@ -1729,7 +1591,7 @@ paths:
           required: true
           schema:
             type: string
-            example: 7aDSXtjMA3KPLxLjt
+          example: 7aDSXtjMA3KPLxLjt
       responses:
         '200':
           description: OK
@@ -1788,8 +1650,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     messages:
                       - _id: gcGai9bRREqokjyPc
                         rid: GENERAL
@@ -1886,8 +1749,9 @@ paths:
                   description: The id of the message to pin
               required:
                 - messageId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   messageId: 7aDSXtjMA3KPLxLjt
       responses:
         '200':
@@ -1942,8 +1806,9 @@ paths:
                         type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     message:
                       _id: 651f23c0a2f73c7460e18d1a
                       t: message_pinned
@@ -1969,7 +1834,7 @@ paths:
         - Chat
       summary: Post Message
       description: |- 
-        Note: You only can send alias and avatar properties if your user has the bot role. We implement this rule to avoid users to impersonate other users
+        **Note**: You only can send alias and avatar properties if your user has the bot role. We implement this rule to avoid users to impersonate other users
         ### Change Log
         | Version | Description |
         | ------- |---------------------------------------------------------------------------- |
@@ -2082,37 +1947,6 @@ paths:
                   description: Defaults to true when tmid is specified. Message will also be shown in the channel/room if value is true.
               required:
                 - roomId
-              x-examples:
-                Example 1:
-                  alias: Gruggy
-                  avatar: 'http://res.guggy.com/logo_128.png'
-                  channel: '#general'
-                  emoji: ':smirk:'
-                  roomId: Xnb2kLD2Pnhdwe3RH
-                  text: Sample message
-                  attachments:
-                    - audio_url: 'http://www.w3schools.com/tags/horse.mp3'
-                      author_icon: 'https://avatars.githubusercontent.com/u/850391?v=3'
-                      author_link: 'https://rocket.chat/'
-                      author_name: Bradley Hilton
-                      collapsed: false
-                      color: '#ff0000'
-                      fields:
-                        - short: true
-                          title: Test
-                          value: Testing out something or other
-                        - short: true
-                          title: Another Test
-                          value: '[Link](https://google.com/) something and this and that.'
-                      image_url: 'http://res.guggy.com/logo_128.png'
-                      message_link: 'https://google.com'
-                      text: Yay for gruggy!
-                      thumb_url: 'http://res.guggy.com/logo_128.png'
-                      title: Attachment Example
-                      title_link: 'https://youtube.com'
-                      title_link_download: true
-                      ts: '2016-12-09T16:53:06.761Z'
-                      video_url: 'http://www.w3schools.com/tags/movie.mp4'
             examples:
               Example:
                 value:
@@ -2185,8 +2019,9 @@ paths:
                         type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     ts: 1481748965123
                     channel: general
                     message:
@@ -2229,8 +2064,9 @@ paths:
                   description: The id of the message to unpin
               required:
                 - messageId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   messageId: 7aDSXtjMA3KPLxLjt
       responses:
         '200':
@@ -2310,8 +2146,9 @@ paths:
                           type: number
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     messages:
                       - _id: px9KLW9G2SfD5DKFt
                         rid: GENERAL
@@ -2333,7 +2170,8 @@ paths:
       summary: Send Message
       description: |- 
         The difference between `chat.postMessage` and `chat.sendMessage` is that `chat.sendMessage` allows for passing a value for `_id` and the other one doesn't. Also, `chat.sendMessage` only sends it to one channel whereas the other one allows for sending to more than one channel at a time.
-        Note: You can only send alias and avatar properties if your user has the `message-impersonate permission`. We implemented this rule to avoid users impersonating other users. By default, only the bot role has this permission, but that can be changed in Administration -> Permissions -> message-impersonate.
+        
+        **Note**: You can only send alias and avatar properties if your user has the `message-impersonate permission`. We implemented this rule to avoid users impersonating other users. By default, only the bot role has this permission, but that can be changed in Administration -> Permissions -> message-impersonate.
         ### Change Log
         | Version | Description                         |
         | ------- | ----------------------------------- |
@@ -2352,7 +2190,7 @@ paths:
           * If the message contains attachments or quotes, no URL is previewed.
           * Internal URLs are not considered in the `previewUrls` array.
           * A maximum of five external URLs is previewed  per message. If there are more than 5 external URLs, no URL is previewed
-          > URLs that include the same text as the [**Site URL**](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/general#general-settings) are referred to as Internal URLs."
+          > URLs that include the same text as the [**Site URL**](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/general#general-settings) are referred to as Internal URLs.
         content:
           application/json:
             schema:
@@ -2463,37 +2301,6 @@ paths:
                   description: An array to define which URL previews should be retrieved from each message.
                   items:
                     type: string
-              x-examples:
-                Example 1:
-                  message:
-                    rid: Xnb2kLD2Pnhdwe3RH
-                    msg: Sample message
-                    alias: Gruggy
-                    emoji: ':smirk:'
-                    avatar: 'http://res.guggy.com/logo_128.png'
-                    attachments:
-                      - color: '#ff0000'
-                        text: Yay for gruggy!
-                        ts: '2016-12-09T16:53:06.761Z'
-                        thumb_url: 'http://res.guggy.com/logo_128.png'
-                        message_link: 'https://google.com'
-                        collapsed: false
-                        author_name: Bradley Hilton
-                        author_link: 'https://rocket.chat/'
-                        author_icon: 'https://avatars.githubusercontent.com/u/850391?v=3'
-                        title: Attachment Example
-                        title_link: 'https://youtube.com'
-                        title_link_download: true
-                        image_url: 'http://res.guggy.com/logo_128.png'
-                        audio_url: 'http://www.w3schools.com/tags/horse.mp3'
-                        video_url: 'http://www.w3schools.com/tags/movie.mp4'
-                        fields:
-                          - short: true
-                            title: Test
-                            value: Testing out something or other
-                          - short: true
-                            title: Another Test
-                            value: '[Link](https://google.com/) something and this and that.'
             examples:
               Message with Attachments:
                 value:
@@ -2596,8 +2403,9 @@ paths:
                         type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     message:
                       rid: GENERAL
                       msg: '123456789'
@@ -2639,8 +2447,9 @@ paths:
                   description: The id of the message to star
               required:
                 - messageId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   messageId: 7aDSXtjMA3KPLxLjt
       responses:
         '200':
@@ -2672,8 +2481,9 @@ paths:
                   description: The id of the message to unstar
               required:
                 - messageId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   messageId: 7aDSXtjMA3KPLxLjt
       responses:
         '200':
@@ -2802,8 +2612,9 @@ paths:
                               type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     threads:
                       update:
                         - _id: J8Sqi5zPw62WgE4Md
@@ -2937,8 +2748,9 @@ paths:
                           type: object
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     messages:
                       update:
                         - _id: 8BciMkvotHLpmpDEG
@@ -2981,6 +2793,7 @@ paths:
           required: true
           schema:
             type: string
+          example: 2019-04-16T18:30:46.669Z
       responses:
         '200':
           description: OK
@@ -3060,8 +2873,9 @@ paths:
                           type: object
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
 
                     result:
                       updated:
@@ -3130,8 +2944,9 @@ paths:
                   description: The room id
               required:
                 - roomId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: ByehQjC44FwMeiLbX
       responses:
         '200':
@@ -3197,8 +3012,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     joined: true
                     members: 2
                     unreads: 4
@@ -3240,13 +3056,10 @@ paths:
                 excludeSelf:
                   type: boolean
                   description: Creates the direct message session excluding the current authenticated user. The session will only be opened if the current user has the `view-room-administration` permission
-              x-examples:
-                Example 1:
-                  username: rocket.cat
             examples:
               Example:
                 value:
-                  username: string
+                  username: kim.dok
                   excludeSelf: true
       responses:
         '200':
@@ -3269,8 +3082,9 @@ paths:
                           type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     room:
                       t: d
                       rid: PMrDaS4axRqkjY7errocket.cat
@@ -3310,9 +3124,6 @@ paths:
                     username:
                       type: string
                       description: The username of the user in the DM
-              x-examples:
-                Example 1:
-                  roomId: ByehQjC44FwMeiLbX
             examples:
               Example:
                 value:
@@ -3412,8 +3223,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     files:
                       - _id: 6542e355a2f73c7460e18ef6
                         name: 2023-11-01_21-13-38.snagx
@@ -3462,36 +3274,36 @@ paths:
           description: The end of time range of messages to retrieve
           schema:
             type: string
-            example: '2016-09-30T13:42:25.304Z'
+          example: '2016-09-30T13:42:25.304Z'
         - name: oldest
           in: query
           description: The start of the time range of messages to retrieve
           schema:
             type: string
-            example: '2016-05-30T13:42:25.304Z'
+          example: '2016-05-30T13:42:25.304Z'
         - name: inclusive
           in: query
           description: Whether messages which land on latest and oldest should be included
           schema:
             type: string
-            example: 'true'
+          example: 'true'
         - name: offset
           in: query
           description: The offset of the list messages to retrieve
           schema:
             type: string
-            example: '10'
+          example: '10'
         - name: count
           in: query
           description: The amount of messages to retrieve. It is 20 by default
           schema:
             type: string
-            example: '100'
+          example: '100'
         - name: unreads
           in: query
           description: Whether the amount of unreads should be included.
           schema:
-            type: string
+            type: boolean
       responses:
         '200':
           description: OK
@@ -3528,8 +3340,9 @@ paths:
                           type: boolean
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     messages:
                       - _id: AkzpHAvZpdnuchw2a
                         rid: ByehQjC44FwMeiLbX
@@ -3724,8 +3537,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     ims:
                       - _id: rYhzFRd2QZjNwAAXXrocket.cat
                         t: d
@@ -3946,8 +3760,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     ims:
                       - _id: 5fRTXMt7DMJbpPJfhrbAXPnMktTFbNpwtJ
                         t: d
@@ -4099,8 +3914,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     members:
                       - _id: 5fRTXMt7DMJbpPJfh
                         username: test.john
@@ -4218,8 +4034,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     messages:
                       - _id: dGNzxH29pFm4Qhufh
                         rid: 5fRTXMt7DMJbpPJfhgzvcvpov9G4TxbGFS
@@ -4282,7 +4099,9 @@ paths:
         - IM
       summary: Message Others
       description: |-
-        Retrieves the messages from any direct message in the server.  For this method to work, navigate to  **Administration > Workspace > Settings > General > REST API > Enable Direct Message History Endpoint** and enable it. Permission required: `view-room-administration`.
+        Retrieves the messages from any direct message in the server.  For this method to work, navigate to  **Administration > Workspace > Settings > General > REST API > Enable Direct Message History Endpoint** and enable it. 
+        
+        Permission required: `view-room-administration`.
         ### Change Log
         | Version | Description             |
         | ------- | ----------------------- |
@@ -4333,8 +4152,9 @@ paths:
                           type: boolean
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     messages:
                       - _id: AkzpHAvZpdnuchw2a
                         rid: ByehQjC44FwMeiLbX
@@ -4402,8 +4222,9 @@ paths:
                   description: The room Id
               required:
                 - roomId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: 5fRTXMt7DMJbpPJfhrbAXPnMktTFbNpwtJ
       responses:
         '200':
@@ -4439,8 +4260,9 @@ paths:
               required:
                 - roomId
                 - topic
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: ByehQjC44FwMeiLbX
                   topic: Discuss all of the testing
       responses:
@@ -4455,8 +4277,9 @@ paths:
                     type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     topic: Discuss all of the testing
                     success: true
 tags:
@@ -4470,7 +4293,7 @@ components:
       description: The room id. It is required if the `roomName` is not provided.
       schema:
         type: string
-        example: dlp
+      example: dlp
     Optional-RoomName:
       name: roomName
       in: query
@@ -4478,7 +4301,7 @@ components:
       required: false
       schema:
         type: string
-        example: WDuJLFkjwk6L7LdFC
+      example: WDuJLFkjwk6L7LdFC
     RoomId:
       name: roomId
       in: query
@@ -4486,7 +4309,7 @@ components:
       required: true
       schema:
         type: string
-        example: 6GFJ3tbmHiyHbahmC
+      example: 6GFJ3tbmHiyHbahmC
     Optional-Username:
       name: username
       in: query
@@ -4501,7 +4324,7 @@ components:
       required: true
       schema:
         type: string
-        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
     UserId:
       name: X-User-Id
       in: header
@@ -4509,7 +4332,7 @@ components:
       required: true
       schema:
         type: string
-        example: rbAXPnMktTFbNpwtJ
+      example: rbAXPnMktTFbNpwtJ
     offset:
       name: offset
       in: query
@@ -4517,7 +4340,7 @@ components:
       required: false
       schema:
         type: integer
-        example: 50
+      example: 50
     count:
       name: count
       in: query
@@ -4525,7 +4348,7 @@ components:
       required: false
       schema:
         type: integer
-        example: 50
+      example: 50
     sort:
       name: sort
       in: query
@@ -4555,9 +4378,6 @@ components:
             properties:
               success:
                 type: boolean
-            x-examples:
-              Example 1:
-                success: true
           examples:
             Success:
               value:
@@ -4573,10 +4393,6 @@ components:
                 type: string
               message:
                 type: string
-            x-examples:
-              Example 1:
-                status: error
-                message: You must be logged in to do this.
           examples:
             Authorization Error:
               value:
