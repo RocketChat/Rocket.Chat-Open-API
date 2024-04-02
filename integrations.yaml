@@ -113,12 +113,6 @@ paths:
                 - enabled
                 - event
                 - urls
-              x-examples:
-                Example 1:
-                  type: webhook-incoming
-                  username: rocket.cat
-                  channel: '#general'
-                  scriptEnabled: false
             examples:
               Incoming integration example:
                 value:
@@ -185,26 +179,6 @@ paths:
                         type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    integration:
-                      type: webhook-incoming
-                      username: test.cat
-                      channel:
-                        - '#exo'
-                      scriptEnabled: true
-                      name: test.cat
-                      enabled: true
-                      scriptEngine: isolated-vm
-                      overrideDestinationChannelEnabled: false
-                      token: XuHp73MccmCvJ9m3fKdQK6HKW9tjhBcbTKKHCSSLsv7qn4fk
-                      userId: CkCPNcvsvCDfmWLqC
-                      _createdAt: '2024-01-10T14:12:07.739Z'
-                      _createdBy:
-                        _id: CkCPNcvsvCDfmWLqC
-                        username: test.cat
-                      _id: 659ea5b72dd9f928ada3e43e
-                    success: true
               examples:
                 Incoming integration example:
                   value:
@@ -268,11 +242,13 @@ paths:
           required: true
           schema:
             type: string
+          example: ByehQjC44FwMeiLbX
         - name: createdBy
           in: query
           description: The user ID who created the integration.
           schema:
             type: string
+          example: fn5u45ui34fvb
       responses:
         '200':
           description: ''
@@ -323,28 +299,6 @@ paths:
                         type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    integration:
-                      _id: 659ea5e42dd9f928ada3e451
-                      type: webhook-outgoing
-                      username: test.cat
-                      channel:
-                        - '#exo'
-                      scriptEnabled: true
-                      name: test.cat
-                      enabled: true
-                      event: sendMessage
-                      urls:
-                        - 'https://text2gif.guggy.com/guggify'
-                      scriptEngine: isolated-vm
-                      userId: CkCPNcvsvCDfmWLqC
-                      _createdAt: '2024-01-10T14:12:52.201Z'
-                      _createdBy:
-                        _id: CkCPNcvsvCDfmWLqC
-                        username: test.cat
-                      _updatedAt: '2024-01-10T14:12:52.203Z'
-                    success: true
               examples:
                 Success Example:
                   value:
@@ -394,6 +348,7 @@ paths:
           required: true
           schema:
             type: string
+          example: nvdQuJQ6tE9HRFBzd
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
@@ -419,8 +374,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     history: []
                     offset: 0
                     items: 0
@@ -525,54 +481,6 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    integrations:
-                      - _id: WMQDChpnYTRmFre9h
-                        enabled: true
-                        username: rocket.cat
-                        alias: Guggy
-                        avatar: 'https://image.crisp.im/avatar/website/17651a90-e082-43f6-b308-957cea6e323c/128'
-                        name: Guggy
-                        triggerWords:
-                          - '!guggy'
-                          - guggy
-                          - gif+
-                        urls:
-                          - 'http://text2gif.guggy.com/guggify'
-                        token: aobEdbYhXfu5hkeqG
-                        script: ...
-                        scriptEnabled: true
-                        impersonateUser: false
-                        scriptCompiled: ...
-                        scriptError: null
-                        type: webhook-outgoing
-                        userId: rocket.cat
-                        channel: []
-                        _createdAt: '2017-01-05T17:06:05.660Z'
-                        _createdBy:
-                          username: graywolf336
-                          _id: R4jgcQaQhvvK6K3iY
-                        _updatedAt: '2017-01-05T17:06:05.660Z'
-                      - _id: 3aazpZ2WzoBP8msi9
-                        type: webhook-outgoing
-                        name: Testing via REST API
-                        enabled: false
-                        username: rocket.cat
-                        urls:
-                          - 'http://text2gif.guggy.com/guggify'
-                        scriptEnabled: false
-                        userId: rocket.cat
-                        channel: []
-                        _createdAt: '2017-01-06T13:23:46.018Z'
-                        _createdBy:
-                          username: graywolf336
-                          _id: R4jgcQaQhvvK6K3iY
-                        _updatedAt: '2017-01-06T13:23:46.018Z'
-                    offset: 0
-                    items: 2
-                    total: 2
-                    success: true
               examples:
                 Success Example:
                   value:
@@ -713,8 +621,9 @@ paths:
                 - scriptEnabled
                 - channel
                 - integrationId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   type: webhook-incoming
                   name: Test
                   enabled: false
@@ -781,32 +690,6 @@ paths:
                             type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    integration:
-                      _id: x3tPXa9XXRqW6Xp2M
-                      enabled: false
-                      channel:
-                        - '#test'
-                      username: rodriq
-                      name: Test
-                      alias: Jim
-                      avatarUrl: ''
-                      emoji: ':ghost:'
-                      scriptEnabled: false
-                      script: console.log("MANNNNN ---------------------------------------------------------")
-                      type: webhook-incoming
-                      token: XYsrkngRr5PBkWhCqJWk5ZfKzQoxSv4QhxkK5trSgJENwbRL
-                      userId: d26x6zSkaPSe5gCyy
-                      _createdAt: '2021-10-22T14:48:46.025Z'
-                      _createdBy:
-                        _id: d26x6zSkaPSe5gCyy
-                        username: rodriq
-                      _updatedAt: '2021-10-22T16:08:39.843Z'
-                      _updatedBy:
-                        _id: d26x6zSkaPSe5gCyy
-                        username: rodriq
-                    success: true
               examples:
                 Success Example:
                   value:
@@ -828,11 +711,11 @@ paths:
                       _createdAt: '2021-10-22T14:48:46.025Z'
                       _createdBy:
                         _id: d26x6zSkaPSe5gCyy
-                        username: rodriq
+                        username: rod
                       _updatedAt: '2021-10-22T16:08:39.843Z'
                       _updatedBy:
                         _id: d26x6zSkaPSe5gCyy
-                        username: rodriq
+                        username: rod
                     success: true
         '400':
           description: Bad Request
@@ -845,21 +728,18 @@ paths:
                     type: boolean
                   error:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'Match error: Missing key ''<key name>'''
               examples:
-                Missing Key:
+                Example 1:
                   value:
                     success: false
                     error: 'Match error: Missing key ''<key name>'''
-                No Integration Found:
+                Example 2:
                   value:
                     success: false
                     error: No integration found.
         '401':
           $ref: '#/components/responses/authorizationError'
+  /api/v1/integrations.remove:
     post:
       tags:
         - Integration
@@ -897,6 +777,11 @@ paths:
               required:
                 - integrationId
                 - type
+            examples:
+              Example 1:
+                value:
+                  integrationId: oNLthAt9RwMw39N2B
+                  type: webhook-outgoing
       responses:
         '200':
           description: ''
@@ -920,15 +805,6 @@ paths:
                         type: string
                       enabled:
                         type: string
-                x-examples:
-                  Example 1:
-                    integration:
-                      type: webhook-incoming
-                      username: rocket.cat
-                      channel: false
-                      scriptEnabled: sendMessage
-                      name: sendMessage
-                      enabled: sendMessage
               examples:
                 Incoming integration example:
                   value:
@@ -996,14 +872,6 @@ paths:
                           type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    accounts:
-                      - _id: P3Gru7ocFCd4vpKEs
-                        server_url: 'http://localhost:8080/remote.php/webdav/'
-                        username: admin
-                        name: Webdav account
-                    success: true
               examples:
                 Success Example:
                   value:
@@ -1034,6 +902,10 @@ paths:
                   description: The WebDAV account ID that you want to remove.
               required:
                 - accountId
+            examples:
+              Example 1:
+                value:
+                  accountId: P3Gru7ocFCd4vpKEs
       responses:
         '200':
           description: ''
@@ -1073,8 +945,9 @@ paths:
                 - name
                 - redirectUri
                 - active
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   name: test-oauth-app
                   redirectUri: 'https://testuri.com'
                   active: true
@@ -1114,8 +987,9 @@ paths:
                         type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     application:
                       name: test-oauth-app
                       redirectUri: 'https://testuri.com'
@@ -1162,8 +1036,9 @@ paths:
                 - redirectUri
                 - active
                 - appId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   name: test-oauth-app
                   redirectUri: 'https://testuri.com'
                   active: true
@@ -1207,8 +1082,9 @@ paths:
                         type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     _id: 65a7d77142a7e12453052d59
                     name: test-oauth-app2
                     redirectUri: 'https://testuri2.com'
@@ -1222,7 +1098,7 @@ paths:
                       username: matheus.barbosa
                     _updatedBy:
                       _id: JFTcMhEAFbNPfnp49
-                      username: matheus.barbosa
+                      username: math.bar
                     success: true
   /api/v1/oauth-apps.list:
     get:
@@ -1277,21 +1153,6 @@ paths:
                           type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    oauthApps:
-                      - _id: zapier
-                        name: Zapier
-                        active: true
-                        clientId: zapier
-                        clientSecret: RTK6TlndaCIolhQhZ7_KHIGOKj41RnlaOq_o-7JKwLr
-                        redirectUri: 'https://zapier.com/dashboard/auth/oauth/return/RocketChatDevAPI/'
-                        _createdAt: '2019-10-17T22:55:32.787Z'
-                        _createdBy:
-                          _id: system
-                          username: system
-                        _updatedAt: '2019-10-17T22:55:32.787Z'
-                    success: true
               examples:
                 Success Example:
                   value:
@@ -1334,11 +1195,13 @@ paths:
             The parameter will stop being accepted from 7.0.0 (use the `clientId` or `_id` parameters instead).
           schema:
             type: string
+          example: jn32kjnnd0943j4njk
         - name: clientId
           in: query
           description: The client ID. This value is required if `appId` is not used.
           schema:
             type: string
+          example: nkn8jk67b8b99b78
         - name: _id
           in: query
           description: The app ID. This value is required if `clientId` is not used.
@@ -1380,8 +1243,9 @@ paths:
                         type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     oauthApp:
                       _id: zapier
                       name: Zapier
@@ -1439,7 +1303,7 @@ components:
       required: false
       schema:
         type: integer
-        example: 50
+      example: 50
     count:
       name: count
       in: query
@@ -1447,7 +1311,7 @@ components:
       required: false
       schema:
         type: integer
-        example: 50
+      example: 50
     sort:
       name: sort
       in: query
@@ -1474,7 +1338,7 @@ components:
       required: true
       schema:
         type: string
-        example: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq
+      example: 9HqLlyZOugD_0YdwAJF8V47U3QHXSq
     X-User-Id:
       name: X-User-Id
       in: header
@@ -1482,7 +1346,7 @@ components:
       required: true
       schema:
         type: string
-        example: aobEdbYhXfu5hkeqG
+      example: aobEdbYhXfu5hkeqG
   responses:
     authorizationError:
       description: Unauthorized
@@ -1495,10 +1359,6 @@ components:
                 type: string
               message:
                 type: string
-            x-examples:
-              Example 1:
-                status: error
-                message: You must be logged in to do this.
           examples:
             Authorization Error:
               value:
