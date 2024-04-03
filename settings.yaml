@@ -1381,9 +1381,9 @@ paths:
         - Import
   /api/v1/getCurrentImportOperation:
     parameters: []
-    post:
+    get:
       summary: Get Current Import Operations
-      operationId: post-api-v1-getCurrentImportOperation
+      operationId: get-api-v1-getCurrentImportOperation
       responses:
         '200':
           description: OK
@@ -2071,20 +2071,20 @@ paths:
         - $ref: '#/components/parameters/X-Auth-Token'
         - schema:
             type: string
-            example: matrix.org
+          example: matrix.org
           in: query
           name: serverName
           description: The server name.
           required: true
         - schema:
             type: string
-            example: my public room name
+          example: my public room name
           in: query
           name: roomName
           description: The room name you want to search for in the server.
         - schema:
             type: string
-            example: g6FtzRlCoXK+IUpmS
+          example: g6FtzRlCoXK+IUpmS
           in: query
           name: pageToken
           description: 'The page you want to retrieve, use it for pagination. Make sure to URL encode this.'
@@ -2228,13 +2228,13 @@ paths:
         - $ref: '#/components/parameters/X-Auth-Token'
         - schema:
             type: string
-            example: '2021-09-30T09:33:15.621Z'
+          example: '2021-09-30T09:33:15.621Z'
           in: query
           name: oldest
           description: It represents the oldest point in time for which you want to retrieve moderation reports.
         - schema:
             type: string
-            example: '2023-08-30T09:33:15.621Z'
+          example: '2023-08-30T09:33:15.621Z'
           in: query
           name: latest
           description: It represents the oldest point in time for which you want to retrieve moderation reports.
@@ -2729,7 +2729,7 @@ paths:
         - $ref: '#/components/parameters/X-Auth-Token'
         - schema:
             type: string
-            example: windows
+          example: windows
           in: query
           name: filter
           description: Filter sessions list using regex.
@@ -2799,8 +2799,8 @@ paths:
                     type: integer
                   success:
                     type: boolean
-              x-examples:
-                 Example 1:
+              examples:
+                Example 1:
                   value:
                     sessions:
                       - sessionId: o94SveQp6fyPsoiNC
@@ -3014,7 +3014,7 @@ paths:
         - $ref: '#/components/parameters/X-Auth-Token'
         - schema:
             type: string
-            example: windows
+          example: windows
           in: query
           name: filter
           description: Filter sessions list using regex.
@@ -3163,7 +3163,7 @@ paths:
         - $ref: '#/components/parameters/X-Auth-Token'
         - schema:
             type: string
-            example: windows
+          example: windows
           in: query
           name: sessionId
           description: The session ID.
@@ -3286,7 +3286,7 @@ paths:
         - $ref: '#/components/parameters/X-Auth-Token'
         - schema:
             type: string
-            example: windows
+          example: windows
           in: query
           name: sessionId
           description: The session ID.
@@ -3466,7 +3466,7 @@ components:
       required: true
       schema:
         type: string
-        example: CkCPNctrgCDfmWLqC
+      example: CkCPNctrgCDfmWLqC
       description: The user ID.
     X-Auth-Token:
       name: X-Auth-Token
@@ -3474,7 +3474,7 @@ components:
       required: true
       schema:
         type: string
-        example: 1Dd4iN_ClKn5jl-xPC36snQ4s9Zd5GZnXCQuCNSKcVE
+      example: 1Dd4iN_ClKn5jl-xPC36snQ4s9Zd5GZnXCQuCNSKcVE
       description: The authentication token.
     offset:
       name: offset
@@ -3482,7 +3482,7 @@ components:
       required: false
       schema:
         type: integer
-        example: 50
+      example: 50
       description: 'Number of items to "skip" in the query, i.e. requests return count items, skipping the first offset items.'
     count:
       name: count
@@ -3490,7 +3490,7 @@ components:
       required: false
       schema:
         type: integer
-        example: 50
+      example: 50
       description: How many items to return.
     sort:
       name: sort
