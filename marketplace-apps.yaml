@@ -56,10 +56,6 @@ paths:
           application/json:
             schema:
               type: object
-              x-examples:
-                Example 1:
-                  action: close-chat
-                  sessionId: 2Sfq8wXw4fYPMf6r4
               required:
                 - action
                 - sessionId
@@ -76,7 +72,12 @@ paths:
                     targetDepartment:
                       type: string
                       description: The targeted department.
-        description: ''
+            examples:
+              Example 1:
+                value:
+                  action: close-chat
+                  sessionId: 2Sfq8wXw4fYPMf6r4
+
   '/api/apps/public/{appId}/templateMessage':
     parameters:
       - schema:
@@ -208,7 +209,7 @@ paths:
                     - '+917785887264'
                     - '+551452001478'
                   connectedWhatsAppNo: '+565412001234'
-                  targetAgent: murtaza98
+                  targetAgent: za98
                   targetDepartment: SalesDepartment
                   template:
                     namespace: your-namespace
@@ -244,7 +245,7 @@ components:
       required: true
       schema:
         type: string
-        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
     UserId:
       name: X-User-Id
       in: header
@@ -252,7 +253,7 @@ components:
       required: true
       schema:
         type: string
-        example: rbAXPnMktTFbNpwtJ
+      example: rbAXPnMktTFbNpwtJ
   responses:
     trueSuccess:
       description: OK
