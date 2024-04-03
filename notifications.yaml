@@ -13,7 +13,7 @@ paths:
     parameters:
       - schema:
           type: string
-          example: ByehQjC44FwMeiLbX
+        example: ByehQjC44FwMeiLbX
         name: id
         in: path
         required: true
@@ -67,7 +67,7 @@ paths:
         - $ref: '#/components/parameters/X-User-Id'
         - schema:
             type: string
-            example: web
+          example: web
           in: query
           name: platform
           description: The platform rendering the banner.
@@ -121,7 +121,7 @@ paths:
         - $ref: '#/components/parameters/X-User-Id'
         - schema:
             type: string
-            example: web
+          example: web
           in: query
           name: platform
           description: The platform rendering the banner
@@ -381,7 +381,7 @@ paths:
         - $ref: '#/components/parameters/X-User-Id'
         - schema:
             type: string
-            example: WkbwSntxt8D3jLp8G
+          example: WkbwSntxt8D3jLp8G
           in: query
           name: id
           description: The message ID.
@@ -517,11 +517,6 @@ paths:
           application/json:
             schema:
               type: object
-              x-examples:
-                Example 1:
-                  type: gcm
-                  value: TOKEN
-                  appName: MyApp
               properties:
                 type:
                   type: string
@@ -555,7 +550,7 @@ components:
       required: true
       schema:
         type: string
-        example: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq
+      example: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq
       description: The authorization token of the user.
     X-User-Id:
       name: X-User-Id
@@ -563,7 +558,7 @@ components:
       required: true
       schema:
         type: string
-        example: aobEdbYhXfu5hkeqG
+      example: aobEdbYhXfu5hkeqG
       description: The user ID of the user.
     offset:
       name: offset
@@ -571,7 +566,7 @@ components:
       required: false
       schema:
         type: integer
-        example: 50
+      example: 50
       description: 'Number of items to "skip" in the query, i.e. requests return count items, skipping the first offset items.'
     count:
       name: count
@@ -579,7 +574,7 @@ components:
       required: false
       schema:
         type: integer
-        example: 50
+      example: 50
       description: The number of items to return.
     sort:
       name: sort
