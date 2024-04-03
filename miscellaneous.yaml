@@ -127,8 +127,9 @@ paths:
                 - roomId
                 - field
                 - value
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: 7aDSXtjMA3KPLxLjt
                   field: autoTranslate
                   value: true
@@ -165,8 +166,9 @@ paths:
                   description: The target language that the message will be translated.
               required:
                 - messageId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   messageId: Fq7sQNSnDEfzj8qoS
                   targetLanguage: en
       responses:
@@ -344,8 +346,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     emailInboxes:
                       - _id: 60197e8ff82d6c83b96c53ff
                         active: false
@@ -457,8 +460,9 @@ paths:
                 - active
                 - smtp
                 - imap
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   name: new email
                   email: mdyemaasil@rocket.chat
                   active: false
@@ -607,8 +611,9 @@ paths:
                         type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     _id: 60197e8ff82d6c83b96c53ff
                     active: false
                     name: Rocket.Chat sample account
@@ -632,7 +637,7 @@ paths:
                     _updatedAt: '2021-09-06T17:43:49.257Z'
                     _createdBy:
                       _id: JxemcN9PDCdfzJeZr
-                      username: renato.becker
+                      username: ren.be
                     success: true
         '400':
           description: Bad Request
@@ -645,10 +650,6 @@ paths:
                     type: boolean
                   error:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: Resource not found
               examples:
                 Resource not found:
                   value:
@@ -692,8 +693,9 @@ paths:
                     type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     _id: 61717dd1066bc500096cb36d
                     success: true
         '400':
@@ -707,10 +709,6 @@ paths:
                     type: boolean
                   error:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: Resource not found
               examples:
                 Email not found:
                   value:
@@ -809,8 +807,9 @@ paths:
                             type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     emailInbox:
                       _id: 60197e8ff82d6c83b96c53ff
                       active: false
@@ -874,8 +873,9 @@ paths:
                     type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     _id: 60197e8ff82d6c83b96c53ff
                     success: true
         '401':
@@ -986,8 +986,9 @@ paths:
                       type: object
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     users:
                       - _id: rocket.cat
                         name: Rocket.Cat
@@ -1028,172 +1029,8 @@ paths:
                           type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    queue:
-                      - id: logid-0
-                        string: |
-                          LocalStore: store created at 
-                        ts: '2024-01-26T13:16:11.945Z'
-                      - id: logid-1
-                        string: |
-                          LocalStore: store created at 
-                        ts: '2024-01-26T13:16:11.946Z'
-                      - id: logid-2
-                        string: |
-                          LocalStore: store created at 
-                        ts: '2024-01-26T13:16:11.947Z'
-                      - id: logid-3
-                        string: |
-                          {"level":40,"time":"2024-01-26T13:16:12.803Z","pid":1,"hostname":"cb52a01481fa","name":"VoIPService","msg":"Voip is not enabled. Cant start the service"}
-                        ts: '2024-01-26T13:16:12.804Z'
-                      - id: logid-4
-                        string: |
-                          {"level":51,"time":"2024-01-26T13:16:16.856Z","pid":1,"hostname":"cb52a01481fa","name":"Migrations","msg":"Not migrating, already at version 304"}
-                        ts: '2024-01-26T13:16:16.856Z'
-                      - id: logid-5
-                        string: |
-                          [2024-01-26T13:16:16.929Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/BROKER: Moleculer v0.14.31 is starting...
-                        ts: '2024-01-26T13:16:16.929Z'
-                      - id: logid-6
-                        string: |
-                          [2024-01-26T13:16:16.929Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/BROKER: Namespace: <not defined>
-                        ts: '2024-01-26T13:16:16.929Z'
-                      - id: logid-7
-                        string: |
-                          [2024-01-26T13:16:16.929Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/BROKER: Node ID: 5da8aab5-e32e-4a0a-b53e-62b027b331cf
-                        ts: '2024-01-26T13:16:16.930Z'
-                      - id: logid-8
-                        string: |
-                          [2024-01-26T13:16:16.931Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/REGISTRY: Strategy: RoundRobinStrategy
-                        ts: '2024-01-26T13:16:16.931Z'
-                      - id: logid-9
-                        string: |
-                          [2024-01-26T13:16:16.932Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/REGISTRY: Discoverer: LocalDiscoverer
-                        ts: '2024-01-26T13:16:16.932Z'
-                      - id: logid-10
-                        string: |
-                          [2024-01-26T13:16:16.933Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/BROKER: Serializer: JSONSerializer
-                        ts: '2024-01-26T13:16:16.933Z'
-                      - id: logid-11
-                        string: |
-                          [2024-01-26T13:16:16.965Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/BROKER: Validator: FastestValidator
-                        ts: '2024-01-26T13:16:16.965Z'
-                      - id: logid-12
-                        string: |
-                          [2024-01-26T13:16:16.968Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/BROKER: Registered 13 middleware(s).
-                        ts: '2024-01-26T13:16:16.968Z'
-                      - id: logid-13
-                        string: |
-                          [2024-01-26T13:16:16.970Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/BROKER: Transporter: TcpTransporter
-                        ts: '2024-01-26T13:16:16.970Z'
-                      - id: logid-14
-                        string: |
-                          {"level":51,"time":"2024-01-26T13:16:17.015Z","pid":1,"hostname":"cb52a01481fa","name":"DatabaseWatcher","msg":"Using change streams"}
-                        ts: '2024-01-26T13:16:17.016Z'
-                      - id: logid-15
-                        string: |
-                          [2024-01-26T13:16:17.031Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/TRANSIT: Connecting to the transporter...
-                        ts: '2024-01-26T13:16:17.032Z'
-                      - id: logid-16
-                        string: |
-                          [2024-01-26T13:16:17.261Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/TRANSPORTER: TCP server is listening on port 32911
-                        ts: '2024-01-26T13:16:17.262Z'
-                      - id: logid-17
-                        string: |
-                          [2024-01-26T13:16:17.263Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/TRANSPORTER: UDP Discovery is disabled.
-                        ts: '2024-01-26T13:16:17.263Z'
-                      - id: logid-18
-                        string: |
-                          [2024-01-26T13:16:17.263Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/TRANSPORTER: TCP Transporter started.
-                        ts: '2024-01-26T13:16:17.264Z'
-                      - id: logid-19
-                        string: |
-                          [2024-01-26T13:16:17.786Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/REGISTRY: '$node' service is registered.
-                        ts: '2024-01-26T13:16:17.787Z'
-                      - id: logid-20
-                        string: |
-                          [2024-01-26T13:16:17.788Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/REGISTRY: 'matrix' service is registered.
-                        ts: '2024-01-26T13:16:17.788Z'
-                      - id: logid-21
-                        string: |
-                          [2024-01-26T13:16:17.790Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/$NODE: Service '$node' started.
-                        ts: '2024-01-26T13:16:17.791Z'
-                      - id: logid-22
-                        string: |
-                          [2024-01-26T13:16:17.791Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/MATRIX: Service 'matrix' started.
-                        ts: '2024-01-26T13:16:17.791Z'
-                      - id: logid-23
-                        string: |
-                          [2024-01-26T13:16:17.793Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/BROKER: ✔ ServiceBroker with 2 service(s) started successfully in 788ms.
-                        ts: '2024-01-26T13:16:17.793Z'
-                      - id: logid-24
-                        string: |
-                          +----------------------------------------------+
-                        ts: '2024-01-26T13:16:18.723Z'
-                      - id: logid-25
-                        string: |
-                          |                SERVER RUNNING                |
-                        ts: '2024-01-26T13:16:18.723Z'
-                      - id: logid-26
-                        string: |
-                          +----------------------------------------------+
-                        ts: '2024-01-26T13:16:18.724Z'
-                      - id: logid-27
-                        string: |
-                          |                                              |
-                        ts: '2024-01-26T13:16:18.726Z'
-                      - id: logid-28
-                        string: |
-                          |  Rocket.Chat Version: 6.5.3                  |
-                        ts: '2024-01-26T13:16:18.726Z'
-                      - id: logid-29
-                        string: |
-                          |       NodeJS Version: 14.21.3 - x64          |
-                        ts: '2024-01-26T13:16:18.726Z'
-                      - id: logid-30
-                        string: |
-                          |      MongoDB Version: 5.0.23                 |
-                        ts: '2024-01-26T13:16:18.726Z'
-                      - id: logid-31
-                        string: |
-                          |       MongoDB Engine: wiredTiger             |
-                        ts: '2024-01-26T13:16:18.726Z'
-                      - id: logid-32
-                        string: |
-                          |             Platform: linux                  |
-                        ts: '2024-01-26T13:16:18.726Z'
-                      - id: logid-33
-                        string: |
-                          |         Process Port: 3000                   |
-                        ts: '2024-01-26T13:16:18.726Z'
-                      - id: logid-34
-                        string: |
-                          |             Site URL: http://localhost:3000  |
-                        ts: '2024-01-26T13:16:18.727Z'
-                      - id: logid-35
-                        string: |
-                          |     ReplicaSet OpLog: Enabled                |
-                        ts: '2024-01-26T13:16:18.727Z'
-                      - id: logid-36
-                        string: |
-                          |          Commit Hash: 726574cfe3             |
-                        ts: '2024-01-26T13:16:18.730Z'
-                      - id: logid-37
-                        string: |
-                          |        Commit Branch: HEAD                   |
-                        ts: '2024-01-26T13:16:18.730Z'
-                      - id: logid-38
-                        string: |
-                          |                                              |
-                        ts: '2024-01-26T13:16:18.731Z'
-                      - id: logid-39
-                        string: |
-                          +----------------------------------------------+
-                        ts: '2024-01-26T13:16:18.731Z'
-                    success: true
               examples:
-                Example:
+                Example 1:
                   value:
                     queue:
                       - id: logid-0
@@ -1818,9 +1655,10 @@ paths:
               properties:
                 license:
                   type: string
-              x-examples:
-                Example 1:
-                  license: VFJ0vHf3Jm9AR0minB342MLaHRlZdc3Du5nf0E5Sv0QJ4SUkEIaU2boCYaDsxQ2N1UL4uhLjCF9M7iCZ/yxafJjxbHvOu1D5rOfdgO4RKlAGE9tGHDidJR9crJyXVb16jPHHvLSkUFzb7HoIq/nUXxU8gEgT3uJ9u2+Dw5ukDLX3SG2AFq1hLoPSZqsP6giSOKBXTx9t8qVrT5COEn4CWCaVdApOdWC2nsROTJPJPbyjdZ9uSXQEr4raeHZXgtb9L3u2+wUej7NwDJ+C9+/6jUjmUD+CZyvpiv1YBWFudCjsgm8chrtzab70ndw1hjSXVMiuO00/wcHg8aTwZ7GSUA+OH1h1DCG4Bxrd94eZwZxEOgQtP01aNaM/RyYaleib88o6zjD0oDDISaN7nwv6F85v7FfRPEWAVZ5HUNVWxiqJqx/fEgYHpxBC3iDWcb/cexjofti/FwqOC4JRowGaGJ/n+WGl0sg1YEjULZdM759sw8VSwDDQ7Tv2H66/mSGwtP/zAGvr9tTwtfnBwpcZXssJytefriAqDsslZYTl7FzAxryo9pDioNSozLMwhCfAVm0VdIt0Ma4s0i72eUtgRnvAAq1bZK6UkE0zE8xMQjOykoiCoQLzwza+g762AQo=
+            examples:
+              Example 1:
+                value:
+                  license: VFJ0vHf3Jm9AR0minB342MLaHRlZdc3Du5nf0E5Sv0QJ4SUkEIaU2boCYaDsxQ2N1UL4uhLjCF9M7iCZ/yxafJjxbHvOu1D5rOfdgO4RKlAGE9tGHDidJR9crJyXVb16jPHHvLSkUFzb7HoIq/nUXxU8gEgT3uJ9u2+Dw5ukDLX3SG2AFq1hLoPSZqsP6g2AQo=
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
@@ -1906,13 +1744,8 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    maxActiveUsers: 25
-                    activeUsers: 0
-                    success: true
               examples:
-                Example:
+                Example 1:
                   value:
                     maxActiveUsers: 25
                     activeUsers: 0
@@ -1944,8 +1777,9 @@ paths:
                   description: The room Id of the room to update the jitsi timeout.
               required:
                 - roomId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   roomId: hyoM5JSQi94RwqPE7
       responses:
         '200':
@@ -2006,8 +1840,9 @@ paths:
                         type: boolean
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     command:
                       command: me
                       params: your_message
@@ -2054,8 +1889,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     commands:
                       - command: invite-all-from
                         clientOnly: false
@@ -2213,8 +2049,9 @@ paths:
                 - roomId
                 - tmid
                 - previewItem
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   command: unmute
                   roomId: ByehQjC44FwMeiLbX
                   tmid: Hsj2435g4bvrj4bjh
@@ -2272,8 +2109,9 @@ paths:
               required:
                 - command
                 - roomId
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   command: unmute
                   roomId: ByehQjC44FwMeiLbX
                   params: '@user123'
@@ -2309,8 +2147,9 @@ paths:
                   description: The app URL where the zip file is located.
               required:
                 - url
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   url: 'https://github.com/RocketChat/Apps.RocketChat.Tester/blob/master/dist/appsrocketchattester_0.0.5.zip?raw=true'
       responses:
         '200':
@@ -2458,8 +2297,9 @@ paths:
                         type: object
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     app:
                       id: bc4dd4a1-bf9b-408e-83a4-aba7eba0bf02
                       version: 0.0.5
@@ -2474,7 +2314,7 @@ paths:
                       classFile: AppsRocketChatTesterApp.js
                       description: An app that provides endpoints to test Apps integration to Rocket.Chat
                       implements: []
-                      iconFileContent: 'data:image/png;base64,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'
+                      iconFileContent: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQBAMAAACAGwOrAAAAG1BMVEUAAAD///9fX19/f38/Pz+fn5/f398fHx+/v7F+DAse5zMkkE4D1Jf6exKnYRje4LriXRQ0JzTVP2t7hLNtFWODfxNqiaa6VE8tGjFCxXyc1HHsTisiQ0rijg4mTvyAAAElFTkSuQmCC'
                       status: auto_enabled
                     implemented:
                       IPreMessageSentPrevent: false
@@ -2562,15 +2402,16 @@ paths:
               required:
                 - from
                 - subject
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   from: test.test@test.com
                   subject: Welcome to the Test Newsletter
-                  body: 'Thank you for subscribing to the Test Newsletter. If this was not you feelfree to unsubscribe by hitting the following button [unsubscribe]'
+                  body: 'Thank you for subscribing to the Test Newsletter. If this was not you feel free to unsubscribe by hitting the following button [unsubscribe]'
                   dryrun: 'true'
       responses:
         '200':
-          $ref: '#/components/responses/authorizationError'
+          $ref: '#/components/responses/trueSuccess'
         '400':
           description: Bad Request
           content:
@@ -2635,8 +2476,9 @@ paths:
               required:
                 - _id
                 - createdAt
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   _id: c6Lsa9SFVFxJLR56H
                   createdAt: '1692284808957'
       responses:
@@ -2676,8 +2518,9 @@ paths:
                 - rid
                 - days
                 - maxUses
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   rid: csFYrDeixJG7PnrAh
                   days: 10
                   maxUses: 0
@@ -2710,8 +2553,9 @@ paths:
                       type: integer
                     _updatedAt:
                       type: string
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     - _id: kDKQ3H
                       days: 1
                       maxUses: 1
@@ -2778,8 +2622,9 @@ paths:
                       type: integer
                     _updatedAt:
                       type: string
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     - _id: kDKQ3H
                       days: 1
                       maxUses: 1
@@ -2823,7 +2668,7 @@ paths:
           required: true
           schema:
             type: string
-            example: kDKQ3H
+          example: kDKQ3H
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
@@ -2845,15 +2690,8 @@ paths:
                     properties:
                       method:
                         type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'Invalid Invitation _id [invalid-invitation-id]'
-                    errorType: invalid-invitation-id
-                    details:
-                      method: removeInvite
               examples:
-                Invalid Invitation Id:
+                Example 1:
                   value:
                     success: false
                     error: 'Invalid Invitation _id [invalid-invitation-id]'
@@ -2883,8 +2721,9 @@ paths:
                   description: The id of the invite being used.
               required:
                 - token
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   token: iS7pza
       responses:
         '200':
@@ -2907,8 +2746,9 @@ paths:
                         type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example 1:
+                  value:
                     room:
                       rid: QqsWiqNH2TnxtvZQq
                       fname: a-room-name
