@@ -4738,10 +4738,13 @@ paths:
           in: query
           description: |-
            The room types. The possible room types are:
-            - d: Direct chat
-            - c: Chat
-            - p: Private chat
-            - l: Livechat
+            - `d`: Direct messages
+            - `c`: Public channel
+            - `p`: Private channel
+            - `discussions`: Team or channel discussions
+            - `teams`: Workspace teams
+            - `l`: Livechat
+            - `v`: Omnichannel VoIP rooms
           schema:
             type: array
             items:
