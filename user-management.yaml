@@ -4986,6 +4986,314 @@ paths:
             `Accounts_AvatarBlockUnauthenticatedAccess` is enabled.
       tags:
         - Users
+  /api/v1/users.sendWelcomeEmail:
+    post:
+      tags:
+        - Users
+      summary: Send User Welcome Email
+      description: |-
+        Send welcome email to a user. 
+        
+        Permission required: `send-mail`
+
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |6.8.0            | Added       |
+
+      operationId: get-api-v1-users.sendWelcomeEmail
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: The email address of the user to send the welcome email to.
+              required:
+                - email
+              x-examples:
+                Example 1:
+                  email: test@email.com
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+                x-examples:
+                  Example 1:
+                    success: false
+                    error: 'SMTP is not configured [error-email-send-failed]'
+                    errorType: error-email-send-failed
+                    details:
+                      method: sendWelcomeEmail
+              examples:
+                SMPT not configured:
+                  value:
+                    success: false
+                    error: 'SMTP is not configured [error-email-send-failed]'
+                    errorType: error-email-send-failed
+                    details:
+                      method: sendWelcomeEmail
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  /api/v1/users.listByStatus:
+    get:
+      tags:
+        - Users
+      summary: List Users by Status
+      description: |-
+        Returns a list of filtered users based on activation status, first-time log-in, and type of users to be returned. 
+        Permissions required: 
+        - `view-d-room`
+        - `view-outside-room`
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |6.8.0            | Added       |
+        
+      operationId: get-api-v1-users.listByStatus
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/count'
+        - name: status
+          in: query
+          description: Filter users based on their activation status. It can either  be `active` or `deactivated`
+          schema:
+            type: string
+            example: active
+        - name: hasLoggedIn
+          in: query
+          description: Filter the users who have logged into their accounts for the first time.
+          schema:
+            type: boolean
+            example: true
+        - name: type
+          in: query
+          description: 'Filter the type of users to be returned. For example, ''bot'', ''user'', ''app'', etc.'
+          schema:
+            type: string
+            example: user
+        - name: roles[]
+          in: query
+          description: Filter the users returned based on a list of roles.
+          schema:
+            type: string
+            example: bot
+        - name: searchTerm
+          in: query
+          description: Filter the list of users returned based on a search term
+          schema:
+            type: string
+            example: test
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        username:
+                          type: string
+                        emails:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              address:
+                                type: string
+                              verified:
+                                type: boolean
+                        type:
+                          type: string
+                        roles:
+                          type: array
+                          items:
+                            type: string
+                        status:
+                          type: string
+                        active:
+                          type: boolean
+                        name:
+                          type: string
+                        lastLogin:
+                          type: string
+                        avatarETag:
+                          type: string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    users:
+                      - _id: W7MRNgkYLXKKAGNvW
+                        username: agent1
+                        emails:
+                          - address: agent1@agent.com
+                            verified: false
+                        type: user
+                        roles:
+                          - user
+                          - livechat-agent
+                        status: offline
+                        active: true
+                        name: Agent 1
+                        lastLogin: '2024-04-24T17:47:50.485Z'
+                      - _id: Tf44Q5AaYDehtJLzA
+                        username: agent2
+                        emails:
+                          - address: agent2@agent.com
+                            verified: false
+                        type: user
+                        roles:
+                          - user
+                          - livechat-agent
+                        status: offline
+                        active: true
+                        name: Agent 2
+                        lastLogin: '2024-04-29T16:38:56.809Z'
+                      - _id: JwATAtGzrzHYHCXFy
+                        username: agent3
+                        emails:
+                          - address: agent3@agent.com
+                            verified: false
+                        type: user
+                        roles:
+                          - user
+                          - livechat-agent
+                        status: online
+                        active: true
+                        name: Agent3
+                        lastLogin: '2024-04-30T16:59:21.879Z'
+                      - _id: u6C62WdHKNk5X8Rzr
+                        username: guy
+                        emails:
+                          - address: guy@guy.com
+                            verified: false
+                        type: user
+                        roles:
+                          - user
+                        status: offline
+                        active: true
+                        name: guy
+                      - _id: rocket.cat
+                        name: Rocket.Cat
+                        username: rocket.cat
+                        status: online
+                        active: true
+                        type: bot
+                        roles:
+                          - bot
+                        avatarETag: MEhPLkenJqs3jTJP5
+                    count: 5
+                    offset: 0
+                    total: 5
+                    success: true
+              examples:
+                Success:
+                  value:
+                    users:
+                      - _id: W7MRNgkYLXKKAGNvW
+                        username: agent1
+                        emails:
+                          - address: agent1@agent.com
+                            verified: false
+                        type: user
+                        roles:
+                          - user
+                          - livechat-agent
+                        status: offline
+                        active: true
+                        name: Agent 1
+                        lastLogin: '2024-04-24T17:47:50.485Z'
+                      - _id: Tf44Q5AaYDehtJLzA
+                        username: agent2
+                        emails:
+                          - address: agent2@agent.com
+                            verified: false
+                        type: user
+                        roles:
+                          - user
+                          - livechat-agent
+                        status: offline
+                        active: true
+                        name: Agent 2
+                        lastLogin: '2024-04-29T16:38:56.809Z'
+                      - _id: JwATAtGzrzHYHCXFy
+                        username: agent3
+                        emails:
+                          - address: agent3@agent.com
+                            verified: false
+                        type: user
+                        roles:
+                          - user
+                          - livechat-agent
+                        status: online
+                        active: true
+                        name: Agent3
+                        lastLogin: '2024-04-30T16:59:21.879Z'
+                      - _id: u6C62WdHKNk5X8Rzr
+                        username: guy
+                        emails:
+                          - address: guy@guy.com
+                            verified: false
+                        type: user
+                        roles:
+                          - user
+                        status: offline
+                        active: true
+                        name: guy
+                      - _id: rocket.cat
+                        name: Rocket.Cat
+                        username: rocket.cat
+                        status: online
+                        active: true
+                        type: bot
+                        roles:
+                          - bot
+                        avatarETag: MEhPLkenJqs3jTJP5
+                    count: 5
+                    offset: 0
+                    total: 5
+                    success: true
 tags:
   - name: LDAP
   - name: Permissions
@@ -5091,6 +5399,6 @@ components:
               success:
                 type: boolean
           examples:
-            Example 1:
+            Success:
               value:
                 success: true
