@@ -77,85 +77,29 @@ paths:
                 value:
                   action: close-chat
                   sessionId: 2Sfq8wXw4fYPMf6r4
-
   '/api/apps/public/{appId}/templateMessage':
-    parameters:
-      - schema:
-          type: string
-        name: appId
-        in: path
-        required: true
     post:
-      summary: Send a Template WhatsApp Message
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                oneOf:
-                  - properties:
-                      success:
-                        type: boolean
-                      invalidContacts:
-                        type: array
-                        items:
-                          type: string
-                type: object
-              examples:
-                Success Example:
-                  value:
-                    success: true
-                    invalidContacts:
-                      - '917738772967'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  error:
-                    type: string
-              examples:
-                Example 1:
-                  value:
-                    success: false
-                    error: Too many phone numbers! Please make sure that phoneNumbers are <= 250
-                Example 2:
-                  value:
-                    success: false
-                    error: No Agent found with username abc98
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  error:
-                    type: string
-              examples:
-                Example 1:
-                  value:
-                    success: false
-                    error: 'Error occurred while processing request. Details: [Error Details]'
-      operationId: post-api-apps-public-app_id-templateMessage
+      tags:
+        - Apps
+      summary: Send a WhatsApp Template Message
       description: |-
-        REST API URL can be found in the **Details** tab of the **App Info** page.
-        For example, `http://localhost:3000/api/apps/public/30bf52a3-d65b-4ab1-9b11-7cfdddf1ef29/templateMessage`
+        Send template messages via WhatsApp to targeted contacts directly from your workspace using this endpoint. It supports only [WhatsApp Cloud App](https://docs.rocket.chat/extend-rocket.chat-capabilities/rocket.chat-marketplace/rocket.chat-public-apps-guides/omnichannel-apps/whatsapp-cloud-app) and [WhatsApp Sandbox App](https://docs.rocket.chat/extend-rocket.chat-capabilities/rocket.chat-marketplace/rocket.chat-public-apps-guides/omnichannel-apps/whatsapp-sandbox).
+
+        
+        The appropriate endpoint URL including the `appId` for sending Whatsapp template messages on your workspace is displayed in the  **Details tab** of the Whatsapp **App Info** page. 
+      operationId: post-api-apps-public-app_id-templateMessage
+      parameters:
+        - name: appId
+          in: path
+          required: true
+          schema:
+            type: string
       requestBody:
+        description: 'We strongly recommend including the + prefix for all phone numbers in the payload. While you can submit numbers without the leading + sign, we have encountered cases where WhatsApp will return an invalid response despite the number being in use.'
         content:
           application/json:
             schema:
               type: object
-              required:
-                - phoneNumbers
-                - connectedWhatsAppNo
               properties:
                 phoneNumbers:
                   type: array
@@ -164,7 +108,7 @@ paths:
                     type: string
                 connectedWhatsAppNo:
                   type: string
-                  description: The WhatsApp Number from which you want to send this template message.
+                  description: The WhatsApp Number from which you want to send this template message. The WhatsApp number connected to your workspace via the app.
                 targetAgent:
                   type: string
                   description: Username of the agent you want to transfer the chat to when the WhatsApp user replies.
@@ -173,7 +117,7 @@ paths:
                   description: Department name or ID where you want to transfer the chat to when the WhatsApp user replies.
                 template:
                   type: object
-                  description: 'Provide information about the template message you wish to send. Kindly refer to [Message Templates](https://developers.facebook.com/docs/whatsapp/api/messages/message-templates#the-template-object) for an example'
+                  description: 'Provide information about the template message you wish to send. Kindly refer to [Message Templates](https://developers.facebook.com/docs/whatsapp/api/messages/message-templates#the-template-object) for an example. Refer to the example in [Sending WhatsApp template messages from your workspace](https://developer.rocket.chat/~/changes/LF0RdSVuWxk4vFtU2GLZ/omnichannel/whatsapp-business-template-messages#sending-whatsapp-template-messages-from-your-workspace)'
                   properties:
                     namespace:
                       type: string
@@ -202,39 +146,63 @@ paths:
                                   type: string
                                 text:
                                   type: string
-            examples:
-              Example 1:
-                value:
-                  phoneNumbers:
-                    - '+917785887264'
-                    - '+551452001478'
-                  connectedWhatsAppNo: '+565412001234'
-                  targetAgent: za98
-                  targetDepartment: SalesDepartment
-                  template:
-                    namespace: your-namespace
-                    name: your-template-name
-                    language:
-                      code: your-language-and-locale-code
-                      policy: deterministic
-                    components:
-                      - type: header
-                        parameters:
-                          - type: text
-                            text: your-text-string
-                      - type: body
-                        parameters:
-                          - type: text
-                            text: your-text-string
-                          - type: text
-                            text: your-text-string
-                      - type: footer
-                        parameters:
-                          - type: text
-                            text: your-text-string
-        description: 'We strongly recommend including the + prefix for all phone numbers in the payload. While you can submit numbers without the leading + sign, we have encountered cases where WhatsApp will return an invalid response despite the number being in use.'
-      tags:
-        - WhatsApp
+              required:
+                - phoneNumbers
+                - connectedWhatsAppNo
+                - template
+              example:
+                phoneNumbers:
+                  - '2368106035555'
+                connectedWhatsAppNo: '104920685899299'
+                template:
+                  name: ship
+                  language:
+                    code: en
+                    policy: deterministic
+                  components:
+                    - type: body
+                      parameters:
+                        - type: text
+                          text: '20'              
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Too many phone numbers:
+                  value:
+                    success: false
+                    error: Too many phone numbers! Please make sure that phoneNumbers are <= 250
+                Agent Not Found:
+                  value:
+                    success: false
+                    error: No Agent found with username abc98
+                Department Not Found:
+                  value:
+                    success: false
+                    error: No Department found with id/Name SalesDepartment
+                Invalid WhatsApp Contact:
+                  value:
+                    success: false
+                    error: Connected WhatsApp Number (connectedWhatsAppNo) i.e. 565412001234 is not a valid WhatsApp contact. Contact Status is invalid
+                Invalid Connected WhatsApp Number:
+                  value:
+                    success: false
+                    error: 'Error! Connected WhatsApp Number (connectedWhatsAppNo) i.e. 565412001234 has not been registered yet on Rocket.Chat. Please goto #omnichannel-whatsapp-setup channel and connect this WhatsApp number first there before sending this request again.'
 components:
   schemas: {}
   parameters:
@@ -265,7 +233,7 @@ components:
               success:
                 type: boolean
           examples:
-            Example 1:
+            Success:
               value:
                 success: true
     authorizationError:
@@ -284,6 +252,22 @@ components:
               value:
                 status: error
                 message: You must be logged in to do this.
+    forbiddenError:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+              error:
+                type: string
+          examples:
+            Permission Error:
+              value:
+                success: false
+                error: 'User does not have the permissions required for this action [error-unauthorized]'
 tags:
   - name: Rasa App
   - name: WhatsApp
