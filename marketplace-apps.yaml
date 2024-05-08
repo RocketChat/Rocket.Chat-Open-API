@@ -80,7 +80,7 @@ paths:
   '/api/apps/public/{appId}/templateMessage':
     post:
       tags:
-        - Apps
+        - WhatsApp
       summary: Send a WhatsApp Template Message
       description: |-
         Send template messages via WhatsApp to targeted contacts directly from your workspace using this endpoint. It supports only [WhatsApp Cloud App](https://docs.rocket.chat/extend-rocket.chat-capabilities/rocket.chat-marketplace/rocket.chat-public-apps-guides/omnichannel-apps/whatsapp-cloud-app) and [WhatsApp Sandbox App](https://docs.rocket.chat/extend-rocket.chat-capabilities/rocket.chat-marketplace/rocket.chat-public-apps-guides/omnichannel-apps/whatsapp-sandbox).
