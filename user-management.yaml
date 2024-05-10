@@ -475,7 +475,7 @@ paths:
                       * For default roles, the role name and ID are the same. For custom roles, the name and ID are different. 
                       * If you are setting a custom role for a user, make sure to enter the custom role ID and not the role name.
                       * The `roleName` parameter will be removed from 7.0.0. Use the `roleId` parameter instead.
-                      Refer to [Roles](https://docs.rocket.chat/use-rocket.chat/workspace-administration/permissions#roles) for more information.
+                      Refer to [Roles](https://docs.rocket.chat/setup-and-configure/roles-in-rocket.chat) for more information.
                   example: auditor-log
                 username:
                   type: string
