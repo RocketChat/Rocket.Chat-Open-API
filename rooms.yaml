@@ -6518,6 +6518,148 @@ paths:
         '403':
           $ref: '#/components/responses/forbiddenError'
 
+  /api/v1/rooms.muteUser:
+    post:
+      tags:
+        - Rooms
+      summary: Mute User in Room
+      description: |
+        Mute a particular user in a room.
+
+        ### Change Log
+
+        | Version | Description                          |
+        | ------- | ------------------------------------ |
+        | 6.8.0   | Added                                |
+      operationId: post-api-v1-rooms.muteUser
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              x-examples:
+                Example 1:
+                  userId: CkCPNfjfhiwWLqC
+                  roomId: iu7jtPAhvEeAS5tNq
+              required:
+                - userId
+                - roomId
+              properties:
+                userId:
+                  type: string
+                  example: CkCPNfjfhiwWLqC
+                  description: 'The user that you want to mute. Alternatively, you can also use the `username` parameter.'
+                roomId:
+                  type: string
+                  example: JZ8Y2dLfYhsg323Rf
+                  description: The room ID.
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The required "userId" or "username" param provided does not match any users [error-invalid-user]'
+                    errorType: error-invalid-user
+                Example 2:
+                  value:
+                    success: false
+                    error: |-
+                      must have required property 'userId'
+                       must have required property 'username'
+                       must match exactly one schema in oneOf [invalid-params]
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  
+  /api/v1/rooms.unmuteUser:
+    post:
+      tags:
+        - Rooms
+      summary: Unmute User in Room
+      description: |
+        Unmute a particular user in a room.
+
+        ### Change Log
+
+        | Version | Description                          |
+        | ------- | ------------------------------------ |
+        | 6.8.0   | Added                                |
+      operationId: post-api-v1-rooms.unmuteUser
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              x-examples:
+                Example 1:
+                  userId: CkCPNfjfhiwWLqC
+                  roomId: iu7jtPAhvEeAS5tNq
+              required:
+                - userId
+                - roomId
+              properties:
+                userId:
+                  type: string
+                  example: CkCPNfjfhiwWLqC
+                  description: 'The user that you want to unmute. Alternatively, you can also use the `username` parameter.'
+                roomId:
+                  type: string
+                  example: JZ8Y2dLfYhsg323Rf
+                  description: The room ID.
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The required "userId" or "username" param provided does not match any users [error-invalid-user]'
+                    errorType: error-invalid-user
+                Example 2:
+                  value:
+                    success: false
+                    error: |-
+                      must have required property 'userId'
+                       must have required property 'username'
+                       must match exactly one schema in oneOf [invalid-params]
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  
   /api/v1/rooms.createDiscussion:
     post:
       tags:
