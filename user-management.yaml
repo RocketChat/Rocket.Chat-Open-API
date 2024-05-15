@@ -1398,8 +1398,8 @@ paths:
                 "team": "Queen" }
                       description: |-
                         Any custom fields the user should have on their account.
-                        To save custom fields, you must first define the custom fields in the admin panel (Administration > Settings > Accounts > Registration > Custom Fields). For details on how to configure this field, see (Custom Fields)[https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/accounts/custom-fields].
-                        For information on how to view the custom fields, see the (Get Users List)[https://developer.rocket.chat/reference/api/rest-api/endpoints/user-management/users-endpoints/get-users-list] endpoint.
+                        To save custom fields, you must first define the custom fields in the admin panel (Administration > Settings > Accounts > Registration > Custom Fields). For details on how to configure this field, see [Custom Fields](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/accounts/custom-fields).
+                        For information on how to view the custom fields, see the [Get Users List](https://developer.rocket.chat/reference/api/rest-api/endpoints/user-management/users-endpoints/get-users-list) endpoint.
               required:
                 - userId
                 - data
