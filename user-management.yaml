@@ -1115,13 +1115,14 @@ paths:
                   default: false
                 customFields:
                   type: object
-                  description: >-
-                    A valid JSON of key-value pairs of additional fields to be
-                    added during user registration. Before saving custom
-                    fields,  you must define them in [workspace admin
-                    settings](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/account-settings#registration).
-                    The customFields will not be returned if it does not exist
-                    on the server.
+                  example: {
+                "clearance": "High",
+                "team": "Queen" }
+                  description: |-
+                    A valid JSON object of key-value pairs consisting of additional fields to be
+                    added during user registration. By default, the value is `undefined`.
+                    To save custom fields, you must first define them in the [workspace admin settings](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/accounts/custom-fields).
+                    For information on how to view the custom fields, see the [Get Users List](https://developer.rocket.chat/reference/api/rest-api/endpoints/user-management/users-endpoints/get-users-list) endpoint.
       responses:
         '200':
           description: OK
@@ -1318,8 +1319,6 @@ paths:
       description: |-
         * To update the password for the user, `edit-other-user-password`
         permission is required.
-        * To save `customFields` you must first define the custom fields in
-        admin panel (Accounts -> Registration -> Custom fields).
         * This endpoint required 2FA.
 
         ### Changelog
@@ -1394,7 +1393,13 @@ paths:
                       default: true
                     customFields:
                       type: object
-                      description: Any custom fields the user should have on their account.
+                      example: {
+                "clearance": "High",
+                "team": "Queen" }
+                      description: |-
+                        Any custom fields the user should have on their account.
+                        To save custom fields, you must first define the custom fields in the admin panel (Administration > Settings > Accounts > Registration > Custom Fields). For details on how to configure this field, see (Custom Fields)[https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/accounts/custom-fields].
+                        For information on how to view the custom fields, see the (Get Users List)[https://developer.rocket.chat/reference/api/rest-api/endpoints/user-management/users-endpoints/get-users-list] endpoint.
               required:
                 - userId
                 - data
