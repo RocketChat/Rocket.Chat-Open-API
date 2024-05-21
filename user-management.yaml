@@ -15,7 +15,7 @@ paths:
     get:
       tags:
         - Permissions
-      summary: List all permissions
+      summary: List All Permissions
       description: |-
         Returns all permissions from the workspace.
         
@@ -82,7 +82,7 @@ paths:
           $ref: '#/components/responses/authorizationError'
   /api/v1/permissions.update:
     post:
-      summary: Update permissions
+      summary: Update Permissions
       description: |-
         Update the permissions on the workspace.
         Permission required: `access-permissions`
@@ -2898,7 +2898,7 @@ paths:
         - Users
       summary: Delete Own Account
       description: |-
-        Deletes your own user. Requires `Allow Users to Delete Own Account` enabled. Accessible from Administration -> Accounts.
+        Deletes your own user account. Requires the `Allow Users to Delete Own Account` setting enabled. Access this setting from **Administration** > **Workspace** > **Settings** > **Accounts**.
         
         ### Changelog
         | Version      | Description |
@@ -2983,24 +2983,15 @@ paths:
         content:
           application/json:
             schema:
-              oneOf:
-                - type: object
-                  properties:
+              type: object
+              properties:
                     userId:
                       type: string
-                      description: >-
-                        The user ID. 
+                      description: |-
+                        The user ID. Alternatively, you can use the `username` parameter and enter the user name value. (For example, `test.user`)
                       example: BsNr28znDkG8aeo7W
-                - type: object
-                  properties:
-                    username:
-                      type: string
-                      description: >-
-                        The username
-                      example: test.user
               required:
                 - userId
-                - username
             examples:
               Example:
                 value:
@@ -3570,7 +3561,7 @@ paths:
                     success: false
                     error: The 'email' param is required
       description: |-
-        Send an email to reset your password. Please ensure that you have completed the configuration of the email; otherwise, your users will not receive the mail normally. Accessible from Administration -> Email inboxes.
+        Send an email to reset your password. Ensure that you have completed the configuration of the email; otherwise, your users will not receive the mail normally. Access this from **Administration** > **Workspace** > **Email inboxes**.
         
         ### Changelog
         | Version      | Description |
@@ -4957,7 +4948,7 @@ paths:
           * The `rc_uid` and `rc_token` can alternately be provided as cookies (already present in the web interface), but not as auth headers.
           * When requesting the avatar of a user, if they have a custom avatar set, this will override the user's choices of format or size.
           * If no uploaded avatar exists for a user, a default one will be generated for them based on the initial of their username in a randomly colored square.
-          * If `UI_Use_Name_Avatar` is set AND the user has a real name set; the generated avatar will be based on their actual name instead of the username.
+          * If `UI_Use_Name_Avatar` is set and the user has a real name set, the generated avatar will be based on their actual name instead of the username.
           * If no format is requested, or the format requested isn't supported, the format returned will be SVG.
       parameters:
         - schema:
