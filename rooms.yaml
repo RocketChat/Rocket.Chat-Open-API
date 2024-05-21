@@ -21,7 +21,7 @@ paths:
         Create a public channel. Optionally, include specified users. The channel creator is included as a member by default.
         Channel naming has restraints following the regex filter `[0-9a-zA-Z-_.]+` by default. See [UTF8 Settings](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/general#utf8) to modify regex filter for channel names. Channel names must not allow for any whitespaces.
 
-        ### Change Log
+        ### Changelog
 
         | Version | Description               |
         | ------- | ------------------------- |
@@ -150,7 +150,7 @@ paths:
       description: |-
         Adds all users in the workspace to a channel.
         
-        ### Change Log
+        ### Changelog
         | Version | Description               |
         | ------- | ------------------------- |
         |0.55.0   | Added `activeUsersOnly` param |
@@ -307,7 +307,7 @@ paths:
         Assign the role of `leader` to a user in the current channel. 
         
         Permission required: `set-leader`
-        ### Change Log
+        ### Changelog
         | Version | Description               |
         | ------- | ------------------------- |
         | 0.75.0   | Added                    |
@@ -369,7 +369,7 @@ paths:
         
         Permission required: `set-moderator`
         
-        ### Change Log
+        ### Changelog
         | Version | Description               |
         | ------- | ------------------------- |
         | 0.49.4  | Added                     |
@@ -430,7 +430,7 @@ paths:
         Assign the `owner` role to a user in a channel. 
         
         Permission required:  `set-owner`
-        ### Change Log
+        ### Changelog
         | Version | Description               |
         | ------- | ------------------------- |
         | 0.49.4   | Added                    |
@@ -496,7 +496,7 @@ paths:
       summary: Read Channel Messages Anonymously
       description: |-
         Fetch the messages in a public channel to an anonymous user. You must enable [`Accounts_AllowAnonymousRead` setting](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/account-settings) in the workspace.
-        ### Change Log
+        ### Changelog
         | Version | Description               |
         | ------- | ------------------------- |
         | 1.2.0   | Added                     |
@@ -687,7 +687,7 @@ paths:
       summary: Archive Channel
       description: |-
         Archive a channel.
-        ### Change Log
+        ### Changelog
         | Version | Description               |
         | ------- | ------------------------- |
         | 0.48.0  | Added                    |
@@ -741,7 +741,7 @@ paths:
       summary: Close Channel
       description: |-
         Remove a channel from the authenticated user's list of channels.
-        ### Change Log
+        ### Changelog
         | Version | Description               |
         | ------- | ------------------------- |
         | 0.48.0  | Added                     |
@@ -794,7 +794,7 @@ paths:
         Gets channel information related to a user.
         
         Permission required: `view-room-administration`
-        ### Change Log
+        ### Changelog
         | Version | Description               |
         | ------- | ------------------------- |
         | 0.65.0  | Added                     |
@@ -863,7 +863,7 @@ paths:
       description: |-
         Delete a channel.
         
-        ### Change Log
+        ### Changelog
         
         | Version | Description               |
         | ------- | ------------------------- |
@@ -898,7 +898,7 @@ paths:
       description: |-
         Retrieves all the files from a channel.
         
-        ### Change Log
+        ### Changelog
         | Version | Description               |
         | ------- | ------------------------- |
         | 0.64.0 | Change userId to user object in response                    |
@@ -1053,7 +1053,7 @@ paths:
       description: |-
         Retrieves the history of a channel.
         
-        ### Change Log
+        ### Changelog
         | Version | Description               |
         | ------- | ------------------------- |
         | 0.75.0 | Added offset property      |
@@ -1223,7 +1223,7 @@ paths:
       summary: Get Channel Information
       description: |-
         Retrieves the information about the channel. This does not include archived channels.
-        ### Change Log
+        ### Changelog
         | Version | Description               |
         | ------- | ------------------------- |
         | 0.48.0  | Added                  |
@@ -1365,12 +1365,12 @@ paths:
       description: |-
         Add a user or bulk users to a channel.
 
-        For a user to invite others, they must match at least one of the following premises:
+        For a user to invite other users, they must match at least one of the following premises:
         - The user is part of a room of any type and has the `add-user-to-joined-room` permission.
         - The user is part of a public room `(t: 'c')` and has the `add-user-to-any-c-room` permission.
         - The user is part of a private room `(t: 'p')` and has the `add-user-to-any-p-room` permission.
 
-        ### Change Log
+        ### Changelog
 
         | Version | Description               |
         | ------- | ------------------------- |
@@ -1389,7 +1389,7 @@ paths:
                   properties:
                     roomId:
                       type: string
-                      description: The channel's id
+                      description: The channel's ID.
                       example: nSYqWzZ4GsKTX4dyK
                     userId:
                       type: string
@@ -1557,7 +1557,7 @@ paths:
       description: |-
         Join a channel.
         
-        ### Change Log
+        ### Changelog
         | Version | Description               |
         | ------- | ------------------------- |
         | 0.49.0  | Added                  |
@@ -1718,7 +1718,7 @@ paths:
       description: |-
         Remove a user from the channel.
         
-        ### Change Log
+        ### Changelog
         | Version | Description               |
         | ------- | ------------------------- |
         | 0.48.0  | Added                     |
@@ -1911,7 +1911,7 @@ paths:
       summary: Leave  Channel
       description: |-
         Leave a channel.
-        ### Change Log
+        ### Changelog
         | Version | Description               |
         | ------- | ------------------------- |
         | 0.48.0  | Added                  |
@@ -1994,7 +1994,7 @@ paths:
       summary: Get List of Joined Channels
       description: |-
         Lists all the channels the authenticated user has joined. 
-        ### Change Log
+        ### Changelog
         | Version | Description                                  |
         | ------- | -------------------------------------------- |
         | 0.62.0  | Add `query` parameter support.               |
@@ -2174,7 +2174,7 @@ paths:
       description: |-
         Lists all of the channels on the workspace.
         
-        ### Change Log
+        ### Changelog
         | Version | Description                                  |
         | ------- | -------------------------------------------- |
         | 0.49.0  | Count and offset query parameters supported. |
@@ -2391,7 +2391,7 @@ paths:
       description: |-
         Lists all channel users. The list of elements a user can use to sort the list is limited. The current sortable element is:`username`
         
-        ### Change Log
+        ### Changelog
         | Version | Description                                  |
         | ------- | -------------------------------------------- |
         | 0.59.0  | Added                                        |
@@ -2489,7 +2489,7 @@ paths:
         The `highestRole` object also contains a `role` field, which has three possile values: `owner`, `moderator` or `member`, which are assigned to levels 0, 1 and 2, respectively.
         The list of elements a user can use to sort the list is limited. The current sortable element is:`username`
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         |6.5.0  | Added         |
@@ -2591,7 +2591,7 @@ paths:
       summary: Get Channel Messages
       description: |-
         Lists all of the specific channel messages. 
-        ### Change Log
+        ### Changelog
         
         | Version | Description                                  |
         | ------- | -------------------------------------------- |
@@ -2804,7 +2804,7 @@ paths:
         
         List all the moderators in a channel.
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 0.70.0 | Added        |
@@ -2850,7 +2850,7 @@ paths:
       summary: List Online Users in a Channel
       description: |-
         List all online users in a channel. If the channel's id is not provided, it lists all the online users of all the channels. 
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         |0.52.0   | Added       |
@@ -2903,7 +2903,7 @@ paths:
       summary: Add Channel to User List
       description: |-
         Add a channel to the authenticated user's list of channels.
-        ### Change Log
+        ### Changelog
         
         | Version | Description |
         | ------- | ----------- |
@@ -2941,7 +2941,7 @@ paths:
 
         Permission required: `set-leader` .
 
-        ### Change Log
+        ### Changelog
 
         | Version | Description |
         | ------- | ----------- |
@@ -3005,7 +3005,7 @@ paths:
 
         Permission required: `set-moderator`.
 
-        ### Change Log
+        ### Changelog
 
         | Version | Description |
         | ------- | ----------- |
@@ -3076,7 +3076,7 @@ paths:
 
         Permission required:`set-owner`.
 
-        ### Change Log
+        ### Changelog
 
         | Version | Description |
         | ------- | ----------- |
@@ -3117,7 +3117,7 @@ paths:
       description: |-
         Change the name of a channel.
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         |0.48.0  | Added        | 
@@ -3212,7 +3212,7 @@ paths:
       description: |-
         Lists all user's roles in the channel.
         
-        ### Change Log
+        ### Changelog
         
         | Version | Description |
         | ------- | ----------- |
@@ -3281,7 +3281,7 @@ paths:
       summary: Set Channel Announcement
       description: |-
         Set an announcement for the channel.
-        ### Change Log
+        ### Changelog
         
         | Version | Description |
         | ------- | ----------- |
@@ -3336,7 +3336,7 @@ paths:
       description: |-
         Sets the custom fields for a channel.
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         |0.62.0  | Added        |
@@ -3349,39 +3349,20 @@ paths:
           application/json:
             schema:
               type: object
-              oneOf:
-                - type: object
-                  properties:
+              properties:
                     roomId:
                       type: string
-                      description: The channel's id
+                      description: The channel's ID. Alternatively, enter the `roomName` parameter and provide the room's name as the value.
                     customFields:
                       type: object
                       description: The custom fields to set for the channel.
                       properties:
                         organization:
                           type: string
-                      required:
-                        - organization
-                  required:
-                    - roomId
-                    - customFields
-                - type: object
-                  properties:
-                    roomName:
-                      type: string
-                      description: The channel's name
-                    customFields:
-                      type: object
-                      description: The custom fields to set for the channel.
-                      properties:
-                        organization:
-                          type: string
-                      required:
-                        - organization
-                  required:
-                    - roomName
-                    - customFields
+              required:
+                - roomId
+                - customFields
+                - organization
             examples:
               Example 1:
                 value:
@@ -3547,7 +3528,7 @@ paths:
       summary: Set Default Channel
       description: |-
         Set whether the channel is a default channel or not.
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         |0.66.0  | Added        |
@@ -3653,7 +3634,7 @@ paths:
       description: |-
         Set the description for a channel.
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         |0.48.4  | Added        |
@@ -3707,7 +3688,7 @@ paths:
       description: |-
         Set the code required to join the channel. If it is set, users must use the join code to successfully join the channel.
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         |0.49.0  | Added        |
@@ -3902,7 +3883,7 @@ paths:
         Set the purpose or description of the channel. 
         It is the same as Set Channel Description.
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         |0.48.0  | Added        |
@@ -3956,7 +3937,7 @@ paths:
       description: |-
         Set a channel to be read-only or not.
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         |0.49.0  | Added        |
@@ -4060,7 +4041,7 @@ paths:
       description: |-
         Set the topic for a channel.
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         |0.13.0  | Added        |
@@ -4113,7 +4094,7 @@ paths:
       summary: Set Channel Type
       description: |-
         Set the channel type. The channel type can be either `c` (public) or `p` (private).
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         |0.49.0  | Added        |
@@ -4127,29 +4108,19 @@ paths:
           application/json:
             schema:
               type: object
-              oneOf:
-                - type: object
-                  properties:
+              properties:
                     roomId:
                       type: string
-                      description: The channel's id
+                      description: The channel's ID. Alternatively, enter the `channelName` parameter and provide the channel's name as the value.
                     type:
                       type: string
                       description: |-
                         The channel's type. The type of room this channel should be, either c or p. 
                         
                         `c` is for channel and `p` is for private.
-                - type: object
-                  properties:
-                    roomName:
-                      type: string
-                      description: The channel's name
-                    type:
-                      type: string
-                      description: |-
-                        The channel's type. The type of room this channel should be, either c or p. 
-                        
-                        `c` is for channel and `p` is for private.
+              required:
+                - roomId
+                - type
             examples:
               Example 1:
                 value:
@@ -4231,7 +4202,7 @@ paths:
       description: |-
         Unarchive a Channel.
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         |0.48.0   | Added       |
@@ -4260,7 +4231,7 @@ paths:
       summary: Get all user mentions in a channel
       description: |-
         Get all the mentions of the authenticated user in a channel.
-        ### Change Log
+        ### Changelog
         | Version | Description|
         | ------- | -----------|
         |0.63.0  | Added       |
@@ -4401,7 +4372,7 @@ paths:
         
         It will return the integrations based on the user's permission. 
         
-        ### Change Log
+        ### Changelog
         | Version | Description                                     |
         | ------- | -------------------------------------------------- |
         | 1.1.0   | Separate permissions in `incoming` and `outgoing`. |
@@ -4532,21 +4503,12 @@ paths:
           application/json:
             schema:
               type: object
-              oneOf:
-                - type: object
-                  properties:
+              properties:
                     channelId:
                       type: string
-                      description: The channel's id
-                  required:
-                    - channelId
-                - type: object
-                  properties:
-                    channelName:
-                      type: string
-                      description: The channel's name
-                  required:
-                    - channelName
+                      description: The channel's ID. Alternatively, enter the `channelName` parameter and provide the channel's name as the value.
+              required:
+                - channelId
             examples:
               Example 1:
                 value:
@@ -4606,7 +4568,7 @@ paths:
       description: |-
         Set the notifications settings of a specific room.
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         |0.63.0  | Added        |
@@ -4726,7 +4688,7 @@ paths:
         
         Permission required: `view-room-administration`
         
-        ### Change Log
+        ### Changelog
         | Version | Description  |
         | ------- |--------------|
         | 2.4.0  | Added         |
@@ -4842,7 +4804,7 @@ paths:
       description: |-
         Cleans up a room, removing messages from the provided time range.
         
-        ### Change Log
+        ### Changelog
         | Version | Description            |
         | ------- | ---------------------- |
         | 0.64.0  | Added                  |
@@ -4911,7 +4873,7 @@ paths:
       description: |- 
         Retrieves the information about the room.
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         |0.72.0   | Added       |
@@ -5104,7 +5066,7 @@ paths:
       description: |-
         Get all discussions of a room. 
         
-        ### Change Log
+        ### Changelog
         | Version | Description   |
         | ------- | --------------|
         | 1.0.0   | Added         |
@@ -5283,7 +5245,7 @@ paths:
       description: |-
         Get all opened rooms (all joined public & private channels and all DMs) of the authenticated user.
         
-        ### Change Log
+        ### Changelog
         | Version | Description   |
         | ------- | --------------|
         | 0.72.0  | Added         |
@@ -5645,7 +5607,7 @@ paths:
       description: |-
         Leave a room.
         
-        ### Change Log
+        ### Changelog
         | Version | Description   |
         | ------- | --------------|
         | 0.72.0  | Added         |
@@ -5675,7 +5637,7 @@ paths:
       description: |-
         Delete a room from the workspace.
         
-        ### Change Log
+        ### Changelog
         | Version | Description   |
         | ------- | --------------|
         | 5.4.0   | Added         |
@@ -5705,7 +5667,7 @@ paths:
       description: |-
         Mark/Unmark a Room as Favourite
         
-        ### Change Log
+        ### Changelog
         | Version | Description   |
         | ------- | --------------|
         | 0.64.0   | Added        |
@@ -5718,29 +5680,16 @@ paths:
           application/json:
             schema:
               type: object
-              oneOf:
-                - type: object
-                  properties:
+              properties:
                     roomId:
                       type: string
-                      description: The room id
+                      description: The room ID. Alternatively, enter the `roomName` parameter and provide the room's name as the value.
                     favorite:
                       type: boolean
                       description: A boolean to mark the room as favourite or not.
-                  required:
-                    - roomId
-                    - favorite
-                - type: object
-                  properties:
-                    roomName:
-                      type: string
-                      description: The room name
-                    favorite:
-                      type: boolean
-                      description: A boolean to mark the room as favourite or not.
-                  required:
-                    - roomName
-                    - favorite
+              required:
+                - roomId
+                - favorite
             examples:
               Example 1:
                 value:
@@ -5757,7 +5706,7 @@ paths:
       summary: Upload File to a Room
       description: |-
         Post a message with the attached file to a dedicated room.
-        ### Change Log
+        ### Changelog
         | Version | Description                          |
         | ------- | ------------------------------------ |
         | 1.0.0   | Return Message object on file upload |
@@ -6096,7 +6045,7 @@ paths:
         
         Permission required: `view-room-administration`
         
-        ### Change Log
+        ### Changelog
         | Version | Description     |
         | ------- | --------------- |
         | 2.4.0   | Added           |
@@ -6170,7 +6119,7 @@ paths:
         - Rooms
       summary: Save Room Settings
       description: |-
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ------------|
         | 3.13.0  | Added       |
@@ -6369,7 +6318,7 @@ paths:
       description: |-
         Change archive state of a room.
         
-        ### Change Log
+        ### Changelog
         | Version | Description      |
         | ------- | ---------------- |
         | 3.3.0  | Added             |
@@ -6439,7 +6388,7 @@ paths:
 
         Permission required: `mail-messages`
 
-        ### Change Log
+        ### Changelog
 
         | Version | Description                          |
         | ------- | ------------------------------------ |
@@ -6526,7 +6475,7 @@ paths:
       description: |
         Mute a particular user in a room.
 
-        ### Change Log
+        ### Changelog
 
         | Version | Description                          |
         | ------- | ------------------------------------ |
@@ -6551,7 +6500,7 @@ paths:
                 userId:
                   type: string
                   example: CkCPNfjfhiwWLqC
-                  description: 'The user that you want to mute. Alternatively, you can also use the `username` parameter.'
+                  description: 'The user that you want to mute. Alternatively, use the `username` parameter and enter the username as the value.'
                 roomId:
                   type: string
                   example: JZ8Y2dLfYhsg323Rf
@@ -6597,7 +6546,7 @@ paths:
       description: |
         Unmute a particular user in a room.
 
-        ### Change Log
+        ### Changelog
 
         | Version | Description                          |
         | ------- | ------------------------------------ |
@@ -6622,7 +6571,7 @@ paths:
                 userId:
                   type: string
                   example: CkCPNfjfhiwWLqC
-                  description: 'The user that you want to unmute. Alternatively, you can also use the `username` parameter.'
+                  description: 'The user that you want to unmute. Alternatively, use the `username` parameter.'
                 roomId:
                   type: string
                   example: JZ8Y2dLfYhsg323Rf
@@ -6668,7 +6617,7 @@ paths:
       description: |-
         Creates a new discussion for the room. It requires at least one of the following permissions: `start-discussion` OR `start-discussion-other-user`, AND must be with the following setting enabled: `Discussion_enabled`.
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 1.0.0   | Added       |
@@ -7197,15 +7146,13 @@ paths:
           application/json:
             schema:
               type: object
-              oneOf:
-                - type: object
-                  properties:
+              properties:
                     teamId:
                       type: string
-                      description: The team id.
+                      description: Enter the team ID. Alternatively, enter the `teamName` parameter and provide the team's name as the value.
                     members:
                       type: array
-                      description: The users (ids and roles) to add to the team.
+                      description: The users (IDs and roles) to add to the team.
                       items:
                         type: object
                         properties:
@@ -7215,29 +7162,9 @@ paths:
                             type: array
                             items:
                               type: string
-                  required:
-                    - teamId
-                    - members
-                - type: object
-                  properties:
-                    teamName:
-                      type: string
-                      description: The team name.
-                    members:
-                      type: array
-                      description: The users (ids and roles) to add to the team.
-                      items:
-                        type: object
-                        properties:
-                          userId:
-                            type: string
-                          roles:
-                            type: array
-                            items:
-                              type: string
-                  required:
-                    - teamName
-                    - members
+              required:
+                - teamId
+                - members
             examples:
               Example 1:
                 value:
@@ -7390,15 +7317,13 @@ paths:
           application/json:
             schema:
               type: object
-              oneOf:
-                - type: object
-                  properties:
+              properties:
                     teamId:
                       type: string
-                      description: The team id.
+                      description: Enter the team ID. Alternatively, enter the `teamName` parameter and provide the team's name as the value.
                     members:
                       type: array
-                      description: The users (ids and roles) to add to the team.
+                      description: The users (IDs and roles) to add to the team.
                       items:
                         type: object
                         properties:
@@ -7408,29 +7333,9 @@ paths:
                             type: array
                             items:
                               type: string
-                  required:
-                    - teamId
-                    - members
-                - type: object
-                  properties:
-                    teamName:
-                      type: string
-                      description: The team name.
-                    members:
-                      type: array
-                      description: The users (ids and roles) to add to the team.
-                      items:
-                        type: object
-                        properties:
-                          userId:
-                            type: string
-                          roles:
-                            type: array
-                            items:
-                              type: string
-                  required:
-                    - teamName
-                    - members
+              required:
+                - teamId
+                - members
             examples:
               Example 1:
                 value:
@@ -7458,32 +7363,18 @@ paths:
           application/json:
             schema:
               type: object
-              oneOf:
-                - type: object
-                  properties:
-                    teamName:
-                      type: string
-                      description: "The team name"
-                    rooms:
-                      type: array
-                      description: The team rooms (ids) to remove the user from.
-                      items:
-                        type: string
-                  required:
-                    - teamName
-                    - rooms
-                - type: object
-                  properties:
+              properties:
                     teamId:
                       type: string
-                      description: The team Id
+                      description: Enter the team ID. Alternatively, enter the `teamName` parameter and provide the team's name as the value. 
                     rooms:
                       type: array
                       description: The team room IDs to remove the user from.
                       items:
                         type: string
-                  required:
-                    - teamId
+              required:
+                - teamId
+                - rooms
             examples:
               Example 1:
                 value:
@@ -7513,39 +7404,21 @@ paths:
           application/json:
             schema:
               type: object
-              oneOf:
-                - type: object
-                  properties:
+              properties:
                     teamId:
                       type: string
-                      description: The team id.
+                      description: Enter the team ID. Alternatively, enter the `teamName` parameter and provide the team's name as the value. 
                     userId:
                       type: string
-                      description: The user id of who to remove from the team.
+                      description: The user ID to remove from the team.
                     rooms:
                       type: array
-                      description: The rooms (ids) from which the user should be removed.
+                      description: The rooms (IDs) from which the user should be removed.
                       items:
                         type: string
-                  required:
-                    - teamId
-                    - userId
-                - type: object
-                  properties:
-                    teamName:
-                      type: string
-                      description: The team name.
-                    userId:
-                      type: string
-                      description: The user id of who to remove from the team.
-                    rooms:
-                      type: array
-                      description: The rooms (ids) from which the user should be removed.
-                      items:
-                        type: string
-                  required:
-                    - teamName
-                    - userId
+              required:
+                - teamId
+                - userId
             examples:
               Example 1:
                 value:
@@ -7720,33 +7593,18 @@ paths:
           application/json:
             schema:
               type: object
-              oneOf:
-                - type: object
-                  properties:
+              properties:
                     teamId:
                       type: string
-                      description: The team id.
+                      description: Enter the team ID. Alternatively, enter the `teamName` parameter and provide the team's name as the value.
                     rooms:
                       type: array
                       description: The IDs of the rooms to be added to the team.
                       items:
                         type: string
-                  required:
-                    - teamId
-                    - rooms
-                - type: object
-                  properties:
-                    teamName:
-                      type: string
-                      description: The team name.
-                    rooms:
-                      type: array
-                      description: The IDs of the rooms to be added to the team.
-                      items:
-                        type: string
-                  required:
-                    - teamName
-                    - rooms
+              required:
+                - teamId
+                - rooms
             examples:
               Example 1:
                 value:
@@ -8676,7 +8534,7 @@ paths:
       summary: Get Group Online Users
       description: |-
         Lists all online users of a group if the group's id is provided, otherwise it gets all online users of all groups.
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 0.52.0  | Added       |
@@ -8727,7 +8585,7 @@ paths:
         * `manage-own-outgoing-integrations`
         
         It will return the integrations based on the user's permission. 
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 1.1.0  | Separate permissions in incoming and outgoing. |
@@ -8888,7 +8746,7 @@ paths:
       description: |-
         Adds all of the users of the Rocket.Chat workspace to the group/channel.
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 0.55.0  | Added       |
@@ -8976,7 +8834,7 @@ paths:
         
         Permission required:  `set-leader` 
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 0.58.0  | Added.      |
@@ -9037,7 +8895,7 @@ paths:
         
         Permission required: `set-moderator`
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 0.49.4  | Added.      |
@@ -9076,7 +8934,7 @@ paths:
       summary: Add Group Owner
       description: |-
         Assign `owner` role for a user in the current group.
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 0.49.4  | Added.      |
@@ -9114,7 +8972,7 @@ paths:
       description: |-
         Archives a group/channel, only if you're part of the group/channel.
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 0.48.0  | Added       |
@@ -9145,7 +9003,7 @@ paths:
       description: |-
         Removes the group/channel from the user's list of groups, only if you're part of the group.
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 0.48.0  | Added       |
@@ -9178,7 +9036,7 @@ paths:
         
         Permission required: `view-room-administration`
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 0.65.0  | Added       |
@@ -9246,7 +9104,7 @@ paths:
       description: |-
         Creates a new group/channel, optionally including specified users. The group creator is always included.
         
-        ### Change Log
+        ### Changelog
         | Version | Description               |
         | ------- | ------------------------- |
         | 6.4.1   | Added `excludeSelf` param |
@@ -9363,7 +9221,7 @@ paths:
       description: |-
         Delete a private group.
         
-        ### Change Log
+        ### Changelog
         | Version | Description              |
         | ------- | ------------------------ |
         | 0.71.0  | Removed `group` property |
@@ -9399,7 +9257,7 @@ paths:
       description: |-
         Retrieves the messages from a group/channel, only if you're part of the group.
         
-        ### Change Log
+        ### Changelog
         | Version | Description             |
         | ------- | ----------------------- |
         | 0.75.0  | Added `offset` property |
@@ -9523,7 +9381,7 @@ paths:
       description: |-
         Retrieves the information about the private group, only if you're part of the group.
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 0.48.0  | Added       |
@@ -9612,7 +9470,7 @@ paths:
       description: |-
         Invite one user or bulk users to the group/channel.
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 0.48.0  | Added       |
@@ -9731,7 +9589,7 @@ paths:
       description: |-
         Removes a user from the group/channel.
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 0.48.0  | Added       |
@@ -9824,7 +9682,7 @@ paths:
       description: |-
         Causes the request sender to be removed from the group/channel if they're part of it and are not the last owner.
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 0.48.0  | Added       |
@@ -9911,7 +9769,7 @@ paths:
         
         Permission required: `view-room-administration`
         
-        ### Change Log
+        ### Changelog
         | Version | Description                    |
         | ------- | ------------------------------ |
         | 0.62.0  | Add 'query' parameter support. |
@@ -10007,7 +9865,7 @@ paths:
       description: |-
         Lists all of the groups/channels the user has joined.
         
-        ### Change Log
+        ### Changelog
         | Version | Description                                  |
         | ------- | -------------------------------------------- |
         | 0.67.0  | Removed `query` parameter support.           |
@@ -10106,7 +9964,7 @@ paths:
         
         Permission required if the room is broadcast.: `view-broadcast-member-list`
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 0.59.0  | Added       |
@@ -10201,7 +10059,7 @@ paths:
         
         Requires `view-broadcast-member-list` if the room is a broadcast.
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 6.5.0   | Added       |
@@ -10305,7 +10163,7 @@ paths:
       description: |-
         Lists all of the specific groups/channels messages on the workspace. 
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 0.59.0  | Added       |
@@ -10432,7 +10290,7 @@ paths:
       description: |-
         Lists all group moderators.
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 0.70.0  | Added       |
@@ -10473,7 +10331,7 @@ paths:
       description: |-
         Adds the group/channel back to the user's list of groups.
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 0.48.0  | Added       |
@@ -10506,7 +10364,7 @@ paths:
         Permission required: `set-leader`
 
 
-        ### Change Log
+        ### Changelog
 
         | Version | Description |
         | ------- | ----------- |
@@ -10568,7 +10426,7 @@ paths:
 
         Permission required: `set-moderator`
 
-        ### Change Log
+        ### Changelog
 
         | Version | Description |
         | ------- | ----------- |
@@ -10611,7 +10469,7 @@ paths:
 
         Permission required: `set-owner` 
 
-        ### Change Log
+        ### Changelog
 
         | Version | Description |
         | ------- | ----------- |
@@ -10652,7 +10510,7 @@ paths:
       description: |-
         Update the name of the private group.
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 0.48.0  | Added       |
@@ -10747,7 +10605,7 @@ paths:
       description: |-
         Set the group announcement.
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 0.70.0  | Added       |
@@ -10801,7 +10659,7 @@ paths:
       description: |-
         Sets the custom fields for the private group.
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 0.62.0  | Added       |
@@ -10817,7 +10675,7 @@ paths:
               properties:
                     roomId:
                       type: string
-                      description: The private group's ID. Alternatively, you can use the `roomName` field.
+                      description: The private group's ID. Alternatively, use the `roomName` parameter and provide the room's name as the value.
                     customFields:
                       type: object
                       description: The custom fields to set for the private group.
@@ -10907,7 +10765,7 @@ paths:
       description: |-
         Set the description for the private group.
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 0.48.0  | Added       |
@@ -10961,7 +10819,7 @@ paths:
       description: |-
         Sets the description for the group/channel (the same as groups.setDescription, obsolete).
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 0.48.0  | Added       |
@@ -11015,7 +10873,7 @@ paths:
       description: |-
         Set group as read-only or not.
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 0.49.0  | Added       |
@@ -11119,7 +10977,7 @@ paths:
       description: |-
         Sets the topic for the group/channel.
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 0.48.0  | Added       |
@@ -11173,7 +11031,7 @@ paths:
       description: |-
         Set the group type. The group type can be either `c` (public) or `p` (private).
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 0.49.0  | Added       |
@@ -11277,7 +11135,7 @@ paths:
       description: |-
         Unarchive a group.
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 0.48.0  | Added       |
@@ -11307,7 +11165,7 @@ paths:
       description: |-
         Get all files in a group.  
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 0.64.0  | Change userId to user object in response       |
@@ -11428,7 +11286,7 @@ paths:
       description: |-
         Set group encryption.
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 3.13.0  | Added       |
@@ -11447,7 +11305,7 @@ paths:
                       description: Whether or not to encrypt the room.
                     roomId:
                       type: string
-                      description: The group ID. Alternatively, you can use the `roomName` field and enter the group name.
+                      description: The group ID. Alternatively, use the `roomName` parameter and enter the group name.
               required:
                     - encrypted
                     - roomName
@@ -11561,7 +11419,7 @@ paths:
       description: |-
         Convert a group to a team.
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 3.13.0  | Added       |
@@ -11669,7 +11527,7 @@ paths:
       description: |-
           List all the roles of users in the group.
           
-          ### Change Log
+          ### Changelog
           | Version | Description |
           | ------- | ----------- |
           | 0.65.0  | Added       |
@@ -11731,7 +11589,7 @@ paths:
       description: |-
         Search workspace directory for users, channels and teams. 
         
-        ### Change Log
+        ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 1.0.0   | Added workspace query param |
