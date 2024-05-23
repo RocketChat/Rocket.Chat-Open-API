@@ -5951,19 +5951,18 @@ paths:
     get:
       tags:
         - Rooms
-      summary: Autocomplete Private Channel
+      summary: Autocomplete Room Name for Private and Public Rooms
       operationId: get-api-v1-rooms.autocomplete.channelAndPrivate
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
         - schema:
-            type: object
-          example: {"exceptions": ["john.doe"], "conditions": {"status": "offline"}, "term": "user", "$or": [{"type": "user"}, {"roles": ["bot"]}]}
+            type: string
+            example: '{"name":"ran"}'
           in: query
           name: selector
           required: true
-          description: |-
-            Filter the response with the parameters.
+          description: The term to be completed. It only applies to room name.
       responses:
         '200':
           description: OK
@@ -5979,41 +5978,136 @@ paths:
                       properties:
                         _id:
                           type: string
-                        name:
-                          type: string
                         fname:
+                          type: string
+                        name:
                           type: string
                         t:
                           type: string
                   success:
                     type: boolean
+                x-examples:
+                  Example 1:
+                    items:
+                      - _id: 664f0d525df46832f75b1860
+                        fname: rancher
+                        name: rancher
+                        t: p
+                      - _id: 6630e94ad2226209149c67e2
+                        fname: random
+                        name: random
+                        t: c
+                      - _id: 664f148f5df46832f75b18b2
+                        fname: ranmowe
+                        name: ranmowe
+                        t: p
+                    success: true
               examples:
                 Example:
                   value:
                     items:
-                      - _id: osvTu9BnJuSiC8b8M
-                        name: data-loss-prevention
-                        fname: data-loss-prevention
+                      - _id: 664f0d525df46832f75b1860
+                        fname: rancher
+                        name: rancher
                         t: p
-                      - _id: H3Li6yWc5tz2hbvmu
-                        name: demo-channel-12-11
-                        fname: demo-channel-12-11
-                        t: p
-                      - _id: ThS4AKxCgBfv5xqQD
-                        fname: Omnichannel Facebook Setup
-                        name: omnichannel-facebook-setup
+                      - _id: 6630e94ad2226209149c67e2
+                        fname: random
+                        name: random
                         t: c
-                      - _id: phqYWtZZrGWrEZWue
-                        fname: Omnichannel Instagram Setup
-                        name: omnichannel-instagram-setup
+                      - _id: 664f148f5df46832f75b18b2
+                        fname: ranmowe
+                        name: ranmowe
                         t: p
-                      - _id: ZhB63qsrJMQ7k3RYx
-                        fname: Omnichannel Twitter Setup
-                        name: omnichannel-twitter-setup
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: The 'selector' param is required
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      description: 'List the public and private rooms whose names match a given string, excluding [discussions](https://docs.rocket.chat/use-rocket.chat/user-guides/rooms/discussions), [DMs](https://docs.rocket.chat/use-rocket.chat/user-guides/rooms/direct-messages), and [omnichannel rooms](https://docs.rocket.chat/use-rocket.chat/omnichannel). The endpoint is valuable when performing search operations. It returns only rooms that the user belongs to.'
+  /api/v1/rooms.autocomplete.adminRooms:
+    get:
+      tags:
+        - Rooms
+      summary: Admin Autocomplete Room Name for Private and Public Rooms
+      operationId: get-api-v1-rooms.autocomplete.adminRooms
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - schema:
+            type: string
+            example: '{"name":"ran"}'
+          in: query
+          name: selector
+          required: true
+          description: The term to be completed. It only applies to room name.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        fname:
+                          type: string
+                        name:
+                          type: string
+                        t:
+                          type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    items:
+                      - _id: 664f0d815df46832f75b1877
+                        fname: rangig
+                        name: Ch9xkYwGHnsLe7CQR
+                        t: c
+                      - _id: 664f0d525df46832f75b1860
+                        fname: rancher
+                        name: rancher
                         t: p
-                      - _id: umr9xvCpqCBtsjYkE
-                        fname: Omnichannel WhatsApp Setup
-                        name: omnichannel-whatsapp-setup
+                      - _id: 6630e94ad2226209149c67e2
+                        fname: random
+                        name: random
+                        t: c
+                    success: true
+              examples:
+                Example:
+                  value:
+                    items:
+                      - _id: 664f0d815df46832f75b1877
+                        fname: rangig
+                        name: Ch9xkYwGHnsLe7CQR
+                        t: c
+                      - _id: 664f0d525df46832f75b1860
+                        fname: rancher
+                        name: rancher
+                        t: p
+                      - _id: 6630e94ad2226209149c67e2
+                        fname: random
+                        name: random
                         t: c
                     success: true
         '400':
@@ -6034,7 +6128,10 @@ paths:
                     error: The 'selector' param is required
         '401':
           $ref: '#/components/responses/authorizationError'
-
+      x-stoplight:
+        id: kmjuekbwjuezr
+      description: 'List public and private rooms whose names match a given string, excluding [DMs](https://docs.rocket.chat/use-rocket.chat/user-guides/rooms/direct-messages), and [omnichannel rooms](https://docs.rocket.chat/use-rocket.chat/omnichannel). This endpoint is valuable when performing search operations. Only workspace administrators can use it.'
+    parameters: []
   /api/v1/rooms.adminRooms.getRoom:
     get:
       tags:
