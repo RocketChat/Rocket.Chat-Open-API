@@ -456,12 +456,10 @@ paths:
         |0.70.0            | Added       |
       operationId: post-api-v1-roles.addUserToRole
       requestBody:
-        description: >-
-          By default, the three major room roles available in Rocket.Chat are
-          `Owner`, `Leader`, and `Moderator`. Creating custom roles is an
-          Enterprise workspace feature. Refer [Room
-          Roles](https://docs.rocket.chat/use-rocket.chat/user-guides/rooms/room-roles)
-          for more information.
+        description: |-
+          By default, the three major room roles are available in Rocket.Chat are **Owner**, **Leader**, and **Moderator**. 
+          [Creating custom roles](https://docs.rocket.chat/use-rocket.chat/user-management/custom-roles) is exclusively available on the Enterprise plan. 
+          Refer to [Roles](https://docs.rocket.chat/setup-and-configure/roles-in-rocket.chat) for more information.
         content:
           application/json:
             schema:
@@ -483,7 +481,7 @@ paths:
                   example: test.fun
                 roomId:
                   type: string
-                  description: The room ID for which the user is assigned the role.
+                  description: The ID of the room where the user should be assigned a role, if it is a room role.
                   example: 4adb09baa5ad42
               required:
                 - roleName
