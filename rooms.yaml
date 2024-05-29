@@ -6031,7 +6031,7 @@ paths:
                   error:
                     type: string
               examples:
-                Example 1:
+                Selector Param Required:
                   value:
                     success: false
                     error: The 'selector' param is required
@@ -6122,7 +6122,7 @@ paths:
                   error:
                     type: string
               examples:
-                Example 1:
+                Selector Param Required:
                   value:
                     success: false
                     error: The 'selector' param is required
