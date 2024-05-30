@@ -4475,7 +4475,7 @@ paths:
                         scriptEnabled: true
                         impersonateUser: false
                         scriptCompiled: 'function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor));'
-                        scriptError: null
+                        scriptError: ""
                         type: webhook-outgoing
                         userId: rocket.cat
                         channel: []
