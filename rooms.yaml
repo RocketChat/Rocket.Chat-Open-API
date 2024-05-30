@@ -8823,7 +8823,7 @@ paths:
                         scriptEnabled: true
                         impersonateUser: false
                         scriptCompiled: 'function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError(''Cannot call a class as a function'')}}var config={color:''#ffffff''};var Script=function(){function Script(){_classCallCheck(this,Script)}Script.prototype.prepare_outgoing_request=function prepare_outgoing_request(_ref){var request=_ref.request;var trigger=request.data.trigger_word+'' '';var phrase=request.data.text.replace(trigger,'''');request.headers[''Content-Type'']=''application/json'';request.headers[''apiKey'']=request.data.token;return{url:request.url,headers:request.headers,data:{format:''gif'',sentence:phrase},method:''POST''}};Script.prototype.process_outgoing_response=function process_outgoing_response(_ref2){var request=_ref2.request;var response=_ref2.response;if(response.content.gif){return{content:{attachments:[{image_url:response.content.gif,color:config[''color'']!=''''?''#''+config[''color''].replace(''#'',''''):''#ffffff''}]}}}else{return{content:{text:''Sorry I don\''t have a photo for you :disappointed_relieved:''}}}};return Script}();'
-                        scriptError: null
+                        scriptError: ""
                         type: webhook-outgoing
                         userId: rocket.cat
                         channel:
