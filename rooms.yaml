@@ -5744,13 +5744,14 @@ paths:
                   description: A description of the file.
                 tmid:
                   type: string
-                  description: The thread message id (if you want upload a file to a thread).
+                  description: The thread message ID (if you want to upload a file to a thread).
                 customFields:
                   type: object
                   description: |-
                     You can add custom fields for messages. For example, set priorities for messages.
 
                     You must enable this option and define the validation in the workspace settings. See the [Message](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/message) settings for further information.
+                  example: {"priority": "high"}
               required:
                 - file
       responses:
