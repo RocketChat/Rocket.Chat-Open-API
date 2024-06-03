@@ -191,6 +191,13 @@ paths:
                   description: An array to define which URL previews should be retrieved from each message.
                   items:
                     type: string
+                customFields:
+                  type: object
+                  description: |-
+                    You can add custom fields for messages. For example, set priorities for messages.
+
+                    You must enable this option and define the validation in the workspace settings. See the [Message](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/message) settings for further information.
+                  example: {"priority": "high"}
               required:
                 - roomId
                 - msgId
@@ -1945,6 +1952,13 @@ paths:
                 tmshow:
                   type: boolean
                   description: Defaults to true when tmid is specified. Message will also be shown in the channel/room if value is true.
+                customFields:
+                  type: object
+                  description: |-
+                    You can add custom fields for messages. For example, set priorities for messages.
+
+                    You must enable this option and define the validation in the workspace settings. See the [Message](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/message) settings for further information.
+                  example: {"priority": "high"}
               required:
                 - roomId
             examples:
@@ -2216,6 +2230,15 @@ paths:
                       description: 'If provided, this will make the avatar use the provided image url. Require  `impersonate-other-user` permission.'
                     attachments:
                       type: array
+                      description: |-
+                        The attachment is an array of objects with any of the following properties. One attachment can have many sections, including:
+                        * General
+                        * Author Information
+                        * Title Information
+                        * Image
+                        * Audio
+                        * Video
+                        * Table/Fields
                       items:
                         type: object
                         properties:
@@ -2290,10 +2313,17 @@ paths:
                     blocks:
                       type: object
                       description: |- 
-                        A message block is an array of objects with any of the following properties. A Blocks can have many sections:
+                        A message block is an array of objects with any of the following properties. Blocks can have many sections:
                         - type
                         - text
-                        - fields"
+                        - fields
+                    customFields:
+                      type: object
+                      description: |-
+                        You can add custom fields for messages. For example, set priorities for messages.
+
+                        You must enable this option and define the validation in the workspace settings. See the [Message](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/message) settings for further information.
+                      example: {"priority": "high"}
                   required:
                     - rid
                 'previewUrls ':
