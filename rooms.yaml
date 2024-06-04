@@ -6512,28 +6512,68 @@ paths:
                   description: The room Id.
                 type:
                   type: string
-                  description: How you want the room to be exported.
+                  description: |-
+                    How you want the room to be exported. The type of export selected determines the remaining required parameters. It can be either `email` or `file`.
                 dateFrom:
                   type: string
-                  description: Startdate to begin fetching.
+                  description: |-
+                    Start date to begin fetching. Use `dateFrom` if  the type is `file`. By default, it selects the oldest possible date.
                 dateTo:
                   type: string
-                  description: End date for fetching.
+                  description: |-
+                    End date for fetching. By default it selects the current date. Use `dateTo` if  the `type` is  `file`.
                 format:
                   type: string
-                  description: The file type to export as.
+                  description: |-
+                    The file type to export as. It can either be `html` or `json`. Use `format` if  the `type` is  `file`.
+                toUsers:
+                  type: array
+                  items:
+                    type: string
+                  description: |-
+                   An array of users that should recieve the export. ecieve the export. It is required if `type` is `email`.
+                toEmails:
+                  type: array
+                  items:
+                    type: string
+                  description: |-
+                    An array of any additional emails that should recieve the export. It is required if `type` is `email`. 
+                messages:
+                  type: array
+                  items:
+                    type: string
+                  description: |-
+                    An array of  messageId for  the messages that should be exported. It is required if `type` is `email`.  
+                subject:
+                  type: string
+                  description: |-
+                    The subject of the email. It is required if `type` is `email`. 
               required:
                 - rid
                 - type
                 - format
+                - subject
+                - messages
+                - toEmails
+                - toUsers
             examples:
-              Example 1:
+              Example:
                 value:
                   rid: iu7jtPAhvEeAS5tNq
                   type: file
                   dateFrom: '2000-01-01'
                   dateTo: '2021-11-25'
                   format: html
+                  toUsers:
+                    - test.user
+                  toEmails:
+                    - test@test.com
+                  messages:
+                    - yd6NBgNoiWATgDoFt
+                    - BoCjicj9DdYoMHHeo
+                    - tajMB3aX3sawFWe8W
+                  subject: 'Test Subject '
+                  
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
@@ -6561,7 +6601,7 @@ paths:
                     success: false
                     error: '[error-invalid-format]'
                     errorType: error-invalid-format
-                Invalid Rooms:
+                Invalid Params:
                   value:
                     success: false
                     error: '[error-invalid-params]'
