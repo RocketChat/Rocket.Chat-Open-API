@@ -9442,8 +9442,8 @@ paths:
       description: |-
         <h2>Premium</h2>
         At least one of the following permissions is required:
-        * `manage-livechat-priorities`
-        * `view-l-room`
+          * `manage-livechat-priorities`
+          * `view-l-room`
 
         ### Changelog
         | Version      | Description | 
@@ -9529,14 +9529,16 @@ paths:
       summary: Get a Priority
       description: |-
         <h2>Premium</h2>
+        
         Get details of a specific priority.
         At least one of the following permissions is required:
           * `manage-livechat-priorities`
           * `view-l-room`
+
         ### Changelog
-        | Version      | Description |
-        | ---------------- | ------------|
-        |6.0.0            | Added       |
+        | Version | Description  |
+        | ------- |--------------|
+        | 6.0.0  | Added         |
       operationId: get-api-v1-livechat-priorities-priorityId
       parameters:
         - $ref: '#/components/parameters/AuthToken'
