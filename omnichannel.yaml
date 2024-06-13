@@ -6533,6 +6533,7 @@ paths:
       summary: Get Business Hours
       description: |-
         <h2>Premium</h2>
+        
         Retrieves all the business hours attached to a workspace.
         Permission required: `view-livechat-business-hours`
       operationId: get-api-v1-livechat-business-hours
@@ -6928,6 +6929,7 @@ paths:
       summary: Get Default Business Hour
       description: |-
         <h2>Premium</h2>
+        
         Fetches the default business hours of a workspace.
         Permission required: `view-livechat-business-hours`
       operationId: get-api-v1-livechat-business-hour
@@ -8456,16 +8458,16 @@ paths:
       summary: Set SLA Policy to Inquiry
       description: |-
         <h2>Premium</h2>
-        Set [SLA policy](https://docs.rocket.chat/use-rocket.chat/omnichannel/sla-policies) to an inquiry.
+        
+        Set [SLA policy](https://docs.rocket.chat/use-rocket.chat/omnichannel/sla-policies) to an inquiry. You can only set the policy for an inquiry that has not been taken by an agent.
         At least one of the following permissions is required:
         * `view-l-room`
         * `manage-livechat-sla`
-        You can only set the policy for an inquiry that has not been taken by an agent.
 
         ### Changelog
-        | Version      | Description | 
-        | ---------------- | ------------|
-        |5.0.0            | Added       |
+        | Version | Description  |
+        | ------- |--------------|
+        | 5.0.0  | Added         |
       operationId: put-api-v1-livechat-inquiry.setSLA
       parameters:
         - $ref: '#/components/parameters/AuthToken'
