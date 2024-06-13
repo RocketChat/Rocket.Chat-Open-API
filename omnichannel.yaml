@@ -9915,6 +9915,7 @@ paths:
       summary: Get List of Tags
       description: |-
         <h2>Premium</h2>
+        
         At least one of the following permissions is required: 
           * `view-l-room`
           * `manage-livechat-tags`
@@ -10020,6 +10021,7 @@ paths:
       summary: Get a Tag
       description: |-
         <h2>Premium</h2>
+        
         At least one of the following permissions is required:
           * `view-l-room`
           * `manage-livechat-tags`
@@ -10242,11 +10244,12 @@ paths:
         - Livechat Units
       description: |-
         <h2>Premium</h2>
+        
         Permission required: `manage-livechat-units`
         ### Changelog
         | Version      | Description |
-        | ---------------- | ------------|
-        |4.2.0             | Added       |
+        | ------------ | ------------|
+        |4.2.0         | Added       |
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
@@ -10417,6 +10420,7 @@ paths:
       operationId: get-api-v1-livechat-units
       description: |-
         <h2>Premium</h2>
+        
         Permission required: `manage-livechat-units`
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -10483,11 +10487,13 @@ paths:
       operationId: post-api-v1-livechat-units-id
       description: |-
         <h2>Premium</h2>
+        
         Permission required: `manage-livechat-units`
+        
         ### Changelog
         | Version      | Description |
-        | ---------------- | ------------|
-        |4.2.0             | Added       |
+        | ------------ | ------------|
+        |4.2.0         | Added       |
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
@@ -10565,11 +10571,13 @@ paths:
       operationId: delete-api-v1-livechat-units-id
       description: |-
         <h2>Premium</h2>
+        
         Permission required: `manage-livechat-units`
+        
         ### Changelog
         | Version      | Description | 
-        | ---------------- | ------------|
-        |4.2.0             | Added       |
+        | ------------ | ------------|
+        |4.2.0         | Added       |
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
@@ -10625,6 +10633,7 @@ paths:
           $ref: '#/components/responses/permissionError'
       description: |-
         <h2>Premium</h2>
+        
         Get details of a specific unit.
         Permission required: `manage-livechat-units`
       tags:
@@ -10689,6 +10698,7 @@ paths:
           $ref: '#/components/responses/permissionError'
       description: |-
         <h2>Premium</h2>
+        
         Get the list of monitors associated with a specific unit.
         Permission required: `manage-livechat-units`
       tags:
@@ -10808,6 +10818,7 @@ paths:
           $ref: '#/components/responses/permissionError'
       description: |-
         <h2>Premium</h2>
+        
         Permission required: `manage-livechat-units`
       tags:
         - Livechat Units
@@ -10938,6 +10949,7 @@ paths:
           $ref: '#/components/responses/permissionError'
       description: |-
         <h2>Premium</h2>
+        
         Permission required: `manage-livechat-units`
       tags:
         - Livechat Units
@@ -11124,13 +11136,14 @@ paths:
       summary: Get Conversations by Status
       description: |-
         <h2>Premium</h2>
+        
         View the metrics of omnichannel conversations in your workspace during a selected time range based on their status: **Open**, **Queued**, **On Hold**, or **Closed**.
         Permission required: `view-livechat-reports`
 
         ### Changelog
         | Version      | Description | 
-        | ---------------- | ------------|
-        |6.4.0            | Added       |
+        | -----------  | ------------|
+        |6.4.0         | Added       |
       operationId: get-api-v1-livechat-analytics-dashboards-conversations-by-status
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -11185,13 +11198,14 @@ paths:
       summary: Get Conversations by Departments
       description: |-
         <h2>Premium</h2>
+        
         View the metrics of omnichannel conversations in your workspace during a selected time range based on their departments.
         Permission required: `view-livechat-reports`
 
         ### Changelog
         | Version      | Description | 
-        | ---------------- | ------------         |
-        |6.4.0            | Added       
+        | -----------  | ------------|
+        |6.4.0         | Added       |
       operationId: get-api-v1-livechat-analytics-dashboards-conversations-by-department
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -11248,12 +11262,14 @@ paths:
       summary: Get Conversations by Tags
       description: |-
         <h2>Premium</h2>
+        
         View the metrics of omnichannel conversations in your workspace during a selected time range based on their tags.
         Permission required: `view-livechat-reports`
+        
         ### Changelog
         | Version      | Description |
-        | ---------------- | ------------|
-        |6.4.0            | Added       |
+        | ------------ | ------------|
+        |6.4.0         | Added       |
       operationId: get-api-v1-livechat-analytics-dashboards-conversations-by-tags
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -11310,13 +11326,15 @@ paths:
         - Reports
       summary: Get Conversation by Agents
       description: |-
-        <h2>Enterprise</h2>
+        <h2>Premium</h2>
+        
         View the metrics of omnichannel conversations in your workspace during a selected time range based on the agents in your workspace.
         Permission required: `view-livechat-reports`
+        
         ### Changelog
         | Version      | Description |
-        | ---------------- | ------------|
-        |6.4.0            | Added       |
+        | ------------ | ------------|
+        |6.4.0         | Added       |
       operationId: get-api-v1-livechat-analytics-dashboards-conversations-by-agent
       parameters:
         - $ref: '#/components/parameters/UserId'
@@ -11386,9 +11404,11 @@ paths:
       summary: Get List of SLA Policies
       description: |-
         <h2>Premium</h2>
-        ### Changelog| Version      | Description |
-        | ---------------- | ------------|
-        |6.0.0          | Added       |
+        
+        ### Changelog
+        | Version      | Description |
+        | ------------ | ------------|
+        |6.0.0         | Added       |
       operationId: get-api-v1-livechat-sla
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -11460,11 +11480,13 @@ paths:
       summary: Create SLA Policy
       description: |-
         <h2>Premium</h2>
+        
         Permission required: `manage-livechat-sla`
+        
         ### Changelog
         | Version      | Description |
-        | ---------------- | ------------|
-        |6.0.0          | Added       |
+        | ------------ | ------------|
+        |6.0.0         | Added       |
       operationId: post-api-v1-livechat-sla
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -11560,14 +11582,16 @@ paths:
       operationId: get-api-v1-livechat-sla-slaId
       description: |-
         <h2>Premium</h2>
+        
         Get details of a specific SLA policy.
         At least one of the following permissions is required:
           * `manage-livechat-sla`
           * `view-l-room`
+          
         ### Changelog
         | Version      | Description |
-        | ---------------- | ------------|
-        |6.0.0            | Added       |
+        | ------------ | ------------|
+        |6.0.0         | Added       |
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
@@ -11616,12 +11640,14 @@ paths:
       summary: Update an SLA
       description: |-
         <h2>Premium</h2>
+        
         Update an existing SLA policy.
         Permission required: `manage-livechat-sla`
+        
         ### Changelog
         | Version      | Description |
-        | ---------------- | ------------|
-        |6.0.0            | Added       |
+        | ------------ | ------------|
+        |6.0.0         | Added       |
       operationId: put-api-v1-livechat-sla-slaId
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -11699,11 +11725,13 @@ paths:
       summary: Delete an SLA
       description: |-
         <h2>Premium</h2>
+        
         Permission required: `manage-livechat-sla`
+        
         ### Changelog
         | Version      | Description | 
-        | ---------------- | ------------|
-        |6.0.0            | Added       |
+        | ------------ | ------------|
+        |6.0.0         | Added       |
       operationId: delete-api-v1-livechat-sla-slaId
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -12224,7 +12252,7 @@ paths:
       description: |-
         Permissions required:
           - For an admin: `view-livechat-rooms`
-          - For an agent: `view-l-room`"
+          - For an agent: `view-l-room`
       operationId: get-api-v1-voip-rooms
       parameters:
         - $ref: '#/components/parameters/AuthToken'
