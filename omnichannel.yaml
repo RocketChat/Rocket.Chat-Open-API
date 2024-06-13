@@ -3106,8 +3106,8 @@ paths:
       description: |-
         Get a list of the departments.
         At least one of the following permissions is required:
-        * view-livechat-departments
-        * view-l-room
+        * `view-livechat-departments`
+        * `view-l-room`
 
         ### Changelog
         | Version      | Description | 
@@ -3428,8 +3428,8 @@ paths:
       description: |-
         Get information about a specific department using the department ID.
         At least one of the following permissions is required:
-        * view-livechat-departments
-        * view-l-room
+        * `view-livechat-departments`
+        * `view-l-room`
 
         ### Changelog
         | Version      | Description | 
@@ -4142,8 +4142,8 @@ paths:
       summary: Get Number of Chats
       description: |-
         <h2>Premium</h2>
-        Gives the number of chat rooms by department.
-        Permission required: `view-livechat-manager`
+        
+        Gives the number of chat rooms by department. Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-departments-amount-of-chats
       responses:
         '200':
@@ -4217,8 +4217,8 @@ paths:
       summary: Get Average Service Time
       description: |-
         <h2>Premium</h2>
-        Returns average service time (in seconds) for chats by department. 
-        Permission required: `view-livechat-manager`
+        
+        Returns average service time (in seconds) for chats by department. Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-departments-average-service-time
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -4285,8 +4285,8 @@ paths:
       summary: Get Average Chat Duration
       description: |-
         <h2>Premium</h2>
-        Returns the average chat duration of each department.
-        Permission required: `view-livechat-manager`
+        
+        Returns the average chat duration of each department. Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-departments-average-chat-duration-time
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -4351,8 +4351,8 @@ paths:
       summary: Get Total Service Time
       description: |-
         <h2>Premium</h2>
-        Gives the total service time (in seconds) by department.
-        Permission required: `view-livechat-manager`
+        
+        Gives the total service time (in seconds) by department. Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-departments-total-service-time
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -4420,9 +4420,9 @@ paths:
     get:
       summary: Get Average Waiting Time
       description: |-
-        <h2>Premium<h2>
-        Gives the average visitor waiting time (in seconds) by department.
-        Permission required: `view-livechat-manager`
+        <h2>Premium</h2>
+        
+        Gives the average visitor waiting time (in seconds) by department. Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-departments-average-waiting-time
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -4487,8 +4487,8 @@ paths:
       summary: Get Total Transferred Chats
       description: |-
         <h2>Premium</h2>
-        Gives the total number of transferred chats by department.
-        Permission required: `view-livechat-manager`
+        
+        Gives the total number of transferred chats by department. Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-departments-total-transferred-chats
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -4555,8 +4555,8 @@ paths:
       summary: Get Total Abandoned Chats
       description: |-
         <h1>Premium</h2>
-        Gives the total number of abandoned chats (rooms) by department.
-        Permission required: `view-livechat-manager`
+        
+        Gives the total number of abandoned chats (rooms) by department. Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-departments-total-abandoned-chats
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -4631,8 +4631,8 @@ paths:
       summary: Get Percentage of Abandoned Chats
       description: |- 
         <h2>Premium</h2>
-        Gives the percentage of abandoned chats per department. 
-        Permission required: `view-livechat-manager`
+        
+        Gives the percentage of abandoned chats per department. Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-departments-percentage-abandoned-chats
       parameters:
         - $ref: '#/components/parameters/AuthToken'
