@@ -485,7 +485,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: query
           in: query
-          description: 'Use the query operator to search for specific data.  For more information, see [Query and Fields](https://developer.rocket.chat/reference/api/rest-api#query-and-fields)'
+          description: 'Use the query operator to search for specific data.  For more information, see [Query Parameters](https://rocketchat-developer.us.document360.io/apidocs/query-parameters)'
           schema:
             type: string
         - name: text
@@ -2561,7 +2561,7 @@ paths:
       summary: Get Department Transfer History
       description: |-
         Retrieve the conversation transfer history from one department to another.
-        Permission required: `view-livechat-rooms`"
+        Permission required: `view-livechat-rooms`
       operationId: 'get-api-v1-livechat-transfer.history-:rid'
       parameters:
         - name: rid
@@ -3012,12 +3012,12 @@ paths:
       summary: Set Livechat Room Priority
       description: |-
         <h2>Premium</h2>
-        Set the priority of a Livechat room.
-        Permission required: `view-l-room`
+        Set the priority of a Livechat room. Permission required: `view-l-room`
+        
         ### Changelog
-        | Version      | Description | 
-        | ---------------- | ------------|
-        |6.0.0            | Added       |
+        | Version | Description  |
+        | ------- |--------------|
+        | 6.0.0  | Added         |
       operationId: post-api-v1-livechat-room-rid-priority
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -3075,12 +3075,12 @@ paths:
       summary: Remove Livechat Room Priority
       description: |-
         <h2>Premium</h2>
-        Remove the priority set to a Livechat room.
-        Permission required: `view-l-room`
+        Remove the priority set to a Livechat room. Permission required: `view-l-room`
+        
         ### Changelog
-        | Version      | Description | 
-        | ---------------- | ------------|
-        |6.0.0            | Added       |
+        | Version | Description  |
+        | ------- |--------------|
+        | 6.0.0  | Added         |
       operationId: delete-api-v1-livechat-room-rid-priority
       parameters:
         - $ref: '#/components/parameters/AuthToken'
