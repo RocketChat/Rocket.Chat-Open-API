@@ -9152,6 +9152,7 @@ paths:
       summary: Get List of Monitors
       description: |-
         <h2>Premium</h2>
+        
         Retrieves a list of monitors.
         Permission required: `manage-livechat-monitors`
       operationId: get-api-v1-livechat-monitors
@@ -9241,6 +9242,7 @@ paths:
       summary: Get a Monitor
       description: |-
         <h2>Premium</h2>
+        
         Get details of a specific monitor.
         Permission required: `manage-livechat-monitors`
       operationId: get-api-v1-livechat-monitors-username
@@ -9448,14 +9450,15 @@ paths:
       summary: Get List of Priorities
       description: |-
         <h2>Premium</h2>
+        
         At least one of the following permissions is required:
           * `manage-livechat-priorities`
           * `view-l-room`
 
         ### Changelog
         | Version      | Description | 
-        | ---------------- | ------------|
-        |6.0.0            | Added       |
+        | ------------ | ------------|
+        |6.0.0         | Added       |
       operationId: get-api-v1-livechat-priorities
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -9592,13 +9595,14 @@ paths:
       summary: Update Priority
       description: |-
         <h2>Premium</h2>
+        
         Update an existing priority.
         Permission required: `manage-livechat-priorities`
         
         ### Changelog
         | Version      | Description | 
-        | ---------------- | ------------|
-        |6.0.0            | Added       |
+        | ------------ | ------------|
+        |6.0.0         | Added       |
       operationId: put-api-v1-livechat-priorities-priorityId
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -9651,6 +9655,33 @@ paths:
           $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/permissionError'
+  /api/v1/livechat/priorities.reset:
+    parameters: []
+    post:
+      summary: Reset Priorities
+      operationId: post-livechat-priorities.reset
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/permissionError'
+      description: |-
+        <h2>Premium</h2>
+        
+        This endpoint resets all priorities back to default.
+        Permission required: `manage-livechat-priorities`
+        
+        ### Changelog
+        | Version      | Description |
+        | ------------ | ------------|
+        |6.0.0         | Added       |
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      tags:
+        - Livechat Priorities
   /livechat/priorities:
     get:
       tags:
@@ -9658,6 +9689,7 @@ paths:
       summary: Get Priorities
       description: |-
         <h2>Premium</h2>
+        
         This endpoint is used to get a list of all priorities in a workspace below version 6.0. It supports the optional [pagination](https://developer.rocket.chat/reference/api/rest-api#pagination) query parameters.
       operationId: get-livechat-priorities
       parameters:
@@ -9720,32 +9752,7 @@ paths:
                     total: 4
                     success: true
       deprecated: true
-  /api/v1/livechat/priorities.reset:
-    parameters: []
-    post:
-      summary: Reset Priorities
-      operationId: post-livechat-priorities.reset
-      responses:
-        '200':
-          $ref: '#/components/responses/trueSuccess'
-        '401':
-          $ref: '#/components/responses/authorizationError'
-        '403':
-          $ref: '#/components/responses/permissionError'
-      description: |-
-        <h2>Premium</h2>
-        This endpoint resets all priorities back to default.
-        Permission required: `manage-livechat-priorities`
-        
-        ### Changelog
-        | Version      | Description |
-        | ---------------- | ------------|
-        |6.0.0            | Added       |
-      parameters:
-        - $ref: '#/components/parameters/AuthToken'
-        - $ref: '#/components/parameters/UserId'
-      tags:
-        - Livechat Priorities
+
   '/livechat/priorities/{priorityId}':
     get:
       tags:
