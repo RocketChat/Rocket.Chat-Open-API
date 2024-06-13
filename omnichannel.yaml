@@ -3012,6 +3012,7 @@ paths:
       summary: Set Livechat Room Priority
       description: |-
         <h2>Premium</h2>
+        
         Set the priority of a Livechat room. Permission required: `view-l-room`
         
         ### Changelog
@@ -3075,6 +3076,7 @@ paths:
       summary: Remove Livechat Room Priority
       description: |-
         <h2>Premium</h2>
+        
         Remove the priority set to a Livechat room. Permission required: `view-l-room`
         
         ### Changelog
@@ -5964,6 +5966,7 @@ paths:
       summary: Get Agent Average Service Time
       description: |-
         <h2>Premium</h2>
+        
         Gives the average service time (in seconds) for each agent.
         Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-agents-average-service-time
@@ -6031,6 +6034,7 @@ paths:
       summary: Get Agent Total Service Time
       description: |-
         <h2>Premium</h2>
+        
         Gives the total service time sorted by agent.
         Permission required: `view-livechat-manager`
         
@@ -6105,6 +6109,7 @@ paths:
       summary: Get History of Agents Available for Service
       description: |-
         <h2>Premium</h2>
+        
         Return the list of agents and their available time for the provided time frame.
         Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-agents-available-for-service-history
