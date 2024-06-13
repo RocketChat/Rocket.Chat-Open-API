@@ -5480,8 +5480,6 @@ paths:
                     success: true
   '/api/v1/livechat/webrtc.call/{callId}':
     put:
-      tags:
-        - Livechat Audio Video Calls
       summary: Update Call Status
       description: |-
         Note: WebRTC is no longer supported with Omnichannel Livechat audio/video calls. To configure audio/video calls, see [Omnichannel Video/Audio Call Configuration](https://docs.rocket.chat/use-rocket.chat/rocket.chat-conference-call/omnichannel-video-audio-call-configuration).
@@ -5533,6 +5531,8 @@ paths:
                   Example 1:
                     status: ended
                     success: true
+      tags:
+        - Livechat Audio Video Calls
   /api/v1/livechat/page.visited:
     post:
       tags:
@@ -10846,7 +10846,7 @@ paths:
         required: true
         description: The unit ID.
     get:
-      summary: Get Departments by Unit Id
+      summary: Get Departments by Unit ID
       operationId: get-api-v1-livechat-units-unitId-departments
       responses:
         '200':
@@ -14242,6 +14242,7 @@ paths:
       summary: Create or Update or Delete a Canned Response
       description: |-
         <h2>Premium</h2>
+        
         To create and update canned responses, the following permissions are required:
         * `save-canned-responses`
         * `save-all-canned-responses`
@@ -14251,8 +14252,8 @@ paths:
 
         ### Changelog
         | Version      | Description |
-        | ---------------- | ------------|
-        |1.0.0            | Added       |
+        | ------------ | ------------|
+        |1.0.0         | Added       |
       operationId: post-api-v1-canned-responses
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -14488,15 +14489,13 @@ paths:
       summary: Get User Canned Responses
       description: |-
         <h2>Premium</h2>
-        Get a list of all canned responses in the workspace that belong to the current user scope.
-         
-        Permission required:
-        - `view-canned-responses`
-          
+        
+        Get a list of all canned responses in the workspace that belong to the current user scope.  Permission required: `view-canned-responses`
+        
         ### Changelog
         | Version      | Description |
-        | ---------------- | ------------|
-        |1.0.0            | Added       |
+        | ------------ | ------------|
+        |1.0.0         | Added       |
       operationId: get-api-v1-canned-responses.get
       responses:
         '200':
