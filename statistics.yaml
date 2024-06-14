@@ -19,7 +19,8 @@ paths:
       summary: Get Statistics List
       description: |-
         Get statistics about the Rocket.Chat workspace. 
-        Permission required: `view-statistics`
+      
+        Permission required: `view-statistics` 
 
         ### Changelog
         | Version      | Description | 
@@ -724,7 +725,8 @@ paths:
       summary: Get Last Statistics
       description: |-
         Statistics about the Rocket.Chat workspace. 
-        Permission required: `view-statistics`
+        
+        Permission required: `view-statistics` 
 
         ### Changelog
         | Version      | Description | 
@@ -1765,7 +1767,9 @@ paths:
       summary: Get New Users
       description: |-
         <h2>Premium</h2>
+        
         Retrieve the metrics of newly registered users during a specific period.
+        
         Permission required: `view-engagement-dashboard`
 
         ### Changelog
@@ -1845,8 +1849,10 @@ paths:
       summary: Get Active Users
       description: |-
         <h2>Premium</h2>
+        
         Retrieve the metrics of active users in the workspace during a specific period.
-        Permission required: `view-engagement-dashboard`
+        
+        Permission required: `view-engagement-dashboard` 
 
         ### Changelog
         | Version      | Description | 
@@ -1935,7 +1941,8 @@ paths:
       description: |-
         <h2>Premium</h2>
         Retrieve users by hours at a particular time of the day in a week.
-        Permission required: `view-engagement-dashboard`
+
+        Permission required: `view-engagement-dashboard`  
 
         ### Changelog
         | Version      | Description | 
@@ -2046,7 +2053,8 @@ paths:
       description: |-
         <h2>Premium</h2>
         Retrieve hourly data when chat is busier.
-        Permission required: `view-engagement-dashboard`
+        
+        Permission required: `view-engagement-dashboard` 
 
         ### Changelog
         | Version      | Description | 
@@ -2118,8 +2126,9 @@ paths:
       summary: Get Weekly Data When Chat is Busier
       description: |-
         <h2>Premium</h2>
-        Retrieves weekly data when chat is busier.
-        Permission required: `view-engagement-dashboard`
+        Retrieves weekly data when chat is busier. 
+        
+        Permission required: `view-engagement-dashboard` 
 
         ### Changelog
         | Version      | Description | 
@@ -2184,7 +2193,8 @@ paths:
       description: |-
         <h2>Premium</h2>
         Retrieve the number of messages sent daily during a specific period.
-        Permission required: `view-engagement-dashboard`
+        
+        Permission required: `view-engagement-dashboard` 
 
         ### Changelog
         | Version      | Description | 
@@ -2258,7 +2268,8 @@ paths:
       description: |-
         <h2>Premium</h2>
         Get the origin of messages sent during a specific period. It highlights the number of messages sent in private channels, private chats, and public channels.
-        Permission required: `view-engagement-dashboard`
+        
+        Permission required: `view-engagement-dashboard` 
 
         ### Changelog
         | Version      | Description | 
@@ -2317,8 +2328,9 @@ paths:
       summary: Get the Most Popular Channels
       description: |-
         <h2>Premium</h2>
-        Retrieves the top 5 popular channels in your workspace by the number of messages sent. It highlights the number of messages sent in private channels, private chats, and public channels.
-        Permission required: `view-engagement-dashboard`
+        Retrieves the top 5 popular channels in your workspace by the number of messages sent. It highlights the number of messages sent in private channels, private chats, and public channels. 
+        
+        Permission required: `view-engagement-dashboard` 
 
         ### Changelog
         | Version      | Description | 
@@ -2403,7 +2415,8 @@ paths:
       description: |-
         <h2>Premium</h2>
         Retrieve all channels and the number of messages in each channel within a specific period.
-        Permission required: `view-engagement-dashboard`
+        
+        Permission required: `view-engagement-dashboard` 
 
         ### Changelog
         | Version      | Description | 
@@ -2484,7 +2497,7 @@ paths:
     get:
       summary: Get All Subscriptions
       description: |-
-        Note that the unread counter value depends on your settings at the Administration > General section.
+        Note that the unread counter value depends on your settings at the **Administration** > **General** section.
 
         ### Changelog
         | Version      | Description | 
@@ -2584,7 +2597,7 @@ paths:
     get:
       summary: Get Subscription Room
       description: |-
-        Note that the unread counter value depends on your settings at the Administration > General section.
+        Note that the unread counter value depends on your settings at the **Administration** > **General** section.
 
         ### Changelog
         | Version      | Description | 
