@@ -662,9 +662,9 @@ paths:
     delete:
       tags:
         - Email Inbox
-      summary: Delete Email Inbox by Id
+      summary: Delete Email Inbox by ID
       description: |- 
-        Deletes email inbox using id.
+        Deletes email inbox using ID.
         
         Permissions required: `manage-email-inbox`
         ### Changelog
@@ -677,7 +677,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: _id
           in: path
-          description: Email inbox id
+          description: Email inbox ID
           required: true
           schema:
             type: string
