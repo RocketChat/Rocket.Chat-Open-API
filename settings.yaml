@@ -1865,11 +1865,13 @@ paths:
           $ref: '#/components/responses/authorizationError'
       description: |-
         <h2>Premium</h2>
+        
         Add a new federated server.
+        
         ### Changelog
         | Version      | Description |
-        | ---------------- | ------------|
-        |6.0.0            | Added       |
+        | ------------ | ------------|
+        |6.0.0         | Added       |
       tags:
         - Federation
       parameters:
@@ -1979,10 +1981,11 @@ paths:
           $ref: '#/components/responses/authorizationError'
       description: |-
         <h2>Premium</h2>
+        
         ### Changelog
         | Version      | Description |
-        | ---------------- | ------------|
-        |6.0.0            | Added       |
+        | ------------ | ------------|
+        |6.0.0          Added       |
       tags:
         - Federation
       parameters:
@@ -2061,11 +2064,13 @@ paths:
           description: Unauthorized
       description: |-
         <h2>Premium</h2>
+        
         Search for federated public rooms by the server name or room name.
+        
         ### Changelog
         | Version      | Description |
-        | ---------------- | ------------|
-        |6.0.0            | Added       |
+        | ------------ | ------------|
+        |6.0.0         | Added       |
       parameters:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/X-Auth-Token'
@@ -2103,10 +2108,11 @@ paths:
           $ref: '#/components/responses/authorizationError'
       description: |-
         <h2>Premium</h2>
+        
         ### Changelog
         | Version      | Description |
-        | ---------------- | ------------|
-        |6.0.0            | Added       |
+        | ------------ | ------------|
+        |6.0.0         | Added       |
       parameters:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/X-Auth-Token'
@@ -3000,13 +3006,14 @@ paths:
           $ref: '#/components/responses/forbiddenError'
       description: |-
         <h2>Premium</h2>
+        
         Retrieve the sessions of all users on the workspace. This endpoint required 2FA.
         Permission required: `view-device-management`
         
         ### Changelog
         | Version      | Description |
-        | ---------------- | ------------|
-        |5.0.0            | Added       |
+        | ------------ | ------------|
+        |5.0.0         | Added       |
       tags:
         - Device Management
       parameters:
@@ -3272,13 +3279,14 @@ paths:
           $ref: '#/components/responses/forbiddenError'
       description: |-
         <h2>Premium</h2>
+        
         Retrieve session information for any session on the workspace, regardless of the session owner. This endpoint allows authorized users to access session details across the workspace and requires 2FA.
         Permission required: `view-device-management`
         
         ### Changelog
         | Version      | Description |
-        | ---------------- | ------------|
-        |5.0.0            | Added       |
+        | ------------ | ------------|
+        |5.0.0         | Added       |
       tags:
         - Device Management
       parameters:
@@ -3423,13 +3431,15 @@ paths:
           $ref: '#/components/responses/forbiddenError'
       description: |-
         <h2>Premium</h2>
+        
         This endpoint allows an authorized user to log out other user's session on the workspace and required 2FA. It provides the capability to terminate sessions of other users, ensuring workspace security and management.
+        
         Permission required: `logout-device-management`
         
         ### Changelog
         | Version      | Description |
-        | ---------------- | ------------|
-        |5.0.0            | Added       |
+        | ------------ | ------------|
+        |5.0.0         | Added       |
       parameters:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/X-Auth-Token'
