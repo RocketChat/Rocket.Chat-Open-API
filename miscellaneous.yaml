@@ -529,9 +529,9 @@ paths:
     get:
       tags:
         - Email Inbox
-      summary: Email Inbox by Id
+      summary: Email Inbox by ID
       description: |- 
-        Gets email inbox by id.
+        Gets email inbox by ID.
         
         Permissions required: `manage-email-inbox`
         ### Changelog
@@ -546,7 +546,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: _id
           in: path
-          description: Email inbox id
+          description: Email inbox ID
           required: true
           schema:
             type: string
@@ -2454,9 +2454,11 @@ paths:
       summary: Mailer Unsubscribe Endpoint
       description: |- 
         Send emails to users from your workspace.
+        
+        ### Changelog
         | Version      | Description |
-        | ---------------- | ------------|
-        |5.4.0      | Added      |
+        | ------------ | ------------|
+        |5.4.0         | Added      |
       operationId: post-api-v1-mailer.unsubscribe
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -2507,13 +2509,13 @@ paths:
               properties:
                 rid:
                   type: string
-                  description: The id of the room that the invite is being created for.
+                  description: The room ID that the invite is being created for.
                 days:
                   type: integer
-                  description: The number of days that the invite will be valid for. Send 0 for unlimited.
+                  description: The number of days that the invite will be valid for. Send `0` for unlimited.
                 maxUses:
                   type: integer
-                  description: The number of times that the invite can be used. Send 0 for unlimited.
+                  description: The number of times that the invite can be used. Send `0` for unlimited.
               required:
                 - rid
                 - days
@@ -2656,7 +2658,7 @@ paths:
     delete:
       tags:
         - Invite
-      summary: Delete Invite by Id
+      summary: Delete Invite by ID
       description: "Deletes an invite from the workspace.\r\n\r\n[Permission](https://docs.rocket.chat/use-rocket.chat/workspace-administration/permissions) required: `create-invite-links`"
       operationId: delete-api-v1-removeInvite-_id
       parameters:
@@ -2664,7 +2666,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: _id
           in: path
-          description: The id of the invite to be deleted.
+          description: The invite ID to be deleted.
           required: true
           schema:
             type: string
@@ -2704,7 +2706,7 @@ paths:
     post:
       tags:
         - Invite
-      summary: Report use Invite Token
+      summary: Report Invite Token Usage
       description: Report to the workspace that an invite token was used.
       operationId: post-api-v1-useInviteToken
       parameters:
@@ -2718,7 +2720,7 @@ paths:
               properties:
                 token:
                   type: string
-                  description: The id of the invite being used.
+                  description: The invite ID being used.
               required:
                 - token
             examples:
@@ -2770,12 +2772,12 @@ paths:
               properties:
                 token:
                   type: string
-                  description: The id of the invite being validated.
+                  description: The invite ID being validated.
               required:
                 - token
-              x-examples:
-                Example 1:
-                  token: iS7pza
+            examples:
+              Example:
+                value: iS7pza
       responses:
         '200':
           description: OK
@@ -2788,8 +2790,9 @@ paths:
                     type: boolean
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example:
+                  value:
                     valid: true
                     success: true
 tags:
