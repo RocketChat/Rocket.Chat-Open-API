@@ -1329,6 +1329,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/x-2fa-code'
+        - $ref: '#/components/parameters/x-2fa-method'
       requestBody:
         content:
           application/json:
@@ -1518,10 +1519,8 @@ paths:
         - Users
       summary: Update Own Basic Information
       description: |-
-        * This endpoint requires 2FA.
-        * If you do not have 2FA enabled, the endpoint requires the current
-        password for verification. Add the `currentPassword` encrypted in SHA256
-        to the body parameters and the request won't require TOTP again.
+        * To change your email or password, you must confirm it using TOTP. If you don't have 2FA enabled (token code or email), TOTP will require the current password method.
+        * If you add the `currentPassword` encrypted in SHA256 to the request body, the request won't require TOTP again.
 
         ### Changelog
         | Version      | Description |
@@ -1533,6 +1532,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/x-2fa-code'
+        - $ref: '#/components/parameters/x-2fa-method'
       requestBody:
         content:
           application/json:
@@ -1600,7 +1600,7 @@ paths:
                       description: The status text of the user.
                 customFields:
                   type: object
-                  description: Any custom fields the user should have on their account.
+                  description: Any custom fields the user should have on their account. You must define the custom fields in the workspace settings.
               required:
                 - data
       responses:
@@ -3744,10 +3744,10 @@ paths:
       description: |-
         Permission required: `create-personal-access-tokens`. 
         
-        This endpoint requires [two-factor authentication](https://rocketchat-developer.us.document360.io/apidocs/introduction-to-two-factor-authentication).
+        * This endpoint requires [two-factor authentication](https://rocketchat-developer.us.document360.io/apidocs/introduction-to-two-factor-authentication).
         
-        It is important to note that the generated access tokens are irrecoverable, so storing them safely is essential. If a token is lost or forgotten, it can be regenerated or deleted.
-        When making calls to the API that mandate authentication, include the generated token in the `X-Auth-Token` header and your user ID in the `X-User-Id` header to authenticate the requests.
+        * Note that the generated access tokens are irrecoverable, so storing them safely is essential. If a token is lost or forgotten, it can be regenerated or deleted.
+        * When making calls to the API that mandate authentication, include the generated token in the `X-Auth-Token` header and your user ID in the `X-User-Id` header to authenticate the requests.
         Visit the [Personal Access Token user guide](https://docs.rocket.chat/use-rocket.chat/user-guides/user-panel/account#personal-access-tokens) for more details.
         
         ### Changelog
@@ -3759,6 +3759,7 @@ paths:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/x-2fa-code'
+        - $ref: '#/components/parameters/x-2fa-method'
       requestBody:
         content:
           application/json:
@@ -3863,6 +3864,7 @@ paths:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/x-2fa-code'
+        - $ref: '#/components/parameters/x-2fa-method'
       requestBody:
         content:
           application/json:
@@ -4007,6 +4009,7 @@ paths:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/x-2fa-code'
+        - $ref: '#/components/parameters/x-2fa-method'
       tags:
         - Users
       requestBody:
@@ -4092,6 +4095,7 @@ paths:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/x-2fa-code'
+        - $ref: '#/components/parameters/x-2fa-method'
       tags:
         - Users
       requestBody:
@@ -4464,6 +4468,7 @@ paths:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/x-2fa-code'
+        - $ref: '#/components/parameters/x-2fa-method'
       description: |-
         [Reset the E2E key](https://docs.rocket.chat/use-rocket.chat/user-guides/user-panel/account#reset-e2e-key) for a user in the workspace.
         * It requires the `edit-other-user-e2ee` permission.
@@ -4552,6 +4557,7 @@ paths:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/x-2fa-code'
+        - $ref: '#/components/parameters/x-2fa-method'
       description: |-
         Reset 2FA via TOTP for a user in the workspace.
         * It requires the `edit-other-user-totp` permission.
@@ -4766,9 +4772,11 @@ paths:
         - LDAP
       summary: LDAP Sync
       description: |-
+        <h2>Premium</h2>
+        
         Syncs your [LDAP data](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/ldap) based on the [data sync configurations](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/ldap/ldap-data-sync-settings). 
-        Permission required: `sync-auth-services-users`
-        This endpoints requies 2FA.
+        Permission required: `sync-auth-services-users`.
+        This endpoints requires 2FA.
         
         ### Changelog
         | Version      | Description |
@@ -4780,6 +4788,7 @@ paths:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/x-2fa-code'
+        - $ref: '#/components/parameters/x-2fa-method'
       responses:
         '200':
           description: OK
@@ -5316,12 +5325,18 @@ components:
       name: x-2fa-code
       in: header
       description: >-
-        The 2fa code. See the [REST Two Factor
-        Authentication](https://developer.rocket.chat/reference/api/rest-api/endpoints/authentication-endpoints/rest-two-factor-authentication#calling-an-endpoint-with-two-factor).
+        The 2fa code. See [Introduction to Two-Factor Authentication](https://rocketchat-developer.us.document360.io/apidocs/introduction-to-two-factor-authentication).
       required: true
       schema:
         type: string
       example: '148750'
+    x-2fa-method:
+      name: x-2fa-method
+      in: header
+      required: true
+      schema:
+        type: string
+      description: 'The desired method to get the 2FA code. It can be `email`, `totp`, or `password`.'
     query:
       name: query
       in: query
