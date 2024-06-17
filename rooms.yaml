@@ -6870,6 +6870,174 @@ paths:
                       _updatedAt: '2019-04-03T01:35:32.280Z'
                       _id: cgk88DHLHexwMaFWh
                     success: true
+                    
+  /api/v1/rooms.images:
+    get:
+      tags:
+        - Rooms
+      summary: Get Room Images
+      description: Retrieves the images of a room that you are a member of.
+      operationId: get-api-v1-rooms.images
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - name: roomId
+          in: query
+          description: The room ID.
+          schema:
+            type: string
+            example: 6630e42b72f069422b1022c1
+          example: 654c9d1ca2f73c7460e1918b
+          required: true
+        - schema:
+            type: string
+          example: 666fdecb4ac1a8e6404ededd
+          in: query
+          name: startingFromId
+          description: Filter images using the file ID.
+          allowEmptyValue: true
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  files:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        size:
+                          type: integer
+                        type:
+                          type: string
+                        rid:
+                          type: string
+                        userId:
+                          type: string
+                        store:
+                          type: string
+                        _updatedAt:
+                          type: string
+                        identify:
+                          type: object
+                          properties:
+                            format:
+                              type: string
+                            size:
+                              type: object
+                              properties:
+                                width:
+                                  type: integer
+                                height:
+                                  type: integer
+                        complete:
+                          type: boolean
+                        etag:
+                          type: string
+                        path:
+                          type: string
+                        progress:
+                          type: integer
+                        token:
+                          type: string
+                        uploadedAt:
+                          type: string
+                        uploading:
+                          type: boolean
+                        url:
+                          type: string
+                        typeGroup:
+                          type: string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Example:
+                  value:
+                    files:
+                      - _id: 666fdecb4ac1a8e6404ededd
+                        name: oauth-screen.png
+                        size: 78441
+                        type: image/png
+                        rid: 6630e42b72f069422b1022c1
+                        userId: yuT9xp9eEd6HqB3n8
+                        store: 'GridFS:Uploads'
+                        _updatedAt: '2024-06-17T06:59:23.608Z'
+                        identify:
+                          format: png
+                          size:
+                            width: 1580
+                            height: 884
+                        complete: true
+                        etag: yvaG9cjz6YRRdMg4L
+                        path: '/ufs/GridFS:Uploads/666fdecb4ac1a8e6404ededd/oauth-screen.png'
+                        progress: 1
+                        token: 1888eA0A0B
+                        uploadedAt: '2024-06-17T06:59:23.602Z'
+                        uploading: false
+                        url: 'https://pro.writing-demo.dev.rocket.chat/ufs/GridFS:Uploads/666fdecb4ac1a8e6404ededd/oauth-screen.png'
+                        typeGroup: image
+                      - _id: 666fddea4ac1a8e6404eded7
+                        name: 11.jpg
+                        size: 83832
+                        type: image/jpeg
+                        rid: 6630e42b72f069422b1022c1
+                        userId: yuT9xp9eEd6HqB3n8
+                        store: 'GridFS:Uploads'
+                        _updatedAt: '2024-06-17T06:55:38.044Z'
+                        identify:
+                          format: jpeg
+                          size:
+                            width: 839
+                            height: 932
+                        complete: true
+                        etag: 3jZf7SJZFCPpf9JK8
+                        path: '/ufs/GridFS:Uploads/666fddea4ac1a8e6404eded7/11.jpg'
+                        progress: 1
+                        token: 498bb849C8
+                        uploadedAt: '2024-06-17T06:55:38.029Z'
+                        uploading: false
+                        url: 'https://pro.writing-demo.dev.rocket.chat/ufs/GridFS:Uploads/666fddea4ac1a8e6404eded7/11.jpg'
+                        typeGroup: image
+                    count: 50
+                    offset: 0
+                    total: 2
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''roomId'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
 
   /api/v1/teams.create:
     post:
