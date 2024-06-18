@@ -2414,7 +2414,10 @@ paths:
   /api/v1/livechat/room.transfer:
     post:
       summary: Transfer Livechat Room
-      description: Transfer an omnichannel conversation to another department.
+      description: |-
+        Use the [Forward Livechat Room](https://rocketchat-developer.us.document360.io/apidocs/forward-livechat-room) endpoint instead.
+        
+        Transfer an omnichannel conversation to another department.
       operationId: post-api-v1-livechat-room.transfer
       requestBody:
         content:
@@ -2497,6 +2500,7 @@ paths:
                     success: false
                     error: 'must have required property ''rid'' [invalid-params]'
                     errorType: invalid-params
+      deprecated: true
       tags:
         - Livechat Rooms
   /api/v1/livechat/room.forward:
