@@ -117,7 +117,7 @@ paths:
                   description: Department name or ID where you want to transfer the chat to when the WhatsApp user replies.
                 template:
                   type: object
-                  description: 'Provide information about the template message you wish to send. Kindly refer to [Message Templates](https://developers.facebook.com/docs/whatsapp/api/messages/message-templates#the-template-object) for an example. Refer to the example in [Sending WhatsApp template messages from your workspace](https://developer.rocket.chat/~/changes/LF0RdSVuWxk4vFtU2GLZ/omnichannel/whatsapp-business-template-messages#sending-whatsapp-template-messages-from-your-workspace)'
+                  description: 'Provide information about the template message you wish to send. Kindly refer to [Message Templates](https://developers.facebook.com/docs/whatsapp/api/messages/message-templates#the-template-object) for an example. Refer to the example in [Sending WhatsApp template messages from your workspace](https://developer.rocket.chat/omnichannel/whatsapp-business-template-messages#sending-whatsapp-template-messages-from-your-workspace)'
                   properties:
                     namespace:
                       type: string
