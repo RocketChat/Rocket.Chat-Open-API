@@ -352,7 +352,7 @@ paths:
     get:
       summary: Get Agent Information
       description: |-
-        Get the Livechat agent data according to the path variables. To get the `rid` and `token` values, call the [Get Rooms](https://developer.rocket.chat/reference/api/rest-api/endpoints/omnichannel/livechat-endpoints/livechat-room/get-rooms) endpoint to retrieve the details of all rooms.
+        Get the Livechat agent data according to the path variables. To get the `rid` and `token` values, call the [Get Rooms](https://rocketchat-developer.us.document360.io/apidocs/get-rooms) endpoint to retrieve the details of all rooms.
       operationId: get-api-v1-livechat-agent
       parameters:
         - name: rid
@@ -424,7 +424,7 @@ paths:
     get:
       summary: Get Next Agent Information
       description: |-
-        Get information about the next available agent for an incoming conversation. This endpoint returns the available agents who have not been assigned to any chat yet. To get the `token` value, call the [Get Rooms](https://developer.rocket.chat/reference/api/rest-api/endpoints/omnichannel/livechat-endpoints/livechat-room/get-rooms) endpoint to retrieve the details of all rooms.
+        Get information about the next available agent for an incoming conversation. This endpoint returns the available agents who have not been assigned to any chat yet. To get the `token` value, call the [Get Rooms](https://rocketchat-developer.us.document360.io/apidocs/get-rooms) endpoint to retrieve the details of all rooms.
       operationId: get-api-v1-livechat-agent.next
       parameters:
         - name: token
@@ -4705,7 +4705,7 @@ paths:
       summary: Get Available Departments by Unit ID
       description: |-
         <h2>Premium</h2>
-        Gives departments that have not been associated to another unit yet. This endpoint has been renamed to `Get Available Departments by Unit Id` to  from Rocket.Chat 5.0.
+        Gives departments that have not been associated to another unit yet. This endpoint has been renamed to **[Get Available Departments by Unit Id](https://rocketchat-developer.us.document360.io/apidocs/get-available-departments-by-unit-id-1)** from Rocket.Chat 5.0.
       operationId: 'get-api-v1-livechat-departments.available-by-unit-:unitId'
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -4880,7 +4880,7 @@ paths:
       summary: Get Departments by Unit ID
       description: |-
         <h2>Premium</h2>
-        Gives departments included in a specific unit ID. This endpoint has been renamed to `Get Departments by Unit ID` as from Rocket.Chat 5.0
+        Gives departments included in a specific unit ID. This endpoint has been renamed to **[Get Departments by Unit ID](https://rocketchat-developer.us.document360.io/apidocs/get-departments-by-unit-id-1)** as from Rocket.Chat 5.0
       operationId: 'get-api-v1-livechat-departments.by-unit-:unitId'
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -9809,7 +9809,7 @@ paths:
       tags:
         - Livechat Priorities
       summary: List of Priorities
-      description: "<h2>Premium</h2>\r\nThis endpoint has been renamed to Get Priorities as from Rocket.Chat 5.0."
+      description: "<h2>Premium</h2>\r\nThis endpoint has been renamed to <b><a href='https://rocketchat-developer.us.document360.io/apidocs/get-priorities'>Get Priorities</a></b> as from Rocket.Chat 5.0."
       operationId: get-livechat-priorities.list
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -9873,7 +9873,7 @@ paths:
       tags:
         - Livechat Priorities
       summary: Get one Priority
-      description: "<h2>Premium</h2>\r\nThis endpoint has been renamed to Get a Priority as from Rocket.Chat 5.0."
+      description: "<h2>Premium</h2>\r\nThis endpoint has been renamed to <b><a href='https://rocketchat-developer.us.document360.io/apidocs/get-a-priority'>Get a Priority</a></b> as from Rocket.Chat 5.0."
       operationId: get-livechat-priority.getOne
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -10087,7 +10087,7 @@ paths:
       summary: List of Tags
       description: |-
         <h2>Premium</h2>
-        This endpoint has been renamed to Get List of Tags as from Rocket.Chat 5.0.
+        This endpoint has been renamed to [Get List of Tags](https://rocketchat-developer.us.document360.io/apidocs/get-list-of-tags) as from Rocket.Chat 5.0.
       operationId: get-api-v1-livechat-tags.list
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -10147,7 +10147,7 @@ paths:
       tags:
         - Livechat Tags
       summary: Get One Tag
-      description: "<h2>Premium</h2>\r\nThis endpoint has been renamed to Get a Tag as from Rocket.Chat 5.0"
+      description: "<h2>Premium</h2>\r\nThis endpoint has been renamed to  <b><a href='https://rocketchat-developer.us.document360.io/apidocs/get-a-tag' target='_blank'>Get a Tag</a><b> as from Rocket.Chat 5.0"
       operationId: get-livechat-tags.getOne
       responses:
         '200':
