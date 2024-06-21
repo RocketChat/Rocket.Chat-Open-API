@@ -1642,7 +1642,8 @@ paths:
         | ---------------- | ------------|
         |3.10.0         | Added       |
         
-        A successful response only means the license provided follows the accepted format. Check your [workspace log](https://docs.rocket.chat/use-rocket.chat/workspace-administration/info) or [administration info](https://docs.rocket.chat/use-rocket.chat/workspace-administration/info) to confirm if the license is valid and was applied to your workspace. Alternatively, you can check Confirm Enterprise License endpoint.
+        A successful response only means the license provided follows the accepted format. Check your [workspace log](https://docs.rocket.chat/use-rocket.chat/workspace-administration/info) or [administration info](https://docs.rocket.chat/use-rocket.chat/workspace-administration/info) to confirm if the license is valid and was applied to your workspace. Alternatively, you can check **[Confirm Enterprise License](https://rocketchat-developer.us.document360.io/apidocs/confirm-enterprise-license)** endpoint.
+        
       operationId: post-api-v1-licenses.add
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
