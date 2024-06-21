@@ -1004,7 +1004,7 @@ paths:
         - Two-Factor Authentication
       summary: Request a new Email Code
       description: |-
-        If a user didn't recieve thier 2FA code, use this endpoint to request a new 2FA code by email.
+        If a user didn't recieve their 2FA code, use this endpoint to request a new 2FA code by email.
       operationId: post-api-v1-users.2fa.sendEmailCode
       requestBody:
         content:
