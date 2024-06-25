@@ -1632,7 +1632,7 @@ paths:
         - Licenses
       summary: Add License
       description: |- 
-        ## Premium
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         
         You may want to [deploy your workspace in an air-gapped environment](https://docs.rocket.chat/setup-and-configure/rocket.chat-air-gapped-deployment). Since the server has no internet to communicate with the cloud, we provide a license for your subscribed plan that you can apply manually to upgrade your workspace.
         
@@ -1719,7 +1719,7 @@ paths:
         - Licenses
       summary: Get Maximum Active User
       description: |- 
-        ## Premium
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         
         Retrieves a list of the maximum active users.
         
