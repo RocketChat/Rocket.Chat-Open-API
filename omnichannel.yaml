@@ -10512,7 +10512,7 @@ paths:
           $ref: '#/components/responses/permissionError'
       operationId: post-api-v1-livechat-units-id
       description: |-
-        <h2>Premium</h2>
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         
         Permission required: `manage-livechat-units`
         
