@@ -4222,7 +4222,7 @@ paths:
     get:
       summary: Get Average Service Time
       description: |-
-        <h2>Premium</h2>
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         
         Returns average service time (in seconds) for chats by department. Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-departments-average-service-time
@@ -4290,7 +4290,7 @@ paths:
     get:
       summary: Get Average Chat Duration
       description: |-
-        <h2>Premium</h2>
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         
         Returns the average chat duration of each department. Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-departments-average-chat-duration-time
@@ -4356,7 +4356,7 @@ paths:
     get:
       summary: Get Total Service Time
       description: |-
-        <h2>Premium</h2>
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         
         Gives the total service time (in seconds) by department. Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-departments-total-service-time
@@ -4560,7 +4560,7 @@ paths:
     get:
       summary: Get Total Abandoned Chats
       description: |-
-        <h1>Premium</h2>
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         
         Gives the total number of abandoned chats (rooms) by department. Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-departments-total-abandoned-chats
@@ -4704,7 +4704,7 @@ paths:
     get:
       summary: Get Available Departments by Unit ID
       description: |-
-        <h2>Premium</h2>
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         
         
         Gives departments that have not been associated to another unit yet. This endpoint has been renamed to **[Get Available Departments by Unit Id](https://rocketchat-developer.us.document360.io/apidocs/get-available-departments-by-unit-id-1)** from Rocket.Chat 5.0.
