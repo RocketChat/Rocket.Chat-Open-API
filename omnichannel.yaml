@@ -4883,10 +4883,9 @@ paths:
     get:
       summary: Get Departments by Unit ID
       description: |-
-        <h2>Premium</h2>
+        <center>![Premium tag](https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg)</center>
         
-        
-        Gives departments included in a specific unit ID. This endpoint has been renamed to **[Get Departments by Unit ID](https://rocketchat-developer.us.document360.io/apidocs/get-departments-by-unit-id-1)** as from Rocket.Chat 5.0
+        <p>Gives departments included in a specific unit ID. This endpoint has been renamed to <a href="https://rocketchat-developer.us.document360.io/apidocs/get-departments-by-unit-id-1" target="_blank">Get Departments by Unit ID</a> as from Rocket.Chat 5.0
         
         
       operationId: 'get-api-v1-livechat-departments.by-unit-:unitId'
@@ -5856,9 +5855,12 @@ paths:
     post:
       summary: Request PDF Transcript
       description: |-
-        [Request a PDF transcript](https://docs.rocket.chat/use-rocket.chat/omnichannel-agents-guides/omnichannel-conversation#to-export-the-transcript-as-pdf) for an Omnichannel conversation. The conversation must be closed before it can be exported.
-        Permission required: `request-pdf-transcript`
-        Omnichannel [managers](https://docs.rocket.chat/use-rocket.chat/omnichannel/managers) and [agents](https://docs.rocket.chat/use-rocket.chat/omnichannel/agents) have this permission by default.
+        <center>![Premium tag](https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg)</center>
+
+        <a href="https://docs.rocket.chat/use-rocket.chat/omnichannel-agents-guides/omnichannel-conversation#to-export-the-transcript-as-pdf" target="_blank">Request a PDF transcript</a> for an Omnichannel conversation. The conversation must be closed before it can be exported. <br>
+        
+        Permission required: `request-pdf-transcript`.
+        Omnichannel <a href="https://docs.rocket.chat/use-rocket.chat/omnichannel/managers" target="_blank">managers</a> and <a href="https://docs.rocket.chat/use-rocket.chat/omnichannel/agents" target="_blank">agents</a> have this permission by default.
         
         ### Changelog
         | Version      | Description |
@@ -8469,9 +8471,10 @@ paths:
         - Livechat Inquiries
       summary: Set SLA Policy to Inquiry
       description: |-
-        <h2>Premium</h2>
+        <center>![Premium tag](https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg)</center>
         
-        Set [SLA policy](https://docs.rocket.chat/use-rocket.chat/omnichannel/sla-policies) to an inquiry. You can only set the policy for an inquiry that has not been taken by an agent.
+        Set <a href="https://docs.rocket.chat/use-rocket.chat/omnichannel/sla-policies" target="_blank">SLA policy</a> to an inquiry. You can only set the policy for an inquiry that has not been taken by an agent.
+
         At least one of the following permissions is required:
         * `view-l-room`
         * `manage-livechat-sla`
@@ -10585,7 +10588,7 @@ paths:
           $ref: '#/components/responses/permissionError'
       operationId: delete-api-v1-livechat-units-id
       description: |-
-        <h2>Premium</h2>
+        <center>![Premium tag](https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg)</center>
         
         Permission required: `manage-livechat-units`
         
@@ -10647,7 +10650,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       description: |-
-        <h2>Premium</h2>
+        <center>![Premium tag](https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg)</center>
         
         Get details of a specific unit.
         Permission required: `manage-livechat-units`
@@ -10712,7 +10715,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       description: |-
-        <h2>Premium</h2>
+        <center>![Premium tag](https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg)</center>
         
         Get the list of monitors associated with a specific unit.
         Permission required: `manage-livechat-units`
@@ -10832,7 +10835,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       description: |-
-        <h2>Premium</h2>
+        <center>![Premium tag](https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg)</center>
         
         Permission required: `manage-livechat-units`
       tags:
@@ -11028,7 +11031,9 @@ paths:
                     total: 1
                     success: true
               examples: {}
-      description: "<h2>Premium</h2>\r\nThis endpoint has been renamed to Get List of Units from Rocket.Chat 5.0."
+      description: "<center>![Premium tag](https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg)</center>
+\r\nThis endpoint has been renamed to Get List of Units from Rocket.Chat 5.0."
+
       tags:
         - Livechat Units
       parameters:
@@ -11075,7 +11080,9 @@ paths:
                     _updatedAt: '2021-06-28T22:10:01.295Z'
                     success: true
               examples: {}
-      description: "<h2>Premium</h2>\r\nThis endpoint has been renamed to Get a Unit from Rocket.Chat 5.0."
+      description: "<center>![Premium tag](https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg)</center>
+\r\nThis endpoint has been renamed to Get a Unit from Rocket.Chat 5.0."
+
       tags:
         - Livechat Units
       parameters:
@@ -11137,7 +11144,9 @@ paths:
                         username: miln.ru
                     success: true
               examples: {}
-      description: "<h2>Premium</h2>\r\nThis endpoint has been renamed to Get List of Unit Monitors from Rocket.Chat 5.0."
+      description: "<center>![Premium tag](https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg)</center>
+\r\nThis endpoint has been renamed to Get List of Unit Monitors from Rocket.Chat 5.0."
+
       tags:
         - Livechat Units
       parameters:
@@ -11150,9 +11159,10 @@ paths:
         - Reports
       summary: Get Conversations by Status
       description: |-
-        <h2>Premium</h2>
+        <center>![Premium tag](https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg)</center>
         
-        View the metrics of omnichannel conversations in your workspace during a selected time range based on their status: **Open**, **Queued**, **On Hold**, or **Closed**.
+        View the metrics of omnichannel conversations in your workspace during a selected time range based on their status: **Open**, **Queued**, **On Hold**, or **Closed**.<br>
+        
         Permission required: `view-livechat-reports`
 
         ### Changelog
@@ -11212,9 +11222,10 @@ paths:
         - Reports
       summary: Get Conversations by Departments
       description: |-
-        <h2>Premium</h2>
+        <center>![Premium tag](https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg)</center>
+
         
-        View the metrics of omnichannel conversations in your workspace during a selected time range based on their departments.
+        View the metrics of omnichannel conversations in your workspace during a selected time range based on their departments. <br>
         Permission required: `view-livechat-reports`
 
         ### Changelog
@@ -11276,7 +11287,7 @@ paths:
         - Reports
       summary: Get Conversations by Tags
       description: |-
-        <h2>Premium</h2>
+        <center>![Premium tag](https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg)</center>
         
         View the metrics of omnichannel conversations in your workspace during a selected time range based on their tags.
         Permission required: `view-livechat-reports`
@@ -11341,9 +11352,11 @@ paths:
         - Reports
       summary: Get Conversation by Agents
       description: |-
-        <h2>Premium</h2>
+       
+        <center>![Premium tag](https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg)</center>
+
+        View the metrics of omnichannel conversations in your workspace during a selected time range based on the agents in your workspace. <br>
         
-        View the metrics of omnichannel conversations in your workspace during a selected time range based on the agents in your workspace.
         Permission required: `view-livechat-reports`
         
         ### Changelog
@@ -11418,7 +11431,7 @@ paths:
         - SLA Policies
       summary: Get List of SLA Policies
       description: |-
-        <h2>Premium</h2>
+        <center>![Premium tag](https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg)</center>
         
         ### Changelog
         | Version      | Description |
@@ -11494,7 +11507,7 @@ paths:
         - SLA Policies
       summary: Create SLA Policy
       description: |-
-        <h2>Premium</h2>
+        <center>![Premium tag](https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg)</center>
         
         Permission required: `manage-livechat-sla`
         
@@ -11596,7 +11609,7 @@ paths:
       summary: Get an SLA
       operationId: get-api-v1-livechat-sla-slaId
       description: |-
-        <h2>Premium</h2>
+        <center>![Premium tag](https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg)</center>
         
         Get details of a specific SLA policy.
         At least one of the following permissions is required:
@@ -11654,7 +11667,8 @@ paths:
         - SLA Policies
       summary: Update an SLA
       description: |-
-        <h2>Premium</h2>
+        <center>![Premium tag](https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg)</center>
+
         
         Update an existing SLA policy.
         Permission required: `manage-livechat-sla`
@@ -11739,7 +11753,7 @@ paths:
         - SLA Policies
       summary: Delete an SLA
       description: |-
-        <h2>Premium</h2>
+        <center>![Premium tag](https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg)</center>
         
         Permission required: `manage-livechat-sla`
         
