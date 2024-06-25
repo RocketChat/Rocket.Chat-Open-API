@@ -998,7 +998,7 @@ paths:
         - Chat
       summary: Get Message Read Receipts
       description: |-
-        <center>![Premium tag](https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg)</center>
+        ![Premium tag](https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg)
         
         Retrieve message read receipts.
         
