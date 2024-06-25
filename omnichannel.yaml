@@ -5855,7 +5855,7 @@ paths:
     post:
       summary: Request PDF Transcript
       description: |-
-        <center>![Premium tag](https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg)</center>
+        <p style="text-align: center;">![Premium tag](https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg)</p>
 
         <a href="https://docs.rocket.chat/use-rocket.chat/omnichannel-agents-guides/omnichannel-conversation#to-export-the-transcript-as-pdf" target="_blank">Request a PDF transcript</a> for an Omnichannel conversation. The conversation must be closed before it can be exported. <br>
         
