@@ -187,7 +187,8 @@ paths:
         - Roles
       summary: Create Role
       description: |-
-        <h2>Premium</h2>
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+
         Create a new role in the workspace.
 
         * You can't create new roles with the same name as existing roles. For example, it is not possible to create a new role with the name `admin`.
@@ -319,9 +320,10 @@ paths:
         - Roles
       summary: Update Role
       description: |-
-        <h2>Premium</h2>
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         
-        Update a role in the workspace.
+        Update a role in the workspace. <br>
+        
         Permission required: `access-permissions`
                 
         ### Changelog
@@ -4772,11 +4774,11 @@ paths:
         - LDAP
       summary: LDAP Sync
       description: |-
-        <h2>Premium</h2>
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         
-        Syncs your [LDAP data](https://docs.rocket.chat/use-rocket.chat/authentication/ldap) based on the [data sync configurations](https://docs.rocket.chat/use-rocket.chat/authentication/ldap/ldap-data-sync-settings). 
+        Syncs your <a href="https://docs.rocket.chat/use-rocket.chat/authentication/ldap" target="_blank">LDAP data</a> based on the <a href="https://docs.rocket.chat/use-rocket.chat/authentication/ldap/ldap-data-sync-settings" target="_blank">data sync configurations</a>. This endpoints requires 2FA. <br>
+
         Permission required: `sync-auth-services-users`.
-        This endpoints requires 2FA.
         
         ### Changelog
         | Version      | Description |
