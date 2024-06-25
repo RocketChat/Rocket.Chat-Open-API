@@ -19,7 +19,7 @@ paths:
       summary: Create Channel
       description: |-
         Create a public channel. Optionally, include specified users. The channel creator is included as a member by default.
-        Channel naming has restraints following the regex filter `[0-9a-zA-Z-_.]+` by default. See [UTF8 Settings](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/general#utf8) to modify regex filter for channel names. Channel names must not allow for any whitespaces.
+        Channel naming has restraints following the regex filter `[0-9a-zA-Z-_.]+` by default. See <a href="https://docs.rocket.chat/docs/general#utf8" target="_blank">UTF8 Settings</a> to modify regex filter for channel names. Channel names must not allow for any whitespaces.
 
         ### Changelog
 
@@ -495,7 +495,8 @@ paths:
         - Channels
       summary: Read Channel Messages Anonymously
       description: |-
-        Fetch the messages in a public channel to an anonymous user. You must enable [`Accounts_AllowAnonymousRead` setting](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/account-settings) in the workspace.
+        Fetch the messages in a public channel to an anonymous user. You must enable `Accounts_AllowAnonymousRead` <a href="https://docs.rocket.chat/docs/accounts" target="_blank">setting</a> in the workspace.
+
         ### Changelog
         | Version | Description               |
         | ------- | ------------------------- |
@@ -6044,7 +6045,7 @@ paths:
                     error: The 'selector' param is required
         '401':
           $ref: '#/components/responses/authorizationError'
-      description: 'List the public and private rooms whose names match a given string, excluding [discussions](https://docs.rocket.chat/use-rocket.chat/user-guides/rooms/discussions), [DMs](https://docs.rocket.chat/use-rocket.chat/user-guides/rooms/direct-messages), and [omnichannel rooms](https://docs.rocket.chat/use-rocket.chat/omnichannel). The endpoint is valuable when performing search operations. It returns only rooms that the user belongs to.'
+      description: 'List the public and private rooms whose names match a given string, excluding <a href="https://docs.rocket.chat/docs/discussions" target="_blank">discussions</a>, <a href="https://docs.rocket.chat/docs/direct-messages" target="_blank">DMs</a>, and <a href="https://docs.rocket.chat/docs/omnichannel" target="_blank">omnichannel rooms</a>. The endpoint is valuable when performing search operations. It returns only rooms that the user belongs to.'
   /api/v1/rooms.autocomplete.adminRooms:
     get:
       tags:
@@ -6137,7 +6138,7 @@ paths:
           $ref: '#/components/responses/authorizationError'
       x-stoplight:
         id: kmjuekbwjuezr
-      description: 'List public and private rooms whose names match a given string, excluding [DMs](https://docs.rocket.chat/use-rocket.chat/user-guides/rooms/direct-messages), and [omnichannel rooms](https://docs.rocket.chat/use-rocket.chat/omnichannel). This endpoint is valuable when performing search operations. Only workspace administrators can use it.'
+      description: 'List public and private rooms whose names match a given string, excluding <a href="https://docs.rocket.chat/docs/direct-messages" target="_blank">DMs</a>, and <a href="https://docs.rocket.chat/docs/omnichannel" target="_blank">omnichannel rooms</a>. This endpoint is valuable when performing search operations. Only workspace administrators can use it.'
     parameters: []
   /api/v1/rooms.adminRooms.getRoom:
     get:

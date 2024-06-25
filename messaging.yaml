@@ -1958,7 +1958,7 @@ paths:
                   description: |-
                     You can add custom fields for messages. For example, set priorities for messages.
 
-                    You must enable this option and define the validation in the workspace settings. See the [Message](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/message) settings for further information.
+                    You must enable this option and define the validation in the workspace settings. See the <a href="https://docs.rocket.chat/docs/message" target="_blank">Message</a> settings for further information.
                   example: {"priority": "high"}
               required:
                 - roomId

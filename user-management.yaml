@@ -1899,7 +1899,7 @@ paths:
       description: |-
         * Retrieves information about a user. The result is only limited to what the callee has access to view.
         * This endpoint supports the `field` query parameter with `userRooms` that returns the rooms that the user is part of. 
-        * The `rooms` field returns the `unread` property based on the [Unread Count setting](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/general#general-settings).
+        * The `rooms` field returns the `unread` property based on the <a href="https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/general#general-settings" target="_blank">Unread Count setting</a>.
         
         ### Changelog
         | Version      | Description |
@@ -2957,8 +2957,8 @@ paths:
         - Users
       summary: Create Users Token
       description: |-
-        As a workspace admin, you can create temporary authentication tokens for users. This is the same type of session authentication token a user gets via [login](https://rocketchat-developer.us.document360.io/apidocs/login-with-username-and-password) and expires the same way.
-        * To be able to use this endpoint, you must add the [environment variable](https://docs.rocket.chat/setup-and-configure/environment-configuration/deployment-environment-variables) `CREATE_TOKENS_FOR_USERS=true` in your compose file.
+        As a workspace admin, you can create temporary authentication tokens for users. This is the same type of session authentication token a user gets via <a href="https://developer.rocket.chat/apidocs/login-with-username-and-password" target="_blank">login</a> and expires the same way.
+        * To be able to use this endpoint, you must add the <a href="https://docs.rocket.chat/docs/deployment-environment-variables" target="_blank">environment variable</a> `CREATE_TOKENS_FOR_USERS=true` in your compose file.
         * For SaaS workspaces, [contact](https://docs.rocket.chat/resources/get-support) support to set this variable.
         * Permission required: `user-generate-access-token`
         
@@ -3746,11 +3746,11 @@ paths:
       description: |-
         Permission required: `create-personal-access-tokens`. 
         
-        * This endpoint requires [two-factor authentication](https://rocketchat-developer.us.document360.io/apidocs/introduction-to-two-factor-authentication).
+        * This endpoint requires <a href="https://developer.rocket.chat/apidocs/introduction-to-two-factor-authentication" target="_blank">two-factor authentication</a>.
         
         * Note that the generated access tokens are irrecoverable, so storing them safely is essential. If a token is lost or forgotten, it can be regenerated or deleted.
         * When making calls to the API that mandate authentication, include the generated token in the `X-Auth-Token` header and your user ID in the `X-User-Id` header to authenticate the requests.
-        Visit the [Personal Access Token user guide](https://docs.rocket.chat/use-rocket.chat/user-guides/user-panel/account#personal-access-tokens) for more details.
+        Visit the <a href="https://docs.rocket.chat/docs/account#personal-access-tokens" target="_blank"> Personal Access Token user guide</a> for more details.
         
         ### Changelog
         | Version      | Description |
@@ -4472,7 +4472,7 @@ paths:
         - $ref: '#/components/parameters/x-2fa-code'
         - $ref: '#/components/parameters/x-2fa-method'
       description: |-
-        [Reset the E2E key](https://docs.rocket.chat/use-rocket.chat/user-guides/user-panel/account#reset-e2e-key) for a user in the workspace.
+        <a href="https://docs.rocket.chat/use-rocket.chat/user-guides/user-panel/account#reset-e2e-key" target="_blank">Reset the E2E key</a> for a user in the workspace.
         * It requires the `edit-other-user-e2ee` permission.
         * This endpoint requires 2FA.
         
@@ -5327,7 +5327,7 @@ components:
       name: x-2fa-code
       in: header
       description: >-
-        The 2fa code. See [Introduction to Two-Factor Authentication](https://rocketchat-developer.us.document360.io/apidocs/introduction-to-two-factor-authentication).
+        The 2fa code. See <a href="https://developer.rocket.chat/apidocs/introduction-to-two-factor-authentication" target="_blank">Introduction to Two-Factor Authentication</a>.
       required: true
       schema:
         type: string
