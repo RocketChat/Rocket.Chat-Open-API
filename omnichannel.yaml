@@ -352,7 +352,8 @@ paths:
     get:
       summary: Get Agent Information
       description: |-
-        Get the Livechat agent data according to the path variables. To get the `rid` and `token` values, call the [Get Rooms](https://rocketchat-developer.us.document360.io/apidocs/get-rooms) endpoint to retrieve the details of all rooms.
+        Get the Livechat agent data according to the path variables. To get the `rid` and `token` values, call the <a href="https://developer.rocket.chat/apidocs/get-rooms" target="_blank">Get Rooms</a> endpoint to retrieve the details of all rooms.
+
       operationId: get-api-v1-livechat-agent
       parameters:
         - name: rid
@@ -424,7 +425,7 @@ paths:
     get:
       summary: Get Next Agent Information
       description: |-
-        Get information about the next available agent for an incoming conversation. This endpoint returns the available agents who have not been assigned to any chat yet. To get the `token` value, call the [Get Rooms](https://rocketchat-developer.us.document360.io/apidocs/get-rooms) endpoint to retrieve the details of all rooms.
+        Get information about the next available agent for an incoming conversation. This endpoint returns the available agents who have not been assigned to any chat yet. To get the `token` value, call the <a href="https://developer.rocket.chat/apidocs/get-rooms" target="_blank">Get Rooms</a> endpoint to retrieve the details of all rooms.
       operationId: get-api-v1-livechat-agent.next
       parameters:
         - name: token
@@ -485,7 +486,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: query
           in: query
-          description: 'Use the query operator to search for specific data.  For more information, see [Query Parameters](https://rocketchat-developer.us.document360.io/apidocs/query-parameters)'
+          description: 'Use the query operator to search for specific data.  For more information, see <a href="https://developer.rocket.chat/apidocs/query-parameters" target="_blank">Query Parameters</a>.'
           schema:
             type: string
         - name: text
@@ -495,7 +496,7 @@ paths:
             type: string
         - name: includeExtension
           in: query
-          description: 'The voice channel extension associated with the agent. If you don''t enter any extension number, the endpoint returns a list of all agents who have not been assigned any extensions.  For information about extensions, see [Associate agents with extensions in Rocket.Chat](https://docs.rocket.chat/use-rocket.chat/rocket.chat-voice-channel/voice-channel-admin-guide/configure-with-an-active-pbx-server/associate-agents-with-extensions-in-rocket.chat).'
+          description: 'The voice channel extension associated with the agent. If you don''t enter any extension number, the endpoint returns a list of all agents who have not been assigned any extensions. For information about extensions, see <a href="https://docs.rocket.chat/docs/associate-agents-with-extensions-in-rocketchat" target="_blank">Associate agents with extensions in Rocket.Chat</a>.'
           schema:
             type: string
         - $ref: '#/components/parameters/offset'
@@ -754,7 +755,7 @@ paths:
         Find Omnichannel contacts by name, email, phone number, or any custom field values stored in the database.
         Permission required: `view-l-room` 
         * Encode values having characters like @,+, /and * to avoid breaking the endpoint.
-        * To find contacts using custom fields, use the custom query parameter. The custom query parameter must be encoded by [URLSearchParams](https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams).
+        * To find contacts using custom fields, use the custom query parameter. The custom query parameter must be encoded by <a href="https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams" target="_blank">URLSearchParams</a>.
         For example, to search contacts with premium subscription, the request is as follows:
         ```
         curl --location --globoff 'http://localhost:3000/api/v1/omnichannel/contact.search?custom={%20%22Subscription%22%3A%20%22premium%22%20}' \
@@ -2415,7 +2416,7 @@ paths:
     post:
       summary: Transfer Livechat Room
       description: |-
-        Use the [Forward Livechat Room](https://rocketchat-developer.us.document360.io/apidocs/forward-livechat-room) endpoint instead.
+        Use the <a href="https://developer.rocket.chat/apidocs/forward-livechat-room" target="_blank">Forward Livechat Room</a> endpoint instead.
         
         Transfer an omnichannel conversation to another department.
       operationId: post-api-v1-livechat-room.transfer
@@ -2433,7 +2434,7 @@ paths:
                   description: The visitor token.
                 department:
                   type: string
-                  description: 'The new department. To get the department ID, call the [Get Livechat Configurations](https://developer.rocket.chat/reference/api/rest-api/endpoints/omnichannel/livechat-endpoints/livechat-config) endpoint. Note that the endpoint only returns public departments.'
+                  description: 'The new department. To get the department ID, call the <a href="https://developer.rocket.chat/apidocs/get-livechat-configurations" target="_blank">Get Livechat Configurations</a> endpoint. Note that the endpoint only returns public departments.'
               required:
                 - rid
                 - token
@@ -4712,7 +4713,7 @@ paths:
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         
         
-        Gives departments that have not been associated to another unit yet. This endpoint has been renamed to **[Get Available Departments by Unit Id](https://rocketchat-developer.us.document360.io/apidocs/get-available-departments-by-unit-id-1)** from Rocket.Chat 5.0.
+        Gives departments that have not been associated to another unit yet. This endpoint has been renamed to <a href="https://developer.rocket.chat/apidocs/get-departments-by-unit-id-1" target="_blank">Get Available Departments by Unit Id</a> from Rocket.Chat 5.0.
         
         
       operationId: 'get-api-v1-livechat-departments.available-by-unit-:unitId'
@@ -4890,7 +4891,7 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
 
-        <p>Gives departments included in a specific unit ID. This endpoint has been renamed to <a href="https://rocketchat-developer.us.document360.io/apidocs/get-departments-by-unit-id-1" target="_blank">Get Departments by Unit ID</a> as from Rocket.Chat 5.0
+        <p>Gives departments included in a specific unit ID. This endpoint has been renamed to <a href="https://developer.rocket.chat/apidocs/get-departments-by-unit-id-1" target="_blank">Get Departments by Unit ID</a> as from Rocket.Chat 5.0
         
         
       operationId: 'get-api-v1-livechat-departments.by-unit-:unitId'
@@ -5455,9 +5456,10 @@ paths:
         - Livechat Audio Video Calls
       summary: Start Call
       description: |-
-        **Note**: WebRTC is no longer supported with Omnichannel Livechat audio/video calls. To configure audio/video calls, see [Omnichannel Video/Audio Call Configuration](https://docs.rocket.chat/use-rocket.chat/rocket.chat-conference-call/omnichannel-video-audio-call-configuration).
-        To configure voice channel, see [Voice Channel](https://docs.rocket.chat/use-rocket.chat/rocket.chat-voice-channel).
-        Start a WebRTC audio/video call in a room. It requires the `view-l-room` [permission](https://docs.rocket.chat/use-rocket.chat/workspace-administration/permissions).
+        **Note**: WebRTC is no longer supported with Omnichannel Livechat audio/video calls.
+        - To configure audio/video calls, see <a href="https://docs.rocket.chat/docs/omnichannel-videoaudio-call-configuration" target="_blank">Omnichannel Video/Audio Call Configuration</a>.
+        - To configure voice channel, see <a href="https://docs.rocket.chat/docs/rocketchat-conference-call" target="_blank">Voice Channel</a>. <br>
+        - To start a WebRTC audio/video call in a room requires the `view-l-room` <a href="https://docs.rocket.chat/docs/permissions" target="_blank">permission</a>.
       operationId: get-api-v1-livechat-webrtc.call
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -5498,9 +5500,10 @@ paths:
     put:
       summary: Update Call Status
       description: |-
-        Note: WebRTC is no longer supported with Omnichannel Livechat audio/video calls. To configure audio/video calls, see [Omnichannel Video/Audio Call Configuration](https://docs.rocket.chat/use-rocket.chat/rocket.chat-conference-call/omnichannel-video-audio-call-configuration).
-        To configure voice channel, see [Voice Channel](https://docs.rocket.chat/use-rocket.chat/rocket.chat-voice-channel).
-        Update the call status of an existing WebRTC audio/video call. It requires the `view-l-room` [permission](https://docs.rocket.chat/use-rocket.chat/workspace-administration/permissions).
+        **Note**: WebRTC is no longer supported with Omnichannel Livechat audio/video calls.
+        - To configure audio/video calls, see <a href="https://docs.rocket.chat/docs/omnichannel-videoaudio-call-configuration" target="_blank">Omnichannel Video/Audio Call Configuration</a>.
+        - To configure voice channel, see <a href="https://docs.rocket.chat/docs/rocketchat-conference-call" target="_blank">Voice Channel</a>. <br>
+        - To  Update the call status of an existing WebRTC audio/video call requires the `view-l-room` <a href="https://docs.rocket.chat/docs/permissions" target="_blank">permission</a>.
       operationId: 'put-api-v1-livechat-webrtc.call-:callId'
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -5862,10 +5865,10 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
 
-        <a href="https://docs.rocket.chat/use-rocket.chat/omnichannel-agents-guides/omnichannel-conversation#to-export-the-transcript-as-pdf" target="_blank">Request a PDF transcript</a> for an Omnichannel conversation. The conversation must be closed before it can be exported. <br>
+        <a href="https://docs.rocket.chat/docs/omnichannel-conversations#conversation-transcript" target="_blank">Request a PDF transcript</a> for an Omnichannel conversation. The conversation must be closed before it can be exported. <br>
         
         Permission required: `request-pdf-transcript`.
-        Omnichannel <a href="https://docs.rocket.chat/use-rocket.chat/omnichannel/managers" target="_blank">managers</a> and <a href="https://docs.rocket.chat/use-rocket.chat/omnichannel/agents" target="_blank">agents</a> have this permission by default.
+        Omnichannel <a href="https://docs.rocket.chat/docs/managers" target="_blank">managers</a> and <a href="https://docs.rocket.chat/docs/agents" target="_blank">agents</a> have this permission by default.
         
         ### Changelog
         | Version      | Description |
