@@ -1,9 +1,83 @@
 openapi: 3.0.0
-x-stoplight:
-  id: hxvrouedycifc
 info:
   version: 1.0.0
   title: Authentication
+  # description: |-
+
+  #   Rocket.Chat provides diverse authentication methods for secure API communication, spanning from basic username and password authentication to OAuth integration with services such as Google, Facebook, and Twitter.
+
+  #   To access protected endpoints in the Rocket.Chat API, you must include the userId and a valid authentication token of the user as headers in the request. Add the authentication token as `x-Auth-Token` and the userId as `x-User-Id` in the headers of your request.
+
+  #   ### Authentication Tokens
+
+  #   Authentication tokens are unique identifiers confirming a user's active session within your Rocket.Chat workspace. These tokens validate the user's identity and permissions, providing secure access to various features and resources. When making requests to protected endpoints that mandate authentication, add this authentication token as `x-Auth-Token` header in your request.
+
+  #   In Rocket.Chat, there are primarily two types of authentication tokens: **authToken** and **personal access token**.
+
+  #   1.  **authToken**
+
+  #       `authToken` is a temporary authentication token returned to users after a successful login through any login endpoint. Additionally, workspace administrators can create `authtoken` for a user via the [Create User Token](/v1-api/apidocs/create-users-token) endpoint.
+
+  #   2.  **personal access token**
+
+  #       [Personal Access Tokens](https://docs.rocket.chat/use-rocket.chat/user-guides/user-panel/account#personal-access-tokens) are permanent authentication tokens that users can generate for themselves to access the API securely without exposing their primary credentials. Visit the Get [Personal Access Tokens API guide](https://developer.rocket.chat/reference/api/rest-api/endpoints/user-management/users-endpoints/generatepersonalaccesstoken) for more details.
+
+#     The following 2FA introduction is under the 2FA section in the published API documentation
+
+#      ## Two-Factor Authentication
+
+#    Rocket.Chat offers various methods for two-factor authentication in a workspace. Kindly refer to the official [Two-Factor Authentication guide](https://developer.rocket.chat/getting-started/two-factor-authentication) for more details.
+
+#    When making requests to endpoints that require two-factor authentication, add the following headers to the request:
+
+#    - **x-2fa-code**: (string) The 2FA code
+#    - **x-2fa-method**: (string) The desired method to check for the 2FA code, usually returned in the 2FA error.
+
+#    If you attempt to send a request to certain endpoints without the appropriate 2FA headers, you receive an error of type `totp-require`. The error message includes a `details` object, that specifies the required 2FA method. It's useful for informing the user where to obtain their 2FA code.
+#    - **method**: The required 2FA method for the user selected by the workspace. 
+#    - **codeGenerated**: Used to inform if the code was generated or if there are tokens available already. It is specific to 2FA by Email.
+#    - **codeCount**: (optional) The number of available codes already sent via email. It is specific to 2FA by Email.
+#    - **codeExpires**: (optional) A list of expiration dates of the tokens.It is specific to 2FA by Email.
+#    - **availableMethods**: The list of available 2FA methods for the user's account.
+
+#    ```
+#    {
+#      "success": false,
+#      "error": "TOTP Required [totp-required]",
+#      "errorType": "totp-required",
+#      "details": {
+#        "method": "email",
+#        "codeGenerated": false,
+#        "codeCount": 1,
+#        "codeExpires": [
+#          "2020-01-02T13:06:42.408Z"
+#        ],
+#        "availableMethods": [
+#          "email"
+#        ]
+#      }
+#    }
+#    ```
+#    If the 2FA code is wrong, a `totp-invalid` response is returned:
+
+#    ```
+#
+#      "success": false,
+#      "error": "TOTP Invalid [totp-invalid]",
+#      "errorType": "totp-invalid",
+#      "details": {
+#        "method": "email"
+#      }
+#   }
+#    ```
+#    ### Handling 2FA Method Errors
+#      It's important to note the  required TOTP **method** returned in the error response when making requests that require 2FA.
+
+#    - If it's `password`, add the hashed password of the user as the `X-2fa-Code` header parameter. 
+#    - If it's `email`, add the 2FA code sent via email as the `X-2fa-Code` header parameter.
+#    - If it's `totp`, add the code from your authenticator app as the `X-2fa-Code` header parameter.
+
+
 servers:
   - url: 'https://apiexplorer.support.rocket.chat'
 paths:
