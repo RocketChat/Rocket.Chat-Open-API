@@ -11,7 +11,7 @@ paths:
         - Auto-Translate
       summary: Get Supported Languages
       description: |- 
-        To learn how to enable the auto-translate feature, see the [Auto-Translate](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/message#ibh8nd40he) user guide.
+        To learn how to enable the auto-translate feature, see the <a href="https://docs.rocket.chat/docs/message#autotranslate" target="_blank">Auto-Translate</a> user guide.
         
         Get the supported languages by the auto-translate.
         ### Changelog
@@ -1634,15 +1634,15 @@ paths:
       description: |- 
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         
-        You may want to [deploy your workspace in an air-gapped environment](https://docs.rocket.chat/setup-and-configure/rocket.chat-air-gapped-deployment). Since the server has no internet to communicate with the cloud, we provide a license for your subscribed plan that you can apply manually to upgrade your workspace.
+        You may want to <a href="https://docs.rocket.chat/docs/rocketchat-air-gapped-deployment" target="_blank">deploy your workspace in an air-gapped environment</a>. Since the server has no internet to communicate with the cloud, we provide a license for your subscribed plan that you can apply manually to upgrade your workspace.
         
-        Permission required: `edit-privileged-setting`
+        Permission required: `edit-privileged-setting`.
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |3.10.0         | Added       |
         
-        A successful response only means the license provided follows the accepted format. Check your [workspace log](https://docs.rocket.chat/use-rocket.chat/workspace-administration/info) or [administration info](https://docs.rocket.chat/use-rocket.chat/workspace-administration/info) to confirm if the license is valid and was applied to your workspace. Alternatively, you can check **[Confirm Enterprise License](https://rocketchat-developer.us.document360.io/apidocs/confirm-enterprise-license)** endpoint.
+        A successful response only means the license provided follows the accepted format. Check your <a href="https://docs.rocket.chat/docs/reports" target="_blank">workspace log</a> or <a href="https://docs.rocket.chat/docs/workspace" target="_blank">administration info</a> to confirm if the license is valid and was applied to your workspace. Alternatively, you can check <b><a href="https://developer.rocket.chat/apidocs/get-licenses-1" target="_blank">Confirm Enterprise License</a></b> endpoint.
         
       operationId: post-api-v1-licenses.add
       parameters:
@@ -1675,7 +1675,7 @@ paths:
       description: |- 
         Use the `/licenses.info` endpoint instead.
         
-        Confirm if the current workspace is subscribed to the [Enterprise plan](https://docs.rocket.chat/readme/our-plans#enterprise-plan).
+        Confirm if the current workspace is subscribed to the <a href="https://docs.rocket.chat/docs/our-plans#enterprise-plan" target="_blank">Enterprise plan</a>.
         
         ### Changelog
         | Version      | Description |
@@ -2127,8 +2127,8 @@ paths:
         - Apps
       summary: Install Private Apps
       description: |- 
-        Install a [private app](https://docs.rocket.chat/extend-rocket.chat-capabilities/rocket.chat-marketplace#private-apps) via URL.
-        [Permission](https://docs.rocket.chat/use-rocket.chat/workspace-administration/permissions) required: `manage-apps`
+        Install a <a href="https://docs.rocket.chat/docs/rocketchat-marketplace#private-apps" target="_blank">private app</a> via URL. <a href="https://docs.rocket.chat/docs/permissions" target="_blank">Permission</a> required: `manage-apps`
+
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -2497,7 +2497,7 @@ paths:
       description: |- 
         Creates or return an existing invite with the specified parameters. 
         
-        [Permission](https://docs.rocket.chat/use-rocket.chat/workspace-administration/permissions) required: `create-invite-links`
+        <a href="https://docs.rocket.chat/docs/permissions" target="_blank">Permission</a> required: `create-invite-links`
       operationId: post-api-v1-findOrCreateInvite
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -2594,7 +2594,7 @@ paths:
       description: |- 
         Lists all of the invites on the server. 
         
-        [Permission](https://docs.rocket.chat/use-rocket.chat/workspace-administration/permissions) required: `create-invite-links`
+        <a href="https://docs.rocket.chat/docs/permissions" target="_blank">Permission</a> required: `create-invite-links`
       operationId: get-api-v1-listInvites
       responses:
         '200':
@@ -2660,7 +2660,7 @@ paths:
       tags:
         - Invite
       summary: Delete Invite by ID
-      description: "Deletes an invite from the workspace.\r\n\r\n[Permission](https://docs.rocket.chat/use-rocket.chat/workspace-administration/permissions) required: `create-invite-links`"
+      description: "Deletes an invite from the workspace.\r\n\r\n<a href='https://docs.rocket.chat/docs/permissions' target='_blank'>Permission</a> required: `create-invite-links`"
       operationId: delete-api-v1-removeInvite-_id
       parameters:
         - $ref: '#/components/parameters/Auth-Token'

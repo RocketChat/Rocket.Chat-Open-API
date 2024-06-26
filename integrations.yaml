@@ -840,7 +840,8 @@ paths:
         - WebDAV
       summary: Get WebDAV Accounts
       description: |-
-          Retrieves the user's [WebDAV](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/webdav-integration) accounts.
+          Retrieves the user's <a href="https://docs.rocket.chat/docs/webdav-integration" target="_blank">WebDAV</a> accounts.
+          
           ### Changelog
           | Version      | Description | 
           | ---------------- | ------------|
