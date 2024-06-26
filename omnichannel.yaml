@@ -6480,7 +6480,7 @@ paths:
         - Livechat Appearance
       summary: Set Livechat Appearance
       description: |-
-        Update the [livechat widget appearance](https://docs.rocket.chat/use-rocket.chat/omnichannel/livechat-widget-appearance) settings.
+        Update the <a href="https://docs.rocket.chat/docs/livechat-widget-appearance" target="_blank">livechat widget appearance</a> settings.
         Permission required: `view-livechat-manager`
 
         ### Changelog
@@ -6492,7 +6492,7 @@ paths:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
       requestBody:
-        description: 'An array of objects containing the `_id` and `value` of the settings to be updated. See [Get LiveChat Appearance](https://developer.rocket.chat/reference/api/rest-api/endpoints/omnichannel/livechat-endpoints/appearance/get-livechat-appearance) example response for the `_id` of each setting.'
+        description: 'An array of objects containing the `_id` and `value` of the settings to be updated. See <a href="https://developer.rocket.chat/apidocs/get-livechat-appearance" target="_blank">Get LiveChat Appearance</a> example response for the `_id` of each setting.'
         content:
           application/json:
             schema:
@@ -8481,7 +8481,7 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         
-        Set <a href="https://docs.rocket.chat/use-rocket.chat/omnichannel/sla-policies" target="_blank">SLA policy</a> to an inquiry. You can only set the policy for an inquiry that has not been taken by an agent.
+        Set <a href="https://docs.rocket.chat/docs/sla-policies" target="_blank">SLA policy</a> to an inquiry. You can only set the policy for an inquiry that has not been taken by an agent.
 
         At least one of the following permissions is required:
         * `view-l-room`
@@ -8946,7 +8946,7 @@ paths:
       description: |-
         Permission required: `view-livechat-manager`
         
-        See the [Livechat Triggers](https://docs.rocket.chat/use-rocket.chat/omnichannel/livechat-triggers) guide for more information.
+        See the <a href="https://docs.rocket.chat/docs/livechat-triggers" target="_blank">Livechat Triggers</a> guide for more information.
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
@@ -9715,7 +9715,7 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         
-        This endpoint is used to get a list of all priorities in a workspace below version 6.0. It supports the optional [pagination](https://developer.rocket.chat/reference/api/rest-api#pagination) query parameters.
+        This endpoint is used to get a list of all priorities in a workspace below version 6.0. It supports the optional <a href="https://developer.rocket.chat/apidocs#pagination" target="_blank">pagination</a> query parameters.
       operationId: get-livechat-priorities
       parameters:
         - $ref: '#/components/parameters/UserId'
@@ -9901,7 +9901,7 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         
-        This endpoint has been renamed to <b><a href='https://rocketchat-developer.us.document360.io/apidocs/get-a-priority' target='_blank'>Get a Priority</a></b> as from Rocket.Chat 5.0."
+        This endpoint has been renamed to <b><a href='https://developer.rocket.chat/apidocs/get-a-priority' target='_blank'>Get a Priority</a></b> as from Rocket.Chat 5.0."
       operationId: get-livechat-priority.getOne
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -10116,7 +10116,7 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         
-        This endpoint has been renamed to **[Get List of Tags](https://rocketchat-developer.us.document360.io/apidocs/get-list-of-tags)** as from Rocket.Chat 5.0.
+        This endpoint has been renamed to <a href="https://developer.rocket.chat/apidocs/get-list-of-tags" target="_blank">Get List of Tags</a> as from Rocket.Chat 5.0.
         
         
       operationId: get-api-v1-livechat-tags.list
@@ -10181,7 +10181,7 @@ paths:
       description: |- 
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
       
-        This endpoint has been renamed to  <b><a href='https://rocketchat-developer.us.document360.io/apidocs/get-a-tag' target='_blank'>Get a Tag</a><b> as from Rocket.Chat 5.0
+        This endpoint has been renamed to  <b><a href='https://developer.rocket.chat/apidocs/get-a-tag' target='_blank'>Get a Tag</a><b> as from Rocket.Chat 5.0
       operationId: get-livechat-tags.getOne
       responses:
         '200':
@@ -12222,7 +12222,7 @@ paths:
         Permission required: `view-l-room`
         ### VoIP Client Events
         List of VoIP client Events available in enum format:
-          ```
+          ```json
           {"VOIP-CALL-STARTED" = "voip-call-started",
            "VOIP-CALL-ENDED" = "voip-call-ended",
            "VOIP-CALL-DECLINED" = "voip-call-declined",

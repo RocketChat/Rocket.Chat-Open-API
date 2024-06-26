@@ -83,7 +83,7 @@ paths:
         - WhatsApp
       summary: Send a WhatsApp Template Message
       description: |-
-        Send template messages via WhatsApp to targeted contacts directly from your workspace using this endpoint. It supports only [WhatsApp Cloud App](https://docs.rocket.chat/extend-rocket.chat-capabilities/rocket.chat-marketplace/rocket.chat-public-apps-guides/omnichannel-apps/whatsapp-cloud-app) and [WhatsApp Sandbox App](https://docs.rocket.chat/extend-rocket.chat-capabilities/rocket.chat-marketplace/rocket.chat-public-apps-guides/omnichannel-apps/whatsapp-sandbox).
+        Send template messages via WhatsApp to targeted contacts directly from your workspace using this endpoint. It supports only <a href="https://docs.rocket.chat/docs/whatsapp-cloud-app" target="_blank">WhatsApp Cloud App</a> and <a href="https://docs.rocket.chat/docs/whatsapp-sandbox" target="_blank">WhatsApp Sandbox App</a>.
 
         
         The appropriate endpoint URL including the `appId` for sending Whatsapp template messages on your workspace is displayed in the  **Details tab** of the Whatsapp **App Info** page. 
@@ -103,7 +103,7 @@ paths:
               properties:
                 phoneNumbers:
                   type: array
-                  description: 'Recipient WhatsApp IDs where you want to send the template message. You can validate a WhatsApp id from [here](https://developers.facebook.com/docs/whatsapp/on-premises/reference/contacts).'
+                  description: 'Recipient WhatsApp IDs where you want to send the template message. You can validate a WhatsApp id from <a href="https://developers.facebook.com/docs/whatsapp/on-premises/reference/contacts" target="_blank">here</a>.'
                   items:
                     type: string
                 connectedWhatsAppNo:
@@ -117,7 +117,7 @@ paths:
                   description: Department name or ID where you want to transfer the chat to when the WhatsApp user replies.
                 template:
                   type: object
-                  description: 'Provide information about the template message you wish to send. Kindly refer to [Message Templates](https://developers.facebook.com/docs/whatsapp/api/messages/message-templates#the-template-object) for an example. Refer to the example in [Sending WhatsApp template messages from your workspace](https://developer.rocket.chat/omnichannel/whatsapp-business-template-messages#sending-whatsapp-template-messages-from-your-workspace)'
+                  description: 'Provide information about the template message you wish to send. Kindly refer to <a href="https://developers.facebook.com/docs/whatsapp/api/messages/message-templates#the-template-object" target="_blank">Message Templates</a> for an example. Also refer to the example in <a href="https://developer.rocket.chat/docs/whatsapp-business-template-messages#send-whatsapp-template-messages-from-your-workspace" target="_blank">Sending WhatsApp template messages from your workspace</a>.'
                   properties:
                     namespace:
                       type: string

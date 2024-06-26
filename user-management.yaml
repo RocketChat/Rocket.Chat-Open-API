@@ -1319,7 +1319,7 @@ paths:
       description: |-
         * To update the password for the user, `edit-other-user-password`
         permission is required.
-        * This endpoint required 2FA.
+        * This endpoint requires 2FA.
 
         ### Changelog
         | Version      | Description | 

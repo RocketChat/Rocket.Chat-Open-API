@@ -62,13 +62,15 @@ paths:
                     success: true
       tags:
         - Settings
-      description: 'List all public settings. Learn how this can be used in configuring your workspace in this [guide](https://docs.rocket.chat/setup-and-configure/environment-configuration/deployment-environment-variables/manage-settings-using-environmental-variables). '
+      description: 'List all public settings. Learn how this can be used in configuring your workspace in this <a href="https://docs.rocket.chat/docs/manage-settings-using-environmental-variables" target="_blank">guide</a>.'
       parameters:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/query'
         - $ref: '#/components/parameters/fields'
+      x-stoplight:
+        id: lsipbbghogucn
   /api/v1/settings.oauth:
     parameters: []
     get:
@@ -170,6 +172,8 @@ paths:
         |0.64.0            | Renamed field `appId` to `clientId` and added flag `custom` to indicate whether the OAuth service is customized and fix `id` inconsistence (set all cases to `_id`)       |
         |0.63.0            | Added       |
       parameters: []
+      x-stoplight:
+        id: egppr84291ag8
   /api/v1/settings:
     parameters: []
     get:
@@ -218,10 +222,12 @@ paths:
           $ref: '#/components/responses/authorizationError'
       tags:
         - Settings
-      description: 'List all private settings. Learn how this can be used in configuring your server in this [guide](https://docs.rocket.chat/setup-and-configure/environment-configuration/deployment-environment-variables).'
+      description: 'List all private settings. Learn how this can be used in configuring your server in this <a href="https://docs.rocket.chat/docs/deployment-environment-variables" target="_blank">guide</a>.'
       parameters:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/X-Auth-Token'
+      x-stoplight:
+        id: 7pbv4d2xr9qdx
   /api/v1/settings.addCustomOAuth:
     parameters: []
     post:
@@ -257,6 +263,7 @@ paths:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/X-Auth-Token'
         - $ref: '#/components/parameters/x-2fa-code'
+        - $ref: '#/components/parameters/X-2fa-method'
       requestBody:
         content:
           application/json:
@@ -268,6 +275,8 @@ paths:
                   description: The name of the custom OAuth method that you want to add.
               required:
                 - name
+      x-stoplight:
+        id: utqft2vu5wdi6
   '/api/v1/settings/{_id}':
     parameters:
       - schema:
@@ -288,9 +297,9 @@ paths:
       operationId: post-api-v1-settings-_id
       description: |-
         Permission required: `edit-privileged-setting`
-        
+
         The `_id` of a setting is the first argument of the `RocketChat.settings.add` method used in `Rocket.Chat/packages/rocketchat-lib/server/startup/settings.js` (among other files). 
-        
+
         For example, the following code in `settings.js` file:
           ```json
           this.add('Accounts_AllowAnonymousRead', false, {
@@ -318,6 +327,7 @@ paths:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/X-Auth-Token'
         - $ref: '#/components/parameters/x-2fa-code'
+        - $ref: '#/components/parameters/X-2fa-method'
       requestBody:
         content:
           application/json:
@@ -338,6 +348,8 @@ paths:
                   description: To trigger a action-button.
               required:
                 - value
+      x-stoplight:
+        id: oxq9qk65qoxuf
     get:
       summary: Get Setting
       tags:
@@ -375,6 +387,8 @@ paths:
       parameters:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/X-Auth-Token'
+      x-stoplight:
+        id: vwh238f3721k7
   /api/v1/service.configurations:
     parameters: []
     get:
@@ -415,6 +429,8 @@ paths:
       description: List out all the active OAuth services configured with details.
       tags:
         - Settings
+      x-stoplight:
+        id: r4cru8ezjk1ck
   /api/v1/cloud.manualRegister:
     parameters: []
     post:
@@ -446,8 +462,8 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       description: |-
-        Manually register a workspace on [Rocket.Chat Cloud](https://docs.rocket.chat/use-rocket.chat/rocket.chat-cloud).
-        Permission required: `register-on-cloud`
+        Manually register a workspace on <a href="https://docs.rocket.chat/docs/rocketchat-cloud" target="_blank">Rocket.Chat Cloud</a>.
+        Permission required: `register-on-cloud`.
       tags:
         - Cloud
       parameters:
@@ -468,6 +484,8 @@ paths:
               Example 1:
                 value:
                   cloudBlob: jfiscsm38urc3ujd
+      x-stoplight:
+        id: dpl1s86pn3ugc
   /api/v1/dns.resolve.txt:
     parameters: []
     post:
@@ -508,6 +526,8 @@ paths:
         content: {}
       tags:
         - DNS
+      x-stoplight:
+        id: oke4xc3gsgf0s
   /api/v1/dns.resolve.srv:
     parameters: []
     post:
@@ -548,6 +568,8 @@ paths:
         content: {}
       tags:
         - DNS
+      x-stoplight:
+        id: s4gjqcfkmzm8m
   /api/v1/e2e.fetchMyKeys:
     parameters: []
     get:
@@ -581,6 +603,8 @@ paths:
       parameters:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/X-Auth-Token'
+      x-stoplight:
+        id: i97kx6y9c3nz3
   /api/v1/e2e.getUsersOfRoomWithoutKey:
     parameters: []
     get:
@@ -656,6 +680,8 @@ paths:
           name: rid
           description: The room ID.
           required: true
+      x-stoplight:
+        id: qwo4jgls73l8x
   /api/v1/e2e.setRoomKeyID:
     parameters: []
     post:
@@ -717,6 +743,8 @@ paths:
                 value:
                   rid: wCiXndNp5NqNY3uCc
                   keyID: my-UniQu3_ke4_Id
+      x-stoplight:
+        id: 58usid6xybxo6
   /api/v1/e2e.setUserPublicAndPrivateKeys:
     parameters: []
     post:
@@ -771,6 +799,8 @@ paths:
                 value:
                   public_key: My-9UbLiK-k34
                   private_key: 9R1V4t3_k3Y
+      x-stoplight:
+        id: pbl8lnh31cp65
   /api/v1/e2e.updateGroupKey:
     parameters: []
     post:
@@ -830,6 +860,8 @@ paths:
                   uid: d26x6zSkaPSe5gCyy
                   rid: 9R1V4t3_k3Y
                   key: M4-Ubd4T3d-k39
+      x-stoplight:
+        id: jzmyzejc28b0o
   /api/v1/uploadImportFile:
     parameters: []
     post:
@@ -911,6 +943,8 @@ paths:
         | Version      | Description |
         | ---------------- | ------------|
         |3.0.0            | Added       |
+      x-stoplight:
+        id: cd2ctxbe176jc
   /api/v1/downloadPublicImportFile:
     parameters: []
     post:
@@ -979,11 +1013,13 @@ paths:
         - Import
       description: |-
         Permission required: `run-import`
-        
+
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |3.0.0            | Added       |
+      x-stoplight:
+        id: t6x4pevvgd0e7
   /api/v1/startImport:
     parameters: []
     post:
@@ -1112,11 +1148,13 @@ paths:
       description: |-
         Triggers the process of importing users, rooms and messages to the workspace.
         Permission required: `run-import`
-        
+
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |3.0.0            | Added       |
+      x-stoplight:
+        id: 9k7tfuuqwwosi
   /api/v1/getImportFileData:
     parameters: []
     get:
@@ -1165,6 +1203,8 @@ paths:
       parameters:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/X-Auth-Token'
+      x-stoplight:
+        id: pgb8ob50o23gy
   /api/v1/getImportProgress:
     parameters: []
     get:
@@ -1218,6 +1258,8 @@ paths:
       parameters:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/X-Auth-Token'
+      x-stoplight:
+        id: p8m9z8sq5fwht
   /api/v1/getLatestImportOperations:
     parameters: []
     get:
@@ -1307,6 +1349,8 @@ paths:
       parameters:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/X-Auth-Token'
+      x-stoplight:
+        id: 71a84duvu4tu1
   /api/v1/downloadPendingFiles:
     parameters: []
     post:
@@ -1343,6 +1387,8 @@ paths:
         - $ref: '#/components/parameters/X-Auth-Token'
       tags:
         - Import
+      x-stoplight:
+        id: wan1pw7i1gqy9
   /api/v1/downloadPendingAvatars:
     parameters: []
     post:
@@ -1379,6 +1425,8 @@ paths:
         - $ref: '#/components/parameters/X-Auth-Token'
       tags:
         - Import
+      x-stoplight:
+        id: idvdgnchbd8wh
   /api/v1/getCurrentImportOperation:
     parameters: []
     get:
@@ -1441,6 +1489,8 @@ paths:
         - $ref: '#/components/parameters/X-Auth-Token'
       tags:
         - Import
+      x-stoplight:
+        id: nh7g2yhhqszm4
   /api/v1/import.new:
     parameters: []
     post:
@@ -1504,6 +1554,8 @@ paths:
         - $ref: '#/components/parameters/X-Auth-Token'
       tags:
         - Bulk User Import
+      x-stoplight:
+        id: p522ythwj85c6
   /api/v1/import.addUsers:
     parameters: []
     post:
@@ -1608,6 +1660,8 @@ paths:
             6. Users flagged as `deleted` will be created as `Deactivated` on Rocket.Chat.
             7. Avatar URLs will not be fetched automatically. The workspace administrator needs to use the **Download Pending Avatars** button in **Administration** > **Workspace** > **Import** on the workspace after the import is completed.
             8. Import IDs will not be used as IDs by Rocket.Chat, but you can query users by their import ID with the [users.info](https://developer.rocket.chat/reference/api/rest-api/endpoints/user-management/users-endpoints/get-users-info) endpoint.
+      x-stoplight:
+        id: avny8ikk8d2bg
   /api/v1/import.run:
     parameters: []
     post:
@@ -1623,11 +1677,11 @@ paths:
       description: |-
         Process the data from the current import operation, creating the users on Rocket.Chat. It requires the current import operation state to be `ready` and it changes the operation state to `importing`. It will return success if the conditions to start the process are met, without waiting for the import to finish.
         Permission required: `run-import`
-        
+
         1. If a user can not be imported successfully it'll be flagged but the operation will not stop.
         2. If a user's email or username is already in use, it will not be created.
         3. Only the users that were imported successfully will be removed from the staging area.
-        
+
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -1640,6 +1694,8 @@ paths:
       requestBody:
         content: {}
         description: ''
+      x-stoplight:
+        id: ujj382yvzat22
   /api/v1/import.status:
     parameters: []
     get:
@@ -1730,6 +1786,8 @@ paths:
         - $ref: '#/components/parameters/X-Auth-Token'
       tags:
         - Bulk User Import
+      x-stoplight:
+        id: 1t53d4appczfx
   /api/v1/import.clear:
     parameters: []
     post:
@@ -1754,6 +1812,8 @@ paths:
       parameters:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/X-Auth-Token'
+      x-stoplight:
+        id: 47x92g0qses5v
   /api/v1/instances.get:
     parameters: []
     get:
@@ -1853,6 +1913,8 @@ paths:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/X-Auth-Token'
       description: 'Permission required: `view-statistics`'
+      x-stoplight:
+        id: 8hoo52clnhf5j
   /api/v1/federation/addServerByUser:
     parameters: []
     post:
@@ -1865,9 +1927,9 @@ paths:
           $ref: '#/components/responses/authorizationError'
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Add a new federated server.
-        
+
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
@@ -1892,6 +1954,8 @@ paths:
               Example 1:
                 value:
                   serverName: my-server.rocket.chat
+      x-stoplight:
+        id: ex84zxirlxv9a
   /api/v1/federation/listServersByUser:
     parameters: []
     get:
@@ -1945,15 +2009,17 @@ paths:
         - $ref: '#/components/parameters/X-Auth-Token'
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Lists all the servers the user has already saved.
-        
+
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |6.0.0            | Added       |
       tags:
         - Federation
+      x-stoplight:
+        id: 312pkyb4w0429
   /api/v1/federation/removeServerByUser:
     parameters: []
     post:
@@ -1982,7 +2048,7 @@ paths:
           $ref: '#/components/responses/authorizationError'
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
@@ -2006,6 +2072,8 @@ paths:
                   description: The public server name that you want to remove.
               required:
                 - serverName
+      x-stoplight:
+        id: y7yne4lyvogml
   /api/v1/federation/searchPublicRooms:
     parameters: []
     get:
@@ -2065,9 +2133,9 @@ paths:
           description: Unauthorized
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Search for federated public rooms by the server name or room name.
-        
+
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
@@ -2097,6 +2165,8 @@ paths:
         - $ref: '#/components/parameters/count'
       tags:
         - Federation
+      x-stoplight:
+        id: w2bv4zx85zz6l
   /api/v1/federation/joinExternalPublicRoom:
     parameters: []
     post:
@@ -2109,7 +2179,7 @@ paths:
           $ref: '#/components/responses/authorizationError'
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
@@ -2135,6 +2205,8 @@ paths:
                   externalRoomId: '!externalRoomId:server.com'
       tags:
         - Federation
+      x-stoplight:
+        id: l152syfad80ut
   /api/v1/moderation.reportsByUsers:
     parameters: []
     get:
@@ -2250,6 +2322,8 @@ paths:
         - $ref: '#/components/parameters/sort'
       tags:
         - Moderation
+      x-stoplight:
+        id: 5hvpxmfo92p1h
   /api/v1/moderation.user.reportedMessages:
     parameters: []
     get:
@@ -2432,6 +2506,8 @@ paths:
           required: true
       tags:
         - Moderation
+      x-stoplight:
+        id: p4kjy5jgiz3cc
   /api/v1/moderation.reports:
     parameters: []
     get:
@@ -2527,6 +2603,8 @@ paths:
           required: true
       tags:
         - Moderation
+      x-stoplight:
+        id: 4w1rkanggvpaq
   /api/v1/moderation.reportInfo:
     parameters: []
     get:
@@ -2557,6 +2635,8 @@ paths:
           required: true
       tags:
         - Moderation
+      x-stoplight:
+        id: d3y2yhn9sg2bc
   /api/v1/moderation.dismissReports:
     parameters: []
     post:
@@ -2593,6 +2673,8 @@ paths:
                   description: The ID of the message which reports to dismiss. This parameter is required if `userId` is not provided.
       tags:
         - Moderation
+      x-stoplight:
+        id: e1fjuzomqoczu
   /api/v1/moderation.user.deleteReportedMessages:
     parameters: []
     post:
@@ -2627,6 +2709,8 @@ paths:
                 - userId
       tags:
         - Moderation
+      x-stoplight:
+        id: pmuz5her2zncf
   /api/v1/sessions/list:
     parameters: []
     get:
@@ -2723,9 +2807,9 @@ paths:
           $ref: '#/components/responses/authorizationError'
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Retrieves all sessions of the authenticated user making the request.
-        
+
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -2744,6 +2828,8 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
+      x-stoplight:
+        id: p4juor0kbuq9n
   /api/v1/sessions/list.all:
     parameters: []
     get:
@@ -3008,10 +3094,10 @@ paths:
           $ref: '#/components/responses/forbiddenError'
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
-        Retrieve the sessions of all users on the workspace. This endpoint required 2FA.
+
+        Retrieve the sessions of all users on the workspace. This endpoint requires 2FA.
         Permission required: `view-device-management`
-        
+
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
@@ -3031,6 +3117,9 @@ paths:
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/x-2fa-code'
+        - $ref: '#/components/parameters/X-2fa-method'
+      x-stoplight:
+        id: g38wnfqfn1yy4
   /api/v1/sessions/info:
     parameters: []
     get:
@@ -3159,9 +3248,9 @@ paths:
           $ref: '#/components/responses/authorizationError'
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Retrieve session information for sessions owned by the authenticated user. This endpoint provides detailed information about the user's sessions on the workspace. It does not grant access to the session information of other users on the workspace.
-        
+
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -3178,6 +3267,8 @@ paths:
           name: sessionId
           description: The session ID.
           required: true
+      x-stoplight:
+        id: r1ovy46vxfwnd
   /api/v1/sessions/info.admin:
     parameters: []
     get:
@@ -3282,10 +3373,10 @@ paths:
           $ref: '#/components/responses/forbiddenError'
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Retrieve session information for any session on the workspace, regardless of the session owner. This endpoint allows authorized users to access session details across the workspace and requires 2FA.
         Permission required: `view-device-management`
-        
+
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
@@ -3303,6 +3394,9 @@ paths:
           description: The session ID.
           required: true
         - $ref: '#/components/parameters/x-2fa-code'
+        - $ref: '#/components/parameters/X-2fa-method'
+      x-stoplight:
+        id: p7cqr8z8c8ljf
   /api/v1/sessions/logout.me:
     parameters: []
     post:
@@ -3345,9 +3439,9 @@ paths:
           $ref: '#/components/responses/authorizationError'
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         This endpoint allows an authenticated user to log out of any of their sessions on the workspace. It is designed specifically for the user to terminate their sessions and cannot be used to log out sessions belonging to other users on the workspace.
-        
+
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -3372,6 +3466,8 @@ paths:
               Example 1:
                 value:
                   sessionId: WJ2giBwm4B9mcojFi
+      x-stoplight:
+        id: 2edkagmv9smsi
   /api/v1/sessions/logout:
     parameters: []
     post:
@@ -3435,11 +3531,11 @@ paths:
           $ref: '#/components/responses/forbiddenError'
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
-        This endpoint allows an authorized user to log out other user's session on the workspace and required 2FA. It provides the capability to terminate sessions of other users, ensuring workspace security and management.
-        
+
+        This endpoint allows an authorized user to log out other user's session on the workspace and requires 2FA. It provides the capability to terminate sessions of other users, ensuring workspace security and management.
+
         Permission required: `logout-device-management`
-        
+
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
@@ -3448,6 +3544,7 @@ paths:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/X-Auth-Token'
         - $ref: '#/components/parameters/x-2fa-code'
+        - $ref: '#/components/parameters/X-2fa-method'
       tags:
         - Device Management
       requestBody:
@@ -3461,6 +3558,8 @@ paths:
                   description: The session ID.
               required:
                 - sessionId
+      x-stoplight:
+        id: gq7qcp2uzpnji
 tags:
   - name: Settings
   - name: Cloud
@@ -3531,6 +3630,13 @@ components:
       schema:
         type: string
       description: 'The 2FA code from the authentication method. If the method is password, encrypt it as SHA256.'
+    X-2fa-method:
+      name: X-2fa-method
+      in: header
+      required: true
+      schema:
+        type: string
+      description: 'The desired method to get the 2FA code. It can be `email`, `totp`, or `password`.'
   schemas: {}
   responses:
     authorizationError:
