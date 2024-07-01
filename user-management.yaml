@@ -17,7 +17,7 @@ paths:
         - Permissions
       summary: List All Permissions
       description: |-
-        Returns all permissions from the workspace.
+        Returns the list of <a href='https://docs.rocket.chat/docs/permissions' target='_blank'>permissions</a> from the workspace.
         
         ### Changelog
         | Version      | Description |
@@ -84,7 +84,7 @@ paths:
     post:
       summary: Update Permissions
       description: |-
-        Update the permissions on the workspace.
+        Update the <a href='https://docs.rocket.chat/docs/permissions' target='_blank'>permissions</a> on the workspace.
         Permission required: `access-permissions`
         ### Changelog
         | Version      | Description |
@@ -187,9 +187,9 @@ paths:
         - Roles
       summary: Create Role
       description: |-
-        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://github.com/RocketChat/Rocket.Chat-Open-API/blob/89e76e7481b4d5b087e797dc1487bcd474ec7fcd/images/Enterprise.jpg" alt="Premium tag" style="display: block; margin: auto;"></div>
 
-        Create a new role in the workspace.
+        Create a new <a href='https://docs.rocket.chat/docs/roles-in-rocketchat'>role</a> in the workspace. See <a href='https://docs.rocket.chat/v1/docs/custom-roles'>Custom Roles</a> for further information.
 
         * You can't create new roles with the same name as existing roles. For example, it is not possible to create a new role with the name `admin`.
         * The scope can either be `Users`(user level) or `Subscriptions`(room level).
@@ -210,15 +210,15 @@ paths:
               properties:
                 name:
                   type: string
-                  description: The name of the new role.
+                  description: Enter the new role's name.
                   example: newRole
                 scope:
                   type: string
-                  description: The scope of the new role. The default value is `Users`.
+                  description: The new role's scope. The default value is `Users`.
                   example: Subscriptions
                 description:
                   type: string
-                  description: A description for the new role.
+                  description: Enter a description for the new role.
                   example: Role description
                 mandatory2fa:
                   type: boolean
@@ -4891,7 +4891,7 @@ paths:
         - LDAP
       summary: Test LDAP User Search
       description: |-
-        Test if a given username can be found in the LDAP server using the authentication and filter settings provided to Rocket.Chat.
+        Test if a given username can be found in the LDAP server using the authentication and filter <a href='https://docs.rocket.chat/docs/configure-ldap-connection' target='_blank'>settings</a> provided to Rocket.Chat.
         Permission required: `test-admin-options`
       operationId: post-api-v1-ldap.testSearch
       parameters:
@@ -5310,7 +5310,7 @@ components:
     Auth-Token:
       name: X-Auth-Token
       in: header
-      description: The `authToken` of the authenticated user.
+      description: The authenticated user token.
       required: true
       schema:
         type: string
@@ -5318,7 +5318,7 @@ components:
     UserId:
       name: X-User-Id
       in: header
-      description: The `userId` of the authenticated user.
+      description: The authenticated user ID.
       required: true
       schema:
         type: string
