@@ -187,7 +187,7 @@ paths:
         - Roles
       summary: Create Role
       description: |-
-        ![Enterprise tag](images/Enterprise.jpg)
+       This endpoint is available for **Enterprise** workspaces only.
 
         Create a new <a href='https://docs.rocket.chat/docs/roles-in-rocketchat'>role</a> in the workspace. See <a href='https://docs.rocket.chat/v1/docs/custom-roles'>Custom Roles</a> for further information.
 
@@ -320,7 +320,7 @@ paths:
         - Roles
       summary: Update Role
       description: |-
-        ![Enterprise tag](https://github.com/RocketChat/Rocket.Chat-Open-API/blob/89e76e7481b4d5b087e797dc1487bcd474ec7fcd/images/Enterprise.jpg)
+        This endpoint is available for **Enterprise** workspaces only.
         
         Update a role in the workspace. <br>
         
