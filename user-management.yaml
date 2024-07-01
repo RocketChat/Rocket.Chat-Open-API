@@ -187,7 +187,7 @@ paths:
         - Roles
       summary: Create Role
       description: |-
-        ![Enterprise tag](https://github.com/RocketChat/Rocket.Chat-Open-API/blob/main/images/Enterprise.jpg)
+        ![Enterprise tag](images/Enterprise.jpg)
 
         Create a new <a href='https://docs.rocket.chat/docs/roles-in-rocketchat'>role</a> in the workspace. See <a href='https://docs.rocket.chat/v1/docs/custom-roles'>Custom Roles</a> for further information.
 
