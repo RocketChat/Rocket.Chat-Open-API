@@ -1763,7 +1763,7 @@ paths:
                   success:
                     type: boolean
                 x-examples:
-                  Example 1:
+                  Success Example:
                     _id: 6683e080ffe932842327bf81
                     wizard:
                       organizationType: enterprise
@@ -2329,7 +2329,7 @@ paths:
                     statsToken: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3b3Jrc3BhY2VJZCI6IiIsInVuaXF1ZUlkIjoiMGVkNWIxYzctODc2Mi00NjAzLWJhZGQtY2YzNWYwZTYzNWQzIiwicmVjb3JkSWQiOiI2NjgzZTA4MGZmZTkzMjg0MjMyN2JmODEiLCJ0aW1lc3RhbXAiOiIyMDI0LTA3LTAyVDExOjEyOjEyLjAyOTU4ODQ4OVoiLCJpbmZvIjp7fX0.l0vBdjR7Oyk7yfw7hwvJe9tlfnWLkiXJ5ysGxLqqx6g_2NvjvogsapFZvwCpyiH1JadvysiNNF53jeDfmG95yfn2sFpGLJXCjACPMHYTkTZ2jiPe7pqm62SFnlnSTU_9ietfUMXkxt21FgOrtDrS9HjiCw1g4Sxd-khz71E6p9OgdnGmOs8YWSSP-ejflEr-H6cOXoXktizgDQXlreF7ggwuov9G6Y4uXsnj8wouU_HNwAJua0pInTiyFe6ZM9TXdtfC-4ghpCT1ccGynKPC4HQT3g_RCCMkTG5A-IeSD5D1hGWhgTfHza0W7f7s4r_Ly0G2FBAgJ_54ykc4FNdbDw
                     success: true
               examples:
-                Example 1:
+                Success Example:
                   value:
                     result:
                       - _id: jRca8kibJx8NkLJxt
@@ -3252,10 +3252,6 @@ paths:
                         type: string
                       name:
                         type: string
-                      fname:
-                        type: string
-                      customFields:
-                        type: object
                       t:
                         type: string
                       u:
@@ -3265,77 +3261,46 @@ paths:
                             type: string
                           username:
                             type: string
-                          name:
-                            type: string
-                            nullable: true
-                      ls:
-                        type: string
                       _updatedAt:
                         type: string
-                      roles:
-                        type: array
-                        items:
-                          type: string
-                      disableNotifications:
-                        type: boolean
-                      emailNotifications:
+                      ls:
                         type: string
-                      audioNotificationValue:
-                        type: string
-                      desktopNotificationDuration:
-                        type: integer
-                      audioNotifications:
-                        type: string
-                      mobilePushNotifications:
-                        type: string
-                      f:
-                        type: boolean
-                      meta:
-                        type: object
-                        properties:
-                          revision:
-                            type: integer
-                          created:
-                            type: integer
-                          version:
-                            type: integer
                   success:
                     type: boolean
+                x-examples:
+                  Success Example:
+                    subscription:
+                      _id: 65cdba92f581e473b5647051
+                      open: true
+                      alert: true
+                      unread: 1
+                      userMentions: 1
+                      groupMentions: 0
+                      ts: '2024-02-15T07:17:38.547Z'
+                      rid: GENERAL
+                      name: general
+                      t: c
+                      u:
+                        _id: fZ3bvXC72pobjFPLJ
+                        username: funke
+                      _updatedAt: '2024-07-02T18:07:35.267Z'
+                      ls: '2024-05-30T16:47:36.993Z'
+                    success: true
               examples:
                 Success Example:
                   value:
-                    subscription:
-                      _id: Rd8qisB7G4tF4Fibu
-                      open: true
-                      alert: false
-                      unread: 0
-                      userMentions: 0
-                      groupMentions: 0
-                      ts: '2018-03-12T17:52:13.041Z'
-                      rid: 5of4weEXaH7yncxz9
-                      name: test
-                      fname: test
-                      customFields: {}
-                      t: p
-                      u:
-                        _id: 47cRd58HnWwpqxhaZ
-                        username: rocket.cat
-                        name: test
-                      ls: '2018-03-12T17:52:13.041Z'
-                      _updatedAt: '2018-03-13T19:36:27.696Z'
-                      roles:
-                        - owner
-                      disableNotifications: false
-                      emailNotifications: nothing
-                      audioNotificationValue: beep
-                      desktopNotificationDuration: 2
-                      audioNotifications: all
-                      mobilePushNotifications: mentions
-                      f: false
-                      meta:
-                        revision: 0
-                        created: 1521051029632
-                        version: 0
+                    result:
+                      - _id: jRca8kibJx8NkLJxt
+                        createdAt: '2018-04-13T12:46:26.517Z'
+                        emails:
+                          - address: user.test.1523623548558@rocket.chat
+                            verified: false
+                        name: EditedRealNameuser.test.1523623548558
+                        username: editedusernameuser.test.1523623548558
+                        avatarETag: 6YbLtc4v9b4conXon
+                    count: 1
+                    offset: 0
+                    total: 1
                     success: true
         '400':
           description: Bad Request
@@ -3351,7 +3316,7 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                Invalid Parameter:
                   value:
                     success: false
                     error: 'must have required property ''roomId'' [invalid-params]'
@@ -3383,7 +3348,7 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                Invalid Parameter:
                   value:
                     success: false
                     error: |-
@@ -3444,7 +3409,7 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                Invalid Parameter:
                   value:
                     success: false
                     error: |-
