@@ -2278,8 +2278,12 @@ paths:
         - Users
       responses:
         '200':
-          description: You will get the user avatar image or a redirect to the image URL.
-          content: {}
+          description: OK
+          content:
+              image/svg+xml:
+                schema: 
+                  type: string
+                  format: binary
         '400':
           description: Bad Request
           content:
@@ -2313,8 +2317,8 @@ paths:
       description: |-
         ### Changelog
         | Version      | Description |
-        | ---------------- | ------------|
-        |0.50.0            | Added       |
+        | ------------ | ------------|
+        |0.50.0        | Added       |
   /api/v1/users.resetAvatar:
     parameters: []
     post:
@@ -4952,7 +4956,7 @@ paths:
         '200':
           description: OK
           content:
-              image/png:
+              image/svg+xml:
                 schema: 
                   type: string
                   format: binary
