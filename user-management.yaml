@@ -4942,7 +4942,7 @@ paths:
         in: path
         required: true
         description: >-
-          Name of the user or channel.  Channels are always preceded by an @
+          Name of the user or channel.  Channels are always preceded by an `@`
           symbol. Rooms that are DMs are always represented by the other
           participant's user avatar.
     get:
@@ -4951,6 +4951,11 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+              image/svg+xml:
+                schema: 
+                  type: string
+                  format: binary
       description: |-
         Note:
           * This is a RESTful endpoint that sits separately from the REST API in the server codebase and behaves slightly differently.
@@ -4996,17 +5001,16 @@ paths:
     post:
       tags:
         - Users
-      summary: Send User Welcome Email
+      summary: Send Welcome Email to User
       description: |-
-        Send welcome email to a user. 
+        Ensure that you have configured the <a href='https://docs.rocket.chat/docs/email' target='_blank'>email settings</a> in your workspace to send emails. 
         
         Permission required: `send-mail`
-
         
         ### Changelog
         | Version      | Description |
-        | ---------------- | ------------|
-        |6.8.0            | Added       |
+        | ------------ | ------------|
+        |6.8.0         | Added       |
 
       operationId: get-api-v1-users.sendWelcomeEmail
       parameters:
@@ -5020,11 +5024,12 @@ paths:
               properties:
                 email:
                   type: string
-                  description: The email address of the user to send the welcome email to.
+                  description: The user's email address to which you want to send the welcome email.
               required:
                 - email
-              x-examples:
-                Example 1:
+            examples:
+              Example 1:
+                value:
                   email: test@email.com
       responses:
         '200':
@@ -5047,13 +5052,6 @@ paths:
                     properties:
                       method:
                         type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'SMTP is not configured [error-email-send-failed]'
-                    errorType: error-email-send-failed
-                    details:
-                      method: sendWelcomeEmail
               examples:
                 SMPT not configured:
                   value:
