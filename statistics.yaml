@@ -1763,7 +1763,7 @@ paths:
                   success:
                     type: boolean
                 x-examples:
-                  Example 1:
+                  Success Example:
                     _id: 6683e080ffe932842327bf81
                     wizard:
                       organizationType: enterprise
@@ -2329,7 +2329,7 @@ paths:
                     statsToken: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3b3Jrc3BhY2VJZCI6IiIsInVuaXF1ZUlkIjoiMGVkNWIxYzctODc2Mi00NjAzLWJhZGQtY2YzNWYwZTYzNWQzIiwicmVjb3JkSWQiOiI2NjgzZTA4MGZmZTkzMjg0MjMyN2JmODEiLCJ0aW1lc3RhbXAiOiIyMDI0LTA3LTAyVDExOjEyOjEyLjAyOTU4ODQ4OVoiLCJpbmZvIjp7fX0.l0vBdjR7Oyk7yfw7hwvJe9tlfnWLkiXJ5ysGxLqqx6g_2NvjvogsapFZvwCpyiH1JadvysiNNF53jeDfmG95yfn2sFpGLJXCjACPMHYTkTZ2jiPe7pqm62SFnlnSTU_9ietfUMXkxt21FgOrtDrS9HjiCw1g4Sxd-khz71E6p9OgdnGmOs8YWSSP-ejflEr-H6cOXoXktizgDQXlreF7ggwuov9G6Y4uXsnj8wouU_HNwAJua0pInTiyFe6ZM9TXdtfC-4ghpCT1ccGynKPC4HQT3g_RCCMkTG5A-IeSD5D1hGWhgTfHza0W7f7s4r_Ly0G2FBAgJ_54ykc4FNdbDw
                     success: true
               examples:
-                Example 1:
+                Success Example:
                   value:
                     result:
                       - _id: jRca8kibJx8NkLJxt
@@ -3268,7 +3268,7 @@ paths:
                   success:
                     type: boolean
                 x-examples:
-                  Example 1:
+                  Success Example:
                     subscription:
                       _id: 65cdba92f581e473b5647051
                       open: true
@@ -3287,7 +3287,7 @@ paths:
                       ls: '2024-05-30T16:47:36.993Z'
                     success: true
               examples:
-                Example 1:
+                Success Example:
                   value:
                     result:
                       - _id: jRca8kibJx8NkLJxt
@@ -3316,7 +3316,7 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                Invalid Parameter:
                   value:
                     success: false
                     error: 'must have required property ''roomId'' [invalid-params]'
@@ -3348,7 +3348,7 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                Invalid Parameter:
                   value:
                     success: false
                     error: |-
@@ -3409,7 +3409,7 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                Invalid Parameter:
                   value:
                     success: false
                     error: |-
