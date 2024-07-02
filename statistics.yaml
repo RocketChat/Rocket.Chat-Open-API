@@ -2437,14 +2437,6 @@ paths:
         - $ref: '#/components/parameters/end'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/offset'
-        - schema:
-            type: boolean
-            example: 'true'
-          in: query
-          name: hideRoomsWithNoActivity
-          description: |- 
-            When `hideRoomsWithNoActivity` is set to true, the rooms where no messages have been sent during the specified timeframe will be hidden from the response. 
-            Note: This will be the default behavior from 7.0, and this parameter will be deprecated.
       responses:
         '200':
           description: OK
