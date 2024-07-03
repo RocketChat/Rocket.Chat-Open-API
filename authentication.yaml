@@ -1113,8 +1113,9 @@ paths:
                         type: array
                         items:
                           type: object                   
-                examples:
-                  TOTP Required:
+              examples:
+                TOTP Required:
+                  value:
                     success: false
                     error: 'TOTP Required [totp-required]'
                     errorType: totp-required
