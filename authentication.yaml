@@ -89,7 +89,7 @@ paths:
       description: |-
         -  Although none of the body parameters are required, it's mandatory to include  either the `user` AND `password`  or only the `resume` parameter.
 
-        - To authenticate a request, you need to pass the `userId` and `authToken` values from this JSON response object as Headers in the request. The `authToken` is passed as `X-Auth-Token` header, while the `userId` as `X-User-Id` header.
+        - To authenticate a request, you need to pass the `userId` and `authToken` values from this JSON response object as headers in the request. The `authToken` is passed as `X-Auth-Token` header, while the `userId` as `X-User-Id` header.
 
         -  If LDAP authentication is enabled, you must maintain the login in the same way as you normally do. Similarly, if 2FA is enabled for an LDAP user, everything stays the same.
           
@@ -205,7 +205,7 @@ paths:
                           preferences: {}
                         avatarUrl: 'http://localhost:3000/avatar/test'
               examples:
-                Example:
+                Login successful:
                   value:
                     status: success
                     data:
