@@ -1128,13 +1128,14 @@ paths:
                         codeGenerated: false
                         availableMethods: []                    
                 example:
-                  success: false
-                  error: 'TOTP Required [totp-required]'
-                  errorType: totp-required
-                  details:
-                    method: password
-                    codeGenerated: false
-                    availableMethods: []
+                  TOTP Required:
+                    success: false
+                    error: 'TOTP Required [totp-required]'
+                    errorType: totp-required
+                    details:
+                      method: password
+                      codeGenerated: false
+                      availableMethods: []
 tags:
   - name: Authentication
   - name: Two-Factor Authentication
