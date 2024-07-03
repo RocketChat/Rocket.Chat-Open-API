@@ -996,7 +996,7 @@ paths:
       tags:
         - Two-Factor Authentication
       summary: Enable 2FA via Email
-      description: 'This endpoint only works if the user has at least one verified email. '
+      description: 'Enable email two-factor authentication for your account. This endpoint only works if the user has at least one verified email. '
       operationId: post-api-v1-users.2fa.enableEmail
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -1013,7 +1013,7 @@ paths:
       tags:
         - Two-Factor Authentication
       summary: Request a new Email Code
-      description: 'If a user didn''t recieve their 2FA code, use this endpoint to request a new 2FA code by email.'
+      description: 'Use this endpoint to request for a new 2FA code by email.'
       operationId: post-api-v1-users.2fa.sendEmailCode
       requestBody:
         content:
@@ -1055,13 +1055,11 @@ paths:
                     error: 'emailOrUsername is required [error-parameter-required]'
                     errorType: error-parameter-required
               examples:
-                Example:
+                Parameter Required:
                   value:
                     success: false
                     error: 'emailOrUsername is required [error-parameter-required]'
                     errorType: error-parameter-required
-      x-stoplight:
-        id: gfjybhc7bq2ll
   /api/v1/users.2fa.disableEmail:
     post:
       tags:
@@ -1120,6 +1118,15 @@ paths:
                         type: array
                         items:
                           type: object
+                  x-examples:
+                    Example:
+                      success: false
+                      error: 'TOTP Required [totp-required]'
+                      errorType: totp-required
+                      details:
+                        method: password
+                        codeGenerated: false
+                        availableMethods: []                    
                 example:
                   success: false
                   error: 'TOTP Required [totp-required]'
@@ -1128,8 +1135,6 @@ paths:
                     method: password
                     codeGenerated: false
                     availableMethods: []
-      x-stoplight:
-        id: jlmi0cjhv6jzw
 tags:
   - name: Authentication
   - name: Two-Factor Authentication
