@@ -271,13 +271,13 @@ paths:
                 - secret
                 - expiresIn
               x-examples:
-                Example 1:
+                Example:
                   serviceName: facebook
                   accessToken: hash
                   secret: hash
                   expiresIn: 200
             examples:
-              Example 1:
+              Example:
                 value:
                   serviceName: facebook
                   accessToken: hash
@@ -338,7 +338,7 @@ paths:
                           avatarUrl:
                             type: string
                 x-examples:
-                  Example 1:
+                  Example:
                     status: success
                     data:
                       authToken: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq
@@ -436,7 +436,7 @@ paths:
                 - appId
                 - expiresIn
               x-examples:
-                Example 1:
+                Example:
                   serviceName: twitter
                   accessToken: hash
                   accessTokenSecret: hash
@@ -444,7 +444,7 @@ paths:
                   appId: hash
                   expiresIn: 200
             examples:
-              Example 1:
+              Example:
                 value:
                   serviceName: twitter
                   accessToken: hash
@@ -507,7 +507,7 @@ paths:
                           avatarUrl:
                             type: string
                 x-examples:
-                  Example 1:
+                  Example:
                     status: success
                     data:
                       authToken: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq
