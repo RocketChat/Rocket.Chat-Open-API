@@ -1049,11 +1049,6 @@ paths:
                     type: string
                   errorType:
                     type: string
-                x-examples:
-                  Parameter required:
-                    success: false
-                    error: 'emailOrUsername is required [error-parameter-required]'
-                    errorType: error-parameter-required
               examples:
                 Parameter Required:
                   value:
