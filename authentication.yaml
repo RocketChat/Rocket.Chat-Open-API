@@ -1112,16 +1112,7 @@ paths:
                       availableMethods:
                         type: array
                         items:
-                          type: object
-                  x-examples:
-                    Example:
-                      success: false
-                      error: 'TOTP Required [totp-required]'
-                      errorType: totp-required
-                      details:
-                        method: password
-                        codeGenerated: false
-                        availableMethods: []                    
+                          type: object                   
                 example:
                   TOTP Required:
                     success: false
