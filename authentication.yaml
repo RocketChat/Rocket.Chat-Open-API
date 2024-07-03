@@ -183,7 +183,7 @@ paths:
                           avatarUrl:
                             type: string
                 x-examples:
-                  Example 1:
+                  Example:
                     status: success
                     data:
                       authToken: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq
@@ -594,14 +594,14 @@ paths:
                 - idToken
                 - expiresIn
               x-examples:
-                Example 1:
+                Example:
                   serviceName: google
                   accessToken: hash
                   idToken: hash
                   expiresIn: 200
                   scope: profile
             examples:
-              Example 1:
+              Example:
                 value:
                   serviceName: google
                   accessToken: hash
@@ -663,7 +663,7 @@ paths:
                           avatarUrl:
                             type: string
                 x-examples:
-                  Example 1:
+                  Login successful:
                     status: success
                     data:
                       authToken: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq
@@ -941,7 +941,7 @@ paths:
                     avatarUrl: 'http://localhost:3000/avatar/test'
                     success: true
               examples:
-                Example:
+                User profile:
                   value:
                     _id: aobEdbYhXfu5hkeqG
                     name: Example User
@@ -991,8 +991,6 @@ paths:
                       twitter: '@userstwi'
                     avatarUrl: 'http://localhost:3000/avatar/test'
                     success: true
-      x-stoplight:
-        id: 0h9bmwbp3s57x
   /api/v1/users.2fa.enableEmail:
     post:
       tags:
@@ -1029,7 +1027,7 @@ paths:
               required:
                 - emailOrUsername
               x-examples:
-                Example 1:
+                Example:
                   emailOrUsername: test-test
             examples:
               Example:
@@ -1052,7 +1050,7 @@ paths:
                   errorType:
                     type: string
                 x-examples:
-                  Example 1:
+                  Parameter required:
                     success: false
                     error: 'emailOrUsername is required [error-parameter-required]'
                     errorType: error-parameter-required
@@ -1164,7 +1162,7 @@ components:
               success:
                 type: boolean
             x-examples:
-              Example 1:
+              Success:
                 success: true
           examples:
             Success:
@@ -1182,7 +1180,7 @@ components:
               message:
                 type: string
             x-examples:
-              Example 1:
+              Authorization Error:
                 status: error
                 message: You must be logged in to do this.
           examples:
