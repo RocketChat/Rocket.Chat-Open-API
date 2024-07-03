@@ -227,8 +227,6 @@ paths:
                         settings:
                           preferences: {}
                         avatarUrl: 'http://localhost:3000/avatar/test'
-      x-stoplight:
-        id: t862fslvpd7uc
   /api/v1/login - with Facebook:
     post:
       tags:
@@ -382,8 +380,6 @@ paths:
                         settings:
                           preferences: {}
                         avatarUrl: 'http://localhost:3000/avatar/test'
-      x-stoplight:
-        id: knla8llqtoh1p
   /api/v1/login - with Twitter:
     post:
       tags:
@@ -551,8 +547,6 @@ paths:
                         settings:
                           preferences: {}
                         avatarUrl: 'http://localhost:3000/avatar/test'
-      x-stoplight:
-        id: tgcxi0i68n8ia
   /api/v1/login - with Google:
     post:
       tags:
@@ -707,8 +701,6 @@ paths:
                         settings:
                           preferences: {}
                         avatarUrl: 'http://localhost:3000/avatar/test'
-      x-stoplight:
-        id: fgbc3v2hwhqaa
   /api/v1/logout:
     post:
       tags:
@@ -750,8 +742,6 @@ paths:
                     status: success
                     data:
                       message: You've been logged out!
-      x-stoplight:
-        id: dhqwhuh4fidsq
   /api/v1/me:
     get:
       tags:
@@ -1006,8 +996,6 @@ paths:
           $ref: '#/components/responses/trueSuccess'
         '401':
           $ref: '#/components/responses/authorizationError'
-      x-stoplight:
-        id: hbmixt7r8qjyx
   /api/v1/users.2fa.sendEmailCode:
     post:
       tags:
