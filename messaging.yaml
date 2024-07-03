@@ -33,10 +33,10 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The room id
+                  description: The room ID
                 msgId:
                   type: string
-                  description: The message id
+                  description: The message ID
                 asUser:
                   type: boolean
                   description: Should the message be deleted as the user who sent it? It is `false` by default.
@@ -116,14 +116,14 @@ paths:
         - Chat
       summary: React to Message
       description: |-
-        React/Unreact to a chat message.
+        React or unreact to a chat message.
 
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
         |0.64.0            | Added parameter "shouldReact" to make endpoint work like a setter|
         |0.63.0            | Emoji has to exist                                               |
-        |0.62.2             |Added                                                             |
+        |0.62.2            |Added                                                             |
       operationId: post-api-v1-chat.react
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -137,7 +137,7 @@ paths:
               properties:
                 messageId:
                   type: string
-                  description: The message id to react to.
+                  description: The message ID to react to.
                 emoji:
                   type: string
                   description: The emoji to react with.
@@ -156,17 +156,45 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The required "messageId" param is missing. [error-messageid-param-not-provided]'
+                    errorType: error-messageid-param-not-provided
+                Example 2:
+                  value:
+                    success: false
+                    error: 'The provided "messageId" does not match any existing message. [error-message-not-found]'
+                    errorType: error-message-not-found
   /api/v1/chat.update:
     post:
       tags:
         - Chat
       summary: Update Message
       description: |-
+        Update a specific message.
+      
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
         | 0.49.0           | Added       |
-        | 6.4.0           | Add previewUrls param       |
+        | 6.4.0            | Add previewUrls param       |
       operationId: post-api-v1-chat.update
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -179,10 +207,10 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The room id of where the message is.
+                  description: The room ID where the message is.
                 msgId:
                   type: string
-                  description: The message id to update.
+                  description: The message ID to update.
                 text:
                   type: string
                   description: Updated text for the message.
@@ -196,7 +224,7 @@ paths:
                   description: |-
                     You can add custom fields for messages. For example, set priorities for messages.
 
-                    You must enable this option and define the validation in the workspace settings. See the [Message](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/message) settings for further information.
+                    You must enable this option and define the validation in the workspace settings. See the <a href='https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/message' target='_blank'>Message</a> settings for further information.
                   example: {"priority": "high"}
               required:
                 - roomId
@@ -306,12 +334,6 @@ paths:
                         - url: 'https://hola.org/'
                           meta: {}
                           ignoreParse: true
-                        - url: 'https://www.usepayday.com/'
-                          meta: {}
-                          ignoreParse: true
-                        - url: 'https://www.getbumpa.com/'
-                          meta: {}
-                          ignoreParse: true
                         - url: 'https://www.atlassian.com/software/jira'
                           meta: {}
                           ignoreParse: true
@@ -348,26 +370,6 @@ paths:
                               value:
                                 src:
                                   type: PLAIN_TEXT
-                                  value: 'https://www.usepayday.com/'
-                                label:
-                                  - type: PLAIN_TEXT
-                                    value: 'https://www.usepayday.com/'
-                            - type: PLAIN_TEXT
-                              value: ' '
-                            - type: LINK
-                              value:
-                                src:
-                                  type: PLAIN_TEXT
-                                  value: 'https://www.getbumpa.com/'
-                                label:
-                                  - type: PLAIN_TEXT
-                                    value: 'https://www.getbumpa.com/'
-                            - type: PLAIN_TEXT
-                              value: ' '
-                            - type: LINK
-                              value:
-                                src:
-                                  type: PLAIN_TEXT
                                   value: 'https://www.atlassian.com/software/jira'
                                 label:
                                   - type: PLAIN_TEXT
@@ -387,13 +389,34 @@ paths:
                         _id: rbAXPnMktTFbNpwtJ
                         username: roxie
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The required "messageId" param is missing. [error-messageid-param-not-provided]'
+                    errorType: error-messageid-param-not-provided
   /api/v1/chat.reportMessage:
     post:
       tags:
         - Chat
       summary: Report Message
       description: |-
-        Report a message.
+        <a href='https://docs.rocket.chat/docs/message-actions#report-a-message-or-user' target='_blank'>Report</a> a specific message.
 
         ### Changelog
         | Version      | Description | 
@@ -411,7 +434,7 @@ paths:
               properties:
                 messageId:
                   type: string
-                  description: The message id to report.
+                  description: The message ID to report.
                 description:
                   type: string
                   description: The description of report.
@@ -426,13 +449,39 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''messageId'' [invalid-params]'
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: 'must have required property ''description'' [invalid-params]'
+                    errorType: invalid-params
   /api/v1/chat.followMessage:
     post:
       tags:
         - Chat
       summary: Follow Message
       description: |-
-        Follow a message.
+        Follow a message to receive notifications.
 
         ### Changelog
         | Version      | Description | 
@@ -451,7 +500,7 @@ paths:
               properties:
                 mid:
                   type: string
-                  description: The id of the message to follow
+                  description: The message ID to follow.
               required:
                 - mid
             examples:
@@ -461,6 +510,34 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: '[The required "mid" body param is missing.]'
+                    errorType: The required "mid" body param is missing.
+                Invalid message ID:
+                  value:
+                    success: false
+                    error: 'Invalid message [error-invalid-message]'
+                    errorType: error-invalid-message
+                    details:
+                      method: followMessage
   /api/v1/chat.unfollowMessage:
     post:
       tags:
@@ -486,7 +563,7 @@ paths:
               properties:
                 mid:
                   type: string
-                  description: The id of the message to unfollow
+                  description: The message ID to unfollow.
               required:
                 - mid
             examples:
@@ -496,6 +573,34 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: '[The required "mid" body param is missing.]'
+                    errorType: The required "mid" body param is missing.
+                Invalid message ID:
+                  value:
+                    success: false
+                    error: 'Invalid message [error-invalid-message]'
+                    errorType: error-invalid-message
+                    details:
+                      method: unfollowMessage
   /api/v1/chat.getMessage:
     get:
       tags:
@@ -506,15 +611,15 @@ paths:
 
         ### Changelog
         | Version      | Description | 
-        | ---------------- | ------------|
-        | 0.47.0           | Added       |
+        | ------------ | ------------|
+        | 0.47.0       | Added       |
       operationId: get-api-v1-chat.getMessage
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
         - name: msgId
           in: query
-          description: The message id
+          description: The message ID.
           required: true
           schema:
             type: string
@@ -522,13 +627,31 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: The "msgId" query parameter must be provided.
   /chat.getThreadsList:
     get:
       tags:
         - Chat
       summary: List Threads
       description: |-
-        List threads in a room.
+        Get the <a href='https://docs.rocket.chat/docs/threads' target='_blank'>thread</a> conversations in a room.
 
         ### Changelog
         | Version      | Description | 
@@ -545,7 +668,7 @@ paths:
         - $ref: '#/components/parameters/fields'
         - name: rid
           in: query
-          description: The id of the room
+          description: The room ID.
           schema:
             type: string
           example: 7aDSXtjMA3KPLxLjt
@@ -689,6 +812,8 @@ paths:
                     offset: 0
                     total: 1
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/chat.getDeletedMessages:
     get:
       tags:
@@ -707,7 +832,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: since
           in: query
-          description: A valid date (ISODate) to search deleted messages from.
+          description: A valid ISO date format from which you want to search the deleted messages.
           required: true
           schema:
             type: string
@@ -747,13 +872,39 @@ paths:
                     offset: 0
                     total: 3
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: '[The required "roomId" query param is missing.]'
+                    errorType: The required "roomId" query param is missing.
+                Example 2:
+                  value:
+                    success: false
+                    error: '[The required "since" query param is missing.]'
+                    errorType: The required "since" query param is missing.
   /api/v1/chat.getDiscussions:
     get:
       tags:
         - Chat
       summary: Get Discussions of A Room
       description: |-
-        Gets the discussions in a room. 
+        Gets the <a href='https://docs.rocket.chat/docs/discussions' target='_blank'>discussions</a> in a room. 
 
         ### Changelog
         | Version      | Description | 
@@ -839,18 +990,43 @@ paths:
                     offset: 0
                     total: 1
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The required "roomId" query param is missing. [error-invalid-params]'
+                    errorType: error-invalid-params
+                Incorrect room ID:
+                  value:
+                    success: false
+                    error: error-not-allowed
   /api/v1/chat.getMentionedMessages:
     get:
       tags:
         - Chat
       summary: Get Mentioned Messages
       description: |-
-        Get mentioned messages. 
+        Get the messages in which you are mentioned (users are mentioned with the `@` symbol). 
 
         ### Changelog
         | Version      | Description | 
-        | ---------------- | ------------|
-        | 2.2.0           | Added       |
+        | ------------ | ------------|
+        | 2.2.0        | Added       |
       operationId: get-api-v1-chat.getMentionedMessages
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -992,6 +1168,31 @@ paths:
                     offset: 0
                     total: 2
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The required "roomId" query param is missing. [error-invalid-params]'
+                    errorType: error-invalid-params
+                Incorrect room ID:
+                  value:
+                    success: false
+                    error: error-not-allowed
   /api/v1/chat.getMessageReadReceipts:
     get:
       tags:
@@ -1000,7 +1201,7 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         
-        Retrieve message read receipts.
+        Get the <a href='https://docs.rocket.chat/docs/message-actions#read-receipts' target='_blank'>read receipts</a> of messages.
         
         ### Changelog
         | Version      | Description |
@@ -1067,13 +1268,32 @@ paths:
                           name: Rocket cat
                           _id: nvw6PBrXTejp4sfQt
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    error: The required 'messageId' param is missing.
+                    success: false
   /api/v1/chat.getPinnedMessages:
     get:
       tags:
         - Chat
       summary: Get Pinned Messages
       description: |- 
-        Get pinned messages in a room. 
+        Get the <a href='https://docs.rocket.chat/docs/message-actions#pin-messages' target='_blank'>pinned messages</a> of a room. 
+        
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
@@ -1269,6 +1489,32 @@ paths:
                     offset: 0
                     total: 3
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The required "roomId" query param is missing. [error-roomId-param-not-provided]'
+                    errorType: error-roomId-param-not-provided
+                Incorrect room ID:
+                  value:
+                    success: false
+                    error: 'Not allowed [error-not-allowed]'
+                    errorType: error-not-allowed
   /api/v1/chat.getSnippetedMessages:
     get:
       tags:
@@ -4336,7 +4582,7 @@ components:
     RoomId:
       name: roomId
       in: query
-      description: The room id.
+      description: The room ID.
       required: true
       schema:
         type: string
@@ -4383,19 +4629,19 @@ components:
     sort:
       name: sort
       in: query
-      description: 'List of fields to order by, and in which direction. This is a JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending. For example, {"value": -1, "_id": 1}'
+      description: 'List of fields to order by, and in which direction. This is a JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending. For example, `{ "value": -1, "_id": 1 }`'
       required: false
       schema: {}
     query:
       name: query
       in: query
-      description: 'This parameter allows you to use MongoDB query operators to search for specific data. For example, to query users with a name that contains the letter "g": query={ "name": { "$regex": "g" } }'
+      description: 'This parameter allows you to use MongoDB query operators to search for specific data. For example, to query users with a name that contains the letter "g": query=`{ "name": { "$regex": "g" }}`'
       required: false
       schema: {}
     fields:
       name: fields
       in: query
-      description: 'This parameter accepts a JSON object with properties that have a value of 1 or 0 to include or exclude them in the response. For example, to only retrieve the usernames of users: fields={ "username": 1 }'
+      description: 'This parameter accepts a JSON object with properties that have a value of 1 or 0 to include or exclude them in the response. For example, to only retrieve the usernames of users: fields=`{ "username": 1 }`'
       required: false
       schema:
         type: string
