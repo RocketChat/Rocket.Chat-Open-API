@@ -1703,8 +1703,8 @@ paths:
                       ts: '2019-10-25T23:26:31.550Z'
                       u:
                         _id: CaevAPDbXN252kyXa
-                        username: marcos.defendi
-                        name: Marcos Defendi
+                        username: marc.dei
+                        name: Marc Dei
                       _updatedAt: '2019-10-25T23:27:51.300Z'
                       mentions: []
                       channels: []
@@ -1712,7 +1712,7 @@ paths:
                       snippeted: true
                       snippetedBy:
                         _id: CaevAPDbXN252kyXa
-                        username: marcos.defendi
+                        username: marc.dei
                     success: true
   /api/v1/chat.getStarredMessages:
     get:
@@ -1720,12 +1720,12 @@ paths:
         - Chat
       summary: Get Starred Messages
       description: |-
-        Get starred messages of the authenticated user in a room. 
+        Get the <a href='https://docs.rocket.chat/docs/message-actions#star-messages' target='_blank'>starred messages</a> of the authenticated user in a room. 
         
         ### Changelog
         | Version      | Description | 
-        | ---------------- | ------------|
-        | 2.2.0           | Added       |
+        | ------------ | ------------|
+        | 2.2.0        | Added       |
       operationId: get-api-v1-chat.getStarredMessages
       parameters:
         - $ref: '#/components/parameters/UserId'
@@ -1815,21 +1815,46 @@ paths:
                     offset: 0
                     total: 1
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The required "roomId" query param is missing. [error-invalid-params]'
+                    errorType: error-invalid-params
+                Incorrect room ID:
+                  value:
+                    success: false
+                    error: error-not-allowed
   /api/v1/chat.getThreadMessages:
     get:
       tags:
         - Chat
       summary: Get Thread Messages
       description: |-
-        Get thread messages.
+        Get <a href='https://docs.rocket.chat/docs/threads' target='_blank'>thread</a> messages.
 
 
         ### Changelog
         | Version      | Description | 
-        | ---------------- | ------------|
-        | 1.2.0           | Remove tlm field, which is not supported|
-        | 1.1.0           | Update Example Results - original message in thread is not returned.|
-        | 1.0.0           | Added       |
+        | ------------ | ------------|
+        | 1.2.0        | Remove `tlm` field which is not supported |
+        | 1.1.0        | Update example results - original message in thread is not returned |
+        | 1.0.0        | Added       |
       operationId: get-api-v1-chat.getThreadMessages
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -1841,7 +1866,7 @@ paths:
         - $ref: '#/components/parameters/fields'
         - name: tmid
           in: query
-          description: The id of the the thread message.
+          description: The thread message ID.
           required: true
           schema:
             type: string
@@ -1914,8 +1939,8 @@ paths:
                         ts: '2019-04-08T13:15:52.017Z'
                         u:
                           _id: p4a8YxvLQEHmiBKTS
-                          username: marcos.defendi
-                          name: Marcos Defendi
+                          username: marc.dev
+                          name: Marc Dev
                         _updatedAt: '2019-04-08T14:40:27.789Z'
                         mentions: []
                         channels: []
@@ -1930,8 +1955,8 @@ paths:
                         ts: '2019-04-08T13:20:22.238Z'
                         u:
                           _id: p4a8YxvLQEHmiBKTS
-                          username: marcos.defendi
-                          name: Marcos Defendi
+                          username: marc.dev
+                          name: Marc Dev
                         _updatedAt: '2019-04-08T13:20:22.265Z'
                         mentions: []
                         channels: []
@@ -1939,55 +1964,114 @@ paths:
                     offset: 0
                     total: 2
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The required "tmid" query param is missing. [error-invalid-params]'
+                    errorType: error-invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: 'Invalid Message [error-invalid-message]'
+                    errorType: error-invalid-message
   /api/v1/chat.ignoreUser:
     get:
       tags:
         - Chat
       summary: Ignore User
       description: |-
-        Ignore or Unignore a user in chat.
+        Ignore or unignore a user in chat.
 
 
         ### Changelog
         | Version      | Description | 
-        | ---------------- | ------------|
-        | 0.64.0           | Added       |
+        | ------------ | ------------|
+        | 0.64.0       | Added       |
       operationId: get-api-v1-chat.ignoreUser
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
         - name: rid
           in: query
-          description: The room id
+          description: The room ID.
           required: true
           schema:
             type: string
         - name: userId
           in: query
-          description: The user id
+          description: The user ID.
           required: true
           schema:
             type: string
         - name: ignore
           in: query
-          description: 'If the user will be ignored or not, default is true.'
+          description: 'If the user is to be ignored or not, default is true.'
           schema:
             type: boolean
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The required "rid" param is missing. [error-room-id-param-not-provided]'
+                    errorType: error-room-id-param-not-provided
+                Example 2:
+                  value:
+                    success: false
+                    error: 'The required "userId" param is missing. [error-user-id-param-not-provided]'
+                    errorType: error-user-id-param-not-provided
+                Invalid room or user ID:
+                  value:
+                    success: false
+                    error: 'Invalid subscription [error-invalid-subscription]'
+                    errorType: error-invalid-subscription
+                    details:
+                      method: ignoreUser
   /api/v1/chat.pinMessage:
     post:
       tags:
         - Chat
       summary: Pin Message
       description: |-
-        Pins a chat message to the channel.
+        <a href='https://docs.rocket.chat/docs/message-actions#pin-messages' target='_blank'>Pin</a> a chat message to the channel.
 
         ### Changelog
         | Version      | Description | 
-        | ---------------- | ------------|
-        | 0.59.0           | Added       |
+        | ------------ | ------------|
+        | 0.59.0       | Added       |
       operationId: post-api-v1-chat.pinMessage
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -2000,7 +2084,7 @@ paths:
               properties:
                 messageId:
                   type: string
-                  description: The id of the message to pin
+                  description: The message ID that you want to pin.
               required:
                 - messageId
             examples:
@@ -2082,13 +2166,101 @@ paths:
                           attachments: []
                       _updatedAt: '2023-10-05T20:59:44.521Z'
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The required "messageId" param is missing. [error-messageid-param-not-provided]'
+                    errorType: error-messageid-param-not-provided
+                Example 2:
+                  value:
+                    success: false
+                    error: 'The provided "messageId" does not match any existing message. [error-message-not-found]'
+                    errorType: error-message-not-found
+  /api/v1/chat.unPinMessage:
+    post:
+      tags:
+        - Chat
+      summary: Unpin a message
+      description: |-
+        Remove a pinned message from the channel.
+
+        ### Changelog
+        | Version      | Description | 
+        | -------------| ------------|
+        | 0.59.0       | Added       |
+      operationId: post-api-v1-chat.unPinMessage
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                messageId:
+                  type: string
+                  description: The message ID you want to to unpin.
+              required:
+                - messageId
+            examples:
+              Example 1:
+                value:
+                  messageId: 7aDSXtjMA3KPLxLjt
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The required "messageId" param is missing. [error-messageid-param-not-provided]'
+                    errorType: error-messageid-param-not-provided
+                Example 2:
+                  value:
+                    success: false
+                    error: 'The provided "messageId" does not match any existing message. [error-message-not-found]'
+                    errorType: error-message-not-found
   /api/v1/chat.postMessage:
     post:
       tags:
         - Chat
       summary: Post Message
       description: |- 
-        **Note**: You only can send alias and avatar properties if your user has the bot role. We implement this rule to avoid users to impersonate other users
+        Send messages to channels.
+        **Note**: You only can send alias and avatar properties if your user has the bot role. We implement this rule to avoid users to impersonate other users.
+        
         ### Change Log
         | Version | Description |
         | ------- |---------------------------------------------------------------------------- |
@@ -2111,21 +2283,23 @@ paths:
               properties:
                 alias:
                   type: string
-                  description: 'This will cause the message''s name to appear as the given alias, but your username will still display.'
+                  description: 'This will cause the message''s name to appear as the given alias, but your username will still be displayed.'
                 avatar:
                   type: string
-                  description: 'If provided, this will make the avatar use the provided image url.'
+                  description: 'If provided, the avatar will be displayed as the provided image URL.'
                 channel:
                   type: string
                 emoji:
                   type: string
-                  description: 'If provided, this will make the avatar on this message be an emoji. '
+                  description: 'If provided, the avatar will be displayed as an emoji.'
+                  example: ":smile:"
                 roomId:
                   type: string
-                  description: The room id of where the message is to be sent. You can use channel name or username. The channel name must have the `#` prefix. `@` refers to username.
+                  description: The room ID where the message is to be sent. You can use channel name or username. The channel name must have the `#` prefix. `@` refers to username.
+                  example: "#general"
                 text:
                   type: string
-                  description: 'The text of the message to send, is optional because of attachments.'
+                  description: 'The message text to send, it is optional because of attachments.'
                 attachments:
                   type: array
                   items:
@@ -2133,22 +2307,24 @@ paths:
                     properties:
                       audio_url:
                         type: string
-                        description: 'Audio file to play, only supports what [html audio](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio) does.'
+                        description: |-
+                          Audio file to attach. See the <a href='https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio'>HTML audio element</a> for information.
                       author_icon:
                         type: string
-                        description: Displays a tiny icon to the left of the Author's name.
+                        description: Displays a tiny icon to the left of the author's name.
                       author_link:
                         type: string
-                        description: Providing this makes the author name clickable and points to this link.
+                        description: Providing this makes the author's name clickable and points to the provided link.
                       author_name:
                         type: string
                         description: Name of the author.
                       collapsed:
                         type: boolean
-                        description: 'Causes the image, audio, and video sections to be hiding when collapsed is true.'
+                        description: 'Causes the image, audio, and video sections to be displayed as collapsed when set to true.'
                       color:
                         type: string
-                        description: 'The color you want the order on the left side to be, any value [background-css](https://developer.mozilla.org/en-US/docs/Web/CSS/background-color) supports.'
+                        description: |-
+                          See <a href='https://developer.mozilla.org/en-US/docs/Web/CSS/background-color'>background-css</a> for the supported colors.'
                       fields:
                         type: array
                         items:
@@ -2168,10 +2344,10 @@ paths:
                             - value
                       image_url:
                         type: string
-                        description: 'The image to display, will be "big" and easy to see.'
+                        description: 'The image to display, will be big and easy to see.'
                       message_link:
                         type: string
-                        description: 'Only applicable if the ts is provided, as it makes the time clickable to this link.'
+                        description: 'Only applicable if the `ts` field is provided, as it makes the time clickable to this link.'
                       text:
                         type: string
                         description: 'The text to display for this attachment, it is different than the message''s text.'
@@ -2192,13 +2368,14 @@ paths:
                         description: Displays the time next to the text portion.
                       video_url:
                         type: string
-                        description: 'Video file to play, only supports what [html video](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video) does.'
+                        description: |-
+                          Video file to attach. See the <a href='https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video'>HTML video element</a> for information.
                 tmid:
                   type: string
-                  description: The message id of the original message to reply to/create a thread on.
+                  description: The message ID of the original message to reply to or to create a thread on.
                 tmshow:
                   type: boolean
-                  description: Defaults to true when tmid is specified. Message will also be shown in the channel/room if value is true.
+                  description: Defaults to true when the `tmid` parameter is specified. Message will also be shown in the room if the value is true.
                 customFields:
                   type: object
                   description: |-
@@ -2298,54 +2475,41 @@ paths:
                       _updatedAt: '2016-12-14T20:56:05.119Z'
                       _id: jC9chsFddTvsbFQG7
                     success: true
-  /api/v1/chat.unPinMessage:
-    post:
-      tags:
-        - Chat
-      summary: Unpin a message
-      description: |-
-        Remove a pinned message from the channel.
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Missing or invalid room ID:
+                  value:
+                    success: false
+                    error: '[invalid-channel]'
+                    errorType: invalid-channel
 
-        ### Changelog
-        | Version      | Description | 
-        | ---------------- | ------------|
-        | 0.59.0           | Added       |
-      operationId: post-api-v1-chat.unPinMessage
-      parameters:
-        - $ref: '#/components/parameters/Auth-Token'
-        - $ref: '#/components/parameters/UserId'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                messageId:
-                  type: string
-                  description: The id of the message to unpin
-              required:
-                - messageId
-            examples:
-              Example 1:
-                value:
-                  messageId: 7aDSXtjMA3KPLxLjt
-      responses:
-        '200':
-          $ref: '#/components/responses/trueSuccess'
   /api/v1/chat.search:
     get:
       tags:
         - Chat
       summary: Search Message
       description: |
-        Search for messages in a channel by id and text message. 
-
+        Search for messages by room ID and text message. 
 
         ### Changelog
         | Version      | Description | 
-        | ---------------- | ------------|
-        | 0.67.0           | Changed limit query parameter to count|
-        | 0.60.0           | Added       |
+        | -------------| ------------|
+        | 0.67.0       | Changed limit query parameter to count|
+        | 0.60.0       | Added       |
       operationId: get-api-v1-chat.search
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -2353,7 +2517,7 @@ paths:
         - $ref: '#/components/parameters/count'
         - name: roomId
           in: query
-          description: The room id
+          description: The room ID.
           required: true
           schema:
             type: string
@@ -2417,22 +2581,49 @@ paths:
                         ts: '2018-03-27T14:44:00.549Z'
                         u:
                           _id: RtMDEYc28fQ5aHpf4
-                          username: marcos.defendi
-                          name: Marcos Defendi
+                          username: marc.dev
+                          name: Marc Dev
                         mentions: []
                         channels: []
                         _updatedAt: '2018-03-27T14:44:00.550Z'
                         score: 0.5833333333333334
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The required "roomId" query param is missing. [error-roomId-param-not-provided]'
+                    errorType: error-roomId-param-not-provided
+                Example 2:
+                  value:
+                    success: false
+                    error: 'The required "searchText" query param is missing. [error-searchText-param-not-provided]'
+                    errorType: error-searchText-param-not-provided
   /api/v1/chat.sendMessage:
     post:
       tags:
         - Chat
       summary: Send Message
       description: |- 
-        The difference between `chat.postMessage` and `chat.sendMessage` is that `chat.sendMessage` allows for passing a value for `_id` and the other one doesn't. Also, `chat.sendMessage` only sends it to one channel whereas the other one allows for sending to more than one channel at a time.
+        The difference between `chat.postMessage` and `chat.sendMessage` is that `chat.sendMessage` allows for passing a value for `_id` and the other one doesn't. Also, `chat.sendMessage` only sends it to one channel whereas the other one allows for sending to more than one channel at a time.<br />
         
-        **Note**: You can only send alias and avatar properties if your user has the `message-impersonate permission`. We implemented this rule to avoid users impersonating other users. By default, only the bot role has this permission, but that can be changed in Administration -> Permissions -> message-impersonate.
+        **Note**: You can only send alias and avatar properties if your user has the `message-impersonate permission`. We implemented this rule to avoid users impersonating other users. By default, only the bot role has this permission, but that can be changed in **Administration** -> **Permissions** -> **message-impersonate**.
+        
         ### Change Log
         | Version | Description                         |
         | ------- | ----------------------------------- |
@@ -2445,13 +2636,13 @@ paths:
         - $ref: '#/components/parameters/UserId'
       requestBody:
         description: |- 
-          **Some important things to note about `previewUrls`  include:**
+          **Some important things to note about the `previewUrls` parameter include:**
           * If the `previewUrls` array is empty, no URL will be previewed.
           * If the `previewUrls` parameter isn't sent, all URLs (up to a maximum of five external URLs) will be previewed.
           * If the message contains attachments or quotes, no URL is previewed.
           * Internal URLs are not considered in the `previewUrls` array.
-          * A maximum of five external URLs is previewed  per message. If there are more than 5 external URLs, no URL is previewed
-          > URLs that include the same text as the [**Site URL**](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/general#general-settings) are referred to as Internal URLs.
+          * A maximum of five external URLs is previewed  per message. If there are more than 5 external URLs, no URL is previewed.
+          > URLs that include the same text as the <a href='https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/general#general-settings' target='_blank'>**Site URL**</a> are referred to as Internal URLs.
         content:
           application/json:
             schema:
@@ -2462,19 +2653,19 @@ paths:
                   properties:
                     rid:
                       type: string
-                      description: The room id of where the message is to be sent.
+                      description: The room ID where the message is to be sent.
                     msg:
                       type: string
-                      description: 'The text of the message to send, is optional because of attachments.'
+                      description: 'The message text to send, it is optional because of attachments.'
                     alias:
                       type: string
-                      description: 'This will cause the message''s name to appear as the given alias, but your username will still display. Require the `impersonate-other-user` role'
+                      description: 'This will cause the message''s name to appear as the given alias, but your username will still be displayed. Requires the `impersonate-other-user` permission'
                     emoji:
                       type: string
-                      description: 'If provided, this will make the avatar on this message be an emoji. '
+                      description: 'If provided, the avatar will be displayed as the emoji. '
                     avatar:
                       type: string
-                      description: 'If provided, this will make the avatar use the provided image url. Require  `impersonate-other-user` permission.'
+                      description: 'If provided, the avatar will be displayed as the provided image url. Requires the  `impersonate-other-user` permission.'
                     attachments:
                       type: array
                       description: |-
@@ -2491,10 +2682,11 @@ paths:
                         properties:
                           audio_url:
                             type: string
-                            description: 'Audio file to play, only supports what [html audio](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio) does.'
+                            description: |-
+                              Audio file to attach. See <a href='https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio' target='_blank'>HTML audio element</a> for information.
                           author_icon:
                             type: string
-                            description: Displays a tiny icon to the left of the Author's name.
+                            description: Displays a tiny icon to the left of the author's name.
                           author_link:
                             type: string
                             description: Providing this makes the author name clickable and points to this link.
@@ -2503,10 +2695,11 @@ paths:
                             description: Name of the author.
                           collapsed:
                             type: boolean
-                            description: 'Causes the image, audio, and video sections to be hiding when collapsed is true.'
+                            description: 'Causes the image, audio, and video sections to be displayed as collapsed when set to true.'
                           color:
                             type: string
-                            description: 'The color you want the order on the left side to be, any value [background-css](https://developer.mozilla.org/en-US/docs/Web/CSS/background-color) supports.'
+                            description: |-
+                              See <a href='https://developer.mozilla.org/en-US/docs/Web/CSS/background-color' target='_blank'>background-css</a> for the supported format.
                           fields:
                             type: array
                             items:
@@ -2526,10 +2719,10 @@ paths:
                                 - value
                           image_url:
                             type: string
-                            description: 'The image to display, will be "big" and easy to see.'
+                            description: 'The image to display, will be big and easy to see.'
                           message_link:
                             type: string
-                            description: 'Only applicable if the ts is provided, as it makes the time clickable to this link.'
+                            description: 'Only applicable if the `ts` parameter is provided, as it makes the time clickable to this link.'
                           text:
                             type: string
                             description: 'The text to display for this attachment, it is different than the message''s text.'
@@ -2550,10 +2743,11 @@ paths:
                             description: Displays the time next to the text portion.
                           video_url:
                             type: string
-                            description: 'Video file to play, only supports what [html video](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video) does.'
+                            description: |-
+                              Video file to attach. See the <a href='https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video' target='blank'>HTML video element</a> for information.
                     tmid:
                       type: string
-                      description: The message's id to create a thread.
+                      description: The message ID to create a thread.
                     tshow:
                       type: string
                       description: Used when replying in a thread. Message will be sent in channel also if value is true
@@ -2569,7 +2763,7 @@ paths:
                       description: |-
                         You can add custom fields for messages. For example, set priorities for messages.
 
-                        You must enable this option and define the validation in the workspace settings. See the [Message](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/message) settings for further information.
+                        You must enable this option and define the validation in the workspace settings. See the <a href='https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/message' target='_blank'>Message</a> settings for further information.
                       example: {"priority": "high"}
                   required:
                     - rid
@@ -2697,18 +2891,47 @@ paths:
                       _updatedAt: '2018-03-01T18:02:26.828Z'
                       _id: LnCSJxxNkCy6K9X8X
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The "message" parameter must be provided. [error-invalid-params]'
+                    errorType: error-invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: The 'rid' property on the message object is missing.
+                Example 3:
+                  value:
+                    success: false
+                    error: error-invalid-room
   /api/v1/chat.starMessage:
     post:
       tags:
         - Chat
       summary: Star Message
       description: |-
-        Star a message.
+        <a href='https://docs.rocket.chat/docs/message-actions#star-messages' target='_blank'>Star</a> a message.
 
         ### Changelog
         | Version      | Description | 
-        | ---------------- | ------------|
-        | 0.59.0           | Added       |
+        | ------------ | ------------|
+        | 0.59.0       | Added       |
       operationId: post-api-v1-chat.starMessage
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -2721,7 +2944,7 @@ paths:
               properties:
                 messageId:
                   type: string
-                  description: The id of the message to star
+                  description: The message ID to star.
               required:
                 - messageId
             examples:
@@ -2731,13 +2954,39 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The required "messageId" param is required. [error-messageid-param-not-provided]'
+                    errorType: error-messageid-param-not-provided
+                Example 2:
+                  value:
+                    success: false
+                    error: 'The provided "messageId" does not match any existing message. [error-message-not-found]'
+                    errorType: error-message-not-found
   /api/v1/chat.unStarMessage:
     post:
       tags:
         - Chat
-      summary: UnStar Message
+      summary: Unstar Message
       description: |-
-        UnStar a message.
+        Unstar a message.
 
         ### Changelog
         | Version      | Description | 
@@ -2755,7 +3004,7 @@ paths:
               properties:
                 messageId:
                   type: string
-                  description: The id of the message to unstar
+                  description: The message ID to unstar.
               required:
                 - messageId
             examples:
@@ -2765,6 +3014,32 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The required "messageId" param is required. [error-messageid-param-not-provided]'
+                    errorType: error-messageid-param-not-provided
+                Example 2:
+                  value:
+                    success: false
+                    error: 'The provided "messageId" does not match any existing message. [error-message-not-found]'
+                    errorType: error-message-not-found
   /api/v1/chat.syncThreadsList:
     get:
       tags:
@@ -2775,8 +3050,8 @@ paths:
 
         ### Changelog
         | Version      | Description | 
-        | ---------------- | ------------|
-        | 1.0.0            | Added       |
+        | ------------ | ------------|
+        | 1.0.0        | Added       |
       operationId: get-api-v1-chat.syncThreadsList
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -2788,7 +3063,7 @@ paths:
         - $ref: '#/components/parameters/sort'
         - name: updatedSince
           in: query
-          description: Date as an ISO string. When you provide the updatedSince query parameter in the URL then the update and remove in the response will contain only those updated and removed since this date and time.
+          description: Date as an ISO string. When you provide the `updatedSince` query parameter, then the `update` and `remove` parameters in the response will contain only those updated and removed since this date and time.
           schema:
             type: string
       responses:
@@ -2943,18 +3218,48 @@ paths:
                           _deletedAt: '2019-04-16T18:16:13.508Z'
                           __collection__: message
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The required "rid" query param is missing. [error-room-id-param-not-provided]'
+                    errorType: error-room-id-param-not-provided
+                Example 2:
+                  value:
+                    success: false
+                    error: 'The required param "updatedSince" is missing. [error-updatedSince-param-invalid]'
+                    errorType: error-updatedSince-param-invalid
+                Example 3:
+                  value:
+                    success: false
+                    error: 'The "updatedSince" query parameter must be a valid date. [error-updatedSince-param-invalid]'
+                    errorType: error-updatedSince-param-invalid
   /api/v1/chat.syncThreadMessages:
     get:
       tags:
         - Chat
       summary: Sync Thread Messages
       description: |-
-        Sync Thread Messages. 
 
         ### Changelog
         | Version      | Description | 
-        | ---------------- | ------------|
-        | 1.0.0           | Added       |
+        | ------------ | ------------|
+        | 1.0.0        | Added       |
       operationId: get-api-v1-chat.syncThreadMessages
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -2964,13 +3269,13 @@ paths:
         - $ref: '#/components/parameters/sort'
         - name: updatedSince
           in: query
-          description: Date as an ISO string. When you provide the updatedSince query parameter in the URL then the update and remove in the response will contain only those updated and removed since this date and time.
+          description: Date as an ISO string. When you provide the `updatedSince` query parameter, the `update` and `remove` parameters in the response will contain only those updated and removed since this date and time.
           required: true
           schema:
             type: string
         - name: tmid
           in: query
-          description: Thread's message ID
+          description: Thread's message ID.
           required: true
           schema:
             type: string
@@ -3044,18 +3349,48 @@ paths:
                           channels: []
                       remove: []
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The required "tmid" query param is missing. [error-invalid-params]'
+                    errorType: error-invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: 'The required param "updatedSince" is missing. [error-updatedSince-param-invalid]'
+                    errorType: error-updatedSince-param-invalid
+                Example 3:
+                  value:
+                    success: false
+                    error: 'The required param "updatedSince" is missing. [error-updatedSince-param-invalid]'
+                    errorType: error-updatedSince-param-invalid
   /api/v1/chat.syncMessages:
     get:
       tags:
         - Chat
       summary: Sync Messages
       description: |-
-        Sync Messages. 
 
         ### Changelog
         | Version      | Description | 
-        | ---------------- | ------------|
-        | 1.0.0           | Added       |
+        | ------------ | ------------|
+        | 1.0.0        | Added       |
       operationId: get-api-v1-chat.syncMessages
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -3066,7 +3401,7 @@ paths:
         - $ref: '#/components/parameters/sort'
         - name: lastUpdate
           in: query
-          description: The Date as an ISO string
+          description: The date as an ISO string.
           required: true
           schema:
             type: string
@@ -3194,6 +3529,37 @@ paths:
                           channels: []
                       deleted: []
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The required "roomId" query param is missing. [error-roomId-param-not-provided]'
+                    errorType: error-roomId-param-not-provided
+                Example 2:
+                  value:
+                    success: false
+                    error: 'The required "lastUpdate" query param is missing. [error-lastUpdate-param-not-provided]'
+                    errorType: error-lastUpdate-param-not-provided
+                Example 3:
+                  value:
+                    success: false
+                    error: 'The "lastUpdate" query parameter must be a valid date. [error-roomId-param-invalid]'
+                    errorType: error-roomId-param-invalid
   /api/v1/im.close:
     post:
       tags:
@@ -4567,7 +4933,7 @@ components:
     Optional-RoomId:
       name: roomId
       in: query
-      description: The room id. It is required if the `roomName` is not provided.
+      description: The room ID. It is required if the `roomName` is not provided.
       schema:
         type: string
       example: dlp
