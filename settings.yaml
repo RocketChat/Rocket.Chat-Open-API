@@ -1832,76 +1832,140 @@ paths:
                     items:
                       type: object
                       properties:
-                        _id:
+                        address:
                           type: string
-                        _createdAt:
-                          type: string
-                        _updatedAt:
-                          type: string
-                        extraInformation:
+                        currentStatus:
                           type: object
                           properties:
-                            host:
+                            connected:
+                              type: boolean
+                            lastHeartbeatTime:
+                              type: integer
+                            local:
+                              type: boolean
+                        instanceRecord:
+                          type: object
+                          properties:
+                            _id:
                               type: string
-                            port:
+                            _createdAt:
                               type: string
-                            os:
+                            _updatedAt:
+                              type: string
+                            extraInformation:
                               type: object
                               properties:
-                                type:
+                                host:
                                   type: string
-                                platform:
+                                port:
                                   type: string
-                                arch:
+                                tcpPort:
+                                  type: integer
+                                os:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                    platform:
+                                      type: string
+                                    arch:
+                                      type: string
+                                    release:
+                                      type: string
+                                    uptime:
+                                      type: number
+                                    loadavg:
+                                      type: array
+                                      items:
+                                        type: number
+                                    totalmem:
+                                      type: integer
+                                    freemem:
+                                      type: integer
+                                    cpus:
+                                      type: integer
+                                nodeVersion:
                                   type: string
-                                release:
-                                  type: string
-                                uptime:
+                                conns:
                                   type: integer
-                                loadavg:
-                                  type: array
-                                  items:
-                                    type: number
-                                totalmem:
-                                  type: integer
-                                freemem:
-                                  type: integer
-                                cpus:
-                                  type: integer
-                            nodeVersion:
+                            name:
                               type: string
-                        name:
-                          type: string
-                        pid:
-                          type: integer
+                            pid:
+                              type: integer
+                        broadcastAuth:
+                          type: boolean
                   success:
                     type: boolean
+                x-examples:
+                  Example 1:
+                    instances:
+                      - address: localhost
+                        currentStatus:
+                          connected: true
+                          lastHeartbeatTime: 16
+                          local: true
+                        instanceRecord:
+                          _id: 871f8be4-5fdb-45a8-868f-8d3e28a39148
+                          _createdAt: '2024-05-22T11:14:11.845Z'
+                          _updatedAt: '2024-07-05T02:55:40.526Z'
+                          extraInformation:
+                            host: localhost
+                            port: '3000'
+                            tcpPort: 46443
+                            os:
+                              type: Linux
+                              platform: linux
+                              arch: x64
+                              release: 5.10.165-143.735.amzn2.x86_64
+                              uptime: 8455403.28
+                              loadavg:
+                                - 0.41
+                                - 0.17
+                                - 0.15
+                              totalmem: 4110323712
+                              freemem: 198479872
+                              cpus: 2
+                            nodeVersion: v14.21.3
+                            conns: 1
+                          name: rocket.chat
+                          pid: 1
+                        broadcastAuth: true
+                    success: true
               examples:
-                Success Example:
+                Get Instances:
                   value:
                     instances:
-                      - _id: vQZbiEj9fChaa9kjw
-                        _createdAt: '2021-09-01T18:29:30.430Z'
-                        _updatedAt: '2021-09-30T11:20:44.678Z'
-                        extraInformation:
-                          host: 10.42.15.191
-                          port: '3000'
-                          os:
-                            type: Linux
-                            platform: linux
-                            arch: x64
-                            release: 4.15.0-109-generic
-                            uptime: 36801050
-                            loadavg:
-                              - 8.66
-                              - 9.46
-                              - 9.89
-                            totalmem: 270450634752
-                            freemem: 105877463040
-                            cpus: 32
-                          nodeVersion: v12.22.1
-                        name: rocket.chat
-                        pid: 1
+                      - address: localhost
+                        currentStatus:
+                          connected: true
+                          lastHeartbeatTime: 16
+                          local: true
+                        instanceRecord:
+                          _id: 871f8be4-5fdb-45a8-868f-8d3e28a39148
+                          _createdAt: '2024-05-22T11:14:11.845Z'
+                          _updatedAt: '2024-07-05T02:55:40.526Z'
+                          extraInformation:
+                            host: localhost
+                            port: '3000'
+                            tcpPort: 46443
+                            os:
+                              type: Linux
+                              platform: linux
+                              arch: x64
+                              release: 5.10.165-143.735.amzn2.x86_64
+                              uptime: 8455403.28
+                              loadavg:
+                                - 0.41
+                                - 0.17
+                                - 0.15
+                              totalmem: 4110323712
+                              freemem: 198479872
+                              cpus: 2
+                            nodeVersion: v14.21.3
+                            conns: 1
+                          name: rocket.chat
+                          pid: 1
+                        broadcastAuth: true
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
