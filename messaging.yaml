@@ -3570,8 +3570,8 @@ paths:
 
         ### Changelog
         | Version      | Description | 
-        | ---------------- | ------------|
-        | 0.48.0           | Added       |
+        | ------------ | ------------|
+        | 0.48.0       | Added       |
       operationId: post-api-v1-im.close
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -3584,7 +3584,7 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The room id
+                  description: The room ID.
               required:
                 - roomId
             examples:
@@ -3594,13 +3594,38 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'Body param "roomId" is required [error-room-param-not-provided]'
+                    errorType: error-room-param-not-provided
+                Invalid room ID or user is not member of room:
+                  value:
+                    success: false
+                    error: The user is not subscribed to the room
   /api/v1/im.counters:
     get:
       tags:
         - IM
       summary: Get DM Counters
       description: |-
-        Gets counters of direct messages. Permission required: `view-room-administration`.
+        Gets counters and information of direct messages. Permission required: `view-room-administration`.
 
         ### Changelog
         | Version      | Description | 
@@ -3612,13 +3637,13 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: roomId
           in: query
-          description: The id of Direct Messages room
+          description: The DM room ID
           required: true
           schema:
             type: string
         - name: userId
           in: query
-          description: The user id to provide counters for
+          description: The user ID to provide counters for.
           schema:
             type: string
       responses:
@@ -3627,13 +3652,13 @@ paths:
             OK
             
             **Note**
-            - joined - boolean flag that shows that user is joined the room or not
-            - members - count of current room members
-            - unreads - count of unread messages for specified user (calling user or provided userId)
-            - unreadsFrom - start date-time of unread interval for specified user
-            - msgs - count of messages in the room
-            - latest - end date-time of unread interval for specified user (or date-time of last posted message)
-            - userMentions - count of user mentions in messages"
+            - `joined`: Boolean flag that shows that user has joined the room or not.
+            - `members`: Count of current room members.
+            - `unreads`: Count of unread messages for specified user (calling user or provided user ID).
+            - `unreadsFrom`: Start date-time of unread interval for specified user.
+            - `msgs`: Count of messages in the room.
+            - `latest`: End date-time of unread interval for specified user (or date-time of last posted message).
+            - `userMentions` - Count of user mentions in messages.
           content:
             application/json:
               schema:
@@ -3666,13 +3691,34 @@ paths:
                     latest: '2023-10-30T20:37:17.160Z'
                     userMentions: 0
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'Query param "roomId" is required [error-room-param-not-provided]'
+                    errorType: error-room-param-not-provided
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/im.create:
     post:
       tags:
         - IM
       summary: Create DM
       description: |-
-        Create a direct message session with another user.
+        Create a direct message session with another user or more than one user.
         
         #### Change Log
         | Version | Description              |
@@ -3692,10 +3738,10 @@ paths:
               properties:
                 username:
                   type: string
-                  description: 'The username to open a direct message session, required if usernames is not provided'
+                  description: 'The username to open a direct message session. This parameter is required if the `usernames` parameter is not provided'
                 usernames:
                   type: string
-                  description: 'List of usernames to open a multiple direct message session, required if username is not provided'
+                  description: 'List of usernames to open a multiple direct message session. This parameter is required if the `username` parameter is not provided'
                 excludeSelf:
                   type: boolean
                   description: Creates the direct message session excluding the current authenticated user. The session will only be opened if the current user has the `view-room-administration` permission
@@ -3735,6 +3781,37 @@ paths:
                         - g1
                         - rocket.cat
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: |-
+                      must have required property 'usernames'
+                       must have required property 'username'
+                       must match exactly one schema in oneOf [invalid-params]
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: 'Invalid user [error-invalid-user]'
+                    errorType: error-invalid-user
+                    details:
+                      method: createDirectMessage
   /api/v1/im.delete:
     post:
       tags:
@@ -3745,8 +3822,8 @@ paths:
 
         ### Changelog
         | Version      | Description | 
-        | ---------------- | ------------|
-        |3.18.0           | Added       |
+        | ------------ | ------------|
+        |3.18.0        | Added       |
       operationId: post-api-v1-im.delete
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -3756,17 +3833,13 @@ paths:
           application/json:
             schema:
               type: object
-              oneOf:
-                - type: object
-                  properties:
-                    roomId:
-                      type: string
-                      description: The roomId of the DM
-                - type: object
-                  properties:
-                    username:
-                      type: string
-                      description: The username of the user in the DM
+              properties:
+                roomId:
+                  type: string
+                  description: The room ID of the DM. This parameter is required if you don't enter the `username` parameter.
+                username:
+                  type: string
+                  description: The username of the user in the DM. This parameter is required if you don't enter the `roomId` parameter.
             examples:
               Example:
                 value:
@@ -3774,6 +3847,35 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: |-
+                      must have required property 'roomId'
+                       must have required property 'username'
+                       must match exactly one schema in oneOf [invalid-params]
+                    errorType: invalid-params
+                Invalid room ID or username:
+                  value:
+                    success: false
+                    error: '[invalid-channel]'
+                    errorType: invalid-channel
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/im.files:
     get:
       tags:
@@ -3895,13 +3997,15 @@ paths:
                     offset: 0
                     total: 1
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/im.history:
     get:
       tags:
         - IM
       summary: DM History
       description: |-
-        Retrieves the messages from a direct message
+        Retrieves the message history from a direct message.
         ### Change Log
         | Version | Description             |
         | ------- | ----------------------- |
@@ -3912,39 +4016,29 @@ paths:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/RoomId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
         - name: latest
           in: query
-          description: The end of time range of messages to retrieve
+          description: The end of time range of messages to retrieve.
           schema:
             type: string
           example: '2016-09-30T13:42:25.304Z'
         - name: oldest
           in: query
-          description: The start of the time range of messages to retrieve
+          description: The start of the time range of messages to retrieve.
           schema:
             type: string
           example: '2016-05-30T13:42:25.304Z'
         - name: inclusive
           in: query
-          description: Whether messages which land on latest and oldest should be included
+          description: Whether messages which land on the `latest` and `oldest` dates should be included.
           schema:
             type: string
           example: 'true'
-        - name: offset
-          in: query
-          description: The offset of the list messages to retrieve
-          schema:
-            type: string
-          example: '10'
-        - name: count
-          in: query
-          description: The amount of messages to retrieve. It is 20 by default
-          schema:
-            type: string
-          example: '100'
         - name: unreads
           in: query
-          description: Whether the amount of unreads should be included.
+          description: Whether the number of unread messages should be included.
           schema:
             type: boolean
       responses:
@@ -4026,6 +4120,32 @@ paths:
                         groupable: false
                         _updatedAt: '2016-12-06T17:57:38.635Z'
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''roomId'' [invalid-params]'
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: '[invalid-channel]'
+                    errorType: invalid-channel
   /api/v1/im.list.everyone:
     get:
       tags:
@@ -4038,8 +4158,8 @@ paths:
 
         ### Changelog
         | Version      | Description | 
-        | ---------------- | ------------|
-        |0.49.0            | Added       |
+        | ------------ | ------------|
+        |0.49.0        | Added       |
       operationId: get-api-v1-im.list.everyone
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -4262,6 +4382,8 @@ paths:
                     count: 2
                     total: 2
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/im.list:
     get:
       tags:
@@ -4499,6 +4621,8 @@ paths:
                     count: 2
                     total: 2
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/im.members:
     get:
       tags:
@@ -4520,7 +4644,7 @@ paths:
         - $ref: '#/components/parameters/sort'
         - name: roomId
           in: query
-          description: The roomId of the DM. It is required if `username` is not provided.
+          description: The room ID of the DM. It is required if `username` is not provided.
           schema:
             type: string
         - $ref: '#/components/parameters/Optional-Username'
@@ -4582,6 +4706,35 @@ paths:
                     offset: 0
                     total: 3
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: |-
+                      must have required property 'roomId'
+                       must have required property 'username'
+                       must match exactly one schema in oneOf [invalid-params]
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: '[invalid-channel]'
+                    errorType: invalid-channel
   /api/v1/im.messages:
     get:
       tags:
@@ -4605,7 +4758,7 @@ paths:
         - $ref: '#/components/parameters/fields'
         - name: roomId
           in: query
-          description: The roomId of the DM. It is required if `username` is not provided.
+          description: The room ID of the DM. It is required if `username` is not provided.
           schema:
             type: string
         - $ref: '#/components/parameters/Optional-Username'
@@ -4736,6 +4889,35 @@ paths:
                     offset: 0
                     total: 3
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: |-
+                      must have required property 'roomId'
+                       must have required property 'username'
+                       must match exactly one schema in oneOf [invalid-params]
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: '[invalid-channel]'
+                    errorType: invalid-channel
   /api/v1/im.messages.others:
     get:
       tags:
@@ -4838,6 +5020,44 @@ paths:
                         groupable: false
                         _updatedAt: '2016-12-06T17:57:38.635Z'
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      route:
+                        type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'This endpoint is disabled [error-endpoint-disabled]'
+                    errorType: error-endpoint-disabled
+                    details:
+                      route: /api/v1/im.messages.others
+                Example 2:
+                  value:
+                    success: false
+                    error: 'The parameter "roomId" is required [error-roomid-param-not-provided]'
+                    errorType: error-roomid-param-not-provided
+                Example 3:
+                  value:
+                    success: false
+                    error: 'No direct message room found by the id of: john [error-room-not-found]'
+                    errorType: error-room-not-found
   /api/v1/im.open:
     post:
       tags:
@@ -4862,7 +5082,7 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The room Id
+                  description: The room ID.
               required:
                 - roomId
             examples:
@@ -4872,6 +5092,27 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'Body param "roomId" is required [error-room-param-not-provided]'
+                    errorType: error-room-param-not-provided
   /api/v1/im.setTopic:
     post:
       tags:
@@ -4896,10 +5137,10 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The roomId of the direct message
+                  description: The room ID of the direct message.
                 topic:
                   type: string
-                  description: The topic of the DM
+                  description: The topic of the DM.
               required:
                 - roomId
                 - topic
@@ -4925,6 +5166,27 @@ paths:
                   value:
                     topic: Discuss all of the testing
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'Body param "roomId" is required [error-room-param-not-provided]'
+                    errorType: error-room-param-not-provided
 tags:
   - name: Chat
   - name: IM
