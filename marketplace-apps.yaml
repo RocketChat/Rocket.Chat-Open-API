@@ -84,9 +84,11 @@ paths:
       summary: Send a WhatsApp Template Message
       description: |-
         Send template messages via WhatsApp to targeted contacts directly from your workspace using this endpoint. It supports only <a href="https://docs.rocket.chat/docs/whatsapp-cloud-app" target="_blank">WhatsApp Cloud App</a> and <a href="https://docs.rocket.chat/docs/whatsapp-sandbox" target="_blank">WhatsApp Sandbox App</a>.
-
-        
-        The appropriate endpoint URL including the `appId` for sending Whatsapp template messages on your workspace is displayed in the  **Details tab** of the Whatsapp **App Info** page. 
+        To get the valid endpoint URL for sending template messages in your workspace,
+        - Go to Administration > Apps > Marketplace 
+        - Search for WhatsApp Cloud app
+        - Navigate to App Info > Details > POST templateMessage. 
+        - Copy the endpoint URL for sending template messages in your workspace. The URL also includes the `appId`.
       operationId: post-api-apps-public-app_id-templateMessage
       parameters:
         - name: appId
@@ -117,7 +119,7 @@ paths:
                   description: Department name or ID where you want to transfer the chat to when the WhatsApp user replies.
                 template:
                   type: object
-                  description: 'Provide information about the template message you wish to send. Kindly refer to <a href="https://developers.facebook.com/docs/whatsapp/api/messages/message-templates#the-template-object" target="_blank">Message Templates</a> for an example. Also refer to the example in <a href="https://developer.rocket.chat/docs/whatsapp-business-template-messages#send-whatsapp-template-messages-from-your-workspace" target="_blank">Sending WhatsApp template messages from your workspace</a>.'
+                  description: 'Provide information about the template message you wish to send. Refer to <a href="https://developers.facebook.com/docs/whatsapp/api/messages/message-templates#the-template-object" target="_blank">Message Templates</a> and <a href="https://developer.rocket.chat/docs/whatsapp-business-template-messages#send-whatsapp-template-messages-from-your-workspace" target="_blank">Sending WhatsApp template messages from your workspace</a> for template examples.'
                   properties:
                     namespace:
                       type: string
