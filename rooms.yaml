@@ -5736,6 +5736,7 @@ paths:
               properties:
                 file:
                   type: string
+                  format: binary
                   description: The file to upload
                 msg:
                   type: string
@@ -5944,7 +5945,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+               Match error:
                   value:
                     items:
                       - _id: siyr2oWQJBjQjhLwr
