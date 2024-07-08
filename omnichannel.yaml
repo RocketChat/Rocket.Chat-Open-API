@@ -6060,7 +6060,7 @@ paths:
         Gives the total service time sorted by agent.
         Permission required: `view-livechat-manager`
         
-        **Service time** means how long time the agent is online and available. It does not mean how long time the agent was busy serving chats.
+        **Service time** means how long time the agent is online and available. It does not mean how long time the agent was busy answering chats.
       operationId: get-api-v1-livechat-analytics-agents-total-service-time
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -6556,7 +6556,7 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         
-        Retrieves all the business hours attached to a workspace.
+        Retrieves all the <a href='https://docs.rocket.chat/docs/business-hours' target='_blank'>business hours</a> attached to a workspace.
         Permission required: `view-livechat-business-hours`
       operationId: get-api-v1-livechat-business-hours
       parameters:
@@ -9176,7 +9176,7 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         
-        Retrieves a list of monitors.
+        Retrieves a list of <a href='https://docs.rocket.chat/docs/monitors' target='_blank'>monitors</a>.
         Permission required: `manage-livechat-monitors`
       operationId: get-api-v1-livechat-monitors
       parameters:
@@ -9476,7 +9476,7 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         
-        At least one of the following permissions is required:
+        Retrieves list of existing <a href='https://docs.rocket.chat/docs/priorities' target='_blank'>priorities</a>. At least one of the following permissions is required:
           * `manage-livechat-priorities`
           * `view-l-room`
 
@@ -9948,7 +9948,7 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         
-        At least one of the following permissions is required: 
+        Retrieves list of <a href='https://docs.rocket.chat/docs/tags' target='_blank'>tags</a>. At least one of the following permissions is required: 
           * `view-l-room`
           * `manage-livechat-tags`
       operationId: get-api-v1-livechat-tags
@@ -10283,7 +10283,7 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         
-        Permission required: `manage-livechat-units`
+        Create a <a href='https://docs.rocket.chat/docs/units' target='_blank'>unit</a> to group departments. Permission required: `manage-livechat-units`
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
@@ -14291,7 +14291,7 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         
-        To create and update canned responses, the following permissions are required:
+        To create and update <a href='https://docs.rocket.chat/docs/canned-responses' target='_blank'>canned responses</a>, the following permissions are required:
         * `save-canned-responses`
         * `save-all-canned-responses`
 
