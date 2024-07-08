@@ -21,13 +21,13 @@ paths:
     post:
       summary: Register New Agent or Manager
       description: |-
-        Register a new [agent](https://docs.rocket.chat/use-rocket.chat/omnichannel/agents) or [manager](https://docs.rocket.chat/use-rocket.chat/omnichannel/managers).
+        Register a new <a href='https://docs.rocket.chat/use-rocket.chat/omnichannel/agents' target='_blank'>agent</a> or <a href='https://docs.rocket.chat/use-rocket.chat/omnichannel/managers' target='_blank'>manager</a>.
         Permission required: `view-livechat-manager`
 
         ### Changelog
         | Version      | Description |
-        | ---------------- | ------------|
-        |0.42.0            | Added       |
+        | ------------ | ------------|
+        |0.42.0        | Added       |
       operationId: 'post-api-v1-livechat-users-:type'
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -35,7 +35,7 @@ paths:
         - name: type
           in: path
           description: |-
-            The type of user that you want to register. The value can either be agent or manager.
+            The type of user that you want to register. The value can either be `agent` or `manager`.
           required: true
           schema:
             type: string
@@ -108,7 +108,7 @@ paths:
       summary: Get List of Agents or Managers
       description: |-
         * If the `type` is `manager`, permission required: `view-livechat-manager`.
-        * If the `type` is `agent`, permission required: at least one of `transfer-livechat-guest`, `edit-omnichannel-contact`.
+        * If the `type` is `agent`, permission required: at least one of `transfer-livechat-guest` or `edit-omnichannel-contact`.
 
         ### Changelog
         | Version      | Description |
@@ -121,7 +121,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: type
           in: path
-          description: The type of user that you want to register. The value can either be agent or manager.
+          description: The type of user that you want to register. The value can either be `agent` or `manager`.
           required: true
           schema:
             type: string
@@ -334,7 +334,7 @@ paths:
             type: string
         - name: _id
           in: path
-          description: The user _id.
+          description: The user ID.
           required: true
           schema:
             type: string
@@ -358,7 +358,7 @@ paths:
       parameters:
         - name: rid
           in: path
-          description: The room _id.
+          description: The room ID.
           required: true
           schema:
             type: string
@@ -479,7 +479,7 @@ paths:
     get:
       summary: Get Available Agent Information
       description: |-
-        Get information about the currently available agent.Permission required: `manage-agent-extension-association`
+        Get information about the currently available agent. Permission required: `manage-agent-extension-association`
       operationId: get-api-v1-omnichannel-agents-available
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -1371,13 +1371,13 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: agents
           in: query
-          description: 'A list of agents, can be a list of ids or usernames'
+          description: 'A list of agents, can be a list of IDs or usernames'
           schema:
             type: string
           example: '[''b32h3b2hhwb25d'']'
         - name: departmentId
           in: query
-          description: The department's id
+          description: The department ID
           schema:
             type: string
           example: AkzpHAvZpdnuchw2a
@@ -1389,13 +1389,13 @@ paths:
           example: true
         - name: createdAt
           in: query
-          description: An object representing when the room was created(Can also be filtered only with `start` or `end`)
+          description: An object representing when the room was created (can also be filtered only with `start` or `end`)
           schema:
             type: string
           example: '{"start": "2018-01-26T00:11:22.345Z", "end": "2018-01-26T00:11:22.345Z"}'
         - name: closedAt
           in: query
-          description: An object representing when the room was created(Can also be filtered only with `start` or `end`)
+          description: An object representing when the room was closed (can also be filtered only with `start` or `end`)
           schema:
             type: string
           example: '{"start": "2018-01-26T00:11:22.345Z", "end": "2018-01-26T00:11:22.345Z"}'
@@ -1407,7 +1407,7 @@ paths:
           example: '[''rocket'', ''chat'']'
         - name: customFields
           in: query
-          description: An object with custom fields to be filtered(previously created and populated at custom fields endpoints)
+          description: An object with custom fields to be filtered (previously created and populated at custom fields endpoints)
           schema:
             type: string
           example: '{"docId": "aobEdbYhXfu5hkeqG"}'
@@ -1618,13 +1618,13 @@ paths:
           example: iNKE8a6k6cjbqWhWd
         - name: rid
           in: query
-          description: The room _id.
+          description: The room ID.
           schema:
             type: string
           example: kCJDd5peKiZnGJLPq
         - name: agentId
           in: query
-          description: The agent id.
+          description: The agent ID.
           schema:
             type: string
           example: XycfA5CetCPuEjqxw
@@ -1973,7 +1973,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: roomId
           in: query
-          description: Room ID that you want to join.
+          description: The room ID that you want to join.
           required: true
           schema:
             type: string
@@ -2507,7 +2507,7 @@ paths:
   /api/v1/livechat/room.forward:
     post:
       summary: Forward Livechat Room
-      description: The Chatbot agent forwards the chat to a human agent.
+      description: The chatbot agent forwards the chat to a human agent.
       operationId: post-api-v1-livechat-room.forward
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -2521,7 +2521,7 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The room _id.
+                  description: The room ID.
                 userId:
                   type: string
                   description: The new agent ID.
@@ -3460,7 +3460,7 @@ paths:
           example: true
         - name: _id
           in: path
-          description: The department _id.
+          description: The department ID.
           required: true
           schema:
             type: string
@@ -3554,7 +3554,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: _id
           in: path
-          description: The department _id.
+          description: The department ID.
           required: true
           schema:
             type: string
@@ -3734,7 +3734,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: _id
           in: path
-          description: The department _id.
+          description: The department ID.
           required: true
           schema:
             type: string
@@ -15581,18 +15581,18 @@ components:
       required: false
       schema:
         format: object
-      description: 'List of fields to order by, and in which direction. JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending. For example, sort = {"value": -1, "_id": 1}'
+      description: 'List of fields to order by, and in which direction. JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending. For example, sort = `{"value": -1, "_id": 1}`'
     fields:
       name: fields
       in: query
       schema: {}
-      description: 'This parameter accepts a JSON object with properties that have a value of 1 or 0 to include or exclude them in the response. For example, to only retrieve the usernames of users: fields = {"username": 1}'
+      description: 'This parameter accepts a JSON object with properties that have a value of 1 or 0 to include or exclude them in the response. For example, to only retrieve the usernames of users: fields = `{"username": 1}`'
     query:
       name: query
       in: query
       required: false
       schema: {}
-      description: 'This parameter allows you to use MongoDB query operators to search for specific data. For example, to query users with a name that contains the letter "g": query={ "name": { "$regex": "g" } } '
+      description: 'This parameter allows you to use MongoDB query operators to search for specific data. For example, to query users with a name that contains the letter "g": query = `{ "name": { "$regex": "g" } }` '
   schemas: {}
   responses:
     trueSuccess:
