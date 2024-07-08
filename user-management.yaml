@@ -187,9 +187,9 @@ paths:
         - Roles
       summary: Create Role
       description: |-
-       This endpoint is available for **Enterprise** workspaces only.
+       <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
 
-        Create a new <a href='https://docs.rocket.chat/docs/roles-in-rocketchat'>role</a> in the workspace. See <a href='https://docs.rocket.chat/v1/docs/custom-roles'>Custom Roles</a> for further information.
+        Create a new <a href='https://docs.rocket.chat/docs/roles-in-rocketchat' target='_blank'>role</a> in the workspace. See <a href='https://docs.rocket.chat/v1/docs/custom-roles' target='_blank'>Custom Roles</a> for further information.
 
         * You can't create new roles with the same name as existing roles. For example, it is not possible to create a new role with the name `admin`.
         * The scope can either be `Users`(user level) or `Subscriptions`(room level).
@@ -320,7 +320,7 @@ paths:
         - Roles
       summary: Update Role
       description: |-
-        This endpoint is available for **Enterprise** workspaces only.
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         
         Update a role in the workspace. <br>
         
