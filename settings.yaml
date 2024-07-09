@@ -166,6 +166,7 @@ paths:
       tags:
         - Settings
       description: |-
+        List all the <a href="https://docs.rocket.chat/docs/oauth" target="_blank"> OAuth services</a>. enabled in the workspace.
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -231,6 +232,7 @@ paths:
   /api/v1/settings.addCustomOAuth:
     parameters: []
     post:
+      description: Add a <a href=" https://docs.rocket.chat/docs/oauth#add-custom-oauth" target="_blank">custom OAuth integration</a> to your workspace. 
       summary: Add Custom OAuth
       operationId: post-api-v1-settings.addCustomOAuth
       responses:
@@ -250,7 +252,7 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                Missing name param:
                   value:
                     success: false
                     error: 'The parameter "name" is required [error-name-param-not-provided]'
@@ -284,7 +286,7 @@ paths:
         name: _id
         in: path
         required: true
-        description: The unique ID of the setting that you want to update.
+        description: The unique ID of the setting that you want to update or fetch.
     post:
       summary: Update Setting
       tags:
@@ -378,7 +380,7 @@ paths:
           $ref: '#/components/responses/authorizationError'
       operationId: get-api-v1-settings-_id
       description: |-
-        Get the settings for a specific ID.
+        Get details of a setting by ID.
         Permission required: `view-privileged-setting`
         ### Changelog
         | Version      | Description |
@@ -387,8 +389,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/X-Auth-Token'
-      x-stoplight:
-        id: vwh238f3721k7
   /api/v1/service.configurations:
     parameters: []
     get:
@@ -506,7 +506,7 @@ paths:
                   error:
                     type: string
               examples:
-                Example 1:
+                Query Not Found:
                   value:
                     success: false
                     error: querySrv ENOTFOUND .rocket.chat/
@@ -548,7 +548,7 @@ paths:
                   error:
                     type: string
               examples:
-                Example 1:
+                Query Not Found:
                   value:
                     success: false
                     error: querySrv ENOTFOUND .rocket.chat/
@@ -654,12 +654,12 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                Invalid Params:
                   value:
                     success: false
                     error: 'must have required property ''rid'' [invalid-params]'
                     errorType: invalid-params
-                Example 2:
+                Invalid Room:
                   value:
                     success: false
                     error: 'Invalid room [error-invalid-room]'
@@ -704,12 +704,12 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                Invalid Params:
                   value:
                     success: false
                     error: 'must have required property ''rid'' [invalid-params]'
                     errorType: invalid-params
-                Example 3:
+                E2E Key Exists:
                   value:
                     success: false
                     error: 'E2E Key ID already exists [error-room-e2e-key-already-exists]'
@@ -739,7 +739,7 @@ paths:
                 - rid
                 - keyID
             examples:
-              Example 1:
+              Example:
                 value:
                   rid: wCiXndNp5NqNY3uCc
                   keyID: my-UniQu3_ke4_Id
@@ -767,7 +767,7 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 2:
+                Invalid Params:
                   value:
                     success: false
                     error: 'must have required property ''public_key'' [invalid-params]'
@@ -795,7 +795,7 @@ paths:
                 - public_key
                 - private_key
             examples:
-              Example 1:
+              Example:
                 value:
                   public_key: My-9UbLiK-k34
                   private_key: 9R1V4t3_k3Y
@@ -823,7 +823,7 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                Invalid Params:
                   value:
                     success: false
                     error: 'must have required property ''rid'' [invalid-params]'
@@ -855,7 +855,7 @@ paths:
                 - rid
                 - key
             examples:
-              Example 1:
+              Example:
                 value:
                   uid: d26x6zSkaPSe5gCyy
                   rid: 9R1V4t3_k3Y
@@ -886,7 +886,7 @@ paths:
                   details:
                     type: string
               examples:
-                Example 1:
+                Importer not Defined:
                   value:
                     success: false
                     error: 'The importer (png) has no import class defined. [error-importer-not-defined]'
@@ -928,7 +928,7 @@ paths:
                 - fileName
                 - contentType
             examples:
-              Example 1:
+              Example:
                 value:
                   binaryContent: /testfile.csv
                   importerKey: csv
@@ -969,7 +969,7 @@ paths:
                   details:
                     type: string
               examples:
-                Example 1:
+                Importer not Defined :
                   value:
                     success: false
                     error: 'The importer (png) has no import class defined. [error-importer-not-defined]'
@@ -1005,13 +1005,14 @@ paths:
                 - fileUrl
                 - importerKey
             examples:
-              Example 1:
+              Example:
                 value:
                   fileUrl: 'https://www.freepik.com/photos/dog'
                   importerKey: pending-avatars
       tags:
         - Import
       description: |-
+        Download the public import file.
         Permission required: `run-import`
 
         ### Changelog
@@ -1125,7 +1126,7 @@ paths:
               required:
                 - input
             examples:
-              Example 1:
+              Example:
                 value:
                   input:
                     users:
@@ -1183,8 +1184,9 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example:
+                  value:
                     users: []
                     channels: []
                     message_count: 0
@@ -1195,6 +1197,7 @@ paths:
           $ref: '#/components/responses/forbiddenError'
       operationId: get-api-v1-getImportFileData
       description: |-
+        Get the import file data. 
         Permission required: `run-import`
         ### Changelog
         | Version      | Description |
@@ -1235,7 +1238,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     key: pending-avatars
                     name: Pending Avatars
@@ -1250,6 +1253,7 @@ paths:
           $ref: '#/components/responses/forbiddenError'
       operationId: get-api-v1-getImportProgress
       description: |-
+        Get the progress of the import.
         Permission required: `run-import`
         ### Changelog
         | Version      | Description |
@@ -1293,7 +1297,7 @@ paths:
                     _updatedAt:
                       type: string
               examples:
-                Example 1:
+                Success:
                   value:
                     - _id: MJxTRZsYdho8Ww2qq
                       type: Pending Avatars
@@ -1341,6 +1345,7 @@ paths:
           $ref: '#/components/responses/forbiddenError'
       operationId: get-api-v1-getLatestImportOperations
       description: |-
+        Get latests import operations.
         Permission required: `view-import-operations`
         ### Changelog
         | Version      | Description |
@@ -1368,8 +1373,9 @@ paths:
                     type: boolean
                   count:
                     type: integer
-                x-examples:
-                  Example 1:
+              examples:
+                Success:
+                  value:
                     success: true
                     count: 0
         '401':
@@ -1377,6 +1383,7 @@ paths:
         '403':
           $ref: '#/components/responses/forbiddenError'
       description: |-
+        Dowbload pending files.
         Permission required: `run-import`
         ### Changelog
         | Version      | Description |
@@ -1406,8 +1413,9 @@ paths:
                     type: boolean
                   count:
                     type: integer
-                x-examples:
-                  Example 1:
+              examples:
+                Success:
+                  value:
                     success: true
                     count: 0
         '401':
@@ -1415,6 +1423,7 @@ paths:
         '403':
           $ref: '#/components/responses/forbiddenError'
       description: |-
+        Download pending avatars from the import.
         Permission required: `run-import`
         ### Changelog
         | Version      | Description |
@@ -1462,7 +1471,7 @@ paths:
                       _updatedAt:
                         type: string
               examples:
-                Example 1:
+                Success:
                   value:
                     success: true
                     operation:
@@ -1479,6 +1488,7 @@ paths:
         '403':
           $ref: '#/components/responses/forbiddenError'
       description: |-
+        Get the current import operation.
         Permission required: `run-import`
         ### Changelog
         | Version      | Description |
@@ -1526,7 +1536,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     operation:
                       _id: 64d69545ee8ae821983005f5
@@ -1659,7 +1669,7 @@ paths:
             5. If no password is added, a temporary random password will be generated automatically.
             6. Users flagged as `deleted` will be created as `Deactivated` on Rocket.Chat.
             7. Avatar URLs will not be fetched automatically. The workspace administrator needs to use the **Download Pending Avatars** button in **Administration** > **Workspace** > **Import** on the workspace after the import is completed.
-            8. Import IDs will not be used as IDs by Rocket.Chat, but you can query users by their import ID with the [users.info](https://developer.rocket.chat/reference/api/rest-api/endpoints/user-management/users-endpoints/get-users-info) endpoint.
+            8. Import IDs will not be used as IDs by Rocket.Chat, but you can query users by their import ID with the  <a href="https://developer.rocket.chat/apidocs/get-users-info" target="_blank">users.info</a>.
       x-stoplight:
         id: avny8ikk8d2bg
   /api/v1/import.run:
@@ -1976,7 +1986,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/X-Auth-Token'
-      description: 'Permission required: `view-statistics`'
+      description: 'Get the instances running for the workspace. Permission required: `view-statistics`'
       x-stoplight:
         id: 8hoo52clnhf5j
   /api/v1/federation/addServerByUser:
