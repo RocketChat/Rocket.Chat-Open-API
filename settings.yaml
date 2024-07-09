@@ -2114,14 +2114,19 @@ paths:
                   error:
                     type: string
               examples:
-                Example 1:
+                Example:
                   value:
                     success: false
                     error: cannot-remove-default-server
         '401':
           $ref: '#/components/responses/authorizationError'
       description: |-
+      
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+
+
+        Remove a federated server.
+
 
         ### Changelog
         | Version      | Description |
@@ -2138,7 +2143,7 @@ paths:
             schema:
               type: object
               x-examples:
-                Example 1:
+                Example:
                   serverName: my-server.rocket.chat
               properties:
                 serverName:
@@ -2204,7 +2209,7 @@ paths:
                     prevPageToken: g6FtzYqIoXK+IWNOd2pkUXdWcFJNc0lNa1VweDptYXRyaXgub3JnoWTC
                     success: true
         '401':
-          description: Unauthorized
+          $ref: '#/components/responses/authorizationError'
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
 
@@ -2274,7 +2279,7 @@ paths:
               required:
                 - externalRoomId
             examples:
-              Example 1:
+              Example:
                 value:
                   externalRoomId: '!externalRoomId:server.com'
       tags:
