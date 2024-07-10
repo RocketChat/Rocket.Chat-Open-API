@@ -69,8 +69,6 @@ paths:
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/query'
         - $ref: '#/components/parameters/fields'
-      x-stoplight:
-        id: lsipbbghogucn
   /api/v1/settings.oauth:
     parameters: []
     get:
@@ -173,8 +171,6 @@ paths:
         |0.64.0            | Renamed field `appId` to `clientId` and added flag `custom` to indicate whether the OAuth service is customized and fix `id` inconsistence (set all cases to `_id`)       |
         |0.63.0            | Added       |
       parameters: []
-      x-stoplight:
-        id: egppr84291ag8
   /api/v1/settings:
     parameters: []
     get:
@@ -227,8 +223,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/X-Auth-Token'
-      x-stoplight:
-        id: 7pbv4d2xr9qdx
   /api/v1/settings.addCustomOAuth:
     parameters: []
     post:
@@ -277,8 +271,6 @@ paths:
                   description: The name of the custom OAuth method that you want to add.
               required:
                 - name
-      x-stoplight:
-        id: utqft2vu5wdi6
   '/api/v1/settings/{_id}':
     parameters:
       - schema:
@@ -350,8 +342,6 @@ paths:
                   description: To trigger a action-button.
               required:
                 - value
-      x-stoplight:
-        id: oxq9qk65qoxuf
     get:
       summary: Get Setting
       tags:
@@ -429,8 +419,6 @@ paths:
       description: List out all the active OAuth services configured with details.
       tags:
         - Settings
-      x-stoplight:
-        id: r4cru8ezjk1ck
   /api/v1/cloud.manualRegister:
     parameters: []
     post:
@@ -451,7 +439,7 @@ paths:
                   error:
                     type: string
               examples:
-                Example 1:
+                Example:
                   value:
                     success: false
                     error: Workspace is already registered
@@ -481,11 +469,9 @@ paths:
               required:
                 - cloudBlob
             examples:
-              Example 1:
+              Example:
                 value:
                   cloudBlob: jfiscsm38urc3ujd
-      x-stoplight:
-        id: dpl1s86pn3ugc
   /api/v1/dns.resolve.txt:
     parameters: []
     post:
@@ -526,8 +512,6 @@ paths:
         content: {}
       tags:
         - DNS
-      x-stoplight:
-        id: oke4xc3gsgf0s
   /api/v1/dns.resolve.srv:
     parameters: []
     post:
@@ -568,8 +552,6 @@ paths:
         content: {}
       tags:
         - DNS
-      x-stoplight:
-        id: s4gjqcfkmzm8m
   /api/v1/e2e.fetchMyKeys:
     parameters: []
     get:
@@ -603,8 +585,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/X-Auth-Token'
-      x-stoplight:
-        id: i97kx6y9c3nz3
   /api/v1/e2e.getUsersOfRoomWithoutKey:
     parameters: []
     get:
@@ -680,8 +660,6 @@ paths:
           name: rid
           description: The room ID.
           required: true
-      x-stoplight:
-        id: qwo4jgls73l8x
   /api/v1/e2e.setRoomKeyID:
     parameters: []
     post:
@@ -743,8 +721,6 @@ paths:
                 value:
                   rid: wCiXndNp5NqNY3uCc
                   keyID: my-UniQu3_ke4_Id
-      x-stoplight:
-        id: 58usid6xybxo6
   /api/v1/e2e.setUserPublicAndPrivateKeys:
     parameters: []
     post:
@@ -799,8 +775,6 @@ paths:
                 value:
                   public_key: My-9UbLiK-k34
                   private_key: 9R1V4t3_k3Y
-      x-stoplight:
-        id: pbl8lnh31cp65
   /api/v1/e2e.updateGroupKey:
     parameters: []
     post:
@@ -860,8 +834,6 @@ paths:
                   uid: d26x6zSkaPSe5gCyy
                   rid: 9R1V4t3_k3Y
                   key: M4-Ubd4T3d-k39
-      x-stoplight:
-        id: jzmyzejc28b0o
   /api/v1/uploadImportFile:
     parameters: []
     post:
@@ -943,8 +915,6 @@ paths:
         | Version      | Description |
         | ---------------- | ------------|
         |3.0.0            | Added       |
-      x-stoplight:
-        id: cd2ctxbe176jc
   /api/v1/downloadPublicImportFile:
     parameters: []
     post:
@@ -1019,8 +989,6 @@ paths:
         | Version      | Description |
         | ---------------- | ------------|
         |3.0.0            | Added       |
-      x-stoplight:
-        id: t6x4pevvgd0e7
   /api/v1/startImport:
     parameters: []
     post:
@@ -1154,8 +1122,6 @@ paths:
         | Version      | Description |
         | ---------------- | ------------|
         |3.0.0            | Added       |
-      x-stoplight:
-        id: 9k7tfuuqwwosi
   /api/v1/getImportFileData:
     parameters: []
     get:
@@ -1206,8 +1172,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/X-Auth-Token'
-      x-stoplight:
-        id: pgb8ob50o23gy
   /api/v1/getImportProgress:
     parameters: []
     get:
@@ -1262,8 +1226,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/X-Auth-Token'
-      x-stoplight:
-        id: p8m9z8sq5fwht
   /api/v1/getLatestImportOperations:
     parameters: []
     get:
@@ -1354,8 +1316,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/X-Auth-Token'
-      x-stoplight:
-        id: 71a84duvu4tu1
   /api/v1/downloadPendingFiles:
     parameters: []
     post:
@@ -1394,8 +1354,6 @@ paths:
         - $ref: '#/components/parameters/X-Auth-Token'
       tags:
         - Import
-      x-stoplight:
-        id: wan1pw7i1gqy9
   /api/v1/downloadPendingAvatars:
     parameters: []
     post:
@@ -1434,8 +1392,6 @@ paths:
         - $ref: '#/components/parameters/X-Auth-Token'
       tags:
         - Import
-      x-stoplight:
-        id: idvdgnchbd8wh
   /api/v1/getCurrentImportOperation:
     parameters: []
     get:
@@ -1499,8 +1455,6 @@ paths:
         - $ref: '#/components/parameters/X-Auth-Token'
       tags:
         - Import
-      x-stoplight:
-        id: nh7g2yhhqszm4
   /api/v1/import.new:
     parameters: []
     post:
@@ -1564,8 +1518,6 @@ paths:
         - $ref: '#/components/parameters/X-Auth-Token'
       tags:
         - Bulk User Import
-      x-stoplight:
-        id: p522ythwj85c6
   /api/v1/import.addUsers:
     parameters: []
     post:
@@ -1644,7 +1596,7 @@ paths:
                       - emails
                       - importIds
             examples:
-              Example 1:
+              Example:
                 value:
                   users:
                     - username: john.doe
@@ -1670,8 +1622,6 @@ paths:
             6. Users flagged as `deleted` will be created as `Deactivated` on Rocket.Chat.
             7. Avatar URLs will not be fetched automatically. The workspace administrator needs to use the **Download Pending Avatars** button in **Administration** > **Workspace** > **Import** on the workspace after the import is completed.
             8. Import IDs will not be used as IDs by Rocket.Chat, but you can query users by their import ID with the  <a href="https://developer.rocket.chat/apidocs/get-users-info" target="_blank">users.info</a>.
-      x-stoplight:
-        id: avny8ikk8d2bg
   /api/v1/import.run:
     parameters: []
     post:
@@ -1704,8 +1654,6 @@ paths:
       requestBody:
         content: {}
         description: ''
-      x-stoplight:
-        id: ujj382yvzat22
   /api/v1/import.status:
     parameters: []
     get:
@@ -1796,8 +1744,6 @@ paths:
         - $ref: '#/components/parameters/X-Auth-Token'
       tags:
         - Bulk User Import
-      x-stoplight:
-        id: 1t53d4appczfx
   /api/v1/import.clear:
     parameters: []
     post:
@@ -1822,8 +1768,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/X-Auth-Token'
-      x-stoplight:
-        id: 47x92g0qses5v
   /api/v1/instances.get:
     parameters: []
     get:
@@ -1907,7 +1851,7 @@ paths:
                   success:
                     type: boolean
                 x-examples:
-                  Example 1:
+                  Example:
                     instances:
                       - address: localhost
                         currentStatus:
@@ -1987,8 +1931,6 @@ paths:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/X-Auth-Token'
       description: 'Get the instances running for the workspace. Permission required: `view-statistics`'
-      x-stoplight:
-        id: 8hoo52clnhf5j
   /api/v1/federation/addServerByUser:
     parameters: []
     post:
@@ -2025,11 +1967,9 @@ paths:
               required:
                 - serverName
             examples:
-              Example 1:
+              Example:
                 value:
                   serverName: my-server.rocket.chat
-      x-stoplight:
-        id: ex84zxirlxv9a
   /api/v1/federation/listServersByUser:
     parameters: []
     get:
@@ -2092,8 +2032,6 @@ paths:
         |6.0.0            | Added       |
       tags:
         - Federation
-      x-stoplight:
-        id: 312pkyb4w0429
   /api/v1/federation/removeServerByUser:
     parameters: []
     post:
@@ -2151,8 +2089,6 @@ paths:
                   description: The public server name that you want to remove.
               required:
                 - serverName
-      x-stoplight:
-        id: y7yne4lyvogml
   /api/v1/federation/searchPublicRooms:
     parameters: []
     get:
@@ -2244,8 +2180,6 @@ paths:
         - $ref: '#/components/parameters/count'
       tags:
         - Federation
-      x-stoplight:
-        id: w2bv4zx85zz6l
   /api/v1/federation/joinExternalPublicRoom:
     parameters: []
     post:
@@ -2258,6 +2192,8 @@ paths:
           $ref: '#/components/responses/authorizationError'
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+        
+        Join a public external federated room.
 
         ### Changelog
         | Version      | Description |
@@ -2284,8 +2220,6 @@ paths:
                   externalRoomId: '!externalRoomId:server.com'
       tags:
         - Federation
-      x-stoplight:
-        id: l152syfad80ut
   /api/v1/moderation.reportsByUsers:
     parameters: []
     get:
@@ -2401,8 +2335,6 @@ paths:
         - $ref: '#/components/parameters/sort'
       tags:
         - Moderation
-      x-stoplight:
-        id: 5hvpxmfo92p1h
   /api/v1/moderation.user.reportedMessages:
     parameters: []
     get:
@@ -2585,8 +2517,6 @@ paths:
           required: true
       tags:
         - Moderation
-      x-stoplight:
-        id: p4kjy5jgiz3cc
   /api/v1/moderation.reports:
     parameters: []
     get:
@@ -2682,8 +2612,6 @@ paths:
           required: true
       tags:
         - Moderation
-      x-stoplight:
-        id: 4w1rkanggvpaq
   /api/v1/moderation.reportInfo:
     parameters: []
     get:
@@ -2697,7 +2625,7 @@ paths:
         '403':
           $ref: '#/components/responses/forbiddenError'
       description: |-
-        Get more details of a single report. A message can be reported multiple times by various users.
+        Get more details of a single report. 
         Permission required: `view-moderation-console`
         ### Changelog
         | Version      | Description |
@@ -2714,8 +2642,6 @@ paths:
           required: true
       tags:
         - Moderation
-      x-stoplight:
-        id: d3y2yhn9sg2bc
   /api/v1/moderation.dismissReports:
     parameters: []
     post:
@@ -2752,8 +2678,6 @@ paths:
                   description: The ID of the message which reports to dismiss. This parameter is required if `userId` is not provided.
       tags:
         - Moderation
-      x-stoplight:
-        id: e1fjuzomqoczu
   /api/v1/moderation.user.deleteReportedMessages:
     parameters: []
     post:
@@ -2788,8 +2712,6 @@ paths:
                 - userId
       tags:
         - Moderation
-      x-stoplight:
-        id: pmuz5her2zncf
   /api/v1/sessions/list:
     parameters: []
     get:
@@ -2907,8 +2829,6 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
-      x-stoplight:
-        id: p4juor0kbuq9n
   /api/v1/sessions/list.all:
     parameters: []
     get:
@@ -2973,7 +2893,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     sessions:
                       - sessionId: o94SveQp6fyPsoiNC
@@ -3197,8 +3117,6 @@ paths:
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/x-2fa-code'
         - $ref: '#/components/parameters/X-2fa-method'
-      x-stoplight:
-        id: g38wnfqfn1yy4
   /api/v1/sessions/info:
     parameters: []
     get:
@@ -3319,7 +3237,7 @@ paths:
                   error:
                     type: string
               examples:
-                Example 1:
+                Session not found:
                   value:
                     success: false
                     error: Session not found
@@ -3346,8 +3264,6 @@ paths:
           name: sessionId
           description: The session ID.
           required: true
-      x-stoplight:
-        id: r1ovy46vxfwnd
   /api/v1/sessions/info.admin:
     parameters: []
     get:
@@ -3433,7 +3349,7 @@ paths:
                   error:
                     type: string
               examples:
-                Example 1:
+                Session not found:
                   value:
                     success: false
                     error: Session not found
@@ -3474,8 +3390,6 @@ paths:
           required: true
         - $ref: '#/components/parameters/x-2fa-code'
         - $ref: '#/components/parameters/X-2fa-method'
-      x-stoplight:
-        id: p7cqr8z8c8ljf
   /api/v1/sessions/logout.me:
     parameters: []
     post:
@@ -3510,7 +3424,7 @@ paths:
                   error:
                     type: string
               examples:
-                Example 1:
+                Session not found:
                   value:
                     success: false
                     error: Session not found
@@ -3542,11 +3456,9 @@ paths:
               required:
                 - sessionId
             examples:
-              Example 1:
+              Example:
                 value:
                   sessionId: WJ2giBwm4B9mcojFi
-      x-stoplight:
-        id: 2edkagmv9smsi
   /api/v1/sessions/logout:
     parameters: []
     post:
@@ -3637,8 +3549,6 @@ paths:
                   description: The session ID.
               required:
                 - sessionId
-      x-stoplight:
-        id: gq7qcp2uzpnji
 tags:
   - name: Settings
   - name: Cloud
