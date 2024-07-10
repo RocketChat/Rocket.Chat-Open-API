@@ -16,7 +16,6 @@ paths:
         - Integration
       summary: Create Integration
       description: |- 
-        Creates an integration, if the callee has the permissions.
         
         Permissions required to create incoming integrations:
         * `manage-incoming-integrations`
@@ -98,12 +97,12 @@ paths:
                   type: string
                   description: |-
                     This is an outgoing integration parameter.
-                    Specific words, separated by commas, which should trigger this integration.
+                    Specific words, separated by commas, that should trigger this integration.
                 token:
                   type: string
                   description: |-
                     This is an outgoing integration parameter.
-                    If your integration requires a special token from the server (api key), use this.
+                    If your integration requires a special token from the server (API key), use this parameter.
               required:
                 - type
                 - username
@@ -221,13 +220,45 @@ paths:
                         username: test.cat
                       _id: 659ea5e42dd9f928ada3e451
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: |-
+                      must have required property 'type'
+                       must have required property 'type'
+                       must match exactly one schema in oneOf [invalid-params]
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: |-
+                      must have required property 'username'
+                       must have required property 'username'
+                       must match exactly one schema in oneOf [invalid-params]
+                    errorType: invalid-params
   /api/v1/integrations.get:
     get:
       tags:
         - Integration
       summary: Get Integration
       description: |- 
-        Get integration information.
+        Get the information of a specific integration.
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -322,6 +353,31 @@ paths:
                         username: test.cat
                       _updatedAt: '2024-01-10T14:12:52.203Z'
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''integrationId'' [invalid-params]'
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: The integration does not exists.
   /api/v1/integrations.history:
     get:
       tags:
@@ -332,7 +388,7 @@ paths:
         * `manage-outgoing-integrations`
         * `manage-own-outgoing-integrations`
         
-        The endpoint returns the integration history based on user permissions.
+        The endpoint returns the integration history based on the user permissions.
         ### Changelog
         |Version      | Description | 
         | ---------------- | ------------|
@@ -382,6 +438,27 @@ paths:
                     items: 0
                     total: 0
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''id'' [invalid-params]'
+                    errorType: invalid-params
   /api/v1/integrations.list:
     get:
       tags:
@@ -394,7 +471,7 @@ paths:
         * `manage-outgoing-integrations`
         * `manage-own-outgoing-integrations`
         
-        The endpoint returns the integrations based on user permissions.
+        The endpoint returns the integrations based on the user permissions.
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
@@ -530,6 +607,8 @@ paths:
                     items: 2
                     total: 2
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/integrations.update:
     put:
       tags:
@@ -586,7 +665,7 @@ paths:
                     type: string
                 event:
                   type: string
-                  description: "This field is required only for outgoing integrations. \r\nThe type of event, can be any of these: sendMessage, fileUploaded, roomArchived, roomCreated, roomJoined, roomLeft, userCreated."
+                  description: "This field is required only for outgoing integrations. \r\nThe type of event can be any of these: `sendMessage`, `fileUploaded`, `roomArchived`, `roomCreated`, `roomJoined`, `roomLeft`, `userCreated`."
                 triggerWords:
                   type: string
                   description: 'Specific words, separated by commas, which should trigger this integration.'
@@ -603,7 +682,7 @@ paths:
                   example: ':ghost:'
                 token:
                   type: string
-                  description: 'If your integration requires a special token from the server (api key), use this.'
+                  description: 'If your integration requires a special token from the server (API key), use this parameter.'
                 script:
                   type: string
                   description: Script triggered when this integration is triggered.
@@ -728,12 +807,26 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
               examples:
                 Example 1:
                   value:
                     success: false
-                    error: 'Match error: Missing key ''<key name>'''
+                    error: |-
+                      must have required property 'type'
+                       must have required property 'type'
+                       must match exactly one schema in oneOf [invalid-params]
+                    errorType: invalid-params
                 Example 2:
+                  value:
+                    success: false
+                    error: |-
+                      must have required property 'integrationId'
+                       must have required property 'type'
+                       must match exactly one schema in oneOf [invalid-params]
+                    errorType: invalid-params
+                Example 3:
                   value:
                     success: false
                     error: No integration found.
@@ -834,6 +927,44 @@ paths:
                         _id: R4jgcQaQhvvK6K3iY
                       _updatedAt: '2017-01-06T13:42:14.144Z'
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: |-
+                      must have required property 'type'
+                       must have required property 'type'
+                       must have required property 'type'
+                       must match exactly one schema in oneOf [invalid-params]
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: |-
+                      must have required property 'integrationId'
+                       must have required property 'target_url'
+                       must have required property 'integrationId'
+                       must match exactly one schema in oneOf [invalid-params]
+                    errorType: invalid-params
+                Example 3:
+                  value:
+                    success: false
+                    error: No integration found.
   /api/v1/webdav.getMyAccounts:
     get:
       tags:
@@ -882,6 +1013,8 @@ paths:
                         username: admin
                         name: Webdav account
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/webdav.removeWebdavAccount:
     post:
       tags:
@@ -917,6 +1050,27 @@ paths:
                 properties:
                   success:
                     type: boolean
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''accountId'' [invalid-params]'
+                    errorType: invalid-params
   /api/v1/oauth-apps.create:
     post:
       tags:
@@ -1004,6 +1158,37 @@ paths:
                         username: math.bar
                       _id: 65a7d68142a7e12453052d56
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''name'' [invalid-params]'
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: 'must have required property ''active'' [invalid-params]'
+                    errorType: invalid-params
+                Example 3:
+                  value:
+                    success: false
+                    error: 'must have required property ''redirectUri'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/oauth-apps.update:
     post:
       tags:
@@ -1096,11 +1281,47 @@ paths:
                     _updatedAt: '2024-01-17T13:37:16.966Z'
                     _createdBy:
                       _id: JFTcMhEAFbNPfnp49
-                      username: matheus.barbosa
+                      username: math.bar
                     _updatedBy:
                       _id: JFTcMhEAFbNPfnp49
                       username: math.bar
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''name'' [invalid-params]'
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: 'must have required property ''active'' [invalid-params]'
+                    errorType: invalid-params
+                Example 3:
+                  value:
+                    success: false
+                    error: 'must have required property ''redirectUri'' [invalid-params]'
+                    errorType: invalid-params
+                Example 4:
+                  value:
+                    success: false
+                    error: 'must have required property ''appId'' [invalid-params]'
+                    errorType: invalid-params
   /api/v1/oauth-apps.list:
     get:
       tags:
@@ -1170,6 +1391,8 @@ paths:
                           username: system
                         _updatedAt: '2019-10-17T22:55:32.787Z'
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/oauth-apps.get:
     get:
       tags:
@@ -1260,6 +1483,35 @@ paths:
                         username: system
                       _updatedAt: '2019-10-17T22:55:32.787Z'
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: |-
+                      must have required property '_id'
+                       must have required property 'clientId'
+                       must have required property 'appId'
+                       must match exactly one schema in oneOf [invalid-params]
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: OAuth app not found.
   /api/v1/oauth-apps.delete:
     post:
       tags:
@@ -1283,7 +1535,7 @@ paths:
                 - appId
       responses:
         '200':
-          description: ''
+          description: OK
           content:
             application/json:
               schema:
@@ -1291,6 +1543,38 @@ paths:
                 properties:
                   success:
                     type: boolean
+              examples:
+                Success:
+                  value:
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''appId'' [invalid-params]'
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: 'Application not found [error-application-not-found]'
+                    errorType: error-application-not-found
+                    details:
+                      method: deleteOAuthApp
 tags:
   - name: Integration
   - name: OAuth Apps
@@ -1316,19 +1600,19 @@ components:
     sort:
       name: sort
       in: query
-      description: 'List of fields to order by, and in which direction. This is a JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending. For example, {"value": -1, "_id": 1}'
+      description: 'List of fields to order by, and in which direction. This is a JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending. For example, `{"value": -1, "_id": 1}`'
       required: false
       schema: {}
     query:
       name: query
       in: query
-      description: 'This parameter allows you to use MongoDB query operators to search for specific data. For example, to query users with a name that contains the letter "g": query={ "name": { "$regex": "g" } }'
+      description: 'This parameter allows you to use MongoDB query operators to search for specific data. For example, to query users with a name that contains the letter "g": query=`{ "name": { "$regex": "g" } }`'
       required: false
       schema: {}
     fields:
       name: fields
       in: query
-      description: 'This parameter accepts a JSON object with properties that have a value of 1 or 0 to include or exclude them in the response. For example, to only retrieve the usernames of users: fields={ "username": 1 }'
+      description: 'This parameter accepts a JSON object with properties that have a value of 1 or 0 to include or exclude them in the response. For example, to only retrieve the usernames of users: fields=`{ "username": 1 }`'
       required: false
       schema:
         type: string
