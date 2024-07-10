@@ -62,7 +62,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Example:
                   value:
                     emojis:
                       - _id: 6542e83aa2f73c7460e18efb
@@ -75,6 +75,8 @@ paths:
                     offset: 0
                     total: 1
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'  
   /api/v1/emoji-custom.create:
     post:
       tags:
@@ -100,6 +102,7 @@ paths:
                 emoji:
                   type: string
                   description: The image file to use as the new custom emoji.
+                  format: binary
                 name:
                   type: string
                   description: The name of the new custom emoji.
@@ -113,6 +116,8 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'  
   /api/v1/emoji-custom.delete:
     post:
       tags:
@@ -141,12 +146,14 @@ paths:
               required:
                 - emojiId
             examples:
-              Example 1:
+              Example:
                 value:
                   emojiId: 6542e83aa2f73c7460e18efb
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'   
   /api/v1/emoji-custom.list:
     get:
       tags:
@@ -234,12 +241,15 @@ paths:
                           extension: jpg
                           _updatedAt: '2019-02-18T16:48:35.119Z'
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'  
   /api/v1/emoji-custom.update:
     post:
       tags:
         - Custom Emoji
       summary: Update a Custom Emoji
       description: |-
+        Update a custom emoji.
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
@@ -277,6 +287,8 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'            
   /api/v1/custom-sounds.list:
     get:
       tags:
@@ -328,7 +340,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     sounds:
                       - _id: 65462caea2f73c7460e18f83
@@ -339,6 +351,8 @@ paths:
                     offset: 0
                     total: 1
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'  
   /api/v1/custom-user-status.list:
     get:
       tags:
@@ -385,7 +399,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success Example:
                   value:
                     statuses:
                       - _id: 63f61be0b000b6b6d86704c8
@@ -430,7 +444,7 @@ paths:
                 - name
                 - statusType
             examples:
-              Example 1:
+              Example:
                 value:
                   name: caught up
                   statusType: busy
@@ -456,7 +470,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success Example:
                   value:
                     customUserStatus:
                       _id: 65462e97a2f73c7460e18f84
@@ -483,7 +497,7 @@ paths:
                       method:
                         type: string
               examples:
-                Name Param:
+                Missing Name Param:
                   value:
                     success: false
                     error: 'The field Name is required [error-the-field-is-required]'
@@ -545,7 +559,7 @@ paths:
                 - name
                 - statusType
             examples:
-              Example 1:
+              Example:
                 value:
                   _id: 65462e97a2f73c7460e18f84
                   name: caught up again
@@ -572,7 +586,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success Example:
                   value:
                     customUserStatus:
                       _id: 65462e97a2f73c7460e18f84
@@ -592,7 +606,7 @@ paths:
                   error:
                     type: string
               examples:
-                Example 1:
+                User status not found:
                   value:
                     success: false
                     error: No custom user status found with the id of "SeZHHb77QXWRbnDh".
@@ -626,7 +640,7 @@ paths:
               required:
                 - customUserStatusId
             examples:
-              Example 1:
+              Example:
                 value:
                   customUserStatusId: 65462e97a2f73c7460e18f84
       responses:
@@ -644,7 +658,7 @@ paths:
                   error:
                     type: string
               examples:
-                Example 1:
+                User status Id is required::
                   value:
                     success: false
                     error: The "customUserStatusId" params is required!
@@ -656,7 +670,7 @@ paths:
         - Assets
       summary: Set Asset
       description: |-
-        Set an asset by name. Permissions required: `manage-assets` 
+        Set an <a href="https://docs.rocket.chat/docs/assets" target="_blank"> asset</a> by name. Permissions required: `manage-assets`. 
 
         ### Changelog
         | Version      | Description | 
@@ -703,6 +717,8 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'  
   /api/v1/assets.unsetAsset:
     post:
       tags:
@@ -734,13 +750,15 @@ paths:
               required:
                 - assetName
             examples:
-              Example 1:
+              Example:
                 value:
                   assetName: logo
                   refreshAllClients: true
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'            
 tags:
   - name: Assets
   - name: Custom Emoji
