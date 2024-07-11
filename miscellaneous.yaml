@@ -49,7 +49,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success Example:
                   value:
                     languages:
                       - language: bg
@@ -83,7 +83,7 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                Target Language Required:
                   value:
                     success: false
                     error: 'must have required property ''targetLanguage'' [invalid-params]'
@@ -94,9 +94,9 @@ paths:
     post:
       tags:
         - Auto-Translate
-      summary: Save Settings
+      summary: Save Auto-Translate  Settings
       description: |- 
-        Saves settings about autotranslate.
+        Saves autotranslate settings for a room.
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -128,7 +128,7 @@ paths:
                 - field
                 - value
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: 7aDSXtjMA3KPLxLjt
                   field: autoTranslate
@@ -137,6 +137,8 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/autotranslate.translateMessage:
     post:
       tags:
@@ -217,7 +219,7 @@ paths:
                   success:
                     type: boolean
                 x-examples:
-                  Example 1:
+                  Success:
                     message:
                       _id: Fq7sQNSnDEfzj8qoS
                       rid: GENERAL
@@ -251,6 +253,8 @@ paths:
                       translations:
                         en: This is a test
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/email-inbox.list:
     get:
       tags:
@@ -347,7 +351,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     emailInboxes:
                       - _id: 60197e8ff82d6c83b96c53ff
@@ -461,7 +465,7 @@ paths:
                 - smtp
                 - imap
             examples:
-              Example 1:
+              Example:
                 value:
                   name: new email
                   email: mdyemaasil@rocket.chat
@@ -493,8 +497,9 @@ paths:
                     type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Success:
+                  value:
                     _id: JdVkn_dkOlms_
                     success: true
         '400':
@@ -612,7 +617,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success Example:
                   value:
                     _id: 60197e8ff82d6c83b96c53ff
                     active: false
@@ -694,7 +699,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success Example:
                   value:
                     _id: 61717dd1066bc500096cb36d
                     success: true
@@ -808,7 +813,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success Example:
                   value:
                     emailInbox:
                       _id: 60197e8ff82d6c83b96c53ff
@@ -844,6 +849,7 @@ paths:
         - Email Inbox
       summary: Send test email to email inbox
       description: |- 
+        Send a test email to the inbox.
         Permissions required: `manage-email-inbox`
         
         ### Changelog
@@ -874,7 +880,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success Example:
                   value:
                     _id: 60197e8ff82d6c83b96c53ff
                     success: true
@@ -1265,7 +1271,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success Example:
                   value:
                     licenses:
                       - version: 2
@@ -1507,7 +1513,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success Example:
                   value:
                     license:
                       license:
@@ -1657,7 +1663,7 @@ paths:
                 license:
                   type: string
             examples:
-              Example 1:
+              Example:
                 value:
                   license: VFJ0vHf3Jm9AR0minB342MLaHRlZdc3Du5nf0E5Sv0QJ4SUkEIaU2boCYaDsxQ2N1UL4uhLjCF9M7iCZ/yxafJjxbHvOu1D5rOfdgO4RKlAGE9tGHDidJR9crJyXVb16jPHHvLSkUFzb7HoIq/nUXxU8gEgT3uJ9u2+Dw5ukDLX3SG2AFq1hLoPSZqsP6g2AQo=
       responses:
@@ -1706,10 +1712,11 @@ paths:
                     type: boolean
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    isEnterprise: true
-                    success: true
+              examples:
+                  Success Example:
+                    value: 
+                      isEnterprise: true
+                      success: true
         '401':
           $ref: '#/components/responses/authorizationError'
       deprecated: true
@@ -1746,7 +1753,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success Example:
                   value:
                     maxActiveUsers: 25
                     activeUsers: 0
@@ -1779,7 +1786,7 @@ paths:
               required:
                 - roomId
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: hyoM5JSQi94RwqPE7
       responses:
@@ -1794,10 +1801,13 @@ paths:
                     type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Success:
+                  value:
                     jitsiTimeout: '2019-01-16T13:17:11.951Z'
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/commands.get:
     get:
       tags:
@@ -1842,7 +1852,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     command:
                       command: me
@@ -1850,6 +1860,8 @@ paths:
                       description: Displays_action_text
                       clientOnly: false
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/commands.list:
     get:
       tags:
@@ -1891,7 +1903,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     commands:
                       - command: invite-all-from
@@ -1956,6 +1968,8 @@ paths:
                     count: 22
                     total: 22
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/commands.preview:
     get:
       tags:
@@ -2111,7 +2125,7 @@ paths:
                 - command
                 - roomId
             examples:
-              Example 1:
+              Success:
                 value:
                   command: unmute
                   roomId: ByehQjC44FwMeiLbX
@@ -2149,7 +2163,7 @@ paths:
               required:
                 - url
             examples:
-              Example 1:
+              Example:
                 value:
                   url: 'https://github.com/RocketChat/Apps.RocketChat.Tester/blob/master/dist/appsrocketchattester_0.0.5.zip?raw=true'
       responses:
@@ -2299,7 +2313,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     app:
                       id: bc4dd4a1-bf9b-408e-83a4-aba7eba0bf02
@@ -2367,6 +2381,8 @@ paths:
                       errors: {}
                       warnings: {}
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/mailer:
     post:
       tags:
@@ -2404,7 +2420,7 @@ paths:
                 - from
                 - subject
             examples:
-              Example 1:
+              Example:
                 value:
                   from: test.test@test.com
                   subject: Welcome to the Test Newsletter
@@ -2480,7 +2496,7 @@ paths:
                 - _id
                 - createdAt
             examples:
-              Example 1:
+              Example:
                 value:
                   _id: c6Lsa9SFVFxJLR56H
                   createdAt: '1692284808957'
@@ -2522,7 +2538,7 @@ paths:
                 - days
                 - maxUses
             examples:
-              Example 1:
+              Example:
                 value:
                   rid: csFYrDeixJG7PnrAh
                   days: 10
@@ -2557,7 +2573,7 @@ paths:
                     _updatedAt:
                       type: string
               examples:
-                Example 1:
+                Success:
                   value:
                     - _id: kDKQ3H
                       days: 1
@@ -2586,13 +2602,15 @@ paths:
                       expires: null
                       uses: 1
                       _updatedAt: '2019-12-20T03:38:40.116Z'
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/listInvites:
     get:
       tags:
         - Invite
       summary: List Invites
       description: |- 
-        Lists all of the invites on the server. 
+        Lists all of the invites on the workspace. 
         
         <a href="https://docs.rocket.chat/docs/permissions" target="_blank">Permission</a> required: `create-invite-links`
       operationId: get-api-v1-listInvites
@@ -2626,7 +2644,7 @@ paths:
                     _updatedAt:
                       type: string
               examples:
-                Example 1:
+                Success:
                   value:
                     - _id: kDKQ3H
                       days: 1
@@ -2655,7 +2673,9 @@ paths:
                       expires: null
                       uses: 1
                       _updatedAt: '2019-12-20T03:38:40.116Z'
-  '/api/v1/removeInvite/{_id}':
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  /api/v1/removeInvite/{_id}:
     delete:
       tags:
         - Invite
@@ -2694,7 +2714,7 @@ paths:
                       method:
                         type: string
               examples:
-                Example 1:
+                Invalid Invitation Id:
                   value:
                     success: false
                     error: 'Invalid Invitation _id [invalid-invitation-id]'
@@ -2725,7 +2745,7 @@ paths:
               required:
                 - token
             examples:
-              Example 1:
+              Example:
                 value:
                   token: iS7pza
       responses:
@@ -2750,7 +2770,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     room:
                       rid: QqsWiqNH2TnxtvZQq
@@ -2758,6 +2778,8 @@ paths:
                       name: a-room-name
                       t: p
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/validateInviteToken:
     post:
       tags:
@@ -2792,10 +2814,12 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example:
+                Success:
                   value:
                     valid: true
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
 tags:
   - name: Apps
   - name: Auto-Translate
