@@ -205,6 +205,253 @@ paths:
                   value:
                     success: false
                     error: 'Error! Connected WhatsApp Number (connectedWhatsAppNo) i.e. 565412001234 has not been registered yet on Rocket.Chat. Please goto #omnichannel-whatsapp-setup channel and connect this WhatsApp number first there before sending this request again.'
+  /api/apps:
+    post:
+      summary: Install Private Apps
+      description: |- 
+        Install a <a href="https://docs.rocket.chat/docs/rocketchat-marketplace#private-apps" target="_blank">private app</a> via URL. <a href="https://docs.rocket.chat/docs/permissions" target="_blank">Permission</a> required: `manage-apps`
+
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |3.1.0     | Added       |
+      operationId: post-api-apps
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  description: The app URL where the zip file is located.
+              required:
+                - url
+            examples:
+              Example:
+                value:
+                  url: 'https://github.com/RocketChat/Apps.RocketChat.Tester/blob/master/dist/appsrocketchattester_0.0.5.zip?raw=true'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  app:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      version:
+                        type: string
+                      requiredApiVersion:
+                        type: string
+                      iconFile:
+                        type: string
+                      author:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          homepage:
+                            type: string
+                          support:
+                            type: string
+                      name:
+                        type: string
+                      nameSlug:
+                        type: string
+                      classFile:
+                        type: string
+                      description:
+                        type: string
+                      implements:
+                        type: array
+                        items:
+                          type: object
+                      iconFileContent:
+                        type: string
+                      status:
+                        type: string
+                  implemented:
+                    type: object
+                    properties:
+                      IPreMessageSentPrevent:
+                        type: boolean
+                      IPreMessageSentExtend:
+                        type: boolean
+                      IPreMessageSentModify:
+                        type: boolean
+                      IPostMessageSent:
+                        type: boolean
+                      IPreMessageDeletePrevent:
+                        type: boolean
+                      IPostMessageDeleted:
+                        type: boolean
+                      IPreMessageUpdatedPrevent:
+                        type: boolean
+                      IPreMessageUpdatedExtend:
+                        type: boolean
+                      IPreMessageUpdatedModify:
+                        type: boolean
+                      IPostMessageUpdated:
+                        type: boolean
+                      IPostMessageReacted:
+                        type: boolean
+                      IPostMessageFollowed:
+                        type: boolean
+                      IPostMessagePinned:
+                        type: boolean
+                      IPostMessageStarred:
+                        type: boolean
+                      IPostMessageReported:
+                        type: boolean
+                      IPreRoomCreatePrevent:
+                        type: boolean
+                      IPreRoomCreateExtend:
+                        type: boolean
+                      IPreRoomCreateModify:
+                        type: boolean
+                      IPostRoomCreate:
+                        type: boolean
+                      IPreRoomDeletePrevent:
+                        type: boolean
+                      IPostRoomDeleted:
+                        type: boolean
+                      IPreRoomUserJoined:
+                        type: boolean
+                      IPostRoomUserJoined:
+                        type: boolean
+                      IPreRoomUserLeave:
+                        type: boolean
+                      IPostRoomUserLeave:
+                        type: boolean
+                      IPostExternalComponentOpened:
+                        type: boolean
+                      IPostExternalComponentClosed:
+                        type: boolean
+                      IUIKitInteractionHandler:
+                        type: boolean
+                      IUIKitLivechatInteractionHandler:
+                        type: boolean
+                      IPostLivechatRoomStarted:
+                        type: boolean
+                      IPostLivechatRoomClosed:
+                        type: boolean
+                      ILivechatRoomClosedHandler:
+                        type: boolean
+                      IPostLivechatAgentAssigned:
+                        type: boolean
+                      IPostLivechatAgentUnassigned:
+                        type: boolean
+                      IPostLivechatRoomTransferred:
+                        type: boolean
+                      IPostLivechatGuestSaved:
+                        type: boolean
+                      IPostLivechatRoomSaved:
+                        type: boolean
+                      IPreFileUpload:
+                        type: boolean
+                      IPreEmailSent:
+                        type: boolean
+                      IPostUserCreated:
+                        type: boolean
+                      IPostUserUpdated:
+                        type: boolean
+                      IPostUserDeleted:
+                        type: boolean
+                      IPostUserLoggedIn:
+                        type: boolean
+                      IPostUserLoggedOut:
+                        type: boolean
+                      IPostUserStatusChanged:
+                        type: boolean
+                  licenseValidation:
+                    type: object
+                    properties:
+                      errors:
+                        type: object
+                      warnings:
+                        type: object
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    app:
+                      id: bc4dd4a1-bf9b-408e-83a4-aba7eba0bf02
+                      version: 0.0.5
+                      requiredApiVersion: ^1.33.0
+                      iconFile: icon.png
+                      author:
+                        name: Rocket.Chat
+                        homepage: 'https://github.com/RocketChat'
+                        support: a
+                      name: Apps.RocketChat.Tester
+                      nameSlug: appsrocketchattester
+                      classFile: AppsRocketChatTesterApp.js
+                      description: An app that provides endpoints to test Apps integration to Rocket.Chat
+                      implements: []
+                      iconFileContent: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQBAMAAACAGwOrAAAAG1BMVEUAAAD///9fX19/f38/Pz+fn5/f398fHx+/v7F+DAse5zMkkE4D1Jf6exKnYRje4LriXRQ0JzTVP2t7hLNtFWODfxNqiaa6VE8tGjFCxXyc1HHsTisiQ0rijg4mTvyAAAElFTkSuQmCC'
+                      status: auto_enabled
+                    implemented:
+                      IPreMessageSentPrevent: false
+                      IPreMessageSentExtend: false
+                      IPreMessageSentModify: false
+                      IPostMessageSent: false
+                      IPreMessageDeletePrevent: false
+                      IPostMessageDeleted: false
+                      IPreMessageUpdatedPrevent: false
+                      IPreMessageUpdatedExtend: false
+                      IPreMessageUpdatedModify: false
+                      IPostMessageUpdated: false
+                      IPostMessageReacted: false
+                      IPostMessageFollowed: false
+                      IPostMessagePinned: false
+                      IPostMessageStarred: false
+                      IPostMessageReported: false
+                      IPreRoomCreatePrevent: false
+                      IPreRoomCreateExtend: false
+                      IPreRoomCreateModify: false
+                      IPostRoomCreate: false
+                      IPreRoomDeletePrevent: false
+                      IPostRoomDeleted: false
+                      IPreRoomUserJoined: false
+                      IPostRoomUserJoined: false
+                      IPreRoomUserLeave: false
+                      IPostRoomUserLeave: false
+                      IPostExternalComponentOpened: false
+                      IPostExternalComponentClosed: false
+                      IUIKitInteractionHandler: false
+                      IUIKitLivechatInteractionHandler: false
+                      IPostLivechatRoomStarted: false
+                      IPostLivechatRoomClosed: false
+                      ILivechatRoomClosedHandler: false
+                      IPostLivechatAgentAssigned: false
+                      IPostLivechatAgentUnassigned: false
+                      IPostLivechatRoomTransferred: false
+                      IPostLivechatGuestSaved: false
+                      IPostLivechatRoomSaved: false
+                      IPreFileUpload: false
+                      IPreEmailSent: false
+                      IPostUserCreated: false
+                      IPostUserUpdated: false
+                      IPostUserDeleted: false
+                      IPostUserLoggedIn: false
+                      IPostUserLoggedOut: false
+                      IPostUserStatusChanged: false
+                    licenseValidation:
+                      errors: {}
+                      warnings: {}
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  
 components:
   schemas: {}
   parameters:
