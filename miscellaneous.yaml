@@ -169,7 +169,7 @@ paths:
               required:
                 - messageId
             examples:
-              Example 1:
+              Example:
                 value:
                   messageId: Fq7sQNSnDEfzj8qoS
                   targetLanguage: en
@@ -218,23 +218,6 @@ paths:
                             type: string
                   success:
                     type: boolean
-                x-examples:
-                  Success:
-                    message:
-                      _id: Fq7sQNSnDEfzj8qoS
-                      rid: GENERAL
-                      msg: Isso é um teste
-                      ts: '2019-06-27T15:35:20.753Z'
-                      u:
-                        _id: pC6Z2N2ijivxdsYSu
-                        username: marcos
-                        name: marcos
-                      _updatedAt: '2019-06-27T15:47:01.486Z'
-                      mentions: []
-                      channels: []
-                      translations:
-                        en: This is a test
-                    success: true
               examples:
                 Success:
                   value:
@@ -513,10 +496,6 @@ paths:
                     type: boolean
                   error:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'E11000 duplicate key error index: rocketchat.rocketchat_email_inbox.$email_1 dup key: { : "mdyemail@rocket.chat" }'
               examples:
                 Duplicate:
                   value:
@@ -993,7 +972,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     users:
                       - _id: rocket.cat
@@ -1003,6 +982,8 @@ paths:
                         avatarETag: 5BB9B5ny5DkKdrwkq
                     rooms: []
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/stdout.queue:
     get:
       summary: Get stdout queue
@@ -1036,7 +1017,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     queue:
                       - id: logid-0
@@ -2065,7 +2046,7 @@ paths:
                 - tmid
                 - previewItem
             examples:
-              Example 1:
+              Example:
                 value:
                   command: unmute
                   roomId: ByehQjC44FwMeiLbX
@@ -2447,13 +2428,6 @@ paths:
                     properties:
                       function:
                         type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'Invalid from address [error-invalid-from-address]'
-                    errorType: error-invalid-from-address
-                    details:
-                      function: Mailer.sendMail
               examples:
                 Invalid From Address:
                   value:
