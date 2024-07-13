@@ -32,10 +32,10 @@ paths:
                   msg:
                     type: string
               examples:
-                Example  1:
+                Close chat:
                   value:
                     msg: ' Close chat request handled successfully'
-                Example 2:
+               Perform handover:
                   value:
                     msg: ' Perform Handover request handled successfully'
         '401':
