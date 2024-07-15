@@ -73,7 +73,7 @@ paths:
                       type: string
                       description: The targeted department.
             examples:
-              Example 1:
+              Example:
                 value:
                   action: close-chat
                   sessionId: 2Sfq8wXw4fYPMf6r4
