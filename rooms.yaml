@@ -8877,7 +8877,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     online:
                       - _id: 47cRd58HnWwpqxhaZ
@@ -8886,6 +8886,8 @@ paths:
                         username: uniqueusername
                     success: true
 
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/groups.getIntegrations:
     get:
       tags:
@@ -8981,7 +8983,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     integrations:
                       - _id: WMQDChpnYTRmFre9h
@@ -9052,6 +9054,8 @@ paths:
                         _updatedAt: '2017-01-05T17:06:05.660Z'
                     success: true
 
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/groups.addAll:
     post:
       tags:
@@ -9083,7 +9087,7 @@ paths:
               required:
                 - roomId
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: ByehQjC44FwMeiLbX
                   activeUsersOnly: 'true'
@@ -9122,7 +9126,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     channel:
                       _id: ByehQjC44FwMeiLbX
@@ -9137,7 +9141,8 @@ paths:
                         username: example
                       ts: '2016-05-30T13:42:25.304Z'
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/groups.addLeader:
     post:
       tags:
@@ -9172,7 +9177,7 @@ paths:
                 - roomId
                 - userId
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: ByehQjC44FwMeiLbX
                   userId: oCHkav5Zf6vmpu2W2
@@ -9193,12 +9198,13 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                User is already a leader:
                   value:
                     success: false
                     error: 'User is already a leader [error-user-already-leader]'
                     errorType: error-user-already-leader
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/groups.addModerator:
     post:
       tags:
@@ -9233,14 +9239,15 @@ paths:
                 - roomId
                 - userId
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: ByehQjC44FwMeiLbX
                   userId: nSYqWzZ4GsKTX4dyK
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/groups.addOwner:
     post:
       tags:
@@ -9270,21 +9277,22 @@ paths:
                 - roomId
                 - userId
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: ByehQjC44FwMeiLbX
                   userId: nSYqWzZ4GsKTX4dyK
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/groups.archive:
     post:
       tags:
         - Groups
       summary: Archive a Group
       description: |-
-        Archives a group/channel, only if you're part of the group/channel.
+        Archive a group you belong to.
         
         ### Changelog
         | Version | Description |
@@ -9308,7 +9316,8 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/groups.close:
     post:
       tags:
@@ -9339,7 +9348,8 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/groups.counters:
     get:
       tags:
@@ -9369,6 +9379,7 @@ paths:
         '200':
           description: |-
             OK
+            
             **Note:**
             - joined - boolean flag that shows that user is joined the room or not
             - members - count of current room members
@@ -9399,7 +9410,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     joined: true
                     members: 1
@@ -9511,8 +9522,9 @@ paths:
                         type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Success:
+                  value:
                     group:
                       _id: NtR6RQ7NvzA9ejecX
                       name: testing
@@ -9526,7 +9538,8 @@ paths:
                       sysMes: true
                       _updatedAt: '2016-12-09T16:53:06.761Z'
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/groups.delete:
     post:
       tags:
@@ -9562,14 +9575,15 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/groups.history:
     get:
       tags:
         - Groups
       summary: Get Group History
       description: |-
-        Retrieves the messages from a group/channel, only if you're part of the group.
+        Retrieves the messages from a group/channel you belong to.
         
         ### Changelog
         | Version | Description             |
@@ -9644,7 +9658,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     messages:
                       - _id: AkzpHAvZpdnuchw2a
@@ -9686,14 +9700,15 @@ paths:
                         groupable: false
                         _updatedAt: '2016-12-06T17:57:38.635Z'
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/groups.info:
     get:
       tags:
         - Groups
       summary: Get Group Information
       description: |-
-        Retrieves the information about the private group, only if you're part of the group.
+        Retrieves the information about a private group you belong to.
         
         ### Changelog
         | Version | Description |
@@ -9754,7 +9769,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     group:
                       _id: ByehQjC44FwMeiLbX
@@ -9808,7 +9823,7 @@ paths:
                 - roomId
                 - userId
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: ByehQjC44FwMeiLbX
                   userId: nSYqWzZ4GsKTX4dyK
@@ -9851,7 +9866,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     group:
                       _id: ByehQjC44FwMeiLbX
@@ -9887,7 +9902,7 @@ paths:
                       method:
                         type: string
               examples:
-                Example 1:
+                Permission required:
                   value:
                     success: false
                     error: Not allowed [error-not-allowed]
@@ -9901,7 +9916,7 @@ paths:
         - Groups
       summary: Remove User from Group
       description: |-
-        Removes a user from the group/channel.
+        Remove a user from the group/channel.
         
         ### Changelog
         | Version | Description |
@@ -9925,7 +9940,7 @@ paths:
                 - roomId
                 - userId
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: ByehQjC44FwMeiLbX
                   userId: nSYqWzZ4GsKTX4dyK
@@ -9970,7 +9985,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     group:
                       _id: ByehQjC44FwMeiLbX
@@ -9987,14 +10002,15 @@ paths:
                       sysMes: true
                       _updatedAt: '2016-12-09T15:22:40.656Z'
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/groups.leave:
     post:
       tags:
         - Groups
       summary: Leave Group
       description: |-
-        Causes the request sender to be removed from the group/channel if they're part of it and are not the last owner.
+        Leave a group. The group owner must set another owner before leaving the group.
         
         ### Changelog
         | Version | Description |
@@ -10055,7 +10071,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     group:
                       _id: ByehQjC44FwMeiLbX
@@ -10072,7 +10088,8 @@ paths:
                       sysMes: true
                       _updatedAt: '2016-12-09T15:22:40.656Z'
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/groups.listAll:
     get:
       tags:
@@ -10149,7 +10166,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     groups:
                       - _id: xA52DRDM7dqx2PfTp
@@ -10170,7 +10187,8 @@ paths:
                     count: 1
                     total: 1
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/groups.list:
     get:
       tags:
@@ -10238,7 +10256,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     groups:
                       - _id: ByehQjC44FwMeiLbX
@@ -10267,7 +10285,8 @@ paths:
                     count: 1
                     total: 1
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/groups.members:
     get:
       tags:
@@ -10336,7 +10355,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     members:
                       - _id: Q4GkX6RMepGDdQ7YJ
@@ -10353,7 +10372,8 @@ paths:
                     offset: 0
                     total: 2
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /groups.membersByHighestRole:
     get:
       tags:
