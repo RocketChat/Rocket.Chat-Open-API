@@ -62,7 +62,7 @@ paths:
                     - `encrypted`: Whether the channel should be encrypted.
                     - `teamId`: Enter the team ID for which you want to create a group.
                     
-                    For more information, see [Channels](https://docs.rocket.chat/use-rocket.chat/user-guides/rooms/channels#channel-privacy-and-encryption).
+                    For more information, see <a href='https://docs.rocket.chat/use-rocket.chat/user-guides/rooms/channels#channel-privacy-and-encryption' target='_blank'>Channels</a>
               required:
                 - name
             examples:
@@ -281,7 +281,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example:
+                Success:
                   value:
                     channel:
                       _id: ByehQjC44FwMeiLbX
@@ -331,7 +331,7 @@ paths:
                 - roomId
                 - userId
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: WDuJLFkjwk6L7LdFC
                   userId: b66oZ8i9pkeSko33v
@@ -352,7 +352,7 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                User is a leader:
                   value:
                     success: false
                     error: 'User is already a leader [error-user-already-leader]'
@@ -393,7 +393,7 @@ paths:
                 - roomId
                 - userId
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: WDuJLFkjwk6L7LdFC
                   userId: b66oZ8i9pkeSko33v
@@ -414,7 +414,7 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                User is already a moderator:
                   value:
                     success: false
                     error: 'User is already a moderator [error-user-already-moderator]'
@@ -454,7 +454,7 @@ paths:
                 - roomId
                 - userId
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: WDuJLFkjwk6L7LdFC
                   userId: b66oZ8i9pkeSko33v
@@ -480,7 +480,7 @@ paths:
                       method:
                         type: string
               examples:
-                Example 1:
+                User is alrready an owner:
                   value:
                     success: false
                     error: 'User is already an owner [error-user-already-owner]'
@@ -596,7 +596,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example:
+                Success:
                   value:
                     messages:
                       - _id: xadufzmxzYQp4H9py
@@ -708,7 +708,7 @@ paths:
               required:
                 - roomId
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: ByehQjC44FwMeiLbX
       responses:
@@ -728,7 +728,7 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                Channel is already archived:
                   value:
                     success: false
                     error: 'The channel, add-room-websocket, is archived [error-room-archived]'
@@ -762,7 +762,7 @@ paths:
               required:
                 - roomId
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: ByehQjC44FwMeiLbX
       responses:
@@ -780,7 +780,7 @@ paths:
                   error:
                     type: string
               examples:
-                Example 1:
+                Channel is already closed:
                   value:
                     success: false
                     error: 'The channel, dlp, is already closed to the sender'
@@ -792,7 +792,7 @@ paths:
         - Channels
       summary: Get Channel Counters
       description: |-
-        Gets channel information related to a user.
+        Gets channel counter for the authenticated user.
         
         Permission required: `view-room-administration`
         ### Changelog
@@ -846,7 +846,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Example:
                   value:
                     joined: true
                     members: 23
@@ -2925,7 +2925,7 @@ paths:
               required:
                 - roomId
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: ByehQjC44FwMeiLbX
       responses:
@@ -2967,7 +2967,7 @@ paths:
                 - roomId
                 - userId
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: ByehQjC44FwMeiLbX
                   userId: oCHkav5Zf6vmpu2W2
@@ -2988,7 +2988,7 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                User is not a leader:
                   value:
                     success: false
                     error: 'User is not a leader [error-user-not-leader]'
@@ -3031,7 +3031,7 @@ paths:
                 - roomId
                 - userId
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: ByehQjC44FwMeiLbX
                   userId: oCHkav5Zf6vmpu2W2
@@ -3057,7 +3057,7 @@ paths:
                       method:
                         type: string
               examples:
-                Example 1:
+                User is not a moderator:
                   value:
                     success: false
                     error: 'User is not a moderator [error-user-not-moderator]'
@@ -3102,14 +3102,15 @@ paths:
                 - roomId
                 - userId
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: ByehQjC44FwMeiLbX
                   userId: oCHkav5Zf6vmpu2W2
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/channels.rename:
     post:
       tags:
@@ -3142,7 +3143,7 @@ paths:
                 - roomId
                 - name
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: WDuJLFkjwk6L7LdFC
                   name: newName
@@ -3187,7 +3188,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example:
+                Success:
                   value:
                     channel:
                       _id: ByehQjC44FwMeiLbX
@@ -3204,7 +3205,8 @@ paths:
                       sysMes: true
                       _updatedAt: '2016-12-09T15:57:44.686Z'
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/channels.roles:
     get:
       tags:
@@ -3255,7 +3257,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     roles:
                       - _id: rGNoXwYuZshq9FENQ
@@ -3274,7 +3276,8 @@ paths:
                         roles:
                           - leader
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/channels.setAnnouncement:
     post:
       tags:
@@ -3307,7 +3310,7 @@ paths:
                 - roomId
                 - announcement
             examples:
-              Example 1:
+              Success:
                 value:
                   roomId: WDuJLFkjwk6L7LdFC
                   announcement: Test out everything
@@ -3324,11 +3327,12 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Example:
                   value:
                     announcement: Test out everything
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/channels.setCustomFields:
     post:
       tags:
@@ -3365,7 +3369,7 @@ paths:
                 - customFields
                 - organization
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: GENERAL
                   customFields:
@@ -3478,7 +3482,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     channel:
                       _id: WDuJLFkjwk6L7LdFC
@@ -3521,7 +3525,8 @@ paths:
                       lm: '2023-09-16T07:37:59.691Z'
                       announcement: Test out everything
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/channels.setDefault:
     post:
       tags:
@@ -3553,7 +3558,7 @@ paths:
                 - roomId
                 - default
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: ByehQjC44FwMeiLbX
                   default: true
@@ -3605,8 +3610,9 @@ paths:
                         type: boolean
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Example:
+                  value:
                     channel:
                       _id: ByehQjC44FwMeiLbX
                       name: testing0
@@ -3626,7 +3632,8 @@ paths:
                       muted: []
                       default: true
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/channels.setDescription:
     post:
       tags:
@@ -3660,7 +3667,7 @@ paths:
                 - roomId
                 - description
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: ByehQjC44FwMeiLbX
                   description: Test out everything
@@ -3676,11 +3683,13 @@ paths:
                     type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
+              examples:
+                Success:
+                  value:
                     description: Testing the room
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/channels.setJoinCode:
     post:
       tags:
@@ -3713,7 +3722,7 @@ paths:
                 - roomId
                 - joinCode
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: ByehQjC44FwMeiLbX
                   joinCode: 87hsyi9
@@ -3829,7 +3838,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     channel:
                       _id: WDuJLFkjwk6L7LdFC
@@ -3874,7 +3883,8 @@ paths:
                       description: Testing the room
                       joinCodeRequired: true
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/channels.setPurpose:
     post:
       tags:
@@ -3908,7 +3918,7 @@ paths:
                 - roomId
                 - purpose
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: WDuJLFkjwk6L7LdFC
                   purpose: greetings
@@ -3925,11 +3935,12 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     purpose: greetings
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/channels.setReadOnly:
     post:
       tags:
@@ -4013,7 +4024,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example:
+                Success:
                   value:
                     channel:
                       _id: ByehQjC44FwMeiLbX
@@ -4033,7 +4044,8 @@ paths:
                       joinCodeRequired: true
                       muted: []
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/channels.setTopic:
     post:
       tags:
@@ -4066,7 +4078,7 @@ paths:
                 - roomId
                 - topic
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: WDuJLFkjwk6L7LdFC
                   topic: Discuss all of the testing
@@ -4083,11 +4095,12 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     topic: Discuss all of the testing
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/channels.setType:
     post:
       tags:
@@ -4123,7 +4136,7 @@ paths:
                 - roomId
                 - type
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: WDuJLFkjwk6L7LdFC
                   type: p
@@ -4174,7 +4187,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     channel:
                       _id: ByehQjC44FwMeiLbX
@@ -4224,6 +4237,8 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'          
 
   /api/v1/channels.getAllUserMentionsByChannel:
     get:
@@ -4327,7 +4342,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     mentions:
                       - _id: mPmJ6cPAazzphJmGe
@@ -4357,7 +4372,8 @@ paths:
                     offset: 0
                     total: 1
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/channels.getIntegrations:
     get:
       tags:
@@ -4455,7 +4471,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Example:
                   value:
                     integrations:
                       - _id: WMQDChpnYTRmFre9h
@@ -4486,7 +4502,8 @@ paths:
                           _id: R4jgcQaQhvvK6K3iY
                         _updatedAt: '2017-01-05T17:06:05.660Z'
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/channels.convertToTeam:
     post:
       tags:
@@ -4511,7 +4528,7 @@ paths:
               required:
                 - channelId
             examples:
-              Example 1:
+              Example:
                 value:
                   channelId: 6513afeda2f73c7460e18c86
       responses:
@@ -4547,7 +4564,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     team:
                       _id: 65149c7ea2f73c7460e18cab
@@ -4560,7 +4577,8 @@ paths:
                       _updatedAt: '2023-09-27T21:19:58.972Z'
                       roomId: 6513afeda2f73c7460e18c86
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/rooms.saveNotification:
     post:
       tags:
