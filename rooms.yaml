@@ -174,7 +174,7 @@ paths:
               required:
                 - roomId
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: WDuJLFkjwk6L7LdFC
                   activeUsersOnly: true
@@ -650,7 +650,7 @@ paths:
                                 value: Testing out something or other
                               - short: true
                                 title: Another Test
-                                value: '[Link](https://google.com/) something and this and that.'
+                                value: '<a href="https://google.com" target="_blank">Link</a> something and this and that.'
                         ts: '2018-10-05T01:10:45.994Z'
                         u:
                           _id: rocketchat.internal.admin.test
@@ -992,7 +992,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Example:
                   value:
                     files:
                       - _id: 651227bea2f73c7460e18c63
@@ -1524,7 +1524,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Add bulk users:
                   value:
                     channel:
                       _id: ByehQjC44FwMeiLbX
@@ -1538,7 +1538,7 @@ paths:
                       _updatedAt: '2016-12-09T12:50:51.575Z'
                       lm: '2016-12-09T12:50:51.555Z'
                     success: true
-                Example 2:
+                Add a user:
                   value:
                     channel:
                       _id: ByehQjC44FwMeiLbX
@@ -1581,7 +1581,7 @@ paths:
               required:
                 - roomId
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: ByehQjC44FwMeiLbX
                   joinCode: '1234'
@@ -1740,7 +1740,7 @@ paths:
                 - roomId
                 - userId
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: WDuJLFkjwk6L7LdFC
                   userId: rYhzFRd2QZjNwAAXX
@@ -1846,47 +1846,6 @@ paths:
                         type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    channel:
-                      _id: WDuJLFkjwk6L7LdFC
-                      fname: dlp
-                      customFields: {}
-                      topic: ''
-                      broadcast: false
-                      encrypted: false
-                      name: dlp
-                      t: c
-                      msgs: 65
-                      usersCount: 45
-                      u:
-                        _id: rbAXPnMktTFbNpwtJ
-                        username: roxie
-                      ts: '2023-04-05T22:34:38.936Z'
-                      ro: false
-                      default: false
-                      sysMes: true
-                      _updatedAt: '2023-09-26T23:09:16.529Z'
-                      lastMessage:
-                        _id: mBfC3sbNhfwcL4AQu
-                        rid: WDuJLFkjwk6L7LdFC
-                        msg: It should be good
-                        ts: '2023-09-16T07:37:59.691Z'
-                        u:
-                          _id: rbAXPnMktTFbNpwtJ
-                          username: test.test
-                          name: test test
-                        _updatedAt: '2023-09-16T07:37:59.815Z'
-                        urls: []
-                        mentions: []
-                        channels: []
-                        md:
-                          - type: PARAGRAPH
-                            value:
-                              - type: PLAIN_TEXT
-                                value: It should be good
-                      lm: '2023-09-16T07:37:59.691Z'
-                    success: true
               examples:
                 Example:
                   value:
@@ -2344,7 +2303,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     channels:
                       - _id: GENERAL
@@ -2383,7 +2342,8 @@ paths:
                     offset: 0
                     total: 3
                     success: true
-                    
+        '401':
+          $ref: '#/components/responses/authorizationError'                    
   /api/v1/channels.members:
     get:
       tags:
@@ -2455,7 +2415,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     members:
                       - _id: rbAXPnMktTFbNpwtJ
@@ -2705,7 +2665,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     messages:
                       - _id: uASTuwBEu7SBDAxxh
@@ -2796,6 +2756,8 @@ paths:
                     offset: 0
                     total: 4
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/channels.moderators:
     get:
       tags:
@@ -2837,13 +2799,15 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     moderators:
                       - _id: rocket.cat
                         username: rocket.cat
                         name: Rocket.Cat
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/channels.online:
     get:
       tags:
@@ -3973,7 +3937,7 @@ paths:
                 - roomId
                 - readOnly
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: ByehQjC44FwMeiLbX
                   readOnly: true
@@ -4680,7 +4644,7 @@ paths:
                 - roomId
                 - notifications
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: 5of4weEXaH7yncxz9
                   notifications:
@@ -4696,7 +4660,8 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/rooms.adminRooms:
     get:
       tags:
@@ -4793,7 +4758,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example:
+                Success:
                   value:
                     rooms:
                     - _id: 654c9d1ca2f73c7460e1918b
@@ -4814,7 +4779,8 @@ paths:
                     offset: 0
                     total: 1
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/rooms.cleanHistory:
     post:
       tags:
@@ -4875,7 +4841,7 @@ paths:
                 - latest
                 - oldest
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: roomId
                   latest: '2016-12-09T13:42:25.304Z'
@@ -4883,7 +4849,8 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/rooms.info:
     get:
       tags:
@@ -5023,7 +4990,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     room:
                       _id: 6513afeda2f73c7460e18c86
@@ -5076,7 +5043,8 @@ paths:
                       teamId: 65149c7ea2f73c7460e18cab
                       teamMain: true
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/rooms.getDiscussions:
     get:
       tags:
@@ -5211,7 +5179,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     discussions:
                       - _id: 6514d34ea2f73c7460e18cb4
@@ -5255,7 +5223,8 @@ paths:
                     offset: 0
                     total: 1
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/rooms.get:
     get:
       tags:
@@ -5421,7 +5390,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     update:
                       - _id: 5fRTXMt7DMJbpPJfhrbAXPnMktTFbNpwtJ
@@ -5617,7 +5586,8 @@ paths:
                       - _id: 6512153aa2f73c7460e18c5e
                         _deletedAt: '2023-09-26T00:29:17.723Z'
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/rooms.leave:
     post:
       tags:
@@ -5647,7 +5617,8 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/rooms.delete:
     post:
       tags:
@@ -5677,14 +5648,15 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/rooms.favorite:
     post:
       tags:
         - Rooms
       summary: Favorite/Unfavourite a Room
       description: |-
-        Mark/Unmark a Room as Favourite
+        Mark/Unmark a Room as favourite
         
         ### Changelog
         | Version | Description   |
@@ -5710,14 +5682,15 @@ paths:
                 - roomId
                 - favorite
             examples:
-              Example 1:
+              Example :
                 value:
                   roomId: GENERAL
                   favorite: true
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   '/api/v1/rooms.upload/{rid}':
     post:
       tags:
@@ -5770,7 +5743,7 @@ paths:
                   description: |-
                     You can add custom fields for messages. For example, set priorities for messages.
 
-                    You must enable this option and define the validation in the workspace settings. See the [Message](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/message) settings for further information.
+                    You must enable this option and define the validation in the workspace settings. See the <a href="https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/message" target="_blank">Message</a> for further information.
                   example: {"priority": "high"}
               required:
                 - file
@@ -5910,11 +5883,11 @@ paths:
                   error:
                     type: string
               examples:
-                Example 1:
+                Unknown key:
                   value:
                     success: false
                     error: 'Match error: Unknown key in field dasd'
-                Example 2:
+                Invalid field:
                   value:
                     success: false
                     error: '[invalid-field]'
@@ -6013,24 +5986,8 @@ paths:
                           type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    items:
-                      - _id: 664f0d525df46832f75b1860
-                        fname: rancher
-                        name: rancher
-                        t: p
-                      - _id: 6630e94ad2226209149c67e2
-                        fname: random
-                        name: random
-                        t: c
-                      - _id: 664f148f5df46832f75b18b2
-                        fname: ranmowe
-                        name: ranmowe
-                        t: p
-                    success: true
               examples:
-                Example:
+                Success:
                   value:
                     items:
                       - _id: 664f0d525df46832f75b1860
@@ -6104,24 +6061,8 @@ paths:
                           type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    items:
-                      - _id: 664f0d815df46832f75b1877
-                        fname: rangig
-                        name: Ch9xkYwGHnsLe7CQR
-                        t: c
-                      - _id: 664f0d525df46832f75b1860
-                        fname: rancher
-                        name: rancher
-                        t: p
-                      - _id: 6630e94ad2226209149c67e2
-                        fname: random
-                        name: random
-                        t: c
-                    success: true
               examples:
-                Example:
+                Success:
                   value:
                     items:
                       - _id: 664f0d815df46832f75b1877
@@ -6155,8 +6096,6 @@ paths:
                     error: The 'selector' param is required
         '401':
           $ref: '#/components/responses/authorizationError'
-      x-stoplight:
-        id: kmjuekbwjuezr
       description: 'List public and private rooms whose names match a given string, excluding <a href="https://docs.rocket.chat/docs/direct-messages" target="_blank">DMs</a>, and <a href="https://docs.rocket.chat/docs/omnichannel" target="_blank">omnichannel rooms</a>. This endpoint is valuable when performing search operations. Only workspace administrators can use it.'
     parameters: []
   /api/v1/rooms.adminRooms.getRoom:
@@ -6218,7 +6157,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example:
+                Success:
                   value:
                     _id: ukFsHiySDhMkQyyyF
                     name: freightwave
@@ -6349,7 +6288,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     rid: JZ8Y2dLfYhsg323Rf
                     success: true
@@ -6367,7 +6306,7 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                roomId or roomName is required:
                   value:
                     success: false
                     error: 'The required "roomId" or "roomName" param provided does not match any group [error-room-not-found]'
@@ -6378,6 +6317,7 @@ paths:
     parameters: []
     get:
       summary: Check if Room Name Exists
+      description: Check if the room name exists
       tags:
         - Rooms
       responses:
@@ -6393,13 +6333,9 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     exists: true
-                    success: true
-                Example 2:
-                  value:
-                    exists: false
                     success: true
         '400':
           description: Bad Request
@@ -6415,7 +6351,7 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                roomName is required:
                   value:
                     success: false
                     error: 'must have required property ''roomName'' [invalid-params]'
@@ -6466,7 +6402,7 @@ paths:
                 - rid
                 - action
             examples:
-              Example 1:
+              Example:
                 value:
                   rid: iu7jtPAhvEeAS5tNq
                   action: archive
@@ -6492,7 +6428,7 @@ paths:
                       method:
                         type: string
               examples:
-                Example 1:
+                Invalid Room:
                   value:
                     success: false
                     error: 'Invalid room [error-invalid-room]'
@@ -6653,10 +6589,6 @@ paths:
           application/json:
             schema:
               type: object
-              x-examples:
-                Example 1:
-                  userId: CkCPNfjfhiwWLqC
-                  roomId: iu7jtPAhvEeAS5tNq
               required:
                 - userId
                 - roomId
@@ -6686,12 +6618,12 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                Invalid User:
                   value:
                     success: false
                     error: 'The required "userId" or "username" param provided does not match any users [error-invalid-user]'
                     errorType: error-invalid-user
-                Example 2:
+                Invalid Params:
                   value:
                     success: false
                     error: |-
@@ -6724,10 +6656,6 @@ paths:
           application/json:
             schema:
               type: object
-              x-examples:
-                Example 1:
-                  userId: CkCPNfjfhiwWLqC
-                  roomId: iu7jtPAhvEeAS5tNq
               required:
                 - userId
                 - roomId
@@ -6757,7 +6685,7 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                Invalid User:
                   value:
                     success: false
                     error: 'The required "userId" or "username" param provided does not match any users [error-invalid-user]'
@@ -6816,7 +6744,7 @@ paths:
                 - prid
                 - t_name
             examples:
-              Example 1:
+              Example:
                 value:
                   prid: GENERAL
                   t_name: Discussion Name
@@ -6869,7 +6797,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example:
+                Success:
                   value:
                     discussion:
                       rid: cgk88DHLHexwMaFWh
@@ -6890,7 +6818,8 @@ paths:
                       _updatedAt: '2019-04-03T01:35:32.280Z'
                       _id: cgk88DHLHexwMaFWh
                     success: true
-                    
+        '401':
+          $ref: '#/components/responses/authorizationError'                    
   /api/v1/rooms.images:
     get:
       tags:
@@ -6986,7 +6915,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example:
+                Success:
                   value:
                     files:
                       - _id: 666fdecb4ac1a8e6404ededd
@@ -7051,7 +6980,7 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                Invalid Params:
                   value:
                     success: false
                     error: 'must have required property ''roomId'' [invalid-params]'
@@ -7101,7 +7030,7 @@ paths:
                 - name
                 - type
             examples:
-              Example 1:
+              Example:
                 value:
                   name: teamName
                   type: 0
@@ -7145,7 +7074,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     team:
                       _id: 651619e3a2f73c7460e18cc5
@@ -7158,7 +7087,8 @@ paths:
                       _updatedAt: '2023-09-29T00:27:15.189Z'
                       roomId: 651619e3a2f73c7460e18cc7
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/teams.listAll:
     get:
       tags:
@@ -7221,7 +7151,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     teams:
                       - _id: 63f3efc4b000b6b6d86704b2
@@ -7261,7 +7191,8 @@ paths:
                     count: 3
                     offset: 0
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/teams.list:
     get:
       tags:
@@ -7324,7 +7255,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     teams:
                       - _id: 63f3efc4b000b6b6d86704b2
@@ -7353,7 +7284,8 @@ paths:
                     count: 2
                     offset: 0
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/teams.info:
     get:
       tags:
@@ -7402,7 +7334,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     teamInfo:
                       _id: 607e0d9b49d493189836bfac
@@ -7415,7 +7347,8 @@ paths:
                       _updatedAt: '2021-04-19T23:09:15.106Z'
                       roomId: Dgh2xwJ3NFKWvKSqY
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/teams.update:
     post:
       tags:
@@ -7450,7 +7383,7 @@ paths:
                 - teamId
                 - data
             examples:
-              Example 1:
+              Example:
                 value:
                   teamId: ByehQjC44FwMeiLbX
                   data:
@@ -7459,7 +7392,8 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/teams.addMembers:
     post:
       tags:
@@ -7498,7 +7432,7 @@ paths:
                 - teamId
                 - members
             examples:
-              Example 1:
+              Example:
                 value:
                   teamId: 63f3efc4b000b6b6d86704b2
                   members:
@@ -7508,7 +7442,8 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/teams.members:
     get:
       tags:
@@ -7597,7 +7532,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     members:
                       - user:
@@ -7630,7 +7565,8 @@ paths:
                     count: 2
                     offset: 0
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/teams.updateMember:
     post:
       tags:
@@ -7669,7 +7605,7 @@ paths:
                 - teamId
                 - members
             examples:
-              Example 1:
+              Example:
                 value:
                   teamId: 63f3efc4b000b6b6d86704b2
                   members:
@@ -7679,7 +7615,8 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/teams.leave:
     post:
       tags:
@@ -7708,7 +7645,7 @@ paths:
                 - teamId
                 - rooms
             examples:
-              Example 1:
+              Example:
                 value:
                   teamName: team1
                   rooms:
@@ -7716,7 +7653,8 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/teams.removeMember:
     post:
       tags:
@@ -7752,7 +7690,7 @@ paths:
                 - teamId
                 - userId
             examples:
-              Example 1:
+              Example:
                 value:
                   teamId: 63f3efc4b000b6b6d86704b2
                   userId: rYhzFRd2QZjNwAAXX
@@ -7761,7 +7699,8 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/teams.delete:
     post:
       tags:
@@ -7794,7 +7733,7 @@ paths:
                     type: string
                     example: "8dugqGhuRvCBLdZft"
             examples:
-              Example 1:
+              Example:
                 value:
                   teamId: mLGZGywfmLGZGywf
                   roomsToRemove:
@@ -7802,7 +7741,8 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/teams.autocomplete:
     get:
       tags:
@@ -7846,7 +7786,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     teams:
                       - _id: Dgh2xwJ3NFKWvKSqY
@@ -7855,7 +7795,8 @@ paths:
                         t: p
                         teamId: 607e0d9b49d493189836bfac
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/teams.convertToChannel:
     post:
       tags:
@@ -7878,7 +7819,7 @@ paths:
               required:
                 - teamId
             examples:
-              Example 1:
+              Example:
                 value:
                   teamId: 612b8ae982d286c3d1f5db31
       responses:
@@ -7938,7 +7879,7 @@ paths:
                 - teamId
                 - rooms
             examples:
-              Example 1:
+              Example:
                 value:
                   teamId: 607e0d9b49d493189836bfac
                   rooms:
@@ -8053,7 +7994,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     rooms:
                       - _id: JKa7R9zu2DinBhBN9
@@ -8098,7 +8039,8 @@ paths:
                           channels: []
                         teamId: 63f3efc4b000b6b6d86704b2
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/teams.removeRoom:
     post:
       tags:
@@ -8131,7 +8073,7 @@ paths:
                   description: The room ID to be removed from the team.
                   example: 8dugqGhuRvCBLdZft
             examples:
-              Example 1:
+              Example:
                 value:
                   teamId: 63f3efc4b000b6b6d86704b2
                   roomId: JKa7R9zu2DinBhBN9
@@ -8241,7 +8183,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     room:
                       _id: JKa7R9zu2DinBhBN9
@@ -8285,7 +8227,8 @@ paths:
                         mentions: []
                         channels: []
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/teams.updateRoom:
     post:
       tags:
@@ -8315,7 +8258,7 @@ paths:
                 - roomId
                 - isDefault
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: JKa7R9zu2DinBhBN9
                   isDefault: true
@@ -8429,7 +8372,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     room:
                       _id: JKa7R9zu2DinBhBN9
@@ -8475,7 +8418,8 @@ paths:
                       teamId: 63f3efc4b000b6b6d86704b2
                       teamDefault: true
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/teams.listRooms:
     get:
       tags:
@@ -8614,7 +8558,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     rooms:
                       - _id: JKa7R9zu2DinBhBN9
@@ -8663,7 +8607,8 @@ paths:
                     count: 1
                     offset: 0
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/teams.listRoomsOfUser:
     get:
       tags:
@@ -8808,7 +8753,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     rooms:
                       - _id: JKa7R9zu2DinBhBN9
@@ -8858,7 +8803,8 @@ paths:
                     count: 1
                     offset: 0
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/groups.online:
     get:
       tags:
@@ -9487,7 +9433,7 @@ paths:
                     - `encrypted`: Whether the group should be encrypted. 
                     - `teamId`: Enter the team ID for which you want to create a group.
                     
-                    For more information, see [Channels](https://docs.rocket.chat/use-rocket.chat/user-guides/rooms/channels#channel-privacy-and-encryption).
+                    For more information, see <a href="https://docs.rocket.chat/use-rocket.chat/user-guides/rooms/channels#channel-privacy-and-encryption" target="_blank">Channels</a>.
               required:
                 - name
             examples:
@@ -10745,7 +10691,7 @@ paths:
                 - roomId
                 - userId
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: ByehQjC44FwMeiLbX
                   userId: oCHkav5Zf6vmpu2W2
@@ -11380,11 +11326,12 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     topic: Testing out everything.
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/groups.setType:
     post:
       tags:
@@ -11868,15 +11815,15 @@ paths:
                   error:
                     type: string
               examples:
-                Example 1:
+                Team name exists:
                   value:
                     success: false
                     error: team-name-already-exists
-                Example 2:
+                Room name is required:
                   value:
                     success: false
                     error: The parameter "roomId" or "roomName" is required
-                Example 3:
+                Room not found:
                   value:
                     success: false
                     error: 'The required "roomId" or "roomName" param provided does not match any group [error-room-not-found]'
@@ -11966,7 +11913,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: query
           in: query
-          description: 'The query to search the workspace directory. When `type` is users you can send an additional workspace field, that can be local (default) or all. Workspace=all will work only if [federation](https://developer.rocket.chat/reference/api/rest-api/endpoints/settings/federation-endpoints) is enabled.'
+          description: 'The query to search the workspace directory. When `type` is users you can send an additional workspace field, that can be local (default) or all. Workspace=all will work only if <a href="https://docs.rocket.chat/use-rocket.chat/rocket.chat-federation" target="_blank">federation</a> is enabled.'
           required: true
           schema:
             example: '{"text": "rocket", "type": "users", "workspace": "local"}'
