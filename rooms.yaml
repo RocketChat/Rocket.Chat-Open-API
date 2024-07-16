@@ -10462,7 +10462,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Succcess:
                   value:
                     members:
                       - _id: JmR3T4TFfppJCfmq9
@@ -10488,7 +10488,8 @@ paths:
                     offset: 0
                     total: 2
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/groups.messages:
     get:
       tags:
@@ -10581,7 +10582,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     messages:
                       - _id: CeXwh5eBbdrtvnqG6
@@ -10615,7 +10616,8 @@ paths:
                     offset: 0
                     total: 2
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/groups.moderators:
     get:
       tags:
@@ -10649,14 +10651,15 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     moderators:
                       - _id: hifeRG56fjlsp
                         username: marc.cat
                         name: Marc Cat
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/groups.open:
     post:
       tags:
@@ -10686,7 +10689,8 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/groups.removeLeader:
     post:
       tags:
@@ -10744,12 +10748,13 @@ paths:
                   errorType:
                     type: string
               examples:
-                Eaxmple 1:
+                User is not a leader:
                   value:
                     success: false
                     error: 'User is not a leader [error-user-not-leader]'
                     errorType: error-user-not-leader
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/groups.removeModerator:
     post:
       tags:
@@ -10785,14 +10790,15 @@ paths:
                 - roomId
                 - userId
             examples:
-              Example 1:
+              Success:
                 value:
                   roomId: ByehQjC44FwMeiLbX
                   userId: oCHkav5Zf6vmpu2W2
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/groups.removeOwner:
     post:
       tags:
@@ -10828,14 +10834,15 @@ paths:
                 - roomId
                 - userId
             examples:
-              Example 1:
+              Success:
                 value:
                   roomId: ByehQjC44FwMeiLbX
                   userId: oCHkav5Zf6vmpu2W2
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/groups.rename:
     post:
       tags:
@@ -10868,7 +10875,7 @@ paths:
                 - roomId
                 - name
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: ByehQjC44FwMeiLbX
                   name: new-name
@@ -10913,7 +10920,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     group:
                       _id: ByehQjC44FwMeiLbX
@@ -10963,7 +10970,7 @@ paths:
                 - roomId
                 - announcement
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: ByehQjC44FwMeiLbX
                   announcement: Test out everything
@@ -10980,11 +10987,12 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     announcement: Test out everything.
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/groups.setCustomFields:
     post:
       tags:
@@ -11070,7 +11078,7 @@ paths:
                   developerWarning:
                     type: string
               examples:
-                Example 1:
+                Success:
                   value:
                     group:
                       _id: euzoT67Gx6nXcn66M
@@ -11123,7 +11131,7 @@ paths:
                 - roomId
                 - description
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: ByehQjC44FwMeiLbX
                   description: Test out everything
@@ -11140,11 +11148,12 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     description: Testing out everything.
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/groups.setPurpose:
     post:
       tags:
@@ -11177,7 +11186,7 @@ paths:
                 - roomId
                 - purpose
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: ByehQjC44FwMeiLbX
                   purpose: Test out everything
@@ -11194,7 +11203,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     purpose: Testing out everything.
                     success: true
@@ -11231,7 +11240,7 @@ paths:
                 - roomId
                 - readOnly
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: ByehQjC44FwMei5LbX
                   readOnly: true
@@ -11282,7 +11291,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     group:
                       _id: ByehQjC44FwMei5LbX
@@ -11302,7 +11311,8 @@ paths:
                       joinCodeRequired: true
                       muted: []
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/groups.setTopic:
     post:
       tags:
@@ -11335,7 +11345,7 @@ paths:
                 - roomId
                 - topic
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: ByehQjC44FwMeiLbX
                   topic: Discuss all of the testing
@@ -11389,7 +11399,7 @@ paths:
                 - roomId
                 - type
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: ByehQjC44FwMeiLbX
                   type: c
@@ -11440,7 +11450,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Example:
                   value:
                     group:
                       _id: ByehQjC44FwMeiLbX
@@ -11460,7 +11470,8 @@ paths:
                       joinCodeRequired: true
                       muted: []
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/groups.unarchive:
     post:
       tags:
@@ -11490,7 +11501,8 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/groups.files:
     get:
       tags:
@@ -11582,7 +11594,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Example:
                   value:
                     files:
                       - _id: S78TNnvaWGwdYRaCD
@@ -11611,7 +11623,8 @@ paths:
                     offset: 0
                     total: 1
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/groups.setEncrypted:
     post:
       tags:
@@ -11644,7 +11657,7 @@ paths:
                     - encrypted
                     - roomName
             examples:
-              Example 1:
+              Example:
                 value:
                   encrypted: false
                   roomId: JZ8Y2dLfYhsg323Rf
@@ -11697,7 +11710,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     group:
                       _id: JZ8Y2dLfYhsg323Rf
@@ -11812,7 +11825,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success             s:
                   value:
                     team:
                       _id: 6172b15bc563fc000acc462e
@@ -11902,7 +11915,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Example:
                   value:
                     roles:
                       - rid: BaE62jfDLXK3Xo6BA
@@ -11984,7 +11997,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success:
                   value:
                     result:
                       - _id: jRca8kibJx8NkLJxt
@@ -11999,7 +12012,8 @@ paths:
                     offset: 0
                     total: 1
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
 tags:
   - name: Channels
   - name: Directory
