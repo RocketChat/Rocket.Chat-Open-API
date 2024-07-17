@@ -5194,34 +5194,33 @@ paths:
                       properties:
                         _id:
                           type: string
+                        ts:
+                          type: string
                         t:
+                          type: string
+                        name:
                           type: string
                         usernames:
                           type: array
                           items:
                             type: string
-                        usersCount:
-                          type: integer
                         msgs:
                           type: integer
-                        ts:
-                          type: string
-                        uids:
-                          type: array
-                          items:
-                            type: string
-                        encrypted:
-                          type: boolean
-                        default:
-                          type: boolean
-                        ro:
-                          type: boolean
-                        sysMes:
-                          type: boolean
+                        usersCount:
+                          type: integer
                         _updatedAt:
                           type: string
-                        e2eKeyId:
-                          type: string
+                        u:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                            name:
+                              type: string
+                        default:
+                          type: boolean
                         lastMessage:
                           type: object
                           properties:
@@ -5229,24 +5228,11 @@ paths:
                               type: string
                             t:
                               type: string
-                            msg:
+                            rid:
                               type: string
-                            groupable:
-                              type: boolean
-                            blocks:
-                              type: array
-                              items:
-                                type: object
-                                properties:
-                                  type:
-                                    type: string
-                                  blockId:
-                                    type: string
-                                  callId:
-                                    type: string
-                                  appId:
-                                    type: string
                             ts:
+                              type: string
+                            msg:
                               type: string
                             u:
                               type: object
@@ -5257,7 +5243,9 @@ paths:
                                   type: string
                                 name:
                                   type: string
-                            rid:
+                            groupable:
+                              type: boolean
+                            drid:
                               type: string
                             _updatedAt:
                               type: string
@@ -5265,14 +5253,22 @@ paths:
                               type: array
                               items:
                                 type: object
+                                properties:
+                                  url:
+                                    type: string
+                                  meta:
+                                    type: object
+                                    properties: {}
                             mentions:
                               type: array
                               items:
                                 type: object
+                                properties: {}
                             channels:
                               type: array
                               items:
                                 type: object
+                                properties: {}
                             md:
                               type: array
                               items:
@@ -5289,163 +5285,102 @@ paths:
                                           type: string
                                         value:
                                           type: string
+                                          items:
+                                            type: object
+                                            properties:
+                                              type:
+                                                type: string
+                                              value:
+                                                type: string
+                                              src:
+                                                type: object
+                                                properties:
+                                                  type:
+                                                    type: string
+                                                  value:
+                                                    type: string
+                                              label:
+                                                type: array
+                                                items:
+                                                  type: object
+                                                  properties:
+                                                    type:
+                                                      type: string
+                                                    value:
+                                                      type: string
                         lm:
                           type: string
-                        fname:
-                          type: string
-                        customFields:
-                          type: object
-                        u:
-                          type: object
-                          properties:
-                            _id:
-                              type: string
-                            username:
-                              type: string
-                            name:
-                              type: string
-                        name:
-                          type: string
-                        topic:
-                          type: string
-                        prid:
-                          type: string
+                        uids:
+                          type: array
+                          items:
+                            type: string
+                        ro:
+                          type: boolean
+                        sysMes:
+                          type: boolean
                   remove:
                     type: array
                     items:
                       type: object
-                      properties:
-                        _id:
-                          type: string
-                        _deletedAt:
-                          type: string
+                      properties: {}
                   success:
                     type: boolean
               examples:
                 Success:
                   value:
                     update:
-                      - _id: 5fRTXMt7DMJbpPJfhrbAXPnMktTFbNpwtJ
+                      - _id: GENERAL
+                        ts: '2024-02-14T14:34:49.365Z'
+                        t: c
+                        name: general
+                        usernames: []
+                        msgs: 55
+                        usersCount: 36
+                        _updatedAt: '2024-07-16T08:49:34.732Z'
+                        u:
+                          _id: rocket.cat
+                          username: rocket.cat
+                          name: Rocket.Cat
+                        default: true
+                        lastMessage:
+                          _id: 668fc2bbffe932842327c1ff
+                          t: discussion-created
+                          rid: GENERAL
+                          ts: '2024-07-11T11:32:11.220Z'
+                          msg: Discussion
+                          u:
+                            _id: 5m4hjvzCTRCqwPrD2
+                            username: Rama
+                            name: Raghav Ram
+                          groupable: false
+                          drid: 668fc2bbffe932842327c1fd
+                          _updatedAt: '2024-07-11T11:32:11.220Z'
+                        lm: '2024-07-11T11:32:11.220Z'
+                      - _id: WbYJfC5kTArcECGkpfZ3bvXC72pobjFPLJ
                         t: d
                         usernames:
-                          - roxie
-                          - test.test
+                          - user2
+                          - user1
                         usersCount: 2
-                        msgs: 5
-                        ts: '2023-07-11T01:37:04.552Z'
+                        msgs: 2
+                        ts: '2024-07-10T13:48:14.998Z'
                         uids:
-                          - 5fRTXMt7DMJbpPJfh
-                          - rbAXPnMktTFbNpwtJ
-                        encrypted: true
+                          - WbYJfC5kTArcECGkp
+                          - fZ3bvXC72pobjFPLJ
                         default: false
                         ro: false
                         sysMes: true
-                        _updatedAt: '2023-09-16T09:43:42.853Z'
-                        e2eKeyId: eyJhbGciOiJB
+                        _updatedAt: '2024-07-10T13:48:28.300Z'
                         lastMessage:
-                          _id: vMkTMrSESTfrLenyv
-                          t: videoconf
-                          msg: ''
-                          groupable: false
-                          blocks:
-                            - type: video_conf
-                              blockId: 650318e4a2f73c7460df7d0b
-                              callId: 650318e4a2f73c7460df7d0b
-                              appId: videoconf-core
-                          ts: '2023-09-14T14:29:56.295Z'
+                          _id: 'XHjLcN3pCe8snaoTm'
+                          rid: 'WbYJfC5kTArcECGkpfZ3bvXC72pobjFPLJ'
+                          msg: 'again'
+                          ts: '2024-07-10T13:48:28.262Z'
                           u:
-                            _id: rbAXPnMktTFbNpwtJ
-                            username: test.test
-                            name: test test
-                          rid: 5fRTXMt7DMJbpPJfhrbAXPnMktTFbNpwtJ
-                          _updatedAt: '2023-09-14T14:29:56.340Z'
-                          urls: []
-                          mentions: []
-                          channels: []
-                        lm: '2023-09-14T14:29:56.295Z'
-                      - _id: bfeqKDqQRxYM2tGXz
-                        fname: Testing-Teams-Bridge
-                        customFields: {}
-                        topic: ''
-                        broadcast: false
-                        encrypted: false
-                        name: Testing-Teams-Bridge
-                        t: p
-                        msgs: 1
-                        usersCount: 1
-                        u:
-                          _id: rbAXPnMktTFbNpwtJ
-                          username: roxie
-                        ts: '2023-03-09T18:20:33.353Z'
-                        ro: false
-                        default: false
-                        sysMes: true
-                        _updatedAt: '2023-09-16T09:43:42.870Z'
-                        lastMessage:
-                          rid: bfeqKDqQRxYM2tGXz
-                          ts: '2023-03-13T00:03:07.799Z'
-                          file:
-                            _id: DuGKthdwSZibkB92D
-                            name: 'Clipboard - March 13, 2023 1:03 AM.png'
-                            type: image/png
-                          files:
-                            - _id: DuGKthdwSZibkB92D
-                              name: 'Clipboard - March 13, 2023 1:03 AM.png'
-                              type: image/png
-                            - _id: mKF2t96heAkz7Wbm3
-                              name: 'Clipboard - March 13, 2023 1:03 AM.png'
-                              type: image/png
-                          attachments:
-                            - ts: '1970-01-01T00:00:00.000Z'
-                              title: 'Clipboard - March 13, 2023 1:03 AM.png'
-                              title_link: '/file-upload/DuGKthdwSZibkB92D/Clipboard%20-%20March%2013,%202023%201:03%20AM.png'
-                              title_link_download: true
-                              image_dimensions:
-                                width: 480
-                                height: 245
-                              image_preview: /9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQ==
-                              image_url: '/file-upload/mKF2t96heAkz7Wbm3/Clipboard%20-%20March%2013,%202023%201:03%20AM.png'
-                              image_type: image/png
-                              image_size: 206457
-                              type: file
-                          msg: ''
-                          groupable: false
-                          u:
-                            _id: rbAXPnMktTFbNpwtJ
-                            username: test.test
-                            name: test test
-                          _id: yGEPxxKAfJzt96M6a
-                          _updatedAt: '2023-03-13T00:03:07.876Z'
-                          urls: []
-                          mentions: []
-                          channels: []
-                        lm: '2023-03-13T00:03:07.799Z'
-                      - _id: G8KgwWSRLua9bZETT
-                        fname: Omnichannel Instagram Setup
-                        customFields: {}
-                        u:
-                          _id: rbAXPnMktTFbNpwtJ
-                          username: roxie
-                        default: false
-                        sysMes: true
-                        msgs: 11
-                        ts: '2023-03-30T15:57:52.680Z'
-                        _updatedAt: '2023-09-16T09:43:42.870Z'
-                        name: omnichannel-instagram-setup
-                        t: p
-                        usersCount: 1
-                        ro: false
-                        lastMessage:
-                          _id: gz3syD8NYXF8gvgNg
-                          rid: G8KgwWSRLua9bZETT
-                          u:
-                            _id: J7oi3eBcRYFRnb8x3
-                            username: instagram.bot
-                            name: Instagram Direct
-                          msg: 'Any existing authentication between Rocket.Chat and Instagram has been revoked by @test.test. As a result, no new messages can be sent out nor will any be received. If this is a mistake, please run `/instagram authorize` command to reauthorize.'
-                          ts: '2023-05-30T12:01:42.438Z'
-                          _updatedAt: '2023-05-30T12:01:42.612Z'
-                          groupable: false
+                            _id: fZ3bvXC72pobjFPLJ
+                            username: user1
+                            name: user1
+                          _updatedAt: '2024-07-10T13:48:28.296Z'
                           urls: []
                           mentions: []
                           channels: []
@@ -5453,70 +5388,64 @@ paths:
                             - type: PARAGRAPH
                               value:
                                 - type: PLAIN_TEXT
-                                  value: 'Any existing authentication between '
+                                  value: again
+                        lm: '2024-07-10T13:48:28.262Z'
+                      - _id: fZ3bvXC72pobjFPLJrocket.cat
+                        t: d
+                        usernames:
+                          - user1
+                          - rocket.cat
+                        usersCount: 2
+                        msgs: 15
+                        ts: '2024-02-21T02:00:01.657Z'
+                        uids:
+                          - fZ3bvXC72pobjFPLJ
+                          - rocket.cat
+                        default: false
+                        ro: false
+                        sysMes: true
+                        _updatedAt: '2024-07-17T02:00:05.203Z'
+                        lastMessage:
+                          rid: fZ3bvXC72pobjFPLJrocket.cat
+                          msg: |-
+                            *Update your Rocket.Chat*
+                            New version available (6.10.0)
+                            https://github.com/RocketChat/Rocket.Chat/releases/tag/6.10.0
+                          ts: '2024-07-17T02:00:05.161Z'
+                          u:
+                            _id: rocket.cat
+                            username: rocket.cat
+                            name: Rocket.Cat
+                          _id: c4PzLLTy4fDSCmm4F
+                          _updatedAt: '2024-07-17T02:00:05.198Z'
+                          urls:
+                            - url: 'https://github.com/RocketChat/Rocket.Chat/releases/tag/6.10.0'
+                              meta: {}
+                          mentions: []
+                          channels: []
+                          md:
+                            - type: PARAGRAPH
+                              value:
+                                - type: BOLD
+                                  value:
+                                    - type: PLAIN_TEXT
+                                      value: Update your Rocket.Chat
+                            - type: PARAGRAPH
+                              value:
+                                - type: PLAIN_TEXT
+                                  value: New version available (6.10.0)
+                            - type: PARAGRAPH
+                              value:
                                 - type: LINK
                                   value:
                                     src:
                                       type: PLAIN_TEXT
-                                      value: //Rocket.Chat
+                                      value: 'https://github.com/RocketChat/Rocket.Chat/releases/tag/6.10.0'
                                     label:
                                       - type: PLAIN_TEXT
-                                        value: Rocket.Chat
-                                - type: PLAIN_TEXT
-                                  value: ' and Instagram has been revoked by '
-                                - type: MENTION_USER
-                                  value:
-                                    type: PLAIN_TEXT
-                                    value: test.test.
-                                - type: PLAIN_TEXT
-                                  value: ' As a result, no new messages can be sent out nor will any be received. If this is a mistake, please run '
-                                - type: INLINE_CODE
-                                  value:
-                                    type: PLAIN_TEXT
-                                    value: /instagram authorize
-                                - type: PLAIN_TEXT
-                                  value: ' command to reauthorize.'
-                        lm: '2023-05-30T12:01:42.438Z'
-                      - _id: 6514d34ea2f73c7460e18cb4
-                        fname: test-discussion
-                        _updatedAt: '2023-09-28T01:14:04.275Z'
-                        topic: general
-                        prid: GENERAL
-                        encrypted: false
-                        name: M75nSgA3uYsnTbKRu
-                        t: c
-                        msgs: 1
-                        usersCount: 1
-                        u:
-                          _id: rbAXPnMktTFbNpwtJ
-                          username: roxie
-                          name: test test
-                        ts: '2023-09-28T01:13:50.574Z'
-                        ro: false
-                        default: false
-                        sysMes: true
-                        lastMessage:
-                          _id: pnm4kh84HfncDEZj7
-                          rid: 6514d34ea2f73c7460e18cb4
-                          msg: 'Hi guys , this is for SWE team'
-                          ts: '2023-09-28T01:14:04.119Z'
-                          u:
-                            _id: rbAXPnMktTFbNpwtJ
-                            username: roxie
-                            name: test test
-                          _updatedAt: '2023-09-28T01:14:04.233Z'
-                          urls: []
-                          mentions: []
-                          channels: []
-                          md:
-                            - type: PARAGRAPH
-                              value:
-                                - type: PLAIN_TEXT
-                                  value: 'Hi guys , this is for SWE team'
-                        lm: '2023-09-28T01:14:04.119Z'
-                    remove:
-                      - _id: 6512153aa2f73c7460e18c5e
-                        _deletedAt: '2023-09-26T00:29:17.723Z'
+                                        value: 'https://github.com/RocketChat/Rocket.Chat/releases/tag/6.10.0'
+                        lm: '2024-07-17T02:00:05.161Z'
+                    remove: []
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
