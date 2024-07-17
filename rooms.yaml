@@ -4883,26 +4883,23 @@ paths:
                     properties:
                       _id:
                         type: string
-                      fname:
-                        type: string
-                      _updatedAt:
-                        type: string
-                      customFields:
-                        type: object
-                      topic:
-                        type: string
-                      broadcast:
-                        type: boolean
-                      encrypted:
-                        type: boolean
-                      name:
+                      ts:
                         type: string
                       t:
                         type: string
+                      name:
+                        type: string
+                      usernames:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
                       msgs:
                         type: integer
                       usersCount:
                         type: integer
+                      _updatedAt:
+                        type: string
                       u:
                         type: object
                         properties:
@@ -4912,24 +4909,20 @@ paths:
                             type: string
                           name:
                             type: string
-                      ts:
-                        type: string
-                      ro:
-                        type: boolean
                       default:
-                        type: boolean
-                      sysMes:
                         type: boolean
                       lastMessage:
                         type: object
                         properties:
                           _id:
                             type: string
+                          t:
+                            type: string
                           rid:
                             type: string
-                          msg:
-                            type: string
                           ts:
+                            type: string
+                          msg:
                             type: string
                           u:
                             type: object
@@ -4940,108 +4933,47 @@ paths:
                                 type: string
                               name:
                                 type: string
+                          groupable:
+                            type: boolean
+                          drid:
+                            type: string
                           _updatedAt:
                             type: string
-                          urls:
-                            type: array
-                            items:
-                              type: object
-                          mentions:
-                            type: array
-                            items:
-                              type: object
-                              properties:
-                                _id:
-                                  type: string
-                                name:
-                                  type: string
-                                username:
-                                  type: string
-                                type:
-                                  type: string
-                          channels:
-                            type: array
-                            items:
-                              type: object
-                          md:
-                            type: array
-                            items:
-                              type: object
-                              properties:
-                                type:
-                                  type: string
-                                value:
-                                  type: array
-                                  items:
-                                    type: object
-                                    properties:
-                                      type:
-                                        type: string
-                                      value:
-                                        type: string
                       lm:
                         type: string
-                      archived:
-                        type: boolean
-                      teamId:
-                        type: string
-                      teamMain:
-                        type: boolean
                   success:
                     type: boolean
               examples:
                 Success:
                   value:
                     room:
-                      _id: 6513afeda2f73c7460e18c86
-                      fname: messages
-                      _updatedAt: '2023-09-27T21:19:59.029Z'
-                      customFields: {}
-                      topic: ''
-                      broadcast: false
-                      encrypted: false
-                      name: messages
+                      _id: GENERAL
+                      ts: '2024-02-14T14:34:49.365Z'
                       t: c
-                      msgs: 8
-                      usersCount: 2
+                      name: general
+                      usernames: []
+                      msgs: 55
+                      usersCount: 36
+                      _updatedAt: '2024-07-16T08:49:34.732Z'
                       u:
-                        _id: rbAXPnMktTFbNpwtJ
-                        username: roxie
-                        name: test test
-                      ts: '2023-09-27T04:30:37.236Z'
-                      ro: false
-                      default: false
-                      sysMes: true
+                        _id: rocket.cat
+                        username: rocket.cat
+                        name: Rocket.Cat
+                      default: true
                       lastMessage:
-                        _id: rKspZMxspNiWf5TuY
-                        rid: 6513afeda2f73c7460e18c86
-                        msg: '@rocket.cat whats the way forward'
-                        ts: '2023-09-27T20:33:10.204Z'
+                        _id: 668fc2bbffe932842327c1ff
+                        t: discussion-created
+                        rid: GENERAL
+                        ts: '2024-07-11T11:32:11.220Z'
+                        msg: Discussion
                         u:
-                          _id: rbAXPnMktTFbNpwtJ
-                          username: roxie
-                          name: test test
-                        _updatedAt: '2023-09-27T20:33:10.314Z'
-                        urls: []
-                        mentions:
-                          - _id: rocket.cat
-                            name: Rocket.Cat
-                            username: rocket.cat
-                            type: user
-                        channels: []
-                        md:
-                          - type: PARAGRAPH
-                            value:
-                              - type: MENTION_USER
-                                value:
-                                  type: PLAIN_TEXT
-                                  value: rocket.cat
-                              - type: PLAIN_TEXT
-                                value: 'whats the way forward'
-                      lm: '2023-09-27T20:33:10.204Z'
-                      archived: false
-                      teamId: 65149c7ea2f73c7460e18cab
-                      teamMain: true
+                          _id: 5m4hjvzChTRCqwPrD2
+                          username: Rama
+                          name: Raghav Ram
+                        groupable: false
+                        drid: 668fc2bbffe932842327c1fd
+                        _updatedAt: '2024-07-11T11:32:11.220Z'
+                      lm: '2024-07-11T11:32:11.220Z'
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
