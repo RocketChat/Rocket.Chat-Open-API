@@ -5343,9 +5343,9 @@ paths:
                           name: Rocket.Cat
                         default: true
                         lastMessage:
-                          _id: 668fc2bbffe932842327c1ff
+                          _id: '668fc2bbffe932842327c1ff'
                           t: discussion-created
-                          rid: GENERAL
+                          rid: 'GENERAL'
                           ts: '2024-07-11T11:32:11.220Z'
                           msg: Discussion
                           u:
