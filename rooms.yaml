@@ -5284,9 +5284,7 @@ paths:
                                         type:
                                           type: string
                                         value:
-                                          type:
-                                            - array
-                                            - string
+                                          type: string
                                           items:
                                             type: object
                                             properties:
