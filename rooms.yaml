@@ -5898,7 +5898,7 @@ paths:
           in: query
           name: selector
           required: true
-          description: The term to be completed. It only applies to room name.
+          description: The term to be completed. It applies to room name and display name.
       responses:
         '200':
           description: OK
