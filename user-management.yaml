@@ -2965,6 +2965,7 @@ paths:
         * To be able to use this endpoint, you must add the <a href="https://docs.rocket.chat/docs/deployment-environment-variables" target="_blank">environment variable</a> `CREATE_TOKENS_FOR_USERS=true` in your compose file.
         * For SaaS workspaces, <a href="https://desk.rocket.chat/portal/en/signin" target="_blank">contact</a> support to set this variable.
         * Permission required: `user-generate-access-token`
+        * The maximum number of login tokens per user is 50. See this <a href='https://github.com/RocketChat/Rocket.Chat/pull/32216' target='_blank'>GitHub PR</a> for details.
         
         For example, if you use Snaps to deploy, set the environment variable as shown below:
           ```
