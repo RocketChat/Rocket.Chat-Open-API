@@ -83,12 +83,14 @@ paths:
         - WhatsApp
       summary: Send a WhatsApp Template Message
       description: |-
-        Send template messages via WhatsApp to targeted contacts directly from your workspace using this endpoint. It supports only <a href="https://docs.rocket.chat/docs/whatsapp-cloud-app" target="_blank">WhatsApp Cloud App</a> and <a href="https://docs.rocket.chat/docs/whatsapp-sandbox" target="_blank">WhatsApp Sandbox App</a>.
-        To get the valid endpoint URL for sending template messages in your workspace,
-        - Go to Administration > Apps > Marketplace 
-        - Search for WhatsApp Cloud app
-        - Navigate to App Info > Details > POST templateMessage. 
-        - Copy the endpoint URL for sending template messages in your workspace. The URL also includes the `appId`.
+        Use this endpoint to send WhatsApp template messages directly to specified contacts from your workspace.
+
+        1. Navigate to **Administration > Apps > Marketplace**.
+        2. Locate your preferred <a href="https://docs.rocket.chat/docs/whatsapp-apps" target="_blank">WhatsApp App</a>.
+        3. Go to *App Info > Details > APIs* and find the `POST templateMessage` section.
+        4. Copy the endpoint URL from the provided curl example. This URL includes the required `appId`.
+        
+        Before sending template messages from Rocket.Chat through any <a href="https://docs.rocket.chat/docs/whatsapp-apps" target="_blank">WhatsApp App</a>, ensure that you have set up the templates in respective WhatsApp provider account. Refer to the official guide for details on <a href="https://developer.rocket.chat/docs/whatsapp-business-template-messages#set-up-template-messages-on-whatsapp" target="_blank">configuring template messages for each WhatsApp app</a>.
       operationId: post-api-apps-public-app_id-templateMessage
       parameters:
         - name: appId
@@ -119,7 +121,8 @@ paths:
                   description: Department name or ID where you want to transfer the chat to when the WhatsApp user replies.
                 template:
                   type: object
-                  description: 'Provide information about the template message you wish to send. Refer to <a href="https://developers.facebook.com/docs/whatsapp/api/messages/message-templates#the-template-object" target="_blank">Message Templates</a> and <a href="https://developer.rocket.chat/docs/whatsapp-business-template-messages#send-whatsapp-template-messages-from-your-workspace" target="_blank">Sending WhatsApp template messages from your workspace</a> for template examples.'
+                  description: |-
+                    Provide the details of the template message you want to send. The structure of the template object may differ depending on the template defined within your WhatsApp provider account. For further clarification, refer to the official guide on <a href="https://developer.rocket.chat/docs/whatsapp-business-template-messages#set-up-template-messages-on-whatsapp" target="_blank">sending template messages in Rocket.Chat</a> to follow the correct procedure for each WhatsApp app. The example template object provided here is based on the configuration outlined in the official guide for the <a href="https://developer.rocket.chat/docs/whatsapp-business-template-messages#whatsapp-cloud" target="_blank">WhatsApp Cloud App</a>.
                   properties:
                     namespace:
                       type: string
