@@ -192,8 +192,19 @@ paths:
                             text: "abc"
                           - type: "text"
                             text: "xyz"
-
-              
+              Whatsapp Sandbox:
+                value:
+                  phoneNumbers:
+                    - "50364357612"
+                  template:
+                    name: "first_welcome_messsage"
+                    language:
+                      code: "en"
+                    components:
+                      - type: "body"
+                        parameters:
+                          - type: "text"
+                            text: "Your name goes here"
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
