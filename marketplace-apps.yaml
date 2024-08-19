@@ -155,20 +155,45 @@ paths:
                 - phoneNumbers
                 - connectedWhatsAppNo
                 - template
-              example:
-                phoneNumbers:
-                  - '2368106035555'
-                connectedWhatsAppNo: '104920685899299'
-                template:
-                  name: ship
-                  language:
-                    code: en
-                    policy: deterministic
-                  components:
-                    - type: body
-                      parameters:
-                        - type: text
-                          text: '20'              
+            examples:
+              WhatsApp Cloud:
+                value:
+                  phoneNumbers:
+                    - '2368106035555'
+                  connectedWhatsAppNo: '104920685899299'
+                  template:
+                    name: ship
+                    language:
+                      code: en
+                      policy: deterministic
+                    components:
+                      - type: body
+                        parameters:
+                          - type: text
+                            text: '20' 
+              WhatsApp 360Dialog (Cloud API):
+                value:                            
+                  phoneNumbers:
+                    - "xxxxxxxxxxxxx"
+                  connectedWhatsAppNo: "555195251xxx"
+                  template:
+                    name: "boarding_pass"
+                    language:
+                      code: "en"
+                      policy: "deterministic"
+                    components:
+                      - type: "header"
+                        parameters:
+                          - type: "text"
+                            text: "halo"
+                      - type: "body"
+                        parameters:
+                          - type: "text"
+                            text: "abc"
+                          - type: "text"
+                            text: "xyz"
+
+              
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
