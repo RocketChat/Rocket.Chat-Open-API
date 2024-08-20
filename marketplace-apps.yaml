@@ -88,7 +88,7 @@ paths:
         1. Navigate to **Administration > Apps > Marketplace**.
         2. Locate your preferred <a href="https://docs.rocket.chat/docs/whatsapp-apps" target="_blank">WhatsApp App</a>.
         3. Go to *App Info > Details > APIs* and find the `POST templateMessage` section.
-        4. Copy the endpoint URL from the provided curl example. This URL includes the required `appId`.
+        4. Copy the `POST templateMessage` endpoint URL for your WhatsApp app from the provided curl example. This URL includes the required `appId`. Send a template message request using this URL as the endpoint.
         
         Before sending template messages from Rocket.Chat through any <a href="https://docs.rocket.chat/docs/whatsapp-apps" target="_blank">WhatsApp App</a>, ensure that you have set up the templates in respective WhatsApp provider account. Refer to the official guide for details on <a href="https://developer.rocket.chat/docs/whatsapp-business-template-messages#set-up-template-messages-on-whatsapp" target="_blank">configuring template messages for each WhatsApp app</a>.
       operationId: post-api-apps-public-app_id-templateMessage
