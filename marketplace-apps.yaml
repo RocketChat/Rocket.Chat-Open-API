@@ -123,6 +123,8 @@ paths:
                   type: object
                   description: |-
                     Provide the details of the template message you want to send. The structure of the template object may differ depending on the template defined within your WhatsApp provider account. For further clarification, refer to the official guide on <a href="https://developer.rocket.chat/docs/whatsapp-business-template-messages#api-endpoint" target="_blank">sending template messages via API in Rocket.Chat</a>. The example template object provided here is based on the configuration outlined in the official guide for the <a href="https://developer.rocket.chat/docs/whatsapp-business-template-messages#whatsapp-cloud" target="_blank">WhatsApp Cloud App</a>.
+                    
+                    If your template message includes parameters, make sure to replace all of them with the appropriate information before sending. Failure to do so may lead to an error.
                   properties:
                     namespace:
                       type: string
