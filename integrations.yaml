@@ -1401,7 +1401,7 @@ paths:
       description: |-
         Retrieves an OAuth app by ID or client ID.
         
-        Permission required: `manage-oauth-apps`
+        Permission required: `manage-oauth-apps`. The endpoint can be accessed even without this permission, but sensitive information (such as client secrets) will be filtered out.
         
         ### Changelog
         | Version      | Description |
