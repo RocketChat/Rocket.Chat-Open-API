@@ -193,8 +193,10 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        | 6.12.0           | Fixed `customFields` not updating if `text` was unchanged |
+        | 6.4.0            | Add previewUrls param       |        
         | 0.49.0           | Added       |
-        | 6.4.0            | Add previewUrls param       |
+        
       operationId: post-api-v1-chat.update
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
