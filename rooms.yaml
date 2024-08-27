@@ -6128,6 +6128,16 @@ paths:
                 favorite:
                   type: object
                   description: The favorite settings of the room. Whether the room is marked as favorite and whether it is set as the default room.
+                sidepanel:
+                  type: object
+                  description: List the team's channels or discussions to be displayed in the sidepanel.
+                  properties:
+                    items:
+                      type: array
+                      description: The options are `discussions` and `channels`.
+                      items:
+                        type: string
+                        example: '["discussions", "channels"]'
               required:
                 - rid
             examples:
@@ -6853,7 +6863,7 @@ paths:
     post:
       tags:
         - Teams
-      summary: Create a new Team
+      summary: Create a New Team
       description: |-
         Creates a new team. 
         
@@ -6884,6 +6894,16 @@ paths:
                   properties:
                     readOnly:
                       type: boolean
+                sidepanel:
+                  type: object
+                  description: List the team's channels or discussions to be displayed in the sidepanel.
+                  properties:
+                    items:
+                      type: array
+                      description: The options are `discussions` and `channels`.
+                      items:
+                        type: string
+                        example: '["discussions", "channels"]'
                 owner:
                   type: string
                   description: Set the owner of the team.
@@ -6899,6 +6919,10 @@ paths:
                     - 8dugqGhuRvCBLdZft
                   room:
                     readOnly: true
+                  sidepanel:
+                    items:
+                      - discussions
+                      - channels
       responses:
         '200':
           description: |-
