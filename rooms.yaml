@@ -6858,6 +6858,110 @@ paths:
                     errorType: invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
+          
+  /api/v1/audit/rooms.members:
+    parameters: []
+    get:
+      summary: Audit Rooms
+      tags:
+        - Rooms
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  members:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        status:
+                          type: string
+                        name:
+                          type: string
+                        username:
+                          type: string
+                        _updatedAt:
+                          type: string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    members:
+                      - _id: FSA63o85Poa2EQvAH
+                        status: offline
+                        name: cat kate
+                        username: cat.kate
+                        _updatedAt: '2024-08-27T09:07:03.795Z'
+                    count: 1
+                    offset: 0
+                    total: 1
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''roomId'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      operationId: get-api-v1-audit-rooms.members
+      description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Enterprise" style="display: block; margin: auto"></div>
+      
+        Audit any public or private room and view the room members. You don't need to be a member of the room.
+        
+        Permission required: `view-members-list-all-rooms`
+        
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 6.12.0   | Added       |
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - schema:
+            type: string
+            example: 66cd971f6fcbb8e8b3cf8e69
+          in: query
+          name: roomId
+          description: Enter the room ID that you want to audit.
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: filter
+          description: Filter the results using the text that you want to view.
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/sort'
 
   /api/v1/teams.create:
     post:
