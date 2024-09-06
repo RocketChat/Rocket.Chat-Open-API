@@ -5562,6 +5562,7 @@ paths:
         ### Changelog
         | Version | Description                          |
         | ------- | ------------------------------------ |
+        | 6.8.0   | Allow custom fields in messages      | 
         | 1.0.0   | Return Message object on file upload |
         | 0.62.0  | Added                                |
       operationId: get-api-v1-rooms.upload-rid
