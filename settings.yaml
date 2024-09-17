@@ -3549,6 +3549,39 @@ paths:
                   description: The session ID.
               required:
                 - sessionId
+  /pw.getPolicy:
+    get:
+      summary: Get Password Policy
+      tags:
+        - Password policy
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                Success:
+                  value:
+                    enabled: true
+                    policy:
+                      - - get-password-policy-minLength
+                        - minLength: 7
+                      - - get-password-policy-forbidRepeatingCharacters
+                      - - get-password-policy-forbidRepeatingCharactersCount
+                        - forbidRepeatingCharactersCount: 3
+                      - - get-password-policy-mustContainAtLeastOneLowercase
+                      - - get-password-policy-mustContainAtLeastOneUppercase
+                      - - get-password-policy-mustContainAtLeastOneNumber
+                      - - get-password-policy-mustContainAtLeastOneSpecialCharacter
+                    success: true
+      operationId: get-pw.getPolicy
+      description: 'Get the current [password policy](https://docs.rocket.chat/v1/docs/accounts#password-policy) for users in your workspace.'
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
 tags:
   - name: Settings
   - name: Cloud
@@ -3560,6 +3593,7 @@ tags:
   - name: Federation
   - name: Moderation
   - name: Device Management
+  - name: Password policy
 components:
   parameters:
     X-User-Id:
