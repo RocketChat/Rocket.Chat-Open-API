@@ -15484,6 +15484,139 @@ paths:
                   host: 'null'
       tags:
         - Livechat Messages
+  /api/v1/omnichannel/integrations:
+    post:
+      summary: Set up Omnichannel webhook
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+      operationId: post-api-v1-omnichannel-integrations
+      tags:
+        - Omnichannel Webhooks
+      description: 'Set up a [webhook](https://docs.rocket.chat/docs/webhooks) to easily integrate Omnichannel with your CRM. Permission required: `view-livechat-manager`.'
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                LivechatWebhookUrl:
+                  type: string
+                  description: The destination webhook URL where the data will be sent.
+                LivechatSecretToken:
+                  type: string
+                  description: A secret token that can be used to verify the webhook.
+                LivechatHttpTimeout:
+                  type: integer
+                  description: The request timeout value
+                LivechatWebhookOnStart:
+                  type: boolean
+                  description: 'When set to true, data is sent to the configured webhook URL each time a new chat starts.'
+                LivechatWebhookOnClose:
+                  type: boolean
+                  description: 'When set to true, data is sent to the configured webhook URL each time a chat is closed.'
+                LivechatWebhookOnChatTaken:
+                  type: boolean
+                  description: 'When set to true, data is sent to the configured webhook URL each time a chat is taken.'
+                LivechatWebhookOnChatQueued:
+                  type: boolean
+                  description: 'When set to true, data is sent to the configured webhook URL each time a chat is queued.'
+                LivechatWebhookOnForward:
+                  type: boolean
+                  description: 'When set to true, data is sent to the configured webhook URL each time a chat is forwarded.'
+                LivechatWebhookOnOfflineMsg:
+                  type: boolean
+                  description: 'When set to true, data is sent to the configured webhook URL each time offline messages are sent.'
+                LivechatWebhookOnVisitorMessage:
+                  type: boolean
+                  description: 'When set to true, data is sent to the configured webhook URL each time a visitor sends a message.'
+                LivechatWebhookOnAgentMessage:
+                  type: boolean
+                  description: 'When set to true, data is sent to the configured webhook URL each time an agent sends a message.'
+            examples:
+              WebhookData:
+                value:
+                  LivechatWebhookUrl: 'https://webhook/d548683u3-7f38ow-48ba-ieooefa-oejiduiw'
+                  LivechatSecretToken: ''
+                  LivechatHttpTimeout: 5000
+                  LivechatWebhookOnStart: true
+                  LivechatWebhookOnClose: true
+                  LivechatWebhookOnChatTaken: true
+                  LivechatWebhookOnChatQueued: false
+                  LivechatWebhookOnForward: false
+                  LivechatWebhookOnOfflineMsg: true
+                  LivechatWebhookOnVisitorMessage: true
+                  LivechatWebhookOnAgentMessage: true
+  /api/v1/livechat/webhook.test:
+    post:
+      summary: Test the Webhook Integration
+      tags:
+        - Omnichannel Webhooks
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+      operationId: post-api-v1-livechat-webhook.test
+      description: |-
+        This endpoint sends sample data to test whether the [configured webhook URL](https://docs.rocket.chat/docs/webhooks) is functioning correctly. Permission required: `view-livechat-webhooks`.
+
+        The data you can expect on your webhook for this test follows this format:
+        ```
+        {
+          "type": "LivechatSession",
+          "_id": "fasd6f5a4sd6f8a4sdf",
+          "label": "title",
+          "topic": "asiodojf",
+          "createdAt": "2024-09-18T12:22:02.975Z",
+          "lastMessageAt": "2024-09-18T12:22:02.975Z",
+          "tags": [
+            "tag1",
+            "tag2",
+            "tag3"
+          ],
+          "customFields": {
+            "productId": "123456"
+          },
+          "visitor": {
+            "_id": "",
+            "name": "visitor name",
+            "username": "visitor-username",
+            "department": "department",
+            "email": "email@address.com",
+            "phone": "192873192873",
+            "ip": "123.456.7.89",
+            "browser": "Chrome",
+            "os": "Linux",
+            "customFields": {
+              "customerId": "123456"
+            }
+          },
+          "agent": {
+            "_id": "asdf89as6df8",
+            "username": "agent.username",
+            "name": "Agent Name",
+            "email": "agent@email.com"
+          },
+          "messages": [
+            {
+              "username": "visitor-username",
+              "msg": "message content",
+              "ts": "2024-09-18T12:22:02.975Z"
+            },
+            {
+              "username": "agent.username",
+              "agentId": "asdf89as6df8",
+              "msg": "message content from agent",
+              "ts": "2024-09-18T12:22:02.975Z"
+            }
+          ]
+        }
+        ```
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
 tags:
   - name: Agent Extensions
   - name: Canned Responses
@@ -15518,6 +15651,7 @@ tags:
   - name: Voice Channel Queue Membership
   - name: Voice Channel Rooms
   - name: Voice Channel Server Connection
+  - name: Omnichannel Webhooks
 components:
   parameters:
     start:
@@ -15605,7 +15739,7 @@ components:
               success:
                 type: boolean
           examples:
-            Example 1:
+            Success:
               value:
                 success: true
     authorizationError:
