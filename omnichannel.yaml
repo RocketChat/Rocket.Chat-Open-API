@@ -15539,7 +15539,7 @@ paths:
             examples:
               WebhookData:
                 value:
-                  LivechatWebhookUrl: 'https://webhook.site/d54869d7-7f89-48ba-9ffa-f2545b4df6fe'
+                  LivechatWebhookUrl: 'https://webhook/d548683u3-7f38ow-48ba-ieooefa-oejiduiw'
                   LivechatSecretToken: ''
                   LivechatHttpTimeout: 5000
                   LivechatWebhookOnStart: true
