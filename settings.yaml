@@ -3549,7 +3549,7 @@ paths:
                   description: The session ID.
               required:
                 - sessionId
-  /pw.getPolicy:
+  /api/v1/pw.getPolicy:
     get:
       summary: Get Password Policy
       tags:
