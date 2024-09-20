@@ -5679,6 +5679,8 @@ paths:
       summary: Request Livechat Transcript
       description: |-
         The endpoint is used by visitors to request a transcript of their chat to be sent to their email once the conversation ends. The room must be closed before you can send a transcript.
+
+        You can also request transcripts for older conversations given that you know the older token and room ID.
         
         ### Changelog
         | Version      | Description | 
