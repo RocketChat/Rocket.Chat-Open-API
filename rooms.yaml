@@ -8847,7 +8847,9 @@ paths:
       tags:
         - Teams
       summary: List Rooms and Discussions of a Team
-      description: 'Lists a particular team''s public rooms, discussions, and the rooms (public/private) a user is part of from the team''s main room.'
+      description: |-
+        Lists a particular team's public rooms, discussions, and the rooms (public/private) a user is part of from the team's main room.
+        Currently, this endpoint returns the discussions from the parent team rooms only; discussions from sub-channels are not returned.
       operationId: get-api-v1-teams.listChildren
       parameters:
         - $ref: '#/components/parameters/UserId'
