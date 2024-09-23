@@ -4872,7 +4872,12 @@ paths:
         - $ref: '#/components/parameters/fields'
       responses:
         '200':
-          description: OK
+          description: |-
+            OK
+            
+            The response includes the following objects:
+            * `parent`: Represents the parent of a room. For discussions, this is the room where the discussion was created, identified by `prid`. For rooms inside a team, the parent will be the team's main room, identified by `team.roomId`. For other rooms, this property is undefined.
+            * `team`: Represents the team a room is part of. For rooms inside a team, this is the team identified by the `teamId` property. For everything else, this is undefined.
           content:
             application/json:
               schema:
@@ -4947,34 +4952,75 @@ paths:
                 Success:
                   value:
                     room:
-                      _id: GENERAL
-                      ts: '2024-02-14T14:34:49.365Z'
-                      t: c
-                      name: general
-                      usernames: []
-                      msgs: 55
-                      usersCount: 36
-                      _updatedAt: '2024-07-16T08:49:34.732Z'
+                      _id: 66ed2dba40141d95f32c292b
+                      fname: new-channel
+                      _updatedAt: '2024-09-20T12:29:08.284Z'
+                      customFields: {}
+                      topic: ''
+                      broadcast: false
+                      encrypted: false
+                      name: new-channel
+                      t: p
+                      msgs: 3
+                      usersCount: 2
                       u:
-                        _id: rocket.cat
-                        username: rocket.cat
-                        name: Rocket.Cat
-                      default: true
+                        _id: C38WSSzrGd2NCjzqJ
+                        username: test.cat
+                        name: test.cat
+                      ts: '2024-09-20T08:09:30.417Z'
+                      ro: false
+                      teamId: 66c82d78237405fc05fc1ef1
+                      default: false
+                      sysMes: true
                       lastMessage:
-                        _id: 668fc2bbffe932842327c1ff
-                        t: discussion-created
-                        rid: GENERAL
-                        ts: '2024-07-11T11:32:11.220Z'
-                        msg: Discussion
+                        _id: xZhJfE4rmaosjHZCe
+                        rid: 66ed2dba40141d95f32c292b
+                        msg: testing
+                        ts: '2024-09-20T12:27:53.356Z'
                         u:
-                          _id: 5m4hjvzChTRCqwPrD2
-                          username: Rama
-                          name: Raghav Ram
-                        groupable: false
-                        drid: 668fc2bbffe932842327c1fd
-                        _updatedAt: '2024-07-11T11:32:11.220Z'
-                      lm: '2024-07-11T11:32:11.220Z'
+                          _id: C38WSSzrGd2NCjzqJ
+                          username: test.cat
+                          name: test.cat
+                        _updatedAt: '2024-09-20T12:27:53.397Z'
+                        urls: []
+                        mentions: []
+                        channels: []
+                        md:
+                          - type: PARAGRAPH
+                            value:
+                              - type: PLAIN_TEXT
+                                value: testing
+                      lm: '2024-09-20T12:27:53.356Z'
+                    team:
+                      _id: 66c82d78237405fc05fc1ef1
+                      name: test-team
+                      type: 0
+                      roomId: 66c82d78237405fc05fc1eef
+                    parent:
+                      _id: 66c82d78237405fc05fc1eef
+                      fname: test-team
+                      name: test-team
+                      t: c
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The parameter "roomId" or "roomName" is required [error-roomid-param-not-provided]'
+                    errorType: error-roomid-param-not-provided
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/rooms.getDiscussions:
