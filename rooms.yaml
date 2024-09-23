@@ -8795,6 +8795,270 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
+
+  /api/v1/teams.listChildren:
+    get:
+      tags:
+        - Teams
+      summary: List Rooms and Discussions of a Team
+      description: 'Lists a particular team''s public rooms, discussions, and the rooms (public/private) a user is part of from the team''s main room.'
+      operationId: get-api-v1-teams.listChildren
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/Optional-TeamName'
+        - $ref: '#/components/parameters/Optional-TeamId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+        - schema:
+            type: string
+          in: query
+          name: filter
+          description: Filter the results using the text you want to find.
+        - schema:
+            type: string
+          in: query
+          name: type
+          description: 'You can choose the type of rooms you want in the response. Enter the value as `channels` or `discussions`. If you don''t enter any value, both types are returned.'
+        - schema:
+            type: string
+            example: 66c82d78237405fc05fc1eef
+          in: query
+          name: roomId
+          description: The room ID. This parameter is required if you have not provided the `teamId` or the `teamName`.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        fname:
+                          type: string
+                        _updatedAt:
+                          type: string
+                        topic:
+                          type: string
+                        broadcast:
+                          type: boolean
+                        encrypted:
+                          type: boolean
+                        name:
+                          type: string
+                        t:
+                          type: string
+                        msgs:
+                          type: integer
+                        usersCount:
+                          type: integer
+                        u:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                            name:
+                              type: string
+                        ts:
+                          type: string
+                        ro:
+                          type: boolean
+                        default:
+                          type: boolean
+                        sysMes:
+                          type: boolean
+                        teamId:
+                          type: string
+                        teamMain:
+                          type: boolean
+                        lastMessage:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            rid:
+                              type: string
+                            msg:
+                              type: string
+                            ts:
+                              type: string
+                            u:
+                              type: object
+                              properties:
+                                _id:
+                                  type: string
+                                username:
+                                  type: string
+                                name:
+                                  type: string
+                            _updatedAt:
+                              type: string
+                            urls:
+                              type: array
+                              items:
+                                type: object
+                                properties: {}
+                            mentions:
+                              type: array
+                              items:
+                                type: object
+                                properties: {}
+                            channels:
+                              type: array
+                              items:
+                                type: object
+                                properties: {}
+                            md:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  type:
+                                    type: string
+                                  value:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        type:
+                                          type: string
+                                        value:
+                                          type: string
+                        lm:
+                          type: string
+                        customFields:
+                          type: object
+                          properties: {}
+                  offset:
+                    type: integer
+                  count:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    total: 2
+                    data:
+                      - _id: 66c82d78237405fc05fc1eef
+                        fname: test-team
+                        _updatedAt: '2024-09-20T12:27:38.725Z'
+                        topic: ''
+                        broadcast: false
+                        encrypted: false
+                        name: test-team
+                        t: c
+                        msgs: 3
+                        usersCount: 1
+                        u:
+                          _id: C38WSSzrGd2NCjzqJ
+                          username: test.cat
+                          name: test.cat
+                        ts: '2024-08-23T06:34:32.413Z'
+                        ro: false
+                        default: false
+                        sysMes: true
+                        teamId: 66c82d78237405fc05fc1ef1
+                        teamMain: true
+                        lastMessage:
+                          _id: ZaeoxcCsHLutRkh9m
+                          rid: 66c82d78237405fc05fc1eef
+                          msg: testing
+                          ts: '2024-09-20T12:27:38.634Z'
+                          u:
+                            _id: C38WSSzrGd2NCjzqJ
+                            username: test.cat
+                            name: test.cat
+                          _updatedAt: '2024-09-20T12:27:38.686Z'
+                          urls: []
+                          mentions: []
+                          channels: []
+                          md:
+                            - type: PARAGRAPH
+                              value:
+                                - type: PLAIN_TEXT
+                                  value: testing
+                        lm: '2024-09-20T12:27:38.634Z'
+                      - _id: 66ed2dba40141d95f32c292b
+                        fname: new-channel
+                        _updatedAt: '2024-09-20T12:29:08.284Z'
+                        customFields: {}
+                        topic: ''
+                        broadcast: false
+                        encrypted: false
+                        name: new-channel
+                        t: p
+                        msgs: 3
+                        usersCount: 2
+                        u:
+                          _id: C38WSSzrGd2NCjzqJ
+                          username: test.cat
+                          name: test.cat
+                        ts: '2024-09-20T08:09:30.417Z'
+                        ro: false
+                        teamId: 66c82d78237405fc05fc1ef1
+                        default: false
+                        sysMes: true
+                        lastMessage:
+                          _id: xZhJfE4rmaosjHZCe
+                          rid: 66ed2dba40141d95f32c292b
+                          msg: testing
+                          ts: '2024-09-20T12:27:53.356Z'
+                          u:
+                            _id: C38WSSzrGd2NCjzqJ
+                            username: test.cat
+                            name: test.cat
+                          _updatedAt: '2024-09-20T12:27:53.397Z'
+                          urls: []
+                          mentions: []
+                          channels: []
+                          md:
+                            - type: PARAGRAPH
+                              value:
+                                - type: PLAIN_TEXT
+                                  value: testing
+                        lm: '2024-09-20T12:27:53.356Z'
+                    offset: 0
+                    count: 50
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: |-
+                      must have required property 'teamId'
+                       must have required property 'teamName'
+                       must have required property 'roomId'
+                       must match exactly one schema in oneOf [invalid-params]
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+          
   /api/v1/groups.online:
     get:
       tags:
