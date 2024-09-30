@@ -10511,7 +10511,7 @@ paths:
         name: id
         in: path
         required: true
-        description: The unit ID that you want to update.
+        description: The unit ID.
     post:
       summary: Update Unit
       tags:
@@ -10652,14 +10652,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
-  '/api/v1/livechat/units/{unitId}':
-    parameters:
-      - schema:
-          type: string
-        name: unitId
-        in: path
-        required: true
-        description: The unit ID.
     get:
       summary: Get a Unit
       operationId: get-api-v1-livechat-units-unitId
@@ -10712,6 +10704,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
+      
   '/api/v1/livechat/units/{unitId}/monitors':
     parameters:
       - schema:
