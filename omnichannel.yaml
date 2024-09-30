@@ -2123,6 +2123,8 @@ paths:
     put:
       summary: Update Livechat Room Visitor
       description: |-
+        > This endpoint has been deprecated and is scheduled for removal in the 7.0.0 release.
+        
         Update room visitor's information.
         Permission required: `view-l-room`
       operationId: put-api-v1-livechat-room.visitor
@@ -2416,6 +2418,8 @@ paths:
     post:
       summary: Transfer Livechat Room
       description: |-
+       > This endpoint has been deprecated and is scheduled for removal in the 8.0.0 release.
+
         Use the <a href="https://developer.rocket.chat/apidocs/forward-livechat-room" target="_blank">Forward Livechat Room</a> endpoint instead.
         
         Transfer an omnichannel conversation to another department.
@@ -3281,7 +3285,8 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
-        |1.0.0           | New fields for department updated      
+        |6.13.0            | Added `departmentUnit` parameter      |
+        |1.0.0           | New fields for department updated      |
         |0.42.0          | Added       |
       operationId: post-api-v1-livechat-department
       parameters:
@@ -3562,6 +3567,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |6.13.0            | Added `departmentUnit` parameter      |
         |0.42.0            | Added       |
       operationId: put-api-v1-livechat-department-_id
       parameters:
@@ -8074,6 +8080,8 @@ paths:
         - Livechat Inquiries
       summary: List Queued Inquiries
       description: |-
+        > This endpoint has been deprecated and is scheduled for removal in the 7.0.0 release.
+
         Use the `/inquiries.queuedForUser` endpoint instead.
         
         Permission required: `view-l-room`
@@ -15265,26 +15273,6 @@ paths:
                     errorType: invalid-params
       operationId: delete-api-v1-livechat-message-_id
       description: Remove a specific livechat message.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                token:
-                  type: string
-                  description: The visitor token.
-                rid:
-                  type: string
-                  description: The room ID.
-              required:
-                - token
-                - rid
-            examples:
-              Example 1:
-                value:
-                  token: 54fc5544030bcecda053311cb6b989
-                  rid: hGFwSKA28nRKut3pD
   '/api/v1/livechat/messages.history/{rid}':
     parameters:
       - schema:
