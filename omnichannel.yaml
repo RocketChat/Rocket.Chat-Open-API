@@ -3342,8 +3342,21 @@ paths:
                       order:
                         type: integer
                         description: The order in which the agents are assigned to chats.
+                departmentUnit:
+                  type: object
+                  description: |-
+                    Assign the department to a [unit](https://docs.rocket.chat/docs/units). 
+
+                    **Guidelines for assigning departments to a unit**
+                    - Permission required: `manage-livechat-departments`
+                    - If the user making the request is a [monitor](https://docs.rocket.chat/docs/monitors), they must be a supervisor of the specified unit. 
+                    - If the user is not a monitor (such as an admin or [manager](https://docs.rocket.chat/docs/managers)), any unit can be associated to the department
+                  properties:
+                    _id:
+                      type: string
+                      description: The id of the unit to assign the department.
             examples:
-              Example 1:
+              Example:
                 value:
                   department:
                     enabled: false
@@ -3353,6 +3366,8 @@ paths:
                     showOnOfflineForm: true
                   agents:
                     - agentId: SQafHvoFPuB57NmBD
+                  departmentUnit:
+                    _id: 66f46dc59a0766c20712d698
       responses:
         '200':
           description: OK
@@ -3607,10 +3622,24 @@ paths:
                         type: string
                       order:
                         type: string
+                departmentUnit:
+                  type: object
+                  description: |-
+                    Assign the department to a [unit](https://docs.rocket.chat/docs/units). 
+
+                    **Guidelines for assigning departments to a unit**
+                    - Permission required: `manage-livechat-departments`
+                    - If the user making the request is a [monitor](https://docs.rocket.chat/docs/monitors), they must be a supervisor of the specified unit. 
+                    - If the user is not a monitor (such as an admin or [manager](https://docs.rocket.chat/docs/managers)), any unit can be associated to the department.
+                    - Providing an empty object `({})`, undefined `({ _id: undefined})`, or null `({ _id: null})` for this parameter removes the department from the associated unit.
+                  properties:
+                    _id:
+                      type: string
+                      description: The id of the unit to assign the department.
               required:
                 - department
             examples:
-              Example 1:
+              Example:
                 value:
                   department:
                     enabled: true
@@ -3621,6 +3650,8 @@ paths:
                   agents:
                     - agentId: SQafHvoFPuB57NmBD
                       username: john.doe
+                  departmentUnit:
+                    _id: 66f46dc59a0766c20712d698                
       responses:
         '200':
           description: OK
