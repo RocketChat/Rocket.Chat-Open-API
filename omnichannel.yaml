@@ -2123,7 +2123,7 @@ paths:
     put:
       summary: Update Livechat Room Visitor
       description: |-
-        > This endpoint has been deprecated and is scheduled for removal in the 7.0.0 [release](https://github.com/RocketChat/Rocket.Chat/releases).
+        > This endpoint has been deprecated and is scheduled for removal in the 7.0.0 <a href="https://github.com/RocketChat/Rocket.Chat/releases" target="_blank">release</a>.
         
         Update room visitor's information.
         Permission required: `view-l-room`
@@ -2418,7 +2418,7 @@ paths:
     post:
       summary: Transfer Livechat Room
       description: |-
-        > This endpoint has been deprecated and is scheduled for removal in the 7.0.0 [release](https://github.com/RocketChat/Rocket.Chat/releases). Use the <a href="https://developer.rocket.chat/apidocs/forward-livechat-room" target="_blank">Forward Livechat Room</a> endpoint instead.
+        > This endpoint has been deprecated and is scheduled for removal in the 7.0.0 <a href="https://github.com/RocketChat/Rocket.Chat/releases" target="_blank">release</a>. Use the <a href="https://developer.rocket.chat/apidocs/forward-livechat-room" target="_blank">Forward Livechat Room</a> endpoint instead.
         
         Transfer an omnichannel conversation to another department.
       operationId: post-api-v1-livechat-room.transfer
@@ -8076,7 +8076,7 @@ paths:
         - Livechat Inquiries
       summary: List Queued Inquiries
       description: |-
-        > This endpoint has been deprecated and is scheduled for removal in the 7.0.0 [release](https://github.com/RocketChat/Rocket.Chat/releases). Use the [`/livechat/inquiries.queuedForUser`](https://developer.rocket.chat/apidocs/list-queued-user-inquiries) endpoint instead.
+        > This endpoint has been deprecated and is scheduled for removal in the 7.0.0 <a href="https://github.com/RocketChat/Rocket.Chat/releases" target="_blank">release</a>. Use the [`/livechat/inquiries.queuedForUser`](https://developer.rocket.chat/apidocs/list-queued-user-inquiries) endpoint instead.
         
         Permission required: `view-l-room`
       operationId: get-api-v1-livechat-inquiries.queued
