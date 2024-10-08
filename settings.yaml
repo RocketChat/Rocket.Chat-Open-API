@@ -776,9 +776,11 @@ paths:
                   public_key: My-9UbLiK-k34
                   private_key: 9R1V4t3_k3Y
   /api/v1/e2e.updateGroupKey:
-    parameters: []
     post:
       summary: Update User E2E Key in Room
+      description: |-
+        > This endpoint has been deprecated and is scheduled for removal in the 8.0.0 <a href="https://github.com/RocketChat/Rocket.Chat/releases" target="_blank">release</a>.
+      deprecated: true
       operationId: post-api-v1-e2e.updateGroupKey
       responses:
         '200':
