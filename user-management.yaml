@@ -2961,7 +2961,7 @@ paths:
         - Users
       summary: Create Users Token
       description: |-
-        > This endpoint has been deprecated and is scheduled for removal in the 8.0.0 release.
+        > This endpoint has been deprecated and is scheduled for removal in the 8.0.0 <a href="https://github.com/RocketChat/Rocket.Chat/releases" target="_blank">release</a>.
         
         As a workspace admin, you can create temporary authentication tokens for users. This is the same type of session authentication token a user gets via <a href="https://developer.rocket.chat/apidocs/login-with-username-and-password" target="_blank">login</a> and expires the same way.
         * To be able to use this endpoint, you must add the <a href="https://docs.rocket.chat/docs/deployment-environment-variables" target="_blank">environment variable</a> `CREATE_TOKENS_FOR_USERS=true` in your compose file.
