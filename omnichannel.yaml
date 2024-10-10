@@ -1889,8 +1889,8 @@ paths:
         - Livechat Rooms
   /api/v1/livechat/room.close:
     post:
-      summary: Close Livechat Room
-      description: ''
+      summary: Close Livechat Room by Visitor
+      description: 'If you are a visitor, use this endpoint to close the livechat room.'
       operationId: post-api-v1-livechat-room.close
       parameters: []
       responses:
@@ -1961,6 +1961,97 @@ paths:
                 value:
                   rid: XFzMqgn33DcsQkpJp
                   token: iNKE8a6k6cjbqWhWd
+                  
+  /api/v1/livechat/room.closeByUser:
+    post:
+      summary: Close Livechat Room
+      description: 'If you are an Omnichannel user (agent, manager), use this endpoint to close the livechat room.'
+      operationId: post-api-v1-livechat-room.closeByUser
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''rid'' [invalid-params]'
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: error-room-already-closed
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      tags:
+        - Livechat Rooms
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - rid
+              properties:
+                rid:
+                  type: string
+                  description: Enter the livechat room ID.
+                  example: 8ceKgWvo5qT5TrCRN
+                comment:
+                  type: string
+                  description: Add a description for closing the room.
+                tags:
+                  type: array
+                  description: 'Add [tags](https://docs.rocket.chat/docs/tags).'
+                  items:
+                    type: string
+                generateTranscriptPdf:
+                  type: boolean
+                  description: Enter whether you want to generate a conversation transcript PDF.
+                transcriptEmail:
+                  type: object
+                  properties:
+                    sendToVisitor:
+                      type: boolean
+                      description: Enter whether you want to send the livechat transcript to the visitor.
+                    requestData:
+                      type: object
+                      properties:
+                        email:
+                          type: string
+                          description: Enter the visitor's email ID to whom you want to send the transcript.
+                        subject:
+                          type: string
+                          description: Enter a subject for the email.
+            examples:
+              Example 1:
+                value:
+                  rid: 8ceKgWvo5qT5TrCRN
+                  comment: close via API
+                  tags:
+                    - abc
+                    - abc
+                  transcriptEmail:
+                    sendToVisitor: true
+                    requestData:
+                      email: test@example.com
+                      subject: transcript
+                  
   /api/v1/livechat/room.join:
     get:
       summary: Join Livechat Room
