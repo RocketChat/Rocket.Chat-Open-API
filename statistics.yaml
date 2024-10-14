@@ -3039,6 +3039,13 @@ paths:
         - $ref: '#/components/parameters/end'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/offset'
+        - in: query
+          name: hideRoomsWithNoActivity
+          schema:
+            type: boolean
+          required: false
+          description: Enable this option to remove rooms without any activity from the response. This parameter has been deprecated and is scheduled for removal in the 7.0.0 <a href="https://github.com/RocketChat/Rocket.Chat/releases" target="_blank">release</a>. After the removal, this endpoint will automatically omit such inactive rooms from the response.
+ 
       responses:
         '200':
           description: OK
