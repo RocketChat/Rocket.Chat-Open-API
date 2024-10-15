@@ -3584,6 +3584,43 @@ paths:
       parameters:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/X-Auth-Token'
+  /api/v1/pw.getPolicyReset:
+    get:
+      summary: Get password policy during password reset
+      tags:
+        - Password policy
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                Success:
+                  value:
+                    enabled: true
+                    policy:
+                      - - get-password-policy-minLength
+                        - minLength: 7
+                      - - get-password-policy-forbidRepeatingCharacters
+                      - - get-password-policy-forbidRepeatingCharactersCount
+                        - forbidRepeatingCharactersCount: 3
+                      - - get-password-policy-mustContainAtLeastOneLowercase
+                      - - get-password-policy-mustContainAtLeastOneUppercase
+                      - - get-password-policy-mustContainAtLeastOneNumber
+                      - - get-password-policy-mustContainAtLeastOneSpecialCharacter
+                    success: true
+      operationId: get-pw.getPolicyReset
+      description: Get the password policy when a user is trying to reset thier password.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: token
+          description: The token sent via email for password reset
+
 tags:
   - name: Settings
   - name: Cloud
