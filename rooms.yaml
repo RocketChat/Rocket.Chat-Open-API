@@ -5851,14 +5851,10 @@ paths:
               properties:
                 file:
                   type: string
-                  x-stoplight:
-                    id: 4pss56kiwbb0z
                   format: binary
                   description: The file to upload
                 msg:
                   type: string
-                  x-stoplight:
-                    id: i8danbf8ckhny
                   description: The text to be added to the file message.
     parameters:
       - schema:
