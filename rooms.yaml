@@ -5807,7 +5807,7 @@ paths:
           $ref: '#/components/responses/authorizationError'
   '/api/v1/rooms.media/{rid}':
     post:
-      summary: Upload media files to a room
+      summary: Upload Media Files to a Room
       tags:
         - Rooms
       responses:
