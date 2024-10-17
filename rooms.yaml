@@ -5805,6 +5805,69 @@ paths:
                     errorType: invalid-field
         '401':
           $ref: '#/components/responses/authorizationError'
+  '/api/v1/rooms.media/{rid}':
+    post:
+      summary: Upload media files to a room
+      tags:
+        - Rooms
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  file:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      url:
+                        type: string
+                  success:
+                    type: boolean
+              examples:
+                Example:
+                  value:
+                    file:
+                      _id: 67109d6c25682c7469486008
+                      url: /file-upload/67109d6c25682c7469486008/Screenshot%202024-10-15%20at%2010.17.39.png
+                    success: true
+      operationId: post-api-v1-rooms.media
+      description: Upload media files to a room.
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+                - msg
+              properties:
+                file:
+                  type: string
+                  x-stoplight:
+                    id: 4pss56kiwbb0z
+                  format: binary
+                  description: The file to upload
+                msg:
+                  type: string
+                  x-stoplight:
+                    id: i8danbf8ckhny
+                  description: The text to be added to the file message.
+    parameters:
+      - schema:
+          type: string
+          example: GENERAL
+        name: rid
+        in: path
+        required: true
+        description: The id of the room.
 
   /api/v1/rooms.autocomplete.availableForTeams:
     get:
