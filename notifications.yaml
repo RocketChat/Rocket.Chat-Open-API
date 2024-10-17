@@ -175,6 +175,57 @@ paths:
                   bannerId: ByehQjC44FwMeiLbX
       tags:
         - Banners
+  /api/v1/banners.getNew:
+    get:
+      summary: Get a banner
+      deprecated: true
+      tags:
+        - Banners
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  banners:
+                    type: array
+                    items:
+                      type: object
+                      properties: {}
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    banners: []
+                    success: true
+              examples:
+                Example:
+                  value:
+                    banners:
+                      - {}
+                    success: true
+      operationId: get-api-v1-banners.getNew
+      description: '> This endpoint has been deprecated and is scheduled for removal in the 8.0.0 <a href="https://github.com/RocketChat/Rocket.Chat/releases" target="_blank">release</a>. Use [`banners`](https://developer.rocket.chat/apidocs/get-banners) or [`banners/:id`](https://developer.rocket.chat/apidocs/get-banner-by-id) instead.'
+      parameters:
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/X-User-Id'
+        - schema:
+            type: string
+            example: web
+          in: query
+          name: platform
+          description: The platform rendering the banner.
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: bid
+          description: The banner ID
+          required: true
+
   /api/v1/push.get:
     parameters: []
     get:
