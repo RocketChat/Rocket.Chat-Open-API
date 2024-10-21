@@ -1340,7 +1340,7 @@ paths:
               properties:
                 userId:
                   type: string
-                  description: The user ID to update.
+                  description: The user ID to update. This value must not be empty.
                   example: BsNr28znDkG8aeo7W
                 data:
                   type: object
@@ -1374,10 +1374,6 @@ paths:
                       description: The roles the user has been assigned.
                       items:
                         type: string
-                    joinDefaultChannels:
-                      type: boolean
-                      description: Whether the user should join the default channels.
-                      default: true
                     requirePasswordChange:
                       type: boolean
                       description: >-
