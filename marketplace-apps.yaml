@@ -275,6 +275,7 @@ paths:
                   description: The zip file containing the app.
                 permissions:
                   type: array
+                  description: An array of the [permissions](https://developer.rocket.chat/docs/app-permission-system) required for your app. This is required if permissions are defined in your `app.json` file.
                   items:
                     type: object
                     properties:
@@ -284,8 +285,7 @@ paths:
               Example:
                 value:
                   url: 'https://github.com/RocketChat/Apps.RocketChat.Tester/blob/master/dist/appsrocketchattester_0.0.5.zip?raw=true'
-                  app: path to the zip file
-
+                  app: 'path to the zip file'
         description: You can either the `app` or `url` parameter to upload the file.
       responses:
         '200':
