@@ -262,19 +262,31 @@ paths:
         - $ref: '#/components/parameters/UserId'
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
             schema:
               type: object
               properties:
                 url:
                   type: string
                   description: The app URL where the zip file is located.
-              required:
-                - url
+                app:
+                  type: string
+                  format: binary
+                  description: The zip file containing the app.
+                permissions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
             examples:
               Example:
                 value:
                   url: 'https://github.com/RocketChat/Apps.RocketChat.Tester/blob/master/dist/appsrocketchattester_0.0.5.zip?raw=true'
+                  app: path to the zip file
+
+        description: You can either the `app` or `url` parameter to upload the file.
       responses:
         '200':
           description: OK
