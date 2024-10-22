@@ -286,7 +286,7 @@ paths:
                 value:
                   url: 'https://github.com/RocketChat/Apps.RocketChat.Tester/blob/master/dist/appsrocketchattester_0.0.5.zip?raw=true'
                   app: 'path to the zip file'
-        description: You can either the `app` or `url` parameter to upload the file.
+        description: You can use either the `app` or `url` parameter to upload the file.
       responses:
         '200':
           description: OK
