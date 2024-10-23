@@ -1183,112 +1183,7 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
-  /api/v1/licenses.get:
-    get:
-      tags:
-        - Licenses
-      summary: Get Licenses
-      description: |- 
-        > This endpoint has been deprecated and is scheduled for removal in the 7.0.0 <a href="https://github.com/RocketChat/Rocket.Chat/releases" target="_blank">release</a>. Use the <a href="https://developer.rocket.chat/apidocs/get-licenses-1" target="_blank">/licenses.info</a> endpoint instead.
-        
-        Retrieves a list of all registered licenses in the workspace.
-        
-        Permission required: `view-privileged-setting`
-        
-        ### Changelog
-        | Version      | Description |
-        | ---------------- | ------------|
-        |6.5.0         | Deprecated       |
-        |3.10.0         | Added       |
-      operationId: get-api-v1-licenses.get
-      parameters:
-        - $ref: '#/components/parameters/Auth-Token'
-        - $ref: '#/components/parameters/UserId'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  licenses:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        version:
-                          type: integer
-                        url:
-                          type: string
-                        expiry:
-                          type: string
-                        maxActiveUsers:
-                          type: integer
-                        maxGuestUsers:
-                          type: integer
-                        maxRoomsPerGuest:
-                          type: integer
-                        modules:
-                          type: array
-                          items:
-                            type: string
-                        tag:
-                          type: object
-                          properties:
-                            name:
-                              type: string
-                            color:
-                              type: string
-                        meta:
-                          type: object
-                          properties:
-                            trial:
-                              type: boolean
-                            trialEnd:
-                              type: string
-                            workspaceId:
-                              type: string
-                  success:
-                    type: boolean
-              examples:
-                Success Example:
-                  value:
-                    licenses:
-                      - version: 2
-                        url: 'localhost:3000'
-                        expiry: '2023-07-13'
-                        maxActiveUsers: 25
-                        maxGuestUsers: 125
-                        maxRoomsPerGuest: 1
-                        modules:
-                          - auditing
-                          - canned-responses
-                          - ldap-enterprise
-                          - livechat-enterprise
-                          - voip-enterprise
-                          - omnichannel-mobile-enterprise
-                          - engagement-dashboard
-                          - push-privacy
-                          - scalability
-                          - teams-mention
-                          - saml-enterprise
-                          - oauth-enterprise
-                          - device-management
-                          - federation
-                          - videoconference-enterprise
-                          - message-read-receipt
-                        tag:
-                          name: Enterprise
-                          color: '#F3BE08'
-                        meta:
-                          trial: false
-                          trialEnd: '2023-04-27T23:00:00Z'
-                          workspaceId: 63cfe8550c95db00013d7798
-                    success: true
-        '401':
-          $ref: '#/components/responses/authorizationError'
-      deprecated: true
+
   /api/v1/licenses.info:
     get:
       tags:
@@ -1297,7 +1192,9 @@ paths:
       description: |-
         Retrieves a list of all registered licenses and the details in the workspace.
 
-        Permission required: `view-privileged-setting`
+        Permission required: `view-privileged-setting`.
+        
+        The `licenses.isEnterprise` and `licenses.get` endpoints have been removed from 7.0. Use this endpoint instead.
       operationId: get-api-v1-licenses.info
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -1654,53 +1551,7 @@ paths:
           $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/forbiddenError'
-  /api/v1/licenses.isEnterprise:
-    get:
-      tags:
-        - Licenses
-      summary: Confirm Enterprise License
-      description: |- 
-        > This endpoint has been deprecated and is scheduled for removal in the 7.0.0 <a href="https://github.com/RocketChat/Rocket.Chat/releases" target="_blank">release</a>. Use the <a href="https://developer.rocket.chat/apidocs/get-licenses-1" target="_blank">/licenses.info</a> endpoint instead.
 
-        Confirm if the current workspace is subscribed to the <a href="https://docs.rocket.chat/docs/our-plans#enterprise-plan" target="_blank">Enterprise plan</a>.
-        
-        ### Changelog
-        | Version      | Description |
-        | ---------------- | ------------|
-        |6.5.0         | Deprecated       |
-        |5.0.0         | Added       |
-      operationId: get-api-v1-licenses.isEnterprise
-      parameters:
-        - name: X-Auth-Token
-          in: header
-          description: The `authToken` of the authenticated user.
-          schema:
-            type: string
-        - name: X-User-Id
-          in: header
-          description: The `userId` of the authenticated user.
-          schema:
-            type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  isEnterprise:
-                    type: boolean
-                  success:
-                    type: boolean
-              examples:
-                  Success Example:
-                    value: 
-                      isEnterprise: true
-                      success: true
-        '401':
-          $ref: '#/components/responses/authorizationError'
-      deprecated: true
   /licenses.maxActiveUsers:
     get:
       tags:
