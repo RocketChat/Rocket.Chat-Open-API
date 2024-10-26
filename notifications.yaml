@@ -110,11 +110,6 @@ paths:
                     type: string
                   errorType:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'must have required property ''platform'' [invalid-params]'
-                    errorType: invalid-params
               examples:
                 Invalid Params:
                   value:
