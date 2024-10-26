@@ -108,11 +108,20 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
+                x-examples:
+                  Example 1:
+                    success: false
+                    error: 'must have required property ''platform'' [invalid-params]'
+                    errorType: invalid-params
               examples:
-                Example 1:
+                Invalid Params:
                   value:
                     success: false
-                    error: 'Match error: Missing key ''platform'''
+                    error: 'must have required property ''platform'' [invalid-params]'
+                    errorType: invalid-params
+  
         '401':
           $ref: '#/components/responses/authorizationError'
       description: Gets the banners to be shown to the authenticated user.
