@@ -38,7 +38,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Success Example:
                   value:
                     banners: []
                     success: true
@@ -53,11 +53,15 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
               examples:
-                Example 1:
+                Invalid Params:
                   value:
                     success: false
-                    error: 'Match error: Missing key ''platform'''
+                    error: 'must have required property ''platform'' [invalid-params]'
+                    errorType: invalid-params
+  
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: get-api-v1-banners-id
@@ -151,11 +155,15 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
               examples:
-                Example 1:
+                Invalid Params:
                   value:
                     success: false
-                    error: 'Match error: Missing key ''bannerId'''
+                    error: 'must have required property ''bannerId'' [invalid-params]'
+                    errorType: invalid-params
+  
         '401':
           $ref: '#/components/responses/authorizationError'
       parameters:
@@ -174,7 +182,7 @@ paths:
               required:
                 - bannerId
             examples:
-              Example 1:
+              Success:
                 value:
                   bannerId: ByehQjC44FwMeiLbX
       tags:
@@ -201,10 +209,6 @@ paths:
                       properties: {}
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    banners: []
-                    success: true
               examples:
                 Example:
                   value:
@@ -419,7 +423,7 @@ paths:
                   error:
                     type: string
               examples:
-                Example 1:
+                Example:
                   value:
                     success: false
                     error: 'Match error: Missing key ''id'''
@@ -465,7 +469,7 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                Invalid Token Parameter:
                   value:
                     success: false
                     error: 'The required "token" body param is missing or invalid. [error-token-param-not-valid]'
@@ -490,7 +494,7 @@ paths:
                 token:
                   type: string
             examples:
-              Example 1:
+              Example:
                 value:
                   token: abc
       tags:
@@ -555,7 +559,7 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                Invalid Token Param:
                   value:
                     success: false
                     error: 'The required "type" body param is missing or invalid. [error-type-param-not-valid]'
@@ -587,7 +591,7 @@ paths:
                 - value
                 - appName
             examples:
-              Example 1:
+              Example:
                 value:
                   type: gcm
                   value: TOKEN
@@ -677,6 +681,6 @@ components:
               success:
                 type: boolean
           examples:
-            Example 1:
+            Success Example:
               value:
                 success: true
