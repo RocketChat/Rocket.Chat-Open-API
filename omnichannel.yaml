@@ -1376,7 +1376,6 @@ paths:
             type: array
             items:
               type: string
-            example: '[''b32h3b2hhwb25d'']'
           example: '[''b32h3b2hhwb25d'']'
         - name: departmentId
           in: query
