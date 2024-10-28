@@ -1355,7 +1355,7 @@ paths:
     get:
       summary: Get List of Livechat Rooms
       description: |-
-        Retrieves a list of Livechat rooms.
+        Retrieves a list of Livechat rooms. You can use the available query parameters to filter the response.
         At least one of the following permissions is required:
         * `view-livechat-rooms`
         * `view-l-room`
@@ -1371,9 +1371,11 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: agents
           in: query
-          description: 'A list of agents, can be a list of IDs or usernames'
+          description: A list of agent IDs
           schema:
-            type: string
+            type: array
+            items:
+              type: string
           example: '[''b32h3b2hhwb25d'']'
         - name: departmentId
           in: query
