@@ -1030,7 +1030,7 @@ paths:
                           description: Set to `true` to import all users.
                         list:
                           type: array
-                          description: 'When `all` is false, list the IDs of users to be imported.'
+                          description: 'When `all` is false, list the record IDs of users to be imported.'
                           items:
                             type: string
                     channels:
@@ -1042,7 +1042,7 @@ paths:
                           description: Set to `true` to import all channels.
                         list:
                           type: array
-                          description: 'When `all` is false, list the IDs of channels to be imported.'
+                          description: 'When `all` is false, list the record IDs of channels to be imported.'
                           items:
                             type: string
             examples:
@@ -1066,6 +1066,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |7.0.0            | Remove required extra data from `users` and `channels` parameters. Use only record ID of the users or channels.   |
         |3.0.0            | Added       |
   /api/v1/getImportFileData:
     parameters: []
