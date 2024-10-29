@@ -1011,6 +1011,8 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - input
               properties:
                 input:
                   type: object
@@ -1020,100 +1022,41 @@ paths:
                   description: 'The input object contains two arrays: `users` and `channels`.'
                   properties:
                     users:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          user_id:
+                      type: object
+                      description: 'An object of the users to be imported. If `all` is true, `list` is ignored.'
+                      properties:
+                        all:
+                          type: boolean
+                          description: Set to `true` to import all users.
+                        list:
+                          type: array
+                          description: 'When `all` is false, list the IDs of users to be imported.'
+                          items:
                             type: string
-                            description: 'The unique user identifier (which is the username, since the user may not have a proper `_id` yet).'
-                            example: bradley.hilton
-                          username:
-                            type: string
-                            description: The user name.
-                            example: bradley.hilton
-                          email:
-                            type: string
-                            description: The user's email address.
-                            example: bradley.hilton@example.com
-                          is_deleted:
-                            type: boolean
-                            description: Was the described user deleted?
-                          is_bot:
-                            type: boolean
-                            description: Is the described user a bot?
-                          do_import:
-                            type: boolean
-                            description: Should the described user be imported?
-                          is_email_taken:
-                            type: boolean
-                            description: Is there an existing user with the same email?
-                        required:
-                          - user_id
-                          - username
-                          - email
-                          - is_deleted
-                          - is_bot
-                          - do_import
-                          - is_email_taken
                     channels:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          channel_id:
+                      type: object
+                      description: 'An object of the channels to import. If `all` is true, `list` is ignored.'
+                      properties:
+                        all:
+                          type: boolean
+                          description: Set to `true` to import all channels.
+                        list:
+                          type: array
+                          description: 'When `all` is false, list the IDs of channels to be imported.'
+                          items:
                             type: string
-                            description: The unique room identifier.
-                            example: 4K2ovcvP5LqfxXnd5
-                          name:
-                            type: string
-                            description: The name of the room.
-                            example: newRoom
-                          is_archived:
-                            type: boolean
-                            description: Is the described room archived?
-                          do_import:
-                            type: boolean
-                            description: Should the described room be imported?
-                          is_private:
-                            type: boolean
-                            description: Is the described room private?
-                          is_direct:
-                            type: boolean
-                            description: 'Is the described room of type [Direct Messages](https://docs.rocket.chat/use-rocket.chat/user-guides/rooms/direct-messages)?'
-                          creator:
-                            type: string
-                            description: The identifier of the room owner.
-                            default: undefined
-                            example: MF72rfNWNcv9EFZsx
-                        required:
-                          - channel_id
-                          - name
-                          - is_archived
-                          - do_import
-                          - is_private
-                          - is_direct
-              required:
-                - input
             examples:
               Example:
                 value:
                   input:
                     users:
-                      - user_id: testbh
-                        username: testbh
-                        email: testbh@gmail.com
-                        is_deleted: false
-                        is_bot: false
-                        do_import: true
-                        is_email_taken: false
+                      all: true
+                      list:
+                        - testbh
                     channels:
-                      - channel_id: WDuJLFkjwk6L7LdFC
-                        name: dlp
-                        is_archived: false
-                        do_import: true
-                        is_private: false
-                        is_direct: false
+                      all: false
+                      list:
+                        - WDuJLFkjwk6L7LdFC
       tags:
         - Import
       description: |-
