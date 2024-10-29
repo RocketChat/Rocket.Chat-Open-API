@@ -384,7 +384,9 @@ paths:
         - Integration
       summary: Get Integration History
       description: |-
-        Permissions required:
+       Any of the following permissions is required:
+        * `manage-incoming-integrations`
+        * `manage-own-incoming-integrations`
         * `manage-outgoing-integrations`
         * `manage-own-outgoing-integrations`
         
@@ -465,7 +467,7 @@ paths:
         - Integration
       summary: Get List of Integrations
       description: |-
-        Permissions required:
+        Any of the following permissions is required:
         * `manage-incoming-integrations`
         * `manage-own-incoming-integrations`
         * `manage-outgoing-integrations`
@@ -840,12 +842,12 @@ paths:
       description: |-
         Remove an integration from the workspace.
         
-        Permissions required:
-          * `manage-incoming-integrations`
-          * `manage-own-incoming-integrations`
-          * `manage-outgoing-integrations`
-          * `manage-own-outgoing-integrations`
-          
+        Any of the following permissions is required:
+        * `manage-incoming-integrations`
+        * `manage-own-incoming-integrations`
+        * `manage-outgoing-integrations`
+        * `manage-own-outgoing-integrations`
+        
           ### Changelog
           | Version      | Description |
           | ---------------- | ------------|
