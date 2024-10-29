@@ -848,11 +848,13 @@ paths:
         * `manage-outgoing-integrations`
         * `manage-own-outgoing-integrations`
         
-          ### Changelog
-          | Version      | Description |
-          | ---------------- | ------------|
-          |1.1.0            | Separate permissions in incoming and outgoing.       |
-          |0.49.0            | Added       |
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |1.1.0            | Separate permissions in incoming and outgoing.       |
+        |0.49.0            | Added       |
+
       operationId: post-api-v1-integrations.remove
       parameters:
         - $ref: '#/components/parameters/X-Auth-Token'
