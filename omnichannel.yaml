@@ -1363,6 +1363,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |7.0.0             | Remove support of filtering by agent's username |
         |2.4.0             | Added support to the parameter `roomName`|
         |2.0.0             | Added       |
       operationId: get-api-v1-livechat-rooms
