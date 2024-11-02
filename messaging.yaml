@@ -4750,6 +4750,8 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        | 7.0.0  | Removed `query` parameter. |
+        | 7.0.0  | Added `mentionIds`, `starredIds`, `pinned` query parameters.|         
         |0.59.0            | Added       |
       operationId: get-api-v1-im.messages
       parameters:
@@ -4758,7 +4760,6 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/query'
         - $ref: '#/components/parameters/fields'
         - name: roomId
           in: query
@@ -4766,6 +4767,24 @@ paths:
           schema:
             type: string
         - $ref: '#/components/parameters/Optional-Username'
+        - name: mentionIds
+          in: query
+          description: Filter the messages where a user has been mentioned by the userId. For a set of userIds, use an array (`["838ndhd79w", "dud0wu900"]`).
+          schema:
+            type: string
+          example: '838ndhd79w'
+        - name: starredIds
+          in: query
+          description: Filter the messages a user have starred by userId. For a set of userIds, use an array (`["838ndhd79w", "dud0wu900"]`).
+          schema:
+            type: string
+          example: 'dud0wu900'
+        - name: pinned
+          in: query
+          description: Filter pinned messages.
+          schema:
+            type: boolean
+          example: 'true' 
       responses:
         '200':
           description: OK
