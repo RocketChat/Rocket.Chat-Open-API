@@ -10824,11 +10824,13 @@ paths:
         - Groups
       summary: Get Group Messages
       description: |-
-        Lists all of the specific groups/channels messages on the workspace. 
+        Lists all the messages in a groups. 
         
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 7.0.0  | Removed `query` parameter. |
+        | 7.0.0  | Added `mentionIds`, `starredIds`, `pinned` query parameters.|
         | 0.59.0  | Added       |
         
       operationId: get-api-v1-groups.messages
@@ -10838,10 +10840,27 @@ paths:
         - $ref: '#/components/parameters/Optional-RoomId'
         - $ref: '#/components/parameters/Optional-RoomName'
         - $ref: '#/components/parameters/fields'
-        - $ref: '#/components/parameters/query'
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
+        - name: mentionIds
+          in: query
+          description: Filter the messages where a user has been mentioned by the userId.
+          schema:
+            type: string
+          example: '["838ndhd79w", "dud0wu900"]'
+        - name: starredIds
+          in: query
+          description: Filter the messages a user have starred by userId.
+          schema:
+            type: string
+          example: 'dud0wu900'
+        - name: pinned
+          in: query
+          description: Filter pinned messages.
+          schema:
+            type: boolean
+          example: 'true'      
       responses:
         '200':
           description: OK
