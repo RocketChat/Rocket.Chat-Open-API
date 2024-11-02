@@ -62,13 +62,25 @@ paths:
                     success: true
       tags:
         - Settings
-      description: 'List all public settings. Learn how this can be used in configuring your workspace in this <a href="https://docs.rocket.chat/docs/manage-settings-using-environmental-variables" target="_blank">guide</a>.'
+      description: |-
+        List all public settings. Learn how this can be used in configuring your workspace in this <a href="https://docs.rocket.chat/docs/manage-settings-using-environmental-variables" target="_blank">guide</a>.
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |7.0.0            | Added the `_id` query parameter for filtering.|
+        |7.0.0            | Removed the `query` parameter.      |
       parameters:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/query'
         - $ref: '#/components/parameters/fields'
+        - name: _id
+          in: query
+          description: 'Filter by the `_id` of the settings.'
+          schema:
+            type: string
+          example: Site_Url, LDAP_Enable        
   /api/v1/settings.oauth:
     parameters: []
     get:
