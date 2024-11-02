@@ -160,11 +160,13 @@ paths:
         - Custom Emoji
       summary: Get Updated List of Custom Emojis
       description: |-
-        Get an updated list of custom emojis.
+        Get a list of updated and removed emojis.
 
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |7.0.0            | Added  `_id` and  `_updatedAt` query parameter     |
+        |7.0.0            | Removed `query` parameter     |
         |0.75.0            | Added       |
       operationId: get-api-v1-emoji-custom.list
       parameters:
@@ -176,7 +178,18 @@ paths:
           schema:
             type: string
           example: '2017-11-25T15:08:17.248Z'
-        - $ref: '#/components/parameters/query'
+        - name: _updatedAt
+          in: query
+          description: ''  
+          schema:
+            type: string
+          example: '2024-11-02T06:40:43.751Z'
+        - name: _id
+          in: query
+          description: 'Filter list by custom emoji id.'  
+          schema:
+            type: string
+          example: '6725ca0a101755229a8cb3bf'
       responses:
         '200':
           description: ''
