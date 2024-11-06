@@ -1324,6 +1324,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |7.0.0             | Removed upsert behaviour and stopped allowing `joinDefaultChannels` param|
         |0.48.0            | Renamed to `users.update`       |
         |0.35.0            | Added       |
       operationId: post-api-v1-users.update
