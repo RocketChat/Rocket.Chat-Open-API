@@ -477,6 +477,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |7.0.0            | Added `name` and `type` query parameters for filtering.       |
         |1.1.0            | Separate permissions in incoming and outgoing.       |
         |0.49.0            | Added       |
       operationId: get-api-v1-integrations-list
@@ -488,6 +489,20 @@ paths:
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/query'
         - $ref: '#/components/parameters/fields'
+        - name: name
+          in: query
+          description: |-
+            Filter list by the name of the integration.
+          schema:
+            type: string
+          example: test
+        - name: type
+          in: query
+          description: |-
+            Filter list by the type of the integration. It can be `webhook-outgoing` or `webhook-incoming`.
+          schema:
+            type: string
+          example: webhook-incoming
       responses:
         '200':
           description: ''
