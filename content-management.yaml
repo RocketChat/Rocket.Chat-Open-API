@@ -376,11 +376,26 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |7.0.0           | Added `name` and `_id` query paramters for filtering.      |
         |2.4.0            | Added       |
       operationId: get-api-v1-custom-user-status.list
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
+        - name: name
+          in: query
+          description: |-
+            Filter list by the name of the custom status.
+          schema:
+            type: string
+          example: lunch
+        - name: _id
+          in: query
+          description: |-
+            Filter list by the _id of the custom status.
+          schema:
+            type: string
+          example: 6731e2ce3b74d3c57d334d0f
       responses:
         '200':
           description: OK
