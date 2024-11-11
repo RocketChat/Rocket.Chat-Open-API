@@ -2556,7 +2556,6 @@ paths:
         
         | Version | Description                                  |
         | ------- | -------------------------------------------- |
-        | 7.0.0  | Removed `query` parameter. |
         | 7.0.0  | Added `mentionIds`, `starredIds`, `pinned` query parameters.|        
         | 0.59.0  | Added                                        |
         
@@ -10848,7 +10847,6 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
-        | 7.0.0  | Removed `query` parameter. |
         | 7.0.0  | Added `mentionIds`, `starredIds`, `pinned` query parameters.|
         | 0.59.0  | Added       |
         
