@@ -312,6 +312,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |2.4.0            | Added `name` query parameter for filtering.      |
         |2.4.0            | Added       |
       operationId: get-api-v1-custom-sounds.list
       parameters:
@@ -322,6 +323,13 @@ paths:
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/query'
         - $ref: '#/components/parameters/fields'
+        - name: name
+          in: query
+          description: |-
+            Filter list by the name of the custom sound.
+          schema:
+            type: string
+          example: drill
       responses:
         '200':
           description: OK
