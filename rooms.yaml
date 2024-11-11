@@ -12304,7 +12304,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
-        | 7.0.0   | Add `type`, `workspace` and `text` query parameters |
+        | 7.0.0   | Added `type`, `workspace` and `text` query parameters |
         | 1.0.0   | Added workspace query param |
         | 0.65.0  | Added Pagination fields: count, total, offset |
         | 0.64.0  | Added |
