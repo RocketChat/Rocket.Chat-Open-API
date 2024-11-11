@@ -166,7 +166,6 @@ paths:
         | Version      | Description | 
         | ---------------- | ------------|
         |7.0.0            | Added  `_id` and  `_updatedAt` query parameter     |
-        |7.0.0            | Removed `query` parameter     |
         |0.75.0            | Added       |
       operationId: get-api-v1-emoji-custom.list
       parameters:
