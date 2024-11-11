@@ -12311,6 +12311,26 @@ paths:
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
+        - name: text
+          in: query
+          description: The search term to be filtered
+          schema:
+            type: string
+          example: "rocket"
+        - name: type
+          in: query
+          description: |- 
+            It can be `channels` or `users`.
+            When `type` is users you can send an additional workspace field, that can be local (default) or all. Workspace=all will work only if <a href="https://docs.rocket.chat/use-rocket.chat/rocket.chat-federation" target="_blank">federation</a> is enabled.
+          schema:
+            type: string
+          example: "users"
+        - name: workspace
+          in: query
+          description: It can be `local` or `all`( if federation is enabled). It is `local` by default.
+          schema:
+            type: string
+          example: "local"
         - name: query
           in: query
           description: 'The query to search the workspace directory. When `type` is users you can send an additional workspace field, that can be local (default) or all. Workspace=all will work only if <a href="https://docs.rocket.chat/use-rocket.chat/rocket.chat-federation" target="_blank">federation</a> is enabled.'
