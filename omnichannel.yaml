@@ -12946,7 +12946,7 @@ paths:
                       ts: '2021-07-18T13:28:38.962Z'
                     success: true
       operationId: delete-api-v1-livechat-visitor-token
-  /api/v1/livechat/visitor.info:
+  /api/v1/livechat/visitors.info:
     parameters: []
     get:
       summary: Get Visitor Information by ID
