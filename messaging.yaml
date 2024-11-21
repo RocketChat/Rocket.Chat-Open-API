@@ -3410,6 +3410,23 @@ paths:
           schema:
             type: string
           example: 2019-04-16T18:30:46.669Z
+        - schema:
+            type: number
+            example: 14182940000
+          in: query
+          name: next
+          description: 'This indicates whether the query should retrieve items from a **later** point in time. The value must be the number of milliseconds, as it follows [Date getTime()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getTime). Note that you can use either `next` or `previous` at the same time.'
+        - schema:
+            type: number
+            example: 14182940000
+          in: query
+          name: previous
+          description: 'This indicates whether the query should retrieve items from an **earlier** point in time. The value must be the number of milliseconds, as it follows [Date getTime()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getTime).'
+        - schema:
+            type: string
+          in: query
+          name: type
+          description: 'You must specify whether you want to retrieve `DELETED` (for deleted messages) or `UPDATED` (for updated messages, which is the default use case). This parameter is **required** if you are using the `next` or `previous` parameter.'
       responses:
         '200':
           description: OK
