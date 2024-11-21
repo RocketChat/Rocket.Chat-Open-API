@@ -3405,7 +3405,7 @@ paths:
         - $ref: '#/components/parameters/sort'
         - name: lastUpdate
           in: query
-          description: 'The date as an ISO string. You cannot this parameter if you are using the `next` or `previous` parameter.'
+          description: 'The date as an ISO string. You cannot use this parameter if you are using the `next` or `previous` parameter.'
           required: true
           schema:
             type: string
