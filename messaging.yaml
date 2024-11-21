@@ -3429,9 +3429,7 @@ paths:
           description: |- 
             You must specify whether you want to retrieve `DELETED` (for deleted messages) or `UPDATED` (for updated messages, which is the default use case). This parameter is **required** if you are using the `next` or `previous` parameter.
             
-            > **NOTE:** `offset`, `sort`, and `count` are optional parameters. By default, the endpoint returns 20 items if you don't specify a value for `count`. According to the remaining query parameters you use, this endpoint returns the messages in two ways:
-            * With the `lastUpdate` parameter: If you use the `lastUpdate` parameter, the endpoint returns the messages updated since the specified date.
-            * With the cursor based pagination: For this approach, you must enter either the `next` or the `previous` parameter, and `type` is a mandatory field. In this case, the `lastUpdate` parameter cannot be used.
+            > **NOTE:** `offset`, `sort`, and `count` are optional parameters. By default, the endpoint returns 20 items if you don't specify a value for `count`. According to the remaining query parameters you use, this endpoint returns the messages in two ways: * With the `lastUpdate` parameter: If you use the `lastUpdate` parameter, the endpoint returns the messages updated since the specified date. * With the cursor based pagination: For this approach, you must enter either the `next` or the `previous` parameter, and `type` is a mandatory field. In this case, the `lastUpdate` parameter cannot be used.
       responses:
         '200':
           description: OK
