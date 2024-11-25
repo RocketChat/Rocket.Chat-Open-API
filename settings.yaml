@@ -923,7 +923,7 @@ paths:
       tags:
         - Import
       description: |-
-        This endpoint takes in the binary content of the imported file, along with additional information about its content, and stores it in a buffer.
+        This endpoint takes in the binary content of the imported file, along with additional information about its content, and stores it in a buffer. Permission required: `run-import`.
 
         ### Changelog
         | Version      | Description |
