@@ -1007,6 +1007,7 @@ paths:
           in: query
           name: contactId
           required: true
+          description: The contact ID.
       description: |-
         Get channels grouped by contact name.
         Permission required: `view-l-room`
