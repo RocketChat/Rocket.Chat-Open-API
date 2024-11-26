@@ -857,6 +857,160 @@ paths:
           $ref: '#/components/responses/authorizationError'
       tags:
         - Livechat Contacts
+  /api/v1/omnichannel/contacts.channels:
+    get:
+      summary: Get channels grouped by contact name
+      tags:
+        - Livechat Contacts
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  channels:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        visitor:
+                          type: object
+                          properties:
+                            visitorId:
+                              type: string
+                            source:
+                              type: object
+                              properties:
+                                type:
+                                  type: string
+                        blocked:
+                          type: boolean
+                        verified:
+                          type: boolean
+                        details:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                            destination:
+                              type: string
+                        lastChat:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            ts:
+                              type: string
+                        field:
+                          type: string
+                        value:
+                          type: string
+                        verifiedAt:
+                          type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    channels:
+                      - name: widget
+                        visitor:
+                          visitorId: 234567987655weygcbg
+                          source:
+                            type: widget
+                        blocked: false
+                        verified: true
+                        details:
+                          type: widget
+                          destination: example.com
+                        lastChat:
+                          _id: sdfgjhgfdfeG
+                          ts: '2024-11-22T14:53:36.500Z'
+                        field: email
+                        value: example@mail.com
+                        verifiedAt: '2024-11-22T14:55:21.354Z'
+                    success: true
+              examples:
+                Success Example:
+                  value:
+                    channels:
+                      - name: widget
+                        visitor:
+                          visitorId: 234567987655weygcbg
+                          source:
+                            type: widget
+                        blocked: false
+                        verified: true
+                        details:
+                          type: widget
+                          destination: example.com
+                        lastChat:
+                          _id: sdfgjhgfdfeG
+                          ts: '2024-11-22T14:53:36.500Z'
+                        field: email
+                        value: example@mail.com
+                        verifiedAt: '2024-11-22T14:55:21.354Z'
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                x-examples:
+                  Example 1:
+                    success: false
+                    error: 'must have required property ''contactId'' [invalid-params]'
+                    errorType: invalid-params
+              examples:
+                Bad Request Example:
+                  value:
+                    success: false
+                    error: 'must have required property ''contactId'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                x-examples:
+                  Example 1:
+                    status: error
+                    message: You must be logged in to do this.
+              examples:
+                'Unauthorized Example ':
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+      operationId: get-api-v1-omnichannel-contacts.channels
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+        - schema:
+            type: string
+          in: query
+          name: contactId
+          required: true
+      description: |-
+        Get channels grouped by contact name.
+        Permission required: `view-l-room`
+    parameters: []
   /api/v1/livechat/analytics/agent-overview:
     get:
       summary: Get Agent Analytics Overview
