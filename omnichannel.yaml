@@ -1101,6 +1101,243 @@ paths:
           in: query
           name: sort
           description: 'List of fields to order by, and in which direction. JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending.'
+  /api/v1/omnichannel/contacts.update:
+    post:
+      summary: Update Omnichannel Contact
+      tags:
+        - Livechat Contacts
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  contact:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      createdAt:
+                        type: string
+                      name:
+                        type: string
+                      emails:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            address:
+                              type: string
+                      phones:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            phoneNumber:
+                              type: string
+                      channels:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                            visitor:
+                              type: object
+                              properties:
+                                visitorId:
+                                  type: string
+                                source:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                            blocked:
+                              type: boolean
+                            verified:
+                              type: boolean
+                            details:
+                              type: object
+                              properties:
+                                type:
+                                  type: string
+                                destination:
+                                  type: string
+                            lastChat:
+                              type: object
+                              properties:
+                                _id:
+                                  type: string
+                                ts:
+                                  type: string
+                      customFields:
+                        type: object
+                        properties: {}
+                      unknown:
+                        type: boolean
+                      preRegistration:
+                        type: boolean
+                      _updatedAt:
+                        type: string
+                      conflictingFields:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+                      lastChat:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          ts:
+                            type: string
+                      contactManager:
+                        type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    contact:
+                      _id: 67487f45e98719b7908d0f29
+                      createdAt: '2024-11-28T14:33:41.487Z'
+                      name: John
+                      emails:
+                        - address: email@example.com
+                      phones:
+                        - phoneNumber: '+123383883838'
+                      channels:
+                        - name: widget
+                          visitor:
+                            visitorId: 67499b2243725ce31dd57fc7
+                            source:
+                              type: widget
+                          blocked: false
+                          verified: false
+                          details:
+                            type: widget
+                            destination: pro.writing-demo.dev.rocket.chat
+                          lastChat:
+                            _id: bC5x3zmBdgtmA4m3W
+                            ts: '2024-11-29T10:44:55.016Z'
+                      customFields: {}
+                      unknown: false
+                      preRegistration: false
+                      _updatedAt: '2024-11-29T13:31:43.595Z'
+                      conflictingFields: []
+                      lastChat:
+                        _id: bC5x3zmBdgtmA4m3W
+                        ts: '2024-11-29T10:44:55.016Z'
+                      contactManager: 9sLvmAcQk4EAGdi6e
+                    success: true
+              examples:
+                Example 1:
+                  value:
+                    contact:
+                      _id: 67487f45e98719b7908d0f29
+                      createdAt: '2024-11-28T14:33:41.487Z'
+                      name: John
+                      emails:
+                        - address: email@example.com
+                      phones:
+                        - phoneNumber: '+123383883838'
+                      channels:
+                        - name: widget
+                          visitor:
+                            visitorId: 67499b2243725ce31dd57fc7
+                            source:
+                              type: widget
+                          blocked: false
+                          verified: false
+                          details:
+                            type: widget
+                            destination: example.com
+                          lastChat:
+                            _id: bC5x3zmBdgtmA4m3W
+                            ts: '2024-11-29T10:44:55.016Z'
+                      customFields: {}
+                      unknown: false
+                      preRegistration: false
+                      _updatedAt: '2024-11-29T13:31:43.595Z'
+                      conflictingFields: []
+                      lastChat:
+                        _id: bC5x3zmBdgtmA4m3W
+                        ts: '2024-11-29T10:44:55.016Z'
+                      contactManager: 9sLvmAcQk4EAGdi6e
+                    success: true
+        '400':
+          $ref: '#/components/responses/startendError'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/permissionError'
+      operationId: post-api-v1-omnichannel-contacts.update
+      description: 'Update omnichannel contact. Permission required: `update-livechat-contact`.'
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              x-examples:
+                Example 1:
+                  contactId: 67487f45e98719b7908d0f29
+                  name: John
+                  phones:
+                    - '+123383883838'
+                  emails:
+                    - email@example.com
+                  contactManager: 9sLvmAcQk4EAGdi6e
+                  customFields: {}
+                  wipeConflicts: true
+              required:
+                - contactId
+              properties:
+                contactId:
+                  type: string
+                  description: The contact's ID.
+                  default: 67487f45e98719b7908d0f29
+                name:
+                  type: string
+                  description: The contact's name.
+                  example: John
+                phones:
+                  type: array
+                  description: An array of string detailing the contact's phone numbers.
+                  items:
+                    type: string
+                    example: '+123456789'
+                emails:
+                  type: array
+                  description: An array of string detailing the contact's email addresses.
+                  items:
+                    type: string
+                    example: example@email.com
+                contactManager:
+                  type: string
+                  description: The contact manager's ID.
+                  example: 9sLvmAcQk4EAGdi6e
+                customFields:
+                  type: object
+                  description: An object defining the custom fields to be updated.
+                wipeConflicts:
+                  type: boolean
+                  description: Boolean to set if the conflicts affecting users should be removed or not.
+            examples:
+              Example 1:
+                value:
+                  contactId: 67487f45e98719b7908d0f29
+                  name: John
+                  phones:
+                    - '+123456789'
+                  emails:
+                    - email@example.com
+                  contactManager: 9sLvmAcQk4EAGdi6e
+                  customFields: {}
+                  wipeConflicts: false
   /api/v1/livechat/analytics/agent-overview:
     get:
       summary: Get Agent Analytics Overview
