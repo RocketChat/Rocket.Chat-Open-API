@@ -1004,14 +1004,103 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - schema:
             type: string
+            example: 673653b997f0fbcd657f0ebf
           in: query
           name: contactId
           required: true
-          description: The contact ID.
+          description: The contact's ID.
       description: |-
         Get channels grouped by contact name.
-        Permission required: `view-l-room`
-    parameters: []
+        Permission required: `view-livechat-contact`.
+  /api/v1/omnichannel/contacts.history:
+    get:
+      summary: Get Contact History
+      tags:
+        - Livechat Contacts
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                x-examples:
+                  Example 1:
+                    success: false
+                    error: 'must have required property ''contactId'' [invalid-params]'
+                    errorType: invalid-params
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''contactId'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                x-examples:
+                  Example 1:
+                    success: false
+                    error: 'User does not have the permissions required for this action [error-unauthorized]'
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'User does not have the permissions required for this action [error-unauthorized]'
+      operationId: get-api-v1-omnichannel-contacts.history
+      description: 'Get contact''s history. Permission required: `view-livechat-contact-history`.'
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+        - schema:
+            type: string
+            example: 673653b997f0fbcd657f0ebf
+          in: query
+          name: contactId
+          required: true
+          description: The contact's ID.
+        - schema:
+            type: string
+            example: widget
+          in: query
+          name: source
+          description: The source of the contact's interaction with your organization.
+        - schema:
+            type: number
+            example: 2
+          in: query
+          name: offset
+          description: 'Number of items to "skip" in the query, i.e. requests return count items, skipping the first offset items.'
+        - schema:
+            type: number
+            example: 2
+          in: query
+          name: count
+          description: The number of items to return.
+        - schema:
+            example: '{"msgs": 1}'
+          in: query
+          name: sort
+          description: 'List of fields to order by, and in which direction. JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending.'
   /api/v1/livechat/analytics/agent-overview:
     get:
       summary: Get Agent Analytics Overview
