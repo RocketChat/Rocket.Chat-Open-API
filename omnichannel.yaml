@@ -1012,6 +1012,11 @@ paths:
       description: |-
         Get channels grouped by contact name.
         Permission required: `view-livechat-contact`.
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        |6.1.0             | Added       |
   /api/v1/omnichannel/contacts.history:
     get:
       summary: Get Contact History
@@ -1067,7 +1072,13 @@ paths:
                     success: false
                     error: 'User does not have the permissions required for this action [error-unauthorized]'
       operationId: get-api-v1-omnichannel-contacts.history
-      description: 'Get contact''s history. Permission required: `view-livechat-contact-history`.'
+      description: |-
+        Get contact's history. Permission required: `view-livechat-contact-history`.
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        |6.1.0             | Added       |
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
@@ -1101,6 +1112,131 @@ paths:
           in: query
           name: sort
           description: 'List of fields to order by, and in which direction. JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending.'
+  /api/v1/omnichannel/contacts:
+    post:
+      summary: Register Omnichannel Contacts
+      tags:
+        - Livechat Contacts
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  contactId:
+                    type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    contactId: 674eeb4343725ce31dd9bdae
+                    success: true
+              examples:
+                Example 1:
+                  value:
+                    contactId: 674eeb4343725ce31dd9bdae
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                x-examples:
+                  Example 1:
+                    success: false
+                    error: 'must have required property ''emails'' [invalid-params]'
+                    errorType: invalid-params
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''emails'' [invalid-params]'
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: error-contact-manager-not-found
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/permissionError'
+      operationId: post-api-v1-omnichannel-contacts
+      description: |-
+        Register a new omnichannel contact.
+        Permission required: `create-livechat-contact`
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        |6.1.0             | Added       |
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              x-examples:
+                Example 1:
+                  name: John
+                  phones:
+                    - '+12345678'
+                  emails:
+                    - email@example.com
+                  customFileds: {}
+                  contactManager: fffff
+              required:
+                - name
+                - phones
+                - emails
+              properties:
+                name:
+                  type: string
+                  description: The contact's name.
+                phones:
+                  type: array
+                  description: An array of the contact's phone number(s).
+                  items:
+                    type: string
+                emails:
+                  type: array
+                  description: An array of the contact's email address(es).
+                  items:
+                    type: string
+                customFields:
+                  type: object
+                  description: The custom fields.
+                contactManager:
+                  type: string
+                  description: The contact manager's ID.
+            examples:
+              Example 1:
+                value:
+                  name: John
+                  phones:
+                    - '+123456789'
+                  emails:
+                    - email@example.com
+                  customFileds: {}
+                  contactManager: 67dfghjkjhgfdce31dd9bdae
+              Example 2:
+                value:
+                  name: John
+                  phones:
+                    - '+123456789'
+                  emails:
+                    - email@example.com
   /api/v1/omnichannel/contacts.update:
     post:
       summary: Update Omnichannel Contact
@@ -1217,7 +1353,7 @@ paths:
                           verified: false
                           details:
                             type: widget
-                            destination: pro.writing-demo.dev.rocket.chat
+                            destination: example.com
                           lastChat:
                             _id: bC5x3zmBdgtmA4m3W
                             ts: '2024-11-29T10:44:55.016Z'
@@ -1267,13 +1403,45 @@ paths:
                       contactManager: 9sLvmAcQk4EAGdi6e
                     success: true
         '400':
-          $ref: '#/components/responses/startendError'
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                x-examples:
+                  Example 1:
+                    success: false
+                    error: 'must have required property ''emails'' [invalid-params]'
+                    errorType: invalid-params
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''emails'' [invalid-params]'
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: error-contact-manager-not-found
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/permissionError'
       operationId: post-api-v1-omnichannel-contacts.update
-      description: 'Update omnichannel contact. Permission required: `update-livechat-contact`.'
+      description: |-
+        Update omnichannel contact. Permission required: `update-livechat-contact`.
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        |6.1.0             | Added       |
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
@@ -1306,13 +1474,13 @@ paths:
                   example: John
                 phones:
                   type: array
-                  description: An array of string detailing the contact's phone numbers.
+                  description: An array of the contact's phone number(s).
                   items:
                     type: string
                     example: '+123456789'
                 emails:
                   type: array
-                  description: An array of string detailing the contact's email addresses.
+                  description: An array of the contact's email address(es).
                   items:
                     type: string
                     example: example@email.com
@@ -1322,10 +1490,10 @@ paths:
                   example: 9sLvmAcQk4EAGdi6e
                 customFields:
                   type: object
-                  description: An object defining the custom fields to be updated.
+                  description: Object defining the custom fields to be updated.
                 wipeConflicts:
                   type: boolean
-                  description: Boolean to set if the conflicts affecting users should be removed or not.
+                  description: Boolean to determine whether conflicts impacting contacts should be automatically resolved.
             examples:
               Example 1:
                 value:
