@@ -649,10 +649,10 @@ paths:
         - Livechat Contacts
   /api/v1/omnichannel/contact.search:
     get:
-      summary: Search Omnichannel Contacts
+      summary: Search Contacts
       description: |-
-        Find Omnichannel contacts by name, email, phone number, or any custom field values stored in the database.
-        Permission required: `view-l-room` 
+        Find contacts by name, email, phone number, or any custom field values stored in the database.
+        Permission required: `view-l-room`.
         * Encode values having characters like @,+, /and * to avoid breaking the endpoint.
         * To find contacts using custom fields, use the custom query parameter. The custom query parameter must be encoded by <a href="https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams" target="_blank">URLSearchParams</a>.
         For example, to search contacts with premium subscription, the request is as follows:
@@ -661,7 +661,7 @@ paths:
         --header 'X-Auth-Token: b5BKhblglC5OU0AfB_Tl9dKmOb0zXUvWK-nhNT_aE8V' \
         --header 'X-User-Id: CkCPNcvsvCDfmWLqC'        
         ```
-      operationId: get-api-v1-omnichannel-contact.search
+      operationId: get-api-v1-contact.search
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
@@ -1665,6 +1665,266 @@ paths:
                   - visitorId
                   - source
       description: 'Get omnichannel contact. Permission required: `view-livechat-contact`.'
+  /api/v1/omnichannel/contacts.search:
+    get:
+      summary: Search Omnichannel Contacts
+      tags:
+        - Livechat Contacts
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  contacts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        createdAt:
+                          type: string
+                        name:
+                          type: string
+                        emails:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              address:
+                                type: string
+                        phones:
+                          type: array
+                          items:
+                            type: object
+                            properties: {}
+                        channels:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                              visitor:
+                                type: object
+                                properties:
+                                  visitorId:
+                                    type: string
+                                  source:
+                                    type: object
+                                    properties:
+                                      type:
+                                        type: string
+                              blocked:
+                                type: boolean
+                              verified:
+                                type: boolean
+                              details:
+                                type: object
+                                properties:
+                                  type:
+                                    type: string
+                                  destination:
+                                    type: string
+                              lastChat:
+                                type: object
+                                properties:
+                                  _id:
+                                    type: string
+                                  ts:
+                                    type: string
+                        customFields:
+                          type: object
+                          properties:
+                            social-number:
+                              type: string
+                        unknown:
+                          type: boolean
+                        _updatedAt:
+                          type: string
+                        conflictingFields:
+                          type: array
+                          items:
+                            type: object
+                            properties: {}
+                        lastChat:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            ts:
+                              type: string
+                        contactManager:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            name:
+                              type: string
+                            username:
+                              type: string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    contacts:
+                      - _id: 673be1711e2e6feb77939a7b
+                        createdAt: '2024-11-19T00:53:05.468Z'
+                        name: Boris Doe
+                        emails:
+                          - address: boris@doe.com
+                        phones: []
+                        channels:
+                          - name: widget
+                            visitor:
+                              visitorId: 673be2101e2e6feb77939a7f
+                              source:
+                                type: widget
+                            blocked: false
+                            verified: false
+                            details:
+                              type: widget
+                              destination: example.com
+                            lastChat:
+                              _id: NMee5zFPv62N7RAhh
+                              ts: '2024-11-19T00:55:46.723Z'
+                        customFields:
+                          social-number: 45600-00
+                        unknown: false
+                        _updatedAt: '2024-11-19T00:56:43.140Z'
+                        conflictingFields: []
+                        lastChat:
+                          _id: NMee5zFPv62N7RAhh
+                          ts: '2024-11-19T00:55:46.723Z'
+                        contactManager:
+                          _id: mAwAgmNndK7SHnQ89
+                          name: Jane
+                          username: Jane
+                    count: 1
+                    offset: 0
+                    total: 1
+                    success: true
+              examples:
+                Example 1:
+                  value:
+                    contacts:
+                      - _id: 673be1711e2e6feb77939a7b
+                        createdAt: '2024-11-19T00:53:05.468Z'
+                        name: Boris Doe
+                        emails:
+                          - address: boris@doe.com
+                        phones: []
+                        channels:
+                          - name: widget
+                            visitor:
+                              visitorId: 673be2101e2e6feb77939a7f
+                              source:
+                                type: widget
+                            blocked: false
+                            verified: false
+                            details:
+                              type: widget
+                              destination: example.com
+                            lastChat:
+                              _id: NMee5zFPv62N7RAhh
+                              ts: '2024-11-19T00:55:46.723Z'
+                        customFields:
+                          social-number: 45600-00
+                        unknown: false
+                        _updatedAt: '2024-11-19T00:56:43.140Z'
+                        conflictingFields: []
+                        lastChat:
+                          _id: NMee5zFPv62N7RAhh
+                          ts: '2024-11-19T00:55:46.723Z'
+                        contactManager:
+                          _id: mAwAgmNndK7SHnQ89
+                          name: Jane
+                          username: Jane
+                    count: 1
+                    offset: 0
+                    total: 1
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                x-examples:
+                  Example 1:
+                    success: false
+                    error: 'must be number [invalid-params]'
+                    errorType: invalid-params
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must be number [invalid-params]'
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: 'must be boolean [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/permissionError'
+      operationId: get-api-v1-omnichannel-contacts.search
+      description: |-
+        Retrieve a list of omnichannel contacts based on search criteria like name, email or phone number.
+        Permission required: `view-livechat-contact`.
+
+        **Note**: Ensure to URL-encode special characters such as `@`, `+`, `/`, and `*` in query parameters to prevent issues with the endpoint. For example, encode email addresses as `mail%40example.com` instead of `mail@example.com`.
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+        - schema:
+            type: string
+            example: John
+          in: query
+          name: searchText
+          description: Text to search for in contact details.
+        - schema:
+            type: boolean
+            example: false
+          in: query
+          name: unknown
+          description: Filter by contact's unknown status.
+        - schema:
+            type: number
+            example: 2
+          in: query
+          name: count
+          description: Number of results to return per search.
+        - schema:
+            type: number
+            example: 5
+          in: query
+          name: offset
+          description: Number of results to skip for pagination.
+        - schema:
+            type: string
+            example: '{"name": 1}'
+          in: query
+          name: sort
+          description: JSON string defining the sort order of results.
   /api/v1/livechat/analytics/agent-overview:
     get:
       summary: Get Agent Analytics Overview
