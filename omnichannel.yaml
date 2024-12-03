@@ -564,6 +564,8 @@ paths:
     post:
       summary: Register or Update Omnichannel Contact
       description: |-
+        > **Note:** This endpoint will be replaced. Refer to the new API documentations for [registering](https://developer.rocket.chat/apidocs/register-omnichannel-contacts) and [updating](https://developer.rocket.chat/apidocs/update-omnichannel-contact) contact for updated usage and features.
+    
         Register a guest user as a new omnichannel contact.
         Permission required: `view-l-room`
       operationId: post-api-v1-omnichannel-contact
@@ -651,6 +653,9 @@ paths:
     get:
       summary: Search Contacts
       description: |-
+      
+        > **Note:** This endpoint will be replaced. Refer to the [new API documentation](https://developer.rocket.chat/apidocs/search-omnichannel-contacts) for updated usage and features.
+
         Find contacts by name, email, phone number, or any custom field values stored in the database.
         Permission required: `view-l-room`.
         * Encode values having characters like @,+, /and * to avoid breaking the endpoint.
@@ -756,261 +761,6 @@ paths:
           $ref: '#/components/responses/authorizationError'
       tags:
         - Livechat Contacts
-  /api/v1/omnichannel/contacts.channels:
-    get:
-      summary: Get channels grouped by contact name
-      tags:
-        - Livechat Contacts
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  channels:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        name:
-                          type: string
-                        visitor:
-                          type: object
-                          properties:
-                            visitorId:
-                              type: string
-                            source:
-                              type: object
-                              properties:
-                                type:
-                                  type: string
-                        blocked:
-                          type: boolean
-                        verified:
-                          type: boolean
-                        details:
-                          type: object
-                          properties:
-                            type:
-                              type: string
-                            destination:
-                              type: string
-                        lastChat:
-                          type: object
-                          properties:
-                            _id:
-                              type: string
-                            ts:
-                              type: string
-                        field:
-                          type: string
-                        value:
-                          type: string
-                        verifiedAt:
-                          type: string
-                  success:
-                    type: boolean
-                x-examples:
-                  Example 1:
-                    channels:
-                      - name: widget
-                        visitor:
-                          visitorId: 234567987655weygcbg
-                          source:
-                            type: widget
-                        blocked: false
-                        verified: true
-                        details:
-                          type: widget
-                          destination: example.com
-                        lastChat:
-                          _id: sdfgjhgfdfeG
-                          ts: '2024-11-22T14:53:36.500Z'
-                        field: email
-                        value: example@mail.com
-                        verifiedAt: '2024-11-22T14:55:21.354Z'
-                    success: true
-              examples:
-                Success Example:
-                  value:
-                    channels:
-                      - name: widget
-                        visitor:
-                          visitorId: 234567987655weygcbg
-                          source:
-                            type: widget
-                        blocked: false
-                        verified: true
-                        details:
-                          type: widget
-                          destination: example.com
-                        lastChat:
-                          _id: sdfgjhgfdfeG
-                          ts: '2024-11-22T14:53:36.500Z'
-                        field: email
-                        value: example@mail.com
-                        verifiedAt: '2024-11-22T14:55:21.354Z'
-                    success: true
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  error:
-                    type: string
-                  errorType:
-                    type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'must have required property ''contactId'' [invalid-params]'
-                    errorType: invalid-params
-              examples:
-                Bad Request Example:
-                  value:
-                    success: false
-                    error: 'must have required property ''contactId'' [invalid-params]'
-                    errorType: invalid-params
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                  message:
-                    type: string
-                x-examples:
-                  Example 1:
-                    status: error
-                    message: You must be logged in to do this.
-              examples:
-                'Unauthorized Example ':
-                  value:
-                    status: error
-                    message: You must be logged in to do this.
-      operationId: get-api-v1-omnichannel-contacts.channels
-      parameters:
-        - $ref: '#/components/parameters/AuthToken'
-        - $ref: '#/components/parameters/UserId'
-        - schema:
-            type: string
-            example: 673653b997f0fbcd657f0ebf
-          in: query
-          name: contactId
-          required: true
-          description: The contact's ID.
-      description: |-
-        Get channels grouped by contact name.
-        Permission required: `view-livechat-contact`.
-
-        ### Changelog
-        | Version      | Description | 
-        | ---------------- | ------------|
-        |6.1.0             | Added       |
-  /api/v1/omnichannel/contacts.history:
-    get:
-      summary: Get Contact History
-      tags:
-        - Livechat Contacts
-      responses:
-        '200':
-          $ref: '#/components/responses/trueSuccess'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  error:
-                    type: string
-                  errorType:
-                    type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'must have required property ''contactId'' [invalid-params]'
-                    errorType: invalid-params
-              examples:
-                Example 1:
-                  value:
-                    success: false
-                    error: 'must have required property ''contactId'' [invalid-params]'
-                    errorType: invalid-params
-        '401':
-          $ref: '#/components/responses/authorizationError'
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  error:
-                    type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'User does not have the permissions required for this action [error-unauthorized]'
-              examples:
-                Example 1:
-                  value:
-                    success: false
-                    error: 'User does not have the permissions required for this action [error-unauthorized]'
-      operationId: get-api-v1-omnichannel-contacts.history
-      description: |-
-        Get contact's history. Permission required: `view-livechat-contact-history`.
-
-        ### Changelog
-        | Version      | Description | 
-        | ---------------- | ------------|
-        |6.1.0             | Added       |
-      parameters:
-        - $ref: '#/components/parameters/AuthToken'
-        - $ref: '#/components/parameters/UserId'
-        - schema:
-            type: string
-            example: 673653b997f0fbcd657f0ebf
-          in: query
-          name: contactId
-          required: true
-          description: The contact's ID.
-        - schema:
-            type: string
-            example: widget
-          in: query
-          name: source
-          description: The source of the contact's interaction with your organization.
-        - schema:
-            type: number
-            example: 2
-          in: query
-          name: offset
-          description: 'Number of items to "skip" in the query, i.e. requests return count items, skipping the first offset items.'
-        - schema:
-            type: number
-            example: 2
-          in: query
-          name: count
-          description: The number of items to return.
-        - schema:
-            example: '{"msgs": 1}'
-          in: query
-          name: sort
-          description: 'List of fields to order by, and in which direction. JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending.'
   /api/v1/omnichannel/contacts:
     post:
       summary: Register Omnichannel Contacts
@@ -1410,6 +1160,52 @@ paths:
       summary: Get Omnichannel Contact
       tags:
         - Livechat Contacts
+      description: |
+        Retrieve a single omnichannel contact by providing **either** a `contactId` or a `visitor` object.  
+        - Use `contactId` to fetch the contact directly by its unique ID.  
+        - Use the `visitor` object to fetch the contact by its visitor association.  
+
+        **Note:** You must provide only one of these parameters in the request.  
+        Required permission: `view-livechat-contact`.
+      operationId: get-api-v1-omnichannel-contacts.get
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+        - name: contactId
+          in: query
+          description: The contact's unique ID. Provide this parameter if fetching the contact directly by its ID.
+          required: false
+          schema:
+            type: string
+            example: 673c76df47a6c9b89dd263d8
+        - name: visitor
+          in: query
+          description: |
+            Visitor association for the contact. Provide this object as JSON with the required fields:
+            - `visitorId` (string): The ID of the visitor.
+            - `source.type` (string): The type of the source (e.g., "web").
+          required: false
+          schema:
+            type: object
+            properties:
+              visitorId:
+                type: string
+                description: The unique ID of the visitor.
+              source:
+                type: object
+                description: The source of the visitor.
+                properties:
+                  type:
+                    type: string
+                    description: 'The type of the source (e.g., "widget").'
+                  id:
+                    type: string
+                    description: The source's unique ID.
+                required:
+                  - type
+            required:
+              - visitorId
+              - source.type
       responses:
         '200':
           description: OK
@@ -1534,7 +1330,7 @@ paths:
                           verifiedAt: '2024-11-19T11:31:58.997Z'
                       customFields:
                         social-number: 123456-12345
-                        address: P.O. Box 111 2345 New Orleans
+                        address: P.O. Box 123 3456 Home Rd. Somewhere in the world
                         zip-code: 123456-099
                       unknown: false
                       _updatedAt: '2024-11-19T11:33:55.424Z'
@@ -1573,7 +1369,7 @@ paths:
                           verifiedAt: '2024-11-19T11:31:58.997Z'
                       customFields:
                         social-number: 123456-12345
-                        address: P.O. Box 111 2345 New Orleans
+                        address: P.O. Box 123 3456 Home Rd. Somewhere in the world
                         zip-code: 123456-099
                       unknown: false
                       _updatedAt: '2024-11-19T11:33:55.424Z'
@@ -1599,24 +1395,8 @@ paths:
                     type: string
                   errorType:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: |-
-                      must have required property 'contactId'
-                       must have required property 'visitor'
-                       must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params
               examples:
                 Example 1:
-                  value:
-                    success: false
-                    error: |-
-                      must have required property 'contactId'
-                       must have required property 'visitor'
-                       must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params
-                Example 2:
                   value:
                     success: false
                     error: |-
@@ -1624,47 +1404,26 @@ paths:
                        must have required property 'source'
                        must match exactly one schema in oneOf [invalid-params]
                     errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: |-
+                      must have required property 'contactId'
+                       must have required property 'visitor'
+                       must match exactly one schema in oneOf [invalid-params]
+                    errorType: invalid-params
+                Example 3:
+                  value:
+                    success: false
+                    error: |-
+                      must pass "isNotEmpty" keyword validation
+                       must have required property 'visitor'
+                       must match exactly one schema in oneOf [invalid-params]
+                    errorType: invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/permissionError'
-      operationId: get-api-v1-omnichannel-contacts.get
-      parameters:
-        - $ref: '#/components/parameters/AuthToken'
-        - $ref: '#/components/parameters/UserId'
-        - name: contactId
-          in: query
-          description: The contact's ID.
-          required: false
-          schema:
-            type: string
-            example: 673c76df47a6c9b89dd263d8
-        - name: visitor
-          in: query
-          description: Visitor information for the contact.
-          required: false
-          schema:
-            oneOf:
-              - type: object
-                properties:
-                  visitorId:
-                    type: string
-                    description: The ID of the visitor.
-                  source:
-                    type: object
-                    properties:
-                      type:
-                        type: string
-                        description: 'The type of the source (e.g., web).'
-                      id:
-                        type: string
-                        description: The ID of the source.
-                    required:
-                      - type
-                required:
-                  - visitorId
-                  - source
-      description: 'Get omnichannel contact. Permission required: `view-livechat-contact`.'
   /api/v1/omnichannel/contacts.search:
     get:
       summary: Search Omnichannel Contacts
@@ -1925,6 +1684,261 @@ paths:
           in: query
           name: sort
           description: JSON string defining the sort order of results.
+  /api/v1/omnichannel/contacts.channels:
+    get:
+      summary: Get channels grouped by contact name
+      tags:
+        - Livechat Contacts
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  channels:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        visitor:
+                          type: object
+                          properties:
+                            visitorId:
+                              type: string
+                            source:
+                              type: object
+                              properties:
+                                type:
+                                  type: string
+                        blocked:
+                          type: boolean
+                        verified:
+                          type: boolean
+                        details:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                            destination:
+                              type: string
+                        lastChat:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            ts:
+                              type: string
+                        field:
+                          type: string
+                        value:
+                          type: string
+                        verifiedAt:
+                          type: string
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    channels:
+                      - name: widget
+                        visitor:
+                          visitorId: 234567987655weygcbg
+                          source:
+                            type: widget
+                        blocked: false
+                        verified: true
+                        details:
+                          type: widget
+                          destination: example.com
+                        lastChat:
+                          _id: sdfgjhgfdfeG
+                          ts: '2024-11-22T14:53:36.500Z'
+                        field: email
+                        value: example@mail.com
+                        verifiedAt: '2024-11-22T14:55:21.354Z'
+                    success: true
+              examples:
+                Success Example:
+                  value:
+                    channels:
+                      - name: widget
+                        visitor:
+                          visitorId: 234567987655weygcbg
+                          source:
+                            type: widget
+                        blocked: false
+                        verified: true
+                        details:
+                          type: widget
+                          destination: example.com
+                        lastChat:
+                          _id: sdfgjhgfdfeG
+                          ts: '2024-11-22T14:53:36.500Z'
+                        field: email
+                        value: example@mail.com
+                        verifiedAt: '2024-11-22T14:55:21.354Z'
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                x-examples:
+                  Example 1:
+                    success: false
+                    error: 'must have required property ''contactId'' [invalid-params]'
+                    errorType: invalid-params
+              examples:
+                Bad Request Example:
+                  value:
+                    success: false
+                    error: 'must have required property ''contactId'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                x-examples:
+                  Example 1:
+                    status: error
+                    message: You must be logged in to do this.
+              examples:
+                'Unauthorized Example ':
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+      operationId: get-api-v1-omnichannel-contacts.channels
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+        - schema:
+            type: string
+            example: 673653b997f0fbcd657f0ebf
+          in: query
+          name: contactId
+          required: true
+          description: The contact's ID.
+      description: |-
+        Get channels grouped by contact name.
+        Permission required: `view-livechat-contact`.
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        |6.1.0             | Added       |
+  /api/v1/omnichannel/contacts.history:
+    get:
+      summary: Get Contact History
+      tags:
+        - Livechat Contacts
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                x-examples:
+                  Example 1:
+                    success: false
+                    error: 'must have required property ''contactId'' [invalid-params]'
+                    errorType: invalid-params
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''contactId'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                x-examples:
+                  Example 1:
+                    success: false
+                    error: 'User does not have the permissions required for this action [error-unauthorized]'
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'User does not have the permissions required for this action [error-unauthorized]'
+      operationId: get-api-v1-omnichannel-contacts.history
+      description: |-
+        Get contact's history. Permission required: `view-livechat-contact-history`.
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        |6.1.0             | Added       |
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+        - schema:
+            type: string
+            example: 673653b997f0fbcd657f0ebf
+          in: query
+          name: contactId
+          required: true
+          description: The contact's ID.
+        - schema:
+            type: string
+            example: widget
+          in: query
+          name: source
+          description: The source of the contact's interaction with your organization.
+        - schema:
+            type: number
+            example: 2
+          in: query
+          name: offset
+          description: 'Number of items to "skip" in the query, i.e. requests return count items, skipping the first offset items.'
+        - schema:
+            type: number
+            example: 2
+          in: query
+          name: count
+          description: The number of items to return.
+        - schema:
+            example: '{"msgs": 1}'
+          in: query
+          name: sort
+          description: 'List of fields to order by, and in which direction. JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending.'
   /api/v1/livechat/analytics/agent-overview:
     get:
       summary: Get Agent Analytics Overview
