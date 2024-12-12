@@ -628,7 +628,90 @@ paths:
           example: 7aDSXtjMA3KPLxLjt
       responses:
         '200':
-          $ref: '#/components/responses/trueSuccess'
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      rid:
+                        type: string
+                      msg:
+                        type: string
+                      alias:
+                        type: string
+                      ts:
+                        type: string
+                      u:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          username:
+                            type: string
+                          name:
+                            type: string
+                      _updatedAt:
+                        type: string
+                      reactions:
+                        type: object
+                        properties:
+                          ':frowning2:':
+                            type: object
+                            properties:
+                              usernames:
+                                type: array
+                                items:
+                                  type: string
+                      mentions:
+                        type: array
+                        items:
+                          type: object
+                      channels:
+                        type: array
+                        items:
+                          type: object
+                      starred:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                      t:
+                        type: string
+                      groupable:
+                        type: boolean
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    message:
+                      _id: CeXwh5eBbdrtvnqG6
+                      rid: agh2Sucgb54RQ8dDo
+                      msg: s
+                      ts: '2018-10-05T13:48:21.616Z'
+                      u:
+                        _id: KPkEYwKKBKZnEEPpt
+                        username: marc.pow
+                        name: Marc Pow
+                      _updatedAt: '2018-10-05T13:48:49.535Z'
+                      reactions:
+                        ':frowning2:':
+                          usernames:
+                            - marcos.defendi
+                      mentions: [ ]
+                      channels: [ ]
+                      starred:
+                        _id: KPkEYwKKBKZnEEPpt
+                    count: 2
+                    offset: 0
+                    total: 2
+                    success: true
         '401':
           $ref: '#/components/responses/authorizationError'
         '400':
@@ -2655,6 +2738,9 @@ paths:
                 message:
                   type: object
                   properties:
+                    t:
+                      type: string
+                      description: The message type e.g. e2e
                     rid:
                       type: string
                       description: The room ID where the message is to be sent.
