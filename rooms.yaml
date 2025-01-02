@@ -2841,16 +2841,13 @@ paths:
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
-        - name: query
+        - name: _id
           in: query
-          description: An object of the channel's id.
+          description: The channel's id.
           required: true
           schema:
-            type: object
-            properties:
-              _id:
-                type: string
-            example: '{"_id": "5HmCfpoB7jp2uibTC"}'
+            type: string
+            example: "5HmCfpoB7jp2uibTC"
       responses:
         '200':
           description: OK
