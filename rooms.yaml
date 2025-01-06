@@ -9199,7 +9199,13 @@ paths:
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
-        - $ref: '#/components/parameters/query'
+        - name: _id
+          in: query
+          description: The channel's id.
+          required: true
+          schema:
+            type: string
+            example: "5HmCfpoB7jp2uibTC"
       responses:
         '200':
           description: OK
