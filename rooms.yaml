@@ -2837,6 +2837,7 @@ paths:
         | Version | Description |
         | ------- | ----------- |
         |0.52.0   | Added       |
+        |7.0.0   | Replaced `query` parameter with `_id` parameter       |
       operationId: get-api-v1-channels.online
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -9195,6 +9196,7 @@ paths:
         | Version | Description |
         | ------- | ----------- |
         | 0.52.0  | Added       |
+        |7.0.0   | Replaced `query` parameter with `_id` parameter       |        
       operationId: get-api-v1-groups.online
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
