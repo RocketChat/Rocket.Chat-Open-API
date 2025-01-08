@@ -6440,7 +6440,7 @@ paths:
         - Rooms
       summary: Export Room
       description: |
-        Export room to a file or email. 
+        Export room to a file or email. When exporting to a file, the ZIP file is stored in the `/tmp` directory on the Rocket.Chat server, and its details are recorded in the `rocketchat_user_data_files` collection in MongoDB.
 
         Permission required: `mail-messages`
 
@@ -6503,11 +6503,7 @@ paths:
               required:
                 - rid
                 - type
-                - format
-                - subject
-                - messages
-                - toEmails
-                - toUsers
+
             examples:
               Example:
                 value:
