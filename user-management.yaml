@@ -4049,8 +4049,6 @@ paths:
         - $ref: '#/components/parameters/UserId'
       tags:
         - Users
-      requestBody:
-        content: {}
   /api/v1/users.2fa.disableEmail:
     parameters: []
     post:
@@ -4104,8 +4102,6 @@ paths:
         - $ref: '#/components/parameters/x-2fa-method'
       tags:
         - Users
-      requestBody:
-        content: {}
   /api/v1/users.2fa.sendEmailCode:
     parameters: []
     post:
@@ -4770,8 +4766,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
-      requestBody:
-        content: {}
   /api/v1/ldap.syncNow:
     post:
       tags:
