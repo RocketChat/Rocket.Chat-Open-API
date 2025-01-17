@@ -520,8 +520,6 @@ paths:
           name: url
           description: The hostname.
           required: true
-      requestBody:
-        content: {}
       tags:
         - DNS
   /api/v1/dns.resolve.srv:
@@ -560,8 +558,6 @@ paths:
           name: url
           description: The hostname.
           required: true
-      requestBody:
-        content: {}
       tags:
         - DNS
   /api/v1/e2e.fetchMyKeys:
@@ -1609,9 +1605,6 @@ paths:
         - $ref: '#/components/parameters/X-Auth-Token'
       tags:
         - Bulk User Import
-      requestBody:
-        content: {}
-        description: ''
   /api/v1/import.status:
     parameters: []
     get:
