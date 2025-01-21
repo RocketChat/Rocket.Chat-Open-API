@@ -2304,6 +2304,10 @@ paths:
                               type: boolean
                             showOnOfflineForm:
                               type: boolean
+                            departmentsAllowedToForward:
+                              type: array
+                              items:
+                                type: string
                       online:
                         type: boolean
                       guest:
@@ -2409,10 +2413,12 @@ paths:
                           name: Support
                           showOnRegistration: false
                           showOnOfflineForm: false
+                          departmentsAllowedToForward: []
                         - _id: 64181a0728384134ed600dcc
                           name: Lost
                           showOnRegistration: false
                           showOnOfflineForm: false
+                          departmentsAllowedToForward: []
                       online: true
                       guest:
                         _id: 2KNu66RPCwxA4ncy7
