@@ -227,6 +227,25 @@ paths:
                     offset: 0
                     total: 299
                     success: true
+                success example with query parameter:
+                  value:
+                    settings:
+                      - _id: API_Allow_Infinite_Count
+                        value: true
+                        packageValue: true
+                        enterprise: false
+                      - _id: API_Apply_permission_view-outside-room_on_users-list
+                        value: false
+                        packageValue: false
+                        enterprise: false
+                      - _id: API_CORS_Origin
+                        value: '*'
+                        packageValue: '*'
+                        enterprise: false
+                    count: 3
+                    offset: 0
+                    total: 10
+                    success: true
         '401':
           $ref: '#/components/responses/authorizationError'
       tags:
@@ -235,6 +254,11 @@ paths:
       parameters:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/X-Auth-Token'
+        - schema:
+            type: boolean
+          in: query
+          name: includeDefaults
+          description: 'When set to true, it fetches both the current value and the default value (packageValue) of the settings'
   /api/v1/settings.addCustomOAuth:
     parameters: []
     post:
