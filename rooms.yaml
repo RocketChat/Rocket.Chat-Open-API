@@ -6983,7 +6983,7 @@ paths:
   /api/v1/audit/rooms.members:
     parameters: []
     get:
-      summary: Audit Rooms
+      summary: Audit and Get Room Members
       tags:
         - Rooms
       responses:
@@ -7083,6 +7083,148 @@ paths:
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/sort'
+          
+  /api/v1/rooms.membersOrderedByRole:
+    parameters: []
+    get:
+      summary: Get Room Members Ordered by Role
+      tags:
+        - Rooms
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  members:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        username:
+                          type: string
+                        status:
+                          type: string
+                        _updatedAt:
+                          type: string
+                        name:
+                          type: string
+                        roles:
+                          type: array
+                          items:
+                            type: string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    members:
+                      - _id: C38WSSzrGd2NCjzqJ
+                        username: test.cat
+                        status: online
+                        _updatedAt: '2025-01-22T07:49:47.830Z'
+                        name: test.cat
+                        roles:
+                          - owner
+                      - _id: P2dgWPPw5veigwcdK
+                        status: offline
+                        _updatedAt: '2025-01-22T07:13:19.734Z'
+                        name: Fun Smith
+                        username: fun.smith
+                        roles:
+                          - moderator
+                      - _id: CNmyTxexxauJ4wrTW
+                        username: agent1
+                        status: offline
+                        _updatedAt: '2025-01-22T07:32:57.238Z'
+                        name: agent1
+                      - _id: FSA63o85Poa2EQvAH
+                        status: offline
+                        name: cat kate
+                        username: cat.kate
+                        _updatedAt: '2025-01-22T08:04:12.251Z'
+                        roles:
+                          - leader
+                    count: 4
+                    offset: 0
+                    total: 4
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: |-
+                      must have required property 'roomId'
+                       must have required property 'roomName'
+                       must match exactly one schema in oneOf [invalid-params]
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-rooms.membersOrderedByRole
+      description: |-
+        Get room members ordered by their roles. This endpoint sorts the members according to their role in the room in the order `Owners` > `Moderators` > all other members. This can be reversed using the query paramter `sort={"rolePriority":-1}`. You need not be a member of the room.
+
+        If the room is a broadcast room, you need the `view-broadcast-member-list` permission to view the room members.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 7.3.0   | Added       |
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - schema:
+            type: string
+            example: 66cd971f6fcbb8e8b3cf8e69
+          in: query
+          name: roomId
+          description: Enter the room ID.
+          required: true
+        - schema:
+            type: string
+            example: test-team
+          in: query
+          name: roomName
+          description: 'Instead of using the room ID, you can enter the room name.'
+        - schema:
+            type: string
+            example: user
+          in: query
+          name: filter
+          description: Filter the results by using the text that you want to view.
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+        - schema:
+            type: array
+            items:
+              type: string
+          in: query
+          name: status
+          description: 'Enter the user status for which you want the results. For example, `online`, `away`, `offline`.'
 
   /api/v1/teams.create:
     post:
