@@ -259,6 +259,8 @@ paths:
           in: query
           name: includeDefaults
           description: 'When set to true, it fetches both the current value and the default value (packageValue) of the settings'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
   /api/v1/settings.addCustomOAuth:
     parameters: []
     post:
