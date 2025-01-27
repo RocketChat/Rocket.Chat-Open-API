@@ -602,7 +602,7 @@ paths:
                       - _id: xadufzmxzYQp4H9py
                         alias: test
                         msg: Example message
-                        attachments: []
+                        attachments: [ ]
                         parseUrls: true
                         bot:
                           i: MnQyfhWt5LqZotyfc
@@ -618,8 +618,8 @@ paths:
                           ':grin:':
                             usernames:
                               - marco.zoo
-                        mentions: []
-                        channels: []
+                        mentions: [ ]
+                        channels: [ ]
                         starred:
                           _id: KPkEYwKKBKZnEEPpt
                       - _id: id-1538701845987
@@ -674,9 +674,9 @@ paths:
                           ':ant:':
                             usernames:
                               - rocketchat.internal.admin.test
-                        mentions: []
-                        channels: []
-                        urls: []
+                        mentions: [ ]
+                        channels: [ ]
+                        urls: [ ]
                     count: 2
                     offset: 0
                     total: 2
@@ -1090,7 +1090,7 @@ paths:
           in: query
           description: 'Whether thread messages should be included in the response'
           schema:
-            type: boolean 
+            type: boolean
           example: true
         - name: unreads
           in: query
@@ -1349,7 +1349,7 @@ paths:
                       u:
                         _id: HKKPmF8rZh45GMHWH
                         username: marcos.defendi
-                      customFields: {}
+                      customFields: { }
                       broadcast: false
                       encrypted: false
                       ts: '2020-05-21T13:14:07.070Z'
@@ -1700,7 +1700,7 @@ paths:
                       u:
                         _id: rocketchat.internal.admin.test
                         username: rocketchat.internal.admin.test
-                      customFields: {}
+                      customFields: { }
                       broadcast: false
                       encrypted: false
                       ts: '2019-01-16T12:00:04.783Z'
@@ -2310,7 +2310,7 @@ paths:
                         ts: '2024-02-14T14:34:49.365Z'
                         t: c
                         name: general
-                        usernames: []
+                        usernames: [ ]
                         msgs: 6
                         usersCount: 6
                         _updatedAt: '2024-03-26T17:40:18.321Z'
@@ -2322,7 +2322,7 @@ paths:
                       - _id: 65fd8a6bf581e473b56471ba
                         fname: test-channel
                         _updatedAt: '2024-03-22T13:40:59.620Z'
-                        customFields: {}
+                        customFields: { }
                         topic: ''
                         broadcast: false
                         encrypted: false
@@ -2343,7 +2343,7 @@ paths:
                     total: 3
                     success: true
         '401':
-          $ref: '#/components/responses/authorizationError'                    
+          $ref: '#/components/responses/authorizationError'
   /api/v1/channels.members:
     get:
       tags:
@@ -2558,7 +2558,7 @@ paths:
         | ------- | -------------------------------------------- |
         | 7.0.0  | Added `mentionIds`, `starredIds`, `pinned` query parameters.|        
         | 0.59.0  | Added                                        |
-        
+
       operationId: get-api-v1-channels.messages
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -2584,7 +2584,7 @@ paths:
           description: Filter pinned messages.
           schema:
             type: boolean
-          example: 'true' 
+          example: 'true'
       responses:
         '200':
           description: OK
@@ -2695,9 +2695,9 @@ paths:
                           username: roxie
                           name: test test
                         _updatedAt: '2023-09-27T04:36:47.698Z'
-                        urls: []
-                        mentions: []
-                        channels: []
+                        urls: [ ]
+                        mentions: [ ]
+                        channels: [ ]
                         md:
                           - type: PARAGRAPH
                             value:
@@ -2712,9 +2712,9 @@ paths:
                           username: roxie
                           name: test test
                         _updatedAt: '2023-09-27T04:34:38.900Z'
-                        urls: []
-                        mentions: []
-                        channels: []
+                        urls: [ ]
+                        mentions: [ ]
+                        channels: [ ]
                         md:
                           - type: PARAGRAPH
                             value:
@@ -2729,19 +2729,19 @@ paths:
                           username: roxie
                           name: test test
                         _updatedAt: '2023-09-27T04:36:38.258Z'
-                        urls: []
-                        mentions: []
-                        channels: []
+                        urls: [ ]
+                        mentions: [ ]
+                        channels: [ ]
                         replies:
                           - rbAXPnMktTFbNpwtJ
                         tcount: 0
                         tlm: '2023-09-27T04:34:50.746Z'
-                        attachments: []
+                        attachments: [ ]
                         editedAt: '2023-09-27T04:36:19.494Z'
                         editedBy:
                           _id: rbAXPnMktTFbNpwtJ
                           username: roxie
-                        reactions: {}
+                        reactions: { }
                         t: rm
                       - _id: 6513b143a2f73c7460e18c88
                         rid: 6513afeda2f73c7460e18c86
@@ -2752,9 +2752,9 @@ paths:
                           username: roxie
                           name: test test
                         _updatedAt: '2023-09-27T04:36:19.486Z'
-                        urls: []
-                        mentions: []
-                        channels: []
+                        urls: [ ]
+                        mentions: [ ]
+                        channels: [ ]
                         md:
                           - type: PARAGRAPH
                             value:
@@ -3335,15 +3335,15 @@ paths:
             schema:
               type: object
               properties:
-                    roomId:
+                roomId:
+                  type: string
+                  description: The channel's ID. Alternatively, enter the `roomName` parameter and provide the room's name as the value.
+                customFields:
+                  type: object
+                  description: The custom fields to set for the channel.
+                  properties:
+                    organization:
                       type: string
-                      description: The channel's ID. Alternatively, enter the `roomName` parameter and provide the room's name as the value.
-                    customFields:
-                      type: object
-                      description: The custom fields to set for the channel.
-                      properties:
-                        organization:
-                          type: string
               required:
                 - roomId
                 - customFields
@@ -3494,9 +3494,9 @@ paths:
                           username: test.test
                           name: test test
                         _updatedAt: '2023-09-16T07:37:59.815Z'
-                        urls: []
-                        mentions: []
-                        channels: []
+                        urls: [ ]
+                        mentions: [ ]
+                        channels: [ ]
                         md:
                           - type: PARAGRAPH
                             value:
@@ -3609,7 +3609,7 @@ paths:
                         - goose160
                         - graywolf336
                       joinCodeRequired: true
-                      muted: []
+                      muted: [ ]
                       default: true
                     success: true
         '401':
@@ -3850,9 +3850,9 @@ paths:
                           username: test.test
                           name: test test
                         _updatedAt: '2023-09-16T07:37:59.815Z'
-                        urls: []
-                        mentions: []
-                        channels: []
+                        urls: [ ]
+                        mentions: [ ]
+                        channels: [ ]
                         md:
                           - type: PARAGRAPH
                             value:
@@ -4022,7 +4022,7 @@ paths:
                         - goose160
                         - graywolf336
                       joinCodeRequired: true
-                      muted: []
+                      muted: [ ]
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -4103,15 +4103,15 @@ paths:
             schema:
               type: object
               properties:
-                    roomId:
-                      type: string
-                      description: The channel's ID. Alternatively, enter the `channelName` parameter and provide the channel's name as the value.
-                    type:
-                      type: string
-                      description: |-
-                        The channel's type. The type of room this channel should be, either c or p. 
-                        
-                        `c` is for channel and `p` is for private.
+                roomId:
+                  type: string
+                  description: The channel's ID. Alternatively, enter the `channelName` parameter and provide the channel's name as the value.
+                type:
+                  type: string
+                  description: |-
+                    The channel's type. The type of room this channel should be, either c or p. 
+                    
+                    `c` is for channel and `p` is for private.
               required:
                 - roomId
                 - type
@@ -4185,7 +4185,7 @@ paths:
                         - goose160
                         - graywolf336
                       joinCodeRequired: true
-                      muted: []
+                      muted: [ ]
                     success: true
 
   /api/v1/channels.unarchive:
@@ -4218,7 +4218,7 @@ paths:
         '200':
           $ref: '#/components/responses/trueSuccess'
         '401':
-          $ref: '#/components/responses/authorizationError'          
+          $ref: '#/components/responses/authorizationError'
 
   /api/v1/channels.getAllUserMentionsByChannel:
     get:
@@ -4334,13 +4334,13 @@ paths:
                           username: roxie
                           name: test test
                         _updatedAt: '2023-09-27T20:32:59.171Z'
-                        urls: []
+                        urls: [ ]
                         mentions:
                           - _id: rbAXPnMktTFbNpwtJ
                             username: roxie
                             name: test test
                             type: user
-                        channels: []
+                        channels: [ ]
                         md:
                           - type: PARAGRAPH
                             value:
@@ -4475,7 +4475,7 @@ paths:
                         scriptError: ""
                         type: webhook-outgoing
                         userId: rocket.cat
-                        channel: []
+                        channel: [ ]
                         _createdAt: '2017-01-05T17:06:05.660Z'
                         _createdBy:
                           username: graywolf336
@@ -4502,9 +4502,9 @@ paths:
             schema:
               type: object
               properties:
-                    channelId:
-                      type: string
-                      description: The channel's ID. Alternatively, enter the `channelName` parameter and provide the channel's name as the value.
+                channelId:
+                  type: string
+                  description: The channel's ID. Alternatively, enter the `channelName` parameter and provide the channel's name as the value.
               required:
                 - channelId
             examples:
@@ -4699,14 +4699,14 @@ paths:
         - name: types
           in: query
           description: |-
-           The room types. The possible room types are:
-            - `d`: Direct messages
-            - `c`: Public channel
-            - `p`: Private channel
-            - `discussions`: Team or channel discussions
-            - `teams`: Workspace teams
-            - `l`: Livechat
-            - `v`: Omnichannel VoIP rooms
+            The room types. The possible room types are:
+             - `d`: Direct messages
+             - `c`: Public channel
+             - `p`: Private channel
+             - `discussions`: Team or channel discussions
+             - `teams`: Workspace teams
+             - `l`: Livechat
+             - `v`: Omnichannel VoIP rooms
           schema:
             type: array
             items:
@@ -4777,20 +4777,20 @@ paths:
                 Success:
                   value:
                     rooms:
-                    - _id: 654c9d1ca2f73c7460e1918b
-                      fname: animalGeography
-                      topic: ''
-                      broadcast: false
-                      name: animalGeography
-                      t: p
-                      msgs: 4
-                      usersCount: 1
-                      u:
-                        _id: CkCPNcvsvCDfmWLqC
-                        username: kim.jane
-                        name: kim.jane
-                      ro: false
-                      default: false
+                      - _id: 654c9d1ca2f73c7460e1918b
+                        fname: animalGeography
+                        topic: ''
+                        broadcast: false
+                        name: animalGeography
+                        t: p
+                        msgs: 4
+                        usersCount: 1
+                        u:
+                          _id: CkCPNcvsvCDfmWLqC
+                          username: kim.jane
+                          name: kim.jane
+                        ro: false
+                        default: false
                     count: 1
                     offset: 0
                     total: 1
@@ -4872,7 +4872,7 @@ paths:
       tags:
         - Rooms
       summary: Get Room Information
-      description: |- 
+      description: |-
         Retrieves the information about the room.
         
         ### Changelog
@@ -4914,7 +4914,7 @@ paths:
                         type: array
                         items:
                           type: object
-                          properties: {}
+                          properties: { }
                       msgs:
                         type: integer
                       usersCount:
@@ -4945,6 +4945,22 @@ paths:
                             type: string
                           msg:
                             type: string
+                          alias:
+                            type: string
+                            nullable: true
+                          attachments:
+                            type: array
+                            items:
+                              type: object
+                          file:
+                            type: object
+                            properties:
+                              _id:
+                                type: string
+                              name:
+                                type: string
+                              type:
+                                type: string
                           u:
                             type: object
                             properties:
@@ -4971,7 +4987,7 @@ paths:
                       _id: 66ed2dba40141d95f32c292b
                       fname: new-channel
                       _updatedAt: '2024-09-20T12:29:08.284Z'
-                      customFields: {}
+                      customFields: { }
                       topic: ''
                       broadcast: false
                       encrypted: false
@@ -4992,15 +5008,16 @@ paths:
                         _id: xZhJfE4rmaosjHZCe
                         rid: 66ed2dba40141d95f32c292b
                         msg: testing
+                        alias: null
                         ts: '2024-09-20T12:27:53.356Z'
                         u:
                           _id: C38WSSzrGd2NCjzqJ
                           username: test.cat
                           name: test.cat
                         _updatedAt: '2024-09-20T12:27:53.397Z'
-                        urls: []
-                        mentions: []
-                        channels: []
+                        urls: [ ]
+                        mentions: [ ]
+                        channels: [ ]
                         md:
                           - type: PARAGRAPH
                             value:
@@ -5204,9 +5221,9 @@ paths:
                             username: roxie
                             name: test test
                           _updatedAt: '2023-09-28T01:14:04.233Z'
-                          urls: []
-                          mentions: []
-                          channels: []
+                          urls: [ ]
+                          mentions: [ ]
+                          channels: [ ]
                           md:
                             - type: PARAGRAPH
                               value:
@@ -5296,6 +5313,22 @@ paths:
                               type: string
                             msg:
                               type: string
+                            alias:
+                              type: string
+                              nullable: true
+                            attachments:
+                              type: array
+                              items:
+                                type: object
+                            file:
+                              type: object
+                              properties:
+                                _id:
+                                  type: string
+                                name:
+                                  type: string
+                                type:
+                                  type: string
                             u:
                               type: object
                               properties:
@@ -5320,17 +5353,17 @@ paths:
                                     type: string
                                   meta:
                                     type: object
-                                    properties: {}
+                                    properties: { }
                             mentions:
                               type: array
                               items:
                                 type: object
-                                properties: {}
+                                properties: { }
                             channels:
                               type: array
                               items:
                                 type: object
-                                properties: {}
+                                properties: { }
                             md:
                               type: array
                               items:
@@ -5384,7 +5417,7 @@ paths:
                     type: array
                     items:
                       type: object
-                      properties: {}
+                      properties: { }
                   success:
                     type: boolean
               examples:
@@ -5395,7 +5428,7 @@ paths:
                         ts: '2024-02-14T14:34:49.365Z'
                         t: c
                         name: general
-                        usernames: []
+                        usernames: [ ]
                         msgs: 55
                         usersCount: 36
                         _updatedAt: '2024-07-16T08:49:34.732Z'
@@ -5443,9 +5476,9 @@ paths:
                             username: user1
                             name: user1
                           _updatedAt: '2024-07-10T13:48:28.296Z'
-                          urls: []
-                          mentions: []
-                          channels: []
+                          urls: [ ]
+                          mentions: [ ]
+                          channels: [ ]
                           md:
                             - type: PARAGRAPH
                               value:
@@ -5482,9 +5515,9 @@ paths:
                           _updatedAt: '2024-07-17T02:00:05.198Z'
                           urls:
                             - url: 'https://github.com/RocketChat/Rocket.Chat/releases/tag/6.10.0'
-                              meta: {}
-                          mentions: []
-                          channels: []
+                              meta: { }
+                          mentions: [ ]
+                          channels: [ ]
                           md:
                             - type: PARAGRAPH
                               value:
@@ -5507,7 +5540,7 @@ paths:
                                       - type: PLAIN_TEXT
                                         value: 'https://github.com/RocketChat/Rocket.Chat/releases/tag/6.10.0'
                         lm: '2024-07-17T02:00:05.161Z'
-                    remove: []
+                    remove: [ ]
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -5595,17 +5628,17 @@ paths:
             schema:
               type: object
               properties:
-                    roomId:
-                      type: string
-                      description: The room ID. Alternatively, enter the `roomName` parameter and provide the room's name as the value.
-                    favorite:
-                      type: boolean
-                      description: A boolean to mark the room as favourite or not.
+                roomId:
+                  type: string
+                  description: The room ID. Alternatively, enter the `roomName` parameter and provide the room's name as the value.
+                favorite:
+                  type: boolean
+                  description: A boolean to mark the room as favourite or not.
               required:
                 - roomId
                 - favorite
             examples:
-              Example :
+              Example:
                 value:
                   roomId: GENERAL
                   favorite: true
@@ -5644,7 +5677,7 @@ paths:
       requestBody:
         description: |-
           For some file types, when uploading via curl, you may need to set the mime type.
-        
+          
           With some file types, curl will upload the file as application/octet-stream. 
           You can pass a custom mime type like this: `-F \"file=@file.wav;type=audio/wav\"` to specify the type.
         content:
@@ -5671,7 +5704,7 @@ paths:
                     You can add custom fields for messages. For example, set priorities for messages.
 
                     You must enable this option and define the validation in the workspace settings. See the <a href="https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/message" target="_blank">Message</a> for further information.
-                  example: {"priority": "high"}
+                  example: { "priority": "high" }
               required:
                 - file
       responses:
@@ -5791,7 +5824,7 @@ paths:
                         username: rodriq
                         name: Rodriq
                       _updatedAt: '2022-06-29T07:34:33.811Z'
-                      urls: []
+                      urls: [ ]
                       md:
                         - type: PARAGRAPH
                           value:
@@ -5829,7 +5862,7 @@ paths:
       responses:
         '200':
           description: OK
-          headers: {}
+          headers: { }
           content:
             application/json:
               schema:
@@ -5922,7 +5955,7 @@ paths:
                   success:
                     type: boolean
               examples:
-               Match error:
+                Match error:
                   value:
                     items:
                       - _id: siyr2oWQJBjQjhLwr
@@ -6083,7 +6116,7 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       description: 'List public and private rooms whose names match a given string, excluding <a href="https://docs.rocket.chat/docs/direct-messages" target="_blank">DMs</a>, and <a href="https://docs.rocket.chat/docs/omnichannel" target="_blank">omnichannel rooms</a>. This endpoint is valuable when performing search operations. Only workspace administrators can use it.'
-    parameters: []
+    parameters: [ ]
   /api/v1/rooms.adminRooms.getRoom:
     get:
       tags:
@@ -6310,7 +6343,7 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/rooms.nameExists:
-    parameters: []
+    parameters: [ ]
     get:
       summary: Check if Room Name Exists
       description: Check if the room name exists
@@ -6483,7 +6516,7 @@ paths:
                   items:
                     type: string
                   description: |-
-                   An array of users that should recieve the export. ecieve the export. It is required if `type` is `email`.
+                    An array of users that should recieve the export. ecieve the export. It is required if `type` is `email`.
                 toEmails:
                   type: array
                   items:
@@ -6521,7 +6554,7 @@ paths:
                     - BoCjicj9DdYoMHHeo
                     - tajMB3aX3sawFWe8W
                   subject: 'Test Subject '
-                  
+
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
@@ -6811,7 +6844,7 @@ paths:
                       _id: cgk88DHLHexwMaFWh
                     success: true
         '401':
-          $ref: '#/components/responses/authorizationError'                    
+          $ref: '#/components/responses/authorizationError'
   /api/v1/rooms.images:
     get:
       tags:
@@ -6979,9 +7012,9 @@ paths:
                     errorType: invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
-          
+
   /api/v1/audit/rooms.members:
-    parameters: []
+    parameters: [ ]
     get:
       summary: Audit and Get Room Members
       tags:
@@ -7056,7 +7089,7 @@ paths:
       operationId: get-api-v1-audit-rooms.members
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Enterprise" style="display: block; margin: auto"></div>
-      
+        
         Audit any public or private room and view the room members. You don't need to be a member of the room.
         
         Permission required: `view-members-list-all-rooms`
@@ -7665,21 +7698,21 @@ paths:
             schema:
               type: object
               properties:
-                    teamId:
-                      type: string
-                      description: Enter the team ID. Alternatively, enter the `teamName` parameter and provide the team's name as the value.
-                    members:
-                      type: array
-                      description: The users (IDs and roles) to add to the team.
-                      items:
-                        type: object
-                        properties:
-                          userId:
-                            type: string
-                          roles:
-                            type: array
-                            items:
-                              type: string
+                teamId:
+                  type: string
+                  description: Enter the team ID. Alternatively, enter the `teamName` parameter and provide the team's name as the value.
+                members:
+                  type: array
+                  description: The users (IDs and roles) to add to the team.
+                  items:
+                    type: object
+                    properties:
+                      userId:
+                        type: string
+                      roles:
+                        type: array
+                        items:
+                          type: string
               required:
                 - teamId
                 - members
@@ -7795,7 +7828,7 @@ paths:
                           settings:
                             preferences:
                               themeAppearence: light
-                            profile: {}
+                            profile: { }
                         roles:
                           - owner
                         createdBy:
@@ -7808,7 +7841,7 @@ paths:
                           name: Testtest
                           status: offline
                           settings:
-                            profile: {}
+                            profile: { }
                         createdBy:
                           _id: rbAXPnMktTFbNpwtJ
                           username: test.test
@@ -7838,21 +7871,21 @@ paths:
             schema:
               type: object
               properties:
-                    teamId:
-                      type: string
-                      description: Enter the team ID. Alternatively, enter the `teamName` parameter and provide the team's name as the value.
-                    members:
-                      type: array
-                      description: The users (IDs and roles) to add to the team.
-                      items:
-                        type: object
-                        properties:
-                          userId:
-                            type: string
-                          roles:
-                            type: array
-                            items:
-                              type: string
+                teamId:
+                  type: string
+                  description: Enter the team ID. Alternatively, enter the `teamName` parameter and provide the team's name as the value.
+                members:
+                  type: array
+                  description: The users (IDs and roles) to add to the team.
+                  items:
+                    type: object
+                    properties:
+                      userId:
+                        type: string
+                      roles:
+                        type: array
+                        items:
+                          type: string
               required:
                 - teamId
                 - members
@@ -7885,14 +7918,14 @@ paths:
             schema:
               type: object
               properties:
-                    teamId:
-                      type: string
-                      description: Enter the team ID. Alternatively, enter the `teamName` parameter and provide the team's name as the value. 
-                    rooms:
-                      type: array
-                      description: The team room IDs to remove the user from.
-                      items:
-                        type: string
+                teamId:
+                  type: string
+                  description: Enter the team ID. Alternatively, enter the `teamName` parameter and provide the team's name as the value.
+                rooms:
+                  type: array
+                  description: The team room IDs to remove the user from.
+                  items:
+                    type: string
               required:
                 - teamId
                 - rooms
@@ -7927,17 +7960,17 @@ paths:
             schema:
               type: object
               properties:
-                    teamId:
-                      type: string
-                      description: Enter the team ID. Alternatively, enter the `teamName` parameter and provide the team's name as the value. 
-                    userId:
-                      type: string
-                      description: The user ID to remove from the team.
-                    rooms:
-                      type: array
-                      description: The rooms (IDs) from which the user should be removed.
-                      items:
-                        type: string
+                teamId:
+                  type: string
+                  description: Enter the team ID. Alternatively, enter the `teamName` parameter and provide the team's name as the value.
+                userId:
+                  type: string
+                  description: The user ID to remove from the team.
+                rooms:
+                  type: array
+                  description: The rooms (IDs) from which the user should be removed.
+                  items:
+                    type: string
               required:
                 - teamId
                 - userId
@@ -8105,7 +8138,7 @@ paths:
       tags:
         - Teams
       summary: Add Rooms to a Team
-      description: |- 
+      description: |-
         Adds rooms to the team.
         
         Permission required: `add-team-channel`
@@ -8119,14 +8152,14 @@ paths:
             schema:
               type: object
               properties:
-                    teamId:
-                      type: string
-                      description: Enter the team ID. Alternatively, enter the `teamName` parameter and provide the team's name as the value.
-                    rooms:
-                      type: array
-                      description: The IDs of the rooms to be added to the team.
-                      items:
-                        type: string
+                teamId:
+                  type: string
+                  description: Enter the team ID. Alternatively, enter the `teamName` parameter and provide the team's name as the value.
+                rooms:
+                  type: array
+                  description: The IDs of the rooms to be added to the team.
+                  items:
+                    type: string
               required:
                 - teamId
                 - rooms
@@ -8251,7 +8284,7 @@ paths:
                     rooms:
                       - _id: JKa7R9zu2DinBhBN9
                         fname: Livestream
-                        customFields: {}
+                        customFields: { }
                         description: ''
                         broadcast: false
                         encrypted: false
@@ -8286,9 +8319,9 @@ paths:
                             name: test test
                           rid: JKa7R9zu2DinBhBN9
                           _updatedAt: '2023-09-14T12:06:00.685Z'
-                          urls: []
-                          mentions: []
-                          channels: []
+                          urls: [ ]
+                          mentions: [ ]
+                          channels: [ ]
                         teamId: 63f3efc4b000b6b6d86704b2
                     success: true
         '401':
@@ -8440,7 +8473,7 @@ paths:
                     room:
                       _id: JKa7R9zu2DinBhBN9
                       fname: Livestream
-                      customFields: {}
+                      customFields: { }
                       description: ''
                       broadcast: false
                       encrypted: false
@@ -8475,9 +8508,9 @@ paths:
                           name: test test
                         rid: JKa7R9zu2DinBhBN9
                         _updatedAt: '2023-09-14T12:06:00.685Z'
-                        urls: []
-                        mentions: []
-                        channels: []
+                        urls: [ ]
+                        mentions: [ ]
+                        channels: [ ]
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -8629,7 +8662,7 @@ paths:
                     room:
                       _id: JKa7R9zu2DinBhBN9
                       fname: Livestream
-                      customFields: {}
+                      customFields: { }
                       description: ''
                       broadcast: false
                       encrypted: false
@@ -8664,9 +8697,9 @@ paths:
                           name: test test
                         rid: JKa7R9zu2DinBhBN9
                         _updatedAt: '2023-09-14T12:06:00.685Z'
-                        urls: []
-                        mentions: []
-                        channels: []
+                        urls: [ ]
+                        mentions: [ ]
+                        channels: [ ]
                       teamId: 63f3efc4b000b6b6d86704b2
                       teamDefault: true
                     success: true
@@ -8815,7 +8848,7 @@ paths:
                     rooms:
                       - _id: JKa7R9zu2DinBhBN9
                         fname: Livestream
-                        customFields: {}
+                        customFields: { }
                         description: ''
                         broadcast: false
                         encrypted: false
@@ -8850,9 +8883,9 @@ paths:
                             name: test test
                           rid: JKa7R9zu2DinBhBN9
                           _updatedAt: '2023-09-14T12:06:00.685Z'
-                          urls: []
-                          mentions: []
-                          channels: []
+                          urls: [ ]
+                          mentions: [ ]
+                          channels: [ ]
                         teamId: 63f3efc4b000b6b6d86704b2
                         teamDefault: true
                     total: 1
@@ -9010,7 +9043,7 @@ paths:
                     rooms:
                       - _id: JKa7R9zu2DinBhBN9
                         fname: Livestream
-                        customFields: {}
+                        customFields: { }
                         description: ''
                         broadcast: false
                         encrypted: false
@@ -9045,9 +9078,9 @@ paths:
                             name: test test
                           rid: JKa7R9zu2DinBhBN9
                           _updatedAt: '2023-09-14T12:06:00.685Z'
-                          urls: []
-                          mentions: []
-                          channels: []
+                          urls: [ ]
+                          mentions: [ ]
+                          channels: [ ]
                         teamId: 63f3efc4b000b6b6d86704b2
                         teamDefault: true
                         isLastOwner: true
@@ -9173,17 +9206,17 @@ paths:
                               type: array
                               items:
                                 type: object
-                                properties: {}
+                                properties: { }
                             mentions:
                               type: array
                               items:
                                 type: object
-                                properties: {}
+                                properties: { }
                             channels:
                               type: array
                               items:
                                 type: object
-                                properties: {}
+                                properties: { }
                             md:
                               type: array
                               items:
@@ -9204,7 +9237,7 @@ paths:
                           type: string
                         customFields:
                           type: object
-                          properties: {}
+                          properties: { }
                   offset:
                     type: integer
                   count:
@@ -9246,9 +9279,9 @@ paths:
                             username: test.cat
                             name: test.cat
                           _updatedAt: '2024-09-20T12:27:38.686Z'
-                          urls: []
-                          mentions: []
-                          channels: []
+                          urls: [ ]
+                          mentions: [ ]
+                          channels: [ ]
                           md:
                             - type: PARAGRAPH
                               value:
@@ -9258,7 +9291,7 @@ paths:
                       - _id: 66ed2dba40141d95f32c292b
                         fname: new-channel
                         _updatedAt: '2024-09-20T12:29:08.284Z'
-                        customFields: {}
+                        customFields: { }
                         topic: ''
                         broadcast: false
                         encrypted: false
@@ -9285,9 +9318,9 @@ paths:
                             username: test.cat
                             name: test.cat
                           _updatedAt: '2024-09-20T12:27:53.397Z'
-                          urls: []
-                          mentions: []
-                          channels: []
+                          urls: [ ]
+                          mentions: [ ]
+                          channels: [ ]
                           md:
                             - type: PARAGRAPH
                               value:
@@ -9322,7 +9355,7 @@ paths:
                     errorType: invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
-          
+
   /api/v1/groups.online:
     get:
       tags:
@@ -10270,7 +10303,7 @@ paths:
                       u:
                         _id: HKKPmF8rZh45GMHWH
                         username: marc.anp
-                      customFields: {}
+                      customFields: { }
                       broadcast: false
                       encrypted: false
                       ts: '2020-05-21T13:16:24.749Z'
@@ -10302,12 +10335,12 @@ paths:
             schema:
               type: object
               properties:
-                    roomId:
-                      type: string
-                      description: The group ID
-                    userId:
-                      type: string
-                      description: The ID of the user to be invited. You can also use the parameter `userIds` as an array to invite more than one user. For example, `["nSYqWzZ4GsKTX4dyK", "SYqWzZ4Gsasdfgh"]`
+                roomId:
+                  type: string
+                  description: The group ID
+                userId:
+                  type: string
+                  description: The ID of the user to be invited. You can also use the parameter `userIds` as an array to invite more than one user. For example, `["nSYqWzZ4GsKTX4dyK", "SYqWzZ4Gsasdfgh"]`
               required:
                 - roomId
                 - userId
@@ -10992,7 +11025,7 @@ paths:
         | ------- | ----------- |
         | 7.0.0  | Added `mentionIds`, `starredIds`, `pinned` query parameters.|
         | 0.59.0  | Added       |
-        
+
       operationId: get-api-v1-groups.messages
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -11020,7 +11053,7 @@ paths:
           description: Filter pinned messages.
           schema:
             type: boolean
-          example: 'true'      
+          example: 'true'
       responses:
         '200':
           description: OK
@@ -11105,8 +11138,8 @@ paths:
                           ':frowning2:':
                             usernames:
                               - marcos.defendi
-                        mentions: []
-                        channels: []
+                        mentions: [ ]
+                        channels: [ ]
                         starred:
                           _id: KPkEYwKKBKZnEEPpt
                       - _id: MrAeupRiF9TvhMesK
@@ -11522,12 +11555,12 @@ paths:
             schema:
               type: object
               properties:
-                    roomId:
-                      type: string
-                      description: The private group's ID. Alternatively, use the `roomName` parameter and provide the room's name as the value.
-                    customFields:
-                      type: object
-                      description: The custom fields to set for the private group.
+                roomId:
+                  type: string
+                  description: The private group's ID. Alternatively, use the `roomName` parameter and provide the room's name as the value.
+                customFields:
+                  type: object
+                  description: The custom fields to set for the private group.
               required:
                 - roomId
                 - customFields
@@ -11816,7 +11849,7 @@ paths:
                         - goose160
                         - graywolf336
                       joinCodeRequired: true
-                      muted: []
+                      muted: [ ]
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -11976,7 +12009,7 @@ paths:
                         - goose160
                         - graywolf336
                       joinCodeRequired: true
-                      muted: []
+                      muted: [ ]
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -12155,15 +12188,15 @@ paths:
             schema:
               type: object
               properties:
-                    encrypted:
-                      type: boolean
-                      description: Whether or not to encrypt the room.
-                    roomId:
-                      type: string
-                      description: The group ID. Alternatively, use the `roomName` parameter and enter the group name.
+                encrypted:
+                  type: boolean
+                  description: Whether or not to encrypt the room.
+                roomId:
+                  type: string
+                  description: The group ID. Alternatively, use the `roomName` parameter and enter the group name.
               required:
-                    - encrypted
-                    - roomName
+                - encrypted
+                - roomName
             examples:
               Example:
                 value:
@@ -12380,12 +12413,12 @@ paths:
         - Groups
       summary: List Group Roles
       description: |-
-          List all the roles of users in the group.
-          
-          ### Changelog
-          | Version | Description |
-          | ------- | ----------- |
-          | 0.65.0  | Added       |
+        List all the roles of users in the group.
+        
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 0.65.0  | Added       |
       operationId: get-api-v1-groups.roles
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -12463,7 +12496,7 @@ paths:
           example: "rocket"
         - name: type
           in: query
-          description: |- 
+          description: |-
             It can be `channels` or `users`.
             When `type` is users you can send an additional workspace field, that can be local (default) or all. Workspace=all will work only if <a href="https://docs.rocket.chat/use-rocket.chat/rocket.chat-federation" target="_blank">federation</a> is enabled.
           schema:
@@ -12611,13 +12644,13 @@ components:
       in: query
       description: 'List of fields to order by, and in which direction. This is a JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending. For example, {"value": -1, "_id": 1}'
       required: false
-      schema: {}
+      schema: { }
     query:
       name: query
       in: query
       description: 'This parameter allows you to use MongoDB query operators to search for specific data. For example, to query users with a name that contains the letter "g": query={ "name": { "$regex": "g" } }'
       required: false
-      schema: {}
+      schema: { }
     fields:
       name: fields
       in: query
