@@ -1003,7 +1003,7 @@ paths:
         - Users
       summary: Create User
       description: |-
-        Create a new user in your workspace.
+        Create a new user in your workspace. This endpoint is typically used by admins to create user accounts in the workspace.
 
         Permission required: `create-user`
 
@@ -1232,6 +1232,9 @@ paths:
         - Users
       summary: Register User
       description: |-
+        * Use this endpoint to create an account on the workspace.
+        * The number of requests you can make and the interval between each request depends on the workspace's rate limiter settings. You can find the settings from **Administration** > **Settings** > **Rate Limiter** > **API Rate Limiter**.
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -1315,8 +1318,9 @@ paths:
     post:
       tags:
         - Users
-      summary: Update User
+      summary: Update User Details
       description: |-
+        * Use this endpoint to update the details of an existing user.
         * To update the password for the user, `edit-other-user-password`
         permission is required.
         * This endpoint requires 2FA.
@@ -2085,7 +2089,7 @@ paths:
         - Users
       summary: Get Users List
       description: |-
-        Gets all of the users in the system and their information, the result is only limited to what the request sender has access to view.
+        Gets all of the users in the system and their information, the result is only limited to what the request sender has access to view. To view direct message rooms of a user, you need the `view-d-room` permission. To view the complete user information (such as account creation date and last login), you need the `view-full-other-user-info permission`.
         
         ### Changelog
         | Version      | Description |
@@ -2227,7 +2231,7 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       description: |-
-        Permission required: `edit-other-user-avatar`, if the `AllowUserAvatarChange` setting is enabled.
+        Permission required: `edit-other-user-avatar`, if the `AllowUserAvatarChange` setting under **Accounts** is enabled.
         
         ### Changelog
         | Version      | Description |
