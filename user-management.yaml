@@ -1895,7 +1895,7 @@ paths:
       summary: Get User's Info
       description: |-
         * Retrieves information about a user. The result is only limited to what the callee has access to view.
-        * This endpoint supports the `field` query parameter with `userRooms` that returns the rooms that the user is part of. 
+        * This endpoint supports the `field` query parameter with `userRooms` that returns the rooms that the user is part of. You need the `view-other-user-channels` permission to view channels owned by other users.
         * The `rooms` field returns the `unread` property based on the <a href="https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/general#general-settings" target="_blank">Unread Count setting</a>.
         
         ### Changelog
