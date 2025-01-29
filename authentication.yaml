@@ -997,30 +997,10 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/users.2fa.sendEmailCode:
+    parameters: []
     post:
-      tags:
-        - Two-Factor Authentication
-      summary: Request a new Email Code
-      description: 'Use this endpoint to request for a new 2FA code by email.'
+      summary: Send 2FA Email Code
       operationId: post-api-v1-users.2fa.sendEmailCode
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                emailOrUsername:
-                  type: string
-                  description: The email or username of the user.
-              required:
-                - emailOrUsername
-              x-examples:
-                Example:
-                  emailOrUsername: test-test
-            examples:
-              Example:
-                value:
-                  emailOrUsername: test-user
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
@@ -1038,11 +1018,35 @@ paths:
                   errorType:
                     type: string
               examples:
-                Parameter Required:
+                Example 1:
                   value:
                     success: false
                     error: 'emailOrUsername is required [error-parameter-required]'
                     errorType: error-parameter-required
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      description: ''
+      parameters:
+        - $ref: '#/components/parameters/Auth-TokenNotRequired'
+        - $ref: '#/components/parameters/UserIdNotRequired'
+      tags:
+        - Two-Factor Authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                emailOrUsername:
+                  type: string
+                  description: Enter the email or username.
+                  example: test@email.com
+              required:
+                - emailOrUsername
+            examples:
+              Example 1:
+                value:
+                  emailOrUsername: test@email.com
   /api/v1/users.2fa.disableEmail:
     post:
       tags:
@@ -1124,11 +1128,27 @@ components:
       schema:
         type: string
         example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+    Auth-TokenNotRequired:
+      name: X-Auth-Token
+      in: header
+      description: The `authToken` of the authenticated user.
+      required: false
+      schema:
+        type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
     UserId:
       name: X-User-Id
       in: header
       description: The `userId` of the authenticated user.
       required: true
+      schema:
+        type: string
+        example: rbAXPnMktTFbNpwtJ
+    UserIdNotRequired:
+      name: X-User-Id
+      in: header
+      description: The `userId` of the authenticated user.
+      required: false
       schema:
         type: string
         example: rbAXPnMktTFbNpwtJ
