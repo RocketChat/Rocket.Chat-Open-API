@@ -1116,8 +1116,8 @@ paths:
                 customFields:
                   type: object
                   example: {
-                "clearance": "High",
-                "team": "Queen" }
+                    "clearance": "High",
+                    "team": "Queen" }
                   description: |-
                     A valid JSON object of key-value pairs consisting of additional fields to be
                     added during user registration. By default, the value is `undefined`.
@@ -1392,8 +1392,9 @@ paths:
                     customFields:
                       type: object
                       example: {
-                "clearance": "High",
-                "team": "Queen" }
+                        "clearance": "High",
+                        "team": "Queen"
+                      }
                       description: |-
                         Any custom fields the user should have on their account.
                         To save custom fields, you must first define the custom fields in the admin panel (Administration > Settings > Accounts > Registration > Custom Fields). For details on how to configure this field, see [Custom Fields](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/accounts/custom-fields).
