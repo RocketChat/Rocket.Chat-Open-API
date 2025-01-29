@@ -2402,8 +2402,9 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       description: |-
-        Permission required, if the setting `AllowUserStatusMessageChange` is enabled: 
-          * `edit-other-user-info`
+        * You can set the status for yourself or another user. 
+        * To change another user's status, the `AllowUserStatusMessageChange` setting must be enabled, and you must have the `edit-other-user-info` permission.
+        * According to your workspace settings (under **Accounts**), you will only be able to set the invisible or `offline` status if the `Allow Invisible status option` setting is enabled.
           
           ### Changelog
           | Version      | Description |
@@ -2431,10 +2432,10 @@ paths:
                 userId:
                   type: string
                   example: zXuq7SvPKYbzYmfpo
-                  description: The user ID for which to set the status.
+                  description: The user ID for which you want to set the status. You don't need to add this if you are setting the status for yourself.
                 username:
                   type: string
-                  description: The user name for which to set the status.
+                  description: The user name for which you want to set the status. You don't need to add this if you are setting the status for yourself.
                   example: bob
               required:
                 - message
@@ -2547,7 +2548,7 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       description: |-
-        Permissions required:
+        Any one of the following permissions are required:
           * `edit-other-user-active-status`
           * `manage-moderation-actions`
           
@@ -2807,7 +2808,7 @@ paths:
           name: ids
           description: The user IDs whose status you want.
       description: |-
-        If the `Presence_broadcast_disabled` setting is true, the endpoint returns an empty array.
+        If the `Presence_broadcast_disabled` setting is true, the endpoint returns an empty array. You can find this setting under **Administration** > **Settings** > **Troubleshoot**.
         
         ### Changelog
         | Version      | Description |
@@ -3570,7 +3571,7 @@ paths:
                     success: false
                     error: The 'email' param is required
       description: |-
-        Send an email to reset your password. Ensure that you have completed the configuration of the email; otherwise, your users will not receive the mail normally. Access this from **Administration** > **Workspace** > **Email inboxes**.
+        Send an email to reset your password. Ensure that you have completed the configuration of the email; otherwise, your users will not receive the mail normally. Access this from **Administration** > **Workspace** > **Settings** > **Email**.
         
         ### Changelog
         | Version      | Description |
@@ -4446,7 +4447,7 @@ paths:
         - $ref: '#/components/parameters/x-2fa-code'
         - $ref: '#/components/parameters/x-2fa-method'
       description: |-
-        Reset 2FA via TOTP for a user in the workspace.
+        Reset 2FA via TOTP for a user in the workspace. Make sure that the `Enable Two Factor Authentication` setting is enabled under **Administration** > **Settings** > **Accounts** > **Two Factor Authentication**.
         * It requires the `edit-other-user-totp` permission.
         * It requires two-factor authentication.
         
@@ -4477,7 +4478,8 @@ paths:
       tags:
         - Users
       summary: List User's Teams
-      description: ''
+      description: |-
+        The teams returned by the endpoint depends on your permissions. To view all teams, you need the `view-all-teams` permission.
       operationId: get-api-v1-users.listTeams
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
