@@ -666,6 +666,7 @@ paths:
           $ref: '#/components/responses/authorizationError'
       description: |-
         Gets the users that belong to a specific role.
+        Permission required: `access-permissions`
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
