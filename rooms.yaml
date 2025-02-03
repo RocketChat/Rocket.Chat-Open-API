@@ -58,9 +58,9 @@ paths:
                   type: object
                   description: |-
                     Enter the following details for the object:
-                    - `broadcast`: Whether the channel should be a broadcast group.
+                    - `broadcast`: Whether the channel should be a broadcast room.
                     - `encrypted`: Whether the channel should be encrypted.
-                    - `teamId`: Enter the team ID for which you want to create a group.
+                    - `teamId`: Enter an existing team ID for this channel.
                     
                     For more information, see <a href='https://docs.rocket.chat/use-rocket.chat/user-guides/rooms/channels#channel-privacy-and-encryption' target='_blank'>Channels</a>
               required:
@@ -681,13 +681,32 @@ paths:
                     offset: 0
                     total: 2
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The required "roomId" or "roomName" param provided does not match any channel [error-room-not-found]'
+                    errorType: error-room-not-found
   /api/v1/channels.archive:
     post:
       tags:
         - Channels
       summary: Archive Channel
       description: |-
-        Archive a channel.
+        Archive a channel. Permission required: `archive-room`
         ### Changelog
         | Version | Description               |
         | ------- | ------------------------- |
