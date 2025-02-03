@@ -9584,7 +9584,7 @@ paths:
         - Groups
       summary: Add All Users to Group
       description: |-
-        Adds all of the users of the Rocket.Chat workspace to the group/channel.
+        Add all users to the room.
         
         ### Changelog
         | Version | Description |
@@ -9602,10 +9602,10 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The group id
+                  description: Enter the the group ID
                 activeUsersOnly:
-                  type: string
-                  description: Adds all of the users of the Rocket.Chat workspace to the group/channel.
+                  type: boolean
+                  description: Add only active users to the room.
               required:
                 - roomId
             examples:
@@ -9663,6 +9663,25 @@ paths:
                         username: example
                       ts: '2016-05-30T13:42:25.304Z'
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The required "roomId" or "roomName" param provided does not match any group [error-room-not-found]'
+                    errorType: error-room-not-found
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.addLeader:
