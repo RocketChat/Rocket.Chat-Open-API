@@ -9381,7 +9381,8 @@ paths:
         - Groups
       summary: Get Group Online Users
       description: |-
-        Lists all online users of a group if the group's id is provided, otherwise it gets all online users of all groups.
+        Lists all online users of a particular group (private channel). You will not be able to view the users if you are not a member of this private channel, unless you have admin permissions.
+        
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
@@ -9393,7 +9394,10 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: _id
           in: query
-          description: The channel's id.
+          description: |-
+            Enter the group's ID. You can find list of groups IDs using any of the following endpoints:
+            * <a href='https://developer.rocket.chat/apidocs/get-list-of-user-groups' target='_blank'>Get List of User Groups</a>: This endpoint returns all private channels in the workspace, if you have the required permissions to view them.
+            * <a href='https://developer.rocket.chat/apidocs/get-groups' target='_blank'>Get Groups</a>: This endpoint returns the private channels that you are a member of.
           required: true
           schema:
             type: string
@@ -9426,7 +9430,29 @@ paths:
                       - _id: BsxzC22xQ43taWdff
                         username: uniqueusername
                     success: true
-
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Error if you are not a member of the private channel:
+                  value:
+                    success: false
+                    error: 'Not Allowed [error-not-allowed]'
+                    errorType: error-not-allowed
+                Invalid or missing query parameter:
+                  value:
+                    success: false
+                    error: Invalid query
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.getIntegrations:
@@ -9451,7 +9477,16 @@ paths:
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
-        - $ref: '#/components/parameters/RoomId'
+        - schema:
+            type: string
+            example: 6731de043b74d3c57d334d0c
+          in: query
+          name: roomId
+          description: |-
+            Enter the private channel's ID. Alternatively, you can enter the room name using the `roomName` query parameter. You can find the IDs by using any of the following endpoints:
+            * <a href='https://developer.rocket.chat/apidocs/get-list-of-user-groups' target='_blank'>Get List of User Groups</a>: This endpoint returns all private channels in the workspace, if you have the required permissions to view them.
+            * <a href='https://developer.rocket.chat/apidocs/get-groups' target='_blank'>Get Groups</a>: This endpoint returns the private channels that you are a member of.
+          required: true
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
@@ -9594,7 +9629,29 @@ paths:
                           _id: R4jgcQaQhvvK6K3iY
                         _updatedAt: '2017-01-05T17:06:05.660Z'
                     success: true
-
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The parameter "roomId" or "roomName" is required [error-room-param-not-provided]'
+                    errorType: error-room-param-not-provided
+                Example 2:
+                  value:
+                    success: false
+                    error: 'User does not have the permissions required for this action [error-unauthorized]'
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.addAll:
