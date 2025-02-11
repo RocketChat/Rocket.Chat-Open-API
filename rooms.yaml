@@ -9660,7 +9660,7 @@ paths:
         - Groups
       summary: Add All Users to Group
       description: |-
-        Add all users to the room.
+        Add all workspace users to the private channel. You can do this if you are a member of the private channel or have admin permissions.
         
         ### Changelog
         | Version | Description |
@@ -9678,7 +9678,10 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: Enter the the group ID
+                  description: |- 
+                    Enter the group ID. Alternatively, you can enter the name using the `roomName` query parameter. You can find the IDs by using any of the following endpoints:
+                    * <a href='https://developer.rocket.chat/apidocs/get-list-of-user-groups' target='_blank'>Get List of User Groups</a>: This endpoint returns all private channels in the workspace, if you have the required permissions to view them.
+                    * <a href='https://developer.rocket.chat/apidocs/get-groups' target='_blank'>Get Groups</a>: This endpoint returns the private channels that you are a member of.
                 activeUsersOnly:
                   type: boolean
                   description: Add only active users to the room.
@@ -9766,7 +9769,7 @@ paths:
         - Groups
       summary: Add Group Leader
       description: |-
-        Assign the `leader` role to a user in a group. 
+        Assign the `leader` role to a user in a private channel. Learn more about roles from the <a href='https://docs.rocket.chat/docs/roles-in-rocketchat' target='_blank'>Roles in Rocket.Chat</a> document.
         
         Permission required:  `set-leader` 
         
@@ -9828,7 +9831,7 @@ paths:
         - Groups
       summary: Add Group Moderator
       description: |-
-        Assign the `moderator` role to a user in a group.
+        Assign the `moderator` role to a user in a private channel. Learn more about roles from the <a href='https://docs.rocket.chat/docs/roles-in-rocketchat' target='_blank'>Roles in Rocket.Chat</a> document.
         
         Permission required: `set-moderator`
         
@@ -9871,7 +9874,8 @@ paths:
         - Groups
       summary: Add Group Owner
       description: |-
-        Assign `owner` role for a user in the current group.
+        Assign `owner` role for a user in the current private channel. Learn more about roles from the <a href='https://docs.rocket.chat/docs/roles-in-rocketchat' target='_blank'>Roles in Rocket.Chat</a> document.
+        
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
@@ -9909,7 +9913,7 @@ paths:
         - Groups
       summary: Archive a Group
       description: |-
-        Archive a group you belong to.
+        Archive a private channel. You need the `archive-room` permission.
         
         ### Changelog
         | Version | Description |
@@ -9920,7 +9924,6 @@ paths:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
       requestBody:
-        description: ''
         content:
           application/json:
             schema:
@@ -9929,10 +9932,41 @@ paths:
                 roomId:
                   type: string
                   example: ByehQjC44FwMeiLbX
-                  description: The group ID that you want to archive.
+                  description: |- 
+                    The group ID that you want to archive. You can find the IDs by using any of the following endpoints:
+                    * <a href='https://developer.rocket.chat/apidocs/get-list-of-user-groups' target='_blank'>Get List of User Groups</a>: This endpoint returns all private channels in the workspace, if you have the required permissions to view them.
+                    * <a href='https://developer.rocket.chat/apidocs/get-groups' target='_blank'>Get Groups</a>: This endpoint returns the private channels that you are a member of.
+              required:
+                - roomId
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+              examples:
+                No permission:
+                  value:
+                    success: false
+                    error: 'Not authorized [error-not-authorized]'
+                    errorType: error-not-authorized
+                    details:
+                      method: archiveRoom
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.close:
