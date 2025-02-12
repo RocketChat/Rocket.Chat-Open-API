@@ -10026,7 +10026,7 @@ paths:
         - Groups
       summary: Get Group Counters
       description: |-
-        Get group counters for the authenticated user. 
+        Get the private channel information for the authenticated user. 
         
         Permission required: `view-room-administration`
         
@@ -10042,7 +10042,7 @@ paths:
         - $ref: '#/components/parameters/Optional-RoomName'
         - name: userId
           in: query
-          description: Counters for provided user ID (need to have a view-room-administration right for calling user).
+          description: Counters for provided user ID (you need to have the `view-room-administration` permission for calling user). This parameter is optional
           schema:
             type: string
       responses:
@@ -10050,14 +10050,14 @@ paths:
           description: |-
             OK
             
-            **Note:**
-            - joined - boolean flag that shows that user is joined the room or not
-            - members - count of current room members
-            - unreads - count of unread messages for specified user (calling user or provided userId)
-            - unreadsFrom - start date-time of unread interval for specified user
-            - msgs - count of messages in the room
-            - latest - end date-time of unread interval for specified user (or date-time of last posted message)
-            - userMentions - count of user mentions in messages"
+            **Note** The response returns the following information:
+            - joined - Boolean flag that shows the particular user has joined the room or not.
+            - members - Count of current room members.
+            - unreads - Count of unread messages for specified user (calling user or for the provided `userId`).
+            - unreadsFrom - Start date-time of unread interval for specified user.
+            - msgs - Count of messages in the room.
+            - latest - End date-time of unread interval for specified user (or date-time of last posted message).
+            - userMentions - Count of user mentions in messages.
           content:
             application/json:
               schema:
@@ -10090,6 +10090,27 @@ paths:
                     latest: '2018-02-23T17:20:17.345Z'
                     userMentions: 0
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The required "roomId" or "roomName" param provided does not match any group [error-room-not-found]'
+                    errorType: error-room-not-found
+        '401':
+          $ref: '#/components/responses/authorizationError'
 
   /api/v1/groups.create:
     post:
@@ -10097,7 +10118,11 @@ paths:
         - Groups
       summary: Create Group
       description: |-
-        Creates a new group/channel, optionally including specified users. The group creator is always included.
+        Create a new private channel, optionally including specified users. Refer to the <a href='https://docs.rocket.chat/docs/channels' target='_blank'>Channels</a> documents for information on the available room options.
+        
+        The following permissions are required:
+        * `create-p`: This permission is required to create a private channel.
+        * `create-team-group`: This permission is required if you want to create a private channel from an existing team.
         
         ### Changelog
         | Version | Description               |
@@ -10114,20 +10139,20 @@ paths:
             schema:
               type: object
               properties:
+                name:
+                  type: string
+                  description: The name of the new private group.
                 readOnly:
                   type: boolean
-                  description: Set if the group is read only or not. The default value is false.
+                  description: Set if the private channel is read-only or not. The default value is false.
                 members:
                   type: array
-                  description: The users to add to the group when it is created.
+                  description: The users to add to the private channel when it is created.
                   items:
                     type: string
                 excludeSelf:
                   type: boolean
-                  description: If set to true the user calling the endpoint is not automatically added as a member of the group. The default value is false.
-                name:
-                  type: string
-                  description: The name of the new private group.
+                  description: If set to true, the user calling the endpoint is not added as a member of the private channel. The default value is false.
                 customFields:
                   type: object
                   description: 'If you have defined custom fields for your workspace, you can provide them in this object parameter.'
@@ -10137,9 +10162,9 @@ paths:
                     Enter the following details for the object:
                     - `broadcast`: Whether the group should be a broadcast group
                     - `encrypted`: Whether the group should be encrypted. 
-                    - `teamId`: Enter the team ID for which you want to create a group.
+                    - `teamId`: Enter the team ID for which you want to create a group. You will get an error if the team does not exist.
                     
-                    For more information, see <a href="https://docs.rocket.chat/use-rocket.chat/user-guides/rooms/channels#channel-privacy-and-encryption" target="_blank">Channels</a>.
+                    For more information, see <a href="https://docs.rocket.chat/docs/channels" target="_blank">Channels</a>.
               required:
                 - name
             examples:
