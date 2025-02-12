@@ -9975,7 +9975,7 @@ paths:
         - Groups
       summary: Close Group
       description: |-
-        Removes the group/channel from the user's list of groups, only if you're part of the group.
+        Hides the private channel from the list of channels in the workspace sidebar, only if you're part of the group. You can still search for hidden channels using the workspace **Directory**.
         
         ### Changelog
         | Version | Description |
@@ -9999,6 +9999,25 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The required "roomId" or "roomName" param provided does not match any group [error-room-not-found]'
+                    errorType: error-room-not-found
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.counters:
