@@ -9995,7 +9995,10 @@ paths:
                 roomId:
                   type: string
                   example: ByehQjC44FwMeiLbX
-                  description: The group ID that you want to close.
+                  description: |- 
+                    The group ID that you want to close. You can find the IDs by using any of the following endpoints:
+                    * <a href='https://developer.rocket.chat/apidocs/get-list-of-user-groups' target='_blank'>Get List of User Groups</a>: This endpoint returns all private channels in the workspace, if you have the required permissions to view them.
+                    * <a href='https://developer.rocket.chat/apidocs/get-groups' target='_blank'>Get Groups</a>: This endpoint returns the private channels that you are a member of.
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
@@ -10241,7 +10244,11 @@ paths:
         - Groups
       summary: Delete Group
       description: |-
-        Delete a private group.
+        Delete a private room.
+        
+        The following permissions are required: 
+        * `delete-p`: To delete a private channel.
+        * `delete-team-group`: To delete a private channel that is part of a team.
         
         ### Changelog
         | Version | Description              |
@@ -10253,7 +10260,6 @@ paths:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
       requestBody:
-        description: ''
         content:
           application/json:
             schema:
@@ -10262,14 +10268,43 @@ paths:
                 roomId:
                   type: string
                   example: ByehQjC44FwMeiLbX
-                  description: Enter the room ID. This parameter is required if no `roomName` is provided.
+                  description: |- 
+                    Enter the room ID. This parameter is required if no `roomName` is provided. You can find the IDs by using any of the following endpoints:
+                    * <a href='https://developer.rocket.chat/apidocs/get-list-of-user-groups' target='_blank'>Get List of User Groups</a>: This endpoint returns all private channels in the workspace, if you have the required permissions to view them.
+                    * <a href='https://developer.rocket.chat/apidocs/get-groups' target='_blank'>Get Groups</a>: This endpoint returns the private channels that you are a member of.
                 roomName:
                   type: string
-                  example: general
+                  example: private-abc
                   description: Enter the room name. This parameter is required if no `roomId` is provided.
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+              examples:
+                No permission:
+                  value:
+                    success: false
+                    error: 'Not allowed [error-not-allowed]'
+                    errorType: error-not-allowed
+                    details:
+                      method: eraseRoom
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.history:
@@ -10278,7 +10313,7 @@ paths:
         - Groups
       summary: Get Group History
       description: |-
-        Retrieves the messages from a group/channel you belong to.
+        Retrieves the messages from a private channel you belong to.
         
         ### Changelog
         | Version | Description             |
@@ -12761,7 +12796,7 @@ components:
     Optional-RoomId:
       name: roomId
       in: query
-      description: The room id. It is required if the `roomName` is not provided.
+      description: The room ID. It is required if the `roomName` is not provided.
       schema:
         type: string
       example: dlpfuijw7ej
