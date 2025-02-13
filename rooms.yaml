@@ -10438,7 +10438,7 @@ paths:
         - Groups
       summary: Get Group Information
       description: |-
-        Retrieves the information about a private group you belong to.
+        Retrieves the information about a private channel you belong to.
         
         ### Changelog
         | Version | Description |
@@ -10520,6 +10520,8 @@ paths:
                       sysMes: true
                       _updatedAt: '2020-05-21T13:16:24.772Z'
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
 
   /api/v1/groups.invite:
     post:
@@ -10527,7 +10529,9 @@ paths:
         - Groups
       summary: Invite Users to Group
       description: |-
-        Invite one user or bulk users to the group/channel.
+        Invite one user or bulk users to a private channel. Any of the following permissions are required:
+        * `add-user-to-joined-room`: This permission is required if you want to add users to the channel that you have joined.
+        * `add-user-to-any-p-room`: This permission is required to add users to any private channel.
         
         ### Changelog
         | Version | Description |
@@ -10545,7 +10549,10 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The group ID
+                  description: |- 
+                    The group ID. You can find the IDs by using any of the following endpoints:
+                    * <a href='https://developer.rocket.chat/apidocs/get-list-of-user-groups' target='_blank'>Get List of User Groups</a>: This endpoint returns all private channels in the workspace, if you have the required permissions to view them.
+                    * <a href='https://developer.rocket.chat/apidocs/get-groups' target='_blank'>Get Groups</a>: This endpoint returns the private channels that you are a member of.
                 userId:
                   type: string
                   description: The ID of the user to be invited. You can also use the parameter `userIds` as an array to invite more than one user. For example, `["nSYqWzZ4GsKTX4dyK", "SYqWzZ4Gsasdfgh"]`
@@ -10639,6 +10646,8 @@ paths:
                     errorType: error-not-allowed
                     details:
                       method: addUsersToRoom
+        '401':
+          $ref: '#/components/responses/authorizationError'
 
   /api/v1/groups.kick:
     post:
@@ -10646,7 +10655,7 @@ paths:
         - Groups
       summary: Remove User from Group
       description: |-
-        Remove a user from the group/channel.
+        Remove a user from the private group/channel. Permission required: `kick-user-from-any-p-room`
         
         ### Changelog
         | Version | Description |
@@ -10734,6 +10743,32 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+              examples:
+                No permission:
+                  value:
+                    success: false
+                    error: 'Not allowed [error-not-allowed]'
+                    errorType: error-not-allowed
+                    details:
+                      method: removeUserFromRoom
   /api/v1/groups.leave:
     post:
       tags:
@@ -10826,7 +10861,7 @@ paths:
         - Groups
       summary: Get List of User Groups
       description: |-
-        Lists all of the groups/channels of any users.
+        Lists all the private groups/channels of the workspace.
         
         Permission required: `view-room-administration`
         
@@ -10925,7 +10960,7 @@ paths:
         - Groups
       summary: Get Groups
       description: |-
-        Lists all of the groups/channels the user has joined.
+        Lists all the private groups/channels the user has joined.
         
         ### Changelog
         | Version | Description                                  |
@@ -11104,129 +11139,14 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
-  /groups.membersByHighestRole:
-    get:
-      tags:
-        - Groups
-      summary: Group Members By Highest Role
-      description: |-
-        Lists the participants of a group/channel sorted by their room-scoped roles.
-        
-        Room members are sorted by their most important role in the room. The following hierarchy is used: **Owner > Moderator > Other roles**. The information related to each user's highest role is returned in the `highestRole` object within each of them.
-        
-        The `highestRole` object contains a numeric `level` field, which ranges from 0 to 2
-        * Level 0 stands for room owners.
-        * Level 1 is assigned to moderators (who are not room owners).
-        * Level 2 is assigned to all other team members regardless of their room-scoped roles.
-        
-        The `highestRole` object also contains a `role` field, which has three possible values: `owner`, `moderator` or `member`, which are assigned to levels 0, 1, and 2, respectively.
-        
-        Requires `view-broadcast-member-list` if the room is a broadcast.
-        
-        ### Changelog
-        | Version | Description |
-        | ------- | ----------- |
-        | 6.5.0   | Added       |
-      operationId: get-groups.membersByHighestRole
-      parameters:
-        - $ref: '#/components/parameters/Auth-Token'
-        - $ref: '#/components/parameters/UserId'
-        - $ref: '#/components/parameters/offset'
-        - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/Optional-RoomId'
-        - $ref: '#/components/parameters/Optional-RoomName'
-        - name: status
-          in: query
-          description: The user's status (search filter).
-          schema:
-            type: array
-            items:
-              type: string
-          example: '["online", "away"]'
-        - name: filter
-          in: query
-          description: Extra search filters to be applied to the fields defined in the `Accounts_SearchFields` setting.
-          schema:
-            type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  members:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        _id:
-                          type: string
-                        status:
-                          type: string
-                        _updatedAt:
-                          type: string
-                        name:
-                          type: string
-                        statusConnection:
-                          type: string
-                        username:
-                          type: string
-                        avatarETag:
-                          type: string
-                        highestRole:
-                          type: object
-                          properties:
-                            role:
-                              type: string
-                            level:
-                              type: integer
-                  count:
-                    type: integer
-                  offset:
-                    type: integer
-                  total:
-                    type: integer
-                  success:
-                    type: boolean
-              examples:
-                Succcess:
-                  value:
-                    members:
-                      - _id: JmR3T4TFfppJCfmq9
-                        status: offline
-                        _updatedAt: '2023-07-20T20:43:05.895Z'
-                        name: Matheus Barbosa Silva
-                        statusConnection: offline
-                        username: matheus.barbosa
-                        avatarETag: fdJn5SqCwg4ZwbywD
-                        highestRole:
-                          role: owner
-                          level: 0
-                      - _id: edjvbnb7pGC3MZNSP
-                        status: offline
-                        _updatedAt: '2023-07-17T21:42:31.845Z'
-                        username: john
-                        name: John
-                        statusConnection: offline
-                        highestRole:
-                          role: member
-                          level: 2
-                    count: 2
-                    offset: 0
-                    total: 2
-                    success: true
-        '401':
-          $ref: '#/components/responses/authorizationError'
+  
   /api/v1/groups.messages:
     get:
       tags:
         - Groups
       summary: Get Group Messages
       description: |-
-        Lists all the messages in a groups. 
+        Lists all the messages in a private channel. 
         
         ### Changelog
         | Version | Description |
@@ -11372,7 +11292,7 @@ paths:
         - Groups
       summary: Get Group Moderators
       description: |-
-        Lists all group moderators.
+        Lists the moderators of a private channel.
         
         ### Changelog
         | Version | Description |
@@ -11414,7 +11334,7 @@ paths:
         - Groups
       summary: Add Group to List
       description: |-
-        Adds the group/channel back to the user's list of groups.
+        Use this endpoint to add the private group/channel back to the list of rooms in the workspace sidebar, if you have used the <a href='https://developer.rocket.chat/apidocs/close-group' target='_blank'>groups.close</a> endpoint to remove the channel from the sidebar.
         
         ### Changelog
         | Version | Description |
@@ -11445,7 +11365,7 @@ paths:
         - Groups
       summary: Remove Group Leader
       description: |-
-        Remove the `leader` role from a user in a group. 
+        Remove the `leader` role from a user in a private channel. 
 
         Permission required: `set-leader`
 
@@ -11509,7 +11429,7 @@ paths:
         - Groups
       summary: Remove Group Moderator
       description: |-
-        Remove the `moderator` role from a user in a group. 
+        Remove the `moderator` role from a user in a private channel. 
 
         Permission required: `set-moderator`
 
@@ -11553,7 +11473,7 @@ paths:
         - Groups
       summary: Remove Group Owner
       description: |
-        Remove the `owner` role from a user in a group. 
+        Remove the `owner` role from a user in a private channel. 
 
         Permission required: `set-owner` 
 
@@ -11577,7 +11497,7 @@ paths:
                   description: The room id
                 userId:
                   type: string
-                  description: 'The id of the user to be removed as owner '
+                  description: 'The ID of the user to be removed as owner '
               required:
                 - roomId
                 - userId
@@ -11597,7 +11517,7 @@ paths:
         - Groups
       summary: Rename Group
       description: |-
-        Update the name of the private group.
+        Rename a private channel. Permission required: `edit-room`
         
         ### Changelog
         | Version | Description |
