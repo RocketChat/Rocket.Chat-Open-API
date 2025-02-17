@@ -10775,7 +10775,7 @@ paths:
         - Groups
       summary: Leave Group
       description: |-
-        Leave a group. The group owner must set another owner before leaving the group.
+        Leave a private channel. The group owner must set another owner before leaving the group. Permission required: `leave-p`
         
         ### Changelog
         | Version | Description |
@@ -11387,7 +11387,10 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The group ID.
+                  description: |-
+                    The private group ID. You can find the IDs by using any of the following endpoints:
+                    * <a href='https://developer.rocket.chat/apidocs/get-list-of-user-groups' target='_blank'>Get List of User Groups</a>: This endpoint returns all private channels in the workspace, if you have the required permissions to view them.
+                    * <a href='https://developer.rocket.chat/apidocs/get-groups' target='_blank'>Get Groups</a>: This endpoint returns the private channels that you are a member of.
                 userId:
                   type: string
                   description: The user ID.
@@ -11450,10 +11453,13 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The group id
+                  description: |-
+                    The private group ID. You can find the IDs by using any of the following endpoints:
+                    * <a href='https://developer.rocket.chat/apidocs/get-list-of-user-groups' target='_blank'>Get List of User Groups</a>: This endpoint returns all private channels in the workspace, if you have the required permissions to view them.
+                    * <a href='https://developer.rocket.chat/apidocs/get-groups' target='_blank'>Get Groups</a>: This endpoint returns the private channels that you are a member of.
                 userId:
                   type: string
-                  description: The id of the user to be romoved from moderator
+                  description: The ID of the user to be removed from moderator role.
               required:
                 - roomId
                 - userId
@@ -11494,7 +11500,10 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The room id
+                  description: |-
+                    The private group ID. You can find the IDs by using any of the following endpoints:
+                    * <a href='https://developer.rocket.chat/apidocs/get-list-of-user-groups' target='_blank'>Get List of User Groups</a>: This endpoint returns all private channels in the workspace, if you have the required permissions to view them.
+                    * <a href='https://developer.rocket.chat/apidocs/get-groups' target='_blank'>Get Groups</a>: This endpoint returns the private channels that you are a member of.
                 userId:
                   type: string
                   description: 'The ID of the user to be removed as owner '
@@ -11535,7 +11544,10 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The group's ID
+                  description: |-
+                    The private group's ID. You can find the IDs by using any of the following endpoints:
+                    * <a href='https://developer.rocket.chat/apidocs/get-list-of-user-groups' target='_blank'>Get List of User Groups</a>: This endpoint returns all private channels in the workspace, if you have the required permissions to view them.
+                    * <a href='https://developer.rocket.chat/apidocs/get-groups' target='_blank'>Get Groups</a>: This endpoint returns the private channels that you are a member of.
                 name:
                   type: string
                   description: The new name of the private group. It can not be the same as another or the existing name.
@@ -11612,7 +11624,8 @@ paths:
         - Groups
       summary: Set Group Announcement
       description: |-
-        Set the group announcement.
+        Set the private channel announcement.
+        Permission required: `edit-room`
         
         ### Changelog
         | Version | Description |
@@ -11630,10 +11643,13 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The group id
+                  description: |-
+                    The private group ID. You can find the IDs by using any of the following endpoints:
+                    * <a href='https://developer.rocket.chat/apidocs/get-list-of-user-groups' target='_blank'>Get List of User Groups</a>: This endpoint returns all private channels in the workspace, if you have the required permissions to view them.
+                    * <a href='https://developer.rocket.chat/apidocs/get-groups' target='_blank'>Get Groups</a>: This endpoint returns the private channels that you are a member of.
                 announcement:
                   type: string
-                  description: The announcement to set for the group.
+                  description: The announcement to set for the private group.
               required:
                 - roomId
                 - announcement
@@ -11665,9 +11681,10 @@ paths:
     post:
       tags:
         - Groups
-      summary: Sets Group Custom Fields
+      summary: Set Group Custom Fields
       description: |-
-        Sets the custom fields for the private group.
+        Sets the <a href='https://docs.rocket.chat/docs/custom-fields' target='_blank'>custom fields</a> for the private channel.
+        Permission required: `edit-room`
         
         ### Changelog
         | Version | Description |
@@ -11685,7 +11702,10 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The private group's ID. Alternatively, use the `roomName` parameter and provide the room's name as the value.
+                  description: |-
+                    The private group's ID. Alternatively, use the `roomName` parameter and provide the room's name as the value. You can find the IDs by using any of the following endpoints:
+                    * <a href='https://developer.rocket.chat/apidocs/get-list-of-user-groups' target='_blank'>Get List of User Groups</a>: This endpoint returns all private channels in the workspace, if you have the required permissions to view them.
+                    * <a href='https://developer.rocket.chat/apidocs/get-groups' target='_blank'>Get Groups</a>: This endpoint returns the private channels that you are a member of.
                 customFields:
                   type: object
                   description: The custom fields to set for the private group.
@@ -11766,6 +11786,8 @@ paths:
                       username: rocketchat.internal.admin.test
                     success: true
                     developerWarning: '[WARNING]: The "usernames" field has been removed for performance reasons. Please use the "*.members" endpoint to get a list of members/users in a room.'
+        '401':
+          $ref: '#/components/responses/authorizationError'
 
   /api/v1/groups.setDescription:
     post:
@@ -11773,7 +11795,7 @@ paths:
         - Groups
       summary: Set Group Description
       description: |-
-        Set the description for the private group.
+        Set the description for the private channel. Permission required: `edit-room`
         
         ### Changelog
         | Version | Description |
@@ -11791,7 +11813,10 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The group id
+                  description: |-
+                    The private group ID. You can find the IDs by using any of the following endpoints:
+                    * <a href='https://developer.rocket.chat/apidocs/get-list-of-user-groups' target='_blank'>Get List of User Groups</a>: This endpoint returns all private channels in the workspace, if you have the required permissions to view them.
+                    * <a href='https://developer.rocket.chat/apidocs/get-groups' target='_blank'>Get Groups</a>: This endpoint returns the private channels that you are a member of.
                 description:
                   type: string
                   description: The group description
@@ -11828,7 +11853,7 @@ paths:
         - Groups
       summary: Set Group Purpose
       description: |-
-        Sets the description for the group/channel (the same as groups.setDescription, obsolete).
+        (Obsolete) Sets the description for the group/channel (the same as `groups.setDescription`).
         
         ### Changelog
         | Version | Description |
@@ -11846,7 +11871,7 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The group id
+                  description: The private group ID.
                 purpose:
                   type: string
                   description: The group purpose
@@ -11882,7 +11907,7 @@ paths:
         - Groups
       summary: Set Group as Read Only
       description: |-
-        Set group as read-only or not.
+        Set private channel as <a href='https://docs.rocket.chat/docs/channels#read-only-channels' target='_blank'>read-only</a>or not. Permission required: `edit-room`
         
         ### Changelog
         | Version | Description |
@@ -11900,7 +11925,10 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The group id
+                  description: |-
+                    The private group ID. You can find the IDs by using any of the following endpoints:
+                    * <a href='https://developer.rocket.chat/apidocs/get-list-of-user-groups' target='_blank'>Get List of User Groups</a>: This endpoint returns all private channels in the workspace, if you have the required permissions to view them.
+                    * <a href='https://developer.rocket.chat/apidocs/get-groups' target='_blank'>Get Groups</a>: This endpoint returns the private channels that you are a member of.
                 readOnly:
                   type: boolean
                   description: Boolean to represent the group read-only status
@@ -11987,7 +12015,7 @@ paths:
         - Groups
       summary: Set Group Topic
       description: |-
-        Sets the topic for the group/channel.
+        Sets the topic for the private channel. Permission required: `edit-room`
         
         ### Changelog
         | Version | Description |
@@ -12005,7 +12033,10 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The group id
+                  description: |-
+                    The group ID. You can find the IDs by using any of the following endpoints:
+                    * <a href='https://developer.rocket.chat/apidocs/get-list-of-user-groups' target='_blank'>Get List of User Groups</a>: This endpoint returns all private channels in the workspace, if you have the required permissions to view them.
+                    * <a href='https://developer.rocket.chat/apidocs/get-groups' target='_blank'>Get Groups</a>: This endpoint returns the private channels that you are a member of.
                 topic:
                   type: string
                   description: The group topic
@@ -12042,7 +12073,11 @@ paths:
         - Groups
       summary: Set Group Type
       description: |-
-        Set the group type. The group type can be either `c` (public) or `p` (private).
+        Set the room type. The group type can be either `c` (public) or `p` (private). Any of the following permissions are required:
+        * `create-c`: This permission is required if you are changing a private channel to a public channel.
+        * `create-p`: This permission is required if you are changing a public channel to a private room.
+        * `create-team-channel`: This permission is required if you are changing a team's private channel to a public channel.
+        * `create-team-group`: This permission is required if you are changing a team's public channel to a private room.
         
         ### Changelog
         | Version | Description |
@@ -12060,7 +12095,10 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The group id
+                  description: |-
+                    The group ID. You can find the IDs by using any of the following endpoints:
+                    * <a href='https://developer.rocket.chat/apidocs/get-list-of-user-groups' target='_blank'>Get List of User Groups</a>: This endpoint returns all private channels in the workspace, if you have the required permissions to view them.
+                    * <a href='https://developer.rocket.chat/apidocs/get-groups' target='_blank'>Get Groups</a>: This endpoint returns the private channels that you are a member of.
                 type:
                   type: string
                   description: The group type
@@ -12147,7 +12185,7 @@ paths:
         - Groups
       summary: Unarchive Group
       description: |-
-        Unarchive a group.
+        Unarchive a private channel. Permission required: `unarchive-room`
         
         ### Changelog
         | Version | Description |
@@ -12178,7 +12216,7 @@ paths:
         - Groups
       summary: Get Group Files
       description: |-
-        Get all files in a group.  
+        Get all media files shared in a private channel.  
         
         ### Changelog
         | Version | Description |
@@ -12300,7 +12338,7 @@ paths:
         - Groups
       summary: Set Group as Encrypted
       description: |-
-        Set group encryption.
+        Set a private channel as encrypted. Learn about <a href='https://docs.rocket.chat/v1/docs/end-to-end-encryption-user-guide' target='_blank'>end-to-end encryption here</a>. Permission required: `edit-room`
         
         ### Changelog
         | Version | Description |
@@ -12433,7 +12471,7 @@ paths:
         - Groups
       summary: Convert a Group to Team
       description: |-
-        Convert a group to a team.
+        Convert a private channel to a team. Permissions required: `create-team`, `edit-room`
         
         ### Changelog
         | Version | Description |
@@ -12541,7 +12579,7 @@ paths:
         - Groups
       summary: List Group Roles
       description: |-
-        List all the roles of users in the group.
+        List all the roles of users in the private channel.
         
         ### Changelog
         | Version | Description |
@@ -12551,6 +12589,13 @@ paths:
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
+        - schema:
+            type: string
+            example: 67ade8ef57422a89b02e2ce3
+          in: query
+          name: roomId
+          description: 'Enter the private channel ID. Alternatively, you can use the `roomName` parameter and enter the private channel''s name.'
+          required: true
       responses:
         '200':
           description: OK
@@ -12596,6 +12641,8 @@ paths:
                           - moderator
                         _id: ehPuGyZBedznJsQHp
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
 
   /api/v1/directory:
     get:
