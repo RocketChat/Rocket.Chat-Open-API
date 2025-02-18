@@ -18,7 +18,7 @@ paths:
         - Channels
       summary: Create Channel
       description: |-
-        Create a public channel. Optionally, include specified users. The channel creator is included as a member by default.
+        Create a public channel. Optionally, include specified users. The channel creator is included as a member by default. Permission required: `create-c`.
         Channel naming has restraints following the regex filter `[0-9a-zA-Z-_.]+` by default. See <a href="https://docs.rocket.chat/docs/general#utf8" target="_blank">UTF8 Settings</a> to modify regex filter for channel names. Channel names must not allow for any whitespaces.
 
         ### Changelog
@@ -53,14 +53,15 @@ paths:
                   description: 'If set to true, the user calling the endpoint is not automatically added as a member of the channel. The default `value` is false.'
                 customFields:
                   type: object
-                  description: 'If you have defined custom fields for your workspace, you can provide them in this object parameter.'
+                  description: |-
+                    If you have defined custom fields for your workspace, you can provide them in this object parameter. For details, see the <a href='https://docs.rocket.chat/docs/custom-fields' target='_blank'>Custom Fields</a> document.
                 extraData:
                   type: object
                   description: |-
                     Enter the following details for the object:
                     - `broadcast`: Whether the channel should be a broadcast room.
                     - `encrypted`: Whether the channel should be encrypted.
-                    - `teamId`: Enter an existing team ID for this channel.
+                    - `teamId`: Enter an existing team ID for this channel. You need the `create-team-channel` permission to add a team to a channel.
                     
                     For more information, see <a href='https://docs.rocket.chat/use-rocket.chat/user-guides/rooms/channels#channel-privacy-and-encryption' target='_blank'>Channels</a>
               required:
@@ -148,7 +149,8 @@ paths:
         - Channels
       summary: Add all Users to a Channel
       description: |-
-        Adds all users in the workspace to a channel.
+        Adds all users in the workspace to a public room. Permission required: `add-all-to-room`.
+        The maximum number of users you can add at once depends on your workspace's REST API settings. To access this setting, go to **Administration** > **Settings** > **General** > **REST API** > **User Limit for Adding All Users to Channel**.
         
         ### Changelog
         | Version | Description               |
@@ -167,7 +169,7 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The channel's id.
+                  description: The channel's ID.
                 activeUsersOnly:
                   type: boolean
                   description: Add only active users. It is `false` by default.
@@ -304,7 +306,7 @@ paths:
         - Channels
       summary: Add Channel Leader
       description: |-
-        Assign the role of `leader` to a user in the current channel. 
+        Assign the role of `leader` to a channel member. See <a href='https://docs.rocket.chat/docs/room-roles' target='_blank'>Room Roles</a> for details about the roles.
         
         Permission required: `set-leader`
         ### Changelog
@@ -323,10 +325,10 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The channel's id
+                  description: The channel ID.
                 userId:
                   type: string
-                  description: The userId of the user to be made leader
+                  description: The ID of the user to be made leader.
               required:
                 - roomId
                 - userId
@@ -365,7 +367,7 @@ paths:
         - Channels
       summary: Add Channel Moderator
       description: |-
-        Assign the `moderator` role to a user in a channel. 
+        Assign the `moderator` role to a channel member. See <a href='https://docs.rocket.chat/docs/room-roles' target='_blank'>Room Roles</a> for details about the roles.
         
         Permission required: `set-moderator`
         
@@ -385,7 +387,7 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The channel's id
+                  description: The channel ID.
                 userId:
                   type: string
                   description: The user ID that you want to set as the moderator.
@@ -427,7 +429,7 @@ paths:
         - Channels
       summary: Add Channel Owner
       description: |-
-        Assign the `owner` role to a user in a channel. 
+        Assign the `owner` role to a channel member. See <a href='https://docs.rocket.chat/docs/room-roles' target='_blank'>Room Roles</a> for details about the roles.
         
         Permission required:  `set-owner`
         ### Changelog
@@ -446,7 +448,7 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The channel's id
+                  description: The channel ID.
                 userId:
                   type: string
                   description: The user ID that you want to set as the channel owner.
@@ -760,7 +762,7 @@ paths:
         - Channels
       summary: Close Channel
       description: |-
-        Remove a channel from the authenticated user's list of channels.
+        Remove a channel from the user's list of channels in the workspace sidebar. You can access it again from the **Directory**.
         ### Changelog
         | Version | Description               |
         | ------- | ------------------------- |
@@ -875,13 +877,17 @@ paths:
                     latest: '2023-09-25T22:50:07.979Z'
                     userMentions: 0
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/channels.delete:
     post:
       tags:
         - Channels
       summary: Delete Channel
       description: |-
-        Delete a channel.
+        Delete a channel. Any of the permssions are required:
+        * `delete-c`: Delete a public channel.
+        * `delete-team-channel`: Delete a channel part of a team. You also need the `delete-c` permission.
         
         ### Changelog
         
@@ -910,13 +916,15 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/channels.files:
     get:
       tags:
         - Channels
       summary: Get Channel Files
       description: |-
-        Retrieves all the files from a channel.
+        Retrieves all the media files from a channel.
         
         ### Changelog
         | Version | Description               |
@@ -1065,13 +1073,14 @@ paths:
                     offset: 0
                     total: 2
                     success: true
+        
   /api/v1/channels.history:
     get:
       tags:
         - Channels
       summary: Get Channel History
       description: |-
-        Retrieves the history of a channel.
+        Retrieves the history of a channel. You must be a member of the channel or have the `preview-c-room` permission.
         
         ### Changelog
         | Version | Description               |
@@ -1236,13 +1245,16 @@ paths:
                         groupable: false
                         _updatedAt: '2016-12-06T17:57:38.635Z'
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/channels.info:
     get:
       tags:
         - Channels
       summary: Get Channel Information
       description: |-
-        Retrieves the information about the channel. This does not include archived channels.
+        Retrieves the information about the channel. This does not include archived channels. You must be a member of the channel.
+        
         ### Changelog
         | Version | Description               |
         | ------- | ------------------------- |
@@ -1377,6 +1389,8 @@ paths:
                       sysMes: true
                       _updatedAt: '2020-05-21T13:14:07.096Z'
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/channels.invite:
     post:
       tags:
@@ -1569,13 +1583,15 @@ paths:
                       _updatedAt: '2016-12-09T12:50:51.575Z'
                       lm: '2016-12-09T12:50:51.555Z'
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/channels.join:
     post:
       tags:
         - Channels
       summary: Join a Channel
       description: |-
-        Join a channel.
+        Join a public channel.
         
         ### Changelog
         | Version | Description               |
@@ -1593,10 +1609,12 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The channel's id.
+                  description: The channel ID.
                 joinCode:
                   type: string
-                  description: The join code of the room. The join code isn't needed if the user has the `join-without-join-code` permission.
+                  description: |-
+                    The join code of the room. Channels can be password-protected. In that case, users must enter the password for access. See <a href='https://docs.rocket.chat/docs/channels#channel-information' target='_blank'>Channel information</a> for details.
+                    The join code isn't needed if the user has the `join-without-join-code` permission.
               required:
                 - roomId
             examples:
@@ -1729,6 +1747,8 @@ paths:
                       _updatedAt: '2019-01-16T12:06:30.426Z'
                       joinCodeRequired: true
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
 
   /api/v1/channels.kick:
     post:
@@ -1737,6 +1757,10 @@ paths:
       summary: Remove User from Channel
       description: |-
         Remove a user from the channel.
+        
+        Permissions required:
+        * `remove-user`: To remove a user from any room.
+        * `kick-user-from-any-c-room`: To remove a user from a public channel. You also need the `remove-user` permission.
         
         ### Changelog
         | Version | Description               |
@@ -1883,13 +1907,15 @@ paths:
                       sysMes: true
                       _updatedAt: '2016-12-09T15:22:40.656Z'
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/channels.leave:
     post:
       tags:
         - Channels
       summary: Leave  Channel
       description: |-
-        Leave a channel.
+        Leave a public channel. Permission required: `leave-c`
         ### Changelog
         | Version | Description               |
         | ------- | ------------------------- |
@@ -1966,6 +1992,8 @@ paths:
                       sysMes: true
                       _updatedAt: '2016-12-09T15:22:40.656Z'
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/channels.list.joined:
     get:
       tags:
@@ -2145,13 +2173,17 @@ paths:
                         sysMes: true
                         _updatedAt: '2016-12-09T15:22:40.656Z'
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/channels.list:
     get:
       tags:
         - Channels
       summary: Get Channel List
       description: |-
-        Lists all of the channels on the workspace.
+        Lists all the channels on the workspace. Any of the following permissions are required:
+        * `view-c-room`
+        * `view-joined-room`
         
         ### Changelog
         | Version | Description                                  |
@@ -2369,7 +2401,9 @@ paths:
         - Channels
       summary: Get Members of a Channel
       description: |-
-        Lists all channel users. The list of elements a user can use to sort the list is limited. The current sortable element is:`username`
+        Lists all channel users. The list of elements a user can use to sort the list is limited. The current sortable element is: `username`.
+        
+        If the channel is a broadcast channel, you need the `view-broadcast-member-list` permission.
         
         ### Changelog
         | Version | Description                                  |
@@ -2454,123 +2488,17 @@ paths:
                     offset: 0
                     total: 2
                     success: true
-  /api/v1/channels.membersByHighestRole:
-    get:
-      tags:
-        - Channels
-      summary: List Channel Members By Highest Role
-      description: |-
-        Lists all channel users sorted by their room scoped roles. 
-        
-        Room members are sorted by their most important role in the room. The following hierarchy is used: **Owner > Moderator > Other roles**. The information related to each user's highest role is returned in the `highestRole` object within each of them.
-        
-        The `highestRole` object contains a numeric `level` field which ranges from 0 to 2. Level 0 stands for room owners, while level 1 is assigned to moderators (that are not room owners) and level 2 is assigned to all other team members regardless of their room scoped roles.
-        
-        The `highestRole` object also contains a `role` field, which has three possile values: `owner`, `moderator` or `member`, which are assigned to levels 0, 1 and 2, respectively.
-        The list of elements a user can use to sort the list is limited. The current sortable element is:`username`
-        
-        ### Changelog
-        | Version | Description |
-        | ------- | ----------- |
-        |6.5.0  | Added         |
-      operationId: get-channels.membersByHighestRole
-      parameters:
-        - $ref: '#/components/parameters/Auth-Token'
-        - $ref: '#/components/parameters/UserId'
-        - name: status
-          in: query
-          description: The user's status (search filter).
-          schema:
-            type: array
-            items:
-              type: string
-            example: '[''online'', ''away'']'
-        - $ref: '#/components/parameters/Optional-RoomId'
-        - $ref: '#/components/parameters/Optional-RoomName'
-        - name: filter
-          in: query
-          description: Extra search filters to be applied to the fields defined in the `Accounts_SearchFields` setting.
-          schema:
-            type: string
-        - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/offset'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  members:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        _id:
-                          type: string
-                        status:
-                          type: string
-                        _updatedAt:
-                          type: string
-                        name:
-                          type: string
-                        statusConnection:
-                          type: string
-                        username:
-                          type: string
-                        avatarETag:
-                          type: string
-                        highestRole:
-                          type: object
-                          properties:
-                            role:
-                              type: string
-                            level:
-                              type: integer
-                  count:
-                    type: integer
-                  offset:
-                    type: integer
-                  total:
-                    type: integer
-                  success:
-                    type: boolean
-              examples:
-                Example:
-                  value:
-                    members:
-                      - _id: JmR3T4TFfppJCfmq9
-                        status: offline
-                        _updatedAt: '2023-07-20T20:43:05.895Z'
-                        name: Matheus Barbosa Silva
-                        statusConnection: offline
-                        username: matheus.barbosa
-                        avatarETag: fdJn5SqCwg4ZwbywD
-                        highestRole:
-                          role: owner
-                          level: 0
-                      - _id: edjvbnb7pGC3MZNSP
-                        status: offline
-                        _updatedAt: '2023-07-17T21:42:31.845Z'
-                        username: john
-                        name: John
-                        statusConnection: offline
-                        highestRole:
-                          role: member
-                          level: 2
-                    count: 2
-                    offset: 0
-                    total: 35
-                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  
   /api/v1/channels.messages:
     get:
       tags:
         - Channels
       summary: Get Channel Messages
       description: |-
-        Lists all of the channel messages. 
+        Lists all the channel's messages. Permissions required: `view-c-room`, `view-joined-room`
+        
         ### Changelog
         
         | Version | Description                                  |
