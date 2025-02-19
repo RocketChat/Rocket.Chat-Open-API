@@ -2779,7 +2779,7 @@ paths:
         - Channels
       summary: List Online Users in a Channel
       description: |-
-        List all online users in a channel. If the channel's id is not provided, it lists all the online users of all the channels. 
+        List all online users in a particular channel. 
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
@@ -2824,13 +2824,15 @@ paths:
                       - _id: BsxzC22xQ43taWdff
                         username: uniqueusername
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/channels.open:
     post:
       tags:
         - Channels
       summary: Add Channel to User List
       description: |-
-        Add a channel to the authenticated user's list of channels.
+        Add a channel back to the user's list of channels in the workspace's sidebar.
         ### Changelog
         
         | Version | Description |
@@ -2848,7 +2850,7 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The channel's id.
+                  description: The channel's ID.
               required:
                 - roomId
             examples:
@@ -2858,6 +2860,8 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
 
   /api/v1/channels.removeLeader:
     post:
@@ -3044,7 +3048,7 @@ paths:
         - Channels
       summary: Rename a Channel
       description: |-
-        Change the name of a channel.
+        Change the name of a channel. Permission required: `edit-room`
         
         ### Changelog
         | Version | Description |
@@ -3062,7 +3066,7 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The channel's id
+                  description: The channel's ID.
                 name:
                   type: string
                   description: The new name of the channel. It can not be the same as the current name.
@@ -3134,6 +3138,35 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+                      action:
+                        type: string
+              examples:
+                No permission:
+                  value:
+                    success: false
+                    error: 'Editing room is not allowed [error-action-not-allowed]'
+                    errorType: error-action-not-allowed
+                    details:
+                      method: saveRoomSettings
+                      action: Editing_room
   /api/v1/channels.roles:
     get:
       tags:
@@ -3211,7 +3244,7 @@ paths:
         - Channels
       summary: Set Channel Announcement
       description: |-
-        Set an announcement for the channel.
+        Set an announcement for the channel. Permission required: `edit-room`
         ### Changelog
         
         | Version | Description |
@@ -3266,7 +3299,9 @@ paths:
         - Channels
       summary: Set Channel Custom Fields
       description: |-
-        Sets the custom fields for a channel.
+        Sets the custom fields for a channel. Permission required: `edit-room`.
+        
+        See the <a href='https://docs.rocket.chat/docs/custom-fields' target='_blank'>Configure Custom Fields for Users</a> document for configuration information.
         
         ### Changelog
         | Version | Description |
@@ -3460,7 +3495,8 @@ paths:
         - Channels
       summary: Set Default Channel
       description: |-
-        Set whether the channel is a default channel or not.
+        Set whether the channel is a default channel or not. All new users will automatically join this channel. Permission required: `edit-room`
+        
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
@@ -3567,7 +3603,7 @@ paths:
         - Channels
       summary: Set Channel Description
       description: |-
-        Set the description for a channel.
+        Set the description for a channel. Permission required: `edit-room`.
         
         ### Changelog
         | Version | Description |
@@ -3578,7 +3614,6 @@ paths:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
       requestBody:
-        description: ''
         content:
           application/json:
             schema:
@@ -3623,7 +3658,7 @@ paths:
         - Channels
       summary: Set Channel Join Code
       description: |-
-        Set the code required to join the channel. If it is set, users must use the join code to successfully join the channel.
+        Set the code required to join the channel. If it is set, users must use the join code to successfully join the channel. Permission required: `edit-room`
         
         ### Changelog
         | Version | Description |
@@ -3641,7 +3676,7 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The channel's id
+                  description: The channel's ID.
                 joinCode:
                   type: string
                   description: The join code that will be required for any user to join this channel.
@@ -3818,8 +3853,8 @@ paths:
         - Channels
       summary: Set Channel Purpose
       description: |-
-        Set the purpose or description of the channel. 
-        It is the same as Set Channel Description.
+        Set the purpose or description of the channel.
+        It is the same as Set Channel Description. Permission required: `edit-room`
         
         ### Changelog
         | Version | Description |
@@ -3874,7 +3909,7 @@ paths:
         - Channels
       summary: Set Channel ReadOnly
       description: |-
-        Set a channel to be read-only or not.
+        Set a channel to be read-only or not. Permission required: `edit-room`
         
         ### Changelog
         | Version | Description |
@@ -3979,7 +4014,7 @@ paths:
         - Channels
       summary: Set Channel Topic
       description: |-
-        Set the topic for a channel.
+        Set the topic for a channel. Permission required: `edit-room`.
         
         ### Changelog
         | Version | Description |
@@ -3997,7 +4032,7 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The channel's id
+                  description: The channel's ID.
                 topic:
                   type: string
                   description: The channel's topic
@@ -4034,7 +4069,10 @@ paths:
         - Channels
       summary: Set Channel Type
       description: |-
-        Set the channel type. The channel type can be either `c` (public) or `p` (private).
+        Set the channel type. The channel type can be either `c` (public) or `p` (private). The following permissions are required:
+        * `create-c`: To change a private group to a public channel.
+        * `create-p`: To change a public channel to a private room.
+        
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
@@ -4134,6 +4172,8 @@ paths:
                       joinCodeRequired: true
                       muted: [ ]
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
 
   /api/v1/channels.unarchive:
     post:
@@ -4141,7 +4181,7 @@ paths:
         - Channels
       summary: Unarchive a Channel
       description: |-
-        Unarchive a Channel.
+        Unarchive a channel. Permission required: `unarchive-room`
         
         ### Changelog
         | Version | Description |
@@ -4171,9 +4211,10 @@ paths:
     get:
       tags:
         - Channels
-      summary: Get all user mentions in a channel
+      summary: Get User Mentions in a Channel
       description: |-
         Get all the mentions of the authenticated user in a channel.
+        
         ### Changelog
         | Version | Description|
         | ------- | -----------|
@@ -4435,10 +4476,10 @@ paths:
     post:
       tags:
         - Channels
-      summary: Convert channel to team
+      summary: Convert Channel to Team
       description: |-
         Convert a channel to a team.
-        Permission required: `create-team`
+        Permissions required: `create-team`, `edit-room`
       operationId: post-api-v1-channels.convertToTeam
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
