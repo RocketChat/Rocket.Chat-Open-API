@@ -450,7 +450,10 @@ paths:
         - Roles
       summary: Assign Role to User
       description: |-
-        Assign a role to a user. Optionally, you can set this role to a user for a specific room.
+        Assign a role to a user. Optionally, you can set this role to a user for a specific room. <br>
+        **Permissions required**:
+        - `access-permissions`: Required to modify permissions for various roles
+        - `assign-admin-role`: Permission to assign the admin role to other users
         
         ### Changelog
         | Version      | Description |
@@ -666,7 +669,10 @@ paths:
           $ref: '#/components/responses/authorizationError'
       description: |-
         Gets the users that belong to a specific role.
-        Permission required: `access-permissions`
+        **Permissions required**: 
+        - `access-permissions`: Required to modify permissions for various roles
+        - `view-other-user-channels`: Permission to view channels owned by other users. Required if the request includes a `roomId`
+
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -1005,8 +1011,9 @@ paths:
       summary: Create User
       description: |-
         Create a new user in your workspace. This endpoint is typically used by admins to create user accounts in the workspace.
-
-        Permission required: `create-user`
+        <br>Permissions required:
+        - `create-user`: Permission to create users
+        - `edit-other-user-active-status`: Permission to enable or disable other accounts
 
 
         ### Changelog
@@ -1048,9 +1055,7 @@ paths:
                   example: uniqueusername1
                 active:
                   type: boolean
-                  description: >-
-                    Set the users' active status.  If the user is deactivated,
-                    they can not login. By default, the user is active.
+                  description: 'Set the users'' active status.  If the user is deactivated, they can not login. By default, the user is active.'
                   example: true
                   default: true
                 nickname:
@@ -1063,10 +1068,7 @@ paths:
                   example: All about the user
                 joinDefaultChannels:
                   type: boolean
-                  description: >-
-                    Select whether users should automatically join default
-                    channels once they are created. By default, it is set to
-                    `true`.
+                  description: 'Select whether users should automatically join default channels once they are created. By default, it is set to `true`.'
                   example: true
                   default: true
                 statusText:
@@ -1088,37 +1090,29 @@ paths:
                     example: bot
                 requirePasswordChange:
                   type: boolean
-                  description: >-
-                    Should the user be required to change their password when
-                    they login? It is set to `false` by default
+                  description: Should the user be required to change their password when they login? It is set to `false` by default
                   example: false
                   default: false
                 setRandomPassword:
                   type: boolean
-                  description: >-
-                    Should the user be assigned a random password once they are
-                    created? It is set to `false` by defualt.
+                  description: Should the user be assigned a random password once they are created? It is set to `false` by defualt.
                   example: false
                   default: false
                 sendWelcomeEmail:
                   type: boolean
-                  description: >-
-                    Should the user get a welcome email? It is set to `true` by
-                    default.
+                  description: Should the user get a welcome email? It is set to `true` by default.
                   example: false
                   default: false
                 verified:
                   type: boolean
-                  description: >-
-                    Should the user's email address be verified when created? It
-                    is set to `false` by default.
+                  description: Should the user's email address be verified when created? It is set to `false` by default.
                   example: false
                   default: false
                 customFields:
                   type: object
-                  example: {
-                    "clearance": "High",
-                    "team": "Queen" }
+                  example:
+                    clearance: High
+                    team: Queen
                   description: |-
                     A valid JSON object of key-value pairs consisting of additional fields to be
                     added during user registration. By default, the value is `undefined`.
@@ -1321,10 +1315,11 @@ paths:
         - Users
       summary: Update User Details
       description: |-
-        * Use this endpoint to update the details of an existing user.
-        * To update the password for the user, `edit-other-user-password`
-        permission is required.
-        * This endpoint requires 2FA.
+        Use this endpoint to update the details of an existing user. This endpoint requires 2FA.<br>
+        **Permissions required**:
+        - `edit-other-user-password`: Permission to modify other user's passwords
+        - `edit-other-user-info_description`: Permission to change other user's name, username or email address
+        - `edit-other-user-active-status`: Permission to enable or disable other accounts
 
         ### Changelog
         | Version      | Description | 
@@ -1350,8 +1345,7 @@ paths:
                   example: BsNr28znDkG8aeo7W
                 data:
                   type: object
-                  description: |-
-                    The object that includes the user information to update with the following parameters. Note: If you provide an empty object, the user details are returned.
+                  description: 'The object that includes the user information to update with the following parameters. Note: If you provide an empty object, the user details are returned.'
                   properties:
                     name:
                       type: string
@@ -1371,9 +1365,7 @@ paths:
                       description: The username for the user.
                     active:
                       type: boolean
-                      description: >-
-                        Whether the user is active, which determines if they can
-                        login or not.
+                      description: 'Whether the user is active, which determines if they can login or not.'
                       default: true
                     roles:
                       type: array
@@ -1382,9 +1374,7 @@ paths:
                         type: string
                     requirePasswordChange:
                       type: boolean
-                      description: >-
-                        Whether the user should be required to change their
-                        password when they login.
+                      description: Whether the user should be required to change their password when they login.
                       default: false
                     sendWelcomeEmail:
                       type: boolean
@@ -1396,10 +1386,9 @@ paths:
                       default: true
                     customFields:
                       type: object
-                      example: {
-                        "clearance": "High",
-                        "team": "Queen"
-                      }
+                      example:
+                        clearance: High
+                        team: Queen
                       description: |-
                         Any custom fields the user should have on their account.
                         To save custom fields, you must first define the custom fields in the admin panel (Administration > Settings > Accounts > Registration > Custom Fields). For details on how to configure this field, see [Custom Fields](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/accounts/custom-fields).
@@ -1470,8 +1459,7 @@ paths:
                       createdAt: '2016-09-13T14:57:56.037Z'
                       services:
                         password:
-                          bcrypt: >-
-                            $2a$10$5I5nUzqNEs8jKhi7BFS55uFYRf5TE4ErSUH8HymMNAbpMAvsOcl2C
+                          bcrypt: $2a$10$5I5nUzqNEs8jKhi7BFS55uFYRf5TE4ErSUH8HymMNAbpMAvsOcl2C
                       username: uniqueusername
                       emails:
                         - address: newemail@user.tld
@@ -2091,8 +2079,12 @@ paths:
         - Users
       summary: Get Users List
       description: |-
-        Gets all of the users in the system and their information, the result is only limited to what the request sender has access to view. To view direct message rooms of a user, you need the `view-d-room` permission. To view the complete user information (such as account creation date and last login), you need the `view-full-other-user-info permission`.
-        
+        Gets all of the users in the system and their information. The result is limited to what the request sender has permission to view. <br>
+        **Permissons required**:
+        - `view-d-room`: Required to view direct messages
+        - `view-full-other-user-info`: Required to view complete user information (e.g., account creation date, last login)
+        - `view-outside-room`: (Only required if the setting `Apply_permission_view-outside-room` is enabled on under **Settings** > **General** > **Rest API**). Required to view rooms outside of which the request sender is a member of
+
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -2362,8 +2354,8 @@ paths:
           $ref: '#/components/responses/authorizationError'
       description: |-
         Permissions required, if the setting `AllowUserAvatarChange` is enabled: 
-          * `edit-other-user-avatar`
-          * `manage-moderation-actions`
+          * `edit-other-user-avatar`: Permission to change other user's avatar
+          * `manage-moderation-actions`: Permission to manage moderation actions, perform actions on reported users
           
           ### Changelog
           | Version      | Description |
@@ -2550,8 +2542,8 @@ paths:
           $ref: '#/components/responses/authorizationError'
       description: |-
         Any one of the following permissions are required:
-          * `edit-other-user-active-status`
-          * `manage-moderation-actions`
+          * `edit-other-user-avatar`: Permission to change other user's avatar
+          * `manage-moderation-actions`: Permission to manage moderation actions, perform actions on reported users
           
           ### Changelog
           | Version      | Description |
@@ -3572,7 +3564,8 @@ paths:
                     success: false
                     error: The 'email' param is required
       description: |-
-        Send an email to reset your password. Ensure that you have completed the configuration of the email; otherwise, your users will not receive the mail normally. Access this from **Administration** > **Workspace** > **Settings** > **Email**.
+        Send an email to reset your password. Ensure that you have completed the configuration of the email; otherwise, your users will not receive the mail normally. Access this from **Administration** > **Workspace** > **Settings** > **Email**. <br>
+        To use this endpoint, the `PasswordReset` setting must be enabled in **Settings** > **Accounts** > **Registration** > **Password Reset**.
         
         ### Changelog
         | Version      | Description |
@@ -4012,7 +4005,7 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       description: |-
-        This endpoint requires 2FA.
+        This endpoint requires 2FA and the `create-personal-access-tokens` permission.
         
         ### Changelog
         | Version      | Description |
@@ -4178,6 +4171,8 @@ paths:
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
+      description: |
+        Requires the `LoginExpiration` settings enabled in **Accounts** > **Login Expiration in Days** which defines how long a login token remains valid before expiration.
   /api/v1/users.autocomplete:
     parameters: []
     get:
@@ -4654,6 +4649,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
+      description: The endpoint requires the `logout-other-user`.
   /api/v1/ldap.syncNow:
     post:
       tags:
@@ -4663,6 +4659,8 @@ paths:
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         
         Syncs your <a href="https://docs.rocket.chat/use-rocket.chat/authentication/ldap" target="_blank">LDAP data</a> based on the <a href="https://docs.rocket.chat/use-rocket.chat/authentication/ldap/ldap-data-sync-settings" target="_blank">data sync configurations</a>. This endpoints requires 2FA. <br>
+        
+        Make sure LDAP is enabled in **Settings** > **LDAP** > **Enable** before using this endpoint.
 
         Permission required: `sync-auth-services-users`.
         
@@ -4746,6 +4744,8 @@ paths:
       summary: Test LDAP Connection
       description: |-
         Test if Rocket.Chat can connect to the specified LDAP server using the port and host provided in the Rocket.Chat settings.
+        Make sure LDAP is enabled in **Settings** > **LDAP** > **Enable** before using this endpoint.
+
         Permission required: `test-admin-options`
       operationId: post-api-v1-ldap.testConnection
       parameters:
@@ -4778,6 +4778,8 @@ paths:
       summary: Test LDAP User Search
       description: |-
         Test if a given username can be found in the LDAP server using the authentication and filter <a href='https://docs.rocket.chat/docs/configure-ldap-connection' target='_blank'>settings</a> provided to Rocket.Chat.
+        Make sure LDAP is enabled in **Settings** > **LDAP** > **Enable** before using this endpoint.
+        
         Permission required: `test-admin-options`
       operationId: post-api-v1-ldap.testSearch
       parameters:
@@ -4955,15 +4957,14 @@ paths:
       summary: List Users by Status
       description: |-
         Returns a list of filtered users based on activation status, first-time log-in, and type of users to be returned. 
-        Permissions required: 
-        - `view-d-room`
-        - `view-outside-room`
-        
+        <br> **Permissions required**: 
+        - `view-d-room`: Required to view direct message 
+        - `view-outside-room`: (Only required if the setting `Apply_permission_view-outside-room` is enabled on under **Settings** > **General** > **Rest API**). Required to view rooms outside of which the request sender is a member of
+
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |6.8.0            | Added       |
-        
       operationId: get-api-v1-users.listByStatus
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -4989,7 +4990,7 @@ paths:
           schema:
             type: string
             example: user
-        - name: roles[]
+        - name: 'roles[]'
           in: query
           description: Filter the users returned based on a list of roles.
           schema:
