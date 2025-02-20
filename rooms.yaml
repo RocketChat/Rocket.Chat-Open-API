@@ -4553,7 +4553,7 @@ paths:
         - Rooms
       summary: Set Room Notifications
       description: |-
-        Set the notifications settings of a specific room.
+        Set the <a href='https://docs.rocket.chat/docs/room-actions#manage-room-notifications' target='_blank'>notification settings</a> of a specific room.
         
         ### Changelog
         | Version | Description |
@@ -4791,7 +4791,9 @@ paths:
         - Rooms
       summary: Clear Room History
       description: |-
-        Cleans up a room, removing messages from the provided time range.
+        Cleans up a room by removing messages from the provided time range. For details, see the <a href='https://docs.rocket.chat/docs/room-actions#prune-messages-from-a-room' target='_blank'>Prune messages from a room</a> section.
+        
+        Permission required: `clean-channel-history`
         
         ### Changelog
         | Version | Description            |
@@ -5050,7 +5052,7 @@ paths:
         - Rooms
       summary: Get Room Discussions
       description: |-
-        Get all discussions of a room. 
+        Get all <a href='https://docs.rocket.chat/docs/discussions' target='_blank'>discussions</a> of a room. 
         
         ### Changelog
         | Version | Description   |
@@ -5538,7 +5540,9 @@ paths:
         - Rooms
       summary: Leave Room
       description: |-
-        Leave a room.
+        Leave a room. The following permissions are required:
+        * `leave-c`: To leave a public room.
+        * `leave-p`: To leave private room.
         
         ### Changelog
         | Version | Description   |
@@ -5569,7 +5573,13 @@ paths:
         - Rooms
       summary: Delete Room
       description: |-
-        Delete a room from the workspace.
+        Delete a room from the workspace. The following permissions are required:
+        * `delete-c`: To delete a public room.
+        * `delete-d`: To delete direct messages.
+        * `delete-p`: To delete private rooms.
+        * `delete-team`: To delete a team.
+        * `delete-team-channel`: To delete a channel within a team, also requires the `delete-c` permission.
+        * `delete-team-group`: To delete a private channel within a team, also requires the `delete-p` permission.
         
         ### Changelog
         | Version | Description   |
@@ -5600,7 +5610,7 @@ paths:
         - Rooms
       summary: Favorite/Unfavourite a Room
       description: |-
-        Mark/Unmark a Room as favourite
+        Mark/Unmark a room as favourite.
         
         ### Changelog
         | Version | Description   |
@@ -5618,7 +5628,7 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The room ID. Alternatively, enter the `roomName` parameter and provide the room's name as the value.
+                  description: The room ID. Alternatively, enter the `roomName` parameter and provide the room's name as the value. You must be a member of the room.
                 favorite:
                   type: boolean
                   description: A boolean to mark the room as favourite or not.
@@ -6028,7 +6038,8 @@ paths:
                     error: The 'selector' param is required
         '401':
           $ref: '#/components/responses/authorizationError'
-      description: 'List the public and private rooms whose names match a given string, excluding <a href="https://docs.rocket.chat/docs/discussions" target="_blank">discussions</a>, <a href="https://docs.rocket.chat/docs/direct-messages" target="_blank">DMs</a>, and <a href="https://docs.rocket.chat/docs/omnichannel" target="_blank">omnichannel rooms</a>. The endpoint is valuable when performing search operations. It returns only rooms that the user belongs to.'
+      description: |-
+        List the public and private rooms whose names match a given string, excluding <a href="https://docs.rocket.chat/docs/discussions" target="_blank">discussions</a>, <a href="https://docs.rocket.chat/docs/direct-messages" target="_blank">DMs</a>, and <a href="https://docs.rocket.chat/docs/omnichannel" target="_blank">omnichannel rooms</a>. The endpoint is valuable when performing search operations. It returns only rooms that the user belongs to.
   /api/v1/rooms.autocomplete.adminRooms:
     get:
       tags:
@@ -6103,7 +6114,10 @@ paths:
                     error: The 'selector' param is required
         '401':
           $ref: '#/components/responses/authorizationError'
-      description: 'List public and private rooms whose names match a given string, excluding <a href="https://docs.rocket.chat/docs/direct-messages" target="_blank">DMs</a>, and <a href="https://docs.rocket.chat/docs/omnichannel" target="_blank">omnichannel rooms</a>. This endpoint is valuable when performing search operations. Only workspace administrators can use it.'
+      description: |-
+        List public and private rooms whose names match a given string, excluding <a href="https://docs.rocket.chat/docs/direct-messages" target="_blank">DMs</a>, and <a href="https://docs.rocket.chat/docs/omnichannel" target="_blank">omnichannel rooms</a>. This endpoint is valuable when performing search operations. Only workspace administrators can use it. Any one of the following permissions are required:
+        * `view-room-administration`
+        * `can-audit`
     parameters: [ ]
   /api/v1/rooms.adminRooms.getRoom:
     get:
@@ -6189,6 +6203,8 @@ paths:
         - Rooms
       summary: Save Room Settings
       description: |-
+        Permission required: `edit-room`
+      
         ### Changelog
         | Version | Description |
         | ------- | ------------|
@@ -6393,7 +6409,9 @@ paths:
         - Rooms
       summary: Change Room Archive State
       description: |-
-        Change archive state of a room.
+        Archive or unarchive a room. Permissions required:
+        * `archive-room`: To archive a room.
+        * `unarchive-room`: To unarchive a room.
         
         ### Changelog
         | Version | Description      |
@@ -6461,7 +6479,7 @@ paths:
         - Rooms
       summary: Export Room
       description: |
-        Export room to a file or email. When exporting to a file, the ZIP file is stored in the `/tmp` directory on the Rocket.Chat server, and its details are recorded in the `rocketchat_user_data_files` collection in MongoDB.
+        Export room messages to a file or email. When exporting to a file, the ZIP file is stored in the `/tmp` directory on the Rocket.Chat server, and its details are recorded in the `rocketchat_user_data_files` collection in MongoDB.
 
         Permission required: `mail-messages`
 
@@ -6482,7 +6500,7 @@ paths:
               properties:
                 rid:
                   type: string
-                  description: The room Id.
+                  description: The room ID.
                 type:
                   type: string
                   description: |-
@@ -6586,7 +6604,7 @@ paths:
         - Rooms
       summary: Mute User in Room
       description: |
-        Mute a particular user in a room.
+        Mute a particular user in a room. Permission required: `mute-user`. The room becomes read-only for the muted user. They can still view messages but cannot send any until unmuted.
 
         ### Changelog
 
@@ -6653,7 +6671,7 @@ paths:
         - Rooms
       summary: Unmute User in Room
       description: |
-        Unmute a particular user in a room.
+        Unmute a particular user in a room. Permission required: `mute-user`
 
         ### Changelog
 
