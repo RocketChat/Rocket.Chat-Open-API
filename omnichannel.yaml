@@ -2460,7 +2460,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: agents
           in: query
-          description: A list of agent IDs
+          description: A list of agent IDs.
           schema:
             type: array
             items:
@@ -2468,31 +2468,31 @@ paths:
           example: '[''b32h3b2hhwb25d'']'
         - name: departmentId
           in: query
-          description: The department ID
+          description: The department ID. You can also enter multiple IDs as an array of string values.
           schema:
             type: string
           example: AkzpHAvZpdnuchw2a
         - name: open
           in: query
-          description: If it should filter by open/closed rooms
+          description: If it should filter by open/closed rooms.
           schema:
             type: boolean
           example: true
         - name: createdAt
           in: query
-          description: An object representing when the room was created (can also be filtered only with `start` or `end`)
+          description: An object representing when the room was created (can also be filtered only with `start` or `end`).
           schema:
             type: string
           example: '{"start": "2018-01-26T00:11:22.345Z", "end": "2018-01-26T00:11:22.345Z"}'
         - name: closedAt
           in: query
-          description: An object representing when the room was closed (can also be filtered only with `start` or `end`)
+          description: An object representing when the room was closed (can also be filtered only with `start` or `end`).
           schema:
             type: string
           example: '{"start": "2018-01-26T00:11:22.345Z", "end": "2018-01-26T00:11:22.345Z"}'
         - name: tags
           in: query
-          description: A list of tags
+          description: A list of tags.
           schema:
             type: string
           example: '[''rocket'', ''chat'']'
@@ -2504,10 +2504,28 @@ paths:
           example: '{"docId": "aobEdbYhXfu5hkeqG"}'
         - name: roomName
           in: query
-          description: The room's name
+          description: The room's name.
           schema:
             type: string
-          example: room name
+          example: room-name
+        - schema:
+            type: boolean
+          in: query
+          name: onhold
+          description: Whether you want to include livechat rooms that are on hold or not.
+        - schema:
+            type: string
+          in: query
+          name: queued
+          description: Whether you want to include queued rooms or not.
+        - schema:
+            type: array
+            items:
+              type: string
+          example: '[''b32h3b2hhwb25d'', ''b32h3b2aaaa'']'
+          in: query
+          name: units
+          description: Enter the unit IDs you want to include as an array of string values.
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
