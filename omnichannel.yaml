@@ -1939,6 +1939,101 @@ paths:
           in: query
           name: sort
           description: 'List of fields to order by, and in which direction. JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending.'
+  /api/v1/omnichannel/contacts.checkExistence:
+    get:
+      summary: Check Contacts Existence
+      tags:
+        - Livechat Contacts
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  exists:
+                    type: boolean
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    exists: true
+                    success: true
+              examples:
+                Contact found:
+                  value:
+                    exists: true
+                    success: true
+                contact not found:
+                  value:
+                    exists: false
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                x-examples:
+                  Example 1:
+                    success: false
+                    error: |-
+                      must have required property 'contactId'
+                       must have required property 'email'
+                       must have required property 'phone'
+                       must match exactly one schema in oneOf [invalid-params]
+                    errorType: invalid-params
+              examples:
+                Error from missing query parameters:
+                  value:
+                    success: false
+                    error: |-
+                      must have required property 'contactId'
+                       must have required property 'email'
+                       must have required property 'phone'
+                       must match exactly one schema in oneOf [invalid-params]
+                    errorType: invalid-params
+      operationId: get-api-v1-omnichannel-contacts.checkExistence
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+        - name: contactId
+          in: query
+          description: The contact's unique ID.
+          required: false
+          schema:
+            type: string
+            example: 673c76df47a6c9b89dd263d8
+        - schema:
+            type: string
+            example: example@mail.com
+          in: query
+          name: email
+          description: The omnichannel contact's email address.
+        - schema:
+            type: string
+            example: '01234567843'
+          in: query
+          name: phone
+          description: Phone number of the omnichannel contact.
+      description: |-
+        This identifies whether a contact is already registered using a given query parameter such as `email` or `phone` or `contactId`.
+        **Note**: You must provide only one of the parameters in the request.
+
+        **Required permission**: `view-livechat-contact`. 
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        |7.2.0             | Added       |
   /api/v1/livechat/analytics/agent-overview:
     get:
       summary: Get Agent Analytics Overview
