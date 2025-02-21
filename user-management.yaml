@@ -1888,14 +1888,15 @@ paths:
         - Users
       summary: Get User's Info
       description: |-
-        * Retrieves information about a user. The result is only limited to what the callee has access to view.
-        * This endpoint supports the `field` query parameter with `userRooms` that returns the rooms that the user is part of. You need the `view-other-user-channels` permission to view channels owned by other users.
-        * The `rooms` field returns the `unread` property based on the <a href="https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/general#general-settings" target="_blank">Unread Count setting</a>.
-        
+        Retrieves information about a user. The result is only limited to what the callee has access to view.
+
+        From version `7.0.0`, this endpoint no longer supports the `fields` parameter, even when the `ALLOW_UNSAFE_QUERY_AND_FIELDS_API_PARAMS: true` environment variable is set. Instead, use the `includeUserRooms` parameter.
+
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
-        |3.4.0            | Added `unread` property inside `rooms` object       |
+        |7.0.0             | Removed the `fields` query parameter       |
+        |3.4.0             | Added `unread` property inside `rooms` object       |
         |0.70.0            | Added `rooms` property to response if the user request it and has the `view-other-user-channels` permission       |
         |0.49.0            | Updated to support `userId` or `username`       |
         |0.48.0            | Renamed to `users.info`       |
@@ -1906,14 +1907,17 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: userId
           in: query
-          description: >-
-            The `userId` of the user. Alternatively, you can use the `username`
-            parameter and value.
+          description: 'The `userId` of the user. Alternatively, you can use the `username` parameter and value.'
           required: true
           schema:
             type: string
           example: W7NHuX5ri2e3mu2Fc
-        - $ref: '#/components/parameters/fields'
+        - schema:
+            type: boolean
+            example: true
+          in: query
+          name: includeUserRooms
+          description: Specifies whether the rooms the user is a member of should be included in the response.
       responses:
         '200':
           description: OK
