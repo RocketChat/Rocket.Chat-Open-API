@@ -7271,9 +7271,9 @@ paths:
         - Teams
       summary: Create a New Team
       description: |-
-        Creates a new team. 
+        Create a new public or private team in the workspace. 
         
-        Permission required: `create-team permission`
+        Permission required: `create-team`
       operationId: post-api-v1-teams.create
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -7292,7 +7292,7 @@ paths:
                   description: 'Privacy of the team (0 - Public, 1 - Private).'
                 members:
                   type: array
-                  description: The user ids to add to the team when it is created.
+                  description: The user IDs to add to the team when it is created.
                   items:
                     type: string
                 room:
@@ -7582,7 +7582,8 @@ paths:
       tags:
         - Teams
       summary: Get Team Info
-      description: 'Gets a team''s information. If the team is not public, the request sender must be a member of the team.'
+      description: |-
+        Gets a team's information. If the team is not public, the request sender must be a member of the team, or must have the `view-all-teams` permission.
       operationId: get-api-v1-teams.info
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -7740,7 +7741,8 @@ paths:
       tags:
         - Teams
       summary: List Team Members
-      description: List all members of a team.
+      description: |-
+        List all members of a team. Permission required: `view-all-teams`
       operationId: get-api-v1-teams.members
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -8093,7 +8095,8 @@ paths:
       tags:
         - Teams
       summary: Convert Team to Channel
-      description: Convert a team to a channel.
+      description: |-
+        Convert a team to a channel. Permission required: `convert-team`
       operationId: post-api-v1-teams.convertToChannel
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -8145,9 +8148,9 @@ paths:
         - Teams
       summary: Add Rooms to a Team
       description: |-
-        Adds rooms to the team.
+        Add existing rooms to a team.
         
-        Permission required: `add-team-channel`
+        Permission required: `move-room-to-team`
       operationId: post-api-v1-teams.addRooms
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -8160,7 +8163,7 @@ paths:
               properties:
                 teamId:
                   type: string
-                  description: Enter the team ID. Alternatively, enter the `teamName` parameter and provide the team's name as the value.
+                  description: Enter the team ID to which you want to add the rooms. Alternatively, enter the `teamName` parameter and provide the team's name as the value.
                 rooms:
                   type: array
                   description: The IDs of the rooms to be added to the team.
@@ -8336,11 +8339,11 @@ paths:
     post:
       tags:
         - Teams
-      summary: Remove room from the Team
+      summary: Remove Room from the Team
       description: |-
         Removes a room from a team. 
 
-        Permission required: `remove-team-channel`
+        Permissions required: `remove-team-channel`, `view-all-team-channels`
       operationId: post-api-v1-teams.removeRoom
       parameters:
         - $ref: '#/components/parameters/UserId'
@@ -8528,7 +8531,7 @@ paths:
       description: |-
         Updates a room from a team. 
         
-        Permission required: `edit-team-channel`
+        Permissions required: `edit-team-channel`, `view-all-team-channels`
       operationId: post-api-v1-teams.updateRoom
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -8541,10 +8544,10 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The room id.
+                  description: The room ID that you want to update.
                 isDefault:
                   type: boolean
-                  description: Sets the room as Auto-join (true) or not (false).
+                  description: Sets the room as auto-join (true) or not (false).
               required:
                 - roomId
                 - isDefault
@@ -8716,7 +8719,8 @@ paths:
       tags:
         - Teams
       summary: List Rooms of a Team
-      description: List all rooms in a team.
+      description: |-
+        List all rooms in a team. Permissions required: `view-all-teams`, `view-all-team-channels`
       operationId: get-api-v1-teams.listRooms
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -8906,9 +8910,9 @@ paths:
         - Teams
       summary: List User Rooms of a Team
       description: |-
-        Lists only the team's rooms the user has joined.
+        Lists only the team's rooms that a particular user has joined.
         
-        Permission required: `view-all-team-channels`
+        Permissions required: `view-all-teams`, `view-all-team-channels`
       operationId: get-api-v1-teams.listRoomsOfUser
       parameters:
         - $ref: '#/components/parameters/UserId'
@@ -8917,7 +8921,7 @@ paths:
         - $ref: '#/components/parameters/Optional-TeamId'
         - name: userId
           in: query
-          description: The user id.
+          description: The user ID.
           required: true
           schema:
             type: string
