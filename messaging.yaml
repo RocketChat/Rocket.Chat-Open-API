@@ -4868,6 +4868,7 @@ paths:
         - name: roomId
           in: query
           description: The room ID of the DM. It is required if `username` is not provided.
+          required: true
           schema:
             type: string
         - $ref: '#/components/parameters/Optional-Username'
