@@ -259,6 +259,13 @@ paths:
       summary: Get Integration
       description: |- 
         Get the information of a specific integration.
+        
+        Permissions required:
+        * `manage-incoming-integrations`
+        * `manage-own-incoming-integrations`
+        * `manage-outgoing-integrations`
+        * `manage-own-outgoing-integrations`
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
