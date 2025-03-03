@@ -646,7 +646,7 @@ components:
       in: query
       required: false
       schema: {}
-      description: 'This parameter allows you to use MongoDB query operators to search for specific data. For example, to query users with a name that contains the letter "g": `query={ "name": { "$regex": "g" } }. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more.'
+      description: 'This parameter allows you to use MongoDB query operators to search for specific data. For example, to query users with a name that contains the letter "g": `query={ "name": { "$regex": "g" } }`. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more.'
     fields:
       name: fields
       in: query
