@@ -5237,15 +5237,15 @@ components:
         This parameter allows you to use [MongoDB
         query](https://www.mongodb.com/docs/manual/reference/operator/query/)
         operators to search for specific data. For example, to query users with
-        a name that contains the letter "g": query={ "name": { "$regex": "g" }
-        } 
+        a name that contains the letter "g": query=`{ "name": { "$regex": "g" }
+        }`. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more. 
       allowEmptyValue: false
     fields:
       name: fields
       in: query
       required: false
       schema: {}
-      description: ' This parameter accepts a JSON object with properties that have a value of 1 or 0 to include or exclude them in the response. For example, to only retrieve the usernames of users: fields={ "username": 1 }'
+      description: ' This parameter accepts a JSON object with properties that have a value of 1 or 0 to include or exclude them in the response. For example, to only retrieve the usernames of users: fields=`{ "username": 1 }`. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more.'
     offset:
       name: offset
       in: query
