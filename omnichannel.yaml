@@ -1161,11 +1161,8 @@ paths:
       tags:
         - Livechat Contacts
       description: |
-        Retrieve a single omnichannel contact by providing **either** a `contactId` or a `visitor` object.  
-        - Use `contactId` to fetch the contact directly by its unique ID.  
-        - Use the `visitor` object to fetch the contact by its visitor association.  
+        Retrieve a single omnichannel contact by its unique `contactId`.  
 
-        **Note:** You must provide only one of these parameters in the request.  
         Required permission: `view-livechat-contact`.
       operationId: get-api-v1-omnichannel-contacts.get
       parameters:
@@ -1173,39 +1170,11 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: contactId
           in: query
-          description: The contact's unique ID. Provide this parameter if fetching the contact directly by its ID.
-          required: false
+          description: The contact's unique ID. 
+          required: true
           schema:
             type: string
             example: 673c76df47a6c9b89dd263d8
-        - name: visitor
-          in: query
-          description: |
-            Visitor association for the contact. Provide this object as JSON with the required fields:
-            - `visitorId` (string): The ID of the visitor.
-            - `source.type` (string): The type of the source (e.g., "web").
-          required: false
-          schema:
-            type: object
-            properties:
-              visitorId:
-                type: string
-                description: The unique ID of the visitor.
-              source:
-                type: object
-                description: The source of the visitor.
-                properties:
-                  type:
-                    type: string
-                    description: 'The type of the source (e.g., "widget").'
-                  id:
-                    type: string
-                    description: The source's unique ID.
-                required:
-                  - type
-            required:
-              - visitorId
-              - source.type
       responses:
         '200':
           description: OK
@@ -1344,7 +1313,7 @@ paths:
                       phones: []
                     success: true
               examples:
-                Example 1:
+                Example:
                   value:
                     contact:
                       _id: 673c76df47a6c9b89dd263d8
@@ -1396,29 +1365,17 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                Required Parameter:
                   value:
                     success: false
                     error: |-
-                      must have required property 'contactId'
-                       must have required property 'source'
-                       must match exactly one schema in oneOf [invalid-params]
+                      error: must have required property 'contactId' [invalid-params]
                     errorType: invalid-params
-                Example 2:
+                Empty contact:
                   value:
                     success: false
                     error: |-
-                      must have required property 'contactId'
-                       must have required property 'visitor'
-                       must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params
-                Example 3:
-                  value:
-                    success: false
-                    error: |-
-                      must pass "isNotEmpty" keyword validation
-                       must have required property 'visitor'
-                       must match exactly one schema in oneOf [invalid-params]
+                      must pass "isNotEmpty" keyword validation [invalid-params]
                     errorType: invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -16693,11 +16650,11 @@ components:
               error:
                 type: string
           examples:
-            Example 1:
+            Permission Error:
               value:
                 success: false
                 error: 'User does not have the permissions required for this action [error-unauthorized]'
-            Example 2:
+            Unauthorized:
               value:
                 success: false
                 error: unauthorized
