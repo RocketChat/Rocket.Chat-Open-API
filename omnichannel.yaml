@@ -1171,7 +1171,7 @@ paths:
         - name: contactId
           in: query
           description: The contact's unique ID. 
-          required: false
+          required: true
           schema:
             type: string
             example: 673c76df47a6c9b89dd263d8
@@ -16650,11 +16650,11 @@ components:
               error:
                 type: string
           examples:
-            Example 1:
+            Permission Error:
               value:
                 success: false
                 error: 'User does not have the permissions required for this action [error-unauthorized]'
-            Example 2:
+            Unauthorized:
               value:
                 success: false
                 error: unauthorized
