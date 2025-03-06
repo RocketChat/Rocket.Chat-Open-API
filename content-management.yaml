@@ -83,7 +83,7 @@ paths:
         - Custom Emoji
       summary: Create an Emoji
       description: |
-        Create a custom emoji.
+        Create a custom emoji. Permission required: `manage-emoji`
 
         ### Changelog
         | Version      | Description | 
@@ -124,7 +124,7 @@ paths:
         - Custom Emoji
       summary: Delete a Custom Emoji
       description: |-
-        Delete a custom emoji.
+        Delete a custom emoji. Permission required: `manage-emoji`
 
         ### Changelog
         | Version      | Description | 
@@ -261,7 +261,8 @@ paths:
         - Custom Emoji
       summary: Update a Custom Emoji
       description: |-
-        Update a custom emoji.
+        Update a custom emoji. Permission required: `manage-emoji`
+        
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
@@ -453,7 +454,7 @@ paths:
         - Custom User Status
       summary: Create Custom Status
       description: |
-        Create a custom user status. 
+        Create a custom user status. Permission required: `manage-user-status`
 
         ### Changelog
         | Version      | Description | 
@@ -564,7 +565,7 @@ paths:
         - Custom User Status
       summary: Update Custom Status
       description: |-
-        Update a custom status. 
+        Update a custom status. Permission required: `manage-user-status`
 
         ### Changelog
         | Version      | Description | 
@@ -653,7 +654,7 @@ paths:
         - Custom User Status
       summary: Delete Custom User Status
       description: |-
-        Delete a custom user status.
+        Delete a custom user status. Permission required: `manage-user-status`
 
         ### Changelog
         | Version      | Description | 
