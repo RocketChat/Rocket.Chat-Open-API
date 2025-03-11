@@ -12889,7 +12889,7 @@ components:
     offset:
       name: offset
       in: query
-      description: 'Number of items to "skip" in the query, i.e. requests return count items, skipping the first offset items.'
+      description: 'Number of items to "skip" in the query, i.e. requests return count items, skipping the first offset items. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
       required: false
       schema:
         type: integer
@@ -12897,7 +12897,7 @@ components:
     count:
       name: count
       in: query
-      description: The number of items to return.
+      description: 'The number of items to return. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
       required: false
       schema:
         type: integer
@@ -12905,7 +12905,7 @@ components:
     sort:
       name: sort
       in: query
-      description: 'List of fields to order by, and in which direction. This is a JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending. For example, {"value": -1, "_id": 1}'
+      description: 'List of fields to order by, and in which direction. This is a JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending. For example, {"value": -1, "_id": 1}. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
       required: false
       schema: { }
     query:
