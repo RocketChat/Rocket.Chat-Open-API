@@ -5255,7 +5255,7 @@ components:
       example: 50
       description: >-
         Number of items to "skip" in the query, i.e. requests return count
-        items, skipping the first offset items.
+        items, skipping the first offset items. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.
     sort:
       name: sort
       in: query
@@ -5264,7 +5264,7 @@ components:
       description: >-
         List of fields to order by, and in which direction. JSON object, with
         properties listed in desired order, with values of 1 for ascending, or
-        -1 for descending. For example, {"value": -1, "_id": 1}
+        -1 for descending. For example, {"value": -1, "_id": 1}. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.
     count:
       name: count
       in: query
@@ -5272,7 +5272,7 @@ components:
       schema:
         type: integer
       example: 50
-      description: How many items to return.
+      description: 'How many items to return. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
   responses:
     authorizationError:
       description: Unauthorized
