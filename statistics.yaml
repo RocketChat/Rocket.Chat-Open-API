@@ -3508,20 +3508,20 @@ components:
       schema:
         type: integer
       example: 50
-      description: The number of items to return.
+      description: 'The number of items to return. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
     offset:
       name: offset
       in: query
       required: false
       schema:
         type: integer
-      description: 'Number of items to "skip" in the query, i.e. requests return `count` items, skipping the first `offset` items.'
+      description: 'Number of items to "skip" in the query, i.e. requests return `count` items, skipping the first `offset` items. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
     sort:
       name: sort
       in: query
       required: false
       schema: {}
-      description: 'List of fields to order by, and in which direction. JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending. For example, `{"value": -1, "_id": 1}`'
+      description: 'List of fields to order by, and in which direction. JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending. For example, `{"value": -1, "_id": 1}`.  Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
     fields:
       name: fields
       in: query
