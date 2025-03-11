@@ -3372,20 +3372,33 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - rid
-              properties:
-                rid:
-                  type: string
-                  description: The room ID.
+              anyOf:
+                - type: object
+                  required: ["roomId"]
+                  properties:
+                    roomId:
+                      type: string
+                      description: The room ID.
+                      example: L6su9mxwdDkvdSaT9hvzu8z6mHFigiXy6Y
+                    readThreads:
+                      type: boolean
+                    
+                - type: object
+                  required: ["rid"]
+                  properties:
+                    rid:
+                      type: string
+                      description: The room ID.    
+                      example: L6su9mxwdDkvdSaT9hvzu8z6mHFigiXy6Y
+                    readThreads:
+                      type: boolean  
             examples:
-              Example 1:
-                value:
-                  rid: L6su9mxwdDkvdSaT9hvzu8z6mHFigiXy6Y
-              Example 2:
+              RoomId:
                 value:
                   roomId: L6su9mxwdDkvdSaT9hvzu8z6mHFigiXy6Y
+              Rid:
+                value:
+                  rid: L6su9mxwdDkvdSaT9hvzu8z6mHFigiXy6Y    
       description: |-
         ### Changelog
         | Version      | Description |
@@ -3433,19 +3446,26 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                firstUnreadMessage:
-                  type: object
+              anyOf: 
+                - type: object
+                  required: ["roomId"]
                   properties:
-                    _id:
+                    roomId:
                       type: string
-                      description: The message ID.
-                roomId:
-                  type: string
-                  description: The room ID.
+                      description: The room ID.
+                - type: object
+                  required: ["firstUnreadMessage"]
+                  properties:
+                    firstUnreadMessage:
+                      type: object
+                      required: [" _id"]
+                      properties:
+                        _id:
+                          type: string
+                          description: The message ID.
+                          
             examples:
-              Example 1:
+              Example :
                 value:
                   roomId: L6su9mxwdDkvdSaT9hvzu8z6mHFigiXy6Y
               Example 2:
