@@ -3595,7 +3595,7 @@ paths:
                     success: false
                     error: 'The "lastUpdate" query parameter must be a valid date. [error-roomId-param-invalid]'
                     errorType: error-roomId-param-invalid
-  /api/v1/im.close:
+  /api/v1/dm.close:
     post:
       tags:
         - IM
@@ -3654,7 +3654,7 @@ paths:
                   value:
                     success: false
                     error: The user is not subscribed to the room
-  /api/v1/im.counters:
+  /api/v1/dm.counters:
     get:
       tags:
         - IM
@@ -3747,7 +3747,7 @@ paths:
                     errorType: error-room-param-not-provided
         '401':
           $ref: '#/components/responses/authorizationError'
-  /api/v1/im.create:
+  /api/v1/dm.create:
     post:
       tags:
         - IM
@@ -3853,7 +3853,7 @@ paths:
                     errorType: error-invalid-user
                     details:
                       method: createDirectMessage
-  /api/v1/im.delete:
+  /api/v1/dm.delete:
     post:
       tags:
         - IM
@@ -3922,7 +3922,7 @@ paths:
                     errorType: invalid-channel
         '401':
           $ref: '#/components/responses/authorizationError'
-  /api/v1/im.files:
+  /api/v1/dm.files:
     get:
       tags:
         - IM
@@ -4045,7 +4045,7 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
-  /api/v1/im.history:
+  /api/v1/dm.history:
     get:
       tags:
         - IM
@@ -4198,7 +4198,7 @@ paths:
                     success: false
                     error: '[invalid-channel]'
                     errorType: invalid-channel
-  /api/v1/im.list.everyone:
+  /api/v1/dm.list.everyone:
     get:
       tags:
         - IM
@@ -4436,7 +4436,7 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
-  /api/v1/im.list:
+  /api/v1/dm.list:
     get:
       tags:
         - IM
@@ -4675,7 +4675,7 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
-  /api/v1/im.members:
+  /api/v1/dm.members:
     get:
       tags:
         - IM
@@ -4788,7 +4788,7 @@ paths:
                     success: false
                     error: '[invalid-channel]'
                     errorType: invalid-channel
-  /api/v1/im.messages:
+  /api/v1/dm.messages:
     get:
       tags:
         - IM
@@ -4990,7 +4990,7 @@ paths:
                     success: false
                     error: '[invalid-channel]'
                     errorType: invalid-channel
-  /api/v1/im.messages.others:
+  /api/v1/dm.messages.others:
     get:
       tags:
         - IM
@@ -5119,7 +5119,7 @@ paths:
                     error: 'This endpoint is disabled [error-endpoint-disabled]'
                     errorType: error-endpoint-disabled
                     details:
-                      route: /api/v1/im.messages.others
+                      route: /api/v1/dm.messages.others
                 Example 2:
                   value:
                     success: false
@@ -5130,7 +5130,7 @@ paths:
                     success: false
                     error: 'No direct message room found by the id of: john [error-room-not-found]'
                     errorType: error-room-not-found
-  /api/v1/im.open:
+  /api/v1/dm.open:
     post:
       tags:
         - IM
@@ -5185,7 +5185,7 @@ paths:
                     success: false
                     error: 'Body param "roomId" is required [error-room-param-not-provided]'
                     errorType: error-room-param-not-provided
-  /api/v1/im.setTopic:
+  /api/v1/dm.setTopic:
     post:
       tags:
         - IM
