@@ -457,6 +457,233 @@ paths:
       description: List out all the active OAuth services configured with details.
       tags:
         - Settings
+        
+  /api/v1/audit.settings:
+    parameters: []
+    get:
+      summary: Get Settings History
+      operationId: get-api-v1-settings-history
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  events:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        t:
+                          type: string
+                        ts:
+                          type: string
+                        actor:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                            reason:
+                              type: string
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                            ip:
+                              type: string
+                            useragent:
+                              type: string
+                        data:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              key:
+                                type: string
+                              value:
+                                oneOf:
+                                  - type: string
+                                  - type: boolean
+                        ip:
+                          type: string
+                        _updatedAt:
+                          type: string
+                        u:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    events:
+                      - _id: 67e431efaae4c3005ea54c73
+                        t: settings.changed
+                        ts: '2025-03-26T16:57:19.671Z'
+                        actor:
+                          type: user
+                          _id: P2dgWPPw5veigwcdK
+                          username: fun.abc
+                          ip: 154.113.158.225
+                          useragent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36'
+                        data:
+                          - key: id
+                            value: Omnichannel_allow_force_close_conversations
+                          - key: previous
+                            value: false
+                          - key: current
+                            value: true
+                        ip: 154.113.158.225
+                        u:
+                          _id: P2dgWPPw5veigwcdK
+                          username: fun.abc
+                        _updatedAt: '2025-03-26T16:57:19.671Z'
+                      - _id: 67e3ec90aae4c3005ea54bbe
+                        t: settings.changed
+                        ts: '2025-03-26T12:01:20.322Z'
+                        actor:
+                          type: system
+                          reason: cacheValueInSettings reset
+                        data:
+                          - key: id
+                            value: Cloud_Workspace_Supported_Versions_Token
+                          - key: previous
+                            value: eyJhbGciOiJSUzI1NiIsInR4MkwVVhy3JQ2fQ
+                          - key: current
+                            value: eyJhbGciOiJSUz9Sw
+                        ip: 0.0.0.0
+                        _updatedAt: '2025-03-26T12:01:20.322Z'
+                      - _id: 67e3ec77aae4c3005ea54bbd
+                        t: settings.changed
+                        ts: '2025-03-26T12:00:55.126Z'
+                        actor:
+                          type: system
+                          reason: cacheValueInSettings reset
+                        data:
+                          - key: id
+                            value: Cloud_Workspace_Supported_Versions_Token
+                          - key: previous
+                            value: eyJhVVhy3JQ2fQ
+                          - key: current
+                            value: eyJhbGhy3JQ2fQ
+                        ip: 0.0.0.0
+                        _updatedAt: '2025-03-26T12:00:55.126Z'
+                      - _id: 67e3ec63aae4c3005ea54bbc
+                        t: settings.changed
+                        ts: '2025-03-26T12:00:35.117Z'
+                        actor:
+                          type: system
+                          reason: cacheValueInSettings reset
+                        data:
+                          - key: id
+                            value: Cloud_Workspace_Supported_Versions_Token
+                          - key: previous
+                            value: eyJhbGciOhy3JQ2fQ
+                          - key: current
+                            value: eyJhbGciOiy3JQ2fQ
+                        ip: 0.0.0.0
+                        _updatedAt: '2025-03-26T12:00:35.117Z'
+                      - _id: 67e3ec54aae4c3005ea54bbb
+                        t: settings.changed
+                        ts: '2025-03-26T12:00:20.098Z'
+                        actor:
+                          type: system
+                          reason: cacheValueInSettings reset
+                        data:
+                          - key: id
+                            value: Cloud_Workspace_Supported_Versions_Token
+                          - key: previous
+                            value: eyJhbGciOiJyD0Cw
+                          - key: current
+                            value: eyJhbwVVhy3JQ2fQ
+                        ip: 0.0.0.0
+                        _updatedAt: '2025-03-26T12:00:20.098Z'
+                    count: 5
+                    offset: 0
+                    total: 20
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      description: |- 
+        Get the list of changed settings within a specific duration of time, useful for auditing purposes. 
+        Permission required: `can-audit`.
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |7.5.0            | Added       |
+      tags:
+        - Settings
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - schema:
+            type: string
+            example: '2025-03-19T18:30:00.000Z'
+          in: query
+          name: start
+          description: 'Enter the start of the time period for which you want to view the changed settings. Format: DD-MM-YYYY or use the ISO string format.'
+        - schema:
+            type: string
+            example: '2025-03-21'
+          in: query
+          name: end
+          description: 'Enter the start of the time period for which you want to view the changed settings. Format: DD-MM-YYYY or use the ISO string format.'
+        - schema:
+            type: string
+            example: Site_Url
+          in: query
+          name: settingId
+          description: Enter the setting ID for which you want to view the details.
+        - schema:
+            type: object
+            properties:
+              type:
+                type: string
+                description: 'The `type` can be the `user` who changed the setting or the `system` (for example, when the `actor` was the server itself, like when the license changes through cloud).'
+                example: system
+              _id:
+                type: string
+                description: 'The user ID who changed the setting.'
+                example: 67e3ec90xxxxxxea54bbe
+              username:
+                type: string
+                description: 'The username of the user who changed the setting.'
+                example: jane.doe
+              ip:
+                type: string
+                description: 'The IP address using which settings were changed.'
+                example: 154.123.456.225
+              useragent:
+                type: string
+                description: 'The device details of the user who changed the setting.'
+                example: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36
+              reason:
+                type: string
+                description: 'The reason of the changed setting. This is especially used when the setting has been changed by the system. For example, `cacheValueInSettings reset`'
+                example: cacheValueInSettings reset
+          in: query
+          name: actor
+          description: |-
+            Filter the results by the user details that performed the action.
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/sort'
+
   /api/v1/cloud.manualRegister:
     parameters: []
     post:
