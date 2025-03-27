@@ -3115,12 +3115,12 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                Invalid parameter:
                   value:
                     success: false
                     error: 'must have required property ''rid'' [invalid-params]'
                     errorType: invalid-params
-                Example 2:
+                Room already closed:
                   value:
                     success: false
                     error: error-room-already-closed
@@ -3142,7 +3142,11 @@ paths:
                   example: 8ceKgWvo5qT5TrCRN
                 comment:
                   type: string
-                  description: Add a description for closing the room.
+                  description: Add a description for closing the room. It is required when the [`Request comment when closing conversation`](https://docs.rocket.chat/docs/omnichannel-admins-guide) setting is enabled.
+                forceClose:
+                  type: boolean
+                  description: |-
+                    Use this parameter to forcefully close a live chat room. Before using this parameter, make sure to enable the [`Force Close Conversation API`](https://docs.rocket.chat/v1/docs/omnichannel-admins-guide#api) setting in Administration > Settings > Omnichannel > API. Exercise caution when using this parameter and reserve it for situations involving misconfigured rooms.
                 tags:
                   type: array
                   description: 'Add [tags](https://docs.rocket.chat/docs/tags).'
@@ -3167,7 +3171,7 @@ paths:
                           type: string
                           description: Enter a subject for the email.
             examples:
-              Example 1:
+              Example:
                 value:
                   rid: 8ceKgWvo5qT5TrCRN
                   comment: close via API
