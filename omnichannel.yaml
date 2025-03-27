@@ -3146,7 +3146,7 @@ paths:
                 forceClose:
                   type: boolean
                   description: |-
-                    Use this parameter to forcefully close a live chat room. Before using this parameter, make sure to enable the [`Force Close Conversation API`](https://docs.rocket.chat/v1/docs/omnichannel-admins-guide#api) setting in Administration > Settings > Omnichannel > API. Exercise caution when using this parameter and reserve it for situations involving misconfigured rooms.
+                    Use this parameter to forcefully close a livechat room. Before using this parameter, make sure to enable the [`Force Close Conversation API`](https://docs.rocket.chat/v1/docs/omnichannel-admins-guide#api) setting in Administration > Settings > Omnichannel > API. Exercise caution when using this parameter and reserve it for situations involving misconfigured rooms.
                 tags:
                   type: array
                   description: 'Add [tags](https://docs.rocket.chat/docs/tags).'
@@ -4242,7 +4242,7 @@ paths:
                     showOnRegistration:
                       type: boolean
                       description: |- 
-                        You can let visitors choose the department they want to talk to. The option will appear to your customer in the Live Chat widget. The value can be boolean true or false.
+                        You can let visitors choose the department they want to talk to. The option will appear to your customer in the Livechat widget. The value can be boolean true or false.
                     name:
                       type: string
                       description: The name of the department you are creating.
@@ -4520,7 +4520,7 @@ paths:
                     showOnRegistration:
                       type: boolean
                       description: |-
-                        You can let visitors choose the department they want to talk to. The option will appear to your customer in the Live Chat widget.
+                        You can let visitors choose the department they want to talk to. The option will appear to your customer in the Livechat widget.
                         The value can be boolean true or false.
                     name:
                       type: string
