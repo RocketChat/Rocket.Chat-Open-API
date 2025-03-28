@@ -654,27 +654,31 @@ paths:
             properties:
               type:
                 type: string
-                description: 'The `type` can be the `user` who changed the setting or the `system` (for example, when the `actor` was the server itself, like when the license changes through cloud).'
+                description: |-
+                  The `type` value can be one of the following:
+                  * The `user` who changed the setting 
+                  * The `system`, for example, when the `actor` was the server itself, like when the license changes through cloud.
+                  * An `app` due to which a setting was changed.
                 example: system
               _id:
                 type: string
-                description: 'The user ID who changed the setting.'
+                description: 'The user or app ID that changed the setting (when the `type` is `user` or `app`).'
                 example: 67e3ec90xxxxxxea54bbe
               username:
                 type: string
-                description: 'The username of the user who changed the setting.'
+                description: 'The username of the user who changed the setting (when the `type` is `user`).'
                 example: jane.doe
               ip:
                 type: string
-                description: 'The IP address using which settings were changed.'
+                description: 'The IP address using which settings were changed (when the `type` is `user`).'
                 example: 154.123.456.225
               useragent:
                 type: string
-                description: 'The device details of the user who changed the setting.'
+                description: 'The device details of the user who changed the setting (when the `type` is `user`).'
                 example: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36
               reason:
                 type: string
-                description: 'The reason of the changed setting. This is especially used when the setting has been changed by the system. For example, `cacheValueInSettings reset`'
+                description: 'The reason of the changed setting (when the `type` is `setting` or `app`).'
                 example: cacheValueInSettings reset
           in: query
           name: actor
