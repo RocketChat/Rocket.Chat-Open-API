@@ -3060,7 +3060,7 @@ paths:
         - Chat
       summary: Sync Thread List
       description: |-
-
+        List the threads of a room along with any data updates from a specified date.
 
         ### Changelog
         | Version      | Description | 
@@ -3273,7 +3273,8 @@ paths:
         - Chat
       summary: Sync Thread Messages
       description: |-
-
+        List the messages in a thread along with any data updates from a specified date.
+        
         ### Changelog
         | Version      | Description | 
         | ------------ | ------------|
@@ -3351,7 +3352,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Example:
                   value:
                     messages:
                       update:
@@ -3402,7 +3403,7 @@ paths:
         - Chat
       summary: Sync Messages
       description: |-
-
+        List the messages in a room along with any data updates from a specified date.
         ### Changelog
         | Version      | Description | 
         | ------------ | ------------|
