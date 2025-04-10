@@ -4,7 +4,7 @@ info:
   title: Messaging
 #  description: |-
 #    * **Chat**: Create and manage chat [messages](https://docs.rocket.chat/use-rocket.chat/user-guides/messages/message-actions).
-#    * **IM**: Create and manage direct messages.
+#    * **DM**: Create and manage direct messages. The DM (dm.*) and IM (im.*) endpoint groups provide identical functionality. For example, im.close and dm.close execute the same operation.
 servers:
   - url: https://apiexplorer.support.rocket.chat
 paths:
@@ -3599,7 +3599,7 @@ paths:
   /api/v1/dm.close:
     post:
       tags:
-        - IM
+        - DM
       summary: Close DM
       description: |-
         Removes the direct message from the user's list of direct messages.
@@ -3658,7 +3658,7 @@ paths:
   /api/v1/dm.counters:
     get:
       tags:
-        - IM
+        - DM
       summary: Get DM Counters
       description: |-
         Gets counters and information of direct messages. Permission required: `view-room-administration`.
@@ -3751,7 +3751,7 @@ paths:
   /api/v1/dm.create:
     post:
       tags:
-        - IM
+        - DM
       summary: Create DM
       description: |-
         Create a direct message session with another user or more than one user.
@@ -3857,7 +3857,7 @@ paths:
   /api/v1/dm.delete:
     post:
       tags:
-        - IM
+        - DM
       summary: Delete DM
       description: |-
         Delete a DM. Permission required: `view-room-administration`.
@@ -3926,7 +3926,7 @@ paths:
   /api/v1/dm.files:
     get:
       tags:
-        - IM
+        - DM
       summary: Get DM Files
       description: |-
         Get all files in a DM. 
@@ -4049,7 +4049,7 @@ paths:
   /api/v1/dm.history:
     get:
       tags:
-        - IM
+        - DM
       summary: DM History
       description: |-
         Retrieves the message history from a direct message.
@@ -4202,7 +4202,7 @@ paths:
   /api/v1/dm.list.everyone:
     get:
       tags:
-        - IM
+        - DM
       summary: List All DMs
       description: |-
         List all DMs in the workspace.  
@@ -4440,7 +4440,7 @@ paths:
   /api/v1/dm.list:
     get:
       tags:
-        - IM
+        - DM
       summary: List DMs
       description: |-
         List all the DMs of the authenticated user. 
@@ -4679,7 +4679,7 @@ paths:
   /api/v1/dm.members:
     get:
       tags:
-        - IM
+        - DM
       summary: List DM Members
       description: |-
         List all the members of a DM. 
@@ -4792,7 +4792,7 @@ paths:
   /api/v1/dm.messages:
     get:
       tags:
-        - IM
+        - DM
       summary: List DM Messages
       description: |-
         List all the messages in a DM. 
@@ -4994,7 +4994,7 @@ paths:
   /api/v1/dm.messages.others:
     get:
       tags:
-        - IM
+        - DM
       summary: Message Others
       description: |-
         Retrieves the messages from any direct message in the server.  For this method to work, navigate to  **Administration > Workspace > Settings > General > REST API > Enable Direct Message History Endpoint** and enable it. 
@@ -5134,7 +5134,7 @@ paths:
   /api/v1/dm.open:
     post:
       tags:
-        - IM
+        - DM
       summary: Open DM
       description: |-
         Adds a DM back to the user's list of direct messages.
@@ -5189,7 +5189,7 @@ paths:
   /api/v1/dm.setTopic:
     post:
       tags:
-        - IM
+        - DM
       summary: Set DM Topic
       description: |-
         Set the topic of a DM.
@@ -5262,7 +5262,7 @@ paths:
                     errorType: error-room-param-not-provided
 tags:
   - name: Chat
-  - name: IM
+  - name: DM
 components:
   parameters:
     Optional-RoomId:
