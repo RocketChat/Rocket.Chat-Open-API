@@ -589,6 +589,10 @@ paths:
                                       type: string
                                     value:
                                       type: string
+                        attachments:
+                          type: array
+                          items:
+                            $ref: '#/components/schemas/Attachment'
                   count:
                     type: integer
                   offset:
@@ -2603,7 +2607,7 @@ paths:
                         attachments:
                           type: array
                           items:
-                            type: object
+                            $ref: '#/components/schemas/Attachment'
                         editedAt:
                           type: string
                         editedBy:
@@ -5309,7 +5313,7 @@ paths:
                             attachments:
                               type: array
                               items:
-                                type: object
+                                $ref: '#/components/schemas/Attachment'
                             file:
                               type: object
                               properties:
@@ -5747,20 +5751,7 @@ paths:
                       attachments:
                         type: array
                         items:
-                          type: object
-                          properties:
-                            ts:
-                              type: string
-                            title:
-                              type: string
-                            title_link:
-                              type: string
-                            title_link_download:
-                              type: boolean
-                            type:
-                              type: string
-                            description:
-                              type: string
+                          $ref: '#/components/schemas/Attachment'
                       u:
                         type: object
                         properties:
@@ -11232,6 +11223,10 @@ paths:
                           type: string
                         groupable:
                           type: boolean
+                        attachments:
+                          type: array
+                          items:
+                            $ref: '#/components/schemas/Attachment'
                   count:
                     type: integer
                   offset:
@@ -12847,6 +12842,46 @@ tags:
   - name: Teams
 
 components:
+  schemas:
+    Attachment:
+      type: object
+      properties:
+        ts:
+          type: string
+          example: 1970-01-01T00:00:00.000Z
+        title:
+          type: string
+        title_link:
+          type: string
+        title_link_download:
+          type: boolean
+        image_dimensions:
+          type: object
+          properties:
+            width:
+              type: integer
+              example: 444
+            height:
+              type: integer
+              example: 360
+        image_preview:
+          type: string
+          example: /9j/2wBDAAYEBQ...
+        image_url:
+          type: string
+          example: /file-upload/PNTaE9SBQasdpAwk2/img_1.jpg
+        image_type:
+          type: string
+          example: image/jpeg
+        image_size:
+          type: integer
+          example: 26674
+        type:
+          type: string
+          example: file
+        description:
+          type: string
+          example: ''
   parameters:
     Optional-RoomId:
       name: roomId
