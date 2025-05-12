@@ -10790,7 +10790,12 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         
-        Retrieves list of <a href='https://docs.rocket.chat/docs/tags' target='_blank'>tags</a>. At least one of the following permissions is required: 
+        Retrieves list of <a href='https://docs.rocket.chat/docs/tags' target='_blank'>tags</a>. Here are some important details to note when retrieving tags:
+        - By default, only tags not linked to any department are returned.
+        - To retrieve all tags in the workspace, set the `viewAll` parameter to `true`.
+        - If a `department` is specified, the response includes both the tags associated with that department and those not linked to any department.
+        
+        At least one of the following permissions is required: 
           * `view-l-room`
           * `manage-livechat-tags`
       operationId: get-api-v1-livechat-tags
