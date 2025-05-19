@@ -2,18 +2,6 @@ openapi: 3.0.0
 info:
   version: 1.0.0
   title: Omnichannel
-#  description: |-
-#    With the Rocket.Chat [Omnichannel](https://docs.rocket.chat/use-rocket.chat/omnichannel) feature, you can talk to your customers and website visitors, regardless of the channel they choose to connect with you.
-
-#    The Omnichannel endpoints are of two types:
-
-#    * **Endpoints requiring authentication**: The workspace admins and managers use the endpoints that require authentication with a login method.
-#    * **Endpoints not requiring authentication**: Visitors can use the endpoints that require no authentication. These endpoints require a visitor `token` which is like an authentication parameter for visitors. Visitors can [register themselves](livechat-endpoints/visitor/register-a-new-livechat-visitor.md) by providing a random unique string as the `token` which can be used for other such endpoints.
-    
-#    This section includes the following endpoints:
-#    * **Livechat**: Manage livechat users, visitors, conversations, and view analytics.
-#    * **Voice Channel**: Initiate and receive [calls](https://docs.rocket.chat/use-rocket.chat/rocket.chat-voice-channel) with visitors.
-#    * **Canned Responses**: Create and manage [template messages](https://docs.rocket.chat/use-rocket.chat/omnichannel/canned-responses).
 servers:
   - url: https://apiexplorer.support.rocket.chat
 paths:
