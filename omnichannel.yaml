@@ -9,7 +9,7 @@ info:
 
 #    * **Endpoints requiring authentication**: The workspace admins and managers use the endpoints that require authentication with a login method.
 #    * **Endpoints not requiring authentication**: Visitors can use the endpoints that require no authentication. These endpoints require a visitor `token` which is like an authentication parameter for visitors. Visitors can [register themselves](livechat-endpoints/visitor/register-a-new-livechat-visitor.md) by providing a random unique string as the `token` which can be used for other such endpoints.
-    
+
 #    This section includes the following endpoints:
 #    * **Livechat**: Manage livechat users, visitors, conversations, and view analytics.
 #    * **Voice Channel**: Initiate and receive [calls](https://docs.rocket.chat/use-rocket.chat/rocket.chat-voice-channel) with visitors.
@@ -319,7 +319,7 @@ paths:
         Permission required: `view-livechat-manager`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |0.42.0            | Added       |
       operationId: delete-api-v1-livechat-users-type-_id
@@ -560,7 +560,7 @@ paths:
       summary: Register or Update Omnichannel Contact
       description: |-
         > **Note:** This endpoint will be replaced. Refer to the new API documentations for [registering](https://developer.rocket.chat/apidocs/register-omnichannel-contacts) and [updating](https://developer.rocket.chat/apidocs/update-omnichannel-contact) contact for updated usage and features.
-    
+
         Register a guest user as a new omnichannel contact.
         Permission required: `view-l-room`
       operationId: post-api-v1-omnichannel-contact
@@ -658,7 +658,7 @@ paths:
         ```
         curl --location --globoff 'http://localhost:3000/api/v1/omnichannel/contact.search?custom={%20%22Subscription%22%3A%20%22premium%22%20}' \
         --header 'X-Auth-Token: b5BKhblglC5OU0AfB_Tl9dKmOb0zXUvWK-nhNT_aE8V' \
-        --header 'X-User-Id: CkCPNcvsvCDfmWLqC'        
+        --header 'X-User-Id: CkCPNcvsvCDfmWLqC'
         ```
       operationId: get-api-v1-contact.search
       parameters:
@@ -819,7 +819,7 @@ paths:
         Permission required: `create-livechat-contact`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |6.1.0             | Added       |
       parameters:
@@ -1082,7 +1082,7 @@ paths:
         Update omnichannel contact. Permission required: `update-livechat-contact`.
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |6.1.0             | Added       |
       parameters:
@@ -1155,7 +1155,7 @@ paths:
       tags:
         - Livechat Contacts
       description: |
-        Retrieve a single omnichannel contact by its unique `contactId`.  
+        Retrieve a single omnichannel contact by its unique `contactId`.
 
         Required permission: `view-livechat-contact`.
       operationId: get-api-v1-omnichannel-contacts.get
@@ -1164,7 +1164,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: contactId
           in: query
-          description: The contact's unique ID. 
+          description: The contact's unique ID.
           required: true
           schema:
             type: string
@@ -1777,7 +1777,7 @@ paths:
         Permission required: `view-livechat-contact`.
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |6.1.0             | Added       |
   /api/v1/omnichannel/contacts.history:
@@ -1839,7 +1839,7 @@ paths:
         Get contact's history. Permission required: `view-livechat-contact-history`.
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |6.1.0             | Added       |
       parameters:
@@ -1950,10 +1950,10 @@ paths:
         This identifies whether a contact is already registered using a given query parameter such as `email` or `phone` or `contactId`.
         **Note**: You must provide only one of the parameters in the request.
 
-        **Required permission**: `view-livechat-contact`. 
+        **Required permission**: `view-livechat-contact`.
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |7.2.0             | Added       |
   /api/v1/livechat/analytics/agent-overview:
@@ -1964,7 +1964,7 @@ paths:
         Permission required: `view-livechat-manager`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |6.4.0             | Added       |
       operationId: get-api-v1-livechat-analytics-agent-overview
@@ -1974,7 +1974,7 @@ paths:
         - name: name
           in: query
           description: |-
-            The data that you want to get. The available options are:  
+            The data that you want to get. The available options are:
             * `Total_conversations`
             * `Avg_chat_duration`
             * `Total_messages`
@@ -2088,7 +2088,7 @@ paths:
         Permission required: `view-livechat-manager`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |6.4.0             | Added       |
       operationId: get-api-v1-livechat-analytics-overview
@@ -2199,7 +2199,7 @@ paths:
         Get Livechat widget configuration information and additional visitor data.
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |0.70.0             | Added       |
       operationId: get-api-v1-livechat-config
@@ -2466,7 +2466,7 @@ paths:
         * `view-l-room`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |7.0.0             | Remove support of filtering by agent's username |
         |2.4.0             | Added support to the parameter `roomName`|
@@ -3087,7 +3087,7 @@ paths:
                 value:
                   rid: XFzMqgn33DcsQkpJp
                   token: iNKE8a6k6cjbqWhWd
-                  
+
   /api/v1/livechat/room.closeByUser:
     post:
       summary: Close Livechat Room
@@ -3181,7 +3181,7 @@ paths:
                     requestData:
                       email: test@example.com
                       subject: transcript
-                  
+
   /api/v1/livechat/room.join:
     get:
       summary: Join Livechat Room
@@ -3235,7 +3235,7 @@ paths:
     post:
       summary: Update Livechat Room
       description: |-
-        Edit a Livechat room. Update the topic, tags, and other details of a Livechat room. 
+        Edit a Livechat room. Update the topic, tags, and other details of a Livechat room.
         Permission required: `view-l-room`
 
         ### Changelog
@@ -3346,7 +3346,7 @@ paths:
       summary: Transfer Livechat Room
       description: |-
         > This endpoint has been deprecated in the 7.0.0 <a href="https://github.com/RocketChat/Rocket.Chat/releases" target="_blank">release</a>. Use the <a href="https://developer.rocket.chat/apidocs/forward-livechat-room" target="_blank">Forward Livechat Room</a> endpoint instead.
-  
+
         Transfer an omnichannel conversation to another department.
       operationId: post-api-v1-livechat-room.transfer
       requestBody:
@@ -4051,7 +4051,7 @@ paths:
         * `view-l-room`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |2.2.0             | Added support to pagination    |
         |0.42.0            | Added       |
@@ -4208,9 +4208,9 @@ paths:
         Permission required: `manage-livechat-departments`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
-        |1.0.0           | New fields for department updated      
+        |1.0.0           | New fields for department updated
         |0.42.0          | Added       |
       operationId: post-api-v1-livechat-department
       parameters:
@@ -4274,11 +4274,11 @@ paths:
                 departmentUnit:
                   type: object
                   description: |-
-                    Assign the department to a [unit](https://docs.rocket.chat/docs/units). 
+                    Assign the department to a [unit](https://docs.rocket.chat/docs/units).
 
                     **Guidelines for assigning departments to a unit**
                     - Permission required: `manage-livechat-departments`
-                    - If the user making the request is a [monitor](https://docs.rocket.chat/docs/monitors), they must be a supervisor of the specified unit. 
+                    - If the user making the request is a [monitor](https://docs.rocket.chat/docs/monitors), they must be a supervisor of the specified unit.
                     - If the user is not a monitor (such as an admin or [manager](https://docs.rocket.chat/docs/managers)), any unit can be associated to the department
                   properties:
                     _id:
@@ -4388,7 +4388,7 @@ paths:
         * `view-l-room`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |2.2.0             | Added `includeAgents` query parameter|
         |0.42.0            | Added       |
@@ -4489,7 +4489,7 @@ paths:
         * To add agents: `add-livechat-department-agents`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |0.42.0            | Added       |
       operationId: put-api-v1-livechat-department-_id
@@ -4554,11 +4554,11 @@ paths:
                 departmentUnit:
                   type: object
                   description: |-
-                    Assign the department to a [unit](https://docs.rocket.chat/docs/units). 
+                    Assign the department to a [unit](https://docs.rocket.chat/docs/units).
 
                     **Guidelines for assigning departments to a unit**
                     - Permission required: `manage-livechat-departments`
-                    - If the user making the request is a [monitor](https://docs.rocket.chat/docs/monitors), they must be a supervisor of the specified unit. 
+                    - If the user making the request is a [monitor](https://docs.rocket.chat/docs/monitors), they must be a supervisor of the specified unit.
                     - If the user is not a monitor (such as an admin or [manager](https://docs.rocket.chat/docs/managers)), any unit can be associated to the department.
                     - Providing an empty object `({})`, undefined `({ _id: undefined})`, or null `({ _id: null})` for this parameter removes the department from the associated unit.
                   properties:
@@ -4580,7 +4580,7 @@ paths:
                     - agentId: SQafHvoFPuB57NmBD
                       username: john.doe
                   departmentUnit:
-                    _id: 66f46dc59a0766c20712d698                
+                    _id: 66f46dc59a0766c20712d698
       responses:
         '200':
           description: OK
@@ -4685,7 +4685,7 @@ paths:
         * `remove-livechat-department`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |0.42.0            | Added       |
       operationId: delete-api-v1-livechat-department-_id
@@ -4711,7 +4711,7 @@ paths:
     get:
       summary: Autocomplete Department
       description: |-
-        Autocomplete the department name. 
+        Autocomplete the department name.
         At least one of the following permissions is required:
           * `view-livechat-departments`
           * `view-l-room`
@@ -5114,7 +5114,7 @@ paths:
       summary: Get Number of Chats
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Gives the number of chat rooms by department. Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-departments-amount-of-chats
       responses:
@@ -5189,7 +5189,7 @@ paths:
       summary: Get Average Service Time
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Returns average service time (in seconds) for chats by department. Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-departments-average-service-time
       parameters:
@@ -5257,7 +5257,7 @@ paths:
       summary: Get Average Chat Duration
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Returns the average chat duration of each department. Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-departments-average-chat-duration-time
       parameters:
@@ -5323,7 +5323,7 @@ paths:
       summary: Get Total Service Time
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Gives the total service time (in seconds) by department. Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-departments-total-service-time
       parameters:
@@ -5393,7 +5393,7 @@ paths:
       summary: Get Average Waiting Time
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Gives the average visitor waiting time (in seconds) by department. Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-departments-average-waiting-time
       parameters:
@@ -5459,7 +5459,7 @@ paths:
       summary: Get Total Transferred Chats
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Gives the total number of transferred chats by department. Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-departments-total-transferred-chats
       parameters:
@@ -5527,7 +5527,7 @@ paths:
       summary: Get Total Abandoned Chats
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Gives the total number of abandoned chats (rooms) by department. Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-departments-total-abandoned-chats
       parameters:
@@ -5603,7 +5603,7 @@ paths:
       summary: Get Percentage of Abandoned Chats
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Gives the percentage of abandoned chats per department. Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-departments-percentage-abandoned-chats
       parameters:
@@ -5671,11 +5671,11 @@ paths:
       summary: Get Available Departments by Unit ID
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
-        
+
+
         Gives departments that have not been associated to another unit yet. This endpoint has been renamed to <a href="https://developer.rocket.chat/apidocs/get-departments-by-unit-id-1" target="_blank">Get Available Departments by Unit Id</a> from Rocket.Chat 5.0.
-        
-        
+
+
       operationId: 'get-api-v1-livechat-departments.available-by-unit-:unitId'
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -5852,8 +5852,8 @@ paths:
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
 
         <p>Gives departments included in a specific unit ID. This endpoint has been renamed to <a href="https://developer.rocket.chat/apidocs/get-departments-by-unit-id-1" target="_blank">Get Departments by Unit ID</a> as from Rocket.Chat 5.0
-        
-        
+
+
       operationId: 'get-api-v1-livechat-departments.by-unit-:unitId'
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -6034,7 +6034,7 @@ paths:
         Send the value for a custom field.
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |0.70.0            | Added       |
       operationId: post-api-v1-livechat-custom.field
@@ -6128,7 +6128,7 @@ paths:
         Send an array of values for different custom fields.
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |0.70.0            | Added       |
       operationId: post-api-v1-livechat-custom.fields
@@ -6236,7 +6236,7 @@ paths:
         Permission required: `view-l-room`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |2.2.0             | Added       |
       operationId: get-api-v1-livechat-custom-fields
@@ -6333,7 +6333,7 @@ paths:
         Permission required: `view-l-room`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |2.4.0             | Added       |
       operationId: get-api-v1-livechat-custom-fields-_id
@@ -6641,9 +6641,9 @@ paths:
         The endpoint is used by visitors to request a transcript of their chat to be sent to their email once the conversation ends. The room must be closed before you can send a transcript.
 
         You can also request transcripts for older conversations given that you know the older token and room ID.
-        
+
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |0.70.0             | Added       |
       operationId: post-api-v1-livechat-transcript
@@ -6719,12 +6719,12 @@ paths:
         - Livechat Transcript
       summary: Send Livechat Transcript
       description: |-
-        This endpoint is used by agents and managers to schedule an email transcript to be sent once the chat is closed. 
+        This endpoint is used by agents and managers to schedule an email transcript to be sent once the chat is closed.
         Permission required: `send-omnichannel-chat-transcript`
         The room must be opened.
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |6.4.0            | Added       |
       operationId: 'post-api-v1-livechat-transcript-:rid'
@@ -6801,7 +6801,7 @@ paths:
         Permission required: `send-omnichannel-chat-transcript`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |6.4.0            | Added       |
       operationId: delete-api-v1-livechat-transcript-rid
@@ -6828,10 +6828,10 @@ paths:
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
 
         <a href="https://docs.rocket.chat/docs/omnichannel-conversations#conversation-transcript" target="_blank">Request a PDF transcript</a> for an Omnichannel conversation. The conversation must be closed before it can be exported. <br>
-        
+
         Permission required: `request-pdf-transcript`.
         Omnichannel <a href="https://docs.rocket.chat/docs/managers" target="_blank">managers</a> and <a href="https://docs.rocket.chat/docs/agents" target="_blank">agents</a> have this permission by default.
-        
+
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -6950,7 +6950,7 @@ paths:
       summary: Get Agent Average Service Time
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Gives the average service time (in seconds) for each agent.
         Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-agents-average-service-time
@@ -7018,10 +7018,10 @@ paths:
       summary: Get Agent Total Service Time
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Gives the total service time sorted by agent.
         Permission required: `view-livechat-manager`
-        
+
         **Service time** means how long time the agent is online and available. It does not mean how long time the agent was busy answering chats.
       operationId: get-api-v1-livechat-analytics-agents-total-service-time
       parameters:
@@ -7093,7 +7093,7 @@ paths:
       summary: Get History of Agents Available for Service
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Return the list of agents and their available time for the provided time frame.
         Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-agents-available-for-service-history
@@ -7199,9 +7199,9 @@ paths:
       description: |-
         Get the settings about the widget appearance.
         Permission required: `view-livechat-manager`
-        
+
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |6.4.0             | Added       |
       operationId: get-api-v1-livechat-appearance
@@ -7446,7 +7446,7 @@ paths:
         Permission required: `view-livechat-manager`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |6.4.0           | Added       |
       operationId: post-api-v1-livechat-appearance
@@ -7517,7 +7517,7 @@ paths:
       summary: Get Business Hours
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Retrieves all the <a href='https://docs.rocket.chat/docs/business-hours' target='_blank'>business hours</a> attached to a workspace.
         Permission required: `view-livechat-business-hours`
       operationId: get-api-v1-livechat-business-hours
@@ -7913,7 +7913,7 @@ paths:
       summary: Get Default Business Hour
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Fetches the default business hours of a workspace.
         Permission required: `view-livechat-business-hours`
       operationId: get-api-v1-livechat-business-hour
@@ -8596,7 +8596,7 @@ paths:
         - Livechat Dashboards
       summary: Get Chats Status
       description: |-
-        Retrieves the status of chats for a specific time duration. 
+        Retrieves the status of chats for a specific time duration.
         Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-dashboards-charts-chats
       parameters:
@@ -8872,7 +8872,7 @@ paths:
         Permission required: `view-livechat-manager`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |1.2.0            | Added       |
       operationId: get-api-v1-livechat-inquiries.list
@@ -8945,7 +8945,7 @@ paths:
         Permission required: `view-l-room`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |1.2.0            | Added       |
       operationId: post-api-v1-livechat-inquiries.take
@@ -9320,7 +9320,7 @@ paths:
       summary: Set SLA Policy to Inquiry
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Set <a href="https://docs.rocket.chat/docs/sla-policies" target="_blank">SLA policy</a> to an inquiry. You can only set the policy for an inquiry that has not been taken by an agent.
 
         At least one of the following permissions is required:
@@ -9392,7 +9392,7 @@ paths:
         Retrieves a list of integration settings.
         Permission required: `view-livechat-manager`
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |2.2.0             | Added       |
       operationId: get-api-v1-livechat-integrations.settings
@@ -9485,7 +9485,7 @@ paths:
       description: |-
         Permission required: `view-l-room`
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |2.4.0             | Added       |
       operationId: get-api-v1-livechat-queue
@@ -9785,7 +9785,7 @@ paths:
       operationId: post-api-v1-livechat-triggers
       description: |-
         Permission required: `view-livechat-manager`
-        
+
         See the <a href="https://docs.rocket.chat/docs/livechat-triggers" target="_blank">Livechat Triggers</a> guide for more information.
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -9897,10 +9897,10 @@ paths:
         - Livechat Triggers
       summary: Get Livechat Trigger
       description: |-
-        Get the details about a specific trigger. 
+        Get the details about a specific trigger.
         Permission required: `view-livechat-manager`
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |2.2.0             | Added       |
       operationId: get-api-v1-livechat-triggers-_id
@@ -10015,7 +10015,7 @@ paths:
       summary: Get List of Monitors
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Retrieves a list of <a href='https://docs.rocket.chat/docs/monitors' target='_blank'>monitors</a>.
         Permission required: `manage-livechat-monitors`
       operationId: get-api-v1-livechat-monitors
@@ -10105,7 +10105,7 @@ paths:
       summary: Get a Monitor
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Get details of a specific monitor.
         Permission required: `manage-livechat-monitors`
       operationId: get-api-v1-livechat-monitors-username
@@ -10315,13 +10315,13 @@ paths:
       summary: Get List of Priorities
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Retrieves list of existing <a href='https://docs.rocket.chat/docs/priorities' target='_blank'>priorities</a>. At least one of the following permissions is required:
           * `manage-livechat-priorities`
           * `view-l-room`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ------------ | ------------|
         |6.0.0         | Added       |
       operationId: get-api-v1-livechat-priorities
@@ -10404,7 +10404,7 @@ paths:
       summary: Get a Priority
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Get details of a specific priority.
         At least one of the following permissions is required:
           * `manage-livechat-priorities`
@@ -10460,12 +10460,12 @@ paths:
       summary: Update Priority
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Update an existing priority.
         Permission required: `manage-livechat-priorities`
-        
+
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ------------ | ------------|
         |6.0.0         | Added       |
       operationId: put-api-v1-livechat-priorities-priorityId
@@ -10534,10 +10534,10 @@ paths:
           $ref: '#/components/responses/permissionError'
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         This endpoint resets all priorities back to default.
         Permission required: `manage-livechat-priorities`
-        
+
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
@@ -10554,7 +10554,7 @@ paths:
       summary: Get Priorities
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         This endpoint is used to get a list of all priorities in a workspace below version 6.0. It supports the optional <a href="https://developer.rocket.chat/apidocs#pagination" target="_blank">pagination</a> query parameters.
       operationId: get-livechat-priorities
       parameters:
@@ -10625,7 +10625,7 @@ paths:
       summary: Get a Priority
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         This endpoint is used to get the details of a priority in a workspace below version 6.0.
       operationId: get-livechat-priorities-priorityId
       parameters:
@@ -10673,7 +10673,7 @@ paths:
       summary: List of Priorities
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         This endpoint has been renamed to <b><a href='https://rocketchat-developer.us.document360.io/apidocs/get-priorities' target='_blank'>Get Priorities</a></b> as from Rocket.Chat 5.0."
       operationId: get-livechat-priorities.list
       parameters:
@@ -10740,7 +10740,7 @@ paths:
       summary: Get one Priority
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         This endpoint has been renamed to <b><a href='https://developer.rocket.chat/apidocs/get-a-priority' target='_blank'>Get a Priority</a></b> as from Rocket.Chat 5.0."
       operationId: get-livechat-priority.getOne
       parameters:
@@ -10787,13 +10787,13 @@ paths:
       summary: Get List of Tags
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Retrieves list of <a href='https://docs.rocket.chat/docs/tags' target='_blank'>tags</a>. Here are some important details to note when retrieving tags:
         - By default, only tags not linked to any department are returned.
         - To retrieve all tags in the workspace, set the `viewAll` parameter to `true`.
         - If a `department` is specified, the response includes both the tags associated with that department and those not linked to any department.
-        
-        At least one of the following permissions is required: 
+
+        At least one of the following permissions is required:
           * `view-l-room`
           * `manage-livechat-tags`
       operationId: get-api-v1-livechat-tags
@@ -10898,7 +10898,7 @@ paths:
       summary: Get a Tag
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         At least one of the following permissions is required:
           * `view-l-room`
           * `manage-livechat-tags`
@@ -10976,10 +10976,10 @@ paths:
       summary: List of Tags
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         This endpoint has been renamed to <a href="https://developer.rocket.chat/apidocs/get-list-of-tags" target="_blank">Get List of Tags</a> as from Rocket.Chat 5.0.
-        
-        
+
+
       operationId: get-api-v1-livechat-tags.list
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -11041,7 +11041,7 @@ paths:
       summary: Get One Tag
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-      
+
         This endpoint has been renamed to  <b><a href='https://developer.rocket.chat/apidocs/get-a-tag' target='_blank'>Get a Tag</a><b> as from Rocket.Chat 5.0
       operationId: get-livechat-tags.getOne
       responses:
@@ -11143,7 +11143,7 @@ paths:
         - Livechat Units
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Create a <a href='https://docs.rocket.chat/docs/units' target='_blank'>unit</a> to group departments. Permission required: `manage-livechat-units`
         ### Changelog
         | Version      | Description |
@@ -11319,7 +11319,7 @@ paths:
       operationId: get-api-v1-livechat-units
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Permission required: `manage-livechat-units`
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -11386,9 +11386,9 @@ paths:
       operationId: post-api-v1-livechat-units-id
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Permission required: `manage-livechat-units`
-        
+
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
@@ -11470,11 +11470,11 @@ paths:
       operationId: delete-api-v1-livechat-units-id
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Permission required: `manage-livechat-units`
-        
+
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ------------ | ------------|
         |4.2.0         | Added       |
       parameters:
@@ -11524,7 +11524,7 @@ paths:
           $ref: '#/components/responses/permissionError'
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Get details of a specific unit. <br>
         Permission required: `manage-livechat-units`
       tags:
@@ -11532,7 +11532,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
-      
+
   '/api/v1/livechat/units/{unitId}/monitors':
     parameters:
       - schema:
@@ -11590,7 +11590,7 @@ paths:
           $ref: '#/components/responses/permissionError'
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Get the list of monitors associated with a specific unit. <br>
         Permission required: `manage-livechat-units`
       tags:
@@ -11710,7 +11710,7 @@ paths:
           $ref: '#/components/responses/permissionError'
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Permission required: `manage-livechat-units`
       tags:
         - Livechat Units
@@ -11841,7 +11841,7 @@ paths:
           $ref: '#/components/responses/permissionError'
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Permission required: `manage-livechat-units`
       tags:
         - Livechat Units
@@ -12031,13 +12031,13 @@ paths:
       summary: Get Conversations by Status
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         View the metrics of omnichannel conversations in your workspace during a selected time range based on their status: **Open**, **Queued**, **On Hold**, or **Closed**.<br>
-        
+
         Permission required: `view-livechat-reports`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | -----------  | ------------|
         |6.4.0         | Added       |
       operationId: get-api-v1-livechat-analytics-dashboards-conversations-by-status
@@ -12095,13 +12095,13 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
 
-        
+
         View the metrics of omnichannel conversations in your workspace during a selected time range based on their departments. <br>
 
         Permission required: `view-livechat-reports`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | -----------  | ------------|
         |6.4.0         | Added       |
       operationId: get-api-v1-livechat-analytics-dashboards-conversations-by-department
@@ -12160,11 +12160,11 @@ paths:
       summary: Get Conversations by Tags
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         View the metrics of omnichannel conversations in your workspace during a selected time range based on their tags. <br>
 
         Permission required: `view-livechat-reports`
-        
+
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
@@ -12225,13 +12225,13 @@ paths:
         - Reports
       summary: Get Conversation by Agents
       description: |-
-       
+
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
 
         View the metrics of omnichannel conversations in your workspace during a selected time range based on the agents in your workspace. <br>
-        
+
         Permission required: `view-livechat-reports`
-        
+
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
@@ -12305,7 +12305,7 @@ paths:
       summary: Get List of SLA Policies
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
@@ -12381,9 +12381,9 @@ paths:
       summary: Create SLA Policy
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Permission required: `manage-livechat-sla`
-        
+
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
@@ -12483,12 +12483,12 @@ paths:
       operationId: get-api-v1-livechat-sla-slaId
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Get details of a specific SLA policy. <br>
         At least one of the following permissions is required:
           * `manage-livechat-sla`
           * `view-l-room`
-          
+
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
@@ -12542,10 +12542,10 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
 
-        
+
         Update an existing SLA policy. <br>
         Permission required: `manage-livechat-sla`
-        
+
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
@@ -12627,11 +12627,11 @@ paths:
       summary: Delete an SLA
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Permission required: `manage-livechat-sla`
-        
+
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ------------ | ------------|
         |6.0.0         | Added       |
       operationId: delete-api-v1-livechat-sla-slaId
@@ -15114,7 +15114,7 @@ paths:
         - Agent Extensions
       summary: Update Omnichannel Agent Extension
       description: |-
-        Update the extension associated with a specific agent. 
+        Update the extension associated with a specific agent.
         Permission required: `manage-agent-extension-association`
       operationId: post-api-v1-omnichannel-agent-extension
       parameters:
@@ -15144,7 +15144,7 @@ paths:
       summary: Create or Update or Delete a Canned Response
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         To create and update <a href='https://docs.rocket.chat/docs/canned-responses' target='_blank'>canned responses</a>, the following permissions are required:
         * `save-canned-responses`
         * `save-all-canned-responses`
@@ -15255,7 +15255,7 @@ paths:
         - `view-all-canned-responses`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |1.0.0            | Added       |
       operationId: get-api-v1-canned-responses
@@ -15392,11 +15392,11 @@ paths:
       summary: Get User Canned Responses
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Get a list of all canned responses in the workspace that belong to the current user scope. <br>
-        
+
         Permission required: `view-canned-responses`
-        
+
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
