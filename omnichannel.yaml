@@ -4210,7 +4210,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
-        |1.0.0           | New fields for department updated
+        |1.0.0           | New fields for department updated |
         |0.42.0          | Added       |
       operationId: post-api-v1-livechat-department
       parameters:
