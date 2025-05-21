@@ -16,7 +16,6 @@ paths:
         - Integration
       summary: Create Integration
       description: |- 
-        
         Permissions required to create incoming integrations:
         * `manage-incoming-integrations`
         * `manage-own-incoming-integrations`
@@ -863,13 +862,12 @@ paths:
       summary: Remove Integration
       description: |-
         Remove an integration from the workspace.
-        
+
         Any of the following permissions is required:
         * `manage-incoming-integrations`
         * `manage-own-incoming-integrations`
         * `manage-outgoing-integrations`
         * `manage-own-outgoing-integrations`
-
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
