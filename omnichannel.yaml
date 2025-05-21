@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   version: 1.0.0
   title: Omnichannel
-#  description: |-
+# description: |-
 #    With the Rocket.Chat [Omnichannel](https://docs.rocket.chat/use-rocket.chat/omnichannel) feature, you can talk to your customers and website visitors, regardless of the channel they choose to connect with you.
 
 #    The Omnichannel endpoints are of two types:
@@ -353,7 +353,6 @@ paths:
       summary: Get Agent Information
       description: |-
         Get the Livechat agent data according to the path variables. To get the `rid` and `token` values, call the <a href="https://developer.rocket.chat/apidocs/get-rooms" target="_blank">Get Rooms</a> endpoint to retrieve the details of all rooms.
-
       operationId: get-api-v1-livechat-agent
       parameters:
         - name: rid
@@ -649,7 +648,6 @@ paths:
     get:
       summary: Search Contacts
       description: |-
-      
         > **Note:** This endpoint will be replaced. Refer to the [new API documentation](https://developer.rocket.chat/apidocs/search-omnichannel-contacts) for updated usage and features.
 
         Find contacts by name, email, phone number, or any custom field values stored in the database.
@@ -3348,7 +3346,7 @@ paths:
       summary: Transfer Livechat Room
       description: |-
         > This endpoint has been deprecated in the 7.0.0 <a href="https://github.com/RocketChat/Rocket.Chat/releases" target="_blank">release</a>. Use the <a href="https://developer.rocket.chat/apidocs/forward-livechat-room" target="_blank">Forward Livechat Room</a> endpoint instead.
-        
+  
         Transfer an omnichannel conversation to another department.
       operationId: post-api-v1-livechat-room.transfer
       requestBody:
@@ -3949,11 +3947,11 @@ paths:
       summary: Set Livechat Room Priority
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Set the priority of a Livechat room.<br>
-        
+
         Permission required: `view-l-room`
-        
+
         ### Changelog
         | Version | Description  |
         | ------- |--------------|
@@ -4015,11 +4013,11 @@ paths:
       summary: Remove Livechat Room Priority
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Remove the priority set to a Livechat room.<br>
-        
+
         Permission required: `view-l-room`
-        
+
         ### Changelog
         | Version | Description  |
         | ------- |--------------|
@@ -4241,7 +4239,7 @@ paths:
                       description: Whether you want to enable the department. The value can be boolean true or false.
                     showOnRegistration:
                       type: boolean
-                      description: |- 
+                      description: |-
                         You can let visitors choose the department they want to talk to. The option will appear to your customer in the Livechat widget. The value can be boolean true or false.
                     name:
                       type: string
@@ -4251,7 +4249,7 @@ paths:
                       description: The email ID associated with the department.
                     showOnOfflineForm:
                       type: boolean
-                      description: |- 
+                      description: |-
                         If you want your department to be displayed during off-business hours. The value can be boolean true or false.
                     description:
                       type: string
@@ -4267,7 +4265,7 @@ paths:
                         description: The agent ID that you want to assign to the department.
                       count:
                         type: integer
-                        description: |- 
+                        description: |-
                           The number of chats served by the agent. Enter a value if you want to reset the stored value.
                           Note: This field is used by the routing algorithm to determine the agents that have served the least number of chats and assign new chats to them.
                       order:
@@ -5603,7 +5601,7 @@ paths:
   /api/v1/livechat/analytics/departments/percentage-abandoned-chats:
     get:
       summary: Get Percentage of Abandoned Chats
-      description: |- 
+      description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         
         Gives the percentage of abandoned chats per department. Permission required: `view-livechat-manager`
@@ -9654,7 +9652,7 @@ paths:
       tags:
         - Livechat Triggers
       summary: Get List of Livechat Triggers
-      description: |- 
+      description: |-
         Permission required: `view-livechat-manager`
         ### Changelog
         | Version      | Description |
@@ -11041,7 +11039,7 @@ paths:
       tags:
         - Livechat Tags
       summary: Get One Tag
-      description: |- 
+      description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
       
         This endpoint has been renamed to  <b><a href='https://developer.rocket.chat/apidocs/get-a-tag' target='_blank'>Get a Tag</a><b> as from Rocket.Chat 5.0
