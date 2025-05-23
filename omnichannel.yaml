@@ -772,10 +772,6 @@ paths:
                     type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    contactId: 674eeb4343725ce31dd9bdae
-                    success: true
               examples:
                 Example 1:
                   value:
@@ -794,11 +790,6 @@ paths:
                     type: string
                   errorType:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'must have required property ''emails'' [invalid-params]'
-                    errorType: invalid-params
               examples:
                 Example 1:
                   value:
@@ -830,15 +821,6 @@ paths:
           application/json:
             schema:
               type: object
-              x-examples:
-                Example 1:
-                  name: John
-                  phones:
-                    - '+12345678'
-                  emails:
-                    - email@example.com
-                  customFileds: {}
-                  contactManager: fffff
               required:
                 - name
                 - phones
@@ -976,40 +958,6 @@ paths:
                         type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    contact:
-                      _id: 67487f45e98719b7908d0f29
-                      createdAt: '2024-11-28T14:33:41.487Z'
-                      name: John
-                      emails:
-                        - address: email@example.com
-                      phones:
-                        - phoneNumber: '+123383883838'
-                      channels:
-                        - name: widget
-                          visitor:
-                            visitorId: 67499b2243725ce31dd57fc7
-                            source:
-                              type: widget
-                          blocked: false
-                          verified: false
-                          details:
-                            type: widget
-                            destination: example.com
-                          lastChat:
-                            _id: bC5x3zmBdgtmA4m3W
-                            ts: '2024-11-29T10:44:55.016Z'
-                      customFields: {}
-                      unknown: false
-                      preRegistration: false
-                      _updatedAt: '2024-11-29T13:31:43.595Z'
-                      conflictingFields: []
-                      lastChat:
-                        _id: bC5x3zmBdgtmA4m3W
-                        ts: '2024-11-29T10:44:55.016Z'
-                      contactManager: 9sLvmAcQk4EAGdi6e
-                    success: true
               examples:
                 Example 1:
                   value:
@@ -1058,11 +1006,6 @@ paths:
                     type: string
                   errorType:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'must have required property ''emails'' [invalid-params]'
-                    errorType: invalid-params
               examples:
                 Example 1:
                   value:
@@ -1093,50 +1036,6 @@ paths:
           application/json:
             schema:
               type: object
-              x-examples:
-                Example 1:
-                  contactId: 67487f45e98719b7908d0f29
-                  name: John
-                  phones:
-                    - '+123383883838'
-                  emails:
-                    - email@example.com
-                  contactManager: 9sLvmAcQk4EAGdi6e
-                  customFields: {}
-                  wipeConflicts: true
-              required:
-                - contactId
-              properties:
-                contactId:
-                  type: string
-                  description: The contact's ID.
-                  default: 67487f45e98719b7908d0f29
-                name:
-                  type: string
-                  description: The contact's name.
-                  example: John
-                phones:
-                  type: array
-                  description: An array of the contact's phone number(s).
-                  items:
-                    type: string
-                    example: '+123456789'
-                emails:
-                  type: array
-                  description: An array of the contact's email address(es).
-                  items:
-                    type: string
-                    example: example@email.com
-                contactManager:
-                  type: string
-                  description: The contact manager's ID.
-                  example: 9sLvmAcQk4EAGdi6e
-                customFields:
-                  type: object
-                  description: Object defining the custom fields to be updated.
-                wipeConflicts:
-                  type: boolean
-                  description: Boolean to determine whether conflicts impacting contacts should be automatically resolved.
             examples:
               Example 1:
                 value:
@@ -1268,44 +1167,6 @@ paths:
                           properties: {}
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    contact:
-                      _id: 673c76df47a6c9b89dd263d8
-                      createdAt: '2024-11-19T11:30:39.710Z'
-                      name: John Doe
-                      channels:
-                        - name: widget
-                          visitor:
-                            visitorId: 673c76df1e2e6feb77939c70
-                            source:
-                              type: widget
-                          blocked: false
-                          verified: true
-                          details:
-                            type: widget
-                            destination: example.com
-                          lastChat:
-                            _id: ixnGsLNT8rTL9eYY3
-                            ts: '2024-11-19T11:30:39.724Z'
-                          field: email
-                          value: mail@example.com
-                          verifiedAt: '2024-11-19T11:31:58.997Z'
-                      customFields:
-                        social-number: 123456-12345
-                        address: P.O. Box 123 3456 Home Rd. Somewhere in the world
-                        zip-code: 123456-099
-                      unknown: false
-                      _updatedAt: '2024-11-19T11:33:55.424Z'
-                      lastChat:
-                        _id: ixnGsLNT8rTL9eYY3
-                        ts: '2024-11-19T11:30:39.724Z'
-                      conflictingFields: []
-                      emails:
-                        - address: mail@example.com
-                      contactManager: cbTgcixmLxYSdFmmZ
-                      phones: []
-                    success: true
               examples:
                 Example:
                   value:
@@ -1484,45 +1345,6 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    contacts:
-                      - _id: 673be1711e2e6feb77939a7b
-                        createdAt: '2024-11-19T00:53:05.468Z'
-                        name: Boris Doe
-                        emails:
-                          - address: boris@doe.com
-                        phones: []
-                        channels:
-                          - name: widget
-                            visitor:
-                              visitorId: 673be2101e2e6feb77939a7f
-                              source:
-                                type: widget
-                            blocked: false
-                            verified: false
-                            details:
-                              type: widget
-                              destination: example.com
-                            lastChat:
-                              _id: NMee5zFPv62N7RAhh
-                              ts: '2024-11-19T00:55:46.723Z'
-                        customFields:
-                          social-number: 45600-00
-                        unknown: false
-                        _updatedAt: '2024-11-19T00:56:43.140Z'
-                        conflictingFields: []
-                        lastChat:
-                          _id: NMee5zFPv62N7RAhh
-                          ts: '2024-11-19T00:55:46.723Z'
-                        contactManager:
-                          _id: mAwAgmNndK7SHnQ89
-                          name: Jane
-                          username: Jane
-                    count: 1
-                    offset: 0
-                    total: 1
-                    success: true
               examples:
                 Example 1:
                   value:
@@ -1576,11 +1398,6 @@ paths:
                     type: string
                   errorType:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'must be number [invalid-params]'
-                    errorType: invalid-params
               examples:
                 Example 1:
                   value:
@@ -1676,26 +1493,6 @@ paths:
                           type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    channels:
-                      - name: widget
-                        visitor:
-                          visitorId: 234567987655weygcbg
-                          source:
-                            type: widget
-                        blocked: false
-                        verified: true
-                        details:
-                          type: widget
-                          destination: example.com
-                        lastChat:
-                          _id: sdfgjhgfdfeG
-                          ts: '2024-11-22T14:53:36.500Z'
-                        field: email
-                        value: example@mail.com
-                        verifiedAt: '2024-11-22T14:55:21.354Z'
-                    success: true
               examples:
                 Success Example:
                   value:
@@ -1730,11 +1527,6 @@ paths:
                     type: string
                   errorType:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'must have required property ''contactId'' [invalid-params]'
-                    errorType: invalid-params
               examples:
                 Bad Request Example:
                   value:
@@ -1752,10 +1544,6 @@ paths:
                     type: string
                   message:
                     type: string
-                x-examples:
-                  Example 1:
-                    status: error
-                    message: You must be logged in to do this.
               examples:
                 'Unauthorized Example ':
                   value:
@@ -1801,11 +1589,6 @@ paths:
                     type: string
                   errorType:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'must have required property ''contactId'' [invalid-params]'
-                    errorType: invalid-params
               examples:
                 Example 1:
                   value:
@@ -1825,10 +1608,6 @@ paths:
                     type: boolean
                   error:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'User does not have the permissions required for this action [error-unauthorized]'
               examples:
                 Example 1:
                   value:
@@ -1878,10 +1657,6 @@ paths:
                     type: boolean
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    exists: true
-                    success: true
               examples:
                 Contact found:
                   value:
@@ -1904,15 +1679,6 @@ paths:
                     type: string
                   errorType:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: |-
-                      must have required property 'contactId'
-                       must have required property 'email'
-                       must have required property 'phone'
-                       must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params
               examples:
                 Error from missing query parameters:
                   value:
@@ -6490,10 +6256,6 @@ paths:
               required:
                 - rid
                 - status
-              x-examples:
-                Example 1:
-                  rid: abc123xyzabc
-                  status: ended
       responses:
         '200':
           description: OK
@@ -6742,10 +6504,6 @@ paths:
           application/json:
             schema:
               type: object
-              x-examples:
-                Example 1:
-                  email: test@test.com
-                  subject: Livechat Transcript
               required:
                 - email
                 - subject
@@ -13774,10 +13532,6 @@ paths:
           application/json:
             schema:
               type: object
-              x-examples:
-                Example 1:
-                  rid: c9YW3rejo7HeL6ZDW
-                  token: yHoawq4s9bDn4dM5H
               required:
                 - rid
                 - token
@@ -13925,18 +13679,6 @@ paths:
           application/json:
             schema:
               type: object
-              x-examples:
-                Example 1:
-                  visitor:
-                    name: Livechat Visitor
-                    email: visitor@rocket.chat
-                    department: Support
-                    token: iNKE8a6k6cjbqWhWd
-                    phone: 55 51 5555-5555
-                    customFields:
-                      - key: address
-                        value: Rocket.Chat street
-                        overwrite: true
               properties:
                 visitor:
                   type: object
@@ -15007,9 +14749,6 @@ paths:
                 properties:
                   extensions:
                     type: string
-                x-examples:
-                  Example 1:
-                    extensions: '10023'
               examples:
                 Success Example:
                   value:
@@ -15790,13 +15529,6 @@ paths:
           application/json:
             schema:
               type: object
-              x-examples:
-                Example 1:
-                  visitor:
-                    token: 54fc5544030bcecda053311cb6b98920b
-                  messages:
-                    - msg: test
-                    - msg: hello
               properties:
                 visitor:
                   type: object
@@ -16645,11 +16377,6 @@ components:
                 type: string
               errorType:
                 type: string
-            x-examples:
-              Example 1:
-                success: false
-                error: 'must have required property ''start'' [invalid-params]'
-                errorType: invalid-params
           examples:
             Example 1:
               value:
