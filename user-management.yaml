@@ -3634,11 +3634,18 @@ paths:
       tags:
         - Users
       summary: Check Username Availability
-      description: ''
+      description: 'Check if the username is available or used by another user'
       operationId: get-api-v1-users.checkUsernameAvailability
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
+        - name: username
+          in: query
+          required: true
+          description: 'The username to check for availability'
+          schema:
+            type: string
+            example: johnDoe
       responses:
         '200':
           description: OK
@@ -3673,12 +3680,27 @@ paths:
                     type: string
                   errorType:
                     type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+                      field:
+                        type: string
               examples:
                 Example 1:
                   value:
                     success: false
                     error: 'must have required property ''username'' [invalid-params]'
                     errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: 'system is blocked and can''t be used! [error-blocked-username]'
+                    errorType: error-blocked-username
+                    details:
+                      method: "checkUsernameAvailability"
+                      field: "system"
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/users.generatePersonalAccessToken:
