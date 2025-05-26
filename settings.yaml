@@ -64,8 +64,8 @@ paths:
         - Settings
       description: |-
         List all public settings. Learn how this can be used in configuring your workspace in this <a href="https://docs.rocket.chat/docs/manage-settings-using-environmental-variables" target="_blank">guide</a>.
-
-### Changelog
+        
+        ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |7.0.0            | Added the `_id` query parameter for filtering.|
@@ -177,7 +177,7 @@ paths:
         - Settings
       description: |-
         List all the <a href="https://docs.rocket.chat/docs/oauth" target="_blank"> OAuth services</a>. enabled in the workspace.
-### Changelog
+        ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |0.64.0            | Renamed field `appId` to `clientId` and added flag `custom` to indicate whether the OAuth service is customized and fix `id` inconsistence (set all cases to `_id`)       |
@@ -339,18 +339,18 @@ paths:
             public: true  });
           ```
           This means that the setting labeled `Allow anonymous read` in the section `Accounts` has `_id` equal to `Accounts_AllowAnonymousRead`. The second argument is the default value (false). The third argument specifies the variable's type and whether it is public, hidden, and so on. 
-
+          
           To set a color, you can send:
           ```json
           { value: '<color-code>',
             editor: 'color' }
           ```
-
+          
           And also to trigger a action-button, use:
           ```json
           { execute: true }
           ```
-### Changelog
+          ### Changelog
           | Version      | Description |
           | ---------------- | ------------|
           |0.65.0            | Added option to set a color and trigger an action       |
@@ -410,7 +410,7 @@ paths:
       description: |-
         Get details of a setting by ID.
         Permission required: `view-privileged-setting`
-### Changelog
+        ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |0.42.0            | Added       |
@@ -457,7 +457,7 @@ paths:
       description: List out all the active OAuth services configured with details.
       tags:
         - Settings
-
+        
   /api/v1/audit.settings:
     parameters: []
     get:
@@ -622,8 +622,8 @@ paths:
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         Get the list of changed settings within a specific duration of time, useful for auditing purposes. 
         Permission required: `can-audit`.
-
-### Changelog
+        
+        ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |7.5.0            | Added       |
@@ -1179,7 +1179,7 @@ paths:
       description: |-
         This endpoint takes in the binary content of the imported file, along with additional information about its content, and stores it in a buffer. Permission required: `run-import`.
 
-### Changelog
+        ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |3.0.0            | Added       |
@@ -1253,7 +1253,7 @@ paths:
         Download the public import file.
         Permission required: `run-import`
 
-### Changelog
+        ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |3.0.0            | Added       |
@@ -1329,7 +1329,7 @@ paths:
         Triggers the process of importing users, rooms and messages to the workspace.
         Permission required: `run-import`
 
-### Changelog
+        ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |7.0.0            | Remove required extra data from `users` and `channels` parameters. Use only record ID of the users or channels.   |
@@ -1377,7 +1377,7 @@ paths:
       description: |-
         Get the import file data. 
         Permission required: `run-import`
-### Changelog
+        ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |3.0.0            | Added       |
@@ -1431,7 +1431,7 @@ paths:
       description: |-
         Get the progress of the import.
         Permission required: `run-import`
-### Changelog
+        ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |3.0.0            | Added       |
@@ -1521,7 +1521,7 @@ paths:
       description: |-
         Get latests import operations.
         Permission required: `view-import-operations`
-### Changelog
+        ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |3.0.0            | Added       |
@@ -1557,7 +1557,7 @@ paths:
       description: |-
         Dowbload pending files.
         Permission required: `run-import`
-### Changelog
+        ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |3.0.0            | Added       |
@@ -1595,7 +1595,7 @@ paths:
       description: |-
         Download pending avatars from the import.
         Permission required: `run-import`
-### Changelog
+        ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |3.0.0            | Added       |
@@ -1658,7 +1658,7 @@ paths:
       description: |-
         Get the current import operation.
         Permission required: `run-import`
-### Changelog
+        ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |3.0.0            | Added       |
@@ -1721,7 +1721,7 @@ paths:
       description: |-
         Creates a new import operation; if an operation was already running, it will be aborted. Any data from previous imports will be cleared automatically.
         Permission required: `run-import`
-### Changelog
+        ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |6.3.0            | Added       |
@@ -1745,7 +1745,7 @@ paths:
       description: |-
         Adds user data to the import staging area. It requires the current import operation status to be either `new` or `ready`. If successful, it changes the operation state to `ready`.
         Permission required: `run-import`
-### Changelog
+        ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |6.3.0            | Added       |
@@ -1854,7 +1854,7 @@ paths:
         2. If a user's email or username is already in use, it will not be created.
         3. Only the users that were imported successfully will be removed from the staging area.
 
-### Changelog
+        ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |6.3.0            | Added       |
@@ -1880,7 +1880,7 @@ paths:
               * `error`: An error caused the operation to stop running.
               * `canceled`: The operation was interrupted by an administrator.
               * `done`: The operation was completed successfully.
-
+              
               Note the following points:
                 1. The operation is considered successful if it processes every user in the staging area, even if no user is imported.
                 2. You can check how many users have been imported or failed to import with the `operation.count.completed` and `operation.count.error` attributes.
@@ -1944,7 +1944,7 @@ paths:
           $ref: '#/components/responses/forbiddenError'
       description: |-
         Get the status of the current import operation.Permission required: `run-import`
-### Changelog
+        ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |6.3.0            | Added       |
@@ -1970,7 +1970,7 @@ paths:
       description: |-
         Abort any import operation currently in progress. Clear any remaining data that may have been left by any previous operation.
         Permission required: `run-import`
-### Changelog
+        ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |6.3.0            | Added       |
@@ -2155,7 +2155,7 @@ paths:
 
         Add a new federated server.
 
-### Changelog
+        ### Changelog
         | Version      | Description |
         | ------------ | ------------|
         |6.0.0         | Added       |
@@ -2235,7 +2235,7 @@ paths:
 
         Lists all the servers the user has already saved.
 
-### Changelog
+        ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |6.0.0            | Added       |
@@ -2268,14 +2268,14 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       description: |-
-
+      
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
 
 
         Remove a federated server.
 
 
-### Changelog
+        ### Changelog
         | Version      | Description |
         | ------------ | ------------|
         |6.0.0          Added       |
@@ -2360,7 +2360,7 @@ paths:
 
         Search for federated public rooms by the server name or room name.
 
-### Changelog
+        ### Changelog
         | Version      | Description |
         | ------------ | ------------|
         |6.0.0         | Added       |
@@ -2401,10 +2401,10 @@ paths:
           $ref: '#/components/responses/authorizationError'
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-
+        
         Join a public external federated room.
 
-### Changelog
+        ### Changelog
         | Version      | Description |
         | ------------ | ------------|
         |6.0.0         | Added       |
@@ -2520,7 +2520,7 @@ paths:
       description: |-
         Retrieves all the reported messages grouped by users.
         Permission required: `view-moderation-console`
-### Changelog
+        ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |6.2.0            | Added       |
@@ -2708,7 +2708,7 @@ paths:
       description: |-
         Retrieve all reported messages of a user.
         Permission required: `view-moderation-console`
-### Changelog
+        ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |6.2.0            | Added       |
@@ -2803,7 +2803,7 @@ paths:
       description: |-
         Retrieve all the reports of a single message. A message can have many reports.
         Permission required: `view-moderation-console`
-### Changelog
+        ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |6.2.0            | Added       |
@@ -2836,7 +2836,7 @@ paths:
       description: |-
         Get more details of a single report. 
         Permission required: `view-moderation-console`
-### Changelog
+        ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |6.2.0            | Added       |
@@ -2866,7 +2866,7 @@ paths:
       description: |-
         You can dismiss all the reports of a particular user by the `userId`. You can also dismiss the report of a message by the `msgId`.
         Permission required: `manage-moderation-actions`
-### Changelog
+        ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |6.2.0            | Added       |
@@ -2901,7 +2901,7 @@ paths:
           $ref: '#/components/responses/forbiddenError'
       description: |-
         Delete all the reports of messages that belongs to user. Permission required: `manage-moderation-actions`
-### Changelog
+        ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |6.2.0            | Added       |
@@ -3020,7 +3020,7 @@ paths:
 
         Retrieves all sessions of the authenticated user making the request.
 
-### Changelog
+        ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |5.0.0            | Added       |
@@ -3306,7 +3306,7 @@ paths:
         Retrieve the sessions of all users on the workspace. This endpoint requires 2FA.
         Permission required: `view-device-management`
 
-### Changelog
+        ### Changelog
         | Version      | Description |
         | ------------ | ------------|
         |5.0.0         | Added       |
@@ -3457,7 +3457,7 @@ paths:
 
         Retrieve session information for sessions owned by the authenticated user. This endpoint provides detailed information about the user's sessions on the workspace. It does not grant access to the session information of other users on the workspace.
 
-### Changelog
+        ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |5.0.0            | Added       |
@@ -3581,7 +3581,7 @@ paths:
         Retrieve session information for any session on the workspace, regardless of the session owner. This endpoint allows authorized users to access session details across the workspace and requires 2FA.
         Permission required: `view-device-management`
 
-### Changelog
+        ### Changelog
         | Version      | Description |
         | ------------ | ------------|
         |5.0.0         | Added       |
@@ -3644,7 +3644,7 @@ paths:
 
         This endpoint allows an authenticated user to log out of any of their sessions on the workspace. It is designed specifically for the user to terminate their sessions and cannot be used to log out sessions belonging to other users on the workspace.
 
-### Changelog
+        ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |5.0.0            | Added       |
@@ -3736,7 +3736,7 @@ paths:
 
         Permission required: `logout-device-management`
 
-### Changelog
+        ### Changelog
         | Version      | Description |
         | ------------ | ------------|
         |5.0.0         | Added       |
