@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   version: 1.0.0
   title: Settings
-# description: |-
+#  description: |-
 #    Configure your Rocket.Chat workspace with the following endpoints:
 #      * **Settings**: Manage public and private settings.
 #      * **Cloud**: Register your workspace on Rocket.Chat Cloud.
@@ -64,7 +64,7 @@ paths:
         - Settings
       description: |-
         List all public settings. Learn how this can be used in configuring your workspace in this <a href="https://docs.rocket.chat/docs/manage-settings-using-environmental-variables" target="_blank">guide</a>.
-        
+
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -80,7 +80,7 @@ paths:
           description: 'Filter by the `_id` of the settings.'
           schema:
             type: string
-          example: Site_Url, LDAP_Enable        
+          example: Site_Url, LDAP_Enable
   /api/v1/settings.oauth:
     parameters: []
     get:
@@ -264,7 +264,7 @@ paths:
   /api/v1/settings.addCustomOAuth:
     parameters: []
     post:
-      description: Add a <a href=" https://docs.rocket.chat/docs/oauth#add-custom-oauth" target="_blank">custom OAuth integration</a> to your workspace. 
+      description: Add a <a href=" https://docs.rocket.chat/docs/oauth#add-custom-oauth" target="_blank">custom OAuth integration</a> to your workspace.
       summary: Add Custom OAuth
       operationId: post-api-v1-settings.addCustomOAuth
       responses:
@@ -330,7 +330,7 @@ paths:
       description: |-
         Permission required: `edit-privileged-setting`
 
-        The `_id` of a setting is the first argument of the `RocketChat.settings.add` method used in `Rocket.Chat/packages/rocketchat-lib/server/startup/settings.js` (among other files). 
+        The `_id` of a setting is the first argument of the `RocketChat.settings.add` method used in `Rocket.Chat/packages/rocketchat-lib/server/startup/settings.js` (among other files).
 
         For example, the following code in `settings.js` file:
           ```json
@@ -338,14 +338,14 @@ paths:
             type: 'boolean',
             public: true  });
           ```
-          This means that the setting labeled `Allow anonymous read` in the section `Accounts` has `_id` equal to `Accounts_AllowAnonymousRead`. The second argument is the default value (false). The third argument specifies the variable's type and whether it is public, hidden, and so on. 
-          
+          This means that the setting labeled `Allow anonymous read` in the section `Accounts` has `_id` equal to `Accounts_AllowAnonymousRead`. The second argument is the default value (false). The third argument specifies the variable's type and whether it is public, hidden, and so on.
+
           To set a color, you can send:
           ```json
           { value: '<color-code>',
             editor: 'color' }
           ```
-          
+
           And also to trigger a action-button, use:
           ```json
           { execute: true }
@@ -457,7 +457,7 @@ paths:
       description: List out all the active OAuth services configured with details.
       tags:
         - Settings
-        
+
   /api/v1/audit.settings:
     parameters: []
     get:
@@ -618,11 +618,11 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
-      description: |- 
+      description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        Get the list of changed settings within a specific duration of time, useful for auditing purposes. 
+        Get the list of changed settings within a specific duration of time, useful for auditing purposes.
         Permission required: `can-audit`.
-        
+
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -657,7 +657,7 @@ paths:
                 type: string
                 description: |-
                   The `type` value can be one of the following:
-                  * The `user` who changed the setting 
+                  * The `user` who changed the setting
                   * The `system`, for example, when the `actor` was the server itself, like when the license changes through cloud.
                   * An `app` due to which a setting was changed.
                 example: system
@@ -1375,7 +1375,7 @@ paths:
           $ref: '#/components/responses/forbiddenError'
       operationId: get-api-v1-getImportFileData
       description: |-
-        Get the import file data. 
+        Get the import file data.
         Permission required: `run-import`
         ### Changelog
         | Version      | Description |
@@ -1880,7 +1880,7 @@ paths:
               * `error`: An error caused the operation to stop running.
               * `canceled`: The operation was interrupted by an administrator.
               * `done`: The operation was completed successfully.
-              
+
               Note the following points:
                 1. The operation is considered successful if it processes every user in the staging area, even if no user is imported.
                 2. You can check how many users have been imported or failed to import with the `operation.count.completed` and `operation.count.error` attributes.
@@ -2268,7 +2268,7 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       description: |-
-      
+
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
 
 
@@ -2401,7 +2401,7 @@ paths:
           $ref: '#/components/responses/authorizationError'
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Join a public external federated room.
 
         ### Changelog
@@ -2834,7 +2834,7 @@ paths:
         '403':
           $ref: '#/components/responses/forbiddenError'
       description: |-
-        Get more details of a single report. 
+        Get more details of a single report.
         Permission required: `view-moderation-console`
         ### Changelog
         | Version      | Description |
