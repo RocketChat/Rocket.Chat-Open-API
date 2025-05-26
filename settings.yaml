@@ -619,6 +619,7 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       description: |- 
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         Get the list of changed settings within a specific duration of time, useful for auditing purposes. 
         Permission required: `can-audit`.
         
