@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   version: 1.0.0
   title: Settings
-#  description: |-
+# description: |-
 #    Configure your Rocket.Chat workspace with the following endpoints:
 #      * **Settings**: Manage public and private settings.
 #      * **Cloud**: Register your workspace on Rocket.Chat Cloud.
