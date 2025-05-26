@@ -504,6 +504,300 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
+          
+  /api/apps/logs:
+    get:
+      summary: Get All Apps Logs
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  offset:
+                    type: integer
+                  logs:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        appId:
+                          type: string
+                        method:
+                          type: string
+                        entries:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              caller:
+                                type: string
+                              severity:
+                                type: string
+                              method:
+                                type: string
+                              timestamp:
+                                type: string
+                              args:
+                                type: array
+                                items:
+                                  type: string
+                        startTime:
+                          type: string
+                        endTime:
+                          type: string
+                        totalTime:
+                          type: integer
+                        _createdAt:
+                          type: string
+                        instanceId:
+                          type: string
+                        _updatedAt:
+                          type: string
+                  count:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    offset: 0
+                    logs:
+                      - _id: 68341684d387e3d7509267f6
+                        appId: 30d2e4bf-2402-4197-b844-e7082b07dc65
+                        method: 'scheduler:registration.auto.renew.scheduler'
+                        entries:
+                          - caller: anonymous OR constructor -> handleScheduler
+                            severity: debug
+                            method: 'scheduler:registration.auto.renew.scheduler'
+                            timestamp: '2025-05-26T07:21:40.283Z'
+                            args:
+                              - Job processor registration.auto.renew.scheduler is being executed...
+                          - caller: anonymous OR constructor -> handleScheduler
+                            severity: debug
+                            method: 'scheduler:registration.auto.renew.scheduler'
+                            timestamp: '2025-05-26T07:21:40.295Z'
+                            args:
+                              - Job processor registration.auto.renew.scheduler was successfully executed
+                        startTime: '2025-05-26T07:21:40.283Z'
+                        endTime: '2025-05-26T07:21:40.295Z'
+                        totalTime: 12
+                        _createdAt: '2025-05-26T07:21:40.295Z'
+                        instanceId: ad219c7b-84a5-4077-9ede-f6f9d7c4d3bd
+                        _updatedAt: '2025-05-26T07:21:40.296Z'
+                      - _id: 68340f7cd387e3d7509267f5
+                        appId: 30d2e4bf-2402-4197-b844-e7082b07dc65
+                        method: 'scheduler:registration.auto.renew.scheduler'
+                        entries:
+                          - caller: anonymous OR constructor -> handleScheduler
+                            severity: debug
+                            method: 'scheduler:registration.auto.renew.scheduler'
+                            timestamp: '2025-05-26T06:51:40.284Z'
+                            args:
+                              - Job processor registration.auto.renew.scheduler is being executed...
+                          - caller: anonymous OR constructor -> handleScheduler
+                            severity: debug
+                            method: 'scheduler:registration.auto.renew.scheduler'
+                            timestamp: '2025-05-26T06:51:40.294Z'
+                            args:
+                              - Job processor registration.auto.renew.scheduler was successfully executed
+                        startTime: '2025-05-26T06:51:40.284Z'
+                        endTime: '2025-05-26T06:51:40.294Z'
+                        totalTime: 10
+                        _createdAt: '2025-05-26T06:51:40.294Z'
+                        instanceId: ad219c7b-84a5-4077-9ede-f6f9d7c4d3bd
+                        _updatedAt: '2025-05-26T06:51:40.295Z'
+                    count: 2
+                    total: 3916
+                    success: true
+        '400':
+          $ref: '#/components/responses/forbiddenError'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-apps-logs
+      description: |-
+       Use this endpoint to get the list of apps' logs for your workspace.
+       Permission required: `manage-apps`
+       
+       ### Changelog
+       | Version      | Description |
+       | ---------------- | ------------|
+       |7.7.0             | Added       |
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+        - schema:
+            type: string
+            example: 4406213d-8624-4355-9641-29e65bf3e3bc
+          in: query
+          name: appId
+          description: Enter the app ID for which you want to view logs.
+        - $ref: '#/components/parameters/logLevel'
+        - $ref: '#/components/parameters/method'
+        - $ref: '#/components/parameters/startDate'
+        - $ref: '#/components/parameters/endDate'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+        
+  '/app/{id}/logs':
+    get:
+      summary: Get an App's Logs
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  offset:
+                    type: integer
+                  logs:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        appId:
+                          type: string
+                        method:
+                          type: string
+                        entries:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              caller:
+                                type: string
+                              severity:
+                                type: string
+                              method:
+                                type: string
+                              timestamp:
+                                type: string
+                              args:
+                                type: array
+                                items:
+                                  type: string
+                        startTime:
+                          type: string
+                        endTime:
+                          type: string
+                        totalTime:
+                          type: integer
+                        _createdAt:
+                          type: string
+                        instanceId:
+                          type: string
+                        _updatedAt:
+                          type: string
+                  count:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    offset: 0
+                    logs:
+                      - _id: 68341684d387e3d7509267f6
+                        appId: 30d2e4bf-2402-4197-b844-e7082b07dc65
+                        method: 'scheduler:registration.auto.renew.scheduler'
+                        entries:
+                          - caller: anonymous OR constructor -> handleScheduler
+                            severity: debug
+                            method: 'scheduler:registration.auto.renew.scheduler'
+                            timestamp: '2025-05-26T07:21:40.283Z'
+                            args:
+                              - Job processor registration.auto.renew.scheduler is being executed...
+                          - caller: anonymous OR constructor -> handleScheduler
+                            severity: debug
+                            method: 'scheduler:registration.auto.renew.scheduler'
+                            timestamp: '2025-05-26T07:21:40.295Z'
+                            args:
+                              - Job processor registration.auto.renew.scheduler was successfully executed
+                        startTime: '2025-05-26T07:21:40.283Z'
+                        endTime: '2025-05-26T07:21:40.295Z'
+                        totalTime: 12
+                        _createdAt: '2025-05-26T07:21:40.295Z'
+                        instanceId: ad219c7b-84a5-4077-9ede-f6f9d7c4d3bd
+                        _updatedAt: '2025-05-26T07:21:40.296Z'
+                      - _id: 68340f7cd387e3d7509267f5
+                        appId: 30d2e4bf-2402-4197-b844-e7082b07dc65
+                        method: 'scheduler:registration.auto.renew.scheduler'
+                        entries:
+                          - caller: anonymous OR constructor -> handleScheduler
+                            severity: debug
+                            method: 'scheduler:registration.auto.renew.scheduler'
+                            timestamp: '2025-05-26T06:51:40.284Z'
+                            args:
+                              - Job processor registration.auto.renew.scheduler is being executed...
+                          - caller: anonymous OR constructor -> handleScheduler
+                            severity: debug
+                            method: 'scheduler:registration.auto.renew.scheduler'
+                            timestamp: '2025-05-26T06:51:40.294Z'
+                            args:
+                              - Job processor registration.auto.renew.scheduler was successfully executed
+                        startTime: '2025-05-26T06:51:40.284Z'
+                        endTime: '2025-05-26T06:51:40.294Z'
+                        totalTime: 10
+                        _createdAt: '2025-05-26T06:51:40.294Z'
+                        instanceId: ad219c7b-84a5-4077-9ede-f6f9d7c4d3bd
+                        _updatedAt: '2025-05-26T06:51:40.295Z'
+                    count: 2
+                    total: 3916
+                    success: true
+        '400':
+          $ref: '#/components/responses/forbiddenError'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'No App found by the id of: :id'
+      operationId: 'get-app-:id-logs'
+      description: |-
+        Use this endpoint to get a specific app's logs for your workspace.
+        Permission required: `manage-apps`
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - schema:
+            type: string
+            example: fc96e832-5472-49e4-aace-1521a7ebeaa6
+          name: id
+          in: path
+          required: true
+          description: Enter the app ID for which you want to view the logs results.
+        - $ref: '#/components/parameters/method'
+        - $ref: '#/components/parameters/logLevel'
+        - $ref: '#/components/parameters/startDate'
+        - $ref: '#/components/parameters/endDate'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
   
 components:
   schemas: {}
@@ -524,6 +818,61 @@ components:
       schema:
         type: string
       example: rbAXPnMktTFbNpwtJ
+    offset:
+      name: offset
+      in: query
+      required: false
+      schema:
+        type: number
+        example: 50
+      description: 'Number of items to "skip" in the query, i.e. requests return count items, skipping the first offset items. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
+    count:
+      name: count
+      in: query
+      required: false
+      schema:
+        type: number
+        example: 10
+      description: 'The number of items to return.  Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
+    sort:
+      name: sort
+      in: query
+      required: false
+      schema:
+        type: string
+      description: 'List of fields to order by, and in which direction. This is a JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending. For example, `{ "value": -1, "_id": 1 }`. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
+    startDate:
+      name: startDate
+      in: query
+      required: false
+      schema:
+        type: string
+        example: '2025-05-25T06:06:45.954Z'
+      description: Enter the start date from which you want the logs results. The format is ISO string.
+    endDate:
+      name: endDate
+      in: query
+      required: false
+      schema:
+        type: string
+        example: '2025-05-25T06:06:45.954Z'
+      description: Enter the end date till which you want to view the logs. The format is ISO string.
+    method:
+      name: method
+      in: query
+      required: false
+      schema:
+        type: string
+        example: 'app:construct'
+      description: 'An app lifecycle has many phases which you can view from the **Logs** section of an app''s **App Info** page. These phases are the methods that are are invoked by an app depending on its settings and user interactions. '
+    logLevel:
+      name: logLevel
+      in: query
+      required: false
+      schema:
+        type: string
+        example: '1'
+      description: 'The log level refers to the type of logs you want to view. Enter `0` to view errors, `1` for errors and information, and `2` for errors, information, and debugging details. '
   responses:
     trueSuccess:
       description: OK
