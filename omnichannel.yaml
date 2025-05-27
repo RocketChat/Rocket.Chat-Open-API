@@ -1048,6 +1048,242 @@ paths:
                   contactManager: 9sLvmAcQk4EAGdi6e
                   customFields: {}
                   wipeConflicts: false
+                  
+  /api/v1/omnichannel/contacts.conflicts:
+    post:
+      summary: Resolve Contact Conflicts
+      tags:
+        - Livechat Contacts
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      createdAt:
+                        type: string
+                      name:
+                        type: string
+                      channels:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                            visitor:
+                              type: object
+                              properties:
+                                visitorId:
+                                  type: string
+                                source:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                            blocked:
+                              type: boolean
+                            verified:
+                              type: boolean
+                            details:
+                              type: object
+                              properties:
+                                type:
+                                  type: string
+                                destination:
+                                  type: string
+                            lastChat:
+                              type: object
+                              properties:
+                                _id:
+                                  type: string
+                                ts:
+                                  type: string
+                            field:
+                              type: string
+                            value:
+                              type: string
+                            verifiedAt:
+                              type: string
+                      customFields:
+                        type: object
+                        properties:
+                          field1:
+                            type: string
+                          field2:
+                            type: string
+                      unknown:
+                        type: boolean
+                      preRegistration:
+                        type: boolean
+                      _updatedAt:
+                        type: string
+                      lastChat:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          ts:
+                            type: string
+                      activity:
+                        type: array
+                        items:
+                          type: string
+                      emails:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            address:
+                              type: string
+                      phones:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+                      conflictingFields:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    result:
+                      _id: 68341efdd387e3d7509267fb
+                      createdAt: '2025-05-26T07:57:49.616Z'
+                      name: Jane Doe
+                      channels:
+                        - name: widget
+                          visitor:
+                            visitorId: 68341ef9d387e3d7509267fa
+                            source:
+                              type: widget
+                          blocked: false
+                          verified: true
+                          details:
+                            type: widget
+                            destination: writing-demo.dev.rocket.chat
+                          lastChat:
+                            _id: cz5uyBRyKPfoWHBat
+                            ts: '2025-05-26T07:57:49.661Z'
+                          field: email
+                          value: jane.doe@email.com
+                          verifiedAt: '2025-05-26T07:58:26.895Z'
+                      customFields:
+                        field1: field1
+                        field2: field2
+                      unknown: false
+                      preRegistration: false
+                      _updatedAt: '2025-05-26T11:35:31.241Z'
+                      lastChat:
+                        _id: cz5uyBRyKPfoWHBat
+                        ts: '2025-05-26T07:57:49.661Z'
+                      activity:
+                        - 2025-05
+                      emails:
+                        - address: jane.doe@email.com
+                      phones: []
+                      conflictingFields: []
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''contactId'' [invalid-params]'
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: error-contact-has-no-conflicts
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/permissionError'
+      operationId: post-api-v1-omnichannel-contacts.conflicts
+      description: |-
+        Use this endpoint to resolve conflicts in a contact's details.
+        
+        This endpoint works only when a contact has conflicts.
+        Conflicts can occur when a verified contact uses another channel to communicate with you. 
+        For example, a contact's details (phone number, email address, custom fields) were saved when they 
+        accessed the Livechat widget.
+        Next time, they use WhatsApp and they provide different details.
+        By default, the values are overwritten. 
+        If you choose to flag conflicts, the conflicting detail will be displayed and you can decide the values to keep.
+        You can flag conflicts in custom fields using the [custom fields endpoints](https://developer.rocket.chat/apidocs/send-custom-field-value) or the [Set Custom Field method](https://developer.rocket.chat/apidocs/livechatwidget-api)
+        from the livechat widget API.
+
+        Permission required: `update-livechat-contact`
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        |7.7.0             | Added       |
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - contactId
+              properties:
+                contactId:
+                  type: string
+                  description: The contact's ID.
+                name:
+                  type: string
+                  description: The contact's name.
+                customFields:
+                  type: object
+                  description: You can enter custom fields if you have created any.
+                  properties:
+                    field1:
+                      type: string
+                    field2:
+                      type: string
+                contactManager:
+                  type: string
+                  description: The contact's assigned agent or manager.
+                wipeConflicts:
+                  type: boolean
+                  description: 'To overwrite the old data with the new details, enter `true`.'
+            examples:
+              Example 1:
+                value:
+                  contactId: 68135a22e384b3ad127c7dbc
+                  name: John Doe
+                  customFields:
+                    field1: field1
+                    field2: field2
+                  contactManager: test.agent
+                  wipeConflicts: false
+
   /api/v1/omnichannel/contacts.get:
     get:
       summary: Get Omnichannel Contact
