@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   version: 1.0.0
   title: Integrations
-# description: |-
+#  description: |-
 #    The following endpoints provide integration support for your Rocket.Chat workspaces:
 #    * **Integration**: Create and manage [integrations](https://docs.rocket.chat/use-rocket.chat/workspace-administration/integrations).
 #    * **WebDAV**: Manage [WebDAV](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/webdav-integration) server accounts.
@@ -16,6 +16,7 @@ paths:
         - Integration
       summary: Create Integration
       description: |- 
+        
         Permissions required to create incoming integrations:
         * `manage-incoming-integrations`
         * `manage-own-incoming-integrations`
@@ -862,17 +863,20 @@ paths:
       summary: Remove Integration
       description: |-
         Remove an integration from the workspace.
-
+        
         Any of the following permissions is required:
         * `manage-incoming-integrations`
         * `manage-own-incoming-integrations`
         * `manage-outgoing-integrations`
         * `manage-own-outgoing-integrations`
+        
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |1.1.0            | Separate permissions in incoming and outgoing.       |
         |0.49.0            | Added       |
+
       operationId: post-api-v1-integrations.remove
       parameters:
         - $ref: '#/components/parameters/X-Auth-Token'
