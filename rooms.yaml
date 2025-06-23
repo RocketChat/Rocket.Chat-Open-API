@@ -7873,21 +7873,19 @@ paths:
                 teamId:
                   type: string
                   description: Enter the team ID. Alternatively, enter the `teamName` parameter and provide the team's name as the value.
-                members:
-                  type: array
-                  description: The users (IDs and roles) to add to the team.
-                  items:
-                    type: object
-                    properties:
-                      userId:
+                member:
+                  type: object
+                  description: The users (IDs and roles) to add or update in the team.
+                  properties:
+                    userId:
+                      type: string
+                    roles:
+                      type: array
+                      items:
                         type: string
-                      roles:
-                        type: array
-                        items:
-                          type: string
               required:
                 - teamId
-                - members
+                - member
             examples:
               Example:
                 value:
@@ -7895,7 +7893,7 @@ paths:
                   members:
                     - userId: rYhzFRd2QZjNwAAXX
                       roles:
-                        - member
+                        - owner, leader
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
