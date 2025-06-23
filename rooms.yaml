@@ -7882,6 +7882,7 @@ paths:
                   properties:
                     userId:
                       type: string
+                      description: Enter the user ID.
                     roles:
                       type: array
                       items: {}
@@ -7892,7 +7893,8 @@ paths:
                   member:
                     userId: rYhzFRd2QZjNwAAXX
                     roles:
-                      - owner, leader
+                      - owner
+                      - leader
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
