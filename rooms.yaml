@@ -7869,10 +7869,13 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - teamId
+                - member
               properties:
                 teamId:
                   type: string
-                  description: Enter the team ID. Alternatively, enter the `teamName` parameter and provide the team's name as the value.
+                  description: 'Enter the team ID. Alternatively, enter the `teamName` parameter and provide the team''s name as the value.'
                 member:
                   type: object
                   description: The users (IDs and roles) to add or update in the team.
@@ -7881,19 +7884,15 @@ paths:
                       type: string
                     roles:
                       type: array
-                      items:
-                        type: string
-              required:
-                - teamId
-                - member
+                      items: {}
             examples:
               Example:
                 value:
                   teamId: 63f3efc4b000b6b6d86704b2
-                  members:
-                    - userId: rYhzFRd2QZjNwAAXX
-                      roles:
-                        - owner, leader
+                  member:
+                    userId: rYhzFRd2QZjNwAAXX
+                    roles:
+                      - owner, leader
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
