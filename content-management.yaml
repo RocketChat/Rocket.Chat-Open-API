@@ -323,7 +323,6 @@ paths:
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/query'
-        - $ref: '#/components/parameters/fields'
         - name: name
           in: query
           description: |-
