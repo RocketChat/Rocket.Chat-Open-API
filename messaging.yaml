@@ -3945,6 +3945,8 @@ paths:
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/query'
         - $ref: '#/components/parameters/fields'
+        - $ref: '#/components/parameters/filterTypeGroup'
+        - $ref: '#/components/parameters/filterName'
         - name: roomId
           in: query
           description: The roomId of the DM. It is required if `username` is not provided.
@@ -5346,6 +5348,27 @@ components:
       required: false
       schema:
         type: string
+    filterName:
+      name: name
+      in: query
+      description: The name of the file to search for.
+      schema:
+        type: string
+      example: logo
+    filterTypeGroup:
+      name: typeGroup
+      in: query
+      description: |-
+        Filter results by the type of file. Available options:
+        - `all`: Return all file types.
+        - `image`: Filter by image files.
+        - `video`: Filter by video files.
+        - `audio`: Filter by audio files.
+        - `text`: Filter by text documents.
+        - `application`: Filter by other file types.
+      schema:
+        type: string
+      example: images
   responses:
     trueSuccess:
       description: OK
