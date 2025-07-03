@@ -12988,8 +12988,8 @@ components:
       description: |-
         Filter results by the type of file. Available options:
         - `all`: Return all file types.
-        - `images`: Filter by image files.
-        - `videos`: Filter by video files.
+        - `image`: Filter by image files.
+        - `video`: Filter by video files.
         - `audio`: Filter by audio files.
         - `text`: Filter by text documents.
         - `application`: Filter by other file types.
