@@ -3780,7 +3780,7 @@ paths:
         
         * Note that the generated access tokens are irrecoverable, so storing them safely is essential. If a token is lost or forgotten, it can be regenerated or deleted.
         * When making calls to the API that mandate authentication, include the generated token in the `X-Auth-Token` header and your user ID in the `X-User-Id` header to authenticate the requests.
-        Visit the <a href="https://docs.rocket.chat/docs/account#personal-access-tokens" target="_blank"> Personal Access Token user guide</a> for more details.
+        Visit the <a href="https://docs.rocket.chat/docs/manage-personal-access-tokens" target="_blank"> Personal Access Token user guide</a> for more details.
         
         ### Changelog
         | Version      | Description |
