@@ -2766,12 +2766,15 @@ paths:
                       type: string
                       description: Used when replying in a thread. Message will be sent in channel also if value is true
                     blocks:
-                      type: object
+                      type: array
+                      items:
+                        type: object
                       description: |- 
                         A message block is an array of objects with any of the following properties. Blocks can have many sections:
                         - type
                         - text
                         - fields
+                        To view the example on how to use this parameter, select **Show example** in this body parameters section. Above the example code block, select the drop-down menu, and select the **Message with Blocks** option. For comprehensive information on blocks, refer to the <a href='https://developer.rocket.chat/docs/blocks' target='_blank'>Apps-Engine UI Blocks documentation-css</a>.
                     customFields:
                       type: object
                       description: |-
