@@ -2215,6 +2215,9 @@ paths:
                     text:
                       type: string
                       description: 'The message text to send, it is optional because of attachments.'
+                    parseUrls:
+                      type: boolean
+                      description: 'Set `parseUrls` to `false` to prevent Rocket.Chat from generating link previews when the message in `text` contains a URL.'
                     attachments:
                       type: array
                       items:
@@ -2315,6 +2318,9 @@ paths:
                     text:
                       type: string
                       description: 'The message text to send, it is optional because of attachments.'
+                    parseUrls:
+                      type: boolean
+                      description: 'Set `parseUrls` to `false` to prevent Rocket.Chat from generating link previews when the message in `text` contains a URL.'  
                     attachments:
                       type: array
                       items:
