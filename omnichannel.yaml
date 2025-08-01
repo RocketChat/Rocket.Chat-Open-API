@@ -4202,7 +4202,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
       operationId: get-api-v1-livechat-department
     post:
       summary: Register New Department
@@ -4379,7 +4379,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
   '/api/v1/livechat/department/{_id}':
     get:
       summary: Get Department Information
@@ -4481,7 +4481,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
     put:
       summary: Update Department
       description: |-
@@ -4678,7 +4678,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
     delete:
       summary: Remove Department
       description: |-
@@ -4708,7 +4708,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
   /api/v1/livechat/department.autocomplete:
     get:
       summary: Autocomplete Department
@@ -4808,7 +4808,7 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
   '/api/v1/livechat/department/{_id}/agents':
     get:
       summary: Get Agents of Department
@@ -4887,7 +4887,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
     post:
       summary: Update Agents of Department
       description: |-
@@ -4948,7 +4948,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
   /api/v1/livechat/department.listByIds:
     get:
       summary: Get Departments by ID
@@ -5110,7 +5110,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
   /api/v1/livechat/analytics/departments/amount-of-chats:
     get:
       summary: Get Number of Chats
@@ -5167,7 +5167,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
@@ -5253,7 +5253,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
   /api/v1/livechat/analytics/departments/average-chat-duration-time:
     get:
       summary: Get Average Chat Duration
@@ -5319,7 +5319,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
   /api/v1/livechat/analytics/departments/total-service-time:
     get:
       summary: Get Total Service Time
@@ -5389,7 +5389,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
   /api/v1/livechat/analytics/departments/average-waiting-time:
     get:
       summary: Get Average Waiting Time
@@ -5455,7 +5455,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
   /api/v1/livechat/analytics/departments/total-transferred-chats:
     get:
       summary: Get Total Transferred Chats
@@ -5523,7 +5523,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
   /api/v1/livechat/analytics/departments/total-abandoned-chats:
     get:
       summary: Get Total Abandoned Chats
@@ -5599,7 +5599,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
   /api/v1/livechat/analytics/departments/percentage-abandoned-chats:
     get:
       summary: Get Percentage of Abandoned Chats
@@ -5667,7 +5667,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
   '/api/v1/livechat/departments.available-by-unit/{unitId}':
     get:
       summary: Get Available Departments by Unit ID
@@ -5846,7 +5846,7 @@ paths:
                     success: true
       deprecated: true
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
   '/api/v1/livechat/departments.by-unit/{unitid}':
     get:
       summary: Get Departments by Unit ID
@@ -6028,7 +6028,7 @@ paths:
                     success: true
       deprecated: true
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
   /api/v1/livechat/custom.field:
     post:
       summary: Send Custom Field Value
@@ -6122,7 +6122,7 @@ paths:
                     error: 'must have required property ''key'' [invalid-params]'
                     errorType: invalid-params
       tags:
-        - Livechat Custom Fields
+        - Omnichannel Custom Fields
   /api/v1/livechat/custom.fields:
     post:
       summary: Send Array of Custom Field Values
@@ -6229,12 +6229,12 @@ paths:
                     error: 'must have required property ''key'' [invalid-params]'
                     errorType: invalid-params
       tags:
-        - Livechat Custom Fields
+        - Omnichannel Custom Fields
   /api/v1/livechat/custom-fields:
     get:
-      summary: Get Livechat Custom Fields
+      summary: Get Omnichannel Custom Fields
       description: |-
-        Get a list of the Livechat custom fields.
+        Get a list of the Omnichannel custom fields.
         Permission required: `view-l-room`
 
         ### Changelog
@@ -6326,7 +6326,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Custom Fields
+        - Omnichannel Custom Fields
   '/api/v1/livechat/custom-fields/{_id}':
     get:
       summary: Get Custom Field Information
@@ -6411,7 +6411,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Custom Fields
+        - Omnichannel Custom Fields
   /api/v1/livechat/webrtc.call:
     get:
       tags:
@@ -6514,8 +6514,8 @@ paths:
     post:
       tags:
         - Livechat Page Visited
-      summary: Send Visitor navigation history
-      description: Retrieves the pages your omnichannel user navigated on your website.
+      summary: Send Visitor Navigation History
+      description: Retrieves the pages your visitor navigated on your website.
       operationId: post-api-v1-livechat-page.visited
       requestBody:
         content:
@@ -6633,8 +6633,8 @@ paths:
   /api/v1/livechat/transcript:
     post:
       tags:
-        - Livechat Transcript
-      summary: Request Livechat Transcript
+        - Omnichannel Transcript
+      summary: Request Omnichannel Transcript
       description: |-
         The endpoint is used by visitors to request a transcript of their chat to be sent to their email once the conversation ends. The room must be closed before you can send a transcript.
 
@@ -6714,8 +6714,8 @@ paths:
   '/api/v1/livechat/transcript/{rid}':
     post:
       tags:
-        - Livechat Transcript
-      summary: Send Livechat Transcript
+        - Omnichannel Transcript
+      summary: Send Omnichannel Transcript
       description: |-
         This endpoint is used by agents and managers to schedule an email transcript to be sent once the chat is closed.
         Permission required: `send-omnichannel-chat-transcript`
@@ -6788,10 +6788,10 @@ paths:
           $ref: '#/components/responses/permissionError'
     delete:
       tags:
-        - Livechat Transcript
-      summary: Delete Livechat Transcript
+        - Omnichannel Transcript
+      summary: Delete Omnichannel Transcript
       description: |-
-        This endpoint is used to cancel any transcript requests for an open room, meaning that the chat transcript won't be sent after the chat is closed. You can not Send Livechat Transcript twice at a time. You must delete the previous request with this endpoint before requesting again.
+        This endpoint is used to cancel any transcript requests for an open room, meaning that the chat transcript won't be sent after the chat is closed. You can not use Send Omnichannel Transcript endpoint twice at a time. You must delete the previous request with this endpoint before requesting again.
         Permission required: `send-omnichannel-chat-transcript`
 
         ### Changelog
@@ -6848,11 +6848,11 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Transcript
+        - Omnichannel Transcript
   '/api/v1/livechat/agents/{agentId}/departments':
     get:
       tags:
-        - Livechat Agent Stats
+        - Omnichannel Agent Stats
       summary: Get Agent Departments
       description: |-
         Returns the departments associated with an agent.
@@ -6940,7 +6940,7 @@ paths:
   /api/v1/livechat/analytics/agents/average-service-time:
     get:
       tags:
-        - Livechat Agent Stats
+        - Omnichannel Agent Stats
       summary: Get Agent Average Service Time
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
@@ -7008,7 +7008,7 @@ paths:
   /api/v1/livechat/analytics/agents/total-service-time:
     get:
       tags:
-        - Livechat Agent Stats
+        - Omnichannel Agent Stats
       summary: Get Agent Total Service Time
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
@@ -7083,7 +7083,7 @@ paths:
   /api/v1/livechat/analytics/agents/available-for-service-history:
     get:
       tags:
-        - Livechat Agent Stats
+        - Omnichannel Agent Stats
       summary: Get History of Agents Available for Service
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
@@ -7507,7 +7507,7 @@ paths:
   /api/v1/livechat/business-hours:
     get:
       tags:
-        - Livechat Business Hours
+        - Omnichannel Business Hours
       summary: Get Business Hours
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
@@ -7903,7 +7903,7 @@ paths:
   /api/v1/livechat/business-hour:
     get:
       tags:
-        - Livechat Business Hours
+        - Omnichannel Business Hours
       summary: Get Default Business Hour
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
@@ -8150,7 +8150,7 @@ paths:
   /api/v1/livechat/business-hours.list:
     get:
       tags:
-        - Livechat Business Hours
+        - Omnichannel Business Hours
       summary: Business Hours List
       description: Gives a list of existing business hours. This endpoint has been renamed to Get Business Hours from Rocket.Chat 5.0.
       operationId: get-api-v1-livechat-business-hours.list
@@ -8391,7 +8391,7 @@ paths:
   /api/v1/livechat/analytics/dashboards/conversation-totalizers:
     get:
       tags:
-        - Livechat Dashboards
+        - Omnichannel Dashboards
       summary: Get Conversation Metrics
       description: |-
         Retrieves metrics about all conversations.
@@ -8446,7 +8446,7 @@ paths:
   /api/v1/livechat/analytics/dashboards/agents-productivity-totalizers:
     get:
       tags:
-        - Livechat Dashboards
+        - Omnichannel Dashboards
       summary: Get Agent Service Time Metrics
       description: 'Permission required: `view-livechat-manager`'
       operationId: get-api-v1-livechat-analytics-dashboards-agents-productivity-totalizers
@@ -8495,7 +8495,7 @@ paths:
   /api/v1/livechat/analytics/dashboards/chats-totalizers:
     get:
       tags:
-        - Livechat Dashboards
+        - Omnichannel Dashboards
       summary: Get Chat Metrics
       description: |-
         Retrieves information about the chats.
@@ -8534,7 +8534,7 @@ paths:
   /api/v1/livechat/analytics/dashboards/productivity-totalizers:
     get:
       tags:
-        - Livechat Dashboards
+        - Omnichannel Dashboards
       summary: Get Chat Metrics by Time
       description: |-
         Retrieves the average time for Livechat conversations.
@@ -8587,7 +8587,7 @@ paths:
   /api/v1/livechat/analytics/dashboards/charts/chats:
     get:
       tags:
-        - Livechat Dashboards
+        - Omnichannel Dashboards
       summary: Get Chats Status
       description: |-
         Retrieves the status of chats for a specific time duration.
@@ -8634,7 +8634,7 @@ paths:
   /api/v1/livechat/analytics/dashboards/charts/chats-per-agent:
     get:
       tags:
-        - Livechat Dashboards
+        - Omnichannel Dashboards
       summary: Get Chat Status of Agents
       description: |-
         Retrieves the status of chats per agent for a specific time duration.
@@ -8685,7 +8685,7 @@ paths:
   /api/v1/livechat/analytics/dashboards/charts/agents-status:
     get:
       tags:
-        - Livechat Dashboards
+        - Omnichannel Dashboards
       summary: Get Status of Agents
       description: |-
         Retrieves the number of agents for each status.
@@ -8731,7 +8731,7 @@ paths:
   /api/v1/livechat/analytics/dashboards/charts/chats-per-department:
     get:
       tags:
-        - Livechat Dashboards
+        - Omnichannel Dashboards
       summary: Get Chats Status for Departments
       description: |-
         Retrieves the status of chats for each department.
@@ -8796,7 +8796,7 @@ paths:
   /api/v1/livechat/analytics/dashboards/charts/timings:
     get:
       tags:
-        - Livechat Dashboards
+        - Omnichannel Dashboards
       summary: Get Chat Times
       description: 'Permission required: `view-livechat-manager`'
       operationId: get-api-v1-livechat-analytics-dashboards-charts-timings
@@ -8859,10 +8859,10 @@ paths:
   /api/v1/livechat/inquiries.list:
     get:
       tags:
-        - Livechat Inquiries
+        - Omnichannel Inquiries
       summary: Get Inquiries List
       description: |-
-        Lists all open Livechat inquiries. An incoming chat that has not yet been taken by the agent is called an inquiry. After it's been taken by the agent it is referred to as room.
+        Lists all open inquiries. An incoming chat that has not yet been taken by the agent is called an inquiry. After it's been taken by the agent it is referred to as room.
         Permission required: `view-livechat-manager`
 
         ### Changelog
@@ -8932,7 +8932,7 @@ paths:
   /api/v1/livechat/inquiries.take:
     post:
       tags:
-        - Livechat Inquiries
+        - Omnichannel Inquiries
       summary: Take Inquiry
       description: |-
         Join an open inquiry.
@@ -8995,7 +8995,7 @@ paths:
   /api/v1/livechat/inquiries.queuedForUser:
     get:
       tags:
-        - Livechat Inquiries
+        - Omnichannel Inquiries
       summary: List Queued User Inquiries
       description: |-
         Permission required: `view-l-room`
@@ -9117,7 +9117,7 @@ paths:
   /api/v1/livechat/inquiries.getOne:
     get:
       tags:
-        - Livechat Inquiries
+        - Omnichannel Inquiries
       summary: Get Inquiry by Room
       description: |-
         Permission required: `view-l-room`
@@ -9310,7 +9310,7 @@ paths:
   /api/v1/livechat/inquiry.setSLA:
     put:
       tags:
-        - Livechat Inquiries
+        - Omnichannel Inquiries
       summary: Set SLA Policy to Inquiry
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
@@ -10305,7 +10305,7 @@ paths:
   /api/v1/livechat/priorities:
     get:
       tags:
-        - Livechat Priorities
+        - Omnichannel Priorities
       summary: Get List of Priorities
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
@@ -10394,7 +10394,7 @@ paths:
   '/api/v1/livechat/priorities/{priorityId}':
     get:
       tags:
-        - Livechat Priorities
+        - Omnichannel Priorities
       summary: Get a Priority
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
@@ -10450,7 +10450,7 @@ paths:
           $ref: '#/components/responses/permissionError'
     put:
       tags:
-        - Livechat Priorities
+        - Omnichannel Priorities
       summary: Update Priority
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
@@ -10540,11 +10540,11 @@ paths:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
       tags:
-        - Livechat Priorities
+        - Omnichannel Priorities
   /livechat/priorities:
     get:
       tags:
-        - Livechat Priorities
+        - Omnichannel Priorities
       summary: Get Priorities
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
@@ -10615,7 +10615,7 @@ paths:
   '/livechat/priorities/{priorityId}':
     get:
       tags:
-        - Livechat Priorities
+        - Omnichannel Priorities
       summary: Get a Priority
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
@@ -10663,7 +10663,7 @@ paths:
   /livechat/priorities.list:
     get:
       tags:
-        - Livechat Priorities
+        - Omnichannel Priorities
       summary: List of Priorities
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
@@ -10730,7 +10730,7 @@ paths:
   /livechat/priority.getOne:
     get:
       tags:
-        - Livechat Priorities
+        - Omnichannel Priorities
       summary: Get one Priority
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
@@ -10777,7 +10777,7 @@ paths:
   /api/v1/livechat/tags:
     get:
       tags:
-        - Livechat Tags
+        - Omnichannel Tags
       summary: Get List of Tags
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
@@ -10888,7 +10888,7 @@ paths:
   '/api/v1/livechat/tags/{tagId}':
     get:
       tags:
-        - Livechat Tags
+        - Omnichannel Tags
       summary: Get a Tag
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
@@ -10966,7 +10966,7 @@ paths:
   /api/v1/livechat/tags.list:
     get:
       tags:
-        - Livechat Tags
+        - Omnichannel Tags
       summary: List of Tags
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
@@ -11031,7 +11031,7 @@ paths:
   /livechat/tags.getOne:
     get:
       tags:
-        - Livechat Tags
+        - Omnichannel Tags
       summary: Get One Tag
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
@@ -11134,7 +11134,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Units
+        - Omnichannel Units
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
 
@@ -11213,7 +11213,7 @@ paths:
     get:
       summary: Get List of Units
       tags:
-        - Livechat Units
+        - Omnichannel Units
       responses:
         '200':
           description: ''
@@ -11337,7 +11337,7 @@ paths:
     post:
       summary: Update Unit
       tags:
-        - Livechat Units
+        - Omnichannel Units
       responses:
         '200':
           description: ''
@@ -11453,7 +11453,7 @@ paths:
     delete:
       summary: Delete a Unit
       tags:
-        - Livechat Units
+        - Omnichannel Units
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
@@ -11522,7 +11522,7 @@ paths:
         Get details of a specific unit. <br>
         Permission required: `manage-livechat-units`
       tags:
-        - Livechat Units
+        - Omnichannel Units
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
@@ -11588,7 +11588,7 @@ paths:
         Get the list of monitors associated with a specific unit. <br>
         Permission required: `manage-livechat-units`
       tags:
-        - Livechat Units
+        - Omnichannel Units
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
@@ -11707,7 +11707,7 @@ paths:
 
         Permission required: `manage-livechat-units`
       tags:
-        - Livechat Units
+        - Omnichannel Units
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
@@ -11838,7 +11838,7 @@ paths:
 
         Permission required: `manage-livechat-units`
       tags:
-        - Livechat Units
+        - Omnichannel Units
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
@@ -11902,7 +11902,7 @@ paths:
       description: "<div style='text-align: center; margin: 1rem 0 1rem 0;'><img src='https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg' alt='Premium tag' style='display: block; margin: auto;'></div>\r\nThis endpoint has been renamed to Get List of Units from Rocket.Chat 5.0."
 
       tags:
-        - Livechat Units
+        - Omnichannel Units
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
@@ -11950,7 +11950,7 @@ paths:
       description: "<div style='text-align: center; margin: 1rem 0 1rem 0;'><img src='https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg' alt='Premium tag' style='display: block; margin: auto;'></div>\r\nThis endpoint has been renamed to Get a Unit from Rocket.Chat 5.0."
 
       tags:
-        - Livechat Units
+        - Omnichannel Units
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
@@ -12013,7 +12013,7 @@ paths:
       description: "<div style='text-align: center; margin: 1rem 0 1rem 0;'><img src='https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg' alt='Premium tag' style='display: block; margin: auto;'></div>\r\nThis endpoint has been renamed to Get List of Unit Monitors from Rocket.Chat 5.0."
 
       tags:
-        - Livechat Units
+        - Omnichannel Units
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
@@ -16446,34 +16446,34 @@ tags:
   - name: Omnichannel Visitors
   - name: Omnichannel Contacts
   - name: Omnichannel Rooms
-  - name: Omnichannel Statistics
-  - name: Agent Extensions
+  - name: Omnichannel Departments
+  - name: Omnichannel Custom Fields
+  - name: Omnichannel Business Hours
+  - name: Omnichannel Priorities
+  - name: Omnichannel Tags
+  - name: Omnichannel Units
+  - name: SLA Policies
   - name: Canned Responses
+  - name: Omnichannel Transcript
+  - name: Omnichannel Statistics
+  - name: Omnichannel Agent Stats
+  - name: Omnichannel Dashboards
+  - name: Reports
+  - name: Omnichannel Inquiries
+  - name: Omnichannel Webhooks
+  - name: Agent Extensions
   - name: Livechat
-  - name: Livechat Agent Stats
   - name: Livechat Appearance
+  - name: Livechat Triggers
   - name: Livechat Audio Video Calls
-  - name: Livechat Business Hours
-  - name: Livechat Custom Fields
-  - name: Livechat Dashboards
-  - name: Livechat Departments
-  - name: Livechat Inquiries
   - name: Livechat Messages
   - name: Livechat Page Visited
-  - name: Livechat Priorities
-  - name: Livechat Tags
-  - name: Livechat Transcript
-  - name: Livechat Triggers
-  - name: Livechat Units
-  - name: Reports
-  - name: SLA Policies
   - name: Voice Channel
   - name: Voice Channel Events
   - name: Voice Channel Extensions
   - name: Voice Channel Queue Membership
   - name: Voice Channel Rooms
   - name: Voice Channel Server Connection
-  - name: Omnichannel Webhooks
 components:
   parameters:
     start:
