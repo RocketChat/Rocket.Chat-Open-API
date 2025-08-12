@@ -16461,13 +16461,13 @@ tags:
   - name: Reports
   - name: Omnichannel Inquiries
   - name: Omnichannel Webhooks
-  - name: Agent Extensions
   - name: Livechat
   - name: Livechat Appearance
   - name: Livechat Triggers
   - name: Livechat Audio Video Calls
   - name: Livechat Messages
   - name: Livechat Page Visited
+  - name: Agent Extensions
   - name: Voice Channel
   - name: Voice Channel Events
   - name: Voice Channel Extensions
