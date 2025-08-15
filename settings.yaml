@@ -925,67 +925,6 @@ paths:
           name: rid
           description: The room ID.
           required: true
-  /api/v1/e2e.setRoomKeyID:
-    parameters: []
-    post:
-      summary: Set Room E2E Key
-      operationId: post-api-v1-e2e.setRoomKeyID
-      responses:
-        '200':
-          $ref: '#/components/responses/trueSuccess'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  error:
-                    type: string
-                  errorType:
-                    type: string
-              examples:
-                Invalid Params:
-                  value:
-                    success: false
-                    error: 'must have required property ''rid'' [invalid-params]'
-                    errorType: invalid-params
-                E2E Key Exists:
-                  value:
-                    success: false
-                    error: 'E2E Key ID already exists [error-room-e2e-key-already-exists]'
-                    errorType: error-room-e2e-key-already-exists
-                    details:
-                      method: e2e.setRoomKeyID
-        '401':
-          $ref: '#/components/responses/authorizationError'
-      tags:
-        - E2E
-      parameters:
-        - $ref: '#/components/parameters/X-User-Id'
-        - $ref: '#/components/parameters/X-Auth-Token'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                rid:
-                  type: string
-                  description: The room ID.
-                keyID:
-                  type: string
-                  description: The key that you want to set for the room. Enter a unique string.
-              required:
-                - rid
-                - keyID
-            examples:
-              Example:
-                value:
-                  rid: wCiXndNp5NqNY3uCc
-                  keyID: my-UniQu3_ke4_Id
   /api/v1/e2e.setUserPublicAndPrivateKeys:
     parameters: []
     post:
