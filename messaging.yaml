@@ -5276,9 +5276,245 @@ paths:
                     success: false
                     error: 'Body param "roomId" is required [error-room-param-not-provided]'
                     errorType: error-room-param-not-provided
+                    
+  /api/v1/autotranslate.getSupportedLanguages:
+    get:
+      tags:
+        - Auto-Translate
+      summary: Get Supported Languages
+      description: |- 
+        To learn how to enable the auto-translate feature, see the <a href="https://docs.rocket.chat/docs/message#autotranslate" target="_blank">Auto-Translate</a> user guide.
+        
+        Get the supported languages by the auto-translate.
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |1.3.0          | Added       |
+      operationId: get-api-v1-autotranslate.getSupportedLanguages
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - name: targetLanguage
+          in: query
+          description: Language in which the language names will be returned.
+          required: true
+          schema:
+            type: string
+          example: en
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  languages:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        language:
+                          type: string
+                        name:
+                          type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    languages:
+                      - language: bg
+                        name: Bulgarian
+                      - language: cs
+                        name: Czech
+                      - language: da
+                        name: Danish
+                      - language: de
+                        name: German
+                      - language: el
+                        name: Greek
+                      - language: en
+                        name: English
+                      - language: es
+                        name: Spanish
+                      - language: et
+                        name: Estonian
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Target Language Required:
+                  value:
+                    success: false
+                    error: 'must have required property ''targetLanguage'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  /api/v1/autotranslate.saveSettings:
+    post:
+      tags:
+        - Auto-Translate
+      summary: Save Auto-Translate  Settings
+      description: |- 
+        Saves autotranslate settings for a room.
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |1.3.0          | Added       |
+      operationId: post-api-v1-autotranslate.saveSettings
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roomId:
+                  type: string
+                  description: The room's id to apply setting.
+                field:
+                  type: string
+                  description: The setting to apply to user's subscription.
+                value:
+                  type: boolean
+                  description: Boolean if the setting is autoTranslate and a string (the language) if the setting is autoTranslateLanguage.
+                defaultLanguage:
+                  type: string
+                  description: The default language.
+              required:
+                - roomId
+                - field
+                - value
+            examples:
+              Example:
+                value:
+                  roomId: 7aDSXtjMA3KPLxLjt
+                  field: autoTranslate
+                  value: true
+                  defaultLanguage: en
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  /api/v1/autotranslate.translateMessage:
+    post:
+      tags:
+        - Auto-Translate
+      summary: Translate Message
+      description: |- 
+        Auto-translates the provided message.
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |1.3.0          | Added       |
+      operationId: post-api-v1-autotranslate.translateMessage
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                messageId:
+                  type: string
+                  description: The message's id to be translated.
+                targetLanguage:
+                  type: string
+                  description: The target language that the message will be translated.
+              required:
+                - messageId
+            examples:
+              Example:
+                value:
+                  messageId: Fq7sQNSnDEfzj8qoS
+                  targetLanguage: en
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      rid:
+                        type: string
+                      msg:
+                        type: string
+                      ts:
+                        type: string
+                      u:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          username:
+                            type: string
+                          name:
+                            type: string
+                      _updatedAt:
+                        type: string
+                      mentions:
+                        type: array
+                        items:
+                          type: object
+                      channels:
+                        type: array
+                        items:
+                          type: object
+                      translations:
+                        type: object
+                        properties:
+                          en:
+                            type: string
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    message:
+                      _id: Fq7sQNSnDEfzj8qoS
+                      rid: GENERAL
+                      msg: Isso é um teste
+                      ts: '2019-06-27T15:35:20.753Z'
+                      u:
+                        _id: pC6Z2N2ijivxdsYSu
+                        username: marcos
+                        name: marcos
+                      _updatedAt: '2019-06-27T15:47:01.486Z'
+                      mentions: []
+                      channels: []
+                      translations:
+                        en: This is a test
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+                    
 tags:
   - name: Chat
   - name: DM
+  - name: Auto-Translate
 components:
   parameters:
     Optional-RoomId:
