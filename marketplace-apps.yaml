@@ -798,6 +798,53 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
+        
+  /api/v1/video-conference/jitsi.update-timeout:
+    post:
+      summary: Update Jitsi Timeout
+      description: |- 
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |0.74.0        | Added       |
+      operationId: post-api-v1-video-conference-jitsi.update-timeout
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roomId:
+                  type: string
+                  description: The room Id of the room to update the jitsi timeout.
+              required:
+                - roomId
+            examples:
+              Example:
+                value:
+                  roomId: hyoM5JSQi94RwqPE7
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jitsiTimeout:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    jitsiTimeout: '2019-01-16T13:17:11.951Z'
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
   
 components:
   schemas: {}
@@ -919,6 +966,7 @@ components:
               value:
                 success: false
                 error: 'User does not have the permissions required for this action [error-unauthorized]'
+
 tags:
   - name: Rasa App
   - name: WhatsApp
