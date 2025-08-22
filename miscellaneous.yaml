@@ -1359,54 +1359,7 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
-  /api/v1/video-conference/jitsi.update-timeout:
-    post:
-      tags:
-        - Video Conference
-      summary: Update Jitsi Timeout
-      description: |- 
-        ### Changelog
-        | Version      | Description |
-        | ---------------- | ------------|
-        |0.74.0        | Added       |
-      operationId: post-api-v1-video-conference-jitsi.update-timeout
-      parameters:
-        - $ref: '#/components/parameters/UserId'
-        - $ref: '#/components/parameters/Auth-Token'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                roomId:
-                  type: string
-                  description: The room Id of the room to update the jitsi timeout.
-              required:
-                - roomId
-            examples:
-              Example:
-                value:
-                  roomId: hyoM5JSQi94RwqPE7
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  jitsiTimeout:
-                    type: string
-                  success:
-                    type: boolean
-              examples:
-                Success:
-                  value:
-                    jitsiTimeout: '2019-01-16T13:17:11.951Z'
-                    success: true
-        '401':
-          $ref: '#/components/responses/authorizationError'
+          
   /api/v1/commands.get:
     get:
       tags:
@@ -1913,7 +1866,7 @@ tags:
   - name: Email Inbox
   - name: Licenses
   - name: Mailer
-  - name: Video Conference
+  
 components:
   parameters:
     offset:
