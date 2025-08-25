@@ -1973,66 +1973,6 @@ paths:
                     errorType: error-invalid-subscription
                     details:
                       method: ignoreUser
-  /api/v1/chat.unPinMessage:
-    post:
-      tags:
-        - Chat
-      summary: Unpin a message
-      description: |-
-        Remove a pinned message from the channel.
-
-        ### Changelog
-        | Version      | Description | 
-        | -------------| ------------|
-        | 0.59.0       | Added       |
-      operationId: post-api-v1-chat.unPinMessage
-      parameters:
-        - $ref: '#/components/parameters/Auth-Token'
-        - $ref: '#/components/parameters/UserId'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                messageId:
-                  type: string
-                  description: The message ID you want to to unpin.
-              required:
-                - messageId
-            examples:
-              Example:
-                value:
-                  messageId: 7aDSXtjMA3KPLxLjt
-      responses:
-        '200':
-          $ref: '#/components/responses/trueSuccess'
-        '401':
-          $ref: '#/components/responses/authorizationError'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  error:
-                    type: string
-                  errorType:
-                    type: string
-              examples:
-                Missing Parameter:
-                  value:
-                    success: false
-                    error: 'The required "messageId" param is missing. [error-messageid-param-not-provided]'
-                    errorType: error-messageid-param-not-provided
-                Invalid Parameter:
-                  value:
-                    success: false
-                    error: 'The provided "messageId" does not match any existing message. [error-message-not-found]'
-                    errorType: error-message-not-found
   /api/v1/chat.postMessage:
     post:
       tags:
