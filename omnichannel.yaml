@@ -3438,7 +3438,13 @@ paths:
   /api/v1/livechat/room.forward:
     post:
       summary: Forward Omnichannel Room
-      description: The chatbot agent forwards the chat to a human agent.
+      description: |-
+        Use this endpoint to transfer  a chat to another department or agent. When transfering the chat to another department, you can also specify a default agent in that department to receive the chat if  an [auto-assignment routing algorithm](https://docs.rocket.chat/docs/queue-types-routing-algorithm) is enabled.
+        
+        ### Changelog
+        | Version | Description  |
+        | ------- |--------------|
+        | 7.10.0  | Added support for selecting a default agent when transferring chat to another department.         |
       operationId: post-api-v1-livechat-room.forward
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -3462,7 +3468,7 @@ paths:
               required:
                 - roomId
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: XFzMqgn33DcsQkpJp
                   userId: iNKE8a6k6cjbqWhWd
@@ -3483,7 +3489,7 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                Example:
                   value:
                     success: false
                     error: 'must have required property ''roomId'' [invalid-params]'
