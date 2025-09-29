@@ -23,11 +23,20 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |7.11.0            | Added the `name` query parameter       |
         |0.63.0            | Added       |
       operationId: get-api-v1-emoji-custom.all
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
+        - schema:
+            type: string
+            example: emoji-one
+          in: query
+          name: name
+          description: Enter the emoji name you want to find. This parameter is optional.
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
       responses:
         '200':
           description: OK
