@@ -6418,6 +6418,64 @@ paths:
           $ref: '#/components/responses/permissionError'
       tags:
         - Omnichannel Custom Fields
+        
+  /api/v1/livechat/custom-fields.delete:
+    post:
+      summary: Delete Omnichannel Custom Field
+      tags:
+        - Omnichannel Custom Fields
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  errorType:
+                    type: string
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    errorType: invalid-params
+                    error: must have required property 'customFieldId'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-livechat-custom-fields.delete
+      description: |-
+       Delete an Omnichannel custom field entry. Permission required: `view-livechat-manager`
+       
+       ### Changelog
+       | Version      | Description |
+       | ---------------- | ------------|
+       |7.11.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - customFieldId
+              properties:
+                customFieldId:
+                  type: string
+                  description: Enter the custom field name that you want to delete.
+                  example: class
+            examples:
+              Example 1:
+                value:
+                  customFieldId: class
+        
   /api/v1/livechat/webrtc.call:
     get:
       tags:
