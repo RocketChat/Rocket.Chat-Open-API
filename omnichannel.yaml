@@ -1086,7 +1086,7 @@ paths:
           $ref: '#/components/responses/permissionError'
       operationId: post-api-v1-omnichannel-contacts.delete
       description: |-
-        Delete omnichannel contact. Permission required: `delete-livechat-contact`.
+        Delete omnichannel contact. Permission required: `Delete Omnichannel Contact` .
 
         ### Changelog
         | Version      | Description |
