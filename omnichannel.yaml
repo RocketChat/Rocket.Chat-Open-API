@@ -1049,6 +1049,67 @@ paths:
                   customFields: {}
                   wipeConflicts: false
                   
+  /api/v1/omnichannel/contacts.delete:
+    post:
+      summary: Delete Omnichannel Contact
+      tags:
+        - Omnichannel Contacts
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                ContactId Missing:
+                  value:
+                    success: false
+                    error: 'must have required property ''contactId'' [invalid-params]'
+                    errorType: invalid-params
+                Contact not found:
+                  value:
+                    success: false
+                    error: 'error-contact-not-found'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/permissionError'
+      operationId: post-api-v1-omnichannel-contacts.delete
+      description: |-
+        Delete omnichannel contact. Permission required: `delete-livechat-contact`.
+
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |7.11.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - contactId
+              properties:
+                contactId:
+                  type: string
+                  description: The contact's ID.
+            examples:
+              Example:
+                value:
+                  contactId: 67487f45e98719b7908d0f29
   /api/v1/omnichannel/contacts.conflicts:
     post:
       summary: Resolve Contact Conflicts
