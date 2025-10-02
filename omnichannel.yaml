@@ -4049,6 +4049,65 @@ paths:
           $ref: '#/components/responses/permissionError'
       tags:
         - Omnichannel Rooms
+        
+  /api/v1/livechat/rooms.removeAllClosedRooms:
+    post:
+      summary: Remove Closed Omnichannel Rooms
+      tags:
+        - Omnichannel Rooms
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  removedRooms:
+                    type: integer
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    removedRooms: 19
+                    success: true
+              examples:
+                Example 1:
+                  value:
+                    removedRooms: 19
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'User does not have the permissions required for this action [error-unauthorized]'
+      operationId: post-api-v1-livechat-rooms.removeAllClosedRooms
+      description: |-
+       Use this endpoint to remove closed Omnichannel rooms. 
+       
+       Permission required: `remove-closed-livechat-rooms`. (On the workspace UI, go to **Administration** > **Workspace** > **Permissions**. Search for the `Remove All Closed Omnichannel Rooms` permission. By default, livechat managers and monitors have this permission.)
+       
+       ### Changelog
+       | Version      | Description |
+       | ---------------- | ------------|
+       |7.11.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+        
   /api/v1/livechat/department:
     get:
       summary: Get List of Departments
