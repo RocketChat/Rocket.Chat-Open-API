@@ -8996,6 +8996,119 @@ paths:
           $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/permissionError'
+
+  /api/v1/livechat/livechat/analytics/dashboards/charts-data:
+    get:
+      summary: Get Analytics Chart Data
+      tags:
+        - Omnichannel Dashboards
+      responses:
+        '200':
+          description: "OK\r\nIn the response, the `dataLabels` array is a list of dates within the specified date range. The `dataPoints` array refers to the chart analytics for the corresponding dates and the chart label."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  chartLabel:
+                    type: string
+                  dataLabels:
+                    type: array
+                    items:
+                      type: string
+                  dataPoints:
+                    type: array
+                    items:
+                      type: integer
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    chartLabel: Total_conversations
+                    dataLabels:
+                      - 10/1
+                      - 10/2
+                      - 10/3
+                      - 10/4
+                      - 10/5
+                      - 10/6
+                    dataPoints:
+                      - 0
+                      - 0
+                      - 0
+                      - 0
+                      - 0
+                      - 0
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'User does not have the permissions required for this action [error-unauthorized]'
+      operationId: get-api-v1-livechat-livechat-analytics-dashboards-charts-data
+      description: |-
+       View the Omnichannel analytics chart data by chart name within a specific duration. On the workspace UI, you can access this feature by going to `Administration` > `Omnichannel` > `Analytics`.
+       
+       Permission required: `view-livechat-manager`
+       
+       ### Changelog
+       | Version      | Description |
+       | ---------------- | ------------|
+       |7.11.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+        - schema:
+            type: string
+            example: '2025-01-01'
+          in: query
+          name: start
+          description: 'Enter the start date from which you want to view the data. Format: YYYY-MM-DD'
+          required: true
+        - schema:
+            type: string
+            example: '2025-10-01'
+          in: query
+          name: end
+          description: 'Enter the end date till which you want to view the data. Format: YYYY-MM-DD'
+          required: true
+        - schema:
+            type: string
+            example: Total_conversations
+          in: query
+          name: chartName
+          description: |-
+           Enter the chart name for which you want to view the analytics. The options are: 
+           * `Total_conversations`
+           * `Avg_chat_duration`
+           * `Total_messages`
+           * `Avg_first_response_time`
+           * `Avg_reaction_time`
+           * `Best_first_response_time`
+           * `Avg_response_time`
+          required: true
+        - schema:
+            type: string
+            example: 64181a0728384134ed600dcc
+          in: query
+          name: departmentId
+          description: Enter the department ID for which you want to view the analytics.
+          
   /api/v1/livechat/inquiries.list:
     get:
       tags:
