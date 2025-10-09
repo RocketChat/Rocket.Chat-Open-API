@@ -6094,6 +6094,166 @@ paths:
       deprecated: true
       tags:
         - Omnichannel Departments
+
+  /api/v1/livechat/custom-fields.save:
+    post:
+      summary: Create Omnichannel Custom Field
+      tags:
+        - Omnichannel Custom Fields
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  customField:
+                    type: object
+                    properties:
+                      label:
+                        type: string
+                      scope:
+                        type: string
+                      visibility:
+                        type: boolean
+                      type:
+                        type: string
+                      searchable:
+                        type: boolean
+                      regexp:
+                        type: string
+                      required:
+                        type: boolean
+                      defaultValue:
+                        type: string
+                      options:
+                        type: string
+                      public:
+                        type: boolean
+                      _updatedAt:
+                        type: string
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    customField:
+                      label: address11
+                      scope: visitor
+                      visibility: true
+                      type: input
+                      searchable: true
+                      regexp: ''
+                      required: false
+                      defaultValue: ''
+                      options: ''
+                      public: true
+                      _updatedAt: '2025-10-06T06:52:40.102Z'
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'User does not have the permissions required for this action [error-unauthorized]'
+      operationId: post-api-v1-livechat-custom-fields.save
+      description: |-
+       Create a new Omnichannel custom field or update an existing on. You can refer to the <a href='https://docs.rocket.chat/docs/omnichannel-custom-fields' target='_blank'>Omnichannel Custom Fields</a> user guide for details.
+       
+       Permission required: `view-livechat-manager`
+       
+       ### Changelog
+       | Version      | Description |
+       | ---------------- | ------------|
+       |7.11.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - customFieldData
+              properties:
+                customFieldId:
+                  type: string
+                  description: 'If you want to update an existing custom field, enter the `field` value.'
+                  example: address
+                customFieldData:
+                  type: object
+                  description: 'In this object, provide the custom field data.'
+                  properties:
+                    field:
+                      type: string
+                      description: Enter a value for the field.
+                      example: address
+                    label:
+                      type: string
+                      description: Enter a label for the field.
+                      example: address-line
+                    visibility:
+                      type: boolean
+                      description: Enter whether the custom field is displayed in a contact’s details.
+                    scope:
+                      type: string
+                      description: "Set the scope of the custom field. The options are: `visitor` and `room`.\r\nRefer to the user guide for details."
+                      example: visitor
+                    type:
+                      type: string
+                      description: 'Set the input type of this field. The options are: `input` and `select`.'
+                      example: input
+                    searchable:
+                      type: boolean
+                      description: Set whether or not searching in the Omnichannel Contact Center can be done with the custom field.
+                    regexp:
+                      type: string
+                      description: 'Validate the values entered for the custom field using regular expressions. For example, [a-z]. This means that the custom field only accepts lowercase letters. Any other characters will display an error message.'
+                      example: '[a-z]'
+                    required:
+                      type: boolean
+                      description: Set whether or not this field should be mandatory.
+                    defaultValue:
+                      type: string
+                      description: Enter a default value for the field.
+                      example: default
+                    options:
+                      type: string
+                      description: 'If the field `type` is `select`, enter the options that users can select. The values must be comma-separated.'
+                      example: 'optionA, optionB'
+                    public:
+                      type: boolean
+                      description: 'If enabled, the custom field will be displayed in external applications, such as Livechat.'
+            examples:
+              Example 1:
+                value:
+                  customFieldData:
+                    field: new1
+                    label: new11
+                    visibility: true
+                    scope: visitor
+                    type: select
+                    searchable: true
+                    regexp: ''
+                    required: false
+                    defaultValue: ''
+                    options: 'optionA, optionB'
+                    public: true
+        
   /api/v1/livechat/custom.field:
     post:
       summary: Send Custom Field Value
