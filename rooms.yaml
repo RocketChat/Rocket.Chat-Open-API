@@ -12937,6 +12937,119 @@ paths:
                       _updatedAt: '2019-12-20T03:38:40.116Z'
         '401':
           $ref: '#/components/responses/authorizationError'
+
+  /api/v1/rooms.roles:
+    get:
+      summary: Get Room Roles
+      tags:
+        - Rooms
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  roles:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        rid:
+                          type: string
+                        u:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                            name:
+                              type: string
+                        roles:
+                          type: array
+                          items:
+                            type: string
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    roles:
+                      - _id: 668c75b2b319fc80bf0ed3a1
+                        rid: 658282732dd9f928ad989e98
+                        u:
+                          _id: P2dgWPPw5veigwcdK
+                          username: jane.doe
+                          name: Jane Doe
+                        roles:
+                          - moderator
+                      - _id: 6819edfa30c9c71254e45d18
+                        rid: 658282732dd9f928ad989e98
+                        u:
+                          _id: 74HrDgvTTxT56o8R8
+                          username: mary.shelley
+                          name: Mary Shelley
+                        roles:
+                          - leader
+                      - _id: 668c7717b319fc80bf0ed3b0
+                        rid: 658282732dd9f928ad989e98
+                        u:
+                          _id: qHWhoJwwgk4bwcoNq
+                          username: test.user
+                        roles:
+                          - moderator
+                      - _id: 6690c37ab319fc80bf0ed407
+                        rid: 658282732dd9f928ad989e98
+                        u:
+                          _id: C38WSSzrGd2NCjzqJ
+                          username: test.cat
+                        roles:
+                          - owner
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  errorType:
+                    type: string
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    errorType: error-invalid-params
+                    error: must have required property 'rid'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-rooms.roles
+      description: |-
+       Get the list of roles in a specific room. This endpoint returns users with the `Owner`, `Leader`, and `Moderator` room roles. You can refer to the <a href='https://docs.rocket.chat/docs/roles-in-rocketchat' target='_blank'>Roles user guide</a> for more details on roles in Rocket.Chat.
+       
+       ### Changelog
+       | Version | Description                          |
+       | ------- | ------------------------------------ |
+       | 7.10.0   | Added                               |
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - schema:
+            type: string
+            example: 658282732dd9f928ad989e98
+          in: query
+          name: rid
+          description: Enter the room ID for which you want to view the room roles.
+          required: true
+          
   /api/v1/listInvites:
     get:
       tags:
@@ -13008,6 +13121,7 @@ paths:
                       _updatedAt: '2019-12-20T03:38:40.116Z'
         '401':
           $ref: '#/components/responses/authorizationError'
+
   /api/v1/removeInvite/{_id}:
     delete:
       tags:
