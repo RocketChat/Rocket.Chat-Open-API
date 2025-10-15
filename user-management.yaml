@@ -1004,6 +1004,64 @@ paths:
                 - roleId
                 - username
     parameters: []
+
+  /api/v1/roles.getUsersInPublicRoles:
+    get:
+      summary: Get Users in Public Roles
+      tags:
+        - Roles
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        username:
+                          type: string
+                        roles:
+                          type: array
+                          items:
+                            type: string
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    users:
+                      - _id: kb2WBkjkut4YJpFQk
+                        username: agent2
+                        roles:
+                          - livechat-agent
+                      - _id: Ahgf5k9Ca4YEdMjwX
+                        username: test.agent
+                        roles:
+                          - admin
+                          - livechat-agent
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-roles.getUsersInPublicRoles
+      description: |-
+       Use this endpoint to get the list of roles other than `user`, such as admin, livechat, and custom roles.
+       
+       ### Changelog
+       | Version      | Description |
+       | ---------------- | ------------|
+       |7.10.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+    
   /api/v1/users.create:
     post:
       tags:
