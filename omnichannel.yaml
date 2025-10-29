@@ -4107,6 +4107,63 @@ paths:
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
+
+  /api/v1/livechat/rooms.delete:
+    post:
+      summary: Remove a Closed Omnichannel Room
+      tags:
+        - Omnichannel Rooms
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  errorType:
+                    type: string
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    errorType: invalid-params
+                    error: must have required property 'roomId'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-livechat-rooms.delete
+      description: |-
+       Use this endpoint to delete a specific closed Omnichannel room from the workspace. Permission required: `remove-closed-livechat-room`
+       
+       ### Changelog
+       | Version      | Description |
+       | ---------------- | ------------|
+       |7.12.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - roomId
+              properties:
+                roomId:
+                  type: string
+                  description: Enter the ID of the closed livechat room that you want to delete.
+                  example: nXHYnNu38qKRRtZDi
+            examples:
+              Example 1:
+                value:
+                  roomId: nXHYnNu38qKRRtZDi
         
   /api/v1/livechat/department:
     get:
