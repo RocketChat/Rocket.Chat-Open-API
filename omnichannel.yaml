@@ -15529,16 +15529,13 @@ paths:
     post:
       tags:
         - Canned Responses
-      summary: Create or Update or Delete a Canned Response
+      summary: Create or Update a Canned Response
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
 
         To create and update <a href='https://docs.rocket.chat/docs/canned-responses' target='_blank'>canned responses</a>, the following permissions are required:
         * `save-canned-responses`
         * `save-all-canned-responses`
-
-        To delete a canned response, the following permission is required:
-        * `remove-canned-responses`
 
         ### Changelog
         | Version      | Description |
@@ -15588,9 +15585,7 @@ paths:
                     - tag1
                     - tag2
         description: |-
-          Note:
-            * To update a canned response, the `_id` parameter is required along with the other required parameters. This parameter is not used to create a canned response.
-            * To delete a canned response, enter the `_id` of the canned response that you want to delete. No other parameter is required.
+          Note: To update a canned response, the `_id` parameter is required along with the other required parameters. This parameter is not used to create a canned response.
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
@@ -15949,6 +15944,30 @@ paths:
         in: path
         required: true
         description: The canned response's ID.
+
+    delete:
+      summary: Delete a Canned Response
+      tags:
+        - Canned Responses
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: delete-api-v1-canned-responses-_id
+      description: |-
+       <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+      
+       Use this endpoint to delete a canned response. Permission required: `remove-canned-responses`
+       
+       ### Changelog
+       | Version      | Description 
+       | ---------------- | ------------|
+       |7.12.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+        
   /api/v1/livechat/message:
     parameters: []
     post:
