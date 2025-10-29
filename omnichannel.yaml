@@ -11433,6 +11433,63 @@ paths:
                   value:
                     success: false
                     error: Tag not found
+
+  /api/v1/livechat/tags.delete:
+    post:
+      summary: Delete a tag
+      tags:
+        - Omnichannel Tags
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: Tag not found
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-livechat-tags.delete
+      description: |-
+       <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+       
+       This endpoint is used to delete an Omnichannel tag from the workspace. Permission required: `manage-livechat-tags`
+       
+       ### Changelog
+       | Version      | Description |
+       | ------------ | ------------|
+       |7.12.0         | Added       |
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: string
+                  description: Enter the tag ID that you want to delete.
+                  example: 682223ba30c9c71254e46012
+            examples:
+              Example 1:
+                value:
+                  id: 682223ba30c9c71254e46012
+                    
   /api/v1/livechat/tags.list:
     get:
       tags:
