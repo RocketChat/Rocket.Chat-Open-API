@@ -9847,6 +9847,82 @@ paths:
           $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/permissionError'
+
+  /api/v1/livechat/inquiries.returnAsInquiry:
+    post:
+      summary: Move Chat to Inquiry
+      tags:
+        - Omnichannel Inquiries
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: boolean
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    result: true
+                    success: true
+                Inquiry already exists:
+                  value:
+                    result: false
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: room-closed
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-livechat-inquiries.returnAsInquiry
+      description: |-
+       This endpoint is used to move an open chat to the queue. Permission required: `view-l-room`
+       
+       ### Changelog
+       | Version      | Description |
+       | ---------------- | ------------|
+       |7.12.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - roomId
+              properties:
+                roomId:
+                  type: string
+                  description: Enter the room ID that you want to return to the queue.
+                departmentId:
+                  type: string
+                  description: Enter the department ID that the chat is part of.
+            examples:
+              Example 1:
+                value:
+                  roomId: iFzJuwGtkg4KB4keW
+                  departmentId: 66fa9ec66ea9eba859b650b3
+          
   /api/v1/livechat/integrations.settings:
     get:
       tags:
