@@ -555,6 +555,57 @@ paths:
           $ref: '#/components/responses/permissionError'
       tags:
         - Omnichannel Agents
+
+  /api/v1/livechat/agents.saveInfo:
+    post:
+      summary: Update Agent Info
+      tags:
+        - Omnichannel Agents
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-livechat-agents.saveInfo
+      description: |-
+       Update an Omnichannel agent's information. Permission required: `manage-livechat-agents`.
+       
+       ### Changelog
+       | Version      | Description |
+       | ---------------- | ------------|
+       |7.11.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - agentId
+                - agentData
+                - agentDepartments
+              properties:
+                agentId:
+                  type: string
+                  description: Enter the agent's ID.
+                agentData:
+                  type: object
+                  description: Enter the agent data that you want to update.
+                agentDepartments:
+                  type: array
+                  description: Enter the agent's departments. You can leave it as an empty string if you don't want to add any departments.
+                  items:
+                    type: string
+            examples:
+              Example 1:
+                value:
+                  agentId: 4zqiF9BSWmBTe6yvt
+                  agentData: {}
+                  agentDepartments:
+                    - ''
+        
   /api/v1/omnichannel/contact:
     post:
       summary: Register or Update Omnichannel Contact
@@ -10187,6 +10238,65 @@ paths:
               examples:
                 default:
                   value: <Response></Response>
+
+  /api/v1/livechat/config/routing:
+    get:
+      summary: Get Livechat Routing Configuration
+      tags:
+        - Livechat
+      responses:
+        '200':
+          description: "OK\r\nThe parameters in the response indicate whether the specific livechat setting in the workspace is enabled or not."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  config:
+                    type: object
+                    properties:
+                      previewRoom:
+                        type: boolean
+                      showConnecting:
+                        type: boolean
+                      showQueue:
+                        type: boolean
+                      showQueueLink:
+                        type: boolean
+                      returnQueue:
+                        type: boolean
+                      enableTriggerAction:
+                        type: boolean
+                      autoAssignAgent:
+                        type: boolean
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    config:
+                      previewRoom: false
+                      showConnecting: false
+                      showQueue: false
+                      showQueueLink: true
+                      returnQueue: false
+                      enableTriggerAction: true
+                      autoAssignAgent: true
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-livechat-config-routing
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      description: |-
+       This endpoint returns the livechat routing configuration. It is called automatically when logging into the application to make the Omnichannel/livechat features available in the client.
+       
+       ### Changelog
+       | Version      | Description |
+       | ---------------- | ------------|
+       |7.11.0            | Added       |
+                  
   /api/v1/livechat/triggers:
     get:
       tags:
