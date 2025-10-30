@@ -4107,6 +4107,63 @@ paths:
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
+
+  /api/v1/livechat/rooms.delete:
+    post:
+      summary: Remove a Closed Omnichannel Room
+      tags:
+        - Omnichannel Rooms
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  errorType:
+                    type: string
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    errorType: invalid-params
+                    error: must have required property 'roomId'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-livechat-rooms.delete
+      description: |-
+       Use this endpoint to delete a specific closed Omnichannel room from the workspace. Permission required: `remove-closed-livechat-room`
+       
+       ### Changelog
+       | Version      | Description |
+       | ---------------- | ------------|
+       |7.12.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - roomId
+              properties:
+                roomId:
+                  type: string
+                  description: Enter the ID of the closed livechat room that you want to delete.
+                  example: nXHYnNu38qKRRtZDi
+            examples:
+              Example 1:
+                value:
+                  roomId: nXHYnNu38qKRRtZDi
         
   /api/v1/livechat/department:
     get:
@@ -9790,6 +9847,82 @@ paths:
           $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/permissionError'
+
+  /api/v1/livechat/inquiries.returnAsInquiry:
+    post:
+      summary: Move Chat to Inquiry
+      tags:
+        - Omnichannel Inquiries
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: boolean
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    result: true
+                    success: true
+                Inquiry already exists:
+                  value:
+                    result: false
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: room-closed
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-livechat-inquiries.returnAsInquiry
+      description: |-
+       This endpoint is used to move an open chat to the queue. Permission required: `view-l-room`
+       
+       ### Changelog
+       | Version      | Description |
+       | ---------------- | ------------|
+       |7.12.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - roomId
+              properties:
+                roomId:
+                  type: string
+                  description: Enter the room ID that you want to return to the queue.
+                departmentId:
+                  type: string
+                  description: Enter the department ID that the chat is part of.
+            examples:
+              Example 1:
+                value:
+                  roomId: iFzJuwGtkg4KB4keW
+                  departmentId: 66fa9ec66ea9eba859b650b3
+          
   /api/v1/livechat/integrations.settings:
     get:
       tags:
@@ -11376,6 +11509,63 @@ paths:
                   value:
                     success: false
                     error: Tag not found
+
+  /api/v1/livechat/tags.delete:
+    post:
+      summary: Delete a tag
+      tags:
+        - Omnichannel Tags
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: Tag not found
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-livechat-tags.delete
+      description: |-
+       <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+       
+       This endpoint is used to delete an Omnichannel tag from the workspace. Permission required: `manage-livechat-tags`
+       
+       ### Changelog
+       | Version      | Description |
+       | ------------ | ------------|
+       |7.12.0         | Added       |
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: string
+                  description: Enter the tag ID that you want to delete.
+                  example: 682223ba30c9c71254e46012
+            examples:
+              Example 1:
+                value:
+                  id: 682223ba30c9c71254e46012
+                    
   /api/v1/livechat/tags.list:
     get:
       tags:
@@ -15529,16 +15719,13 @@ paths:
     post:
       tags:
         - Canned Responses
-      summary: Create or Update or Delete a Canned Response
+      summary: Create or Update a Canned Response
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
 
         To create and update <a href='https://docs.rocket.chat/docs/canned-responses' target='_blank'>canned responses</a>, the following permissions are required:
         * `save-canned-responses`
         * `save-all-canned-responses`
-
-        To delete a canned response, the following permission is required:
-        * `remove-canned-responses`
 
         ### Changelog
         | Version      | Description |
@@ -15588,9 +15775,7 @@ paths:
                     - tag1
                     - tag2
         description: |-
-          Note:
-            * To update a canned response, the `_id` parameter is required along with the other required parameters. This parameter is not used to create a canned response.
-            * To delete a canned response, enter the `_id` of the canned response that you want to delete. No other parameter is required.
+          Note: To update a canned response, the `_id` parameter is required along with the other required parameters. This parameter is not used to create a canned response.
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
@@ -15949,6 +16134,30 @@ paths:
         in: path
         required: true
         description: The canned response's ID.
+
+    delete:
+      summary: Delete a Canned Response
+      tags:
+        - Canned Responses
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: delete-api-v1-canned-responses-_id
+      description: |-
+       <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+      
+       Use this endpoint to delete a canned response. Permission required: `remove-canned-responses`
+       
+       ### Changelog
+       | Version      | Description 
+       | ---------------- | ------------|
+       |7.12.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+        
   /api/v1/livechat/message:
     parameters: []
     post:
