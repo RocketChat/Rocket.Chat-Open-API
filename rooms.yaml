@@ -5586,7 +5586,7 @@ paths:
         * `delete-team`: To delete a team.
         * `delete-team-channel`: To delete a channel within a team, also requires the `delete-c` permission.
         * `delete-team-group`: To delete a private channel within a team, also requires the `delete-p` permission.
-        
+
         ### Changelog
         | Version | Description   |
         | ------- | --------------|
@@ -5600,6 +5600,8 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - roomId
               properties:
                 roomId:
                   type: string
@@ -5608,6 +5610,33 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                'Example 1: Missing roomId':
+                  value:
+                    success: false
+                    error: The 'roomId' param is required
+                'Example 2: Missing Permission':
+                  value:
+                    success: true
+                    error: string
+                'Example 3: Cannot Delete Team Channel':
+                  value:
+                    success: false
+                    error: 'Cannot delete a team channel [error-cannot-delete-team-channel]'
+                    errorType: error-cannot-delete-team-channel
+                    details:
+                      method: eraseRoom
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/rooms.favorite:
