@@ -5621,10 +5621,6 @@ paths:
                     type: boolean
                   error:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: The 'roomId' param is required
               examples:
                 'Example 1: Missing roomId':
                   value:
