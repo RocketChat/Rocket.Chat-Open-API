@@ -1861,11 +1861,461 @@ paths:
                 value:
                   message: '{"msg":"method","method":"createChannel","id":"2","params":["test-websocket",["doe.john"],false]}'
 
+  /api/v1/calendar-events.list:
+    get:
+      summary: Get List of Calendar Events
+      tags:
+        - Calendar Events
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties: {}
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    data:
+                      - _id: 690b02874e7e8bcf6985b27a
+                        uid: C38WSSzrGd2NCjzqJ
+                        startTime: '2025-03-26T07:17:00.000Z'
+                        endTime: '2025-03-26T07:18:00.000Z'
+                        subject: Subject8
+                        description: Description8
+                        meetingUrl: null
+                        reminderMinutesBeforeStart: 10
+                        reminderTime: '2025-03-26T07:07:00.000Z'
+                        notificationSent: false
+                        _updatedAt: '2025-11-05T07:53:43.420Z'
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''date'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-calendar-events.list
+      description: Use this endpoint to view the list of your calendar events for a specific date.
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - schema:
+            type: string
+            example: '2025-01-01'
+          in: query
+          name: date
+          description: Enter the date for which you want to view the calendar events. Use the format YYYY-MM-DD.
+          required: true
+          
+  /api/v1/calendar-events.info:
+    get:
+      summary: Get Calendar Event Info
+      tags:
+        - Calendar Events
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      uid:
+                        type: string
+                      startTime:
+                        type: string
+                      endTime:
+                        type: string
+                      subject:
+                        type: string
+                      description:
+                        type: string
+                      meetingUrl:
+                        type: string
+                        nullable: true
+                      reminderMinutesBeforeStart:
+                        type: integer
+                      reminderTime:
+                        type: string
+                      notificationSent:
+                        type: boolean
+                      _updatedAt:
+                        type: string
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    event:
+                      _id: 690b02874e7e8bcf6985b27a
+                      uid: C38WSSzrGd2NCjzqJ
+                      startTime: '2025-03-26T07:17:00.000Z'
+                      endTime: '2025-03-26T07:18:00.000Z'
+                      subject: Subject8
+                      description: Description8
+                      meetingUrl: null
+                      reminderMinutesBeforeStart: 10
+                      reminderTime: '2025-03-26T07:07:00.000Z'
+                      notificationSent: false
+                      _updatedAt: '2025-11-05T07:53:43.420Z'
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''id'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-calendar-events.info
+      description: Use this endpoint to get information about a specific calendar event.
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - schema:
+            type: string
+            example: 6909b8ea4e7e8bcf6985b1a8
+          in: query
+          name: id
+          description: Enter the event ID.
+          required: true
+          
+  /api/v1/calendar-events.create:
+    post:
+      summary: Create Calendar Event
+      tags:
+        - Calendar Events
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    id: 690b08674e7e8bcf6985b2d5
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-calendar-events.create
+      description: Create a new calendar event.
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - startTime
+                - subject
+                - description
+              properties:
+                startTime:
+                  type: string
+                  description: Enter the time at which the event starts.
+                  example: '2025-11-05T07:17:00.000Z'
+                endTime:
+                  type: string
+                  description: Enter the time at which the event ends.
+                  example: '2025-11-05T07:18:00.000Z'
+                subject:
+                  type: string
+                  description: Enter a subject for the event.
+                description:
+                  type: string
+                  description: Enter a description for the event.
+                reminderMinutesBeforeStart:
+                  type: integer
+                  description: Enter the number of minutes before the event that the reminder should be sent.
+                  example: 10
+                busy:
+                  type: boolean
+                  description: Enter whether or not you want to set your status as busy.
+                externalId:
+                  type: string
+                  example: NWwwcnU3NmM1NW03dDRtZGdkMWNjNDRmamsgcmFjaGFuYS52aXNhdmFkaXlhQHJvY2tldC5jaGF0
+                  description: 'If you want to use an external event from another calendar, enter the event ID (eid) of the external calendar event.'
+            examples:
+              Example 1:
+                value:
+                  startTime: '2025-11-05T07:17:00.000Z'
+                  endTime: '2025-11-05T07:18:00.000Z'
+                  subject: Subject8
+                  description: Description8
+                  reminderMinutesBeforeStart: 10
+                  
+  /api/v1/calendar-events.update:
+    post:
+      summary: Update Calendar Event
+      tags:
+        - Calendar Events
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''eventId'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-calendar-events.update
+      description: Update an existing calendar event.
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - eventId
+                - startTime
+                - subject
+                - description
+              properties:
+                eventId:
+                  type: string
+                  description: Enter the event ID that you want to update.
+                startTime:
+                  type: string
+                  description: Enter the time at which the event starts.
+                endTime:
+                  type: string
+                  description: Enter the time at which the event ends.
+                subject:
+                  type: string
+                  description: Enter a subject for the event.
+                description:
+                  type: string
+                  description: Enter a description for the event.
+                reminderMinutesBeforeStart:
+                  type: integer
+                  description: Enter the number of minutes before the event that the reminder should be sent.
+                busy:
+                  type: boolean
+                  description: Enter whether or not you want to set your status as busy.
+            examples:
+              Example 1:
+                value:
+                  eventId: 690b08674e7e8bcf6985b2d5
+                  startTime: '2025-11-05T07:17:00.000Z'
+                  endTime: '2025-11-05T07:18:00.000Z'
+                  subject: Subject8
+                  description: Description8
+                  reminderMinutesBeforeStart: 10
+                  
+  /api/v1/calendar-events.delete:
+    post:
+      summary: Delete Calendar Event
+      tags:
+        - Calendar Events
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: invalid-calendar-event
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-calendar-events.delete
+      description: Delete a specific calendar event.
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - eventId
+              properties:
+                eventId:
+                  type: string
+                  description: Enter the event ID that you want to delete.
+                  example: 6909b8ea4e7e8bcf6985b1a8
+            examples:
+              Example 1:
+                value:
+                  eventId: 6909b8ea4e7e8bcf6985b1a8
+                  
+  /api/v1/calendar-events.import:
+    post:
+      summary: Import Calendar Event
+      tags:
+        - Calendar Events
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    id: 690c2b2d4e7e8bcf6985b3d8
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''externalId'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-calendar-events.import
+      description: Use this endpoint to import an exteral calendar event.
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - externalId
+                - startTime
+                - subject
+                - description
+              properties:
+                externalId:
+                  type: string
+                  description: Enter the event ID (eid) of the external calendar event.
+                startTime:
+                  type: string
+                  description: Enter the time at which the event begins.
+                endTime:
+                  type: string
+                  description: Enter the time at which the event ends.
+                subject:
+                  type: string
+                  description: Enter the event subject.
+                description:
+                  type: string
+                  description: Enter the event description.
+                reminderMinutesBeforeStart:
+                  type: integer
+                  description: Enter the number of minutes before the event that the reminder must be sent.
+                busy:
+                  type: boolean
+                  description: Enter whether or not you want to set your status as busy.
+            examples:
+              Example 1:
+                value:
+                  externalId: NWwwcnU3NmM1NW03dDRtZGdkMWNjNDRmamsgcmFjaGFuYS52aXNhdmFkaXlhQHJvY2tldC5jaGF0
+                  startTime: '2025-11-05T07:17:00.000Z'
+                  endTime: '2025-11-05T07:18:00.000Z'
+                  subject: Subject8
+                  description: Description8
+                  reminderMinutesBeforeStart: 10
+                  busy: true
+
 tags:
   - name: Commands
   - name: Email Inbox
   - name: Licenses
   - name: Mailer
+  - name: Calendar Events
   
 components:
   parameters:
