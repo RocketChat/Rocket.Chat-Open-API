@@ -1142,8 +1142,6 @@ paths:
                     * For default roles, the role name and ID are the same. For custom roles, the name and ID are different. 
                     * If you are setting a custom role for a user, make sure to enter the custom role ID, and not the role name.
                     Refer to [Roles](https://docs.rocket.chat/use-rocket.chat/workspace-administration/permissions#roles) for more information.
-                  example:
-                    - bot
                   items:
                     type: string
                     example: bot
@@ -1286,7 +1284,7 @@ paths:
         - Users
       summary: Register User
       description: |-
-        * Use this endpoint to create an account on the workspace.
+        * An external member can use this endpoint to create an account on the workspace.
         * The number of requests you can make and the interval between each request depends on the workspace's rate limiter settings. You can find the settings from **Administration** > **Settings** > **Rate Limiter** > **API Rate Limiter**.
         
         ### Changelog
@@ -1367,6 +1365,25 @@ paths:
                       utcOffset: 0
                       username: example
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''pass'' [invalid-params]'
+                    errorType: invalid-params
     parameters: []
   /api/v1/users.update:
     post:
