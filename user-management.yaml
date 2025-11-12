@@ -1581,14 +1581,14 @@ paths:
                       action: Editing_user
         '401':
           $ref: '#/components/responses/authorizationError'
-    parameters: []
+
   /api/v1/users.updateOwnBasicInfo:
     post:
       tags:
         - Users
       summary: Update Own Basic Information
       description: |-
-        * To change your email or password, you must confirm it using TOTP. If you don't have 2FA enabled (token code or email), TOTP will require the current password method.
+        * To change your email or password, you must confirm it using TOTP. If you don't have 2FA enabled in your account (token code or email), TOTP will require the current password method. Note that if 2FA is not enabled in the workspace, the 2FA headers are not required.
         * If you add the `currentPassword` encrypted in SHA256 to the request body, the request won't require TOTP again.
 
         ### Changelog
@@ -1625,8 +1625,7 @@ paths:
                 data:
                   type: object
                   description: >-
-                    An object of user data to be updated with the following
-                    parameters.
+                    An object of user data to be updated with the following parameters. If you enter an empty string, the user details are returned.
                   properties:
                     email:
                       type: string
@@ -1955,9 +1954,28 @@ paths:
                       bio: Engineer
                       nickname: ''
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''data'' [invalid-params]'
+                    errorType: invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
-    parameters: []
+
   /api/v1/users.info:
     get:
       tags:
