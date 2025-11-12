@@ -1982,7 +1982,7 @@ paths:
         - Users
       summary: Get User's Info
       description: |-
-        Retrieves information about a user. The result is only limited to what the callee has access to view.
+        Retrieves information about a user. The result is limited only to what you have access to view.
 
         From version `7.0.0`, this endpoint no longer supports the `fields` parameter, even when the `ALLOW_UNSAFE_QUERY_AND_FIELDS_API_PARAMS: true` environment variable is set. Instead, use the `includeUserRooms` parameter.
 
@@ -2011,7 +2011,7 @@ paths:
             example: true
           in: query
           name: includeUserRooms
-          description: Specifies whether the rooms the user is a member of should be included in the response.
+          description: Enter whether or not the rooms that the user is a member of are included in the response. To view the list of rooms, you need the `view-other-user-channels` permission.
       responses:
         '200':
           description: OK
