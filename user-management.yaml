@@ -2650,7 +2650,7 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       description: |-
-        Any one of the following permissions is required:
+        Activate a deactivated user in the workspace. Any one of the following permissions is required:
           * `edit-other-user-active-status`: Permission to change other user's status.
           * `manage-moderation-actions`: Permission to manage moderation actions, perform actions on reported users.
           
@@ -2757,7 +2757,7 @@ paths:
                     success: false
                     error: unauthorized
       description: |-
-        Permission required: `edit-other-user-active-status`
+        Automatically deactivate idle users in your workspace based on the number of days and roles. Permission required: `edit-other-user-active-status`
           
           ### Changelog
           | Version      | Description |
@@ -2790,9 +2790,8 @@ paths:
                   role: user
       tags:
         - Users
-    parameters: []
+
   /api/v1/users.getPresence:
-    parameters: []
     get:
       summary: Get Specific User's Presence
       operationId: get-api-v1-users.getPresence
