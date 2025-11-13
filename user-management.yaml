@@ -2650,9 +2650,9 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       description: |-
-        Any one of the following permissions are required:
-          * `edit-other-user-avatar`: Permission to change other user's avatar
-          * `manage-moderation-actions`: Permission to manage moderation actions, perform actions on reported users
+        Any one of the following permissions is required:
+          * `edit-other-user-active-status`: Permission to change other user's status.
+          * `manage-moderation-actions`: Permission to manage moderation actions, perform actions on reported users.
           
           ### Changelog
           | Version      | Description |
@@ -2698,7 +2698,6 @@ paths:
           chosen as the new owner.
       tags:
         - Users
-    parameters: []
   /api/v1/users.deactivateIdle:
     post:
       summary: Deactivate Idle Users
