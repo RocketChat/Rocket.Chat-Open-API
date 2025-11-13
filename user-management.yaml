@@ -1588,6 +1588,7 @@ paths:
         - Users
       summary: Update Own Basic Information
       description: |-
+        Update your account information using this endpoint.
         * To change your email or password, you must confirm it using TOTP. If you don't have 2FA enabled in your account (token code or email), TOTP will require the current password method. Note that if 2FA is not enabled in the workspace, the 2FA headers are not required.
         * If you add the `currentPassword` encrypted in SHA256 to the request body, the request won't require TOTP again.
 
@@ -2407,6 +2408,8 @@ paths:
           description: 'The user ID. Alternatively, you can enter the `username` parameter.'
           required: true
       description: |-
+        View a user's avatar.
+        
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
@@ -2450,6 +2453,7 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       description: |-
+        Reset a user's avatar to the default icon. By default, icons contain the user's initials.
         Permissions required, if the setting `AllowUserAvatarChange` is enabled: 
           * `edit-other-user-avatar`: Permission to change other user's avatar
           * `manage-moderation-actions`: Permission to manage moderation actions, perform actions on reported users
@@ -2828,6 +2832,8 @@ paths:
       tags:
         - Users
       description: |-
+        Get a user's presence in the workspace (offline, busy, active, or away).
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -2835,7 +2841,6 @@ paths:
         |0.48.0            | Renamed to `users.getPresence`       |
         |0.35.0            | Added       |
   /api/v1/users.presence:
-    parameters: []
     get:
       summary: Get Users Presence
       operationId: get-api-v1-users.presence
@@ -2908,6 +2913,7 @@ paths:
           name: ids
           description: The user IDs whose status you want.
       description: |-
+        Get presence of multiple workspace users. You can filter by date and user IDs.
         If the `Presence_broadcast_disabled` setting is true, the endpoint returns an empty array. You can find this setting under **Administration** > **Settings** > **Troubleshoot**.
         
         ### Changelog
@@ -2922,7 +2928,7 @@ paths:
         - Users
       summary: Delete User
       description: |-
-        Deletes an existing user from your workspace. Permission required: `delete-user`
+        Permanently deletes an existing user from your workspace. Permission required: `delete-user`
         
         ### Changelog
         | Version      | Description |
@@ -2943,13 +2949,14 @@ paths:
               properties:
                 userId:
                   type: string
+                  example: BsNr28znDkG8aeo7W
                   description: >-
                     The `userId` of the user. Alternatively, you can use the
-                    username property and value.
+                    `username` property and value.
                 confirmRelinquish:
                   type: boolean
                   description: >-
-                    Deletes user even if it is the last owner of a room. By
+                    Deletes the user, even if they are the last owner of a room. By
                     default, it is set to `false`.
                   default: false
             examples:
@@ -3021,21 +3028,24 @@ paths:
           application/json:
             schema:
               type: object
-              x-examples:
-                Example 1:
-                  userId: BsNr28znDkG8aeo7W
+              required:
+                - password
               properties:
                 password:
                   type: string
                   description: The password of user (encrypted in SHA256).
-                  example: BsNr28znDkG8aeo7W
+                  example: 8f0e2f76e22b43e2855189877e7dc1e1e7d98c226c95db247cd1d547928334a9
                 confirmRelinquish:
                   type: boolean
                   description: >-
                     Deletes own account even if user is the last owner of a
                     room.
-              required:
-                - password
+                  default: false
+            examples:
+              Example 1:
+                value:
+                  password: 8f0e2f76e22b43e2855189877e7dc1e1e7d98c226c95db247cd1d547928334a9
+                  confirmRelinquish: false                    
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
@@ -3057,7 +3067,7 @@ paths:
                     error: Body parameter "password" is required.
         '401':
           $ref: '#/components/responses/authorizationError'
-    parameters: []
+
   /api/v1/users.createToken:
     post:
       tags:
