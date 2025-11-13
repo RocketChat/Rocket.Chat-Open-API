@@ -2482,18 +2482,33 @@ paths:
       tags:
         - Users
   /api/v1/users.setStatus:
-    parameters: []
     post:
       summary: Set User Status
       operationId: post-api-v1-users.setStatus
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Missing status or message parameter:
+                  value:
+                    success: false
+                    error: 'Match error: Failed Match.OneOf, Match.Maybe or Match.Optional validation'
         '401':
           $ref: '#/components/responses/authorizationError'
       description: |-
-        * You can set the status for yourself or another user. 
-        * To change another user's status, the `AllowUserStatusMessageChange` setting must be enabled, and you must have the `edit-other-user-info` permission.
+        * You can set the status for yourself or another user. The `AllowUserStatusMessageChange` setting must be enabled in the `Accounts` workspace settings.
+        * To change another user's status, you must have the `edit-other-user-info` permission.
         * According to your workspace settings (under **Accounts**), you will only be able to set the invisible or `offline` status if the `Allow Invisible status option` setting is enabled.
           
           ### Changelog
@@ -2511,24 +2526,21 @@ paths:
               properties:
                 message:
                   type: string
-                  description: The user's status message.
+                  description: The user's status message. At least one of the `message` or `status` parameters is required.
                   example: My status update
                 status:
                   type: string
                   description: >-
                     The user's status like `online`, `away`, `busy`, or
-                    `offline`.
+                    `offline`. At least one of the `message` or `status` parameters is required.
                   example: online
                 userId:
                   type: string
                   example: zXuq7SvPKYbzYmfpo
-                  description: The user ID for which you want to set the status. You don't need to add this if you are setting the status for yourself.
-                username:
-                  type: string
-                  description: The user name for which you want to set the status. You don't need to add this if you are setting the status for yourself.
-                  example: bob
+                  description: The user ID for which you want to set the status. You don't need to add this if you are setting the status for yourself. Alternatively, you can use the `username` parameter and enter the username for which you want to set the status.
               required:
                 - message
+                - status
             examples:
               Example 1:
                 value:
