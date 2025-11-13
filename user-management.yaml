@@ -2296,7 +2296,7 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
-    parameters: []
+
   /api/v1/users.setAvatar:
     post:
       summary: Set User Avatar
@@ -2323,7 +2323,7 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       description: |-
-        Permission required: `edit-other-user-avatar`, if the `AllowUserAvatarChange` setting under **Accounts** is enabled.
+        Use this endpoint to change your or another user's avatar. You can change avatars only if the `AllowUserAvatarChange` setting under **Accounts** is enabled. To change another user's avatar, you need the permission: `edit-other-user-avatar`.
         
         ### Changelog
         | Version      | Description |
@@ -2357,14 +2357,13 @@ paths:
                 value:
                   avatarUrl: 'http://domain.tld/to/my/own/avatar.jpg'
         description: |-
-          You have 2 options to set the user avatar:
-            * Upload the image file to use as the new avatar, as form data. For example, `image=@my-own-avatar.png`.
-            * Enter the image URL you want to set as the user avatar in the request body.
+          You have two options to set the user avatar:
+            * Upload the image file to use as the new avatar, as form-data. For example, `image=@my-own-avatar.png`.
+            * Enter the image URL you want to set as the user avatar in the request body, using the parameter `avatarUrl`.
       tags:
         - Users
-    parameters: []
+
   /api/v1/users.getAvatar:
-    parameters: []
     get:
       summary: Get User Avatar
       tags:
