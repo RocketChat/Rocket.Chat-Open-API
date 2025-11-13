@@ -5172,72 +5172,6 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    users:
-                      - _id: W7MRNgkYLXKKAGNvW
-                        username: agent1
-                        emails:
-                          - address: agent1@agent.com
-                            verified: false
-                        type: user
-                        roles:
-                          - user
-                          - livechat-agent
-                        status: offline
-                        active: true
-                        name: Agent 1
-                        lastLogin: '2024-04-24T17:47:50.485Z'
-                      - _id: Tf44Q5AaYDehtJLzA
-                        username: agent2
-                        emails:
-                          - address: agent2@agent.com
-                            verified: false
-                        type: user
-                        roles:
-                          - user
-                          - livechat-agent
-                        status: offline
-                        active: true
-                        name: Agent 2
-                        lastLogin: '2024-04-29T16:38:56.809Z'
-                      - _id: JwATAtGzrzHYHCXFy
-                        username: agent3
-                        emails:
-                          - address: agent3@agent.com
-                            verified: false
-                        type: user
-                        roles:
-                          - user
-                          - livechat-agent
-                        status: online
-                        active: true
-                        name: Agent3
-                        lastLogin: '2024-04-30T16:59:21.879Z'
-                      - _id: u6C62WdHKNk5X8Rzr
-                        username: guy
-                        emails:
-                          - address: guy@guy.com
-                            verified: false
-                        type: user
-                        roles:
-                          - user
-                        status: offline
-                        active: true
-                        name: guy
-                      - _id: rocket.cat
-                        name: Rocket.Cat
-                        username: rocket.cat
-                        status: online
-                        active: true
-                        type: bot
-                        roles:
-                          - bot
-                        avatarETag: MEhPLkenJqs3jTJP5
-                    count: 5
-                    offset: 0
-                    total: 5
-                    success: true
               examples:
                 Success:
                   value:
@@ -5305,6 +5239,8 @@ paths:
                     offset: 0
                     total: 5
                     success: true
+        '400':
+          $ref: '#/components/responses/authorizationError'
 tags:
   - name: LDAP
   - name: Permissions
