@@ -5239,7 +5239,7 @@ paths:
                     offset: 0
                     total: 5
                     success: true
-        '400':
+        '401':
           $ref: '#/components/responses/authorizationError'
 tags:
   - name: LDAP
