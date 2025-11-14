@@ -1292,7 +1292,6 @@ paths:
         | ---------------- | ------------|
         |0.50.0            | Added       |
       operationId: post-api-v1-users.register
-      parameters: []
       requestBody:
         content:
           application/json:
@@ -1319,7 +1318,7 @@ paths:
                   example: Roger Smith
                 secretURL:
                   type: string
-                  description: String appended to secret registration URL.
+                  description: You may have been provided with a secret URL. It includes a string appended to the registration URL. For example, `https://workspacedomain.com/register/my-secret-code`. For this parameter, enter the additional string at the end of the URL.
                   example: Jjwjg6gouWLXhMGKW
               required:
                 - username
@@ -3276,7 +3275,6 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/users.setPreferences:
-    parameters: []
     post:
       summary: Set User Preferences
       operationId: post-api-v1-users.setPreferences
@@ -3438,7 +3436,7 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       description: |-
-        If you want to edit another user's preferences, you need the permission `edit-other-user-info`.
+        Set preferences for your account. If you want to edit another user's preferences, you need the permission `edit-other-user-info`.
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -3451,15 +3449,12 @@ paths:
           application/json:
             schema:
               type: object
-              x-examples:
-                Example 1:
-                  userId: BsNr28znDkG8aeo7W
-                  data: {}
+              required:
+                - data
               properties:
                 userId:
                   type: string
-                  description: |-
-                    The user ID whose preferences you want to change. If an ID is not provided, the preferences will be set for the user who is sending the request.
+                  description: 'The user ID whose preferences you want to change. If an ID is not provided, the preferences will be set for the user who is sending the request.'
                 data:
                   type: object
                   description: The object with the following preference details.
@@ -3470,17 +3465,17 @@ paths:
                       example: en
                     newRoomNotification:
                       type: string
-                      example: door
-                      description: New room notification sound.
+                      example: chime
+                      description: Set the sound for new room notifications.
+                      default: door
                     newMessageNotification:
                       type: string
                       example: chime
                       description: New message notification sound.
+                      default: chime
                     muteFocusedConversations:
                       type: boolean
-                      description: >-
-                        A boolean value that indicates whether the user has
-                        enabled the option to mute focused conversations.
+                      description: 'When set to true, open and active rooms will not create notification sounds.'
                     clockMode:
                       type: integer
                       description: |-
@@ -3490,29 +3485,19 @@ paths:
                         * `2`: 24-hour clock
                     useEmojis:
                       type: boolean
-                      description: >-
-                        A boolean value that indicates whether the user has
-                        enabled the option to use emojis.
+                      description: A boolean value that indicates whether the user has enabled the option to use emojis.
                     convertAsciiEmoji:
                       type: boolean
-                      description: >-
-                        A boolean value that indicates whether the user has
-                        enabled the option to convert ASCII emojis.
+                      description: A boolean value that indicates whether the user has enabled the option to convert ASCII emojis.
                     saveMobileBandwidth:
                       type: boolean
-                      description: >-
-                        A boolean value that indicates whether the user has
-                        enabled the option to save mobile bandwidth.
+                      description: A boolean value that indicates whether the user has enabled the option to save mobile bandwidth.
                     collapseMediaByDefault:
                       type: boolean
-                      description: >-
-                        A boolean value that indicates whether the user has
-                        enabled the option to collapse media by default.
+                      description: A boolean value that indicates whether the user has enabled the option to collapse media by default.
                     autoImageLoad:
                       type: boolean
-                      description: >-
-                        A boolean value indicates whether the user has enabled
-                        the option to load images automatically.
+                      description: A boolean value indicates whether the user has enabled the option to load images automatically.
                     emailNotificationMode:
                       type: string
                       example: mentions
@@ -3523,9 +3508,7 @@ paths:
                           * `nothing`: Get no desktop notifications.
                     unreadAlert:
                       type: boolean
-                      description: >-
-                        A boolean value indicates whether the user has enabled
-                        the option.
+                      description: A boolean value indicates whether the user has enabled the option.
                     notificationsSoundVolume:
                       type: integer
                       description: The sound volume for notifications.
@@ -3547,69 +3530,50 @@ paths:
                         * `nothing`: Get no push notifications.
                     enableAutoAway:
                       type: boolean
-                      description: >-
-                        A boolean value that indicates whether the user has
-                        enabled the option to update the status as away after a
-                        certain amount of idle time.
+                      description: A boolean value that indicates whether the user has enabled the option to update the status as away after a certain amount of idle time.
                     highlights:
                       type: array
-                      description: >-
-                        The message highlights section. You will be notified
-                        when someone mentions a word or phrase that you add
-                        here. Highlight words are not case-sensitive.
+                      description: The message highlights section. You will be notified when someone mentions a word or phrase that you add here. Highlight words are not case-sensitive.
                       items:
                         type: string
                         example: '["deploy", "docker"]'
                     messageViewMode:
                       type: integer
                       description: |-
-                        The preferred view mode for the messages. The available options are:
+                        The preferred view mode for the messages i. The available options are:
                           * `0` - Normal
                           * `1` - Cozy
                           * `2` - Compact
                     hideUsernames:
                       type: boolean
-                      description: >-
-                        A boolean value that indicates whether the user has
-                        enabled the option to hide usernames.
+                      description: A boolean value that indicates whether the user has enabled the option to hide usernames.
                     hideRoles:
                       type: boolean
-                      description: >-
-                        A boolean value that indicates whether the user has
-                        enabled the option to hide roles.
+                      description: A boolean value that indicates whether the user has enabled the option to hide roles.
                     displayAvatars:
                       type: boolean
-                      description: >-
-                        A boolean value that indicates whether the user has
-                        enabled the option to display user avatars.
+                      description: A boolean value that indicates whether the user has enabled the option to display user avatars.
                     hideFlexTab:
                       type: boolean
-                      description: >-
-                        A boolean value that indicates whether the user has
-                        enabled the option.
+                      description: A boolean value that indicates whether the user has enabled the option to automatically close the right sidebar in rooms when you click outside them.
                     sendOnEnter:
                       type: string
                       description: |-
                         Set how you want the **Enter** key to behave when sending messages.
-                        
+
                         * `normal` - Send messages with the **Enter** key.
                         * `alternative` - Send messages with **Enter** + **Ctrl/Alt/Shift/Cmd**.
                         * `desktop` - Send messages with **Enter** only on the desktop.
                     idleTimeLimit:
                       type: integer
-                      description: The time limit that is to be considered as idle time.
+                      description: 'The time limit that is to be considered as idle time. After this time, the user status changes to `away`.'
                       example: 300
                     sidebarShowFavorites:
                       type: boolean
-                      description: >-
-                        A boolean value that indicates whether the user has
-                        enabled the option to show favorites on the sidebar.
+                      description: A boolean value that indicates whether the user has enabled the option to show favorites on the sidebar.
                     sidebarShowUnread:
                       type: boolean
-                      description: >-
-                        A boolean value that indicates whether the user has
-                        enabled the option to show unread messages in the
-                        sidebar.
+                      description: A boolean value that indicates whether the user has enabled the option to show unread messages in the sidebar.
                     sidebarSortby:
                       type: string
                       description: |-
@@ -3625,15 +3589,10 @@ paths:
                           * `condensed`
                     sidebarDisplayAvatar:
                       type: boolean
-                      description: >-
-                        A boolean value that indicates whether the user has
-                        enabled the option to display avatars in the sidebar.
+                      description: A boolean value that indicates whether the user has enabled the option to display avatars in the sidebar.
                     sidebarGroupByType:
                       type: boolean
-                      description: >-
-                        A boolean value that indicates whether the user has
-                        enabled the option to show the grouped values in the
-                        sidebar.
+                      description: A boolean value that indicates whether the user has enabled the option to show the grouped values in the sidebar.
                     dontAskAgainList:
                       type: array
                       description: |-
@@ -3641,8 +3600,94 @@ paths:
                         "dontAskAgainList\":[{\"action\":\"hideRoom\",\"label\":\"Hide\"}]"
                       items:
                         type: object
-              required:
-                - data
+                        properties:
+                          action:
+                            type: string
+                            x-stoplight:
+                              id: lz3claakkkr40
+                          label:
+                            type: string
+                            x-stoplight:
+                              id: mvk5kcn8m8kmc
+                    notifyCalendarEvents:
+                      type: boolean
+                      description: 'If you are using Outlook Calendar in your workspace, you can enable or disable calendar event notifications using this parameter.'
+                      default: false
+                    themeAppearence:
+                      type: string
+                      example: light
+                      default: auto
+                      description: "Set your preferrred workspace theme. The options are:\r\n* `light`\r\n* `dark`\r\n* `auto`\r\n* `high-contrast`"
+                    masterVolume:
+                      type: number
+                      description: Control the volume for all sounds coming from your workspace.
+                    alsoSendThreadToChannel:
+                      type: string
+                      description: "When replying to a thread, select how your replies should be sent to the room:\r\n* `never`: Thread replies are not sent to the channel.\r\n* `always`: Thread replies are sent to the channel.\r\n* `default`: Defaults to the workspace settings set by the admin."
+                    desktopNotificationRequireInteraction:
+                      type: boolean
+                      description: 'When set to true, notifications will remain in the notification panel until they are visited or closed.'
+                    showThreadsInMainChannel:
+                      type: boolean
+                      description: 'When set to true, all replies under a thread will also be displayed directly in the main room. When disabled, they''re displayed based on the sender''s choice.'
+                    fontSize:
+                      type: string
+                      description: "Set the font size. The options are:\r\n* `small`\r\n* `medium`\r\n* `large`"
+                    receiveLoginDetectionEmail:
+                      type: boolean
+                      description: Set this option to true to get an email notification whenever a login is made to your account.
+                    omnichannelTranscriptPDF:
+                      type: boolean
+                      description: Set to true to always export the transcript as PDF at the end of Omnichannel conversations.
+                    omnichannelTranscriptEmail:
+                      type: boolean
+                      description: Set to true to always send the transcript to contacts at the end of conversations.
+                    omnichannelHideConversationAfterClosing:
+                      type: boolean
+                      description: Set to true to redirect agents to the home page after closing a conversation.
+                    enableMobileRinging:
+                      type: boolean
+                      description: 'If you are using the Rocket.Chat Voice feature, you can set this parameter to true for mobile call notifications.'
+            examples:
+              Example 1:
+                value:
+                  userId: rbAXPnMktTFbNpwtJ
+                  data:
+                    language: en
+                    newRoomNotification: door
+                    newMessageNotification: chime
+                    muteFocusedConversations: true
+                    clockMode: 0
+                    useEmojis: true
+                    convertAsciiEmoji: true
+                    saveMobileBandwidth: true
+                    collapseMediaByDefault: true
+                    autoImageLoad: true
+                    emailNotificationMode: mentions
+                    unreadAlert: true
+                    notificationsSoundVolume: 0
+                    desktopNotifications: mentions
+                    pushNotifications: mentions
+                    enableAutoAway: true
+                    highlights:
+                      - '["deploy", "docker"]'
+                    messageViewMode: 0
+                    hideUsernames: true
+                    hideRoles: true
+                    displayAvatars: true
+                    hideFlexTab: true
+                    sendOnEnter: string
+                    idleTimeLimit: 300
+                    sidebarShowFavorites: true
+                    sidebarShowUnread: true
+                    sidebarSortby: string
+                    sidebarViewMode: string
+                    sidebarDisplayAvatar: true
+                    sidebarGroupByType: true
+                    dontAskAgainList:
+                      - {}
+                    notifyCalendarEvents: false
+                    themeAppearence: auto
       tags:
         - Users
   /api/v1/users.forgotPassword:
