@@ -215,7 +215,7 @@ paths:
                   example: newRole
                 scope:
                   type: string
-                  description: The new role's scope. The default value is `Users`.
+                  description: The new role's scope. The scope can either be Users (user level) or Subscriptions (room level). The default value is `Users`.
                   example: Subscriptions
                 description:
                   type: string
@@ -225,7 +225,7 @@ paths:
                   type: boolean
                   description: >-
                     Whether the role should have a mandatory 2FA. The default
-                    value is `false`.
+                    value is `false`. If set to true, users assigned to this role are prompted to enter a 2FA code for certain activities.
                   default: false
               required:
                 - name
@@ -350,7 +350,7 @@ paths:
                   type: string
                   example: Subscriptions
                   description: >-
-                    The updated  scope of the role. The default value is
+                    The updated  scope of the role. The scope can either be Users (user level) or Subscriptions (room level). The default value is
                     `Users`.
                 description:
                   type: string
@@ -361,7 +361,7 @@ paths:
                   default: false
                   description: >-
                     Whether the role should have a mandatory 2FA. The default
-                    value is `false`.
+                    value is `false`. If set to true, users assigned to this role are prompted to enter a 2FA code for certain activities.
               required:
                 - roleId
                 - name
@@ -4218,7 +4218,6 @@ paths:
                 value:
                   tokenName: mytoken
   /api/v1/users.requestDataDownload:
-    parameters: []
     get:
       summary: Request Data Download
       operationId: get-api-v1-users.requestDataDownload
@@ -4319,6 +4318,8 @@ paths:
             Whether you want a full export or not. By default, the value is
             false.
       description: |-
+        Request download of your personal data using this endpoint. The <a href='https://docs.rocket.chat/v1/docs/user-data-download' target='_blank'>User Data Download</a> feature must be configured on the workspace.
+       
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -4476,7 +4477,6 @@ paths:
         | ---------------- | ------------|
         |3.1.0            | Added       |
   /api/v1/users.resetE2EKey:
-    parameters: []
     post:
       summary: Reset Users E2E Key
       operationId: post-api-v1-users.resetE2EKey
@@ -4538,9 +4538,9 @@ paths:
         - $ref: '#/components/parameters/x-2fa-code'
         - $ref: '#/components/parameters/x-2fa-method'
       description: |-
-        <a href="https://docs.rocket.chat/use-rocket.chat/user-guides/user-panel/account#reset-e2e-key" target="_blank">Reset the E2E key</a> for a user in the workspace.
-        * It requires the `edit-other-user-e2ee` permission.
-        * This endpoint requires 2FA.
+        <a href="https://docs.rocket.chat/docs/manage-your-account-settings#endtoend-encryption" target="_blank">Reset the E2E key</a> for your account or another user in the workspace.
+        * To reset other users' E2EE key, you need the `edit-other-user-e2ee` permission.
+        * This endpoint requires 2FA, if 2FA is enabled and configured on your workspace.
         
         ### Changelog
         | Version      | Description |
@@ -4558,14 +4558,13 @@ paths:
                   type: string
                   description: >-
                     The `userId` of the user whose e2e key you want to reset.
-                    You can also use the username. If you don't enter a value,
+                    You can also use the `username` parameter. If you don't enter a value,
                     the sender's E2E value is reset.
             examples:
               Example 1:
                 value:
                   userId: GonjPyg3gB3Z9ur9s
   /api/v1/users.resetTOTP:
-    parameters: []
     post:
       summary: Reset Users TOTP
       operationId: post-api-v1-users.resetTOTP
@@ -4628,8 +4627,8 @@ paths:
         - $ref: '#/components/parameters/x-2fa-method'
       description: |-
         Reset 2FA via TOTP for a user in the workspace. Make sure that the `Enable Two Factor Authentication` setting is enabled under **Administration** > **Settings** > **Accounts** > **Two Factor Authentication**.
-        * It requires the `edit-other-user-totp` permission.
-        * It requires two-factor authentication.
+        * Permission required: `edit-other-user-totp`.
+        * It requires two-factor authentication, if 2FA is enabled and configured in your workspace.
         
         ### Changelog
         | Version      | Description |
@@ -4659,7 +4658,7 @@ paths:
         - Users
       summary: List User's Teams
       description: |-
-        The teams returned by the endpoint depends on your permissions. To view all teams, you need the `view-all-teams` permission.
+        Get the list of teams that a specific user is a member of. The teams returned by the endpoint depend on your permissions. To view all teams, you need the `view-all-teams` permission.
       operationId: get-api-v1-users.listTeams
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -4744,7 +4743,6 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/moderation.reportUser:
-    parameters: []
     post:
       summary: Report User
       operationId: post-api-v1-moderation.reportUser
@@ -4800,12 +4798,13 @@ paths:
                   userId: ByehQjC44FwMeiLbX
                   description: test
       description: |-
+        Report a user for offensive messages in the workspace.
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |6.4.0            | Added       |
   /api/v1/users.logout:
-    parameters: []
     post:
       summary: Logout User
       operationId: post-api-v1-users.logout
@@ -4833,7 +4832,16 @@ paths:
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
-      description: The endpoint requires the `logout-other-user`.
+      description: Log out of your account. You can also log out of another user's session. You will need the `logout-other-user` permission.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  description: Enter the user ID to be logged out.
   /api/v1/ldap.syncNow:
     post:
       tags:
@@ -4986,6 +4994,23 @@ paths:
                   value:
                     message: LDAP_User_Found
                     success: true
+        '400':
+          description: Bad Request
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'Match error: Missing key ''username'''
         '401':
           $ref: '#/components/responses/authorizationError'
       requestBody:
@@ -5004,7 +5029,6 @@ paths:
               Example 1:
                 value:
                   username: bob
-    parameters: []
   '/api/v1/avatar/{subject}':
     parameters:
       - schema:
