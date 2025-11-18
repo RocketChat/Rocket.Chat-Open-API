@@ -9801,10 +9801,12 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The groups's id
+                  description: The groups's (private channel) ID.
+                  example: ByehQjC44FwMeiLbX
                 userId:
                   type: string
-                  description: The user's id
+                  description: The user's ID.
+                  example: oCHkav5Zf6vmpu2W2
               required:
                 - roomId
                 - userId
@@ -9863,10 +9865,12 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The groups's id
+                  description: The groups's (private channel) ID.
+                  example: ByehQjC44FwMeiLbX
                 userId:
                   type: string
-                  description: The user's id
+                  description: The user's ID.
+                  example: nSYqWzZ4GsKTX4dyK
               required:
                 - roomId
                 - userId
@@ -9878,6 +9882,25 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The required "roomId" or "roomName" param provided does not match any group [error-room-not-found]'
+                    errorType: error-room-not-found
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.addOwner:
@@ -9904,8 +9927,12 @@ paths:
               properties:
                 roomId:
                   type: string
+                  description: Enter the group's (private channel) ID.
+                  example: ByehQjC44FwMeiLbX
                 userId:
                   type: string
+                  description: Enter the user's ID.
+                  example: nSYqWzZ4GsKTX4dyK
               required:
                 - roomId
                 - userId
@@ -9917,6 +9944,25 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The required "roomId" or "roomName" param provided does not match any group [error-room-not-found]'
+                    errorType: error-room-not-found
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.archive:
@@ -9987,7 +10033,7 @@ paths:
         - Groups
       summary: Close Group
       description: |-
-        Hides the private channel from the list of channels in the workspace sidebar, only if you're part of the group. You can still search for hidden channels using the workspace **Directory**.
+        Hides the private channel from the list of channels in the workspace sidebar, only if you're part of the group. It will reappear when someone sends a new message. You can search for hidden channels using the workspace **Directory**.
         
         ### Changelog
         | Version | Description |
@@ -10157,17 +10203,21 @@ paths:
                 name:
                   type: string
                   description: The name of the new private group.
+                  example: groupname
                 readOnly:
                   type: boolean
                   description: Set if the private channel is read-only or not. The default value is false.
+                  example: false
                 members:
                   type: array
                   description: The users to add to the private channel when it is created.
                   items:
                     type: string
+                    example: rocket.cat
                 excludeSelf:
                   type: boolean
                   description: If set to true, the user calling the endpoint is not added as a member of the private channel. The default value is false.
+                  example: false
                 customFields:
                   type: object
                   description: 'If you have defined custom fields for your workspace, you can provide them in this object parameter.'
@@ -10175,11 +10225,18 @@ paths:
                   type: object
                   description: |-
                     Enter the following details for the object:
-                    - `broadcast`: Whether the group should be a broadcast group
-                    - `encrypted`: Whether the group should be encrypted. 
-                    - `teamId`: Enter the team ID for which you want to create a group. You will get an error if the team does not exist.
                     
-                    For more information, see <a href="https://docs.rocket.chat/docs/channels" target="_blank">Channels</a>.
+                    Note: For more information, see <a href="https://docs.rocket.chat/docs/channels" target="_blank">Channels</a>.
+                  properties:
+                    broadcast:
+                      type: boolean
+                      description: Whether the group should be a broadcast group. False by default.
+                    encrypted:
+                      type: boolean
+                      description: Whether the group should be encrypted. False by default.
+                    teamId:
+                      type: string
+                      description: Enter the team ID for which you want to create a group. You will get an error if the team does not exist.
               required:
                 - name
             examples:
@@ -10248,6 +10305,22 @@ paths:
                       sysMes: true
                       _updatedAt: '2016-12-09T16:53:06.761Z'
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: Body param "name" is required
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.delete:
@@ -10339,25 +10412,25 @@ paths:
         - $ref: '#/components/parameters/RoomId'
         - name: latest
           in: query
-          description: The end of time range of messages to retrieve. The default value is the current date and time.
+          description: The end of the time range of messages to retrieve. The default value is the current date and time.
           schema:
             type: string
-          example: '2016-09-30T13:42:25.304Z'
+          example: '2025-09-30T13:42:25.304Z'
         - name: oldest
           in: query
-          description: The start of the time range of messages to retrieve
+          description: The start of the time range to retrieve messages.
           schema:
             type: string
-          example: '2016-05-30T13:42:25.304Z'
+          example: '2025-05-30T13:42:25.304Z'
         - name: inclusive
           in: query
-          description: Whether messages which land on latest and oldest should be included. The default value is false.
+          description: Whether messages sent on the latest and oldest dates should be included. The default value is false.
           schema:
             type: boolean
           example: true
         - name: unreads
           in: query
-          description: Whether the amount of unreads should be included. The default value is false.
+          description: Whether unread messages should be included in the response. The default value is false.
           schema:
             type: boolean
           example: false
@@ -10406,42 +10479,61 @@ paths:
                       - _id: AkzpHAvZpdnuchw2a
                         rid: ByehQjC44FwMeiLbX
                         msg: hi
-                        ts: '2016-12-09T12:50:51.555Z'
+                        ts: '2025-12-09T12:50:51.555Z'
                         u:
                           _id: y65tAmHs93aDChMWu
                           username: testing
-                        _updatedAt: '2016-12-09T12:50:51.562Z'
+                        _updatedAt: '2025-12-09T12:50:51.562Z'
                       - _id: vkLMxcctR4MuTxreF
                         t: uj
                         rid: ByehQjC44FwMeiLbX
-                        ts: '2016-12-08T15:41:37.730Z'
+                        ts: '2025-12-08T15:41:37.730Z'
                         msg: testing2
                         u:
                           _id: bRtgdhzM6PD9F8pSx
                           username: testing2
                         groupable: false
-                        _updatedAt: '2016-12-08T16:03:25.235Z'
+                        _updatedAt: '2025-12-08T16:03:25.235Z'
                       - _id: bfRW658nEyEBg75rc
                         t: uj
                         rid: ByehQjC44FwMeiLbX
-                        ts: '2016-12-07T15:47:49.099Z'
+                        ts: '2025-12-07T15:47:49.099Z'
                         msg: testing
                         u:
                           _id: nSYqWzZ4GsKTX4dyK
                           username: testing1
                         groupable: false
-                        _updatedAt: '2016-12-07T15:47:49.099Z'
+                        _updatedAt: '2025-12-07T15:47:49.099Z'
                       - _id: pbuFiGadhRZTKouhB
                         t: uj
                         rid: ByehQjC44FwMeiLbX
-                        ts: '2016-12-06T17:57:38.635Z'
+                        ts: '2025-12-06T17:57:38.635Z'
                         msg: testing
                         u:
                           _id: y65tAmHs93aDChMWu
                           username: testing
                         groupable: false
-                        _updatedAt: '2016-12-06T17:57:38.635Z'
+                        _updatedAt: '2025-12-06T17:57:38.635Z'
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The parameter "roomId" or "roomName" is required [error-room-param-not-provided]'
+                    errorType: error-room-param-not-provided
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.info:
