@@ -4319,14 +4319,13 @@ paths:
             Whether you want a full export or not. By default, the value is
             false.
       description: |-
-        Request download of your personal data using this endpoint. The <a href='https://docs.rocket.chat/v1/docs/user-data-download' target='_blank'>User Data Download</a> feature must be configured on the workspace.
+        Request download of your personal data using this endpoint. The <a href='https://docs.rocket.chat/v1/docs/user-data-download' target='_blank'>User Data Download</a> feature must be configured in the workspace by the admin. The exported file is available in the configured directory.
        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |1.2.0            | Added as `users.requestDataDownload`       |
   /api/v1/users.logoutOtherClients:
-    parameters: []
     post:
       summary: Logout Other Clients
       operationId: post-api-v1-users.logoutOtherClients
@@ -4358,9 +4357,8 @@ paths:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
       description: |
-        Requires the `LoginExpiration` settings enabled in **Accounts** > **Login Expiration in Days** which defines how long a login token remains valid before expiration.
+        Logs out of user sessions in other clients while keeping the current session active. The response the current token and its expiration date. Requires the `LoginExpiration` settings enabled in **Accounts** > **Login Expiration in Days** which defines how long a login token remains valid before expiration.
   /api/v1/users.autocomplete:
-    parameters: []
     get:
       summary: Autocomplete User
       operationId: get-api-v1-users.autocomplete
