@@ -985,8 +985,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/Auth-Token'
       description: |-
-        Permission required: `access-permissions`
-        Remove a role from a user. Optionally, you can remove this role from a specified scope.
+        Remove a role from a user. Permission required: `access-permissions`
       requestBody:
         content:
           application/json:
@@ -1001,10 +1000,12 @@ paths:
                   type: string
                   description: The username for which you want to remove the role.
                   example: user08
+                scope:
+                  type: string
+                  description: 'Optionally, you can also provide the role scope. The options are `Users` and `Subscriptions`.'
               required:
                 - roleId
                 - username
-    parameters: []
 
   /api/v1/roles.getUsersInPublicRoles:
     get:
