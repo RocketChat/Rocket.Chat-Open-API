@@ -2013,6 +2013,12 @@ paths:
           in: query
           name: includeUserRooms
           description: Enter whether or not the rooms that the user is a member of are included in the response. To view the list of rooms, you need the `view-other-user-channels` permission.
+        - schema:
+            type: string
+            example: hXBuCLPDnsLgSJLiL
+          in: query
+          name: importId
+          description: 'You can use this parameter to search for users that were imported from external channels, such as Slack. You can also get the value of the import ID using this endpoint if you have the `view-full-other-user-info` permission.'
       responses:
         '200':
           description: OK
@@ -3467,12 +3473,12 @@ paths:
                     newRoomNotification:
                       type: string
                       example: chime
-                      description: Set the sound for new room notifications.
+                      description: Set the sound for new room notifications. The notification sounds are customizable, you can check the preferences in your workspace account for the list of options available.
                       default: door
                     newMessageNotification:
                       type: string
                       example: chime
-                      description: New message notification sound.
+                      description: New message notification sound. The notification sounds are customizable, you can check the preferences in your workspace account for the list of options available.
                       default: chime
                     muteFocusedConversations:
                       type: boolean
@@ -4456,7 +4462,6 @@ paths:
           description: |-
             Filter the response with the parameters.
   /api/v1/users.removeOtherTokens:
-    parameters: []
     post:
       summary: Remove Other Tokens
       operationId: post-api-v1-users.removeOtherTokens
@@ -4471,6 +4476,8 @@ paths:
       tags:
         - Users
       description: |-
+        Remove user's login tokens. This endpoint is primarily used when a user changes their password and they need to log in to the workspace again on other devices.
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
