@@ -10624,6 +10624,25 @@ paths:
                       sysMes: true
                       _updatedAt: '2020-05-21T13:16:24.772Z'
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The parameter "roomId" or "roomName" is required [error-room-param-not-provided]'
+                    errorType: error-room-param-not-provided  
         '401':
           $ref: '#/components/responses/authorizationError'
 
@@ -10657,9 +10676,11 @@ paths:
                     The group ID. You can find the IDs by using any of the following endpoints:
                     * <a href='https://developer.rocket.chat/apidocs/get-list-of-user-groups' target='_blank'>Get List of User Groups</a>: This endpoint returns all private channels in the workspace, if you have the required permissions to view them.
                     * <a href='https://developer.rocket.chat/apidocs/get-groups' target='_blank'>Get Groups</a>: This endpoint returns the private channels that you are a member of.
+                  example: ByehQjC44FwMeiLbX  
                 userId:
                   type: string
                   description: The ID of the user to be invited. You can also use the parameter `userIds` as an array to invite more than one user. For example, `["nSYqWzZ4GsKTX4dyK", "SYqWzZ4Gsasdfgh"]`
+                  example: nSYqWzZ4GsKTX4dyK
               required:
                 - roomId
                 - userId
@@ -10777,8 +10798,12 @@ paths:
               properties:
                 roomId:
                   type: string
+                  description: Enter the private room ID from which you want to remove the user.
+                  example: ByehQjC44FwMeiLbX
                 userId:
                   type: string
+                  description: Enter the user ID that you want to remove.
+                  example: nSYqWzZ4GsKTX4dyK
               required:
                 - roomId
                 - userId
@@ -11064,7 +11089,7 @@ paths:
         - Groups
       summary: Get Groups
       description: |-
-        Lists all the private groups/channels the user has joined.
+        Lists all the private groups/channels that you are a member of.
         
         ### Changelog
         | Version | Description                                  |
@@ -11241,6 +11266,25 @@ paths:
                     offset: 0
                     total: 2
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The parameter "roomId" or "roomName" is required [error-room-param-not-provided]'
+                    errorType: error-room-param-not-provided
         '401':
           $ref: '#/components/responses/authorizationError'
   
@@ -11392,6 +11436,28 @@ paths:
                     offset: 0
                     total: 2
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: |-
+                      must have required property 'roomId'
+                       must have required property 'roomName'
+                       must match exactly one schema in oneOf [invalid-params]
+                    errorType: invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.moderators:
@@ -11434,6 +11500,25 @@ paths:
                         username: marc.cat
                         name: Marc Cat
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The parameter "roomId" or "roomName" is required [error-room-param-not-provided]'
+                    errorType: error-room-param-not-provided  
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.open:
@@ -11461,10 +11546,31 @@ paths:
                 roomId:
                   type: string
                   example: ByehQjC44FwMeiLbX
-                  description: The room ID.
+                  description: The room ID that you want to add to the sidebar. Alternatively, you can use the `roomName` parameter and enter the room name, instead of the ID.
+              required:
+                - roomId
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The parameter "roomId" or "roomName" is required [error-room-param-not-provided]'
+                    errorType: error-room-param-not-provided
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.removeLeader:
@@ -11499,9 +11605,11 @@ paths:
                     The private group ID. You can find the IDs by using any of the following endpoints:
                     * <a href='https://developer.rocket.chat/apidocs/get-list-of-user-groups' target='_blank'>Get List of User Groups</a>: This endpoint returns all private channels in the workspace, if you have the required permissions to view them.
                     * <a href='https://developer.rocket.chat/apidocs/get-groups' target='_blank'>Get Groups</a>: This endpoint returns the private channels that you are a member of.
+                  example: ByehQjC44FwMeiLbX
                 userId:
                   type: string
                   description: The user ID.
+                  example: oCHkav5Zf6vmpu2W2
               required:
                 - roomId
                 - userId
@@ -11565,9 +11673,11 @@ paths:
                     The private group ID. You can find the IDs by using any of the following endpoints:
                     * <a href='https://developer.rocket.chat/apidocs/get-list-of-user-groups' target='_blank'>Get List of User Groups</a>: This endpoint returns all private channels in the workspace, if you have the required permissions to view them.
                     * <a href='https://developer.rocket.chat/apidocs/get-groups' target='_blank'>Get Groups</a>: This endpoint returns the private channels that you are a member of.
+                  example: ByehQjC44FwMeiLbX
                 userId:
                   type: string
-                  description: The ID of the user to be removed from moderator role.
+                  description: The ID of the user to be removed from moderator role. Alternatively, you can use the `userName` parameter and enter the username, instead of the ID.
+                  example: oCHkav5Zf6vmpu2W2
               required:
                 - roomId
                 - userId
@@ -11579,6 +11689,30 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The parameter "roomId" or "roomName" is required [error-room-param-not-provided]'
+                    errorType: error-room-param-not-provided
+                Example 2:
+                  value:
+                    success: false
+                    error: 'The required "userId" or "username" param was not provided [error-user-param-not-provided]'
+                    errorType: error-user-param-not-provided
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.removeOwner:
