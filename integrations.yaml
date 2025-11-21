@@ -16,6 +16,8 @@ paths:
         - Integration
       summary: Create Integration
       description: |- 
+        Use this endpoint to create an incoming or outgoing integration. For details, you can refer to the <a href='https://docs.rocket.chat/docs/integrations' target='_blank'>Integrations user guide</a>.
+        
         Permissions required to create incoming integrations:
         * `manage-incoming-integrations`
         * `manage-own-incoming-integrations`
@@ -257,7 +259,7 @@ paths:
         - Integration
       summary: Get Integration
       description: |- 
-        Get the information of a specific integration.
+        Get the information of a specific incoming or outgoing integration.
         
         Permissions required:
         * `manage-incoming-integrations`
@@ -1098,7 +1100,8 @@ paths:
       tags:
         - OAuth Apps
       summary: Create OAuth App
-      description: 'Permission required: `manage-oauth-apps`'
+      description: |-
+       Create an app to log in to third-party applications. For details, you can refer to the <a href='https://docs.rocket.chat/docs/third-party-login' target='_blank'> Third-party login user guide</a>. Permission required: `manage-oauth-apps`'
       operationId: post-api-v1-oauth-apps.create
       parameters:
         - $ref: '#/components/parameters/X-Auth-Token'
@@ -1216,7 +1219,7 @@ paths:
       tags:
         - OAuth Apps
       summary: Update OAuth App
-      description: 'Permission required: `manage-oauth-apps`'
+      description: 'Update an existing app. Permission required: `manage-oauth-apps`'
       operationId: post-api-v1-oauth-apps.update
       parameters:
         - $ref: '#/components/parameters/X-Auth-Token'
@@ -1229,7 +1232,7 @@ paths:
               properties:
                 name:
                   type: string
-                  description: Name of the app that you want to create.
+                  description: Name of the app that you want to update.
                 redirectUri:
                   type: string
                   description: The URL to redirect the OAuth app.
@@ -1238,7 +1241,7 @@ paths:
                   description: 'Whether the app will be active or not. Enter a boolean value, `true` or `false`.'
                 appId:
                   type: string
-                  description: The app ID.
+                  description: The app ID. The app ID. This is created when you create an app. You can use the <a href='https://developer.rocket.chat/apidocs/get-list-of-oauth-apps' target='_blank'>Get List of OAuth Apps</a> endpoint to get the app ID.
               required:
                 - name
                 - redirectUri
@@ -1350,7 +1353,7 @@ paths:
         - OAuth Apps
       summary: Get List of OAuth Apps
       description: |-
-        Permission required: `manage-oauth-apps`
+        Use this endpoint to get the list of apps. Permission required: `manage-oauth-apps`
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
