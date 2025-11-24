@@ -5283,9 +5283,9 @@ paths:
         - Auto-Translate
       summary: Get Supported Languages
       description: |- 
-        To learn how to enable the auto-translate feature, see the <a href="https://docs.rocket.chat/docs/message#autotranslate" target="_blank">Auto-Translate</a> user guide.
+        Get the list of languages supported by the translation service provider.
+        Make sure that the auto-translate feature is configured in your workspace. For details, see the <a href="https://docs.rocket.chat/v1/docs/auto-translate-messages" target="_blank">Auto-Translate</a> user guide.
         
-        Get the supported languages by the auto-translate.
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -5314,9 +5314,11 @@ paths:
                     items:
                       type: object
                       properties:
-                        language:
-                          type: string
                         name:
+                          type: string
+                        supports_formality:
+                          type: boolean
+                        language:
                           type: string
                   success:
                     type: boolean
@@ -5324,22 +5326,45 @@ paths:
                 Success Example:
                   value:
                     languages:
-                      - language: bg
-                        name: Bulgarian
-                      - language: cs
-                        name: Czech
-                      - language: da
-                        name: Danish
-                      - language: de
-                        name: German
-                      - language: el
-                        name: Greek
-                      - language: en
-                        name: English
-                      - language: es
-                        name: Spanish
-                      - language: et
-                        name: Estonian
+                      - name: Arabic
+                        supports_formality: false
+                        language: ar
+                      - name: Bulgarian
+                        supports_formality: false
+                        language: bg
+                      - name: Czech
+                        supports_formality: false
+                        language: cs
+                      - name: German
+                        supports_formality: true
+                        language: de
+                      - name: Spanish (Latin American)
+                        supports_formality: true
+                        language: es-419
+                      - name: Estonian
+                        supports_formality: false
+                        language: et
+                      - name: Indonesian
+                        supports_formality: false
+                        language: id
+                      - name: Korean
+                        supports_formality: false
+                        language: ko
+                      - name: Lithuanian
+                        supports_formality: false
+                        language: lt
+                      - name: Portuguese (Brazilian)
+                        supports_formality: true
+                        language: pt-BR
+                      - name: Thai
+                        supports_formality: false
+                        language: th
+                      - name: Vietnamese
+                        supports_formality: false
+                        language: vi
+                      - name: Chinese (simplified)
+                        supports_formality: false
+                        language: zh
                     success: true
         '400':
           description: Bad Request
