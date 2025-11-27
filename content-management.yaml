@@ -92,7 +92,9 @@ paths:
         - Custom Emoji
       summary: Create an Emoji
       description: |
-        Create a custom emoji. Permission required: `manage-emoji`
+        Upload a custom emoji to the workspace. Make sure that you have configured the storage system. For details, refer to the [Manage Custom Sounds and Emojis](https://docs.rocket.chat/docs/manage-custom-sounds-and-emojis) document.
+
+        Permission required: `manage-emoji`
 
         ### Changelog
         | Version      | Description | 
@@ -107,6 +109,9 @@ paths:
           multipart/form-data:
             schema:
               type: object
+              required:
+                - emoji
+                - name
               properties:
                 emoji:
                   type: string
@@ -118,13 +123,30 @@ paths:
                 aliases:
                   type: string
                   description: The alias of the new custom emoji.
-              required:
-                - emoji
-                - name
-                - aliases
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: Missing Content-Type
+                Example 2:
+                  value:
+                    success: false
+                    error: '[No file uploaded]'
+                    errorType: No file uploaded
         '401':
           $ref: '#/components/responses/authorizationError'  
   /api/v1/emoji-custom.delete:
@@ -148,12 +170,12 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - emojiId
               properties:
                 emojiId:
                   type: string
-                  description: The id of the emoji to delete
-              required:
-                - emojiId
+                  description: Enter the emoji ID to delete.
             examples:
               Example:
                 value:
@@ -161,8 +183,31 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: The "emojiId" params is required!
+                Example 2:
+                  value:
+                    success: false
+                    error: 'Invalid emoji [Custom_Emoji_Error_Invalid_Emoji]'
+                    errorType: Custom_Emoji_Error_Invalid_Emoji
+                    details:
+                      method: deleteEmojiCustom
         '401':
-          $ref: '#/components/responses/authorizationError'   
+          $ref: '#/components/responses/authorizationError' 
   /api/v1/emoji-custom.list:
     get:
       tags:
@@ -271,7 +316,7 @@ paths:
       summary: Update a Custom Emoji
       description: |-
         Update a custom emoji. Permission required: `manage-emoji`
-        
+
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
@@ -281,36 +326,59 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/Auth-Token'
       requestBody:
-        description: 'If you are updating the image, provide the image file as form data.'
+        description: ''
         content:
-          application/json:
+          multipart/form-data:
             schema:
               type: object
+              required:
+                - name
+                - _id
               properties:
                 emoji:
                   type: string
-                  description: 'The image file to use as custom emoji, as form data.'
-                  example: '@my-custom-emoji.png'
-                _id:
-                  type: string
-                  description: The ID of the custom emoji.
-                  example: AG7DSB2H32YHS
+                  description: Upload the emoji file that you want to update as form-data.
                 name:
                   type: string
-                  description: The name of the custom emoji.
+                  description: Enter the name of the emoji that you want to update.
                   example: my-custom-emoji
+                _id:
+                  type: string
+                  description: Enter the emoji ID to be updated.
+                  example: AG7DSB2H32YHS
                 aliases:
                   type: string
                   description: The alias of the custom emoji.
                   example: emoji-alias
-              required:
-                - _id
-                - name
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: '[The required "_id" query param is missing.]'
+                    errorType: The required "_id" query param is missing.
+                Example 2:
+                  value:
+                    success: false
+                    error: '[Emoji not found.]'
+                    errorType: Emoji not found.
         '401':
-          $ref: '#/components/responses/authorizationError'            
+          $ref: '#/components/responses/authorizationError'          
   /api/v1/custom-sounds.list:
     get:
       tags:
