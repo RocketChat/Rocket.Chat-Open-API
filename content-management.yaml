@@ -714,7 +714,7 @@ paths:
         - Assets
       summary: Set Asset
       description: |-
-        Set an <a href="https://docs.rocket.chat/docs/assets" target="_blank"> asset</a> by name. Permissions required: `manage-assets`. 
+        Upload an <a href="https://docs.rocket.chat/docs/assets" target="_blank"> asset</a> by name. Permissions required: `manage-assets`. Make sure that the workspace's <a href='https://docs.rocket.chat/docs/file-upload' target='_blank'>file upload settings</a> are configured as required. The allowed file size and type depend on the file upload settings.
 
         ### Changelog
         | Version      | Description | 
@@ -727,49 +727,72 @@ paths:
       requestBody:
         description: ''
         content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                asset:
-                  type: string
-                  description: Asset File to upload.
-                assetName:
-                  type: string
-                  description: "Type of asset to upload. `assetName` can be one of these:`logo`, `background`, `favicon_ico`, `favicon`, `favicon_16`, `favicon_32`, `favicon_192`, `favicon_512`, `touchicon_180`, `touchicon_180_pre`, `tile_70`, `tile_144`, `tile_150`, `tile_310_square`, `tile_310_wide`, `safari_pinned`.\r\n"
-                refreshAllClients:
-                  type: boolean
-                  description: If needs refresh all clients to apply changes immediately.
-              required:
-                - asset
-                - assetName
           multipart/form-data:
             schema:
               type: object
-              properties:
-                asset:
-                  type: string
-                  description: Asset File to upload.
-                assetName:
-                  type: string
-                  description: "Type of asset to upload. `assetName` can be one of these:`logo`, `background`, `favicon_ico`, `favicon`, `favicon_16`, `favicon_32`, `favicon_192`, `favicon_512`, `touchicon_180`, `touchicon_180_pre`, `tile_70`, `tile_144`, `tile_150`, `tile_310_square`, `tile_310_wide`, `safari_pinned ]`\r\n"
-                refreshAllClients:
-                  type: string
               required:
                 - asset
                 - assetName
+              properties:
+                asset:
+                  type: string
+                  description: 'Upload the file as form-data.'
+                assetName:
+                  type: string
+                  description: |-
+                   Type of asset to upload. The value can be one of the following:
+                   * `logo`
+                   * `background`
+                   * `favicon_ico`
+                   * `favicon`
+                   * `favicon_16`
+                   * `favicon_32`
+                   * `favicon_192`
+                   * `favicon_512`
+                   * `touchicon_180`
+                   * `touchicon_180_pre`
+                   * `tile_70`
+                   * `tile_144`
+                   * `tile_150`
+                   * `tile_310_square`
+                   * `tile_310_wide`
+                   * `safari_pinned`
+                refreshAllClients:
+                  type: boolean
+                  description: Set to true if all clients must be refreshed to immediately apply the changes.
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                No asset name:
+                  value:
+                    success: false
+                    error: Invalid asset
+                Example 1:
+                  value:
+                    success: false
+                    error: '[No file uploaded]'
+                    errorType: No file uploaded
         '401':
-          $ref: '#/components/responses/authorizationError'  
+          $ref: '#/components/responses/authorizationError' 
   /api/v1/assets.unsetAsset:
     post:
       tags:
         - Assets
       summary: Unset Asset
       description: |-
-        Unset an asset by name. Permissions required: `manage-assets` .
+        Remove an asset by name. Permissions required: `manage-assets` .
 
         ### Changelog
         | Version      | Description | 
@@ -787,10 +810,27 @@ paths:
               properties:
                 assetName:
                   type: string
-                  description: "Asset name to unset. `assetName` can be one of these:`logo`, `background`, `favicon_ico`, `favicon`, `favicon_16`, `favicon_32`, `favicon_192`, `favicon_512`, `touchicon_180`, `touchicon_180_pre`, `tile_70`, `tile_144`, `tile_150`, `tile_310_square`, `tile_310_wide`, `safari_pinned`.\r\n"
+                  description: |-
+                   Type of asset to remove. The value can be one of the following:
+                   * `logo`
+                   * `background`
+                   * `favicon_ico`
+                   * `favicon`
+                   * `favicon_16`
+                   * `favicon_32`
+                   * `favicon_192`
+                   * `favicon_512`
+                   * `touchicon_180`
+                   * `touchicon_180_pre`
+                   * `tile_70`
+                   * `tile_144`
+                   * `tile_150`
+                   * `tile_310_square`
+                   * `tile_310_wide`
+                   * `safari_pinned`
                 refreshAllClients:
                   type: boolean
-                  description: If needs refresh all clients to apply changes immediately.
+                  description: Set to true if all clients must be refreshed to immediately apply the changes.
               required:
                 - assetName
             examples:
@@ -801,6 +841,25 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''assetName'' [invalid-params]'
+                    errorType: invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'            
 tags:
