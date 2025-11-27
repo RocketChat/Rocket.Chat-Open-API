@@ -738,7 +738,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: refresh
           in: query
-          description: Refresh the statistics.
+          description: Set to true to refresh the statistics.
           schema:
             type: boolean
             example: true
