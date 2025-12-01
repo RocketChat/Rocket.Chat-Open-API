@@ -11,7 +11,7 @@ paths:
         - Email Inbox
       summary: List Email Inbox
       description: |- 
-        Gets email inbox list.
+        Gets Omnichannel email inbox list.
         
         Permissions required:- `manage-email-inbox`
         
@@ -142,7 +142,7 @@ paths:
         - Email Inbox
       summary: Set Email Inbox
       description: |- 
-        Sets the email inbox for your server.
+        Configure the Omnichannel email inbox for your server.
         
         Permissions required:- `manage-email-inbox`
         ### Changelog
@@ -280,9 +280,9 @@ paths:
     get:
       tags:
         - Email Inbox
-      summary: Email Inbox by ID
+      summary: Get Email Inbox by ID
       description: |- 
-        Gets email inbox by ID.
+        Gets Omnichannel email inbox by ID.
         
         Permissions required: `manage-email-inbox`
         ### Changelog
@@ -297,7 +297,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: _id
           in: path
-          description: Email inbox ID
+          description: Enter the email inbox ID.
           required: true
           schema:
             type: string
@@ -415,7 +415,7 @@ paths:
         - Email Inbox
       summary: Delete Email Inbox by ID
       description: |- 
-        Deletes email inbox using ID.
+        Delete Omnichannel email inbox using ID.
         
         Permissions required: `manage-email-inbox`
         ### Changelog
@@ -428,7 +428,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: _id
           in: path
-          description: Email inbox ID
+          description: Enter the email inbox ID.
           required: true
           schema:
             type: string
@@ -475,7 +475,7 @@ paths:
         - Email Inbox
       summary: Search Email Inbox
       description: |- 
-        Searches email inbox by email address.
+        Searches Omnichannel email inbox by email address.
         
         Permissions required: `manage-email-inbox`
         
@@ -489,7 +489,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: email
           in: query
-          description: Email inbox address
+          description: Enter the email inbox address.
           required: true
           schema:
             type: string
@@ -589,13 +589,15 @@ paths:
                     success: true
         '403':
           $ref: '#/components/responses/forbiddenError'
+        '401':
+          $ref: '#/components/responses/authorizationError'
   '/api/v1/email-inbox.send-test/{_id}':
     get:
       tags:
         - Email Inbox
-      summary: Send test email to email inbox
+      summary: Send Test Email
       description: |- 
-        Send a test email to the inbox.
+        Send a test email to the Omnichannel inbox.
         Permissions required: `manage-email-inbox`
         
         ### Changelog
@@ -608,7 +610,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: _id
           in: path
-          description: Email inbox id
+          description: Enter the email inbox ID.
           required: true
           schema:
             type: string
@@ -753,9 +755,9 @@ paths:
           $ref: '#/components/responses/authorizationError'
   /api/v1/stdout.queue:
     get:
-      summary: Get stdout queue
+      summary: Get Server Logs
       description: |- 
-        Retrieves last 1000 lines of server logs
+        Retrieves last 1000 lines of server logs.
         
         Permissions required: `view-logs`
       operationId: get-api-v1-stdout.queue
@@ -1364,9 +1366,9 @@ paths:
     get:
       tags:
         - Commands
-      summary: Get Slash Commands
+      summary: Get Slash Command
       description: |- 
-        Get specification of the slash command.
+        Get details of a specific slash command.
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -1412,6 +1414,22 @@ paths:
                       description: Displays_action_text
                       clientOnly: false
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: The query param "command" must be provided.  
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/commands.list:
@@ -1554,11 +1572,25 @@ paths:
           example: '@user123'
       responses:
         '200':
-          description: OK
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
                 type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: You must provide a command to get the previews from.
+        '401':
+          $ref: '#/components/responses/authorizationError'  
     post:
       tags:
         - Commands
@@ -1630,11 +1662,25 @@ paths:
                     value: 'https://dev.null/gif'
       responses:
         '200':
-          description: OK
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
                 type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: You must provide a command to run the preview item on.
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/commands.run:
     post:
       tags:
@@ -1687,13 +1733,31 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: You must provide a command to run.
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/mailer:
     post:
       tags:
         - Mailer
       summary: Send Mailer Endpoint
       description: |- 
-        Send emails to users from your workspace.
+        Send emails to users from your workspace. Make sure that you have configured the <a href='https://docs.rocket.chat/docs/configure-email' target='_blank'>email settings</a> in the workspace.
         
         | Version      | Description |
         | ---------------- | ------------|
@@ -1829,27 +1893,20 @@ paths:
                     type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    message: '{"msg":"result","id":"2","result":{"rid":"67937a74f7ca7be1b5fcf599","inserted":true,"_id":"67937a74f7ca7be1b5fcf599","_updatedAt":{"$date":1737718388248},"fname":"test-websocket","name":"test-websocket","t":"c","msgs":0,"usersCount":0,"u":{"_id":"P2dgWPPw5veigwcdK","username":"funke.olasupo","name":"Funke Olasupo"},"ts":{"$date":1737718388248},"ro":false,"default":false,"sysMes":true}}'
-                    success: true
               examples:
                 Example:
                   value:
                     message: '{"msg":"result","id":"2","result":{"rid":"67937a74f7ca7be1b5fcf599","inserted":true,"_id":"67937a74f7ca7be1b5fcf599","_updatedAt":{"$date":1737718388248},"fname":"test-websocket","name":"test-websocket","t":"c","msgs":0,"usersCount":0,"u":{"_id":"P2dgWPPw5veigwcdK","username":"funke.olasupo","name":"Funke Olasupo"},"ts":{"$date":1737718388248},"ro":false,"default":false,"sysMes":true}}'
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
       operationId: post-api-v1-method.call-method
-      x-stoplight:
-        id: 3um2mxq64l7fi
       description: 'Execute a [realtime API method](https://developer.rocket.chat/apidocs/realtime-method-calls).'
       requestBody:
         content:
           application/json:
             schema:
               type: object
-              x-examples:
-                Example 1:
-                  message: '{"msg":"method","method":"createChannel","id":"2","params":["test-websocket",["doe.john"],false]}'
               required:
                 - message
               properties:
