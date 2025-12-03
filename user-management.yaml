@@ -2966,13 +2966,25 @@ paths:
                     default, it is set to `false`.
                   default: false
             examples:
-              Example 1:
+              Example:
                 value:
                   userId: BsNr28znDkG8aeo7W
                   confirmRelinquish: true
       responses:
         '200':
-          $ref: '#/components/responses/trueSuccess'
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  deletedRooms:
+                    description: "The rooms deleted as part of the user deletion process."
+                    type: array
+                    items:
+                      type: object
         '400':
           description: Bad Request
           content:
@@ -2987,7 +2999,7 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                Example:
                   value:
                     success: false
                     error: >-
