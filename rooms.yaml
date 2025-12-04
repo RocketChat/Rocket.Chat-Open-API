@@ -5588,12 +5588,10 @@ paths:
         * `delete-team-group`: To delete a private channel within a team, also requires the `delete-p` permission.
 
         > You can't use this endpoint to delete a team's main room. Use [Delete a Team endpoint](https://developer.rocket.chat/apidocs/delete-a-team) instead.
-
         ### Changelog
         | Version | Description   |
         | ------- | --------------|
         | 5.4.0   | Added         |
-
       operationId: get-api-v1-rooms.delete
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
