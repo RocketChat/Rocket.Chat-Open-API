@@ -2065,6 +2065,8 @@ paths:
                         type: string
                       utcOffset:
                         type: integer
+                      freeSwitchExtension:
+                        type: string
                       canViewAllInfo:
                         type: boolean
                   success:
@@ -2106,6 +2108,7 @@ paths:
                       statusText: ''
                       avatarETag: GFoEi6wv3uAxnzDcD
                       nickname: tesuser2
+                      freeSwitchExtension: "1234"
                       canViewAllInfo: true
                       rooms:
                         - _id: 651667dda2f73c7460e18cce
