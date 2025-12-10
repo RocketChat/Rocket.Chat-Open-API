@@ -1667,8 +1667,44 @@ paths:
         - $ref: '#/components/parameters/X-Auth-Token'
       tags:
         - Import
+  /api/v1/importers.list:
+    get:
+      summary: Get List of Imports
+      tags:
+        - Import
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    key:
+                      type: string
+                    name:
+                      type: string
+              examples:
+                Example 1:
+                  value:
+                    - key: csv
+                      name: CSV
+                    - key: slack
+                      name: Slack
+                    - key: slack-users
+                      name: Slack_Users
+                    - key: omnichannel_contact
+                      name: omnichannel_contacts_importer
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-importers.list
+      description: 'Use this endpoint to view the list of imports in the workspace. Permission required: `run-import`'
+      parameters:
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/X-User-Id'        
   /api/v1/import.new:
-    parameters: []
     post:
       summary: Create New Import Operation
       operationId: post-api-v1-import.new
@@ -3919,3 +3955,4 @@ components:
               value:
                 success: false
                 error: 'User does not have the permissions required for this action [error-unauthorized]'
+
