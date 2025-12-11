@@ -605,12 +605,56 @@ paths:
                   agentData: {}
                   agentDepartments:
                     - ''
-        
+  /api/v1/livechat/agent.status:
+    post:
+      summary: Update Agent Status
+      tags:
+        - Omnichannel Agents
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    status: not-available
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-livechat-agent.status
+      description: |-
+       Update the agent's livechat status. If the agent is available, using this endpoint will set the status as unavailable, and vice versa. Permission required: `view-l-room`. 
+       If you want to update the status of another agent, you need the `manage-livechat-agents` permission. If you have configured business hours, the agent status cannot be updated outside of business hours.
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                agentId:
+                  type: string
+                  description: 'Enter this parameter if you want to update the livechat status of another agent. If this parameter is not provided, the agent that is calling the endpoint will be updated.'
+                  example: J6Q87AnWP5aNc9xhx
+            examples:
+              Example 1:
+                value:
+                  agentId: J6Q87AnWP5aNc9xhx        
   /api/v1/omnichannel/contact:
     post:
       summary: Register or Update Omnichannel Contact
       description: |-
-        > **Note:** This endpoint will be replaced. Refer to the new API documentations for [registering](https://developer.rocket.chat/apidocs/register-omnichannel-contacts) and [updating](https://developer.rocket.chat/apidocs/update-omnichannel-contact) contact for updated usage and features.
+        > **Note:** This endpoint will be replaced. Refer to the new API documentation for [registering](https://developer.rocket.chat/apidocs/register-omnichannel-contacts) and [updating](https://developer.rocket.chat/apidocs/update-omnichannel-contact) contact for updated usage and features.
 
         Register a guest user as a new omnichannel contact.
         Permission required: `view-l-room`
