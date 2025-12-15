@@ -11396,7 +11396,6 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
   /api/v1/livechat/priorities.reset:
-    parameters: []
     post:
       summary: Reset Priorities
       operationId: post-livechat-priorities.reset
@@ -11422,6 +11421,37 @@ paths:
         - $ref: '#/components/parameters/UserId'
       tags:
         - Omnichannel Priorities
+    get:
+      summary: Check Priority Reset
+      tags:
+        - Omnichannel Priorities
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reset:
+                    type: boolean
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    reset: true
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-livechat-priorities.reset
+      description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+        
+        Use this endpoint to check whether or not you can reset the priorities or not. You cannot reset priorities if the values are already in the default state. Once you edit the priorities, you get the option to reset them. Permission required: `manage-livechat-priorities`
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
   /livechat/priorities:
     get:
       tags:
