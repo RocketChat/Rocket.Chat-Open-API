@@ -5885,6 +5885,141 @@ paths:
           $ref: '#/components/responses/permissionError'
       tags:
         - Omnichannel Departments
+  /api/v1/livechat/departments/archived:
+    get:
+      summary: Get Archived Departments
+      tags:
+        - Omnichannel Departments
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  departments:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        enabled:
+                          type: boolean
+                        showOnRegistration:
+                          type: boolean
+                        name:
+                          type: string
+                        email:
+                          type: string
+                        showOnOfflineForm:
+                          type: boolean
+                        type:
+                          type: string
+                        _updatedAt:
+                          type: string
+                        abandonedRoomsCloseCustomMessage:
+                          type: string
+                        allowReceiveForwardOffline:
+                          type: boolean
+                        chatClosingTags:
+                          type: array
+                          items:
+                            type: object
+                            properties: {}
+                        departmentsAllowedToForward:
+                          type: array
+                          items:
+                            type: object
+                            properties: {}
+                        description:
+                          type: string
+                        fallbackForwardDepartment:
+                          type: string
+                        offlineMessageChannelName:
+                          type: string
+                        requestTagBeforeClosingChat:
+                          type: boolean
+                        waitingQueueMessage:
+                          type: string
+                        numAgents:
+                          type: integer
+                        ancestors:
+                          type: array
+                          items:
+                            type: string
+                        parentId:
+                          type: string
+                        archived:
+                          type: boolean
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    departments:
+                      - _id: 66fa9f5d6ea9eba859b650b6
+                        enabled: false
+                        showOnRegistration: true
+                        name: gfyh88
+                        email: john@doe.com
+                        showOnOfflineForm: true
+                        type: d
+                        _updatedAt: '2025-03-28T11:17:22.654Z'
+                        abandonedRoomsCloseCustomMessage: ''
+                        allowReceiveForwardOffline: true
+                        chatClosingTags: []
+                        departmentsAllowedToForward: []
+                        description: ''
+                        fallbackForwardDepartment: ''
+                        offlineMessageChannelName: ''
+                        requestTagBeforeClosingChat: false
+                        waitingQueueMessage: ''
+                        numAgents: 0
+                        ancestors:
+                          - 67b84af9382738a951e6f3b8
+                        parentId: 67b84af9382738a951e6f3b8
+                        archived: true
+                      - _id: 66a7680360ab9acca6a57fad
+                        enabled: false
+                        name: test-dept
+                        description: ''
+                        showOnRegistration: false
+                        showOnOfflineForm: false
+                        requestTagBeforeClosingChat: false
+                        email: test-dept@example.com
+                        chatClosingTags: []
+                        offlineMessageChannelName: ''
+                        abandonedRoomsCloseCustomMessage: ''
+                        waitingQueueMessage: ''
+                        departmentsAllowedToForward: []
+                        fallbackForwardDepartment: ''
+                        allowReceiveForwardOffline: false
+                        type: d
+                        _updatedAt: '2025-04-02T11:28:31.651Z'
+                        numAgents: 0
+                        archived: true
+                    count: 2
+                    offset: 0
+                    total: 2
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-livechat-departments-archived
+      description: |-
+       Get the list of archived departments in the workspace. Any of the following permissions is required: 
+        * `view-livechat-departments`
+        * `view-l-room`
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
   '/api/v1/livechat/departments.available-by-unit/{unitId}':
     get:
       summary: Get Available Departments by Unit ID
