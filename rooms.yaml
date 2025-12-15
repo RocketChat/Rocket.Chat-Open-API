@@ -13672,6 +13672,71 @@ paths:
           name: rid
           description: Enter the room ID for which you want to view the room roles.
           required: true
+  /api/v1/rooms.isMember:
+    get:
+      summary: Check Room Member
+      tags:
+        - Rooms
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isMember:
+                    type: boolean
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    isMember: true
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                User not available in room:
+                  value:
+                    success: false
+                    error: error-user-not-found
+                Missing user ID parameter:
+                  value:
+                    success: false
+                    error: |-
+                      must have required property 'userId'
+                       must have required property 'username'
+                       must match exactly one schema in oneOf [invalid-params]
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-rooms.isMember
+      description: 'Use this endpoint to check whether or not a user is a member of a specific room. If the user is not a member of the room, an error response (`error-user-not-found`) is returned. You can only get the results for the rooms that you are a member of. Otherwise, you get a forbidden error response.'
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: roomId
+          description: Enter the room ID in which you want to check for the user.
+          required: true
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - schema:
+            type: string
+          in: query
+          name: userId
+          description: 'Enter the user ID that you want to check. Alternatively, you can use the `username` parameter and provide the user name instead of the user ID.'
+          required: true
           
   /api/v1/listInvites:
     get:
