@@ -4312,6 +4312,66 @@ paths:
               Example 1:
                 value:
                   roomId: dCBiZX3XPWyPsa6pt
+  /api/v1/livechat/rooms/filters:
+    get:
+      summary: View Omnichannel Room Sources
+      tags:
+        - Omnichannel Rooms
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  filters:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                        id:
+                          type: string
+                        alias:
+                          type: string
+                        sidebarIcon:
+                          type: string
+                        defaultIcon:
+                          type: string
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    filters:
+                      - {}
+                      - type: app
+                        id: 5e3dadaa-e774-40d8-b3a4-b93b91747168
+                        alias: WhatsApp Cloud
+                        sidebarIcon: whatsapp
+                        defaultIcon: whatsapp
+                      - type: app
+                        id: 99ecc706-ca5a-4b8f-bbaf-c28de243f1db
+                        alias: WhatsApp Sandbox
+                        sidebarIcon: whatsapp
+                        defaultIcon: whatsapp
+                      - type: app
+                        id: fc96e832-5472-49e4-aace-1521a7ebeaa6
+                        alias: Telegram
+                        sidebarIcon: telegram
+                        defaultIcon: telegram
+                      - type: sms
+                      - type: widget
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-livechat-rooms-filters
+      description: 'Use this endpoint to view the sources of the Omnichannel rooms, for example, an app or the Livechat widget. Permission required: `view-l-room`'
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
         
   /api/v1/livechat/department:
     get:
