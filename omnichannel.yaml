@@ -6020,6 +6020,52 @@ paths:
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
+  '/api/v1/livechat/department/archive/{_id}':
+    parameters:
+      - schema:
+          type: string
+          example: 693fc4b0ddfe6ceaf280f7f6
+        name: _id
+        in: path
+        required: true
+        description: Enter the department ID that you want to archive.
+    post:
+      summary: Archive a Department
+      tags:
+        - Omnichannel Departments
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-livechat-department-archive-_id
+      description: 'Use this endpoint to archive a department. If a department is no longer needed but you want to retain it for future use, you can archive it. Permission required: `manage-livechat-departments`'
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+  '/api/v1/livechat/department/unarchive/{_id}':
+    parameters:
+      - schema:
+          type: string
+          example: 693fc4b0ddfe6ceaf280f7f6
+        name: _id
+        in: path
+        required: true
+        description: Enter the department ID that you want to unarchive.
+    post:
+      summary: Unarchive a Department
+      tags:
+        - Omnichannel Departments
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-livechat-department-unarchive-_id
+      description: 'Use this endpoint to unarchive a department and add it back to the list of active departments. Permission required: `manage-livechat-departments`'
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
   '/api/v1/livechat/departments.available-by-unit/{unitId}':
     get:
       summary: Get Available Departments by Unit ID
