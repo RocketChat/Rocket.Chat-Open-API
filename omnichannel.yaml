@@ -13049,6 +13049,69 @@ paths:
           $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/permissionError'
+  /api/v1/livechat/analytics/dashboards/conversations-by-source:
+    get:
+      summary: Get Conversations By Source
+      tags:
+        - Reports
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        label:
+                          type: string
+                        value:
+                          type: integer
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    total: 19
+                    data:
+                      - label: widget
+                        value: 18
+                      - label: twilio
+                        value: 1
+                    success: true
+        '400':
+          $ref: '#/components/responses/startendError'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-livechat-analytics-dashboards-conversations-by-source
+      description: |-
+
+       <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+
+       Use this endpoint to view the list of sources of Omnichannel conversation during the specified time range. Permission required: `view-livechat-reports`'
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+        - schema:
+            type: string
+            example: '2025-06-01'
+          in: query
+          name: start
+          description: 'Enter the start date. Format: YYYY-MM-DD'
+          required: true
+        - schema:
+            type: string
+            example: '2025-12-01'
+          in: query
+          name: end
+          description: 'Enter the end date. Format: YYYY-MM-DD'
+          required: true
   /api/v1/livechat/sla:
     get:
       tags:
