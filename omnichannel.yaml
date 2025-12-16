@@ -2053,6 +2053,162 @@ paths:
         | Version      | Description |
         | ---------------- | ------------|
         |7.2.0             | Added       |
+  /api/v1/omnichannel/contacts.block:
+    post:
+      summary: Block Omnichannel Contact
+      tags:
+        - Omnichannel Contacts
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''visitor'' [invalid-params]'
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: error-contact-not-found
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-omnichannel-contacts.block
+      description: |-
+       <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+       
+       Use this endpoint to block an Omnichannel on a specific channel. Permission required: `block-livechat-contact`
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - visitor
+              properties:
+                visitor:
+                  type: object
+                  required:
+                    - visitorId
+                    - source
+                  description: The visitor object contains the details of the contact that you want to block.
+                  properties:
+                    visitorId:
+                      type: string
+                      description: |-
+                       Enter the visitor ID of the contact that you want to block. To get the visitor ID, you can use the <a href='https://developer.rocket.chat/apidocs/search-omnichannel-contacts' target='_blank'>Search Omnichannel Contacts</a> endpoint.
+                      example: 68f0d2c201e202fefed83672
+                    source:
+                      type: object
+                      required:
+                        - type
+                      description: The source object contains the channels from which you want to block the contact. To get the room types, you can use the <a href='https://developer.rocket.chat/apidocs/view-omnichannel-room-sources' target='_blank'>View Omnichannel Room Sources</a> endpoint.
+                      properties:
+                        type:
+                          type: string
+                          description: Enter the type of channel from which you want to block the contact.
+                          example: widget
+            examples:
+              Example 1:
+                value:
+                  visitor:
+                    visitorId: 68f0d2c201e202fefed83672
+                    source:
+                      type: widget
+  /api/v1/omnichannel/contacts.unblock:
+    post:
+      summary: Unblock Omnichannel Contact
+      tags:
+        - Omnichannel Contacts
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''visitor'' [invalid-params]'
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: error-contact-not-found
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-omnichannel-contacts.unblock
+      description: |-
+       <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+       
+       Use this endpoint to unblock an Omnichannel on a specific channel. Permission required: `unblock-livechat-contact`
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - visitor
+              properties:
+                visitor:
+                  type: object
+                  required:
+                    - visitorId
+                    - source
+                  description: The visitor object contains the details of the contact that you want to unblock.
+                  properties:
+                    visitorId:
+                      type: string
+                      description: |-
+                       Enter the visitor ID of the contact that you want to unblock.
+                      example: 68f0d2c201e202fefed83672
+                    source:
+                      type: object
+                      required:
+                        - type
+                      description: The source object contains the channels from which you want to unblock the contact.
+                      properties:
+                        type:
+                          type: string
+                          description: Enter the type of channel from which you want to unblock the contact.
+                          example: widget
+            examples:
+              Example 1:
+                value:
+                  visitor:
+                    visitorId: 68f0d2c201e202fefed83672
+                    source:
+                      type: widget
   /api/v1/livechat/analytics/agent-overview:
     get:
       summary: Get Agent Analytics Overview
