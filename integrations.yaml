@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   version: 1.0.0
   title: Integrations
-#  description: |-
+# description: |-
 #    The following endpoints provide integration support for your Rocket.Chat workspaces:
 #    * **Integration**: Create and manage [integrations](https://docs.rocket.chat/use-rocket.chat/workspace-administration/integrations).
 #    * **WebDAV**: Manage [WebDAV](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/webdav-integration) server accounts.
@@ -16,6 +16,7 @@ paths:
         - Integration
       summary: Create Integration
       description: |- 
+        Use this endpoint to create an incoming or outgoing integration. For details, you can refer to the <a href='https://docs.rocket.chat/docs/integrations' target='_blank'>Integrations user guide</a>.
         
         Permissions required to create incoming integrations:
         * `manage-incoming-integrations`
@@ -258,7 +259,7 @@ paths:
         - Integration
       summary: Get Integration
       description: |- 
-        Get the information of a specific integration.
+        Get the information of a specific incoming or outgoing integration.
         
         Permissions required:
         * `manage-incoming-integrations`
@@ -863,20 +864,17 @@ paths:
       summary: Remove Integration
       description: |-
         Remove an integration from the workspace.
-        
+
         Any of the following permissions is required:
         * `manage-incoming-integrations`
         * `manage-own-incoming-integrations`
         * `manage-outgoing-integrations`
         * `manage-own-outgoing-integrations`
-        
-        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |1.1.0            | Separate permissions in incoming and outgoing.       |
         |0.49.0            | Added       |
-
       operationId: post-api-v1-integrations.remove
       parameters:
         - $ref: '#/components/parameters/X-Auth-Token'
@@ -991,6 +989,617 @@ paths:
                   value:
                     success: false
                     error: No integration found.
+  /api/v1/webdav.getMyAccounts:
+    get:
+      tags:
+        - WebDAV
+      summary: Get WebDAV Accounts
+      description: |-
+          Retrieves the user's <a href="https://docs.rocket.chat/docs/webdav-integration" target="_blank">WebDAV</a> accounts.
+          
+          ### Changelog
+          | Version      | Description | 
+          | ---------------- | ------------|
+          |2.4.0            | Added       |
+      operationId: get-api-v1-webdav.getMyAccounts
+      parameters:
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/X-User-Id'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accounts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        server_url:
+                          type: string
+                        username:
+                          type: string
+                        name:
+                          type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    accounts:
+                      - _id: P3Gru7ocFCd4vpKEs
+                        server_url: 'http://localhost:8080/remote.php/webdav/'
+                        username: admin
+                        name: Webdav account
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  /api/v1/webdav.removeWebdavAccount:
+    post:
+      tags:
+        - WebDAV
+      summary: Remove WebDAV Account
+      description: Remove a specific WebDAV account.
+      operationId: post-api-v1-webdav.removeWebdavAccount
+      parameters:
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/X-User-Id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                accountId:
+                  type: string
+                  description: The WebDAV account ID that you want to remove.
+              required:
+                - accountId
+            examples:
+              Example 1:
+                value:
+                  accountId: P3Gru7ocFCd4vpKEs
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''accountId'' [invalid-params]'
+                    errorType: invalid-params
+  /api/v1/oauth-apps.create:
+    post:
+      tags:
+        - OAuth Apps
+      summary: Create OAuth App
+      description: |-
+       Create an app to log in to third-party applications. For details, you can refer to the <a href='https://docs.rocket.chat/docs/third-party-login' target='_blank'> Third-party login user guide</a>. Permission required: `manage-oauth-apps`'
+      operationId: post-api-v1-oauth-apps.create
+      parameters:
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/X-User-Id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Name of the app that you want to create.
+                redirectUri:
+                  type: string
+                  description: The URL to redirect the OAuth app.
+                active:
+                  type: boolean
+                  description: 'Whether the app will be active or not. Enter a boolean value, `true` or `false`.'
+              required:
+                - name
+                - redirectUri
+                - active
+            examples:
+              Example 1:
+                value:
+                  name: test-oauth-app
+                  redirectUri: 'https://testuri.com'
+                  active: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  application:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      redirectUri:
+                        type: string
+                      active:
+                        type: boolean
+                      clientId:
+                        type: string
+                      clientSecret:
+                        type: string
+                      _createdAt:
+                        type: string
+                      _updatedAt:
+                        type: string
+                      _createdBy:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          username:
+                            type: string
+                      _id:
+                        type: string
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    application:
+                      name: test-oauth-app
+                      redirectUri: 'https://testuri.com'
+                      active: true
+                      clientId: bN9D5TjY8Cv8GqWfE
+                      clientSecret: l3HAl0lSr2VaTYZVED6EabyhNzovS8Je2JYmbjNT-V1
+                      _createdAt: '2024-01-17T13:30:41.521Z'
+                      _updatedAt: '2024-01-17T13:30:41.521Z'
+                      _createdBy:
+                        _id: JFTcMhEAFbNPfnp49
+                        username: math.bar
+                      _id: 65a7d68142a7e12453052d56
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''name'' [invalid-params]'
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: 'must have required property ''active'' [invalid-params]'
+                    errorType: invalid-params
+                Example 3:
+                  value:
+                    success: false
+                    error: 'must have required property ''redirectUri'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  /api/v1/oauth-apps.update:
+    post:
+      tags:
+        - OAuth Apps
+      summary: Update OAuth App
+      description: 'Update an existing app. Permission required: `manage-oauth-apps`'
+      operationId: post-api-v1-oauth-apps.update
+      parameters:
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/X-User-Id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Name of the app that you want to update.
+                redirectUri:
+                  type: string
+                  description: The URL to redirect the OAuth app.
+                active:
+                  type: boolean
+                  description: 'Whether the app will be active or not. Enter a boolean value, `true` or `false`.'
+                appId:
+                  type: string
+                  description: The app ID. The app ID. This is created when you create an app. You can use the <a href='https://developer.rocket.chat/apidocs/get-list-of-oauth-apps' target='_blank'>Get List of OAuth Apps</a> endpoint to get the app ID.
+              required:
+                - name
+                - redirectUri
+                - active
+                - appId
+            examples:
+              Example 1:
+                value:
+                  name: test-oauth-app
+                  redirectUri: 'https://testuri.com'
+                  active: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  name:
+                    type: string
+                  redirectUri:
+                    type: string
+                  active:
+                    type: boolean
+                  clientId:
+                    type: string
+                  clientSecret:
+                    type: string
+                  _createdAt:
+                    type: string
+                  _updatedAt:
+                    type: string
+                  _createdBy:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      username:
+                        type: string
+                  _updatedBy:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      username:
+                        type: string
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    _id: 65a7d77142a7e12453052d59
+                    name: test-oauth-app2
+                    redirectUri: 'https://testuri2.com'
+                    active: false
+                    clientId: fxHAgLRjP3RswMe67
+                    clientSecret: QwIAYE1_8M02p-Js8SHZyTPg7HpJm-1ZtbjuSp8bXpP
+                    _createdAt: '2024-01-17T13:34:41.445Z'
+                    _updatedAt: '2024-01-17T13:37:16.966Z'
+                    _createdBy:
+                      _id: JFTcMhEAFbNPfnp49
+                      username: math.bar
+                    _updatedBy:
+                      _id: JFTcMhEAFbNPfnp49
+                      username: math.bar
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''name'' [invalid-params]'
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: 'must have required property ''active'' [invalid-params]'
+                    errorType: invalid-params
+                Example 3:
+                  value:
+                    success: false
+                    error: 'must have required property ''redirectUri'' [invalid-params]'
+                    errorType: invalid-params
+                Example 4:
+                  value:
+                    success: false
+                    error: 'must have required property ''appId'' [invalid-params]'
+                    errorType: invalid-params
+  /api/v1/oauth-apps.list:
+    get:
+      tags:
+        - OAuth Apps
+      summary: Get List of OAuth Apps
+      description: |-
+        Use this endpoint to get the list of apps. Permission required: `manage-oauth-apps`
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |2.4.0            | Added       |
+      operationId: get-api-v1-oauth-apps.list
+      parameters:
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/X-User-Id'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  oauthApps:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        active:
+                          type: boolean
+                        clientId:
+                          type: string
+                        clientSecret:
+                          type: string
+                        redirectUri:
+                          type: string
+                        _createdAt:
+                          type: string
+                        _createdBy:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                        _updatedAt:
+                          type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    oauthApps:
+                      - _id: zapier
+                        name: Zapier
+                        active: true
+                        clientId: zapier
+                        clientSecret: RTK6TlndaCIolhQhZ7_KHIGOKj41RnlaOq_o-7JKwLr
+                        redirectUri: 'https://zapier.com/dashboard/auth/oauth/return/RocketChatDevAPI/'
+                        _createdAt: '2019-10-17T22:55:32.787Z'
+                        _createdBy:
+                          _id: system
+                          username: system
+                        _updatedAt: '2019-10-17T22:55:32.787Z'
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  /api/v1/oauth-apps.get:
+    get:
+      tags:
+        - OAuth Apps
+      summary: Get OAuth App
+      description: |-
+        Retrieves an OAuth app by ID or client ID.
+        
+        Permission required: `manage-oauth-apps`. The endpoint can be accessed even without this permission, but sensitive information (such as client secrets) will be filtered out.
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |2.4.0            | Added       |
+      operationId: get-api-v1-oauth-apps.get
+      parameters:
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/X-User-Id'
+        - name: appId
+          in: query
+          description: |-
+            The app ID.  This value is required if `clientId` is not used.
+            
+            The parameter will stop being accepted from 7.0.0 (use the `clientId` or `_id` parameters instead).
+          schema:
+            type: string
+          example: jn32kjnnd0943j4njk
+        - name: clientId
+          in: query
+          description: The client ID. This value is required if `appId` is not used.
+          schema:
+            type: string
+          example: nkn8jk67b8b99b78
+        - name: _id
+          in: query
+          description: The app ID. This value is required if `clientId` is not used.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  oauthApp:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      name:
+                        type: string
+                      active:
+                        type: boolean
+                      clientId:
+                        type: string
+                      clientSecret:
+                        type: string
+                      redirectUri:
+                        type: string
+                      _createdAt:
+                        type: string
+                      _createdBy:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          username:
+                            type: string
+                      _updatedAt:
+                        type: string
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    oauthApp:
+                      _id: zapier
+                      name: Zapier
+                      active: true
+                      clientId: zapier
+                      clientSecret: RTK6TlndaCIolhQhZ7_KHIGOKj41RnlaOq_o-7JKwLr
+                      redirectUri: 'https://zapier.com/dashboard/auth/oauth/return/RocketChatDevAPI/'
+                      _createdAt: '2019-10-17T22:55:32.787Z'
+                      _createdBy:
+                        _id: system
+                        username: system
+                      _updatedAt: '2019-10-17T22:55:32.787Z'
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: |-
+                      must have required property '_id'
+                       must have required property 'clientId'
+                       must have required property 'appId'
+                       must match exactly one schema in oneOf [invalid-params]
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: OAuth app not found.
+  /api/v1/oauth-apps.delete:
+    post:
+      tags:
+        - OAuth Apps
+      summary: Delete OAuth App
+      description: 'Permission required: `manage-oauth-apps`'
+      operationId: post-api-v1-oauth-apps.delete
+      parameters:
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/X-User-Id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                appId:
+                  type: string
+                  description: The OAuth app ID that you want to delete.
+              required:
+                - appId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''appId'' [invalid-params]'
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: 'Application not found [error-application-not-found]'
+                    errorType: error-application-not-found
+                    details:
+                      method: deleteOAuthApp
 tags:
   - name: Integration
 components:

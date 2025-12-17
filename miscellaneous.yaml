@@ -5,246 +5,13 @@ info:
 servers:
   - url: https://apiexplorer.support.rocket.chat
 paths:
-  /api/v1/autotranslate.getSupportedLanguages:
-    get:
-      tags:
-        - Auto-Translate
-      summary: Get Supported Languages
-      description: |- 
-        To learn how to enable the auto-translate feature, see the <a href="https://docs.rocket.chat/docs/message#autotranslate" target="_blank">Auto-Translate</a> user guide.
-        
-        Get the supported languages by the auto-translate.
-        ### Changelog
-        | Version      | Description |
-        | ---------------- | ------------|
-        |1.3.0          | Added       |
-      operationId: get-api-v1-autotranslate.getSupportedLanguages
-      parameters:
-        - $ref: '#/components/parameters/Auth-Token'
-        - $ref: '#/components/parameters/UserId'
-        - name: targetLanguage
-          in: query
-          description: Language in which the language names will be returned.
-          required: true
-          schema:
-            type: string
-          example: en
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  languages:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        language:
-                          type: string
-                        name:
-                          type: string
-                  success:
-                    type: boolean
-              examples:
-                Success Example:
-                  value:
-                    languages:
-                      - language: bg
-                        name: Bulgarian
-                      - language: cs
-                        name: Czech
-                      - language: da
-                        name: Danish
-                      - language: de
-                        name: German
-                      - language: el
-                        name: Greek
-                      - language: en
-                        name: English
-                      - language: es
-                        name: Spanish
-                      - language: et
-                        name: Estonian
-                    success: true
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  error:
-                    type: string
-                  errorType:
-                    type: string
-              examples:
-                Target Language Required:
-                  value:
-                    success: false
-                    error: 'must have required property ''targetLanguage'' [invalid-params]'
-                    errorType: invalid-params
-        '401':
-          $ref: '#/components/responses/authorizationError'
-  /api/v1/autotranslate.saveSettings:
-    post:
-      tags:
-        - Auto-Translate
-      summary: Save Auto-Translate  Settings
-      description: |- 
-        Saves autotranslate settings for a room.
-        ### Changelog
-        | Version      | Description |
-        | ---------------- | ------------|
-        |1.3.0          | Added       |
-      operationId: post-api-v1-autotranslate.saveSettings
-      parameters:
-        - $ref: '#/components/parameters/Auth-Token'
-        - $ref: '#/components/parameters/UserId'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                roomId:
-                  type: string
-                  description: The room's id to apply setting.
-                field:
-                  type: string
-                  description: The setting to apply to user's subscription.
-                value:
-                  type: boolean
-                  description: Boolean if the setting is autoTranslate and a string (the language) if the setting is autoTranslateLanguage.
-                defaultLanguage:
-                  type: string
-                  description: The default language.
-              required:
-                - roomId
-                - field
-                - value
-            examples:
-              Example:
-                value:
-                  roomId: 7aDSXtjMA3KPLxLjt
-                  field: autoTranslate
-                  value: true
-                  defaultLanguage: en
-      responses:
-        '200':
-          $ref: '#/components/responses/trueSuccess'
-        '401':
-          $ref: '#/components/responses/authorizationError'
-  /api/v1/autotranslate.translateMessage:
-    post:
-      tags:
-        - Auto-Translate
-      summary: Translate Message
-      description: |- 
-        Auto-translates the provided message.
-        ### Changelog
-        | Version      | Description |
-        | ---------------- | ------------|
-        |1.3.0          | Added       |
-      operationId: post-api-v1-autotranslate.translateMessage
-      parameters:
-        - $ref: '#/components/parameters/Auth-Token'
-        - $ref: '#/components/parameters/UserId'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                messageId:
-                  type: string
-                  description: The message's id to be translated.
-                targetLanguage:
-                  type: string
-                  description: The target language that the message will be translated.
-              required:
-                - messageId
-            examples:
-              Example:
-                value:
-                  messageId: Fq7sQNSnDEfzj8qoS
-                  targetLanguage: en
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: object
-                    properties:
-                      _id:
-                        type: string
-                      rid:
-                        type: string
-                      msg:
-                        type: string
-                      ts:
-                        type: string
-                      u:
-                        type: object
-                        properties:
-                          _id:
-                            type: string
-                          username:
-                            type: string
-                          name:
-                            type: string
-                      _updatedAt:
-                        type: string
-                      mentions:
-                        type: array
-                        items:
-                          type: object
-                      channels:
-                        type: array
-                        items:
-                          type: object
-                      translations:
-                        type: object
-                        properties:
-                          en:
-                            type: string
-                  success:
-                    type: boolean
-              examples:
-                Success:
-                  value:
-                    message:
-                      _id: Fq7sQNSnDEfzj8qoS
-                      rid: GENERAL
-                      msg: Isso é um teste
-                      ts: '2019-06-27T15:35:20.753Z'
-                      u:
-                        _id: pC6Z2N2ijivxdsYSu
-                        username: marcos
-                        name: marcos
-                      _updatedAt: '2019-06-27T15:47:01.486Z'
-                      mentions: []
-                      channels: []
-                      translations:
-                        en: This is a test
-                    success: true
-        '401':
-          $ref: '#/components/responses/authorizationError'
   /api/v1/email-inbox.list:
     get:
       tags:
         - Email Inbox
       summary: List Email Inbox
       description: |- 
-        Gets email inbox list.
+        Gets Omnichannel email inbox list.
         
         Permissions required:- `manage-email-inbox`
         
@@ -375,7 +142,7 @@ paths:
         - Email Inbox
       summary: Set Email Inbox
       description: |- 
-        Sets the email inbox for your server.
+        Configure the Omnichannel email inbox for your server.
         
         Permissions required:- `manage-email-inbox`
         ### Changelog
@@ -513,9 +280,9 @@ paths:
     get:
       tags:
         - Email Inbox
-      summary: Email Inbox by ID
+      summary: Get Email Inbox by ID
       description: |- 
-        Gets email inbox by ID.
+        Gets Omnichannel email inbox by ID.
         
         Permissions required: `manage-email-inbox`
         ### Changelog
@@ -530,7 +297,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: _id
           in: path
-          description: Email inbox ID
+          description: Enter the email inbox ID.
           required: true
           schema:
             type: string
@@ -648,7 +415,7 @@ paths:
         - Email Inbox
       summary: Delete Email Inbox by ID
       description: |- 
-        Deletes email inbox using ID.
+        Delete Omnichannel email inbox using ID.
         
         Permissions required: `manage-email-inbox`
         ### Changelog
@@ -661,7 +428,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: _id
           in: path
-          description: Email inbox ID
+          description: Enter the email inbox ID.
           required: true
           schema:
             type: string
@@ -708,7 +475,7 @@ paths:
         - Email Inbox
       summary: Search Email Inbox
       description: |- 
-        Searches email inbox by email address.
+        Searches Omnichannel email inbox by email address.
         
         Permissions required: `manage-email-inbox`
         
@@ -722,7 +489,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: email
           in: query
-          description: Email inbox address
+          description: Enter the email inbox address.
           required: true
           schema:
             type: string
@@ -822,13 +589,15 @@ paths:
                     success: true
         '403':
           $ref: '#/components/responses/forbiddenError'
+        '401':
+          $ref: '#/components/responses/authorizationError'
   '/api/v1/email-inbox.send-test/{_id}':
     get:
       tags:
         - Email Inbox
-      summary: Send test email to email inbox
+      summary: Send Test Email
       description: |- 
-        Send a test email to the inbox.
+        Send a test email to the Omnichannel inbox.
         Permissions required: `manage-email-inbox`
         
         ### Changelog
@@ -841,7 +610,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: _id
           in: path
-          description: Email inbox id
+          description: Enter the email inbox ID.
           required: true
           schema:
             type: string
@@ -867,6 +636,109 @@ paths:
           $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/forbiddenError'
+  /api/v1/sendInvitationEmail:
+    post:
+      summary: Send Invitation Email
+      tags:
+        - Email Inbox
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''emails'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-sendInvitationEmail
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - emails
+              properties:
+                emails:
+                  type: array
+                  description: Enter the list of emails to which you want to send the invitation.
+                  items:
+                    type: string
+                    example: example@example.com
+            examples:
+              Example 1:
+                value:
+                  emails:
+                    - example@example.com
+      description: Send workspace invitation emails using this endpoint.
+  /api/v1/users.sendConfirmationEmail:
+    post:
+      summary: Send Email Verification
+      tags:
+        - Email Inbox
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''email'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-users.sendConfirmationEmail
+      description: Send an email to verify a user's email address. The user receives the email and they must click the confirmation button to confirm their email address.
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+                  description: Enter the email address that needs to be verified.
+                  example: example@example.com
+            examples:
+              Example 1:
+                value:
+                  email: example@example.com
   /api/v1/shield.svg:
     get:
       summary: Shield SVG
@@ -986,9 +858,9 @@ paths:
           $ref: '#/components/responses/authorizationError'
   /api/v1/stdout.queue:
     get:
-      summary: Get stdout queue
+      summary: Get Server Logs
       description: |- 
-        Retrieves last 1000 lines of server logs
+        Retrieves last 1000 lines of server logs.
         
         Permissions required: `view-logs`
       operationId: get-api-v1-stdout.queue
@@ -1592,61 +1464,14 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
-  /api/v1/video-conference/jitsi.update-timeout:
-    post:
-      tags:
-        - Video Conference
-      summary: Update Jitsi Timeout
-      description: |- 
-        ### Changelog
-        | Version      | Description |
-        | ---------------- | ------------|
-        |0.74.0        | Added       |
-      operationId: post-api-v1-video-conference-jitsi.update-timeout
-      parameters:
-        - $ref: '#/components/parameters/UserId'
-        - $ref: '#/components/parameters/Auth-Token'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                roomId:
-                  type: string
-                  description: The room Id of the room to update the jitsi timeout.
-              required:
-                - roomId
-            examples:
-              Example:
-                value:
-                  roomId: hyoM5JSQi94RwqPE7
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  jitsiTimeout:
-                    type: string
-                  success:
-                    type: boolean
-              examples:
-                Success:
-                  value:
-                    jitsiTimeout: '2019-01-16T13:17:11.951Z'
-                    success: true
-        '401':
-          $ref: '#/components/responses/authorizationError'
+          
   /api/v1/commands.get:
     get:
       tags:
         - Commands
-      summary: Get Slash Commands
+      summary: Get Slash Command
       description: |- 
-        Get specification of the slash command.
+        Get details of a specific slash command.
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -1692,6 +1517,22 @@ paths:
                       description: Displays_action_text
                       clientOnly: false
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: The query param "command" must be provided.  
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/commands.list:
@@ -1834,11 +1675,25 @@ paths:
           example: '@user123'
       responses:
         '200':
-          description: OK
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
                 type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: You must provide a command to get the previews from.
+        '401':
+          $ref: '#/components/responses/authorizationError'  
     post:
       tags:
         - Commands
@@ -1910,11 +1765,25 @@ paths:
                     value: 'https://dev.null/gif'
       responses:
         '200':
-          description: OK
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
                 type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: You must provide a command to run the preview item on.
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/commands.run:
     post:
       tags:
@@ -1967,13 +1836,31 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: You must provide a command to run.
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/mailer:
     post:
       tags:
         - Mailer
       summary: Send Mailer Endpoint
       description: |- 
-        Send emails to users from your workspace.
+        Send emails to users from your workspace. Make sure that you have configured the <a href='https://docs.rocket.chat/docs/configure-email' target='_blank'>email settings</a> in the workspace.
         
         | Version      | Description |
         | ---------------- | ------------|
@@ -2082,321 +1969,7 @@ paths:
           $ref: '#/components/responses/trueSuccess'
         '401':
           $ref: '#/components/responses/authorizationError'
-  /api/v1/findOrCreateInvite:
-    post:
-      tags:
-        - Invite
-      summary: Find or Create Invite
-      description: |- 
-        Creates or return an existing invite with the specified parameters. 
-        
-        <a href="https://docs.rocket.chat/docs/permissions" target="_blank">Permission</a> required: `create-invite-links`
-      operationId: post-api-v1-findOrCreateInvite
-      parameters:
-        - $ref: '#/components/parameters/Auth-Token'
-        - $ref: '#/components/parameters/UserId'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                rid:
-                  type: string
-                  description: The room ID that the invite is being created for.
-                days:
-                  type: integer
-                  description: The number of days that the invite will be valid for. Send `0` for unlimited.
-                maxUses:
-                  type: integer
-                  description: The number of times that the invite can be used. Send `0` for unlimited.
-              required:
-                - rid
-                - days
-                - maxUses
-            examples:
-              Example:
-                value:
-                  rid: csFYrDeixJG7PnrAh
-                  days: 10
-                  maxUses: 0
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    _id:
-                      type: string
-                    days:
-                      type: integer
-                    maxUses:
-                      type: integer
-                    rid:
-                      type: string
-                    userId:
-                      type: string
-                    createdAt:
-                      type: string
-                    expires:
-                      type: string
-                      nullable: true
-                    uses:
-                      type: integer
-                    _updatedAt:
-                      type: string
-              examples:
-                Success:
-                  value:
-                    - _id: kDKQ3H
-                      days: 1
-                      maxUses: 1
-                      rid: s7CE842q9WtvLctD7
-                      userId: sNiDqHit5nGAGFg8X
-                      createdAt: '2019-12-20T03:31:56.774Z'
-                      expires: '2019-12-21T03:31:56.774Z'
-                      uses: 1
-                      _updatedAt: '2019-12-20T03:33:40.065Z'
-                    - _id: 99ScEP
-                      days: 1
-                      maxUses: 0
-                      rid: s7CE842q9WtvLctD7
-                      userId: sNiDqHit5nGAGFg8X
-                      createdAt: '2019-12-20T03:38:20.485Z'
-                      expires: '2019-12-21T03:38:20.485Z'
-                      uses: 0
-                      _updatedAt: '2019-12-20T03:38:20.485Z'
-                    - _id: Y5JKM4
-                      days: 0
-                      maxUses: 1
-                      rid: s7CE842q9WtvLctD7
-                      userId: sNiDqHit5nGAGFg8X
-                      createdAt: '2019-12-20T03:38:25.313Z'
-                      expires: null
-                      uses: 1
-                      _updatedAt: '2019-12-20T03:38:40.116Z'
-        '401':
-          $ref: '#/components/responses/authorizationError'
-  /api/v1/listInvites:
-    get:
-      tags:
-        - Invite
-      summary: List Invites
-      description: |- 
-        Lists all of the invites on the workspace. 
-        
-        <a href="https://docs.rocket.chat/docs/permissions" target="_blank">Permission</a> required: `create-invite-links`
-      operationId: get-api-v1-listInvites
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    _id:
-                      type: string
-                    days:
-                      type: integer
-                    maxUses:
-                      type: integer
-                    rid:
-                      type: string
-                    userId:
-                      type: string
-                    createdAt:
-                      type: string
-                    expires:
-                      type: string
-                      nullable: true
-                    uses:
-                      type: integer
-                    _updatedAt:
-                      type: string
-              examples:
-                Success:
-                  value:
-                    - _id: kDKQ3H
-                      days: 1
-                      maxUses: 1
-                      rid: s7CE842q9WtvLctD7
-                      userId: sNiDqHit5nGAGFg8X
-                      createdAt: '2019-12-20T03:31:56.774Z'
-                      expires: '2019-12-21T03:31:56.774Z'
-                      uses: 1
-                      _updatedAt: '2019-12-20T03:33:40.065Z'
-                    - _id: 99ScEP
-                      days: 1
-                      maxUses: 0
-                      rid: s7CE842q9WtvLctD7
-                      userId: sNiDqHit5nGAGFg8X
-                      createdAt: '2019-12-20T03:38:20.485Z'
-                      expires: '2019-12-21T03:38:20.485Z'
-                      uses: 0
-                      _updatedAt: '2019-12-20T03:38:20.485Z'
-                    - _id: Y5JKM4
-                      days: 0
-                      maxUses: 1
-                      rid: s7CE842q9WtvLctD7
-                      userId: sNiDqHit5nGAGFg8X
-                      createdAt: '2019-12-20T03:38:25.313Z'
-                      expires: null
-                      uses: 1
-                      _updatedAt: '2019-12-20T03:38:40.116Z'
-        '401':
-          $ref: '#/components/responses/authorizationError'
-  /api/v1/removeInvite/{_id}:
-    delete:
-      tags:
-        - Invite
-      summary: Delete Invite by ID
-      description: "Deletes an invite from the workspace.\r\n\r\n<a href='https://docs.rocket.chat/docs/permissions' target='_blank'>Permission</a> required: `create-invite-links`"
-      operationId: delete-api-v1-removeInvite-_id
-      parameters:
-        - $ref: '#/components/parameters/Auth-Token'
-        - $ref: '#/components/parameters/UserId'
-        - name: _id
-          in: path
-          description: The invite ID to be deleted.
-          required: true
-          schema:
-            type: string
-          example: kDKQ3H
-      responses:
-        '200':
-          $ref: '#/components/responses/trueSuccess'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  error:
-                    type: string
-                  errorType:
-                    type: string
-                  details:
-                    type: object
-                    properties:
-                      method:
-                        type: string
-              examples:
-                Invalid Invitation Id:
-                  value:
-                    success: false
-                    error: 'Invalid Invitation _id [invalid-invitation-id]'
-                    errorType: invalid-invitation-id
-                    details:
-                      method: removeInvite
-        '401':
-          $ref: '#/components/responses/authorizationError'
-  /api/v1/useInviteToken:
-    post:
-      tags:
-        - Invite
-      summary: Report Invite Token Usage
-      description: Report to the workspace that an invite token was used.
-      operationId: post-api-v1-useInviteToken
-      parameters:
-        - $ref: '#/components/parameters/Auth-Token'
-        - $ref: '#/components/parameters/UserId'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                token:
-                  type: string
-                  description: The invite ID being used.
-              required:
-                - token
-            examples:
-              Example:
-                value:
-                  token: iS7pza
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  room:
-                    type: object
-                    properties:
-                      rid:
-                        type: string
-                      fname:
-                        type: string
-                      name:
-                        type: string
-                      t:
-                        type: string
-                  success:
-                    type: boolean
-              examples:
-                Success:
-                  value:
-                    room:
-                      rid: QqsWiqNH2TnxtvZQq
-                      fname: a-room-name
-                      name: a-room-name
-                      t: p
-                    success: true
-        '401':
-          $ref: '#/components/responses/authorizationError'
-  /api/v1/validateInviteToken:
-    post:
-      tags:
-        - Invite
-      summary: Validate Invite Token
-      description: Checks if an invite token is valid.
-      operationId: post-api-v1-validateInviteToken
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                token:
-                  type: string
-                  description: The invite ID being validated.
-              required:
-                - token
-            examples:
-              Example:
-                value: iS7pza
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  valid:
-                    type: boolean
-                  success:
-                    type: boolean
-              examples:
-                Success:
-                  value:
-                    valid: true
-                    success: true
-        '401':
-          $ref: '#/components/responses/authorizationError'
+
   '/api/v1/method.call/{method}':
     parameters:
       - name: method
@@ -2423,27 +1996,20 @@ paths:
                     type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    message: '{"msg":"result","id":"2","result":{"rid":"67937a74f7ca7be1b5fcf599","inserted":true,"_id":"67937a74f7ca7be1b5fcf599","_updatedAt":{"$date":1737718388248},"fname":"test-websocket","name":"test-websocket","t":"c","msgs":0,"usersCount":0,"u":{"_id":"P2dgWPPw5veigwcdK","username":"funke.olasupo","name":"Funke Olasupo"},"ts":{"$date":1737718388248},"ro":false,"default":false,"sysMes":true}}'
-                    success: true
               examples:
                 Example:
                   value:
                     message: '{"msg":"result","id":"2","result":{"rid":"67937a74f7ca7be1b5fcf599","inserted":true,"_id":"67937a74f7ca7be1b5fcf599","_updatedAt":{"$date":1737718388248},"fname":"test-websocket","name":"test-websocket","t":"c","msgs":0,"usersCount":0,"u":{"_id":"P2dgWPPw5veigwcdK","username":"funke.olasupo","name":"Funke Olasupo"},"ts":{"$date":1737718388248},"ro":false,"default":false,"sysMes":true}}'
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
       operationId: post-api-v1-method.call-method
-      x-stoplight:
-        id: 3um2mxq64l7fi
       description: 'Execute a [realtime API method](https://developer.rocket.chat/apidocs/realtime-method-calls).'
       requestBody:
         content:
           application/json:
             schema:
               type: object
-              x-examples:
-                Example 1:
-                  message: '{"msg":"method","method":"createChannel","id":"2","params":["test-websocket",["doe.john"],false]}'
               required:
                 - message
               properties:
@@ -2455,14 +2021,462 @@ paths:
                 value:
                   message: '{"msg":"method","method":"createChannel","id":"2","params":["test-websocket",["doe.john"],false]}'
 
+  /api/v1/calendar-events.list:
+    get:
+      summary: Get List of Calendar Events
+      tags:
+        - Calendar Events
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties: {}
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    data:
+                      - _id: 690b02874e7e8bcf6985b27a
+                        uid: C38WSSzrGd2NCjzqJ
+                        startTime: '2025-03-26T07:17:00.000Z'
+                        endTime: '2025-03-26T07:18:00.000Z'
+                        subject: Subject8
+                        description: Description8
+                        meetingUrl: null
+                        reminderMinutesBeforeStart: 10
+                        reminderTime: '2025-03-26T07:07:00.000Z'
+                        notificationSent: false
+                        _updatedAt: '2025-11-05T07:53:43.420Z'
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''date'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-calendar-events.list
+      description: Use this endpoint to view the list of your calendar events for a specific date.
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - schema:
+            type: string
+            example: '2025-01-01'
+          in: query
+          name: date
+          description: Enter the date for which you want to view the calendar events. Use the format YYYY-MM-DD.
+          required: true
+          
+  /api/v1/calendar-events.info:
+    get:
+      summary: Get Calendar Event Info
+      tags:
+        - Calendar Events
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      uid:
+                        type: string
+                      startTime:
+                        type: string
+                      endTime:
+                        type: string
+                      subject:
+                        type: string
+                      description:
+                        type: string
+                      meetingUrl:
+                        type: string
+                        nullable: true
+                      reminderMinutesBeforeStart:
+                        type: integer
+                      reminderTime:
+                        type: string
+                      notificationSent:
+                        type: boolean
+                      _updatedAt:
+                        type: string
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    event:
+                      _id: 690b02874e7e8bcf6985b27a
+                      uid: C38WSSzrGd2NCjzqJ
+                      startTime: '2025-03-26T07:17:00.000Z'
+                      endTime: '2025-03-26T07:18:00.000Z'
+                      subject: Subject8
+                      description: Description8
+                      meetingUrl: null
+                      reminderMinutesBeforeStart: 10
+                      reminderTime: '2025-03-26T07:07:00.000Z'
+                      notificationSent: false
+                      _updatedAt: '2025-11-05T07:53:43.420Z'
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''id'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-calendar-events.info
+      description: Use this endpoint to get information about a specific calendar event.
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - schema:
+            type: string
+            example: 6909b8ea4e7e8bcf6985b1a8
+          in: query
+          name: id
+          description: Enter the event ID.
+          required: true
+          
+  /api/v1/calendar-events.create:
+    post:
+      summary: Create Calendar Event
+      tags:
+        - Calendar Events
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    id: 690b08674e7e8bcf6985b2d5
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-calendar-events.create
+      description: Create a new calendar event.
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - startTime
+                - subject
+                - description
+              properties:
+                startTime:
+                  type: string
+                  description: Enter the time at which the event starts.
+                  example: '2025-11-05T07:17:00.000Z'
+                endTime:
+                  type: string
+                  description: Enter the time at which the event ends.
+                  example: '2025-11-05T07:18:00.000Z'
+                subject:
+                  type: string
+                  description: Enter a subject for the event.
+                description:
+                  type: string
+                  description: Enter a description for the event.
+                reminderMinutesBeforeStart:
+                  type: integer
+                  description: Enter the number of minutes before the event that the reminder should be sent.
+                  example: 10
+                busy:
+                  type: boolean
+                  description: Enter whether or not you want to set your status as busy.
+                externalId:
+                  type: string
+                  example: NWwwcnU3NmM1NW03dDRtZGdkMWNjNDRmamsgcmFjaGFuYS52aXNhdmFkaXlhQHJvY2tldC5jaGF0
+                  description: 'If you want to use an external event from another calendar, enter the event ID (eid) of the external calendar event.'
+            examples:
+              Example 1:
+                value:
+                  startTime: '2025-11-05T07:17:00.000Z'
+                  endTime: '2025-11-05T07:18:00.000Z'
+                  subject: Subject8
+                  description: Description8
+                  reminderMinutesBeforeStart: 10
+                  
+  /api/v1/calendar-events.update:
+    post:
+      summary: Update Calendar Event
+      tags:
+        - Calendar Events
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''eventId'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-calendar-events.update
+      description: Update an existing calendar event.
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - eventId
+                - startTime
+                - subject
+                - description
+              properties:
+                eventId:
+                  type: string
+                  description: Enter the event ID that you want to update.
+                startTime:
+                  type: string
+                  description: Enter the time at which the event starts.
+                endTime:
+                  type: string
+                  description: Enter the time at which the event ends.
+                subject:
+                  type: string
+                  description: Enter a subject for the event.
+                description:
+                  type: string
+                  description: Enter a description for the event.
+                reminderMinutesBeforeStart:
+                  type: integer
+                  description: Enter the number of minutes before the event that the reminder should be sent.
+                busy:
+                  type: boolean
+                  description: Enter whether or not you want to set your status as busy.
+            examples:
+              Example 1:
+                value:
+                  eventId: 690b08674e7e8bcf6985b2d5
+                  startTime: '2025-11-05T07:17:00.000Z'
+                  endTime: '2025-11-05T07:18:00.000Z'
+                  subject: Subject8
+                  description: Description8
+                  reminderMinutesBeforeStart: 10
+                  
+  /api/v1/calendar-events.delete:
+    post:
+      summary: Delete Calendar Event
+      tags:
+        - Calendar Events
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: invalid-calendar-event
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-calendar-events.delete
+      description: Delete a specific calendar event.
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - eventId
+              properties:
+                eventId:
+                  type: string
+                  description: Enter the event ID that you want to delete.
+                  example: 6909b8ea4e7e8bcf6985b1a8
+            examples:
+              Example 1:
+                value:
+                  eventId: 6909b8ea4e7e8bcf6985b1a8
+                  
+  /api/v1/calendar-events.import:
+    post:
+      summary: Import Calendar Event
+      tags:
+        - Calendar Events
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    id: 690c2b2d4e7e8bcf6985b3d8
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''externalId'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-calendar-events.import
+      description: Use this endpoint to import an exteral calendar event.
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - externalId
+                - startTime
+                - subject
+                - description
+              properties:
+                externalId:
+                  type: string
+                  description: Enter the event ID (eid) of the external calendar event.
+                startTime:
+                  type: string
+                  description: Enter the time at which the event begins.
+                endTime:
+                  type: string
+                  description: Enter the time at which the event ends.
+                subject:
+                  type: string
+                  description: Enter the event subject.
+                description:
+                  type: string
+                  description: Enter the event description.
+                reminderMinutesBeforeStart:
+                  type: integer
+                  description: Enter the number of minutes before the event that the reminder must be sent.
+                busy:
+                  type: boolean
+                  description: Enter whether or not you want to set your status as busy.
+            examples:
+              Example 1:
+                value:
+                  externalId: NWwwcnU3NmM1NW03dDRtZGdkMWNjNDRmamsgcmFjaGFuYS52aXNhdmFkaXlhQHJvY2tldC5jaGF0
+                  startTime: '2025-11-05T07:17:00.000Z'
+                  endTime: '2025-11-05T07:18:00.000Z'
+                  subject: Subject8
+                  description: Description8
+                  reminderMinutesBeforeStart: 10
+                  busy: true
+
 tags:
-  - name: Auto-Translate
   - name: Commands
   - name: Email Inbox
-  - name: Invite
   - name: Licenses
   - name: Mailer
-  - name: Video Conference
+  - name: Calendar Events
+  
 components:
   parameters:
     offset:

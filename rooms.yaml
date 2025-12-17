@@ -589,6 +589,10 @@ paths:
                                       type: string
                                     value:
                                       type: string
+                        attachments:
+                          type: array
+                          items:
+                            $ref: '#/components/schemas/Attachment'
                   count:
                     type: integer
                   offset:
@@ -942,6 +946,8 @@ paths:
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/filterTypeGroup'
+        - $ref: '#/components/parameters/filterName'
       responses:
         '200':
           description: OK
@@ -2603,7 +2609,7 @@ paths:
                         attachments:
                           type: array
                           items:
-                            type: object
+                            $ref: '#/components/schemas/Attachment'
                         editedAt:
                           type: string
                         editedBy:
@@ -5309,7 +5315,7 @@ paths:
                             attachments:
                               type: array
                               items:
-                                type: object
+                                $ref: '#/components/schemas/Attachment'
                             file:
                               type: object
                               properties:
@@ -5580,11 +5586,14 @@ paths:
         * `delete-team`: To delete a team.
         * `delete-team-channel`: To delete a channel within a team, also requires the `delete-c` permission.
         * `delete-team-group`: To delete a private channel within a team, also requires the `delete-p` permission.
-        
+
+        > You can't use this endpoint to delete a team's main room. Use [Delete a Team endpoint](https://developer.rocket.chat/apidocs/delete-a-team) instead.
+
         ### Changelog
         | Version | Description   |
         | ------- | --------------|
         | 5.4.0   | Added         |
+
       operationId: get-api-v1-rooms.delete
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -5594,6 +5603,8 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - roomId
               properties:
                 roomId:
                   type: string
@@ -5602,6 +5613,33 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                'Example 1: Missing roomId':
+                  value:
+                    success: false
+                    error: The 'roomId' param is required
+                'Example 2: Missing Permission':
+                  value:
+                    success: true
+                    error: string
+                'Example 3: Cannot Delete Team Channel':
+                  value:
+                    success: false
+                    error: 'Cannot delete a team channel [error-cannot-delete-team-channel]'
+                    errorType: error-cannot-delete-team-channel
+                    details:
+                      method: eraseRoom
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/rooms.favorite:
@@ -5747,20 +5785,7 @@ paths:
                       attachments:
                         type: array
                         items:
-                          type: object
-                          properties:
-                            ts:
-                              type: string
-                            title:
-                              type: string
-                            title_link:
-                              type: string
-                            title_link_download:
-                              type: boolean
-                            type:
-                              type: string
-                            description:
-                              type: string
+                          $ref: '#/components/schemas/Attachment'
                       u:
                         type: object
                         properties:
@@ -7878,33 +7903,32 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - teamId
+                - member
               properties:
                 teamId:
                   type: string
-                  description: Enter the team ID. Alternatively, enter the `teamName` parameter and provide the team's name as the value.
-                members:
-                  type: array
-                  description: The users (IDs and roles) to add to the team.
-                  items:
-                    type: object
-                    properties:
-                      userId:
-                        type: string
-                      roles:
-                        type: array
-                        items:
-                          type: string
-              required:
-                - teamId
-                - members
+                  description: 'Enter the team ID. Alternatively, enter the `teamName` parameter and provide the team''s name as the value.'
+                member:
+                  type: object
+                  description: The users (IDs and roles) to add or update in the team.
+                  properties:
+                    userId:
+                      type: string
+                      description: Enter the user ID.
+                    roles:
+                      type: array
+                      items: {}
             examples:
               Example:
                 value:
                   teamId: 63f3efc4b000b6b6d86704b2
-                  members:
-                    - userId: rYhzFRd2QZjNwAAXX
-                      roles:
-                        - member
+                  member:
+                    userId: rYhzFRd2QZjNwAAXX
+                    roles:
+                      - owner
+                      - leader
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
@@ -9780,10 +9804,12 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The groups's id
+                  description: The groups's (private channel) ID.
+                  example: ByehQjC44FwMeiLbX
                 userId:
                   type: string
-                  description: The user's id
+                  description: The user's ID.
+                  example: oCHkav5Zf6vmpu2W2
               required:
                 - roomId
                 - userId
@@ -9842,10 +9868,12 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: The groups's id
+                  description: The groups's (private channel) ID.
+                  example: ByehQjC44FwMeiLbX
                 userId:
                   type: string
-                  description: The user's id
+                  description: The user's ID.
+                  example: nSYqWzZ4GsKTX4dyK
               required:
                 - roomId
                 - userId
@@ -9857,6 +9885,25 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The required "roomId" or "roomName" param provided does not match any group [error-room-not-found]'
+                    errorType: error-room-not-found
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.addOwner:
@@ -9883,8 +9930,12 @@ paths:
               properties:
                 roomId:
                   type: string
+                  description: Enter the group's (private channel) ID.
+                  example: ByehQjC44FwMeiLbX
                 userId:
                   type: string
+                  description: Enter the user's ID.
+                  example: nSYqWzZ4GsKTX4dyK
               required:
                 - roomId
                 - userId
@@ -9896,6 +9947,25 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The required "roomId" or "roomName" param provided does not match any group [error-room-not-found]'
+                    errorType: error-room-not-found
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.archive:
@@ -9966,7 +10036,7 @@ paths:
         - Groups
       summary: Close Group
       description: |-
-        Hides the private channel from the list of channels in the workspace sidebar, only if you're part of the group. You can still search for hidden channels using the workspace **Directory**.
+        Hides the private channel from the list of channels in the workspace sidebar, only if you're part of the group. It will reappear when someone sends a new message. You can search for hidden channels using the workspace **Directory**.
         
         ### Changelog
         | Version | Description |
@@ -10136,29 +10206,41 @@ paths:
                 name:
                   type: string
                   description: The name of the new private group.
+                  example: groupname
                 readOnly:
                   type: boolean
                   description: Set if the private channel is read-only or not. The default value is false.
+                  example: false
                 members:
                   type: array
                   description: The users to add to the private channel when it is created.
                   items:
                     type: string
+                    example: rocket.cat
                 excludeSelf:
                   type: boolean
                   description: If set to true, the user calling the endpoint is not added as a member of the private channel. The default value is false.
+                  example: false
                 customFields:
                   type: object
-                  description: 'If you have defined custom fields for your workspace, you can provide them in this object parameter.'
+                  description: |-
+                   You add custom fields for private rooms using this parameter. Enter the key and value that you want to associate with this room. For example, `{ "company": "sell-and-more" }`. The custom fields are not displayed in the workspace UI.
                 extraData:
                   type: object
                   description: |-
                     Enter the following details for the object:
-                    - `broadcast`: Whether the group should be a broadcast group
-                    - `encrypted`: Whether the group should be encrypted. 
-                    - `teamId`: Enter the team ID for which you want to create a group. You will get an error if the team does not exist.
                     
-                    For more information, see <a href="https://docs.rocket.chat/docs/channels" target="_blank">Channels</a>.
+                    Note: For more information, see <a href="https://docs.rocket.chat/docs/channels" target="_blank">Channels</a>.
+                  properties:
+                    broadcast:
+                      type: boolean
+                      description: Whether the group should be a broadcast group. False by default.
+                    encrypted:
+                      type: boolean
+                      description: Whether the group should be encrypted. False by default.
+                    teamId:
+                      type: string
+                      description: Enter the team ID for which you want to create a group. You will get an error if the team does not exist.
               required:
                 - name
             examples:
@@ -10227,6 +10309,22 @@ paths:
                       sysMes: true
                       _updatedAt: '2016-12-09T16:53:06.761Z'
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: Body param "name" is required
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.delete:
@@ -10318,25 +10416,25 @@ paths:
         - $ref: '#/components/parameters/RoomId'
         - name: latest
           in: query
-          description: The end of time range of messages to retrieve. The default value is the current date and time.
+          description: The end of the time range of messages to retrieve. The default value is the current date and time.
           schema:
             type: string
-          example: '2016-09-30T13:42:25.304Z'
+          example: '2025-09-30T13:42:25.304Z'
         - name: oldest
           in: query
-          description: The start of the time range of messages to retrieve
+          description: The start of the time range to retrieve messages.
           schema:
             type: string
-          example: '2016-05-30T13:42:25.304Z'
+          example: '2025-05-30T13:42:25.304Z'
         - name: inclusive
           in: query
-          description: Whether messages which land on latest and oldest should be included. The default value is false.
+          description: Whether messages sent on the latest and oldest dates should be included. The default value is false.
           schema:
             type: boolean
           example: true
         - name: unreads
           in: query
-          description: Whether the amount of unreads should be included. The default value is false.
+          description: Whether unread messages should be included in the response. The default value is false.
           schema:
             type: boolean
           example: false
@@ -10385,42 +10483,61 @@ paths:
                       - _id: AkzpHAvZpdnuchw2a
                         rid: ByehQjC44FwMeiLbX
                         msg: hi
-                        ts: '2016-12-09T12:50:51.555Z'
+                        ts: '2025-12-09T12:50:51.555Z'
                         u:
                           _id: y65tAmHs93aDChMWu
                           username: testing
-                        _updatedAt: '2016-12-09T12:50:51.562Z'
+                        _updatedAt: '2025-12-09T12:50:51.562Z'
                       - _id: vkLMxcctR4MuTxreF
                         t: uj
                         rid: ByehQjC44FwMeiLbX
-                        ts: '2016-12-08T15:41:37.730Z'
+                        ts: '2025-12-08T15:41:37.730Z'
                         msg: testing2
                         u:
                           _id: bRtgdhzM6PD9F8pSx
                           username: testing2
                         groupable: false
-                        _updatedAt: '2016-12-08T16:03:25.235Z'
+                        _updatedAt: '2025-12-08T16:03:25.235Z'
                       - _id: bfRW658nEyEBg75rc
                         t: uj
                         rid: ByehQjC44FwMeiLbX
-                        ts: '2016-12-07T15:47:49.099Z'
+                        ts: '2025-12-07T15:47:49.099Z'
                         msg: testing
                         u:
                           _id: nSYqWzZ4GsKTX4dyK
                           username: testing1
                         groupable: false
-                        _updatedAt: '2016-12-07T15:47:49.099Z'
+                        _updatedAt: '2025-12-07T15:47:49.099Z'
                       - _id: pbuFiGadhRZTKouhB
                         t: uj
                         rid: ByehQjC44FwMeiLbX
-                        ts: '2016-12-06T17:57:38.635Z'
+                        ts: '2025-12-06T17:57:38.635Z'
                         msg: testing
                         u:
                           _id: y65tAmHs93aDChMWu
                           username: testing
                         groupable: false
-                        _updatedAt: '2016-12-06T17:57:38.635Z'
+                        _updatedAt: '2025-12-06T17:57:38.635Z'
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The parameter "roomId" or "roomName" is required [error-room-param-not-provided]'
+                    errorType: error-room-param-not-provided
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.info:
@@ -10511,6 +10628,25 @@ paths:
                       sysMes: true
                       _updatedAt: '2020-05-21T13:16:24.772Z'
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The parameter "roomId" or "roomName" is required [error-room-param-not-provided]'
+                    errorType: error-room-param-not-provided  
         '401':
           $ref: '#/components/responses/authorizationError'
 
@@ -10544,9 +10680,11 @@ paths:
                     The group ID. You can find the IDs by using any of the following endpoints:
                     * <a href='https://developer.rocket.chat/apidocs/get-list-of-user-groups' target='_blank'>Get List of User Groups</a>: This endpoint returns all private channels in the workspace, if you have the required permissions to view them.
                     * <a href='https://developer.rocket.chat/apidocs/get-groups' target='_blank'>Get Groups</a>: This endpoint returns the private channels that you are a member of.
+                  example: ByehQjC44FwMeiLbX  
                 userId:
                   type: string
                   description: The ID of the user to be invited. You can also use the parameter `userIds` as an array to invite more than one user. For example, `["nSYqWzZ4GsKTX4dyK", "SYqWzZ4Gsasdfgh"]`
+                  example: nSYqWzZ4GsKTX4dyK
               required:
                 - roomId
                 - userId
@@ -10664,8 +10802,12 @@ paths:
               properties:
                 roomId:
                   type: string
+                  description: Enter the private room ID from which you want to remove the user.
+                  example: ByehQjC44FwMeiLbX
                 userId:
                   type: string
+                  description: Enter the user ID that you want to remove.
+                  example: nSYqWzZ4GsKTX4dyK
               required:
                 - roomId
                 - userId
@@ -10766,7 +10908,7 @@ paths:
         - Groups
       summary: Leave Group
       description: |-
-        Leave a private channel. The group owner must set another owner before leaving the group. Permission required: `leave-p`
+        Leave a private channel. Leave a private channel. If a group owner is leaving, they must set another owner before leaving the group. Permission required: `leave-p`
         
         ### Changelog
         | Version | Description |
@@ -10844,6 +10986,37 @@ paths:
                       sysMes: true
                       _updatedAt: '2016-12-09T15:22:40.656Z'
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'You are the last owner. Please set new owner before leaving the room. [error-you-are-last-owner]'
+                    errorType: error-you-are-last-owner
+                    details:
+                      method: leaveRoom
+                Example 2:
+                  value:
+                    success: false
+                    error: 'The parameter "roomId" or "roomName" is required [error-room-param-not-provided]'
+                    errorType: error-room-param-not-provided                    
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.listAll:
@@ -10951,7 +11124,7 @@ paths:
         - Groups
       summary: Get Groups
       description: |-
-        Lists all the private groups/channels the user has joined.
+        Lists all the private groups/channels that you are a member of.
         
         ### Changelog
         | Version | Description                                  |
@@ -11128,6 +11301,25 @@ paths:
                     offset: 0
                     total: 2
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The parameter "roomId" or "roomName" is required [error-room-param-not-provided]'
+                    errorType: error-room-param-not-provided
         '401':
           $ref: '#/components/responses/authorizationError'
   
@@ -11232,6 +11424,10 @@ paths:
                           type: string
                         groupable:
                           type: boolean
+                        attachments:
+                          type: array
+                          items:
+                            $ref: '#/components/schemas/Attachment'
                   count:
                     type: integer
                   offset:
@@ -11275,6 +11471,28 @@ paths:
                     offset: 0
                     total: 2
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: |-
+                      must have required property 'roomId'
+                       must have required property 'roomName'
+                       must match exactly one schema in oneOf [invalid-params]
+                    errorType: invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.moderators:
@@ -11317,6 +11535,25 @@ paths:
                         username: marc.cat
                         name: Marc Cat
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The parameter "roomId" or "roomName" is required [error-room-param-not-provided]'
+                    errorType: error-room-param-not-provided  
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.open:
@@ -11344,10 +11581,31 @@ paths:
                 roomId:
                   type: string
                   example: ByehQjC44FwMeiLbX
-                  description: The room ID.
+                  description: The room ID that you want to add to the sidebar. Alternatively, you can use the `roomName` parameter and enter the room name, instead of the ID.
+              required:
+                - roomId
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The parameter "roomId" or "roomName" is required [error-room-param-not-provided]'
+                    errorType: error-room-param-not-provided
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.removeLeader:
@@ -11382,9 +11640,11 @@ paths:
                     The private group ID. You can find the IDs by using any of the following endpoints:
                     * <a href='https://developer.rocket.chat/apidocs/get-list-of-user-groups' target='_blank'>Get List of User Groups</a>: This endpoint returns all private channels in the workspace, if you have the required permissions to view them.
                     * <a href='https://developer.rocket.chat/apidocs/get-groups' target='_blank'>Get Groups</a>: This endpoint returns the private channels that you are a member of.
+                  example: ByehQjC44FwMeiLbX
                 userId:
                   type: string
                   description: The user ID.
+                  example: oCHkav5Zf6vmpu2W2
               required:
                 - roomId
                 - userId
@@ -11448,9 +11708,11 @@ paths:
                     The private group ID. You can find the IDs by using any of the following endpoints:
                     * <a href='https://developer.rocket.chat/apidocs/get-list-of-user-groups' target='_blank'>Get List of User Groups</a>: This endpoint returns all private channels in the workspace, if you have the required permissions to view them.
                     * <a href='https://developer.rocket.chat/apidocs/get-groups' target='_blank'>Get Groups</a>: This endpoint returns the private channels that you are a member of.
+                  example: ByehQjC44FwMeiLbX
                 userId:
                   type: string
-                  description: The ID of the user to be removed from moderator role.
+                  description: The ID of the user to be removed from moderator role. Alternatively, you can use the `userName` parameter and enter the username, instead of the ID.
+                  example: oCHkav5Zf6vmpu2W2
               required:
                 - roomId
                 - userId
@@ -11462,6 +11724,30 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The parameter "roomId" or "roomName" is required [error-room-param-not-provided]'
+                    errorType: error-room-param-not-provided
+                Example 2:
+                  value:
+                    success: false
+                    error: 'The required "userId" or "username" param was not provided [error-user-param-not-provided]'
+                    errorType: error-user-param-not-provided
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.removeOwner:
@@ -11495,9 +11781,11 @@ paths:
                     The private group ID. You can find the IDs by using any of the following endpoints:
                     * <a href='https://developer.rocket.chat/apidocs/get-list-of-user-groups' target='_blank'>Get List of User Groups</a>: This endpoint returns all private channels in the workspace, if you have the required permissions to view them.
                     * <a href='https://developer.rocket.chat/apidocs/get-groups' target='_blank'>Get Groups</a>: This endpoint returns the private channels that you are a member of.
+                  example: ByehQjC44FwMeiLbX
                 userId:
                   type: string
                   description: 'The ID of the user to be removed as owner '
+                  example: oCHkav5Zf6vmpu2W2
               required:
                 - roomId
                 - userId
@@ -11509,6 +11797,30 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The parameter "roomId" or "roomName" is required [error-room-param-not-provided]'
+                    errorType: error-room-param-not-provided
+                Example 2:
+                  value:
+                    success: false
+                    error: 'The required "userId" or "username" param was not provided [error-user-param-not-provided]'
+                    errorType: error-user-param-not-provided
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.rename:
@@ -11539,9 +11851,11 @@ paths:
                     The private group's ID. You can find the IDs by using any of the following endpoints:
                     * <a href='https://developer.rocket.chat/apidocs/get-list-of-user-groups' target='_blank'>Get List of User Groups</a>: This endpoint returns all private channels in the workspace, if you have the required permissions to view them.
                     * <a href='https://developer.rocket.chat/apidocs/get-groups' target='_blank'>Get Groups</a>: This endpoint returns the private channels that you are a member of.
+                  example: ByehQjC44FwMeiLbX
                 name:
                   type: string
                   description: The new name of the private group. It can not be the same as another or the existing name.
+                  example: newname
               required:
                 - roomId
                 - name
@@ -11608,6 +11922,29 @@ paths:
                       sysMes: true
                       _updatedAt: '2016-12-09T15:57:44.686Z'
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: The bodyParam "name" is required
+                Example 2:
+                  value:
+                    success: false
+                    error: 'The parameter "roomId" or "roomName" is required [error-room-param-not-provided]'
+                    errorType: error-room-param-not-provided
+        '401':
+          $ref: '#/components/responses/authorizationError'
 
   /api/v1/groups.setAnnouncement:
     post:
@@ -11615,7 +11952,7 @@ paths:
         - Groups
       summary: Set Group Announcement
       description: |-
-        Set the private channel announcement.
+        Set the private channel announcement. Announcements are displayed at the top of the rooms, under the header.
         Permission required: `edit-room`
         
         ### Changelog
@@ -11638,9 +11975,11 @@ paths:
                     The private group ID. You can find the IDs by using any of the following endpoints:
                     * <a href='https://developer.rocket.chat/apidocs/get-list-of-user-groups' target='_blank'>Get List of User Groups</a>: This endpoint returns all private channels in the workspace, if you have the required permissions to view them.
                     * <a href='https://developer.rocket.chat/apidocs/get-groups' target='_blank'>Get Groups</a>: This endpoint returns the private channels that you are a member of.
+                  example: ByehQjC44FwMeiLbX
                 announcement:
                   type: string
                   description: The announcement to set for the private group.
+                  example: Test announcement
               required:
                 - roomId
                 - announcement
@@ -11648,7 +11987,7 @@ paths:
               Example:
                 value:
                   roomId: ByehQjC44FwMeiLbX
-                  announcement: Test out everything
+                  announcement: Test announcement
       responses:
         '200':
           description: OK
@@ -11674,7 +12013,7 @@ paths:
         - Groups
       summary: Set Group Custom Fields
       description: |-
-        Sets the <a href='https://docs.rocket.chat/docs/custom-fields' target='_blank'>custom fields</a> for the private channel.
+        Set custom fields for the private channel. These custom fields are not displayed on the workspace UI.
         Permission required: `edit-room`
         
         ### Changelog
@@ -11697,6 +12036,7 @@ paths:
                     The private group's ID. Alternatively, use the `roomName` parameter and provide the room's name as the value. You can find the IDs by using any of the following endpoints:
                     * <a href='https://developer.rocket.chat/apidocs/get-list-of-user-groups' target='_blank'>Get List of User Groups</a>: This endpoint returns all private channels in the workspace, if you have the required permissions to view them.
                     * <a href='https://developer.rocket.chat/apidocs/get-groups' target='_blank'>Get Groups</a>: This endpoint returns the private channels that you are a member of.
+                  example: euzoT67Gx6nXcn66M
                 customFields:
                   type: object
                   description: The custom fields to set for the private group.
@@ -11722,13 +12062,17 @@ paths:
                     properties:
                       _id:
                         type: string
-                      name:
-                        type: string
                       fname:
+                        type: string
+                      _updatedAt:
+                        type: string
+                      name:
                         type: string
                       t:
                         type: string
                       msgs:
+                        type: integer
+                      usersCount:
                         type: integer
                       u:
                         type: object
@@ -11737,46 +12081,175 @@ paths:
                             type: string
                           username:
                             type: string
-                      customFields:
-                        type: object
-                        properties:
-                          company:
+                          name:
                             type: string
                       ts:
                         type: string
                       ro:
                         type: boolean
-                      sysMes:
+                      sidepanel:
+                        type: object
+                        properties:
+                          items:
+                            type: array
+                            items:
+                              type: string
+                      teamId:
+                        type: string
+                      teamMain:
                         type: boolean
-                      _updatedAt:
+                      rolePrioritiesCreated:
+                        type: integer
+                      lastMessage:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          rid:
+                            type: string
+                          msg:
+                            type: string
+                          ts:
+                            type: string
+                          u:
+                            type: object
+                            properties:
+                              _id:
+                                type: string
+                              username:
+                                type: string
+                              name:
+                                type: string
+                          _updatedAt:
+                            type: string
+                          urls:
+                            type: array
+                            items:
+                              type: object
+                              properties: {}
+                          mentions:
+                            type: array
+                            items:
+                              type: object
+                              properties: {}
+                          channels:
+                            type: array
+                            items:
+                              type: object
+                              properties: {}
+                          md:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                type:
+                                  type: string
+                                value:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      type:
+                                        type: string
+                                      value:
+                                        type: string
+                      lm:
                         type: string
-                      username:
+                      encrypted:
+                        type: boolean
+                      e2eKeyId:
                         type: string
+                      retention:
+                        type: object
+                        properties:
+                          enabled:
+                            type: boolean
+                          overrideGlobal:
+                            type: boolean
+                      announcement:
+                        type: string
+                      announcementDetails:
+                        type: string
+                      customFields:
+                        type: object
+                        properties:
+                          company:
+                            type: string
                   success:
                     type: boolean
-                  developerWarning:
-                    type: string
               examples:
                 Success:
                   value:
                     group:
-                      _id: euzoT67Gx6nXcn66M
-                      name: channel.cf.1518990680083
-                      fname: channel.cf.1518990680083
+                      _id: 66c88dae237405fc05fc1f06
+                      fname: api-team2
+                      _updatedAt: '2025-11-20T08:26:12.813Z'
+                      name: api-team2
                       t: p
-                      msgs: 0
+                      msgs: 17
+                      usersCount: 2
                       u:
-                        _id: ew28FnZqipDpvKw3R
-                        username: rocketchat.internal.admin.test
+                        _id: C38WSSzrGd2NCjzqJ
+                        username: test.cat
+                        name: test.cat
+                      ts: '2024-08-23T13:25:02.959Z'
+                      ro: false
+                      sidepanel:
+                        items:
+                          - discussions
+                      teamId: 66c88daf237405fc05fc1f08
+                      teamMain: true
+                      rolePrioritiesCreated: 2
+                      lastMessage:
+                        _id: 3yXev48EfPnBwfvDN
+                        rid: 66c88dae237405fc05fc1f06
+                        msg: hello world
+                        ts: '2025-10-28T06:32:52.861Z'
+                        u:
+                          _id: C38WSSzrGd2NCjzqJ
+                          username: test.cat
+                          name: Test Cat
+                        _updatedAt: '2025-10-28T06:32:52.983Z'
+                        urls: []
+                        mentions: []
+                        channels: []
+                        md:
+                          - type: PARAGRAPH
+                            value:
+                              - type: PLAIN_TEXT
+                                value: hello world
+                      lm: '2025-10-28T06:32:52.861Z'
+                      encrypted: false
+                      e2eKeyId: 8ee4c64e1012
+                      retention:
+                        enabled: false
+                        overrideGlobal: false
+                      announcement: testing announcement
+                      announcementDetails: null
                       customFields:
                         company: sell-and-more
-                      ts: '2018-02-18T21:51:20.091Z'
-                      ro: false
-                      sysMes: true
-                      _updatedAt: '2018-02-23T11:27:01.411Z'
-                      username: rocketchat.internal.admin.test
                     success: true
-                    developerWarning: '[WARNING]: The "usernames" field has been removed for performance reasons. Please use the "*.members" endpoint to get a list of members/users in a room.'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: The bodyParam "customFields" is required with a type like object.
+                Example 2:
+                  value:
+                    success: false
+                    error: 'The parameter "roomId" or "roomName" is required [error-room-param-not-provided]'
+                    errorType: error-room-param-not-provided
         '401':
           $ref: '#/components/responses/authorizationError'
 
@@ -11808,9 +12281,11 @@ paths:
                     The private group ID. You can find the IDs by using any of the following endpoints:
                     * <a href='https://developer.rocket.chat/apidocs/get-list-of-user-groups' target='_blank'>Get List of User Groups</a>: This endpoint returns all private channels in the workspace, if you have the required permissions to view them.
                     * <a href='https://developer.rocket.chat/apidocs/get-groups' target='_blank'>Get Groups</a>: This endpoint returns the private channels that you are a member of.
+                  example: ByehQjC44FwMeiLbX
                 description:
                   type: string
-                  description: The group description
+                  description: Enter a description for the private channel.
+                  example: Test description
               required:
                 - roomId
                 - description
@@ -11836,6 +12311,27 @@ paths:
                   value:
                     description: Testing out everything.
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: The bodyParam "description" is required
+                Example 2:
+                  value:
+                    success: false
+                    error: 'The parameter "roomId" or "roomName" is required [error-room-param-not-provided]'
+                    errorType: error-room-param-not-provided  
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.setPurpose:
@@ -11891,14 +12387,15 @@ paths:
                   value:
                     purpose: Testing out everything.
                     success: true
-
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/groups.setReadOnly:
     post:
       tags:
         - Groups
       summary: Set Group as Read Only
       description: |-
-        Set private channel as <a href='https://docs.rocket.chat/docs/channels#read-only-channels' target='_blank'>read-only</a>or not. Permission required: `edit-room`
+        Set or unset a private channel as <a href='https://docs.rocket.chat/docs/channels#readonly-channels' target='_blank'>read-only</a>. Permission required: `edit-room`
         
         ### Changelog
         | Version | Description |
@@ -11920,9 +12417,11 @@ paths:
                     The private group ID. You can find the IDs by using any of the following endpoints:
                     * <a href='https://developer.rocket.chat/apidocs/get-list-of-user-groups' target='_blank'>Get List of User Groups</a>: This endpoint returns all private channels in the workspace, if you have the required permissions to view them.
                     * <a href='https://developer.rocket.chat/apidocs/get-groups' target='_blank'>Get Groups</a>: This endpoint returns the private channels that you are a member of.
+                  example: ByehQjC44FwMei5LbX
                 readOnly:
                   type: boolean
                   description: Boolean to represent the group read-only status
+                  example: true
               required:
                 - roomId
                 - readOnly
@@ -11998,6 +12497,27 @@ paths:
                       joinCodeRequired: true
                       muted: [ ]
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The parameter "roomId" or "roomName" is required [error-room-param-not-provided]'
+                    errorType: error-room-param-not-provided
+                Example 2:
+                  value:
+                    success: false
+                    error: The bodyParam "readOnly" is required
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.setTopic:
@@ -12006,7 +12526,7 @@ paths:
         - Groups
       summary: Set Group Topic
       description: |-
-        Sets the topic for the private channel. Permission required: `edit-room`
+        Sets the topic for the private channel. The topic is displayed next to the room name in the header. Permission required: `edit-room`
         
         ### Changelog
         | Version | Description |
@@ -12028,9 +12548,11 @@ paths:
                     The group ID. You can find the IDs by using any of the following endpoints:
                     * <a href='https://developer.rocket.chat/apidocs/get-list-of-user-groups' target='_blank'>Get List of User Groups</a>: This endpoint returns all private channels in the workspace, if you have the required permissions to view them.
                     * <a href='https://developer.rocket.chat/apidocs/get-groups' target='_blank'>Get Groups</a>: This endpoint returns the private channels that you are a member of.
+                  example: ByehQjC44FwMeiLbX
                 topic:
                   type: string
-                  description: The group topic
+                  description: Enter the group's topic.
+                  example: QA discussions
               required:
                 - roomId
                 - topic
@@ -12056,6 +12578,27 @@ paths:
                   value:
                     topic: Testing out everything.
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: The bodyParam "topic" is required
+                Example 2:
+                  value:
+                    success: false
+                    error: 'The parameter "roomId" or "roomName" is required [error-room-param-not-provided]'
+                    errorType: error-room-param-not-provided
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.setType:
@@ -12092,7 +12635,7 @@ paths:
                     * <a href='https://developer.rocket.chat/apidocs/get-groups' target='_blank'>Get Groups</a>: This endpoint returns the private channels that you are a member of.
                 type:
                   type: string
-                  description: The group type
+                  description: Enter the group type.
               required:
                 - roomId
                 - type
@@ -12168,6 +12711,22 @@ paths:
                       joinCodeRequired: true
                       muted: [ ]
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: The bodyParam "type" is required                    
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.unarchive:
@@ -12191,6 +12750,8 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - roomId
               properties:
                 roomId:
                   type: string
@@ -12199,6 +12760,25 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The parameter "roomId" or "roomName" is required [error-room-param-not-provided]'
+                    errorType: error-room-param-not-provided
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.files:
@@ -12225,6 +12805,8 @@ paths:
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/query'
         - $ref: '#/components/parameters/fields'
+        - $ref: '#/components/parameters/filterTypeGroup'
+        - $ref: '#/components/parameters/filterName'
       responses:
         '200':
           description: OK
@@ -12321,6 +12903,28 @@ paths:
                     offset: 0
                     total: 1
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: |-
+                      must have required property 'roomId'
+                       must have required property 'roomName'
+                       must match exactly one schema in oneOf [invalid-params]
+                    errorType: invalid-params  
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.setEncrypted:
@@ -12353,7 +12957,7 @@ paths:
                   description: The group ID. Alternatively, use the `roomName` parameter and enter the group name.
               required:
                 - encrypted
-                - roomName
+                - roomId
             examples:
               Example:
                 value:
@@ -12477,19 +13081,17 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - roomId
               properties:
-                teamName:
+                roomId:
                   type: string
-                  description: Enter the team name. This parameter is required if `teamId` is not provided.
-                teamId:
-                  type: string
-                  description: Enter the team ID. This parameter is required if `teamName` is not provided.
-                roomsToRemove:
-                  type: array
-                  description: The room IDs to delete along with the team.
-                  items:
-                    type: string
-                    example: "8dugqGhuRvCBLdZft"
+                  description: Enter the private channel that you want to convert to a private team.
+                  example: JZ8Y2dLfYhsg323Rf
+            examples:
+              Example 1:
+                value:
+                  roomId: JZ8Y2dLfYhsg323Rf
       responses:
         '200':
           description: OK
@@ -12523,7 +13125,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Success             s:
+                Success:             
                   value:
                     team:
                       _id: 6172b15bc563fc000acc462e
@@ -12532,7 +13134,7 @@ paths:
                       createdAt: '2021-10-22T12:40:59.928Z'
                       createdBy:
                         _id: d26x6zSkaPSe5gCyy
-                        username: rodriq
+                        username: rod
                       _updatedAt: '2021-10-22T12:40:59.928Z'
                       roomId: h3HLZkQdrWCPg2RN7
                     success: true
@@ -12632,6 +13234,25 @@ paths:
                           - moderator
                         _id: ehPuGyZBedznJsQHp
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'The parameter "roomId" or "roomName" is required [error-room-param-not-provided]'
+                    errorType: error-room-param-not-provided          
         '401':
           $ref: '#/components/responses/authorizationError'
 
@@ -12839,14 +13460,811 @@ paths:
         | Version | Description                          |
         | ------- | ------------------------------------ |
         | 7.4.0   | Added                                |
+
+  /api/v1/findOrCreateInvite:
+    post:
+      tags:
+        - Room Invites
+      summary: Find or Create Invite
+      description: |- 
+        Creates or return an existing invite with the specified parameters. 
+        
+        <a href="https://docs.rocket.chat/docs/permissions" target="_blank">Permission</a> required: `create-invite-links`
+      operationId: post-api-v1-findOrCreateInvite
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rid:
+                  type: string
+                  description: The room ID that the invite is being created for.
+                days:
+                  type: integer
+                  description: The number of days that the invite will be valid for. Send `0` for unlimited.
+                maxUses:
+                  type: integer
+                  description: The number of times that the invite can be used. Send `0` for unlimited.
+              required:
+                - rid
+                - days
+                - maxUses
+            examples:
+              Example:
+                value:
+                  rid: csFYrDeixJG7PnrAh
+                  days: 10
+                  maxUses: 0
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                    days:
+                      type: integer
+                    maxUses:
+                      type: integer
+                    rid:
+                      type: string
+                    userId:
+                      type: string
+                    createdAt:
+                      type: string
+                    expires:
+                      type: string
+                      nullable: true
+                    uses:
+                      type: integer
+                    _updatedAt:
+                      type: string
+              examples:
+                Success:
+                  value:
+                    - _id: kDKQ3H
+                      days: 1
+                      maxUses: 1
+                      rid: s7CE842q9WtvLctD7
+                      userId: sNiDqHit5nGAGFg8X
+                      createdAt: '2019-12-20T03:31:56.774Z'
+                      expires: '2019-12-21T03:31:56.774Z'
+                      uses: 1
+                      _updatedAt: '2019-12-20T03:33:40.065Z'
+                    - _id: 99ScEP
+                      days: 1
+                      maxUses: 0
+                      rid: s7CE842q9WtvLctD7
+                      userId: sNiDqHit5nGAGFg8X
+                      createdAt: '2019-12-20T03:38:20.485Z'
+                      expires: '2019-12-21T03:38:20.485Z'
+                      uses: 0
+                      _updatedAt: '2019-12-20T03:38:20.485Z'
+                    - _id: Y5JKM4
+                      days: 0
+                      maxUses: 1
+                      rid: s7CE842q9WtvLctD7
+                      userId: sNiDqHit5nGAGFg8X
+                      createdAt: '2019-12-20T03:38:25.313Z'
+                      expires: null
+                      uses: 1
+                      _updatedAt: '2019-12-20T03:38:40.116Z'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+
+  /api/v1/rooms.roles:
+    get:
+      summary: Get Room Roles
+      tags:
+        - Rooms
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  roles:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        rid:
+                          type: string
+                        u:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                            name:
+                              type: string
+                        roles:
+                          type: array
+                          items:
+                            type: string
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    roles:
+                      - _id: 668c75b2b319fc80bf0ed3a1
+                        rid: 658282732dd9f928ad989e98
+                        u:
+                          _id: P2dgWPPw5veigwcdK
+                          username: jane.doe
+                          name: Jane Doe
+                        roles:
+                          - moderator
+                      - _id: 6819edfa30c9c71254e45d18
+                        rid: 658282732dd9f928ad989e98
+                        u:
+                          _id: 74HrDgvTTxT56o8R8
+                          username: mary.shelley
+                          name: Mary Shelley
+                        roles:
+                          - leader
+                      - _id: 668c7717b319fc80bf0ed3b0
+                        rid: 658282732dd9f928ad989e98
+                        u:
+                          _id: qHWhoJwwgk4bwcoNq
+                          username: test.user
+                        roles:
+                          - moderator
+                      - _id: 6690c37ab319fc80bf0ed407
+                        rid: 658282732dd9f928ad989e98
+                        u:
+                          _id: C38WSSzrGd2NCjzqJ
+                          username: test.cat
+                        roles:
+                          - owner
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  errorType:
+                    type: string
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    errorType: error-invalid-params
+                    error: must have required property 'rid'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-rooms.roles
+      description: |-
+       Get the list of roles in a specific room. This endpoint returns users with the `Owner`, `Leader`, and `Moderator` room roles. You can refer to the <a href='https://docs.rocket.chat/docs/roles-in-rocketchat' target='_blank'>Roles user guide</a> for more details on roles in Rocket.Chat.
+       
+       ### Changelog
+       | Version | Description                          |
+       | ------- | ------------------------------------ |
+       | 7.10.0   | Added                               |
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - schema:
+            type: string
+            example: 658282732dd9f928ad989e98
+          in: query
+          name: rid
+          description: Enter the room ID for which you want to view the room roles.
+          required: true
+  /api/v1/rooms.isMember:
+    get:
+      summary: Check Room Member
+      tags:
+        - Rooms
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isMember:
+                    type: boolean
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    isMember: true
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                User not available in room:
+                  value:
+                    success: false
+                    error: error-user-not-found
+                Missing user ID parameter:
+                  value:
+                    success: false
+                    error: |-
+                      must have required property 'userId'
+                       must have required property 'username'
+                       must match exactly one schema in oneOf [invalid-params]
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-rooms.isMember
+      description: 'Use this endpoint to check whether or not a user is a member of a specific room. If the user is not a member of the room, an error response (`error-user-not-found`) is returned. You can only get the results for the rooms that you are a member of. Otherwise, you get a forbidden error response.'
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: roomId
+          description: Enter the room ID in which you want to check for the user.
+          required: true
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - schema:
+            type: string
+          in: query
+          name: userId
+          description: 'Enter the user ID that you want to check. Alternatively, you can use the `username` parameter and provide the user name instead of the user ID.'
+          required: true
+  /api/v1/rooms.autocomplete.channelAndPrivate.withPagination:
+    get:
+      summary: Autocomplete Room Name With Pagination
+      tags:
+        - Rooms
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        fname:
+                          type: string
+                        name:
+                          type: string
+                        t:
+                          type: string
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    items:
+                      - _id: 66c82e1e237405fc05fc1ef4
+                        fname: api-team
+                        name: api-team
+                        t: c
+                      - _id: 66c88dae237405fc05fc1f06
+                        fname: api-team2
+                        name: api-team2
+                        t: p
+                    total: 4
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: The 'selector' param is required
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-rooms.autocomplete.channelAndPrivate.withPagination
+      description: 'List the public and private rooms whose names match a given string, excluding discussions, DMs, and omnichannel rooms. The endpoint is valuable when performing search operations. It returns only rooms that the user belongs to. This endpoint includes pagination query parameters.'
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/sort'
+        - schema:
+            type: string
+            example: '{"name":"api"}'
+          in: query
+          name: selector
+          description: The search term to be completed. It only applies to the room name.
+          required: true
+  '/api/v1/rooms.mediaConfirm/{rid}/{fileId}':
+    parameters:
+      - schema:
+          type: string
+          example: 66cd971f6fcbb8e8b3cf8e69
+        name: rid
+        in: path
+        required: true
+        description: Enter the room ID where you want to check the uploaded file.
+      - schema:
+          type: string
+          example: 69424442ddfe6ceaf280f93f
+        name: fileId
+        in: path
+        required: true
+        description: Enter the file ID.
+    post:
+      summary: Check Uploaded File
+      tags:
+        - Rooms
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      rid:
+                        type: string
+                      ts:
+                        type: string
+                      msg:
+                        type: string
+                      file:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          name:
+                            type: string
+                          type:
+                            type: string
+                          size:
+                            type: integer
+                          format:
+                            type: string
+                      files:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            name:
+                              type: string
+                            type:
+                              type: string
+                            size:
+                              type: integer
+                            format:
+                              type: string
+                      attachments:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            title:
+                              type: string
+                            title_link:
+                              type: string
+                            title_link_download:
+                              type: boolean
+                            image_dimensions:
+                              type: object
+                              properties:
+                                width:
+                                  type: integer
+                                height:
+                                  type: integer
+                            image_preview:
+                              type: string
+                            image_url:
+                              type: string
+                            image_type:
+                              type: string
+                            image_size:
+                              type: integer
+                            type:
+                              type: string
+                      u:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          username:
+                            type: string
+                          name:
+                            type: string
+                      _updatedAt:
+                        type: string
+                      urls:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    message:
+                      _id: 2ZABtFgt89fYYSw3Q
+                      rid: GENERAL
+                      ts: '2025-12-17T05:49:55.825Z'
+                      msg: ''
+                      file:
+                        _id: 69424442ddfe6ceaf280f93f
+                        name: 44.jpg
+                        type: image/jpeg
+                        size: 71224
+                        format: jpeg
+                      files:
+                        - _id: 69424442ddfe6ceaf280f93f
+                          name: 44.jpg
+                          type: image/jpeg
+                          size: 71224
+                          format: jpeg
+                        - _id: 69424483ddfe6ceaf280f941
+                          name: thumb-44.jpg
+                          type: image/jpeg
+                          size: 13473
+                          format: jpeg
+                      attachments:
+                        - title: 44.jpg
+                          title_link: /file-upload/69424442ddfe6ceaf280f93f/44.jpg
+                          title_link_download: true
+                          image_dimensions:
+                            width: 368
+                            height: 360
+                          image_preview: /9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQgsW+OGY6OKR5o3hGJfr6n3n5JkvPdSpXal1BmuoReom//Z
+                          image_url: /file-upload/69424483ddfe6ceaf280f941/44.jpg
+                          image_type: image/jpeg
+                          image_size: 71224
+                          type: file
+                      u:
+                        _id: C38WSSzrGd2NCjzqJ
+                        username: test.cat
+                        name: test cat
+                      _updatedAt: '2025-12-17T05:49:55.959Z'
+                      urls: []
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: '[invalid-file]'
+                    errorType: invalid-file
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-rooms.mediaConfirm-rid-fileId
+      description: Use this endpoint to get details of a specific file uploaded to a room.
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+          
+  /api/v1/listInvites:
+    get:
+      tags:
+        - Room Invites
+      summary: List Invites
+      description: |- 
+        Lists all of the invites on the workspace. 
+        
+        <a href="https://docs.rocket.chat/docs/permissions" target="_blank">Permission</a> required: `create-invite-links`
+      operationId: get-api-v1-listInvites
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                    days:
+                      type: integer
+                    maxUses:
+                      type: integer
+                    rid:
+                      type: string
+                    userId:
+                      type: string
+                    createdAt:
+                      type: string
+                    expires:
+                      type: string
+                      nullable: true
+                    uses:
+                      type: integer
+                    _updatedAt:
+                      type: string
+              examples:
+                Success:
+                  value:
+                    - _id: kDKQ3H
+                      days: 1
+                      maxUses: 1
+                      rid: s7CE842q9WtvLctD7
+                      userId: sNiDqHit5nGAGFg8X
+                      createdAt: '2019-12-20T03:31:56.774Z'
+                      expires: '2019-12-21T03:31:56.774Z'
+                      uses: 1
+                      _updatedAt: '2019-12-20T03:33:40.065Z'
+                    - _id: 99ScEP
+                      days: 1
+                      maxUses: 0
+                      rid: s7CE842q9WtvLctD7
+                      userId: sNiDqHit5nGAGFg8X
+                      createdAt: '2019-12-20T03:38:20.485Z'
+                      expires: '2019-12-21T03:38:20.485Z'
+                      uses: 0
+                      _updatedAt: '2019-12-20T03:38:20.485Z'
+                    - _id: Y5JKM4
+                      days: 0
+                      maxUses: 1
+                      rid: s7CE842q9WtvLctD7
+                      userId: sNiDqHit5nGAGFg8X
+                      createdAt: '2019-12-20T03:38:25.313Z'
+                      expires: null
+                      uses: 1
+                      _updatedAt: '2019-12-20T03:38:40.116Z'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+
+  /api/v1/removeInvite/{_id}:
+    delete:
+      tags:
+        - Room Invites
+      summary: Delete Invite by ID
+      description: "Deletes an invite from the workspace.\r\n\r\n<a href='https://docs.rocket.chat/docs/permissions' target='_blank'>Permission</a> required: `create-invite-links`"
+      operationId: delete-api-v1-removeInvite-_id
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - name: _id
+          in: path
+          description: The invite ID to be deleted.
+          required: true
+          schema:
+            type: string
+          example: kDKQ3H
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+              examples:
+                Invalid Invitation Id:
+                  value:
+                    success: false
+                    error: 'Invalid Invitation _id [invalid-invitation-id]'
+                    errorType: invalid-invitation-id
+                    details:
+                      method: removeInvite
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  /api/v1/useInviteToken:
+    post:
+      tags:
+        - Room Invites
+      summary: Report Invite Token Usage
+      description: Report to the workspace that an invite token was used.
+      operationId: post-api-v1-useInviteToken
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  description: The invite ID being used.
+              required:
+                - token
+            examples:
+              Example:
+                value:
+                  token: iS7pza
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  room:
+                    type: object
+                    properties:
+                      rid:
+                        type: string
+                      fname:
+                        type: string
+                      name:
+                        type: string
+                      t:
+                        type: string
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    room:
+                      rid: QqsWiqNH2TnxtvZQq
+                      fname: a-room-name
+                      name: a-room-name
+                      t: p
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  /api/v1/validateInviteToken:
+    post:
+      tags:
+        - Room Invites
+      summary: Validate Invite Token
+      description: Checks if an invite token is valid.
+      operationId: post-api-v1-validateInviteToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  description: The invite ID being validated.
+              required:
+                - token
+            examples:
+              Example:
+                value: iS7pza
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  valid:
+                    type: boolean
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    valid: true
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+
 tags:
   - name: Channels
   - name: Directory
   - name: Groups
   - name: Rooms
   - name: Teams
+  - name: Room Invites
 
 components:
+  schemas:
+    Attachment:
+      type: object
+      properties:
+        ts:
+          type: string
+          example: 1970-01-01T00:00:00.000Z
+        title:
+          type: string
+        title_link:
+          type: string
+        title_link_download:
+          type: boolean
+        image_dimensions:
+          type: object
+          properties:
+            width:
+              type: integer
+              example: 444
+            height:
+              type: integer
+              example: 360
+        image_preview:
+          type: string
+          example: /9j/2wBDAAYEBQ...
+        image_url:
+          type: string
+          example: /file-upload/PNTaE9SBQasdpAwk2/img_1.jpg
+        image_type:
+          type: string
+          example: image/jpeg
+        image_size:
+          type: integer
+          example: 26674
+        type:
+          type: string
+          example: file
+        description:
+          type: string
+          example: ''
   parameters:
     Optional-RoomId:
       name: roomId
@@ -12937,6 +14355,27 @@ components:
       schema:
         type: string
       example: rbAXPnMktTFbNpwtJ
+    filterName:
+      name: name
+      in: query
+      description: The name of the file to search for.
+      schema:
+        type: string
+      example: logo
+    filterTypeGroup:
+      name: typeGroup
+      in: query
+      description: |-
+        Filter results by the type of file. Available options:
+        - `all`: Return all file types.
+        - `image`: Filter by image files.
+        - `video`: Filter by video files.
+        - `audio`: Filter by audio files.
+        - `text`: Filter by text documents.
+        - `application`: Filter by other file types.
+      schema:
+        type: string
+      example: images
   responses:
     trueSuccess:
       description: OK

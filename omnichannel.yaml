@@ -2,14 +2,14 @@ openapi: 3.0.0
 info:
   version: 1.0.0
   title: Omnichannel
-#  description: |-
+# description: |-
 #    With the Rocket.Chat [Omnichannel](https://docs.rocket.chat/use-rocket.chat/omnichannel) feature, you can talk to your customers and website visitors, regardless of the channel they choose to connect with you.
 
 #    The Omnichannel endpoints are of two types:
 
 #    * **Endpoints requiring authentication**: The workspace admins and managers use the endpoints that require authentication with a login method.
 #    * **Endpoints not requiring authentication**: Visitors can use the endpoints that require no authentication. These endpoints require a visitor `token` which is like an authentication parameter for visitors. Visitors can [register themselves](livechat-endpoints/visitor/register-a-new-livechat-visitor.md) by providing a random unique string as the `token` which can be used for other such endpoints.
-    
+
 #    This section includes the following endpoints:
 #    * **Livechat**: Manage livechat users, visitors, conversations, and view analytics.
 #    * **Voice Channel**: Initiate and receive [calls](https://docs.rocket.chat/use-rocket.chat/rocket.chat-voice-channel) with visitors.
@@ -103,7 +103,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Users
+        - Omnichannel Users
     get:
       summary: Get List of Agents or Managers
       description: |-
@@ -225,7 +225,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Users
+        - Omnichannel Users
   '/api/v1/livechat/users/{type}/{_id}':
     get:
       summary: Get Agent or Manager Information
@@ -311,7 +311,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Users
+        - Omnichannel Users
     delete:
       summary: Remove Agent or Manager
       description: |-
@@ -319,7 +319,7 @@ paths:
         Permission required: `view-livechat-manager`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |0.42.0            | Added       |
       operationId: delete-api-v1-livechat-users-type-_id
@@ -347,13 +347,12 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Users
+        - Omnichannel Users
   '/api/v1/livechat/agent.info/{rid}/{token}':
     get:
       summary: Get Agent Information
       description: |-
         Get the Livechat agent data according to the path variables. To get the `rid` and `token` values, call the <a href="https://developer.rocket.chat/apidocs/get-rooms" target="_blank">Get Rooms</a> endpoint to retrieve the details of all rooms.
-
       operationId: get-api-v1-livechat-agent
       parameters:
         - name: rid
@@ -420,7 +419,7 @@ paths:
                         maxNumberSimultaneousChat: '5'
                     success: true
       tags:
-        - Livechat Agents
+        - Omnichannel Agents
   '/api/v1/livechat/agent.next/{token}':
     get:
       summary: Get Next Agent Information
@@ -474,7 +473,7 @@ paths:
                       username: livechat.agent
                     success: true
       tags:
-        - Livechat Agents
+        - Omnichannel Agents
   /api/v1/omnichannel/agents/available:
     get:
       summary: Get Available Agent Information
@@ -555,13 +554,108 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Agents
+        - Omnichannel Agents
+
+  /api/v1/livechat/agents.saveInfo:
+    post:
+      summary: Update Agent Info
+      tags:
+        - Omnichannel Agents
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-livechat-agents.saveInfo
+      description: |-
+       Update an Omnichannel agent's information. Permission required: `manage-livechat-agents`.
+       
+       ### Changelog
+       | Version      | Description |
+       | ---------------- | ------------|
+       |7.11.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - agentId
+                - agentData
+                - agentDepartments
+              properties:
+                agentId:
+                  type: string
+                  description: Enter the agent's ID.
+                agentData:
+                  type: object
+                  description: Enter the agent data that you want to update.
+                agentDepartments:
+                  type: array
+                  description: Enter the agent's departments. You can leave it as an empty string if you don't want to add any departments.
+                  items:
+                    type: string
+            examples:
+              Example 1:
+                value:
+                  agentId: 4zqiF9BSWmBTe6yvt
+                  agentData: {}
+                  agentDepartments:
+                    - ''
+  /api/v1/livechat/agent.status:
+    post:
+      summary: Update Agent Status
+      tags:
+        - Omnichannel Agents
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    status: not-available
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-livechat-agent.status
+      description: |-
+       Update the agent's livechat status. If the agent is available, using this endpoint will set the status as unavailable, and vice versa. Permission required: `view-l-room`. 
+       If you want to update the status of another agent, you need the `manage-livechat-agents` permission. If you have configured business hours, the agent status cannot be updated outside of business hours.
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                agentId:
+                  type: string
+                  description: 'Enter this parameter if you want to update the livechat status of another agent. If this parameter is not provided, the agent that is calling the endpoint will be updated.'
+                  example: J6Q87AnWP5aNc9xhx
+            examples:
+              Example 1:
+                value:
+                  agentId: J6Q87AnWP5aNc9xhx        
   /api/v1/omnichannel/contact:
     post:
       summary: Register or Update Omnichannel Contact
       description: |-
-        > **Note:** This endpoint will be replaced. Refer to the new API documentations for [registering](https://developer.rocket.chat/apidocs/register-omnichannel-contacts) and [updating](https://developer.rocket.chat/apidocs/update-omnichannel-contact) contact for updated usage and features.
-    
+        > **Note:** This endpoint will be replaced. Refer to the new API documentation for [registering](https://developer.rocket.chat/apidocs/register-omnichannel-contacts) and [updating](https://developer.rocket.chat/apidocs/update-omnichannel-contact) contact for updated usage and features.
+
         Register a guest user as a new omnichannel contact.
         Permission required: `view-l-room`
       operationId: post-api-v1-omnichannel-contact
@@ -644,12 +738,11 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Contacts
+        - Omnichannel Contacts
   /api/v1/omnichannel/contact.search:
     get:
       summary: Search Contacts
       description: |-
-      
         > **Note:** This endpoint will be replaced. Refer to the [new API documentation](https://developer.rocket.chat/apidocs/search-omnichannel-contacts) for updated usage and features.
 
         Find contacts by name, email, phone number, or any custom field values stored in the database.
@@ -660,7 +753,7 @@ paths:
         ```
         curl --location --globoff 'http://localhost:3000/api/v1/omnichannel/contact.search?custom={%20%22Subscription%22%3A%20%22premium%22%20}' \
         --header 'X-Auth-Token: b5BKhblglC5OU0AfB_Tl9dKmOb0zXUvWK-nhNT_aE8V' \
-        --header 'X-User-Id: CkCPNcvsvCDfmWLqC'        
+        --header 'X-User-Id: CkCPNcvsvCDfmWLqC'
         ```
       operationId: get-api-v1-contact.search
       parameters:
@@ -756,12 +849,12 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       tags:
-        - Livechat Contacts
+        - Omnichannel Contacts
   /api/v1/omnichannel/contacts:
     post:
       summary: Register Omnichannel Contacts
       tags:
-        - Livechat Contacts
+        - Omnichannel Contacts
       responses:
         '200':
           description: OK
@@ -774,10 +867,6 @@ paths:
                     type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    contactId: 674eeb4343725ce31dd9bdae
-                    success: true
               examples:
                 Example 1:
                   value:
@@ -796,11 +885,6 @@ paths:
                     type: string
                   errorType:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'must have required property ''emails'' [invalid-params]'
-                    errorType: invalid-params
               examples:
                 Example 1:
                   value:
@@ -821,7 +905,7 @@ paths:
         Permission required: `create-livechat-contact`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |6.1.0             | Added       |
       parameters:
@@ -832,15 +916,6 @@ paths:
           application/json:
             schema:
               type: object
-              x-examples:
-                Example 1:
-                  name: John
-                  phones:
-                    - '+12345678'
-                  emails:
-                    - email@example.com
-                  customFileds: {}
-                  contactManager: fffff
               required:
                 - name
                 - phones
@@ -886,7 +961,7 @@ paths:
     post:
       summary: Update Omnichannel Contact
       tags:
-        - Livechat Contacts
+        - Omnichannel Contacts
       responses:
         '200':
           description: OK
@@ -978,40 +1053,6 @@ paths:
                         type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    contact:
-                      _id: 67487f45e98719b7908d0f29
-                      createdAt: '2024-11-28T14:33:41.487Z'
-                      name: John
-                      emails:
-                        - address: email@example.com
-                      phones:
-                        - phoneNumber: '+123383883838'
-                      channels:
-                        - name: widget
-                          visitor:
-                            visitorId: 67499b2243725ce31dd57fc7
-                            source:
-                              type: widget
-                          blocked: false
-                          verified: false
-                          details:
-                            type: widget
-                            destination: example.com
-                          lastChat:
-                            _id: bC5x3zmBdgtmA4m3W
-                            ts: '2024-11-29T10:44:55.016Z'
-                      customFields: {}
-                      unknown: false
-                      preRegistration: false
-                      _updatedAt: '2024-11-29T13:31:43.595Z'
-                      conflictingFields: []
-                      lastChat:
-                        _id: bC5x3zmBdgtmA4m3W
-                        ts: '2024-11-29T10:44:55.016Z'
-                      contactManager: 9sLvmAcQk4EAGdi6e
-                    success: true
               examples:
                 Example 1:
                   value:
@@ -1060,11 +1101,6 @@ paths:
                     type: string
                   errorType:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'must have required property ''emails'' [invalid-params]'
-                    errorType: invalid-params
               examples:
                 Example 1:
                   value:
@@ -1084,7 +1120,7 @@ paths:
         Update omnichannel contact. Permission required: `update-livechat-contact`.
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |6.1.0             | Added       |
       parameters:
@@ -1095,50 +1131,6 @@ paths:
           application/json:
             schema:
               type: object
-              x-examples:
-                Example 1:
-                  contactId: 67487f45e98719b7908d0f29
-                  name: John
-                  phones:
-                    - '+123383883838'
-                  emails:
-                    - email@example.com
-                  contactManager: 9sLvmAcQk4EAGdi6e
-                  customFields: {}
-                  wipeConflicts: true
-              required:
-                - contactId
-              properties:
-                contactId:
-                  type: string
-                  description: The contact's ID.
-                  default: 67487f45e98719b7908d0f29
-                name:
-                  type: string
-                  description: The contact's name.
-                  example: John
-                phones:
-                  type: array
-                  description: An array of the contact's phone number(s).
-                  items:
-                    type: string
-                    example: '+123456789'
-                emails:
-                  type: array
-                  description: An array of the contact's email address(es).
-                  items:
-                    type: string
-                    example: example@email.com
-                contactManager:
-                  type: string
-                  description: The contact manager's ID.
-                  example: 9sLvmAcQk4EAGdi6e
-                customFields:
-                  type: object
-                  description: Object defining the custom fields to be updated.
-                wipeConflicts:
-                  type: boolean
-                  description: Boolean to determine whether conflicts impacting contacts should be automatically resolved.
             examples:
               Example 1:
                 value:
@@ -1151,13 +1143,249 @@ paths:
                   contactManager: 9sLvmAcQk4EAGdi6e
                   customFields: {}
                   wipeConflicts: false
+                  
+  /api/v1/omnichannel/contacts.conflicts:
+    post:
+      summary: Resolve Contact Conflicts
+      tags:
+        - Omnichannel Contacts
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      createdAt:
+                        type: string
+                      name:
+                        type: string
+                      channels:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                            visitor:
+                              type: object
+                              properties:
+                                visitorId:
+                                  type: string
+                                source:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                            blocked:
+                              type: boolean
+                            verified:
+                              type: boolean
+                            details:
+                              type: object
+                              properties:
+                                type:
+                                  type: string
+                                destination:
+                                  type: string
+                            lastChat:
+                              type: object
+                              properties:
+                                _id:
+                                  type: string
+                                ts:
+                                  type: string
+                            field:
+                              type: string
+                            value:
+                              type: string
+                            verifiedAt:
+                              type: string
+                      customFields:
+                        type: object
+                        properties:
+                          field1:
+                            type: string
+                          field2:
+                            type: string
+                      unknown:
+                        type: boolean
+                      preRegistration:
+                        type: boolean
+                      _updatedAt:
+                        type: string
+                      lastChat:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          ts:
+                            type: string
+                      activity:
+                        type: array
+                        items:
+                          type: string
+                      emails:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            address:
+                              type: string
+                      phones:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+                      conflictingFields:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    result:
+                      _id: 68341efdd387e3d7509267fb
+                      createdAt: '2025-05-26T07:57:49.616Z'
+                      name: Jane Doe
+                      channels:
+                        - name: widget
+                          visitor:
+                            visitorId: 68341ef9d387e3d7509267fa
+                            source:
+                              type: widget
+                          blocked: false
+                          verified: true
+                          details:
+                            type: widget
+                            destination: writing-demo.dev.rocket.chat
+                          lastChat:
+                            _id: cz5uyBRyKPfoWHBat
+                            ts: '2025-05-26T07:57:49.661Z'
+                          field: email
+                          value: jane.doe@email.com
+                          verifiedAt: '2025-05-26T07:58:26.895Z'
+                      customFields:
+                        field1: field1
+                        field2: field2
+                      unknown: false
+                      preRegistration: false
+                      _updatedAt: '2025-05-26T11:35:31.241Z'
+                      lastChat:
+                        _id: cz5uyBRyKPfoWHBat
+                        ts: '2025-05-26T07:57:49.661Z'
+                      activity:
+                        - 2025-05
+                      emails:
+                        - address: jane.doe@email.com
+                      phones: []
+                      conflictingFields: []
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''contactId'' [invalid-params]'
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: error-contact-has-no-conflicts
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/permissionError'
+      operationId: post-api-v1-omnichannel-contacts.conflicts
+      description: |-
+        Use this endpoint to resolve conflicts in a contact's details.
+        
+        This endpoint works only when a contact has conflicts.
+        Conflicts can occur when a verified contact uses another channel to communicate with you. 
+        For example, a contact's details (phone number, email address, custom fields) were saved when they 
+        accessed the Livechat widget.
+        Next time, they use WhatsApp and they provide different details.
+        By default, the values are overwritten. 
+        If you choose to flag conflicts, the conflicting detail will be displayed and you can decide the values to keep.
+        You can flag conflicts in custom fields using the [custom fields endpoints](https://developer.rocket.chat/apidocs/send-custom-field-value) or the [Set Custom Field method](https://developer.rocket.chat/apidocs/livechatwidget-api)
+        from the livechat widget API.
+
+        Permission required: `update-livechat-contact`
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        |7.7.0             | Added       |
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - contactId
+              properties:
+                contactId:
+                  type: string
+                  description: The contact's ID.
+                name:
+                  type: string
+                  description: The contact's name.
+                customFields:
+                  type: object
+                  description: You can enter custom fields if you have created any.
+                  properties:
+                    field1:
+                      type: string
+                    field2:
+                      type: string
+                contactManager:
+                  type: string
+                  description: The contact's assigned agent or manager.
+                wipeConflicts:
+                  type: boolean
+                  description: 'To overwrite the old data with the new details, enter `true`.'
+            examples:
+              Example 1:
+                value:
+                  contactId: 68135a22e384b3ad127c7dbc
+                  name: John Doe
+                  customFields:
+                    field1: field1
+                    field2: field2
+                  contactManager: test.agent
+                  wipeConflicts: false
+
   /api/v1/omnichannel/contacts.get:
     get:
       summary: Get Omnichannel Contact
       tags:
-        - Livechat Contacts
+        - Omnichannel Contacts
       description: |
-        Retrieve a single omnichannel contact by its unique `contactId`.  
+        Retrieve a single omnichannel contact by its unique `contactId`.
 
         Required permission: `view-livechat-contact`.
       operationId: get-api-v1-omnichannel-contacts.get
@@ -1166,7 +1394,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: contactId
           in: query
-          description: The contact's unique ID. 
+          description: The contact's unique ID.
           required: true
           schema:
             type: string
@@ -1270,44 +1498,6 @@ paths:
                           properties: {}
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    contact:
-                      _id: 673c76df47a6c9b89dd263d8
-                      createdAt: '2024-11-19T11:30:39.710Z'
-                      name: John Doe
-                      channels:
-                        - name: widget
-                          visitor:
-                            visitorId: 673c76df1e2e6feb77939c70
-                            source:
-                              type: widget
-                          blocked: false
-                          verified: true
-                          details:
-                            type: widget
-                            destination: example.com
-                          lastChat:
-                            _id: ixnGsLNT8rTL9eYY3
-                            ts: '2024-11-19T11:30:39.724Z'
-                          field: email
-                          value: mail@example.com
-                          verifiedAt: '2024-11-19T11:31:58.997Z'
-                      customFields:
-                        social-number: 123456-12345
-                        address: P.O. Box 123 3456 Home Rd. Somewhere in the world
-                        zip-code: 123456-099
-                      unknown: false
-                      _updatedAt: '2024-11-19T11:33:55.424Z'
-                      lastChat:
-                        _id: ixnGsLNT8rTL9eYY3
-                        ts: '2024-11-19T11:30:39.724Z'
-                      conflictingFields: []
-                      emails:
-                        - address: mail@example.com
-                      contactManager: cbTgcixmLxYSdFmmZ
-                      phones: []
-                    success: true
               examples:
                 Example:
                   value:
@@ -1381,7 +1571,7 @@ paths:
     get:
       summary: Search Omnichannel Contacts
       tags:
-        - Livechat Contacts
+        - Omnichannel Contacts
       responses:
         '200':
           description: OK
@@ -1486,45 +1676,6 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    contacts:
-                      - _id: 673be1711e2e6feb77939a7b
-                        createdAt: '2024-11-19T00:53:05.468Z'
-                        name: Boris Doe
-                        emails:
-                          - address: boris@doe.com
-                        phones: []
-                        channels:
-                          - name: widget
-                            visitor:
-                              visitorId: 673be2101e2e6feb77939a7f
-                              source:
-                                type: widget
-                            blocked: false
-                            verified: false
-                            details:
-                              type: widget
-                              destination: example.com
-                            lastChat:
-                              _id: NMee5zFPv62N7RAhh
-                              ts: '2024-11-19T00:55:46.723Z'
-                        customFields:
-                          social-number: 45600-00
-                        unknown: false
-                        _updatedAt: '2024-11-19T00:56:43.140Z'
-                        conflictingFields: []
-                        lastChat:
-                          _id: NMee5zFPv62N7RAhh
-                          ts: '2024-11-19T00:55:46.723Z'
-                        contactManager:
-                          _id: mAwAgmNndK7SHnQ89
-                          name: Jane
-                          username: Jane
-                    count: 1
-                    offset: 0
-                    total: 1
-                    success: true
               examples:
                 Example 1:
                   value:
@@ -1578,11 +1729,6 @@ paths:
                     type: string
                   errorType:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'must be number [invalid-params]'
-                    errorType: invalid-params
               examples:
                 Example 1:
                   value:
@@ -1626,7 +1772,7 @@ paths:
     get:
       summary: Get channels grouped by contact name
       tags:
-        - Livechat Contacts
+        - Omnichannel Contacts
       responses:
         '200':
           description: OK
@@ -1678,26 +1824,6 @@ paths:
                           type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    channels:
-                      - name: widget
-                        visitor:
-                          visitorId: 234567987655weygcbg
-                          source:
-                            type: widget
-                        blocked: false
-                        verified: true
-                        details:
-                          type: widget
-                          destination: example.com
-                        lastChat:
-                          _id: sdfgjhgfdfeG
-                          ts: '2024-11-22T14:53:36.500Z'
-                        field: email
-                        value: example@mail.com
-                        verifiedAt: '2024-11-22T14:55:21.354Z'
-                    success: true
               examples:
                 Success Example:
                   value:
@@ -1732,11 +1858,6 @@ paths:
                     type: string
                   errorType:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'must have required property ''contactId'' [invalid-params]'
-                    errorType: invalid-params
               examples:
                 Bad Request Example:
                   value:
@@ -1754,10 +1875,6 @@ paths:
                     type: string
                   message:
                     type: string
-                x-examples:
-                  Example 1:
-                    status: error
-                    message: You must be logged in to do this.
               examples:
                 'Unauthorized Example ':
                   value:
@@ -1779,14 +1896,14 @@ paths:
         Permission required: `view-livechat-contact`.
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |6.1.0             | Added       |
   /api/v1/omnichannel/contacts.history:
     get:
       summary: Get Contact History
       tags:
-        - Livechat Contacts
+        - Omnichannel Contacts
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
@@ -1803,11 +1920,6 @@ paths:
                     type: string
                   errorType:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'must have required property ''contactId'' [invalid-params]'
-                    errorType: invalid-params
               examples:
                 Example 1:
                   value:
@@ -1827,10 +1939,6 @@ paths:
                     type: boolean
                   error:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'User does not have the permissions required for this action [error-unauthorized]'
               examples:
                 Example 1:
                   value:
@@ -1841,7 +1949,7 @@ paths:
         Get contact's history. Permission required: `view-livechat-contact-history`.
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |6.1.0             | Added       |
       parameters:
@@ -1867,7 +1975,7 @@ paths:
     get:
       summary: Check Contacts Existence
       tags:
-        - Livechat Contacts
+        - Omnichannel Contacts
       responses:
         '200':
           description: OK
@@ -1880,10 +1988,6 @@ paths:
                     type: boolean
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    exists: true
-                    success: true
               examples:
                 Contact found:
                   value:
@@ -1906,15 +2010,6 @@ paths:
                     type: string
                   errorType:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: |-
-                      must have required property 'contactId'
-                       must have required property 'email'
-                       must have required property 'phone'
-                       must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params
               examples:
                 Error from missing query parameters:
                   value:
@@ -1952,12 +2047,168 @@ paths:
         This identifies whether a contact is already registered using a given query parameter such as `email` or `phone` or `contactId`.
         **Note**: You must provide only one of the parameters in the request.
 
-        **Required permission**: `view-livechat-contact`. 
+        **Required permission**: `view-livechat-contact`.
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |7.2.0             | Added       |
+  /api/v1/omnichannel/contacts.block:
+    post:
+      summary: Block Omnichannel Contact
+      tags:
+        - Omnichannel Contacts
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''visitor'' [invalid-params]'
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: error-contact-not-found
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-omnichannel-contacts.block
+      description: |-
+       <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+       
+       Use this endpoint to block an Omnichannel on a specific channel. Permission required: `block-livechat-contact`
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - visitor
+              properties:
+                visitor:
+                  type: object
+                  required:
+                    - visitorId
+                    - source
+                  description: The visitor object contains the details of the contact that you want to block.
+                  properties:
+                    visitorId:
+                      type: string
+                      description: |-
+                       Enter the visitor ID of the contact that you want to block. To get the visitor ID, you can use the <a href='https://developer.rocket.chat/apidocs/search-omnichannel-contacts' target='_blank'>Search Omnichannel Contacts</a> endpoint.
+                      example: 68f0d2c201e202fefed83672
+                    source:
+                      type: object
+                      required:
+                        - type
+                      description: The source object contains the channels from which you want to block the contact. To get the room types, you can use the <a href='https://developer.rocket.chat/apidocs/view-omnichannel-room-sources' target='_blank'>View Omnichannel Room Sources</a> endpoint.
+                      properties:
+                        type:
+                          type: string
+                          description: Enter the type of channel from which you want to block the contact.
+                          example: widget
+            examples:
+              Example 1:
+                value:
+                  visitor:
+                    visitorId: 68f0d2c201e202fefed83672
+                    source:
+                      type: widget
+  /api/v1/omnichannel/contacts.unblock:
+    post:
+      summary: Unblock Omnichannel Contact
+      tags:
+        - Omnichannel Contacts
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''visitor'' [invalid-params]'
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: error-contact-not-found
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-omnichannel-contacts.unblock
+      description: |-
+       <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+       
+       Use this endpoint to unblock an Omnichannel on a specific channel. Permission required: `unblock-livechat-contact`
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - visitor
+              properties:
+                visitor:
+                  type: object
+                  required:
+                    - visitorId
+                    - source
+                  description: The visitor object contains the details of the contact that you want to unblock.
+                  properties:
+                    visitorId:
+                      type: string
+                      description: |-
+                       Enter the visitor ID of the contact that you want to unblock.
+                      example: 68f0d2c201e202fefed83672
+                    source:
+                      type: object
+                      required:
+                        - type
+                      description: The source object contains the channels from which you want to unblock the contact.
+                      properties:
+                        type:
+                          type: string
+                          description: Enter the type of channel from which you want to unblock the contact.
+                          example: widget
+            examples:
+              Example 1:
+                value:
+                  visitor:
+                    visitorId: 68f0d2c201e202fefed83672
+                    source:
+                      type: widget
   /api/v1/livechat/analytics/agent-overview:
     get:
       summary: Get Agent Analytics Overview
@@ -1966,7 +2217,7 @@ paths:
         Permission required: `view-livechat-manager`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |6.4.0             | Added       |
       operationId: get-api-v1-livechat-analytics-agent-overview
@@ -1976,7 +2227,7 @@ paths:
         - name: name
           in: query
           description: |-
-            The data that you want to get. The available options are:  
+            The data that you want to get. The available options are:
             * `Total_conversations`
             * `Avg_chat_duration`
             * `Total_messages`
@@ -2081,7 +2332,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Statistics
+        - Omnichannel Statistics
   /api/v1/livechat/analytics/overview:
     get:
       summary: Get Analytics Overview
@@ -2090,7 +2341,7 @@ paths:
         Permission required: `view-livechat-manager`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |6.4.0             | Added       |
       operationId: get-api-v1-livechat-analytics-overview
@@ -2191,7 +2442,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Statistics
+        - Omnichannel Statistics
   /api/v1/livechat/config:
     get:
       tags:
@@ -2201,7 +2452,7 @@ paths:
         Get Livechat widget configuration information and additional visitor data.
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |0.70.0             | Added       |
       operationId: get-api-v1-livechat-config
@@ -2460,15 +2711,15 @@ paths:
                     success: true
   /api/v1/livechat/rooms:
     get:
-      summary: Get List of Livechat Rooms
+      summary: Get List of Omnichannel Rooms
       description: |-
-        Retrieves a list of Livechat rooms. You can use the available query parameters to filter the response.
+        Retrieves a list of Omnichannel rooms. You can use the available query parameters to filter the response.
         At least one of the following permissions is required:
         * `view-livechat-rooms`
         * `view-l-room`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |7.0.0             | Remove support of filtering by agent's username |
         |2.4.0             | Added support to the parameter `roomName`|
@@ -2531,7 +2782,7 @@ paths:
             type: boolean
           in: query
           name: onhold
-          description: Whether you want to include livechat rooms that are on hold or not.
+          description: Whether you want to include rooms that are on hold or not.
         - schema:
             type: string
           in: query
@@ -2730,10 +2981,10 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Rooms
+        - Omnichannel Rooms
   /api/v1/livechat/room:
     get:
-      summary: Get or Create Livechat Rooms
+      summary: Get or Create Omnichannel Rooms
       description: 'Get the data of an existing room of a visitor. If a room doesn''t exist for the visitor, a new room is created.'
       operationId: get-api-v1-livechat-room
       parameters:
@@ -3014,11 +3265,11 @@ paths:
                     success: false
                     error: 'Match error: Missing key ''token'''
       tags:
-        - Livechat Rooms
+        - Omnichannel Rooms
   /api/v1/livechat/room.close:
     post:
-      summary: Close Livechat Room by Visitor
-      description: 'If you are a visitor, use this endpoint to close the livechat room.'
+      summary: Close Omnichannel Room by Visitor
+      description: 'If you are a visitor, use this endpoint to close the room.'
       operationId: post-api-v1-livechat-room.close
       parameters: []
       responses:
@@ -3066,7 +3317,7 @@ paths:
                     error: 'must have required property ''rid'' [invalid-params]'
                     errorType: invalid-params
       tags:
-        - Livechat Rooms
+        - Omnichannel Rooms
       requestBody:
         content:
           application/json:
@@ -3089,11 +3340,11 @@ paths:
                 value:
                   rid: XFzMqgn33DcsQkpJp
                   token: iNKE8a6k6cjbqWhWd
-                  
+
   /api/v1/livechat/room.closeByUser:
     post:
-      summary: Close Livechat Room
-      description: 'If you are an Omnichannel user (agent, manager), use this endpoint to close the livechat room.'
+      summary: Close Omnichannel Room
+      description: 'If you are an Omnichannel user (agent, manager), use this endpoint to close the room.'
       operationId: post-api-v1-livechat-room.closeByUser
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -3127,7 +3378,7 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       tags:
-        - Livechat Rooms
+        - Omnichannel Rooms
       requestBody:
         content:
           application/json:
@@ -3138,7 +3389,7 @@ paths:
               properties:
                 rid:
                   type: string
-                  description: Enter the livechat room ID.
+                  description: Enter the room ID.
                   example: 8ceKgWvo5qT5TrCRN
                 comment:
                   type: string
@@ -3146,7 +3397,7 @@ paths:
                 forceClose:
                   type: boolean
                   description: |-
-                    Use this parameter to forcefully close a livechat room. Before using this parameter, make sure to enable the [`Force Close Conversation API`](https://docs.rocket.chat/v1/docs/omnichannel-admins-guide#api) setting in Administration > Settings > Omnichannel > API. Exercise caution when using this parameter and reserve it for situations involving misconfigured rooms.
+                    Use this parameter to forcefully close a room. Before using this parameter, make sure to enable the [`Force Close Conversation API`](https://docs.rocket.chat/v1/docs/omnichannel-admins-guide#api) setting in Administration > Settings > Omnichannel > API. Exercise caution when using this parameter and reserve it for situations involving misconfigured rooms.
                 tags:
                   type: array
                   description: 'Add [tags](https://docs.rocket.chat/docs/tags).'
@@ -3160,7 +3411,7 @@ paths:
                   properties:
                     sendToVisitor:
                       type: boolean
-                      description: Enter whether you want to send the livechat transcript to the visitor.
+                      description: Enter whether you want to send the transcript to the visitor.
                     requestData:
                       type: object
                       properties:
@@ -3183,12 +3434,12 @@ paths:
                     requestData:
                       email: test@example.com
                       subject: transcript
-                  
+
   /api/v1/livechat/room.join:
     get:
-      summary: Join Livechat Room
+      summary: Join Omnichannel Room
       description: |-
-        Call this endpoint to join a Livechat room.
+        Call this endpoint to join an Omnichannel room.
         Permission required: `view-l-room`
       operationId: get-api-v1-livechat-room.join
       parameters:
@@ -3232,12 +3483,12 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Rooms
+        - Omnichannel Rooms
   /api/v1/livechat/room.saveInfo:
     post:
-      summary: Update Livechat Room
+      summary: Update Omnichannel Room
       description: |-
-        Edit a Livechat room. Update the topic, tags, and other details of a Livechat room. 
+        Edit an Omnichannel room. Update the topic, tags, and other details.
         Permission required: `view-l-room`
 
         ### Changelog
@@ -3341,14 +3592,14 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Rooms
+        - Omnichannel Rooms
 
   /api/v1/livechat/room.transfer:
     post:
-      summary: Transfer Livechat Room
+      summary: Transfer Omnichannel Room
       description: |-
         > This endpoint has been deprecated in the 7.0.0 <a href="https://github.com/RocketChat/Rocket.Chat/releases" target="_blank">release</a>. Use the <a href="https://developer.rocket.chat/apidocs/forward-livechat-room" target="_blank">Forward Livechat Room</a> endpoint instead.
-        
+
         Transfer an omnichannel conversation to another department.
       operationId: post-api-v1-livechat-room.transfer
       requestBody:
@@ -3434,11 +3685,17 @@ paths:
                     errorType: invalid-params
       deprecated: true
       tags:
-        - Livechat Rooms
+        - Omnichannel Rooms
   /api/v1/livechat/room.forward:
     post:
-      summary: Forward Livechat Room
-      description: The chatbot agent forwards the chat to a human agent.
+      summary: Forward Omnichannel Room
+      description: |-
+        Use this endpoint to transfer  a chat to another department or agent. When transfering the chat to another department, you can also specify a default agent in that department to receive the chat if  an [auto-assignment routing algorithm](https://docs.rocket.chat/docs/queue-types-routing-algorithm) is enabled.
+        
+        ### Changelog
+        | Version | Description  |
+        | ------- |--------------|
+        | 7.10.0  | Added support for selecting a default agent when transferring chat to another department.         |
       operationId: post-api-v1-livechat-room.forward
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -3462,7 +3719,7 @@ paths:
               required:
                 - roomId
             examples:
-              Example 1:
+              Example:
                 value:
                   roomId: XFzMqgn33DcsQkpJp
                   userId: iNKE8a6k6cjbqWhWd
@@ -3483,7 +3740,7 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                Example:
                   value:
                     success: false
                     error: 'must have required property ''roomId'' [invalid-params]'
@@ -3491,7 +3748,7 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       tags:
-        - Livechat Rooms
+        - Omnichannel Rooms
   '/api/v1/livechat/transfer.history/{rid}':
     get:
       summary: Get Department Transfer History
@@ -3602,11 +3859,11 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Rooms
+        - Omnichannel Rooms
   /api/v1/livechat/room.survey:
     post:
-      summary: Survey Livechat Room
-      description: Provide feedback on a Livechat room.
+      summary: Survey Omnichannel Room
+      description: Provide feedback on an Omnichannel room.
       operationId: post-api-v1-livechat-room.survey
       requestBody:
         content:
@@ -3686,14 +3943,14 @@ paths:
                     error: 'must have required property ''token'' [invalid-params]'
                     errorType: invalid-params
       tags:
-        - Livechat Rooms
+        - Omnichannel Rooms
   /api/v1/livechat/room.onHold:
     post:
-      summary: Put Livechat Room on Hold
+      summary: Put Omnichannel Room on Hold
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
 
-        Put an active Livechat conversation on hold.
+        Put an active conversation on hold.
       operationId: post-api-v1-livechat-room.onHold
       parameters:
         - $ref: '#/components/parameters/UserId'
@@ -3706,7 +3963,7 @@ paths:
               properties:
                 roomId:
                   type: string
-                  description: Active Livechat room ID.
+                  description: Active Omnichannel room ID.
               required:
                 - roomId
             examples:
@@ -3738,11 +3995,11 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       tags:
-        - Livechat Rooms
+        - Omnichannel Rooms
   '/api/v1/livechat/upload/{rid}':
     post:
       summary: Upload Files to Room
-      description: Upload files to a Livechat room.
+      description: Upload files to an Omnichannel room.
       operationId: post-api-v1-livechat-upload
       parameters:
         - name: x-visitor-token
@@ -3943,17 +4200,17 @@ paths:
                     success: false
                     error: unauthorized
       tags:
-        - Livechat Rooms
+        - Omnichannel Rooms
   '/api/v1/livechat/room/{rid}/priority':
     post:
-      summary: Set Livechat Room Priority
+      summary: Set Omnichannel Room Priority
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
-        Set the priority of a Livechat room.<br>
-        
+
+        Set the priority of an Omnichannel room.<br>
+
         Permission required: `view-l-room`
-        
+
         ### Changelog
         | Version | Description  |
         | ------- |--------------|
@@ -4010,16 +4267,16 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Rooms
+        - Omnichannel Rooms
     delete:
-      summary: Remove Livechat Room Priority
+      summary: Remove Omnichannel Room Priority
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
-        Remove the priority set to a Livechat room.<br>
-        
+
+        Remove the priority set to an Omnichannel room.<br>
+
         Permission required: `view-l-room`
-        
+
         ### Changelog
         | Version | Description  |
         | ------- |--------------|
@@ -4042,7 +4299,236 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Rooms
+        - Omnichannel Rooms
+        
+  /api/v1/livechat/rooms.removeAllClosedRooms:
+    post:
+      summary: Remove Closed Omnichannel Rooms
+      tags:
+        - Omnichannel Rooms
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  removedRooms:
+                    type: integer
+                  success:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    removedRooms: 19
+                    success: true
+              examples:
+                Example 1:
+                  value:
+                    removedRooms: 19
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'User does not have the permissions required for this action [error-unauthorized]'
+      operationId: post-api-v1-livechat-rooms.removeAllClosedRooms
+      description: |-
+       Use this endpoint to remove closed Omnichannel rooms. 
+       
+       Permission required: `remove-closed-livechat-rooms`. (On the workspace UI, go to **Administration** > **Workspace** > **Permissions**. Search for the `Remove All Closed Omnichannel Rooms` permission. By default, livechat managers and monitors have this permission.)
+       
+       ### Changelog
+       | Version      | Description |
+       | ---------------- | ------------|
+       |7.11.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+
+  /api/v1/livechat/rooms.delete:
+    post:
+      summary: Remove a Closed Omnichannel Room
+      tags:
+        - Omnichannel Rooms
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  errorType:
+                    type: string
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    errorType: invalid-params
+                    error: must have required property 'roomId'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-livechat-rooms.delete
+      description: |-
+       Use this endpoint to delete a specific closed Omnichannel room from the workspace. Permission required: `remove-closed-livechat-room`
+       
+       ### Changelog
+       | Version      | Description |
+       | ---------------- | ------------|
+       |7.12.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - roomId
+              properties:
+                roomId:
+                  type: string
+                  description: Enter the ID of the closed livechat room that you want to delete.
+                  example: nXHYnNu38qKRRtZDi
+            examples:
+              Example 1:
+                value:
+                  roomId: nXHYnNu38qKRRtZDi
+  /api/v1/livechat/room.resumeOnHold:
+    post:
+      summary: Resume Room On-Hold
+      tags:
+        - Omnichannel Rooms
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''roomId'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-livechat-room.resumeOnHold
+      description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+
+        Use this endpoint to resume a room that was on-hold. Permission required: `view-l-room`
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - roomId
+              properties:
+                roomId:
+                  type: string
+                  description: Enter the Omnichannel room ID that you want to resume.
+                  example: dCBiZX3XPWyPsa6pt
+            examples:
+              Example 1:
+                value:
+                  roomId: dCBiZX3XPWyPsa6pt
+  /api/v1/livechat/rooms/filters:
+    get:
+      summary: View Omnichannel Room Sources
+      tags:
+        - Omnichannel Rooms
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  filters:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                        id:
+                          type: string
+                        alias:
+                          type: string
+                        sidebarIcon:
+                          type: string
+                        defaultIcon:
+                          type: string
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    filters:
+                      - {}
+                      - type: app
+                        id: 5e3dadaa-e774-40d8-b3a4-b93b91747168
+                        alias: WhatsApp Cloud
+                        sidebarIcon: whatsapp
+                        defaultIcon: whatsapp
+                      - type: app
+                        id: 99ecc706-ca5a-4b8f-bbaf-c28de243f1db
+                        alias: WhatsApp Sandbox
+                        sidebarIcon: whatsapp
+                        defaultIcon: whatsapp
+                      - type: app
+                        id: fc96e832-5472-49e4-aace-1521a7ebeaa6
+                        alias: Telegram
+                        sidebarIcon: telegram
+                        defaultIcon: telegram
+                      - type: sms
+                      - type: widget
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-livechat-rooms-filters
+      description: 'Use this endpoint to view the sources of the Omnichannel rooms, for example, an app or the Livechat widget. Permission required: `view-l-room`'
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+        
   /api/v1/livechat/department:
     get:
       summary: Get List of Departments
@@ -4053,7 +4539,7 @@ paths:
         * `view-l-room`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |2.2.0             | Added support to pagination    |
         |0.42.0            | Added       |
@@ -4202,7 +4688,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
       operationId: get-api-v1-livechat-department
     post:
       summary: Register New Department
@@ -4210,9 +4696,9 @@ paths:
         Permission required: `manage-livechat-departments`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
-        |1.0.0           | New fields for department updated      
+        |1.0.0           | New fields for department updated |
         |0.42.0          | Added       |
       operationId: post-api-v1-livechat-department
       parameters:
@@ -4241,7 +4727,7 @@ paths:
                       description: Whether you want to enable the department. The value can be boolean true or false.
                     showOnRegistration:
                       type: boolean
-                      description: |- 
+                      description: |-
                         You can let visitors choose the department they want to talk to. The option will appear to your customer in the Livechat widget. The value can be boolean true or false.
                     name:
                       type: string
@@ -4251,7 +4737,7 @@ paths:
                       description: The email ID associated with the department.
                     showOnOfflineForm:
                       type: boolean
-                      description: |- 
+                      description: |-
                         If you want your department to be displayed during off-business hours. The value can be boolean true or false.
                     description:
                       type: string
@@ -4267,7 +4753,7 @@ paths:
                         description: The agent ID that you want to assign to the department.
                       count:
                         type: integer
-                        description: |- 
+                        description: |-
                           The number of chats served by the agent. Enter a value if you want to reset the stored value.
                           Note: This field is used by the routing algorithm to determine the agents that have served the least number of chats and assign new chats to them.
                       order:
@@ -4276,11 +4762,11 @@ paths:
                 departmentUnit:
                   type: object
                   description: |-
-                    Assign the department to a [unit](https://docs.rocket.chat/docs/units). 
+                    Assign the department to a [unit](https://docs.rocket.chat/docs/units).
 
                     **Guidelines for assigning departments to a unit**
                     - Permission required: `manage-livechat-departments`
-                    - If the user making the request is a [monitor](https://docs.rocket.chat/docs/monitors), they must be a supervisor of the specified unit. 
+                    - If the user making the request is a [monitor](https://docs.rocket.chat/docs/monitors), they must be a supervisor of the specified unit.
                     - If the user is not a monitor (such as an admin or [manager](https://docs.rocket.chat/docs/managers)), any unit can be associated to the department
                   properties:
                     _id:
@@ -4379,7 +4865,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
   '/api/v1/livechat/department/{_id}':
     get:
       summary: Get Department Information
@@ -4390,7 +4876,7 @@ paths:
         * `view-l-room`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |2.2.0             | Added `includeAgents` query parameter|
         |0.42.0            | Added       |
@@ -4481,7 +4967,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
     put:
       summary: Update Department
       description: |-
@@ -4491,7 +4977,7 @@ paths:
         * To add agents: `add-livechat-department-agents`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |0.42.0            | Added       |
       operationId: put-api-v1-livechat-department-_id
@@ -4556,11 +5042,11 @@ paths:
                 departmentUnit:
                   type: object
                   description: |-
-                    Assign the department to a [unit](https://docs.rocket.chat/docs/units). 
+                    Assign the department to a [unit](https://docs.rocket.chat/docs/units).
 
                     **Guidelines for assigning departments to a unit**
                     - Permission required: `manage-livechat-departments`
-                    - If the user making the request is a [monitor](https://docs.rocket.chat/docs/monitors), they must be a supervisor of the specified unit. 
+                    - If the user making the request is a [monitor](https://docs.rocket.chat/docs/monitors), they must be a supervisor of the specified unit.
                     - If the user is not a monitor (such as an admin or [manager](https://docs.rocket.chat/docs/managers)), any unit can be associated to the department.
                     - Providing an empty object `({})`, undefined `({ _id: undefined})`, or null `({ _id: null})` for this parameter removes the department from the associated unit.
                   properties:
@@ -4582,7 +5068,7 @@ paths:
                     - agentId: SQafHvoFPuB57NmBD
                       username: john.doe
                   departmentUnit:
-                    _id: 66f46dc59a0766c20712d698                
+                    _id: 66f46dc59a0766c20712d698
       responses:
         '200':
           description: OK
@@ -4678,7 +5164,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
     delete:
       summary: Remove Department
       description: |-
@@ -4687,7 +5173,7 @@ paths:
         * `remove-livechat-department`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |0.42.0            | Added       |
       operationId: delete-api-v1-livechat-department-_id
@@ -4708,12 +5194,12 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
   /api/v1/livechat/department.autocomplete:
     get:
       summary: Autocomplete Department
       description: |-
-        Autocomplete the department name. 
+        Autocomplete the department name.
         At least one of the following permissions is required:
           * `view-livechat-departments`
           * `view-l-room`
@@ -4808,7 +5294,7 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
   '/api/v1/livechat/department/{_id}/agents':
     get:
       summary: Get Agents of Department
@@ -4887,7 +5373,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
     post:
       summary: Update Agents of Department
       description: |-
@@ -4948,7 +5434,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
   /api/v1/livechat/department.listByIds:
     get:
       summary: Get Departments by ID
@@ -5110,13 +5596,13 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
   /api/v1/livechat/analytics/departments/amount-of-chats:
     get:
       summary: Get Number of Chats
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Gives the number of chat rooms by department. Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-departments-amount-of-chats
       responses:
@@ -5167,7 +5653,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
@@ -5191,7 +5677,7 @@ paths:
       summary: Get Average Service Time
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Returns average service time (in seconds) for chats by department. Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-departments-average-service-time
       parameters:
@@ -5253,13 +5739,13 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
   /api/v1/livechat/analytics/departments/average-chat-duration-time:
     get:
       summary: Get Average Chat Duration
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Returns the average chat duration of each department. Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-departments-average-chat-duration-time
       parameters:
@@ -5319,13 +5805,13 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
   /api/v1/livechat/analytics/departments/total-service-time:
     get:
       summary: Get Total Service Time
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Gives the total service time (in seconds) by department. Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-departments-total-service-time
       parameters:
@@ -5389,13 +5875,13 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
   /api/v1/livechat/analytics/departments/average-waiting-time:
     get:
       summary: Get Average Waiting Time
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Gives the average visitor waiting time (in seconds) by department. Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-departments-average-waiting-time
       parameters:
@@ -5455,13 +5941,13 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
   /api/v1/livechat/analytics/departments/total-transferred-chats:
     get:
       summary: Get Total Transferred Chats
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Gives the total number of transferred chats by department. Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-departments-total-transferred-chats
       parameters:
@@ -5523,13 +6009,13 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
   /api/v1/livechat/analytics/departments/total-abandoned-chats:
     get:
       summary: Get Total Abandoned Chats
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Gives the total number of abandoned chats (rooms) by department. Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-departments-total-abandoned-chats
       parameters:
@@ -5599,13 +6085,13 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
   /api/v1/livechat/analytics/departments/percentage-abandoned-chats:
     get:
       summary: Get Percentage of Abandoned Chats
-      description: |- 
+      description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Gives the percentage of abandoned chats per department. Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-departments-percentage-abandoned-chats
       parameters:
@@ -5667,17 +6153,198 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
+  /api/v1/livechat/departments/archived:
+    get:
+      summary: Get Archived Departments
+      tags:
+        - Omnichannel Departments
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  departments:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        enabled:
+                          type: boolean
+                        showOnRegistration:
+                          type: boolean
+                        name:
+                          type: string
+                        email:
+                          type: string
+                        showOnOfflineForm:
+                          type: boolean
+                        type:
+                          type: string
+                        _updatedAt:
+                          type: string
+                        abandonedRoomsCloseCustomMessage:
+                          type: string
+                        allowReceiveForwardOffline:
+                          type: boolean
+                        chatClosingTags:
+                          type: array
+                          items:
+                            type: object
+                            properties: {}
+                        departmentsAllowedToForward:
+                          type: array
+                          items:
+                            type: object
+                            properties: {}
+                        description:
+                          type: string
+                        fallbackForwardDepartment:
+                          type: string
+                        offlineMessageChannelName:
+                          type: string
+                        requestTagBeforeClosingChat:
+                          type: boolean
+                        waitingQueueMessage:
+                          type: string
+                        numAgents:
+                          type: integer
+                        ancestors:
+                          type: array
+                          items:
+                            type: string
+                        parentId:
+                          type: string
+                        archived:
+                          type: boolean
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    departments:
+                      - _id: 66fa9f5d6ea9eba859b650b6
+                        enabled: false
+                        showOnRegistration: true
+                        name: gfyh88
+                        email: john@doe.com
+                        showOnOfflineForm: true
+                        type: d
+                        _updatedAt: '2025-03-28T11:17:22.654Z'
+                        abandonedRoomsCloseCustomMessage: ''
+                        allowReceiveForwardOffline: true
+                        chatClosingTags: []
+                        departmentsAllowedToForward: []
+                        description: ''
+                        fallbackForwardDepartment: ''
+                        offlineMessageChannelName: ''
+                        requestTagBeforeClosingChat: false
+                        waitingQueueMessage: ''
+                        numAgents: 0
+                        ancestors:
+                          - 67b84af9382738a951e6f3b8
+                        parentId: 67b84af9382738a951e6f3b8
+                        archived: true
+                      - _id: 66a7680360ab9acca6a57fad
+                        enabled: false
+                        name: test-dept
+                        description: ''
+                        showOnRegistration: false
+                        showOnOfflineForm: false
+                        requestTagBeforeClosingChat: false
+                        email: test-dept@example.com
+                        chatClosingTags: []
+                        offlineMessageChannelName: ''
+                        abandonedRoomsCloseCustomMessage: ''
+                        waitingQueueMessage: ''
+                        departmentsAllowedToForward: []
+                        fallbackForwardDepartment: ''
+                        allowReceiveForwardOffline: false
+                        type: d
+                        _updatedAt: '2025-04-02T11:28:31.651Z'
+                        numAgents: 0
+                        archived: true
+                    count: 2
+                    offset: 0
+                    total: 2
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-livechat-departments-archived
+      description: |-
+       Get the list of archived departments in the workspace. Any of the following permissions is required: 
+        * `view-livechat-departments`
+        * `view-l-room`
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+  '/api/v1/livechat/department/archive/{_id}':
+    parameters:
+      - schema:
+          type: string
+          example: 693fc4b0ddfe6ceaf280f7f6
+        name: _id
+        in: path
+        required: true
+        description: Enter the department ID that you want to archive.
+    post:
+      summary: Archive a Department
+      tags:
+        - Omnichannel Departments
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-livechat-department-archive-_id
+      description: 'Use this endpoint to archive a department. If a department is no longer needed but you want to retain it for future use, you can archive it. Permission required: `manage-livechat-departments`'
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+  '/api/v1/livechat/department/unarchive/{_id}':
+    parameters:
+      - schema:
+          type: string
+          example: 693fc4b0ddfe6ceaf280f7f6
+        name: _id
+        in: path
+        required: true
+        description: Enter the department ID that you want to unarchive.
+    post:
+      summary: Unarchive a Department
+      tags:
+        - Omnichannel Departments
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-livechat-department-unarchive-_id
+      description: 'Use this endpoint to unarchive a department and add it back to the list of active departments. Permission required: `manage-livechat-departments`'
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
   '/api/v1/livechat/departments.available-by-unit/{unitId}':
     get:
       summary: Get Available Departments by Unit ID
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
-        
+
+
         Gives departments that have not been associated to another unit yet. This endpoint has been renamed to <a href="https://developer.rocket.chat/apidocs/get-departments-by-unit-id-1" target="_blank">Get Available Departments by Unit Id</a> from Rocket.Chat 5.0.
-        
-        
+
+
       operationId: 'get-api-v1-livechat-departments.available-by-unit-:unitId'
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -5846,7 +6513,7 @@ paths:
                     success: true
       deprecated: true
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
   '/api/v1/livechat/departments.by-unit/{unitid}':
     get:
       summary: Get Departments by Unit ID
@@ -5854,8 +6521,8 @@ paths:
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
 
         <p>Gives departments included in a specific unit ID. This endpoint has been renamed to <a href="https://developer.rocket.chat/apidocs/get-departments-by-unit-id-1" target="_blank">Get Departments by Unit ID</a> as from Rocket.Chat 5.0
-        
-        
+
+
       operationId: 'get-api-v1-livechat-departments.by-unit-:unitId'
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -6028,7 +6695,167 @@ paths:
                     success: true
       deprecated: true
       tags:
-        - Livechat Departments
+        - Omnichannel Departments
+
+  /api/v1/livechat/custom-fields.save:
+    post:
+      summary: Create Omnichannel Custom Field
+      tags:
+        - Omnichannel Custom Fields
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  customField:
+                    type: object
+                    properties:
+                      label:
+                        type: string
+                      scope:
+                        type: string
+                      visibility:
+                        type: boolean
+                      type:
+                        type: string
+                      searchable:
+                        type: boolean
+                      regexp:
+                        type: string
+                      required:
+                        type: boolean
+                      defaultValue:
+                        type: string
+                      options:
+                        type: string
+                      public:
+                        type: boolean
+                      _updatedAt:
+                        type: string
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    customField:
+                      label: address11
+                      scope: visitor
+                      visibility: true
+                      type: input
+                      searchable: true
+                      regexp: ''
+                      required: false
+                      defaultValue: ''
+                      options: ''
+                      public: true
+                      _updatedAt: '2025-10-06T06:52:40.102Z'
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'User does not have the permissions required for this action [error-unauthorized]'
+      operationId: post-api-v1-livechat-custom-fields.save
+      description: |-
+       Create a new Omnichannel custom field or update an existing on. You can refer to the <a href='https://docs.rocket.chat/docs/omnichannel-custom-fields' target='_blank'>Omnichannel Custom Fields</a> user guide for details.
+       
+       Permission required: `view-livechat-manager`
+       
+       ### Changelog
+       | Version      | Description |
+       | ---------------- | ------------|
+       |7.11.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - customFieldData
+              properties:
+                customFieldId:
+                  type: string
+                  description: 'If you want to update an existing custom field, enter the `field` value.'
+                  example: address
+                customFieldData:
+                  type: object
+                  description: 'In this object, provide the custom field data.'
+                  properties:
+                    field:
+                      type: string
+                      description: Enter a value for the field.
+                      example: address
+                    label:
+                      type: string
+                      description: Enter a label for the field.
+                      example: address-line
+                    visibility:
+                      type: boolean
+                      description: Enter whether the custom field is displayed in a contact’s details.
+                    scope:
+                      type: string
+                      description: "Set the scope of the custom field. The options are: `visitor` and `room`.\r\nRefer to the user guide for details."
+                      example: visitor
+                    type:
+                      type: string
+                      description: 'Set the input type of this field. The options are: `input` and `select`.'
+                      example: input
+                    searchable:
+                      type: boolean
+                      description: Set whether or not searching in the Omnichannel Contact Center can be done with the custom field.
+                    regexp:
+                      type: string
+                      description: 'Validate the values entered for the custom field using regular expressions. For example, [a-z]. This means that the custom field only accepts lowercase letters. Any other characters will display an error message.'
+                      example: '[a-z]'
+                    required:
+                      type: boolean
+                      description: Set whether or not this field should be mandatory.
+                    defaultValue:
+                      type: string
+                      description: Enter a default value for the field.
+                      example: default
+                    options:
+                      type: string
+                      description: 'If the field `type` is `select`, enter the options that users can select. The values must be comma-separated.'
+                      example: 'optionA, optionB'
+                    public:
+                      type: boolean
+                      description: 'If enabled, the custom field will be displayed in external applications, such as Livechat.'
+            examples:
+              Example 1:
+                value:
+                  customFieldData:
+                    field: new1
+                    label: new11
+                    visibility: true
+                    scope: visitor
+                    type: select
+                    searchable: true
+                    regexp: ''
+                    required: false
+                    defaultValue: ''
+                    options: 'optionA, optionB'
+                    public: true
+        
   /api/v1/livechat/custom.field:
     post:
       summary: Send Custom Field Value
@@ -6036,7 +6863,7 @@ paths:
         Send the value for a custom field.
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |0.70.0            | Added       |
       operationId: post-api-v1-livechat-custom.field
@@ -6122,7 +6949,7 @@ paths:
                     error: 'must have required property ''key'' [invalid-params]'
                     errorType: invalid-params
       tags:
-        - Livechat Custom Fields
+        - Omnichannel Custom Fields
   /api/v1/livechat/custom.fields:
     post:
       summary: Send Array of Custom Field Values
@@ -6130,7 +6957,7 @@ paths:
         Send an array of values for different custom fields.
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |0.70.0            | Added       |
       operationId: post-api-v1-livechat-custom.fields
@@ -6229,16 +7056,16 @@ paths:
                     error: 'must have required property ''key'' [invalid-params]'
                     errorType: invalid-params
       tags:
-        - Livechat Custom Fields
+        - Omnichannel Custom Fields
   /api/v1/livechat/custom-fields:
     get:
-      summary: Get Livechat Custom Fields
+      summary: Get Omnichannel Custom Fields
       description: |-
-        Get a list of the Livechat custom fields.
+        Get a list of the Omnichannel custom fields.
         Permission required: `view-l-room`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |2.2.0             | Added       |
       operationId: get-api-v1-livechat-custom-fields
@@ -6326,7 +7153,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Custom Fields
+        - Omnichannel Custom Fields
   '/api/v1/livechat/custom-fields/{_id}':
     get:
       summary: Get Custom Field Information
@@ -6335,7 +7162,7 @@ paths:
         Permission required: `view-l-room`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |2.4.0             | Added       |
       operationId: get-api-v1-livechat-custom-fields-_id
@@ -6411,7 +7238,82 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Custom Fields
+        - Omnichannel Custom Fields
+        
+  /api/v1/livechat/custom-fields.delete:
+    post:
+      summary: Delete Omnichannel Custom Field
+      tags:
+        - Omnichannel Custom Fields
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  errorType:
+                    type: string
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    errorType: invalid-params
+                    error: must have required property 'customFieldId'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'User does not have the permissions required for this action [error-unauthorized]'
+      operationId: post-api-v1-livechat-custom-fields.delete
+      description: |-
+       Delete an Omnichannel custom field entry. Permission required: `view-livechat-manager`. (On the workspace UI, go to **Administration** > **Workspace** > **Permissions**. Search for the `View Omnichannel Manager` permission. By default, livechat managers and agents have this permission.)
+       
+       ### Changelog
+       | Version      | Description |
+       | ---------------- | ------------|
+       |7.11.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - customFieldId
+              properties:
+                customFieldId:
+                  type: string
+                  description: Enter the custom field name that you want to delete.
+                  example: class
+            examples:
+              Example 1:
+                value:
+                  customFieldId: class
+        
   /api/v1/livechat/webrtc.call:
     get:
       tags:
@@ -6492,10 +7394,6 @@ paths:
               required:
                 - rid
                 - status
-              x-examples:
-                Example 1:
-                  rid: abc123xyzabc
-                  status: ended
       responses:
         '200':
           description: OK
@@ -6518,8 +7416,8 @@ paths:
     post:
       tags:
         - Livechat Page Visited
-      summary: Send Visitor navigation history
-      description: Retrieves the pages your omnichannel user navigated on your website.
+      summary: Send Visitor Navigation History
+      description: Retrieves the pages your visitor navigated on your website.
       operationId: post-api-v1-livechat-page.visited
       requestBody:
         content:
@@ -6637,15 +7535,15 @@ paths:
   /api/v1/livechat/transcript:
     post:
       tags:
-        - Livechat Transcript
-      summary: Request Livechat Transcript
+        - Omnichannel Transcript
+      summary: Request Omnichannel Transcript
       description: |-
         The endpoint is used by visitors to request a transcript of their chat to be sent to their email once the conversation ends. The room must be closed before you can send a transcript.
 
         You can also request transcripts for older conversations given that you know the older token and room ID.
-        
+
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |0.70.0             | Added       |
       operationId: post-api-v1-livechat-transcript
@@ -6718,15 +7616,15 @@ paths:
   '/api/v1/livechat/transcript/{rid}':
     post:
       tags:
-        - Livechat Transcript
-      summary: Send Livechat Transcript
+        - Omnichannel Transcript
+      summary: Send Omnichannel Transcript
       description: |-
-        This endpoint is used by agents and managers to schedule an email transcript to be sent once the chat is closed. 
+        This endpoint is used by agents and managers to schedule an email transcript to be sent once the chat is closed.
         Permission required: `send-omnichannel-chat-transcript`
         The room must be opened.
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |6.4.0            | Added       |
       operationId: 'post-api-v1-livechat-transcript-:rid'
@@ -6744,10 +7642,6 @@ paths:
           application/json:
             schema:
               type: object
-              x-examples:
-                Example 1:
-                  email: test@test.com
-                  subject: Livechat Transcript
               required:
                 - email
                 - subject
@@ -6796,14 +7690,14 @@ paths:
           $ref: '#/components/responses/permissionError'
     delete:
       tags:
-        - Livechat Transcript
-      summary: Delete Livechat Transcript
+        - Omnichannel Transcript
+      summary: Delete Omnichannel Transcript
       description: |-
-        This endpoint is used to cancel any transcript requests for an open room, meaning that the chat transcript won't be sent after the chat is closed. You can not Send Livechat Transcript twice at a time. You must delete the previous request with this endpoint before requesting again.
+        This endpoint is used to cancel any transcript requests for an open room, meaning that the chat transcript won't be sent after the chat is closed. You can not use Send Omnichannel Transcript endpoint twice at a time. You must delete the previous request with this endpoint before requesting again.
         Permission required: `send-omnichannel-chat-transcript`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |6.4.0            | Added       |
       operationId: delete-api-v1-livechat-transcript-rid
@@ -6830,10 +7724,10 @@ paths:
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
 
         <a href="https://docs.rocket.chat/docs/omnichannel-conversations#conversation-transcript" target="_blank">Request a PDF transcript</a> for an Omnichannel conversation. The conversation must be closed before it can be exported. <br>
-        
+
         Permission required: `request-pdf-transcript`.
         Omnichannel <a href="https://docs.rocket.chat/docs/managers" target="_blank">managers</a> and <a href="https://docs.rocket.chat/docs/agents" target="_blank">agents</a> have this permission by default.
-        
+
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -6856,11 +7750,11 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Transcript
+        - Omnichannel Transcript
   '/api/v1/livechat/agents/{agentId}/departments':
     get:
       tags:
-        - Livechat Agent Stats
+        - Omnichannel Agent Stats
       summary: Get Agent Departments
       description: |-
         Returns the departments associated with an agent.
@@ -6948,11 +7842,11 @@ paths:
   /api/v1/livechat/analytics/agents/average-service-time:
     get:
       tags:
-        - Livechat Agent Stats
+        - Omnichannel Agent Stats
       summary: Get Agent Average Service Time
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Gives the average service time (in seconds) for each agent.
         Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-agents-average-service-time
@@ -7016,14 +7910,14 @@ paths:
   /api/v1/livechat/analytics/agents/total-service-time:
     get:
       tags:
-        - Livechat Agent Stats
+        - Omnichannel Agent Stats
       summary: Get Agent Total Service Time
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Gives the total service time sorted by agent.
         Permission required: `view-livechat-manager`
-        
+
         **Service time** means how long time the agent is online and available. It does not mean how long time the agent was busy answering chats.
       operationId: get-api-v1-livechat-analytics-agents-total-service-time
       parameters:
@@ -7091,11 +7985,11 @@ paths:
   /api/v1/livechat/analytics/agents/available-for-service-history:
     get:
       tags:
-        - Livechat Agent Stats
+        - Omnichannel Agent Stats
       summary: Get History of Agents Available for Service
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Return the list of agents and their available time for the provided time frame.
         Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-agents-available-for-service-history
@@ -7201,9 +8095,9 @@ paths:
       description: |-
         Get the settings about the widget appearance.
         Permission required: `view-livechat-manager`
-        
+
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |6.4.0             | Added       |
       operationId: get-api-v1-livechat-appearance
@@ -7448,7 +8342,7 @@ paths:
         Permission required: `view-livechat-manager`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |6.4.0           | Added       |
       operationId: post-api-v1-livechat-appearance
@@ -7515,11 +8409,11 @@ paths:
   /api/v1/livechat/business-hours:
     get:
       tags:
-        - Livechat Business Hours
+        - Omnichannel Business Hours
       summary: Get Business Hours
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Retrieves all the <a href='https://docs.rocket.chat/docs/business-hours' target='_blank'>business hours</a> attached to a workspace.
         Permission required: `view-livechat-business-hours`
       operationId: get-api-v1-livechat-business-hours
@@ -7911,11 +8805,11 @@ paths:
   /api/v1/livechat/business-hour:
     get:
       tags:
-        - Livechat Business Hours
+        - Omnichannel Business Hours
       summary: Get Default Business Hour
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Fetches the default business hours of a workspace.
         Permission required: `view-livechat-business-hours`
       operationId: get-api-v1-livechat-business-hour
@@ -8158,7 +9052,7 @@ paths:
   /api/v1/livechat/business-hours.list:
     get:
       tags:
-        - Livechat Business Hours
+        - Omnichannel Business Hours
       summary: Business Hours List
       description: Gives a list of existing business hours. This endpoint has been renamed to Get Business Hours from Rocket.Chat 5.0.
       operationId: get-api-v1-livechat-business-hours.list
@@ -8399,7 +9293,7 @@ paths:
   /api/v1/livechat/analytics/dashboards/conversation-totalizers:
     get:
       tags:
-        - Livechat Dashboards
+        - Omnichannel Dashboards
       summary: Get Conversation Metrics
       description: |-
         Retrieves metrics about all conversations.
@@ -8454,7 +9348,7 @@ paths:
   /api/v1/livechat/analytics/dashboards/agents-productivity-totalizers:
     get:
       tags:
-        - Livechat Dashboards
+        - Omnichannel Dashboards
       summary: Get Agent Service Time Metrics
       description: 'Permission required: `view-livechat-manager`'
       operationId: get-api-v1-livechat-analytics-dashboards-agents-productivity-totalizers
@@ -8503,7 +9397,7 @@ paths:
   /api/v1/livechat/analytics/dashboards/chats-totalizers:
     get:
       tags:
-        - Livechat Dashboards
+        - Omnichannel Dashboards
       summary: Get Chat Metrics
       description: |-
         Retrieves information about the chats.
@@ -8542,7 +9436,7 @@ paths:
   /api/v1/livechat/analytics/dashboards/productivity-totalizers:
     get:
       tags:
-        - Livechat Dashboards
+        - Omnichannel Dashboards
       summary: Get Chat Metrics by Time
       description: |-
         Retrieves the average time for Livechat conversations.
@@ -8595,10 +9489,10 @@ paths:
   /api/v1/livechat/analytics/dashboards/charts/chats:
     get:
       tags:
-        - Livechat Dashboards
+        - Omnichannel Dashboards
       summary: Get Chats Status
       description: |-
-        Retrieves the status of chats for a specific time duration. 
+        Retrieves the status of chats for a specific time duration.
         Permission required: `view-livechat-manager`
       operationId: get-api-v1-livechat-analytics-dashboards-charts-chats
       parameters:
@@ -8642,7 +9536,7 @@ paths:
   /api/v1/livechat/analytics/dashboards/charts/chats-per-agent:
     get:
       tags:
-        - Livechat Dashboards
+        - Omnichannel Dashboards
       summary: Get Chat Status of Agents
       description: |-
         Retrieves the status of chats per agent for a specific time duration.
@@ -8693,7 +9587,7 @@ paths:
   /api/v1/livechat/analytics/dashboards/charts/agents-status:
     get:
       tags:
-        - Livechat Dashboards
+        - Omnichannel Dashboards
       summary: Get Status of Agents
       description: |-
         Retrieves the number of agents for each status.
@@ -8739,7 +9633,7 @@ paths:
   /api/v1/livechat/analytics/dashboards/charts/chats-per-department:
     get:
       tags:
-        - Livechat Dashboards
+        - Omnichannel Dashboards
       summary: Get Chats Status for Departments
       description: |-
         Retrieves the status of chats for each department.
@@ -8804,7 +9698,7 @@ paths:
   /api/v1/livechat/analytics/dashboards/charts/timings:
     get:
       tags:
-        - Livechat Dashboards
+        - Omnichannel Dashboards
       summary: Get Chat Times
       description: 'Permission required: `view-livechat-manager`'
       operationId: get-api-v1-livechat-analytics-dashboards-charts-timings
@@ -8864,17 +9758,130 @@ paths:
           $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/permissionError'
+
+  /api/v1/livechat/livechat/analytics/dashboards/charts-data:
+    get:
+      summary: Get Analytics Chart Data
+      tags:
+        - Omnichannel Dashboards
+      responses:
+        '200':
+          description: "OK\r\nIn the response, the `dataLabels` array is a list of dates within the specified date range. The `dataPoints` array refers to the chart analytics for the corresponding dates and the chart label."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  chartLabel:
+                    type: string
+                  dataLabels:
+                    type: array
+                    items:
+                      type: string
+                  dataPoints:
+                    type: array
+                    items:
+                      type: integer
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    chartLabel: Total_conversations
+                    dataLabels:
+                      - 10/1
+                      - 10/2
+                      - 10/3
+                      - 10/4
+                      - 10/5
+                      - 10/6
+                    dataPoints:
+                      - 0
+                      - 0
+                      - 0
+                      - 0
+                      - 0
+                      - 0
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'User does not have the permissions required for this action [error-unauthorized]'
+      operationId: get-api-v1-livechat-livechat-analytics-dashboards-charts-data
+      description: |-
+       View the Omnichannel analytics chart data by chart name within a specific duration. On the workspace UI, you can access this feature by going to `Administration` > `Omnichannel` > `Analytics`.
+       
+       Permission required: `view-livechat-manager`
+       
+       ### Changelog
+       | Version      | Description |
+       | ---------------- | ------------|
+       |7.11.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+        - schema:
+            type: string
+            example: '2025-01-01'
+          in: query
+          name: start
+          description: 'Enter the start date from which you want to view the data. Format: YYYY-MM-DD'
+          required: true
+        - schema:
+            type: string
+            example: '2025-10-01'
+          in: query
+          name: end
+          description: 'Enter the end date till which you want to view the data. Format: YYYY-MM-DD'
+          required: true
+        - schema:
+            type: string
+            example: Total_conversations
+          in: query
+          name: chartName
+          description: |-
+           Enter the chart name for which you want to view the analytics. The options are: 
+           * `Total_conversations`
+           * `Avg_chat_duration`
+           * `Total_messages`
+           * `Avg_first_response_time`
+           * `Avg_reaction_time`
+           * `Best_first_response_time`
+           * `Avg_response_time`
+          required: true
+        - schema:
+            type: string
+            example: 64181a0728384134ed600dcc
+          in: query
+          name: departmentId
+          description: Enter the department ID for which you want to view the analytics.
+          
   /api/v1/livechat/inquiries.list:
     get:
       tags:
-        - Livechat Inquiries
+        - Omnichannel Inquiries
       summary: Get Inquiries List
       description: |-
-        Lists all open Livechat inquiries. An incoming chat that has not yet been taken by the agent is called an inquiry. After it's been taken by the agent it is referred to as room.
+        Lists all open inquiries. An incoming chat that has not yet been taken by the agent is called an inquiry. After it's been taken by the agent it is referred to as room.
         Permission required: `view-livechat-manager`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |1.2.0            | Added       |
       operationId: get-api-v1-livechat-inquiries.list
@@ -8940,14 +9947,14 @@ paths:
   /api/v1/livechat/inquiries.take:
     post:
       tags:
-        - Livechat Inquiries
+        - Omnichannel Inquiries
       summary: Take Inquiry
       description: |-
         Join an open inquiry.
         Permission required: `view-l-room`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |1.2.0            | Added       |
       operationId: post-api-v1-livechat-inquiries.take
@@ -9003,7 +10010,7 @@ paths:
   /api/v1/livechat/inquiries.queuedForUser:
     get:
       tags:
-        - Livechat Inquiries
+        - Omnichannel Inquiries
       summary: List Queued User Inquiries
       description: |-
         Permission required: `view-l-room`
@@ -9125,7 +10132,7 @@ paths:
   /api/v1/livechat/inquiries.getOne:
     get:
       tags:
-        - Livechat Inquiries
+        - Omnichannel Inquiries
       summary: Get Inquiry by Room
       description: |-
         Permission required: `view-l-room`
@@ -9318,11 +10325,11 @@ paths:
   /api/v1/livechat/inquiry.setSLA:
     put:
       tags:
-        - Livechat Inquiries
+        - Omnichannel Inquiries
       summary: Set SLA Policy to Inquiry
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Set <a href="https://docs.rocket.chat/docs/sla-policies" target="_blank">SLA policy</a> to an inquiry. You can only set the policy for an inquiry that has not been taken by an agent.
 
         At least one of the following permissions is required:
@@ -9385,6 +10392,82 @@ paths:
           $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/permissionError'
+
+  /api/v1/livechat/inquiries.returnAsInquiry:
+    post:
+      summary: Move Chat to Inquiry
+      tags:
+        - Omnichannel Inquiries
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: boolean
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    result: true
+                    success: true
+                Inquiry already exists:
+                  value:
+                    result: false
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: room-closed
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-livechat-inquiries.returnAsInquiry
+      description: |-
+       This endpoint is used to move an open chat to the queue. Permission required: `view-l-room`
+       
+       ### Changelog
+       | Version      | Description |
+       | ---------------- | ------------|
+       |7.12.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - roomId
+              properties:
+                roomId:
+                  type: string
+                  description: Enter the room ID that you want to return to the queue.
+                departmentId:
+                  type: string
+                  description: Enter the department ID that the chat is part of.
+            examples:
+              Example 1:
+                value:
+                  roomId: iFzJuwGtkg4KB4keW
+                  departmentId: 66fa9ec66ea9eba859b650b3
+          
   /api/v1/livechat/integrations.settings:
     get:
       tags:
@@ -9394,7 +10477,7 @@ paths:
         Retrieves a list of integration settings.
         Permission required: `view-livechat-manager`
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |2.2.0             | Added       |
       operationId: get-api-v1-livechat-integrations.settings
@@ -9487,7 +10570,7 @@ paths:
       description: |-
         Permission required: `view-l-room`
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |2.4.0             | Added       |
       operationId: get-api-v1-livechat-queue
@@ -9649,12 +10732,71 @@ paths:
               examples:
                 default:
                   value: <Response></Response>
+
+  /api/v1/livechat/config/routing:
+    get:
+      summary: Get Livechat Routing Configuration
+      tags:
+        - Livechat
+      responses:
+        '200':
+          description: "OK\r\nThe parameters in the response indicate whether the specific livechat setting in the workspace is enabled or not."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  config:
+                    type: object
+                    properties:
+                      previewRoom:
+                        type: boolean
+                      showConnecting:
+                        type: boolean
+                      showQueue:
+                        type: boolean
+                      showQueueLink:
+                        type: boolean
+                      returnQueue:
+                        type: boolean
+                      enableTriggerAction:
+                        type: boolean
+                      autoAssignAgent:
+                        type: boolean
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    config:
+                      previewRoom: false
+                      showConnecting: false
+                      showQueue: false
+                      showQueueLink: true
+                      returnQueue: false
+                      enableTriggerAction: true
+                      autoAssignAgent: true
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-livechat-config-routing
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      description: |-
+       This endpoint returns the livechat routing configuration. It is called automatically when logging into the application to make the Omnichannel/livechat features available in the client.
+       
+       ### Changelog
+       | Version      | Description |
+       | ---------------- | ------------|
+       |7.11.0            | Added       |
+                  
   /api/v1/livechat/triggers:
     get:
       tags:
         - Livechat Triggers
       summary: Get List of Livechat Triggers
-      description: |- 
+      description: |-
         Permission required: `view-livechat-manager`
         ### Changelog
         | Version      | Description |
@@ -9787,7 +10929,7 @@ paths:
       operationId: post-api-v1-livechat-triggers
       description: |-
         Permission required: `view-livechat-manager`
-        
+
         See the <a href="https://docs.rocket.chat/docs/livechat-triggers" target="_blank">Livechat Triggers</a> guide for more information.
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -9899,10 +11041,10 @@ paths:
         - Livechat Triggers
       summary: Get Livechat Trigger
       description: |-
-        Get the details about a specific trigger. 
+        Get the details about a specific trigger.
         Permission required: `view-livechat-manager`
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |2.2.0             | Added       |
       operationId: get-api-v1-livechat-triggers-_id
@@ -10013,11 +11155,11 @@ paths:
   /api/v1/livechat/monitors:
     get:
       tags:
-        - Livechat Monitors
+        - Omnichannel Monitors
       summary: Get List of Monitors
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Retrieves a list of <a href='https://docs.rocket.chat/docs/monitors' target='_blank'>monitors</a>.
         Permission required: `manage-livechat-monitors`
       operationId: get-api-v1-livechat-monitors
@@ -10103,11 +11245,11 @@ paths:
   '/api/v1/livechat/monitors/{username}':
     get:
       tags:
-        - Livechat Monitors
+        - Omnichannel Monitors
       summary: Get a Monitor
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Get details of a specific monitor.
         Permission required: `manage-livechat-monitors`
       operationId: get-api-v1-livechat-monitors-username
@@ -10176,7 +11318,7 @@ paths:
   /api/v1/livechat/monitors.list:
     get:
       tags:
-        - Livechat Monitors
+        - Omnichannel Monitors
       summary: List of Monitors
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
@@ -10253,7 +11395,7 @@ paths:
   /api/v1/livechat/monitors.getOne:
     get:
       tags:
-        - Livechat Monitors
+        - Omnichannel Monitors
       summary: Get One Monitor
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
@@ -10313,17 +11455,17 @@ paths:
   /api/v1/livechat/priorities:
     get:
       tags:
-        - Livechat Priorities
+        - Omnichannel Priorities
       summary: Get List of Priorities
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Retrieves list of existing <a href='https://docs.rocket.chat/docs/priorities' target='_blank'>priorities</a>. At least one of the following permissions is required:
           * `manage-livechat-priorities`
           * `view-l-room`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ------------ | ------------|
         |6.0.0         | Added       |
       operationId: get-api-v1-livechat-priorities
@@ -10402,11 +11544,11 @@ paths:
   '/api/v1/livechat/priorities/{priorityId}':
     get:
       tags:
-        - Livechat Priorities
+        - Omnichannel Priorities
       summary: Get a Priority
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Get details of a specific priority.
         At least one of the following permissions is required:
           * `manage-livechat-priorities`
@@ -10458,16 +11600,16 @@ paths:
           $ref: '#/components/responses/permissionError'
     put:
       tags:
-        - Livechat Priorities
+        - Omnichannel Priorities
       summary: Update Priority
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Update an existing priority.
         Permission required: `manage-livechat-priorities`
-        
+
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ------------ | ------------|
         |6.0.0         | Added       |
       operationId: put-api-v1-livechat-priorities-priorityId
@@ -10523,7 +11665,6 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
   /api/v1/livechat/priorities.reset:
-    parameters: []
     post:
       summary: Reset Priorities
       operationId: post-livechat-priorities.reset
@@ -10536,10 +11677,10 @@ paths:
           $ref: '#/components/responses/permissionError'
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         This endpoint resets all priorities back to default.
         Permission required: `manage-livechat-priorities`
-        
+
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
@@ -10548,15 +11689,46 @@ paths:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
       tags:
-        - Livechat Priorities
-  /livechat/priorities:
+        - Omnichannel Priorities
     get:
+      summary: Check Priority Reset
       tags:
-        - Livechat Priorities
-      summary: Get Priorities
+        - Omnichannel Priorities
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reset:
+                    type: boolean
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    reset: true
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-livechat-priorities.reset
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         
+        Use this endpoint to check whether or not you can reset the priorities or not. You cannot reset priorities if the values are already in the default state. Once you edit the priorities, you get the option to reset them. Permission required: `manage-livechat-priorities`
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+  /livechat/priorities:
+    get:
+      tags:
+        - Omnichannel Priorities
+      summary: Get Priorities
+      description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+
         This endpoint is used to get a list of all priorities in a workspace below version 6.0. It supports the optional <a href="https://developer.rocket.chat/apidocs#pagination" target="_blank">pagination</a> query parameters.
       operationId: get-livechat-priorities
       parameters:
@@ -10623,11 +11795,11 @@ paths:
   '/livechat/priorities/{priorityId}':
     get:
       tags:
-        - Livechat Priorities
+        - Omnichannel Priorities
       summary: Get a Priority
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         This endpoint is used to get the details of a priority in a workspace below version 6.0.
       operationId: get-livechat-priorities-priorityId
       parameters:
@@ -10671,11 +11843,11 @@ paths:
   /livechat/priorities.list:
     get:
       tags:
-        - Livechat Priorities
+        - Omnichannel Priorities
       summary: List of Priorities
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         This endpoint has been renamed to <b><a href='https://rocketchat-developer.us.document360.io/apidocs/get-priorities' target='_blank'>Get Priorities</a></b> as from Rocket.Chat 5.0."
       operationId: get-livechat-priorities.list
       parameters:
@@ -10738,11 +11910,11 @@ paths:
   /livechat/priority.getOne:
     get:
       tags:
-        - Livechat Priorities
+        - Omnichannel Priorities
       summary: Get one Priority
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         This endpoint has been renamed to <b><a href='https://developer.rocket.chat/apidocs/get-a-priority' target='_blank'>Get a Priority</a></b> as from Rocket.Chat 5.0."
       operationId: get-livechat-priority.getOne
       parameters:
@@ -10785,17 +11957,17 @@ paths:
   /api/v1/livechat/tags:
     get:
       tags:
-        - Livechat Tags
+        - Omnichannel Tags
       summary: Get List of Tags
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Retrieves list of <a href='https://docs.rocket.chat/docs/tags' target='_blank'>tags</a>. Here are some important details to note when retrieving tags:
         - By default, only tags not linked to any department are returned.
         - To retrieve all tags in the workspace, set the `viewAll` parameter to `true`.
         - If a `department` is specified, the response includes both the tags associated with that department and those not linked to any department.
-        
-        At least one of the following permissions is required: 
+
+        At least one of the following permissions is required:
           * `view-l-room`
           * `manage-livechat-tags`
       operationId: get-api-v1-livechat-tags
@@ -10896,11 +12068,11 @@ paths:
   '/api/v1/livechat/tags/{tagId}':
     get:
       tags:
-        - Livechat Tags
+        - Omnichannel Tags
       summary: Get a Tag
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         At least one of the following permissions is required:
           * `view-l-room`
           * `manage-livechat-tags`
@@ -10971,17 +12143,74 @@ paths:
                   value:
                     success: false
                     error: Tag not found
+
+  /api/v1/livechat/tags.delete:
+    post:
+      summary: Delete a tag
+      tags:
+        - Omnichannel Tags
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: Tag not found
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-livechat-tags.delete
+      description: |-
+       <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+       
+       This endpoint is used to delete an Omnichannel tag from the workspace. Permission required: `manage-livechat-tags`
+       
+       ### Changelog
+       | Version      | Description |
+       | ------------ | ------------|
+       |7.12.0         | Added       |
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: string
+                  description: Enter the tag ID that you want to delete.
+                  example: 682223ba30c9c71254e46012
+            examples:
+              Example 1:
+                value:
+                  id: 682223ba30c9c71254e46012
+                    
   /api/v1/livechat/tags.list:
     get:
       tags:
-        - Livechat Tags
+        - Omnichannel Tags
       summary: List of Tags
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         This endpoint has been renamed to <a href="https://developer.rocket.chat/apidocs/get-list-of-tags" target="_blank">Get List of Tags</a> as from Rocket.Chat 5.0.
-        
-        
+
+
       operationId: get-api-v1-livechat-tags.list
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -11039,11 +12268,11 @@ paths:
   /livechat/tags.getOne:
     get:
       tags:
-        - Livechat Tags
+        - Omnichannel Tags
       summary: Get One Tag
-      description: |- 
+      description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-      
+
         This endpoint has been renamed to  <b><a href='https://developer.rocket.chat/apidocs/get-a-tag' target='_blank'>Get a Tag</a><b> as from Rocket.Chat 5.0
       operationId: get-livechat-tags.getOne
       responses:
@@ -11142,10 +12371,10 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
       tags:
-        - Livechat Units
+        - Omnichannel Units
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Create a <a href='https://docs.rocket.chat/docs/units' target='_blank'>unit</a> to group departments. Permission required: `manage-livechat-units`
         ### Changelog
         | Version      | Description |
@@ -11221,7 +12450,7 @@ paths:
     get:
       summary: Get List of Units
       tags:
-        - Livechat Units
+        - Omnichannel Units
       responses:
         '200':
           description: ''
@@ -11321,7 +12550,7 @@ paths:
       operationId: get-api-v1-livechat-units
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Permission required: `manage-livechat-units`
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -11345,7 +12574,7 @@ paths:
     post:
       summary: Update Unit
       tags:
-        - Livechat Units
+        - Omnichannel Units
       responses:
         '200':
           description: ''
@@ -11388,9 +12617,9 @@ paths:
       operationId: post-api-v1-livechat-units-id
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Permission required: `manage-livechat-units`
-        
+
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
@@ -11461,7 +12690,7 @@ paths:
     delete:
       summary: Delete a Unit
       tags:
-        - Livechat Units
+        - Omnichannel Units
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
@@ -11472,11 +12701,11 @@ paths:
       operationId: delete-api-v1-livechat-units-id
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Permission required: `manage-livechat-units`
-        
+
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ------------ | ------------|
         |4.2.0         | Added       |
       parameters:
@@ -11526,15 +12755,15 @@ paths:
           $ref: '#/components/responses/permissionError'
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Get details of a specific unit. <br>
         Permission required: `manage-livechat-units`
       tags:
-        - Livechat Units
+        - Omnichannel Units
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
-      
+
   '/api/v1/livechat/units/{unitId}/monitors':
     parameters:
       - schema:
@@ -11592,11 +12821,11 @@ paths:
           $ref: '#/components/responses/permissionError'
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Get the list of monitors associated with a specific unit. <br>
         Permission required: `manage-livechat-units`
       tags:
-        - Livechat Units
+        - Omnichannel Units
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
@@ -11712,10 +12941,10 @@ paths:
           $ref: '#/components/responses/permissionError'
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Permission required: `manage-livechat-units`
       tags:
-        - Livechat Units
+        - Omnichannel Units
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
@@ -11843,10 +13072,10 @@ paths:
           $ref: '#/components/responses/permissionError'
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Permission required: `manage-livechat-units`
       tags:
-        - Livechat Units
+        - Omnichannel Units
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
@@ -11910,7 +13139,7 @@ paths:
       description: "<div style='text-align: center; margin: 1rem 0 1rem 0;'><img src='https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg' alt='Premium tag' style='display: block; margin: auto;'></div>\r\nThis endpoint has been renamed to Get List of Units from Rocket.Chat 5.0."
 
       tags:
-        - Livechat Units
+        - Omnichannel Units
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
@@ -11958,7 +13187,7 @@ paths:
       description: "<div style='text-align: center; margin: 1rem 0 1rem 0;'><img src='https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg' alt='Premium tag' style='display: block; margin: auto;'></div>\r\nThis endpoint has been renamed to Get a Unit from Rocket.Chat 5.0."
 
       tags:
-        - Livechat Units
+        - Omnichannel Units
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
@@ -12021,7 +13250,7 @@ paths:
       description: "<div style='text-align: center; margin: 1rem 0 1rem 0;'><img src='https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg' alt='Premium tag' style='display: block; margin: auto;'></div>\r\nThis endpoint has been renamed to Get List of Unit Monitors from Rocket.Chat 5.0."
 
       tags:
-        - Livechat Units
+        - Omnichannel Units
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
@@ -12033,13 +13262,13 @@ paths:
       summary: Get Conversations by Status
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         View the metrics of omnichannel conversations in your workspace during a selected time range based on their status: **Open**, **Queued**, **On Hold**, or **Closed**.<br>
-        
+
         Permission required: `view-livechat-reports`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | -----------  | ------------|
         |6.4.0         | Added       |
       operationId: get-api-v1-livechat-analytics-dashboards-conversations-by-status
@@ -12097,13 +13326,13 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
 
-        
+
         View the metrics of omnichannel conversations in your workspace during a selected time range based on their departments. <br>
 
         Permission required: `view-livechat-reports`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | -----------  | ------------|
         |6.4.0         | Added       |
       operationId: get-api-v1-livechat-analytics-dashboards-conversations-by-department
@@ -12162,11 +13391,11 @@ paths:
       summary: Get Conversations by Tags
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         View the metrics of omnichannel conversations in your workspace during a selected time range based on their tags. <br>
 
         Permission required: `view-livechat-reports`
-        
+
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
@@ -12227,13 +13456,13 @@ paths:
         - Reports
       summary: Get Conversation by Agents
       description: |-
-       
+
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
 
         View the metrics of omnichannel conversations in your workspace during a selected time range based on the agents in your workspace. <br>
-        
+
         Permission required: `view-livechat-reports`
-        
+
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
@@ -12300,6 +13529,69 @@ paths:
           $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/permissionError'
+  /api/v1/livechat/analytics/dashboards/conversations-by-source:
+    get:
+      summary: Get Conversations By Source
+      tags:
+        - Reports
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        label:
+                          type: string
+                        value:
+                          type: integer
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    total: 19
+                    data:
+                      - label: widget
+                        value: 18
+                      - label: twilio
+                        value: 1
+                    success: true
+        '400':
+          $ref: '#/components/responses/startendError'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-livechat-analytics-dashboards-conversations-by-source
+      description: |-
+
+       <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+
+       Use this endpoint to view the list of sources of Omnichannel conversation during the specified time range. Permission required: `view-livechat-reports`'
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+        - schema:
+            type: string
+            example: '2025-06-01'
+          in: query
+          name: start
+          description: 'Enter the start date. Format: YYYY-MM-DD'
+          required: true
+        - schema:
+            type: string
+            example: '2025-12-01'
+          in: query
+          name: end
+          description: 'Enter the end date. Format: YYYY-MM-DD'
+          required: true
   /api/v1/livechat/sla:
     get:
       tags:
@@ -12307,7 +13599,7 @@ paths:
       summary: Get List of SLA Policies
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
@@ -12383,9 +13675,9 @@ paths:
       summary: Create SLA Policy
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Permission required: `manage-livechat-sla`
-        
+
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
@@ -12485,12 +13777,12 @@ paths:
       operationId: get-api-v1-livechat-sla-slaId
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Get details of a specific SLA policy. <br>
         At least one of the following permissions is required:
           * `manage-livechat-sla`
           * `view-l-room`
-          
+
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
@@ -12544,10 +13836,10 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
 
-        
+
         Update an existing SLA policy. <br>
         Permission required: `manage-livechat-sla`
-        
+
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
@@ -12629,11 +13921,11 @@ paths:
       summary: Delete an SLA
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Permission required: `manage-livechat-sla`
-        
+
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ------------ | ------------|
         |6.0.0         | Added       |
       operationId: delete-api-v1-livechat-sla-slaId
@@ -13776,10 +15068,6 @@ paths:
           application/json:
             schema:
               type: object
-              x-examples:
-                Example 1:
-                  rid: c9YW3rejo7HeL6ZDW
-                  token: yHoawq4s9bDn4dM5H
               required:
                 - rid
                 - token
@@ -13927,18 +15215,6 @@ paths:
           application/json:
             schema:
               type: object
-              x-examples:
-                Example 1:
-                  visitor:
-                    name: Livechat Visitor
-                    email: visitor@rocket.chat
-                    department: Support
-                    token: iNKE8a6k6cjbqWhWd
-                    phone: 55 51 5555-5555
-                    customFields:
-                      - key: address
-                        value: Rocket.Chat street
-                        overwrite: true
               properties:
                 visitor:
                   type: object
@@ -13994,7 +15270,7 @@ paths:
                         value: Rocket.Chat street
                         overwrite: true
       tags:
-        - Livechat Visitors
+        - Omnichannel Visitors
   '/api/v1/livechat/visitor/{token}':
     parameters:
       - schema:
@@ -14066,11 +15342,11 @@ paths:
                     success: true
       description: Get the details of a specific visitor.
       tags:
-        - Livechat Visitors
+        - Omnichannel Visitors
     delete:
       summary: Delete Visitor
       tags:
-        - Livechat Visitors
+        - Omnichannel Visitors
       responses:
         '200':
           description: ''
@@ -14194,7 +15470,7 @@ paths:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
       tags:
-        - Livechat Visitors
+        - Omnichannel Visitors
   '/api/v1/livechat/visitor/{token}/room':
     parameters:
       - schema:
@@ -14206,7 +15482,7 @@ paths:
     get:
       summary: Get Open Conversation of a Visitor
       tags:
-        - Livechat Visitors
+        - Omnichannel Visitors
       responses:
         '200':
           description: ''
@@ -14261,7 +15537,7 @@ paths:
     get:
       summary: Search Visitors by Term
       tags:
-        - Livechat Visitors
+        - Omnichannel Visitors
       responses:
         '200':
           description: ''
@@ -14373,7 +15649,7 @@ paths:
     get:
       summary: Get Pages Visited by Livechat Visitor
       tags:
-        - Livechat Visitors
+        - Omnichannel Visitors
       responses:
         '200':
           description: ''
@@ -14487,7 +15763,7 @@ paths:
     get:
       summary: Get Livechat Visitor Chat History
       tags:
-        - Livechat Visitors
+        - Omnichannel Visitors
       responses:
         '200':
           description: ''
@@ -14733,7 +16009,7 @@ paths:
     get:
       summary: Search Visitor Chat
       tags:
-        - Livechat Visitors
+        - Omnichannel Visitors
       responses:
         '200':
           description: ''
@@ -14806,7 +16082,7 @@ paths:
     get:
       summary: Autocomplete Visitors
       tags:
-        - Livechat Visitors
+        - Omnichannel Visitors
       responses:
         '200':
           description: ''
@@ -14936,7 +16212,7 @@ paths:
                   token: 54fc5544030bcecda0533
                   status: busy
       tags:
-        - Livechat Visitors
+        - Omnichannel Visitors
   /api/v1/omnichannel/extensions:
     get:
       tags:
@@ -15009,9 +16285,6 @@ paths:
                 properties:
                   extensions:
                     type: string
-                x-examples:
-                  Example 1:
-                    extensions: '10023'
               examples:
                 Success Example:
                   value:
@@ -15116,7 +16389,7 @@ paths:
         - Agent Extensions
       summary: Update Omnichannel Agent Extension
       description: |-
-        Update the extension associated with a specific agent. 
+        Update the extension associated with a specific agent.
         Permission required: `manage-agent-extension-association`
       operationId: post-api-v1-omnichannel-agent-extension
       parameters:
@@ -15143,16 +16416,13 @@ paths:
     post:
       tags:
         - Canned Responses
-      summary: Create or Update or Delete a Canned Response
+      summary: Create or Update a Canned Response
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         To create and update <a href='https://docs.rocket.chat/docs/canned-responses' target='_blank'>canned responses</a>, the following permissions are required:
         * `save-canned-responses`
         * `save-all-canned-responses`
-
-        To delete a canned response, the following permission is required:
-        * `remove-canned-responses`
 
         ### Changelog
         | Version      | Description |
@@ -15202,9 +16472,7 @@ paths:
                     - tag1
                     - tag2
         description: |-
-          Note:
-            * To update a canned response, the `_id` parameter is required along with the other required parameters. This parameter is not used to create a canned response.
-            * To delete a canned response, enter the `_id` of the canned response that you want to delete. No other parameter is required.
+          Note: To update a canned response, the `_id` parameter is required along with the other required parameters. This parameter is not used to create a canned response.
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
@@ -15257,7 +16525,7 @@ paths:
         - `view-all-canned-responses`
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
         |1.0.0            | Added       |
       operationId: get-api-v1-canned-responses
@@ -15394,11 +16662,11 @@ paths:
       summary: Get User Canned Responses
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-        
+
         Get a list of all canned responses in the workspace that belong to the current user scope. <br>
-        
+
         Permission required: `view-canned-responses`
-        
+
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
@@ -15563,6 +16831,30 @@ paths:
         in: path
         required: true
         description: The canned response's ID.
+
+    delete:
+      summary: Delete a Canned Response
+      tags:
+        - Canned Responses
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: delete-api-v1-canned-responses-_id
+      description: |-
+       <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+      
+       Use this endpoint to delete a canned response. Permission required: `remove-canned-responses`
+       
+       ### Changelog
+       | Version      | Description 
+       | ---------------- | ------------|
+       |7.12.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+        
   /api/v1/livechat/message:
     parameters: []
     post:
@@ -15792,13 +17084,6 @@ paths:
           application/json:
             schema:
               type: object
-              x-examples:
-                Example 1:
-                  visitor:
-                    token: 54fc5544030bcecda053311cb6b98920b
-                  messages:
-                    - msg: test
-                    - msg: hello
               properties:
                 visitor:
                   type: object
@@ -16474,40 +17759,40 @@ paths:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
 tags:
-  - name: Agent Extensions
-  - name: Canned Responses
-  - name: Livechat
-  - name: Livechat Agent Stats
-  - name: Livechat Agents
-  - name: Livechat Appearance
-  - name: Livechat Audio Video Calls
-  - name: Livechat Business Hours
-  - name: Livechat Contacts
-  - name: Livechat Custom Fields
-  - name: Livechat Dashboards
-  - name: Livechat Departments
-  - name: Livechat Inquiries
-  - name: Livechat Messages
-  - name: Livechat Monitors
-  - name: Livechat Page Visited
-  - name: Livechat Priorities
-  - name: Livechat Rooms
-  - name: Livechat Statistics
-  - name: Livechat Tags
-  - name: Livechat Transcript
-  - name: Livechat Triggers
-  - name: Livechat Units
-  - name: Livechat Users
-  - name: Livechat Visitors
-  - name: Reports
+  - name: Omnichannel Users
+  - name: Omnichannel Agents
+  - name: Omnichannel Monitors
+  - name: Omnichannel Visitors
+  - name: Omnichannel Contacts
+  - name: Omnichannel Rooms
+  - name: Omnichannel Departments
+  - name: Omnichannel Custom Fields
+  - name: Omnichannel Business Hours
+  - name: Omnichannel Priorities
+  - name: Omnichannel Tags
+  - name: Omnichannel Units
   - name: SLA Policies
+  - name: Canned Responses
+  - name: Omnichannel Transcript
+  - name: Omnichannel Statistics
+  - name: Omnichannel Agent Stats
+  - name: Omnichannel Dashboards
+  - name: Reports
+  - name: Omnichannel Inquiries
+  - name: Omnichannel Webhooks
+  - name: Livechat
+  - name: Livechat Appearance
+  - name: Livechat Triggers
+  - name: Livechat Audio Video Calls
+  - name: Livechat Messages
+  - name: Livechat Page Visited
+  - name: Agent Extensions
   - name: Voice Channel
   - name: Voice Channel Events
   - name: Voice Channel Extensions
   - name: Voice Channel Queue Membership
   - name: Voice Channel Rooms
   - name: Voice Channel Server Connection
-  - name: Omnichannel Webhooks
 components:
   parameters:
     start:
@@ -16647,11 +17932,6 @@ components:
                 type: string
               errorType:
                 type: string
-            x-examples:
-              Example 1:
-                success: false
-                error: 'must have required property ''start'' [invalid-params]'
-                errorType: invalid-params
           examples:
             Example 1:
               value:

@@ -26,7 +26,7 @@ info:
 
 #      ## Two-Factor Authentication
 
-#    Rocket.Chat offers various methods for two-factor authentication in a workspace. Kindly refer to the official [Two-Factor Authentication guide](https://developer.rocket.chat/getting-started/two-factor-authentication) for more details.
+#    Rocket.Chat offers various methods for two-factor authentication in a workspace. Refer to the official [Two-Factor Authentication guide](https://developer.rocket.chat/getting-started/two-factor-authentication) for more details.
 
 #    When making requests to endpoints that require two-factor authentication, add the following headers to the request:
 
@@ -34,7 +34,7 @@ info:
 #    - **x-2fa-method**: (string) The desired method to check for the 2FA code, usually returned in the 2FA error.
 
 #    If you attempt to send a request to certain endpoints without the appropriate 2FA headers, you receive an error of type `totp-require`. The error message includes a `details` object, that specifies the required 2FA method. It's useful for informing the user where to obtain their 2FA code.
-#    - **method**: The required 2FA method for the user selected by the workspace. 
+#    - **method**: The required 2FA method for the user selected in the workspace. 
 #    - **codeGenerated**: Used to inform if the code was generated or if there are tokens available already. It is specific to 2FA by Email.
 #    - **codeCount**: (optional) The number of available codes already sent via email. It is specific to 2FA by Email.
 #    - **codeExpires**: (optional) A list of expiration dates of the tokens.It is specific to 2FA by Email.

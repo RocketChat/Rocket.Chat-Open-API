@@ -2023,6 +2023,9 @@ paths:
                     text:
                       type: string
                       description: 'The message text to send, it is optional because of attachments.'
+                    parseUrls:
+                      type: boolean
+                      description: 'Set `parseUrls` to `false` to prevent Rocket.Chat from generating link previews when the message in `text` contains a URL.'
                     attachments:
                       type: array
                       items:
@@ -2123,6 +2126,9 @@ paths:
                     text:
                       type: string
                       description: 'The message text to send, it is optional because of attachments.'
+                    parseUrls:
+                      type: boolean
+                      description: 'Set `parseUrls` to `false` to prevent Rocket.Chat from generating link previews when the message in `text` contains a URL.'  
                     attachments:
                       type: array
                       items:
@@ -2574,9 +2580,17 @@ paths:
                       type: string
                       description: Used when replying in a thread. Message will be sent in channel also if value is true
                     blocks:
-                      type: object
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          type:
+                            type: string
+                          text:
+                            type: string
                       description: |- 
-                        A message block is an array of objects with any of the following properties. Blocks can have many sections:
+                        A message block is an array of objects with any of the following properties. To view the example on how to use this parameter, select **Show example** in this body parameters section. Above the example code block, select the drop-down menu, and select the **Message with Blocks** option. For comprehensive information on blocks, refer to the <a href='https://developer.rocket.chat/docs/blocks' target='_blank'>Apps-Engine UI Blocks documentation</a>.
+                        Blocks can have many sections:
                         - type
                         - text
                         - fields
@@ -3684,6 +3698,8 @@ paths:
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/query'
         - $ref: '#/components/parameters/fields'
+        - $ref: '#/components/parameters/filterTypeGroup'
+        - $ref: '#/components/parameters/filterName'
         - name: roomId
           in: query
           description: The roomId of the DM. It is required if `username` is not provided.
@@ -4999,9 +5015,270 @@ paths:
                     success: false
                     error: 'Body param "roomId" is required [error-room-param-not-provided]'
                     errorType: error-room-param-not-provided
+                    
+  /api/v1/autotranslate.getSupportedLanguages:
+    get:
+      tags:
+        - Auto-Translate
+      summary: Get Supported Languages
+      description: |- 
+        Get the list of languages supported by the translation service provider.
+        Make sure that the auto-translate feature is configured in your workspace. For details, see the <a href="https://docs.rocket.chat/v1/docs/auto-translate-messages" target="_blank">Auto-Translate</a> user guide.
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |1.3.0          | Added       |
+      operationId: get-api-v1-autotranslate.getSupportedLanguages
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - name: targetLanguage
+          in: query
+          description: Language in which the language names will be returned.
+          required: true
+          schema:
+            type: string
+          example: en
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  languages:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        supports_formality:
+                          type: boolean
+                        language:
+                          type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    languages:
+                      - name: Arabic
+                        supports_formality: false
+                        language: ar
+                      - name: Bulgarian
+                        supports_formality: false
+                        language: bg
+                      - name: Czech
+                        supports_formality: false
+                        language: cs
+                      - name: German
+                        supports_formality: true
+                        language: de
+                      - name: Spanish (Latin American)
+                        supports_formality: true
+                        language: es-419
+                      - name: Estonian
+                        supports_formality: false
+                        language: et
+                      - name: Indonesian
+                        supports_formality: false
+                        language: id
+                      - name: Korean
+                        supports_formality: false
+                        language: ko
+                      - name: Lithuanian
+                        supports_formality: false
+                        language: lt
+                      - name: Portuguese (Brazilian)
+                        supports_formality: true
+                        language: pt-BR
+                      - name: Thai
+                        supports_formality: false
+                        language: th
+                      - name: Vietnamese
+                        supports_formality: false
+                        language: vi
+                      - name: Chinese (simplified)
+                        supports_formality: false
+                        language: zh
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Target Language Required:
+                  value:
+                    success: false
+                    error: 'must have required property ''targetLanguage'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  /api/v1/autotranslate.saveSettings:
+    post:
+      tags:
+        - Auto-Translate
+      summary: Save Auto-Translate  Settings
+      description: |- 
+        Saves autotranslate settings for a room.
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |1.3.0          | Added       |
+      operationId: post-api-v1-autotranslate.saveSettings
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roomId:
+                  type: string
+                  description: The room's id to apply setting.
+                field:
+                  type: string
+                  description: The setting to apply to user's subscription.
+                value:
+                  type: boolean
+                  description: Boolean if the setting is autoTranslate and a string (the language) if the setting is autoTranslateLanguage.
+                defaultLanguage:
+                  type: string
+                  description: The default language.
+              required:
+                - roomId
+                - field
+                - value
+            examples:
+              Example:
+                value:
+                  roomId: 7aDSXtjMA3KPLxLjt
+                  field: autoTranslate
+                  value: true
+                  defaultLanguage: en
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  /api/v1/autotranslate.translateMessage:
+    post:
+      tags:
+        - Auto-Translate
+      summary: Translate Message
+      description: |- 
+        Auto-translates the provided message.
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |1.3.0          | Added       |
+      operationId: post-api-v1-autotranslate.translateMessage
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                messageId:
+                  type: string
+                  description: The message's id to be translated.
+                targetLanguage:
+                  type: string
+                  description: The target language that the message will be translated.
+              required:
+                - messageId
+            examples:
+              Example:
+                value:
+                  messageId: Fq7sQNSnDEfzj8qoS
+                  targetLanguage: en
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      rid:
+                        type: string
+                      msg:
+                        type: string
+                      ts:
+                        type: string
+                      u:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          username:
+                            type: string
+                          name:
+                            type: string
+                      _updatedAt:
+                        type: string
+                      mentions:
+                        type: array
+                        items:
+                          type: object
+                      channels:
+                        type: array
+                        items:
+                          type: object
+                      translations:
+                        type: object
+                        properties:
+                          en:
+                            type: string
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    message:
+                      _id: Fq7sQNSnDEfzj8qoS
+                      rid: GENERAL
+                      msg: Isso é um teste
+                      ts: '2019-06-27T15:35:20.753Z'
+                      u:
+                        _id: pC6Z2N2ijivxdsYSu
+                        username: marcos
+                        name: marcos
+                      _updatedAt: '2019-06-27T15:47:01.486Z'
+                      mentions: []
+                      channels: []
+                      translations:
+                        en: This is a test
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+                    
 tags:
   - name: Chat
   - name: DM
+  - name: Auto-Translate
 components:
   parameters:
     Optional-RoomId:
@@ -5085,6 +5362,27 @@ components:
       required: false
       schema:
         type: string
+    filterName:
+      name: name
+      in: query
+      description: The name of the file to search for.
+      schema:
+        type: string
+      example: logo
+    filterTypeGroup:
+      name: typeGroup
+      in: query
+      description: |-
+        Filter results by the type of file. Available options:
+        - `all`: Return all file types.
+        - `image`: Filter by image files.
+        - `video`: Filter by video files.
+        - `audio`: Filter by audio files.
+        - `text`: Filter by text documents.
+        - `application`: Filter by other file types.
+      schema:
+        type: string
+      example: images
   responses:
     trueSuccess:
       description: OK

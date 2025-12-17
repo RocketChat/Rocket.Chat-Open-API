@@ -738,7 +738,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: refresh
           in: query
-          description: Refresh the statistics.
+          description: Set to true to refresh the statistics.
           schema:
             type: boolean
             example: true
@@ -3113,7 +3113,7 @@ paths:
     get:
       summary: Get All Subscriptions
       description: |-
-        Note that the unread counter value depends on your settings in the **Administration** > <a href='https://docs.rocket.chat/docs/general' target='_blank'>**General**</a> section.
+        Get the room notification subscription details and the latest updates. Note that the unread counter value depends on your settings in the **Administration** > <a href='https://docs.rocket.chat/docs/general' target='_blank'>**General**</a> section.
 
         ### Changelog
         | Version      | Description | 
@@ -3140,42 +3140,7 @@ paths:
                   update:
                     type: array
                     items:
-                      type: object
-                      properties:
-                        t:
-                          type: string
-                        ts:
-                          type: string
-                        name:
-                          type: string
-                        fname:
-                          type: string
-                          nullable: true
-                        rid:
-                          type: string
-                        u:
-                          type: object
-                          properties:
-                            _id:
-                              type: string
-                            username:
-                              type: string
-                            name:
-                              type: string
-                        open:
-                          type: boolean
-                        alert:
-                          type: boolean
-                        unread:
-                          type: integer
-                        userMentions:
-                          type: integer
-                        groupMentions:
-                          type: integer
-                        _updatedAt:
-                          type: string
-                        _id:
-                          type: string
+                      $ref: '#/components/schemas/Subscription'
                   remove:
                     type: array
                     items:
@@ -3208,12 +3173,11 @@ paths:
           $ref: '#/components/responses/authorizationError'
       tags:
         - Subscriptions
-    parameters: []
   /api/v1/subscriptions.getOne:
     get:
       summary: Get Subscription Room
       description: |-
-        Note that the unread counter value depends on your settings at the **Administration** > <a href='https://docs.rocket.chat/docs/general' target='_blank'>**General**</a> section.
+        Get the notification subscription details for a specific room. Note that the unread counter value depends on your settings at the **Administration** > <a href='https://docs.rocket.chat/docs/general' target='_blank'>**General**</a> section.
 
         ### Changelog
         | Version      | Description | 
@@ -3239,39 +3203,7 @@ paths:
                 type: object
                 properties:
                   subscription:
-                    type: object
-                    properties:
-                      _id:
-                        type: string
-                      open:
-                        type: boolean
-                      alert:
-                        type: boolean
-                      unread:
-                        type: integer
-                      userMentions:
-                        type: integer
-                      groupMentions:
-                        type: integer
-                      ts:
-                        type: string
-                      rid:
-                        type: string
-                      name:
-                        type: string
-                      t:
-                        type: string
-                      u:
-                        type: object
-                        properties:
-                          _id:
-                            type: string
-                          username:
-                            type: string
-                      _updatedAt:
-                        type: string
-                      ls:
-                        type: string
+                    $ref: '#/components/schemas/Subscription'
                   success:
                     type: boolean
                 x-examples:
@@ -3382,23 +3314,23 @@ paths:
                       example: L6su9mxwdDkvdSaT9hvzu8z6mHFigiXy6Y
                     readThreads:
                       type: boolean
-                    
+
                 - type: object
                   required: ["rid"]
                   properties:
                     rid:
                       type: string
-                      description: The room ID.    
+                      description: The room ID.
                       example: L6su9mxwdDkvdSaT9hvzu8z6mHFigiXy6Y
                     readThreads:
-                      type: boolean  
+                      type: boolean
             examples:
               RoomId:
                 value:
                   roomId: L6su9mxwdDkvdSaT9hvzu8z6mHFigiXy6Y
               Rid:
                 value:
-                  rid: L6su9mxwdDkvdSaT9hvzu8z6mHFigiXy6Y    
+                  rid: L6su9mxwdDkvdSaT9hvzu8z6mHFigiXy6Y
       description: |-
         ### Changelog
         | Version      | Description |
@@ -3446,7 +3378,7 @@ paths:
         content:
           application/json:
             schema:
-              anyOf: 
+              anyOf:
                 - type: object
                   required: ["roomId"]
                   properties:
@@ -3463,7 +3395,7 @@ paths:
                         _id:
                           type: string
                           description: The message ID.
-                          
+
             examples:
               Example :
                 value:
@@ -3554,7 +3486,48 @@ components:
       required: false
       schema: {}
       description: 'This parameter allows you to use MongoDB query operators to search for specific data. For example, to query users with a name that contains the letter "g": query=`{ "name": { "$regex": "g" } }`. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more.'
-  schemas: {}
+  schemas:
+    Subscription:
+      type: object
+      properties:
+        _id:
+          type: string
+        open:
+          type: boolean
+        alert:
+          type: boolean
+        unread:
+          type: integer
+        userMentions:
+          type: integer
+        groupMentions:
+          type: integer
+        ts:
+          type: string
+        rid:
+          type: string
+        name:
+          type: string
+        fname:
+          type: string
+          nullable: true
+        t:
+          type: string
+        u:
+          type: object
+          properties:
+            _id:
+              type: string
+            username:
+              type: string
+            name:
+              type: string
+        _updatedAt:
+          type: string
+        ls:
+          type: string
+        E2EKey:
+          type: string
   responses:
     authorizationError:
       description: Unauthorized

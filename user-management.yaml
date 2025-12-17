@@ -11,6 +11,177 @@ info:
 servers:
   - url: https://apiexplorer.support.rocket.chat
 paths:
+  /api/v1/permissions.listAll:
+    get:
+      tags:
+        - Permissions
+      summary: List All Permissions
+      description: |-
+        Returns the list of <a href='https://docs.rocket.chat/docs/permissions' target='_blank'>permissions</a> from the workspace.
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |0.73.0            | Added       |
+      operationId: get-permissions.listAll
+      parameters:
+        - name: updatedSince
+          in: query
+          description: |-
+            Date as ISO string. If you include this parameter, the `update` and
+            `remove` fields in the response will contain only those permissions
+            updated and removed since this date and time.
+          schema:
+            type: string
+          example: '2017-11-25T15:08:17.248Z'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  update:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        _updatedAt:
+                          type: string
+                        roles:
+                          type: array
+                          items:
+                            type: string
+                  remove:
+                    type: array
+                    items:
+                      type: object
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    update:
+                      - _id: access-permissions
+                        _updatedAt: '2018-11-28T11:55:49.106Z'
+                        roles:
+                          - admin
+                      - _id: add-oauth-service
+                        _updatedAt: '2018-11-28T12:59:51.974Z'
+                        roles:
+                          - admin
+                          - user
+                    remove: []
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  /api/v1/permissions.update:
+    post:
+      summary: Update Permissions
+      description: |-
+        Update the <a href='https://docs.rocket.chat/docs/permissions' target='_blank'>permissions</a> on the workspace.
+        Permission required: `access-permissions`
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |0.66.0            | Added       |
+      operationId: post-api-v1-permissions.update
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                permissions:
+                  type: array
+                  description: The array of roles to overwrite.
+                  items:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                        description: Enter the permission ID.
+                        example: access-permissions
+                      roles:
+                        type: array
+                        items:
+                          type: string
+                          description: For default Rocket.Chat roles, you can enter the role names such as `admin`, `user`, `owner`, etc. If you are updating the permissions for a custom role, enter the custom role ID instead of the role name. Use the <a href='https://developer.rocket.chat/apidocs/get-roles' target='_blank'>Get Roles</a> endpoint to get the list of roles with IDs in your workspace.
+                          example: admin
+              required:
+                - permissions
+            examples:
+              Example 1:
+                value:
+                  permissions:
+                    - _id: access-permissions
+                      roles:
+                        - admin
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  permissions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        roles:
+                          type: array
+                          items:
+                            type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    permissions:
+                      - _id: access-permissions
+                        roles:
+                          - admin
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: Invalid body params
+                    errorType: error-invalid-body-params
+                Example 2:
+                  value:
+                    success: false
+                    error: Editing permissions is not allowed
+                    errorType: error-edit-permissions-not-allowed
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+      tags:
+        - Permissions
   /api/v1/roles.create:
     post:
       tags:
@@ -44,7 +215,7 @@ paths:
                   example: newRole
                 scope:
                   type: string
-                  description: The new role's scope. The default value is `Users`.
+                  description: The new role's scope. The scope can either be Users (user level) or Subscriptions (room level). The default value is `Users`.
                   example: Subscriptions
                 description:
                   type: string
@@ -54,7 +225,7 @@ paths:
                   type: boolean
                   description: >-
                     Whether the role should have a mandatory 2FA. The default
-                    value is `false`.
+                    value is `false`. If set to true, users assigned to this role are prompted to enter a 2FA code for certain activities.
                   default: false
               required:
                 - name
@@ -179,7 +350,7 @@ paths:
                   type: string
                   example: Subscriptions
                   description: >-
-                    The updated  scope of the role. The default value is
+                    The updated  scope of the role. The scope can either be Users (user level) or Subscriptions (room level). The default value is
                     `Users`.
                 description:
                   type: string
@@ -190,7 +361,7 @@ paths:
                   default: false
                   description: >-
                     Whether the role should have a mandatory 2FA. The default
-                    value is `false`.
+                    value is `false`. If set to true, users assigned to this role are prompted to enter a 2FA code for certain activities.
               required:
                 - roleId
                 - name
@@ -814,8 +985,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/Auth-Token'
       description: |-
-        Permission required: `access-permissions`
-        Remove a role from a user. Optionally, you can remove this role from a specified scope.
+        Remove a role from a user. Permission required: `access-permissions`
       requestBody:
         content:
           application/json:
@@ -830,10 +1000,70 @@ paths:
                   type: string
                   description: The username for which you want to remove the role.
                   example: user08
+                scope:
+                  type: string
+                  description: 'Optionally, you can also provide the role scope. The options are `Users` and `Subscriptions`.'
               required:
                 - roleId
                 - username
-    parameters: []
+
+  /api/v1/roles.getUsersInPublicRoles:
+    get:
+      summary: Get Users in Public Roles
+      tags:
+        - Roles
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        username:
+                          type: string
+                        roles:
+                          type: array
+                          items:
+                            type: string
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    users:
+                      - _id: kb2WBkjkut4YJpFQk
+                        username: agent2
+                        roles:
+                          - livechat-agent
+                      - _id: Ahgf5k9Ca4YEdMjwX
+                        username: test.agent
+                        roles:
+                          - admin
+                          - livechat-agent
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-roles.getUsersInPublicRoles
+      description: |-
+       Use this endpoint to get the list of roles other than `user`, such as admin, livechat, and custom roles.
+       
+       ### Changelog
+       | Version      | Description |
+       | ---------------- | ------------|
+       |7.10.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+    
   /api/v1/users.create:
     post:
       tags:
@@ -913,8 +1143,6 @@ paths:
                     * For default roles, the role name and ID are the same. For custom roles, the name and ID are different. 
                     * If you are setting a custom role for a user, make sure to enter the custom role ID, and not the role name.
                     Refer to [Roles](https://docs.rocket.chat/use-rocket.chat/workspace-administration/permissions#roles) for more information.
-                  example:
-                    - bot
                   items:
                     type: string
                     example: bot
@@ -1057,7 +1285,7 @@ paths:
         - Users
       summary: Register User
       description: |-
-        * Use this endpoint to create an account on the workspace.
+        * An external member can use this endpoint to create an account on the workspace.
         * The number of requests you can make and the interval between each request depends on the workspace's rate limiter settings. You can find the settings from **Administration** > **Settings** > **Rate Limiter** > **API Rate Limiter**.
         
         ### Changelog
@@ -1065,7 +1293,6 @@ paths:
         | ---------------- | ------------|
         |0.50.0            | Added       |
       operationId: post-api-v1-users.register
-      parameters: []
       requestBody:
         content:
           application/json:
@@ -1092,7 +1319,7 @@ paths:
                   example: Roger Smith
                 secretURL:
                   type: string
-                  description: String appended to secret registration URL.
+                  description: You may have been provided with a secret URL. It includes a string appended to the registration URL. For example, `https://workspacedomain.com/register/my-secret-code`. For this parameter, enter the additional string at the end of the URL.
                   example: Jjwjg6gouWLXhMGKW
               required:
                 - username
@@ -1138,6 +1365,25 @@ paths:
                       utcOffset: 0
                       username: example
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''pass'' [invalid-params]'
+                    errorType: invalid-params
     parameters: []
   /api/v1/users.update:
     post:
@@ -1335,14 +1581,15 @@ paths:
                       action: Editing_user
         '401':
           $ref: '#/components/responses/authorizationError'
-    parameters: []
+
   /api/v1/users.updateOwnBasicInfo:
     post:
       tags:
         - Users
       summary: Update Own Basic Information
       description: |-
-        * To change your email or password, you must confirm it using TOTP. If you don't have 2FA enabled (token code or email), TOTP will require the current password method.
+        Update your account information using this endpoint.
+        * To change your email or password, you must confirm it using TOTP. If you don't have 2FA enabled in your account (token code or email), TOTP will require the current password method. Note that if 2FA is not enabled in the workspace, the 2FA headers are not required.
         * If you add the `currentPassword` encrypted in SHA256 to the request body, the request won't require TOTP again.
 
         ### Changelog
@@ -1379,8 +1626,7 @@ paths:
                 data:
                   type: object
                   description: >-
-                    An object of user data to be updated with the following
-                    parameters.
+                    An object of user data to be updated with the following parameters. If you enter an empty string, the user details are returned.
                   properties:
                     email:
                       type: string
@@ -1709,16 +1955,35 @@ paths:
                       bio: Engineer
                       nickname: ''
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''data'' [invalid-params]'
+                    errorType: invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
-    parameters: []
+
   /api/v1/users.info:
     get:
       tags:
         - Users
       summary: Get User's Info
       description: |-
-        Retrieves information about a user. The result is only limited to what the callee has access to view.
+        Retrieves information about a user. The result is limited only to what you have access to view.
 
         From version `7.0.0`, this endpoint no longer supports the `fields` parameter, even when the `ALLOW_UNSAFE_QUERY_AND_FIELDS_API_PARAMS: true` environment variable is set. Instead, use the `includeUserRooms` parameter.
 
@@ -1747,7 +2012,13 @@ paths:
             example: true
           in: query
           name: includeUserRooms
-          description: Specifies whether the rooms the user is a member of should be included in the response.
+          description: Enter whether or not the rooms that the user is a member of are included in the response. To view the list of rooms, you need the `view-other-user-channels` permission.
+        - schema:
+            type: string
+            example: hXBuCLPDnsLgSJLiL
+          in: query
+          name: importId
+          description: 'You can use this parameter to search for users that were imported from external channels, such as Slack. You can also get the value of the import ID using this endpoint if you have the `view-full-other-user-info` permission.'
       responses:
         '200':
           description: OK
@@ -1794,6 +2065,8 @@ paths:
                         type: string
                       utcOffset:
                         type: integer
+                      freeSwitchExtension:
+                        type: string
                       canViewAllInfo:
                         type: boolean
                   success:
@@ -1835,6 +2108,7 @@ paths:
                       statusText: ''
                       avatarETag: GFoEi6wv3uAxnzDcD
                       nickname: tesuser2
+                      freeSwitchExtension: "1234"
                       canViewAllInfo: true
                       rooms:
                         - _id: 651667dda2f73c7460e18cce
@@ -2032,7 +2306,7 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
-    parameters: []
+
   /api/v1/users.setAvatar:
     post:
       summary: Set User Avatar
@@ -2059,7 +2333,7 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       description: |-
-        Permission required: `edit-other-user-avatar`, if the `AllowUserAvatarChange` setting under **Accounts** is enabled.
+        Use this endpoint to change your or another user's avatar. You can change avatars only if the `AllowUserAvatarChange` setting under **Accounts** is enabled. To change another user's avatar, you need the permission: `edit-other-user-avatar`.
         
         ### Changelog
         | Version      | Description |
@@ -2093,14 +2367,13 @@ paths:
                 value:
                   avatarUrl: 'http://domain.tld/to/my/own/avatar.jpg'
         description: |-
-          You have 2 options to set the user avatar:
-            * Upload the image file to use as the new avatar, as form data. For example, `image=@my-own-avatar.png`.
-            * Enter the image URL you want to set as the user avatar in the request body.
+          You have two options to set the user avatar:
+            * Upload the image file to use as the new avatar, as form-data. For example, `image=@my-own-avatar.png`.
+            * Enter the image URL you want to set as the user avatar in the request body, using the parameter `avatarUrl`.
       tags:
         - Users
-    parameters: []
+
   /api/v1/users.getAvatar:
-    parameters: []
     get:
       summary: Get User Avatar
       tags:
@@ -2144,6 +2417,8 @@ paths:
           description: 'The user ID. Alternatively, you can enter the `username` parameter.'
           required: true
       description: |-
+        View a user's avatar.
+        
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
@@ -2187,6 +2462,7 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       description: |-
+        Reset a user's avatar to the default icon. By default, icons contain the user's initials.
         Permissions required, if the setting `AllowUserAvatarChange` is enabled: 
           * `edit-other-user-avatar`: Permission to change other user's avatar
           * `manage-moderation-actions`: Permission to manage moderation actions, perform actions on reported users
@@ -2219,18 +2495,33 @@ paths:
       tags:
         - Users
   /api/v1/users.setStatus:
-    parameters: []
     post:
       summary: Set User Status
       operationId: post-api-v1-users.setStatus
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Missing status or message parameter:
+                  value:
+                    success: false
+                    error: 'Match error: Failed Match.OneOf, Match.Maybe or Match.Optional validation'
         '401':
           $ref: '#/components/responses/authorizationError'
       description: |-
-        * You can set the status for yourself or another user. 
-        * To change another user's status, the `AllowUserStatusMessageChange` setting must be enabled, and you must have the `edit-other-user-info` permission.
+        * You can set the status for yourself or another user. The `AllowUserStatusMessageChange` setting must be enabled in the `Accounts` workspace settings.
+        * To change another user's status, you must have the `edit-other-user-info` permission.
         * According to your workspace settings (under **Accounts**), you will only be able to set the invisible or `offline` status if the `Allow Invisible status option` setting is enabled.
           
           ### Changelog
@@ -2248,24 +2539,21 @@ paths:
               properties:
                 message:
                   type: string
-                  description: The user's status message.
+                  description: The user's status message. At least one of the `message` or `status` parameters is required.
                   example: My status update
                 status:
                   type: string
                   description: >-
                     The user's status like `online`, `away`, `busy`, or
-                    `offline`.
+                    `offline`. At least one of the `message` or `status` parameters is required.
                   example: online
                 userId:
                   type: string
                   example: zXuq7SvPKYbzYmfpo
-                  description: The user ID for which you want to set the status. You don't need to add this if you are setting the status for yourself.
-                username:
-                  type: string
-                  description: The user name for which you want to set the status. You don't need to add this if you are setting the status for yourself.
-                  example: bob
+                  description: The user ID for which you want to set the status. You don't need to add this if you are setting the status for yourself. Alternatively, you can use the `username` parameter and enter the username for which you want to set the status.
               required:
                 - message
+                - status
             examples:
               Example 1:
                 value:
@@ -2375,9 +2663,9 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       description: |-
-        Any one of the following permissions are required:
-          * `edit-other-user-avatar`: Permission to change other user's avatar
-          * `manage-moderation-actions`: Permission to manage moderation actions, perform actions on reported users
+        Activate a deactivated user in the workspace. Any one of the following permissions is required:
+          * `edit-other-user-active-status`: Permission to change other user's status.
+          * `manage-moderation-actions`: Permission to manage moderation actions, perform actions on reported users.
           
           ### Changelog
           | Version      | Description |
@@ -2423,7 +2711,6 @@ paths:
           chosen as the new owner.
       tags:
         - Users
-    parameters: []
   /api/v1/users.deactivateIdle:
     post:
       summary: Deactivate Idle Users
@@ -2483,7 +2770,7 @@ paths:
                     success: false
                     error: unauthorized
       description: |-
-        Permission required: `edit-other-user-active-status`
+        Automatically deactivate idle users in your workspace based on the number of days and roles. Permission required: `edit-other-user-active-status`
           
           ### Changelog
           | Version      | Description |
@@ -2516,9 +2803,8 @@ paths:
                   role: user
       tags:
         - Users
-    parameters: []
+
   /api/v1/users.getPresence:
-    parameters: []
     get:
       summary: Get Specific User's Presence
       operationId: get-api-v1-users.getPresence
@@ -2555,6 +2841,8 @@ paths:
       tags:
         - Users
       description: |-
+        Get a user's presence in the workspace (offline, busy, active, or away).
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -2562,7 +2850,6 @@ paths:
         |0.48.0            | Renamed to `users.getPresence`       |
         |0.35.0            | Added       |
   /api/v1/users.presence:
-    parameters: []
     get:
       summary: Get Users Presence
       operationId: get-api-v1-users.presence
@@ -2635,6 +2922,7 @@ paths:
           name: ids
           description: The user IDs whose status you want.
       description: |-
+        Get presence of multiple workspace users. You can filter by date and user IDs.
         If the `Presence_broadcast_disabled` setting is true, the endpoint returns an empty array. You can find this setting under **Administration** > **Settings** > **Troubleshoot**.
         
         ### Changelog
@@ -2649,7 +2937,7 @@ paths:
         - Users
       summary: Delete User
       description: |-
-        Deletes an existing user from your workspace. Permission required: `delete-user`
+        Permanently deletes an existing user from your workspace. Permission required: `delete-user`
         
         ### Changelog
         | Version      | Description |
@@ -2670,23 +2958,36 @@ paths:
               properties:
                 userId:
                   type: string
+                  example: BsNr28znDkG8aeo7W
                   description: >-
                     The `userId` of the user. Alternatively, you can use the
-                    username property and value.
+                    `username` property and value.
                 confirmRelinquish:
                   type: boolean
                   description: >-
-                    Deletes user even if it is the last owner of a room. By
+                    Deletes the user, even if they are the last owner of a room. By
                     default, it is set to `false`.
                   default: false
             examples:
-              Example 1:
+              Example:
                 value:
                   userId: BsNr28znDkG8aeo7W
                   confirmRelinquish: true
       responses:
         '200':
-          $ref: '#/components/responses/trueSuccess'
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  deletedRooms:
+                    description: "The rooms deleted as part of the user deletion process."
+                    type: array
+                    items:
+                      type: object
         '400':
           description: Bad Request
           content:
@@ -2701,7 +3002,7 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                Example:
                   value:
                     success: false
                     error: >-
@@ -2748,21 +3049,24 @@ paths:
           application/json:
             schema:
               type: object
-              x-examples:
-                Example 1:
-                  userId: BsNr28znDkG8aeo7W
+              required:
+                - password
               properties:
                 password:
                   type: string
                   description: The password of user (encrypted in SHA256).
-                  example: BsNr28znDkG8aeo7W
+                  example: 8f0e2f76e22b43e2855189877e7dc1e1e7d98c226c95db247cd1d547928334a9
                 confirmRelinquish:
                   type: boolean
                   description: >-
                     Deletes own account even if user is the last owner of a
                     room.
-              required:
-                - password
+                  default: false
+            examples:
+              Example 1:
+                value:
+                  password: 8f0e2f76e22b43e2855189877e7dc1e1e7d98c226c95db247cd1d547928334a9
+                  confirmRelinquish: false                    
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
@@ -2784,7 +3088,7 @@ paths:
                     error: Body parameter "password" is required.
         '401':
           $ref: '#/components/responses/authorizationError'
-    parameters: []
+
   /api/v1/users.createToken:
     post:
       tags:
@@ -2993,7 +3297,6 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/users.setPreferences:
-    parameters: []
     post:
       summary: Set User Preferences
       operationId: post-api-v1-users.setPreferences
@@ -3155,7 +3458,7 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       description: |-
-        If you want to edit another user's preferences, you need the permission `edit-other-user-info`.
+        Set preferences for your account. If you want to edit another user's preferences, you need the permission `edit-other-user-info`.
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -3168,15 +3471,12 @@ paths:
           application/json:
             schema:
               type: object
-              x-examples:
-                Example 1:
-                  userId: BsNr28znDkG8aeo7W
-                  data: {}
+              required:
+                - data
               properties:
                 userId:
                   type: string
-                  description: |-
-                    The user ID whose preferences you want to change. If an ID is not provided, the preferences will be set for the user who is sending the request.
+                  description: 'The user ID whose preferences you want to change. If an ID is not provided, the preferences will be set for the user who is sending the request.'
                 data:
                   type: object
                   description: The object with the following preference details.
@@ -3187,17 +3487,17 @@ paths:
                       example: en
                     newRoomNotification:
                       type: string
-                      example: door
-                      description: New room notification sound.
+                      example: chime
+                      description: Set the sound for new room notifications. The notification sounds are customizable, you can check the preferences in your workspace account for the list of options available.
+                      default: door
                     newMessageNotification:
                       type: string
                       example: chime
-                      description: New message notification sound.
+                      description: New message notification sound. The notification sounds are customizable, you can check the preferences in your workspace account for the list of options available.
+                      default: chime
                     muteFocusedConversations:
                       type: boolean
-                      description: >-
-                        A boolean value that indicates whether the user has
-                        enabled the option to mute focused conversations.
+                      description: 'When set to true, open and active rooms will not create notification sounds.'
                     clockMode:
                       type: integer
                       description: |-
@@ -3207,29 +3507,19 @@ paths:
                         * `2`: 24-hour clock
                     useEmojis:
                       type: boolean
-                      description: >-
-                        A boolean value that indicates whether the user has
-                        enabled the option to use emojis.
+                      description: A boolean value that indicates whether the user has enabled the option to use emojis.
                     convertAsciiEmoji:
                       type: boolean
-                      description: >-
-                        A boolean value that indicates whether the user has
-                        enabled the option to convert ASCII emojis.
+                      description: A boolean value that indicates whether the user has enabled the option to convert ASCII emojis.
                     saveMobileBandwidth:
                       type: boolean
-                      description: >-
-                        A boolean value that indicates whether the user has
-                        enabled the option to save mobile bandwidth.
+                      description: A boolean value that indicates whether the user has enabled the option to save mobile bandwidth.
                     collapseMediaByDefault:
                       type: boolean
-                      description: >-
-                        A boolean value that indicates whether the user has
-                        enabled the option to collapse media by default.
+                      description: A boolean value that indicates whether the user has enabled the option to collapse media by default.
                     autoImageLoad:
                       type: boolean
-                      description: >-
-                        A boolean value indicates whether the user has enabled
-                        the option to load images automatically.
+                      description: A boolean value indicates whether the user has enabled the option to load images automatically.
                     emailNotificationMode:
                       type: string
                       example: mentions
@@ -3240,9 +3530,7 @@ paths:
                           * `nothing`: Get no desktop notifications.
                     unreadAlert:
                       type: boolean
-                      description: >-
-                        A boolean value indicates whether the user has enabled
-                        the option.
+                      description: A boolean value indicates whether the user has enabled the option.
                     notificationsSoundVolume:
                       type: integer
                       description: The sound volume for notifications.
@@ -3264,69 +3552,50 @@ paths:
                         * `nothing`: Get no push notifications.
                     enableAutoAway:
                       type: boolean
-                      description: >-
-                        A boolean value that indicates whether the user has
-                        enabled the option to update the status as away after a
-                        certain amount of idle time.
+                      description: A boolean value that indicates whether the user has enabled the option to update the status as away after a certain amount of idle time.
                     highlights:
                       type: array
-                      description: >-
-                        The message highlights section. You will be notified
-                        when someone mentions a word or phrase that you add
-                        here. Highlight words are not case-sensitive.
+                      description: The message highlights section. You will be notified when someone mentions a word or phrase that you add here. Highlight words are not case-sensitive.
                       items:
                         type: string
                         example: '["deploy", "docker"]'
                     messageViewMode:
                       type: integer
                       description: |-
-                        The preferred view mode for the messages. The available options are:
+                        The preferred view mode for the messages i. The available options are:
                           * `0` - Normal
                           * `1` - Cozy
                           * `2` - Compact
                     hideUsernames:
                       type: boolean
-                      description: >-
-                        A boolean value that indicates whether the user has
-                        enabled the option to hide usernames.
+                      description: A boolean value that indicates whether the user has enabled the option to hide usernames.
                     hideRoles:
                       type: boolean
-                      description: >-
-                        A boolean value that indicates whether the user has
-                        enabled the option to hide roles.
+                      description: A boolean value that indicates whether the user has enabled the option to hide roles.
                     displayAvatars:
                       type: boolean
-                      description: >-
-                        A boolean value that indicates whether the user has
-                        enabled the option to display user avatars.
+                      description: A boolean value that indicates whether the user has enabled the option to display user avatars.
                     hideFlexTab:
                       type: boolean
-                      description: >-
-                        A boolean value that indicates whether the user has
-                        enabled the option.
+                      description: A boolean value that indicates whether the user has enabled the option to automatically close the right sidebar in rooms when you click outside them.
                     sendOnEnter:
                       type: string
                       description: |-
                         Set how you want the **Enter** key to behave when sending messages.
-                        
+
                         * `normal` - Send messages with the **Enter** key.
                         * `alternative` - Send messages with **Enter** + **Ctrl/Alt/Shift/Cmd**.
                         * `desktop` - Send messages with **Enter** only on the desktop.
                     idleTimeLimit:
                       type: integer
-                      description: The time limit that is to be considered as idle time.
+                      description: 'The time limit that is to be considered as idle time. After this time, the user status changes to `away`.'
                       example: 300
                     sidebarShowFavorites:
                       type: boolean
-                      description: >-
-                        A boolean value that indicates whether the user has
-                        enabled the option to show favorites on the sidebar.
+                      description: A boolean value that indicates whether the user has enabled the option to show favorites on the sidebar.
                     sidebarShowUnread:
                       type: boolean
-                      description: >-
-                        A boolean value that indicates whether the user has
-                        enabled the option to show unread messages in the
-                        sidebar.
+                      description: A boolean value that indicates whether the user has enabled the option to show unread messages in the sidebar.
                     sidebarSortby:
                       type: string
                       description: |-
@@ -3342,15 +3611,10 @@ paths:
                           * `condensed`
                     sidebarDisplayAvatar:
                       type: boolean
-                      description: >-
-                        A boolean value that indicates whether the user has
-                        enabled the option to display avatars in the sidebar.
+                      description: A boolean value that indicates whether the user has enabled the option to display avatars in the sidebar.
                     sidebarGroupByType:
                       type: boolean
-                      description: >-
-                        A boolean value that indicates whether the user has
-                        enabled the option to show the grouped values in the
-                        sidebar.
+                      description: A boolean value that indicates whether the user has enabled the option to show the grouped values in the sidebar.
                     dontAskAgainList:
                       type: array
                       description: |-
@@ -3358,8 +3622,94 @@ paths:
                         "dontAskAgainList\":[{\"action\":\"hideRoom\",\"label\":\"Hide\"}]"
                       items:
                         type: object
-              required:
-                - data
+                        properties:
+                          action:
+                            type: string
+                            x-stoplight:
+                              id: lz3claakkkr40
+                          label:
+                            type: string
+                            x-stoplight:
+                              id: mvk5kcn8m8kmc
+                    notifyCalendarEvents:
+                      type: boolean
+                      description: 'If you are using Outlook Calendar in your workspace, you can enable or disable calendar event notifications using this parameter.'
+                      default: false
+                    themeAppearence:
+                      type: string
+                      example: light
+                      default: auto
+                      description: "Set your preferrred workspace theme. The options are:\r\n* `light`\r\n* `dark`\r\n* `auto`\r\n* `high-contrast`"
+                    masterVolume:
+                      type: number
+                      description: Control the volume for all sounds coming from your workspace.
+                    alsoSendThreadToChannel:
+                      type: string
+                      description: "When replying to a thread, select how your replies should be sent to the room:\r\n* `never`: Thread replies are not sent to the channel.\r\n* `always`: Thread replies are sent to the channel.\r\n* `default`: Defaults to the workspace settings set by the admin."
+                    desktopNotificationRequireInteraction:
+                      type: boolean
+                      description: 'When set to true, notifications will remain in the notification panel until they are visited or closed.'
+                    showThreadsInMainChannel:
+                      type: boolean
+                      description: 'When set to true, all replies under a thread will also be displayed directly in the main room. When disabled, they''re displayed based on the sender''s choice.'
+                    fontSize:
+                      type: string
+                      description: "Set the font size. The options are:\r\n* `small`\r\n* `medium`\r\n* `large`"
+                    receiveLoginDetectionEmail:
+                      type: boolean
+                      description: Set this option to true to get an email notification whenever a login is made to your account.
+                    omnichannelTranscriptPDF:
+                      type: boolean
+                      description: Set to true to always export the transcript as PDF at the end of Omnichannel conversations.
+                    omnichannelTranscriptEmail:
+                      type: boolean
+                      description: Set to true to always send the transcript to contacts at the end of conversations.
+                    omnichannelHideConversationAfterClosing:
+                      type: boolean
+                      description: Set to true to redirect agents to the home page after closing a conversation.
+                    enableMobileRinging:
+                      type: boolean
+                      description: 'If you are using the Rocket.Chat Voice feature, you can set this parameter to true for mobile call notifications.'
+            examples:
+              Example 1:
+                value:
+                  userId: rbAXPnMktTFbNpwtJ
+                  data:
+                    language: en
+                    newRoomNotification: door
+                    newMessageNotification: chime
+                    muteFocusedConversations: true
+                    clockMode: 0
+                    useEmojis: true
+                    convertAsciiEmoji: true
+                    saveMobileBandwidth: true
+                    collapseMediaByDefault: true
+                    autoImageLoad: true
+                    emailNotificationMode: mentions
+                    unreadAlert: true
+                    notificationsSoundVolume: 0
+                    desktopNotifications: mentions
+                    pushNotifications: mentions
+                    enableAutoAway: true
+                    highlights:
+                      - '["deploy", "docker"]'
+                    messageViewMode: 0
+                    hideUsernames: true
+                    hideRoles: true
+                    displayAvatars: true
+                    hideFlexTab: true
+                    sendOnEnter: string
+                    idleTimeLimit: 300
+                    sidebarShowFavorites: true
+                    sidebarShowUnread: true
+                    sidebarSortby: string
+                    sidebarViewMode: string
+                    sidebarDisplayAvatar: true
+                    sidebarGroupByType: true
+                    dontAskAgainList:
+                      - {}
+                    notifyCalendarEvents: false
+                    themeAppearence: auto
       tags:
         - Users
   /api/v1/users.forgotPassword:
@@ -3464,11 +3814,18 @@ paths:
       tags:
         - Users
       summary: Check Username Availability
-      description: ''
+      description: 'Check if the username is available or used by another user'
       operationId: get-api-v1-users.checkUsernameAvailability
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
+        - name: username
+          in: query
+          required: true
+          description: 'The username to check for availability'
+          schema:
+            type: string
+            example: johnDoe
       responses:
         '200':
           description: OK
@@ -3503,12 +3860,27 @@ paths:
                     type: string
                   errorType:
                     type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+                      field:
+                        type: string
               examples:
                 Example 1:
                   value:
                     success: false
                     error: 'must have required property ''username'' [invalid-params]'
                     errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: 'system is blocked and can''t be used! [error-blocked-username]'
+                    errorType: error-blocked-username
+                    details:
+                      method: "checkUsernameAvailability"
+                      field: "system"
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/users.generatePersonalAccessToken:
@@ -3588,7 +3960,7 @@ paths:
         
         * Note that the generated access tokens are irrecoverable, so storing them safely is essential. If a token is lost or forgotten, it can be regenerated or deleted.
         * When making calls to the API that mandate authentication, include the generated token in the `X-Auth-Token` header and your user ID in the `X-User-Id` header to authenticate the requests.
-        Visit the <a href="https://docs.rocket.chat/docs/account#personal-access-tokens" target="_blank"> Personal Access Token user guide</a> for more details.
+        Visit the <a href="https://docs.rocket.chat/docs/manage-personal-access-tokens" target="_blank"> Personal Access Token user guide</a> for more details.
         
         ### Changelog
         | Version      | Description |
@@ -3868,7 +4240,6 @@ paths:
                 value:
                   tokenName: mytoken
   /api/v1/users.requestDataDownload:
-    parameters: []
     get:
       summary: Request Data Download
       operationId: get-api-v1-users.requestDataDownload
@@ -3969,12 +4340,13 @@ paths:
             Whether you want a full export or not. By default, the value is
             false.
       description: |-
+        Request download of your personal data using this endpoint. The <a href='https://docs.rocket.chat/v1/docs/user-data-download' target='_blank'>User Data Download</a> feature must be configured in the workspace by the admin. The exported file is available in the configured directory.
+       
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |1.2.0            | Added as `users.requestDataDownload`       |
   /api/v1/users.logoutOtherClients:
-    parameters: []
     post:
       summary: Logout Other Clients
       operationId: post-api-v1-users.logoutOtherClients
@@ -4006,9 +4378,8 @@ paths:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
       description: |
-        Requires the `LoginExpiration` settings enabled in **Accounts** > **Login Expiration in Days** which defines how long a login token remains valid before expiration.
+        Logs out of user sessions in other clients while keeping the current session active. The response the current token and its expiration date. Requires the `LoginExpiration` settings enabled in **Accounts** > **Login Expiration in Days** which defines how long a login token remains valid before expiration.
   /api/v1/users.autocomplete:
-    parameters: []
     get:
       summary: Autocomplete User
       operationId: get-api-v1-users.autocomplete
@@ -4106,7 +4477,6 @@ paths:
           description: |-
             Filter the response with the parameters.
   /api/v1/users.removeOtherTokens:
-    parameters: []
     post:
       summary: Remove Other Tokens
       operationId: post-api-v1-users.removeOtherTokens
@@ -4121,12 +4491,13 @@ paths:
       tags:
         - Users
       description: |-
+        Remove user's login tokens. This endpoint is primarily used when a user changes their password and they need to log in to the workspace again on other devices.
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |3.1.0            | Added       |
   /api/v1/users.resetE2EKey:
-    parameters: []
     post:
       summary: Reset Users E2E Key
       operationId: post-api-v1-users.resetE2EKey
@@ -4188,9 +4559,9 @@ paths:
         - $ref: '#/components/parameters/x-2fa-code'
         - $ref: '#/components/parameters/x-2fa-method'
       description: |-
-        <a href="https://docs.rocket.chat/use-rocket.chat/user-guides/user-panel/account#reset-e2e-key" target="_blank">Reset the E2E key</a> for a user in the workspace.
-        * It requires the `edit-other-user-e2ee` permission.
-        * This endpoint requires 2FA.
+        <a href="https://docs.rocket.chat/docs/manage-your-account-settings#endtoend-encryption" target="_blank">Reset the E2E key</a> for your account or another user in the workspace.
+        * To reset other users' E2EE key, you need the `edit-other-user-e2ee` permission.
+        * This endpoint requires 2FA, if 2FA is enabled and configured on your workspace.
         
         ### Changelog
         | Version      | Description |
@@ -4208,14 +4579,13 @@ paths:
                   type: string
                   description: >-
                     The `userId` of the user whose e2e key you want to reset.
-                    You can also use the username. If you don't enter a value,
+                    You can also use the `username` parameter. If you don't enter a value,
                     the sender's E2E value is reset.
             examples:
               Example 1:
                 value:
                   userId: GonjPyg3gB3Z9ur9s
   /api/v1/users.resetTOTP:
-    parameters: []
     post:
       summary: Reset Users TOTP
       operationId: post-api-v1-users.resetTOTP
@@ -4278,8 +4648,8 @@ paths:
         - $ref: '#/components/parameters/x-2fa-method'
       description: |-
         Reset 2FA via TOTP for a user in the workspace. Make sure that the `Enable Two Factor Authentication` setting is enabled under **Administration** > **Settings** > **Accounts** > **Two Factor Authentication**.
-        * It requires the `edit-other-user-totp` permission.
-        * It requires two-factor authentication.
+        * Permission required: `edit-other-user-totp`.
+        * It requires two-factor authentication, if 2FA is enabled and configured in your workspace.
         
         ### Changelog
         | Version      | Description |
@@ -4309,7 +4679,7 @@ paths:
         - Users
       summary: List User's Teams
       description: |-
-        The teams returned by the endpoint depends on your permissions. To view all teams, you need the `view-all-teams` permission.
+        Get the list of teams that a specific user is a member of. The teams returned by the endpoint depend on your permissions. To view all teams, you need the `view-all-teams` permission.
       operationId: get-api-v1-users.listTeams
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -4394,7 +4764,6 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/moderation.reportUser:
-    parameters: []
     post:
       summary: Report User
       operationId: post-api-v1-moderation.reportUser
@@ -4450,12 +4819,13 @@ paths:
                   userId: ByehQjC44FwMeiLbX
                   description: test
       description: |-
+        Report a user for offensive messages in the workspace.
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |6.4.0            | Added       |
   /api/v1/users.logout:
-    parameters: []
     post:
       summary: Logout User
       operationId: post-api-v1-users.logout
@@ -4483,7 +4853,16 @@ paths:
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
-      description: The endpoint requires the `logout-other-user`.
+      description: Log out of your account. You can also log out of another user's session. You will need the `logout-other-user` permission.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  description: Enter the user ID to be logged out.
   /api/v1/ldap.syncNow:
     post:
       tags:
@@ -4636,6 +5015,23 @@ paths:
                   value:
                     message: LDAP_User_Found
                     success: true
+        '400':
+          description: Bad Request
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'Match error: Missing key ''username'''
         '401':
           $ref: '#/components/responses/authorizationError'
       requestBody:
@@ -4654,7 +5050,6 @@ paths:
               Example 1:
                 value:
                   username: bob
-    parameters: []
   '/api/v1/avatar/{subject}':
     parameters:
       - schema:
@@ -4886,72 +5281,6 @@ paths:
                     type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    users:
-                      - _id: W7MRNgkYLXKKAGNvW
-                        username: agent1
-                        emails:
-                          - address: agent1@agent.com
-                            verified: false
-                        type: user
-                        roles:
-                          - user
-                          - livechat-agent
-                        status: offline
-                        active: true
-                        name: Agent 1
-                        lastLogin: '2024-04-24T17:47:50.485Z'
-                      - _id: Tf44Q5AaYDehtJLzA
-                        username: agent2
-                        emails:
-                          - address: agent2@agent.com
-                            verified: false
-                        type: user
-                        roles:
-                          - user
-                          - livechat-agent
-                        status: offline
-                        active: true
-                        name: Agent 2
-                        lastLogin: '2024-04-29T16:38:56.809Z'
-                      - _id: JwATAtGzrzHYHCXFy
-                        username: agent3
-                        emails:
-                          - address: agent3@agent.com
-                            verified: false
-                        type: user
-                        roles:
-                          - user
-                          - livechat-agent
-                        status: online
-                        active: true
-                        name: Agent3
-                        lastLogin: '2024-04-30T16:59:21.879Z'
-                      - _id: u6C62WdHKNk5X8Rzr
-                        username: guy
-                        emails:
-                          - address: guy@guy.com
-                            verified: false
-                        type: user
-                        roles:
-                          - user
-                        status: offline
-                        active: true
-                        name: guy
-                      - _id: rocket.cat
-                        name: Rocket.Cat
-                        username: rocket.cat
-                        status: online
-                        active: true
-                        type: bot
-                        roles:
-                          - bot
-                        avatarETag: MEhPLkenJqs3jTJP5
-                    count: 5
-                    offset: 0
-                    total: 5
-                    success: true
               examples:
                 Success:
                   value:
@@ -5019,6 +5348,8 @@ paths:
                     offset: 0
                     total: 5
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
 tags:
   - name: LDAP
   - name: Permissions

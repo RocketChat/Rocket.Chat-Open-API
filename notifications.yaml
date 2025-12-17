@@ -448,7 +448,6 @@ paths:
       tags:
         - Push Token
   /api/v1/push.token:
-    parameters: []
     delete:
       summary: Delete Push Token
       operationId: delete-api-v1-push.token
@@ -601,6 +600,38 @@ paths:
         | Version      | Description |
         | ---------------- | ------------|
         |0.60.0            | Added       |
+  /api/v1/push.info:
+    get:
+      summary: Get Push Info
+      tags:
+        - Push Token
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pushGatewayEnabled:
+                    type: boolean
+                  defaultPushGateway:
+                    type: boolean
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    pushGatewayEnabled: true
+                    defaultPushGateway: true
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-push.info
+      description: This endpoint returns the status of push gateway in your workspace.
+      parameters:
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/X-User-Id'
 components:
   parameters:
     X-Auth-Token:
@@ -684,3 +715,4 @@ components:
             Success Example:
               value:
                 success: true
+
