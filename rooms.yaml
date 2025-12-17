@@ -13737,6 +13737,83 @@ paths:
           name: userId
           description: 'Enter the user ID that you want to check. Alternatively, you can use the `username` parameter and provide the user name instead of the user ID.'
           required: true
+  /api/v1/rooms.autocomplete.channelAndPrivate.withPagination:
+    get:
+      summary: Autocomplete Room Name With Pagination
+      tags:
+        - Rooms
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        fname:
+                          type: string
+                        name:
+                          type: string
+                        t:
+                          type: string
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    items:
+                      - _id: 66c82e1e237405fc05fc1ef4
+                        fname: api-team
+                        name: api-team
+                        t: c
+                      - _id: 66c88dae237405fc05fc1f06
+                        fname: api-team2
+                        name: api-team2
+                        t: p
+                    total: 4
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: The 'selector' param is required
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-rooms.autocomplete.channelAndPrivate.withPagination
+      description: 'List the public and private rooms whose names match a given string, excluding discussions, DMs, and omnichannel rooms. The endpoint is valuable when performing search operations. It returns only rooms that the user belongs to. This endpoint includes pagination query parameters.'
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/sort'
+        - schema:
+            type: string
+            example: '{"name":"api"}'
+          in: query
+          name: selector
+          description: The search term to be completed. It only applies to the room name.
+          required: true
           
   /api/v1/listInvites:
     get:
