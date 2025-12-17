@@ -13814,6 +13814,189 @@ paths:
           name: selector
           description: The search term to be completed. It only applies to the room name.
           required: true
+  '/api/v1/rooms.mediaConfirm/{rid}/{fileId}':
+    parameters:
+      - schema:
+          type: string
+          example: 66cd971f6fcbb8e8b3cf8e69
+        name: rid
+        in: path
+        required: true
+        description: Enter the room ID where you want to check the uploaded file.
+      - schema:
+          type: string
+          example: 69424442ddfe6ceaf280f93f
+        name: fileId
+        in: path
+        required: true
+        description: Enter the file ID.
+    post:
+      summary: Check Uploaded File
+      tags:
+        - Rooms
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      rid:
+                        type: string
+                      ts:
+                        type: string
+                      msg:
+                        type: string
+                      file:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          name:
+                            type: string
+                          type:
+                            type: string
+                          size:
+                            type: integer
+                          format:
+                            type: string
+                      files:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            name:
+                              type: string
+                            type:
+                              type: string
+                            size:
+                              type: integer
+                            format:
+                              type: string
+                      attachments:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            title:
+                              type: string
+                            title_link:
+                              type: string
+                            title_link_download:
+                              type: boolean
+                            image_dimensions:
+                              type: object
+                              properties:
+                                width:
+                                  type: integer
+                                height:
+                                  type: integer
+                            image_preview:
+                              type: string
+                            image_url:
+                              type: string
+                            image_type:
+                              type: string
+                            image_size:
+                              type: integer
+                            type:
+                              type: string
+                      u:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          username:
+                            type: string
+                          name:
+                            type: string
+                      _updatedAt:
+                        type: string
+                      urls:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    message:
+                      _id: 2ZABtFgt89fYYSw3Q
+                      rid: GENERAL
+                      ts: '2025-12-17T05:49:55.825Z'
+                      msg: ''
+                      file:
+                        _id: 69424442ddfe6ceaf280f93f
+                        name: 44.jpg
+                        type: image/jpeg
+                        size: 71224
+                        format: jpeg
+                      files:
+                        - _id: 69424442ddfe6ceaf280f93f
+                          name: 44.jpg
+                          type: image/jpeg
+                          size: 71224
+                          format: jpeg
+                        - _id: 69424483ddfe6ceaf280f941
+                          name: thumb-44.jpg
+                          type: image/jpeg
+                          size: 13473
+                          format: jpeg
+                      attachments:
+                        - title: 44.jpg
+                          title_link: /file-upload/69424442ddfe6ceaf280f93f/44.jpg
+                          title_link_download: true
+                          image_dimensions:
+                            width: 368
+                            height: 360
+                          image_preview: /9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQgsW+OGY6OKR5o3hGJfr6n3n5JkvPdSpXal1BmuoReom//Z
+                          image_url: /file-upload/69424483ddfe6ceaf280f941/44.jpg
+                          image_type: image/jpeg
+                          image_size: 71224
+                          type: file
+                      u:
+                        _id: C38WSSzrGd2NCjzqJ
+                        username: test.cat
+                        name: test cat
+                      _updatedAt: '2025-12-17T05:49:55.959Z'
+                      urls: []
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: '[invalid-file]'
+                    errorType: invalid-file
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-rooms.mediaConfirm-rid-fileId
+      description: Use this endpoint to get details of a specific file uploaded to a room.
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
           
   /api/v1/listInvites:
     get:
