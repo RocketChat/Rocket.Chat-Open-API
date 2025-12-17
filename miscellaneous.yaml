@@ -636,6 +636,59 @@ paths:
           $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/forbiddenError'
+  /api/v1/sendInvitationEmail:
+    post:
+      summary: Send Invitation Email
+      tags:
+        - Email Inbox
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''emails'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-sendInvitationEmail
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - emails
+              properties:
+                emails:
+                  type: array
+                  description: Enter the list of emails to which you want to send the invitation.
+                  items:
+                    type: string
+                    example: example@example.com
+            examples:
+              Example 1:
+                value:
+                  emails:
+                    - example@example.com
+      description: Send workspace invitation emails using this endpoint.
   /api/v1/shield.svg:
     get:
       summary: Shield SVG
