@@ -17625,6 +17625,264 @@ paths:
                   host: 'null'
       tags:
         - Livechat Messages
+  '/api/v1/livechat/messages/{rid}':
+    get:
+      summary: Get Livechat Messages
+      tags:
+        - Livechat Messages
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        rid:
+                          type: string
+                        ts:
+                          type: string
+                        msg:
+                          type: string
+                        groupable:
+                          type: boolean
+                        file:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            name:
+                              type: string
+                            type:
+                              type: string
+                            size:
+                              type: integer
+                            format:
+                              type: string
+                        files:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              _id:
+                                type: string
+                              name:
+                                type: string
+                              type:
+                                type: string
+                              size:
+                                type: integer
+                              format:
+                                type: string
+                        attachments:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              title:
+                                type: string
+                              title_link:
+                                type: string
+                              title_link_download:
+                                type: boolean
+                              image_dimensions:
+                                type: object
+                                properties:
+                                  width:
+                                    type: integer
+                                  height:
+                                    type: integer
+                              image_preview:
+                                type: string
+                              image_url:
+                                type: string
+                              image_type:
+                                type: string
+                              image_size:
+                                type: integer
+                              type:
+                                type: string
+                              description:
+                                type: string
+                        u:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                            name:
+                              type: string
+                        _updatedAt:
+                          type: string
+                        urls:
+                          type: array
+                          items:
+                            type: object
+                            properties: {}
+                        mentions:
+                          type: array
+                          items:
+                            type: object
+                            properties: {}
+                        channels:
+                          type: array
+                          items:
+                            type: object
+                            properties: {}
+                        md:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              type:
+                                type: string
+                              value:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                    value:
+                                      type: string
+                        token:
+                          type: string
+                        alias:
+                          type: string
+                  offset:
+                    type: integer
+                  count:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    messages:
+                      - _id: hmnQoYcnSJp7c9f2v
+                        rid: dCBiZX3XPWyPsa6pt
+                        ts: '2025-10-16T11:17:07.068Z'
+                        msg: ''
+                        groupable: false
+                        file:
+                          _id: 68f0d43201e202fefed836cf
+                          name: video-designs (1).png
+                          type: image/png
+                          size: 17466
+                          format: png
+                        files:
+                          - _id: 68f0d43201e202fefed836cf
+                            name: video-designs (1).png
+                            type: image/png
+                            size: 17466
+                            format: png
+                          - _id: 68f0d43301e202fefed836d1
+                            name: thumb-video-designs (1).png
+                            type: image/png
+                            size: 14848
+                            format: png
+                        attachments:
+                          - title: video-designs (1).png
+                            title_link: /file-upload/68f0d43201e202fefed836cf/video-designs%20(1).png
+                            title_link_download: true
+                            image_dimensions:
+                              width: 480
+                              height: 301
+                            image_preview: /9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAUACADASIAAhEBAxEB/8QAGQABAAMBAQAAAAAAAAAAAAAAAAIDBAUI/8QAHRAAAgIDAAMAAAAAAAAAAAAAAQIAAwQRMQUhIv/EABUBAQEAAAAAAAAAAAAAAAAAAAAB/8QAFxEBAQEBAAAAAAAAAAAAAAAAAAERQf/aAAwDAQACEQMRAD8A8qqCzAKNk8EtbGvW4VNUwsPF17kKXNVquvVO5vt8pdZnpklvpRoHUszqXWNca5rjUKmNg6uvcqYFWIYaI6J0a/KXJnvkhvthrepgusNtrO3WOzFzhLUIiJFIiIH/2Q==
+                            image_url: /file-upload/68f0d43301e202fefed836d1/video-designs%20(1).png
+                            image_type: image/png
+                            image_size: 17466
+                            type: file
+                            description: ''
+                        u:
+                          _id: C38WSSzrGd2NCjzqJ
+                          username: test.cat
+                          name: Test Cat
+                        _updatedAt: '2025-11-12T10:24:44.420Z'
+                        urls: []
+                        mentions: []
+                        channels: []
+                      - _id: 6j9hrchZBHwZHpsF2
+                        rid: dCBiZX3XPWyPsa6pt
+                        msg: hello
+                        ts: '2025-10-16T11:16:58.948Z'
+                        u:
+                          _id: C38WSSzrGd2NCjzqJ
+                          username: test.cat
+                          name: Test Cat
+                        _updatedAt: '2025-11-12T10:24:44.420Z'
+                        urls: []
+                        mentions: []
+                        channels: []
+                        md:
+                          - type: PARAGRAPH
+                            value:
+                              - type: PLAIN_TEXT
+                                value: hello
+                      - _id: CfD55oXeSvvC3jmZS
+                        rid: dCBiZX3XPWyPsa6pt
+                        msg: hello
+                        token: 2c9035b72dec31be7e9ccbb3cbd9952394ea41c1517b76c528d403c00a3fccf9
+                        alias: swayyy
+                        ts: '2025-10-16T11:16:36.406Z'
+                        u:
+                          _id: 68f0d41001e202fefed836af
+                          username: guest-49
+                          name: swayyy
+                        _updatedAt: '2025-10-16T11:16:36.447Z'
+                        urls: []
+                        mentions: []
+                        channels: []
+                        md:
+                          - type: PARAGRAPH
+                            value:
+                              - type: PLAIN_TEXT
+                                value: hello
+                    offset: 0
+                    count: 50
+                    total: 3
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: invalid-room
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: 'get-api-v1-livechat-:rid-messages'
+      description: 'View the messages of a specific Livechat room. Permission required: `view-l-room`'
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+        - schema:
+            type: string
+          in: query
+          name: searchTerm
+          description: Enter a term that you want to search in the messages.
   /api/v1/omnichannel/integrations:
     post:
       summary: Set up Omnichannel webhook
