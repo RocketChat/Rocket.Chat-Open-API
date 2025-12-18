@@ -3610,6 +3610,94 @@ paths:
                     success: false
                     error: 'The "lastUpdate" query parameter must be a valid date. [error-roomId-param-invalid]'
                     errorType: error-roomId-param-invalid
+  /api/v1/chat.getURLPreview:
+    get:
+      summary: Get URL Preview
+      tags:
+        - Chat
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  urlPreview:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                      meta:
+                        type: object
+                        properties: {}
+                      headers:
+                        type: object
+                        properties:
+                          contentLength:
+                            type: string
+                          contentType:
+                            type: string
+                      ignoreParse:
+                        type: boolean
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    urlPreview:
+                      url: 'http://www.w3schools.com/tags/movie.mp4'
+                      meta: {}
+                      headers:
+                        contentLength: '318465'
+                        contentType: video/mp4
+                      ignoreParse: true
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''url'' [invalid-params]'
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: 'must have required property ''roomId'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-chat.getURLPreview
+      description: Use this endpoint to get a URL preview that can be used in the send and update message endpoints.
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - schema:
+            type: string
+            example: Xnb2kLD2Pnhdwe3RH
+          in: query
+          name: roomId
+          description: Enter the room ID where you want to send or update the message.
+          required: true
+        - schema:
+            type: string
+            example: 'http://www.w3schools.com/tags/movie.mp4'
+          in: query
+          name: url
+          description: Enter the URL that you want to preview.
+          required: true
   /api/v1/dm.close:
     post:
       tags:
