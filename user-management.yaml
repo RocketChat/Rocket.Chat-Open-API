@@ -3809,6 +3809,52 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
+  /api/v1/users.getAvatarSuggestion:
+    get:
+      summary: Get Avatar Suggestion
+      tags:
+        - Users
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  suggestions:
+                    type: object
+                    properties:
+                      gravatar:
+                        type: object
+                        properties:
+                          service:
+                            type: string
+                          url:
+                            type: string
+                          blob:
+                            type: string
+                          contentType:
+                            type: string
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    suggestions:
+                      gravatar:
+                        service: gravatar
+                        url: 'https://s.gravatar.com/avatar/6da0187ff0de738a86a62b0e9e34ffbf?default=404&size=200'
+                        blob: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAgAElEQVR42my9y49k2ZHm9zM75153j8jIjMysyqxKVrGKZJNsstjvbrTUg1bPQAIaGgkYCCMtpIWglTba6g+YP0CA/gBBO61moYUEYQRpMNBooWlyptmcLrJZZFXWu/L9iqe733uOmRZ27nWP4hSQiKjMCPfr955j9tn3fWZHfvCX/8iTLhA6/vCHP+TenWOuHR5Rxy0'
+                        contentType: image/png
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-users.getAvatarSuggestion
+      description: Use this endpoint to get suggestions for your workspace avatar image. The endpoint may return an empty string if no images associated with your email ID are found.
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
   /api/v1/users.checkUsernameAvailability:
     get:
       tags:
