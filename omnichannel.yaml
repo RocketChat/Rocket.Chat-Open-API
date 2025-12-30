@@ -9049,6 +9049,62 @@ paths:
           $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/permissionError'
+  /api/v1/livechat/business-hours.remove:
+    post:
+      summary: Remove Business Hour
+      tags:
+        - Omnichannel Business Hours
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  errorType:
+                    type: string
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    errorType: invalid-params
+                    error: must have required property '_id'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-livechat-business-hours.remove
+      description: 'Remove an Omnichannel business hour. '
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - _id
+                - type
+              properties:
+                _id:
+                  type: string
+                  description: Enter the business hour ID that you want to delete.
+                  example: 6953aca46ff48667974be88c
+                type:
+                  type: string
+                  description: Enter the type of the business hour. It can be `default` or `custom`.
+                  example: default
+            examples:
+              Example 1:
+                value:
+                  _id: 6953aca46ff48667974be88c
+                  type: custom
   /api/v1/livechat/business-hours.list:
     get:
       tags:
@@ -11315,6 +11371,136 @@ paths:
           $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/permissionError'
+  /api/v1/livechat/monitors.delete:
+    post:
+      summary: Delete a Monitor
+      tags:
+        - Omnichannel Monitors
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  errorType:
+                    type: string
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    errorType: invalid-params
+                    error: must have required property 'username'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-livechat-monitors.delete
+      description: |-
+       <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+       
+       Delete an Omnichannel monitor. Permission required: `manage-livechat-monitors`
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+              properties:
+                username:
+                  type: string
+                  description: Enter the username that you want to remove as the monitor.
+                  example: test.user
+            examples:
+              Example 1:
+                value:
+                  username: test.user
+  /api/v1/livechat/monitors.create:
+    post:
+      summary: Create a Monitor
+      tags:
+        - Omnichannel Monitors
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  username:
+                    type: string
+                  roles:
+                    type: array
+                    items:
+                      type: string
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    _id: J6Q87AnWP5aNc9xhx
+                    username: cat.kat
+                    roles:
+                      - user
+                      - livechat-agent
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  errorType:
+                    type: string
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    errorType: invalid-params
+                    error: must have required property 'username'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-livechat-monitors.create
+      description: |-
+       <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+       
+       Add a user as monitor. Permission required: `manage-livechat-monitors`
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+              properties:
+                username:
+                  type: string
+                  description: Enter the username that you want to add as monitor.
+                  example: test.user
+            examples:
+              Example 1:
+                value:
+                  username: cat.kat
   /api/v1/livechat/monitors.list:
     get:
       tags:
