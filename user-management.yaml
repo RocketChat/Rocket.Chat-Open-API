@@ -471,16 +471,10 @@ paths:
             schema:
               type: object
               properties:
-                roleName:
+                roleId:
                   type: string
-                  description: |-
-                    The role name. Alternatively, use the `roleId` parameter.
-                    Note: 
-                      * For default roles, the role name and ID are the same. For custom roles, the name and ID are different. 
-                      * If you are setting a custom role for a user, make sure to enter the custom role ID and not the role name.
-                      * The `roleName` parameter will be removed from 7.0.0. Use the `roleId` parameter instead.
-                      Refer to [Roles](https://docs.rocket.chat/setup-and-configure/roles-in-rocket.chat) for more information.
-                  example: auditor-log
+                  example: 6579adcf2dd9f9d9514f6
+                  description: The ID of an existing role.
                 username:
                   type: string
                   description: The user name.
@@ -493,9 +487,9 @@ paths:
                 - roleName
                 - username
             examples:
-              Example 1:
+              Example:
                 value:
-                  roleName: auditor-log
+                  roleId: 6579adcf2dd9f9d9514f6
                   username: test.fun
                   roomId: 64adb09baa5ad4273bfc
       responses:
@@ -583,7 +577,7 @@ paths:
       parameters:
         - name: role
           in: query
-          description: The role name or the role ID. For custom roles, use the role ID.
+          description: The ID of the role
           required: true
           schema:
             type: string
