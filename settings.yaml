@@ -1044,9 +1044,6 @@ paths:
   /api/v1/e2e.updateGroupKey:
     post:
       summary: Update User E2E Key in Room
-      description: |-
-        > This endpoint has been deprecated and is scheduled for removal in the 8.0.0 <a href="https://github.com/RocketChat/Rocket.Chat/releases" target="_blank">release</a>.
-      deprecated: true
       operationId: post-api-v1-e2e.updateGroupKey
       responses:
         '200':
@@ -3955,4 +3952,5 @@ components:
               value:
                 success: false
                 error: 'User does not have the permissions required for this action [error-unauthorized]'
+
 
