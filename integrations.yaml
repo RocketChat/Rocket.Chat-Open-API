@@ -1436,18 +1436,9 @@ paths:
       parameters:
         - $ref: '#/components/parameters/X-Auth-Token'
         - $ref: '#/components/parameters/X-User-Id'
-        - name: appId
-          in: query
-          description: |-
-            The app ID.  This value is required if `clientId` is not used.
-            
-            The parameter will stop being accepted from 7.0.0 (use the `clientId` or `_id` parameters instead).
-          schema:
-            type: string
-          example: jn32kjnnd0943j4njk
         - name: clientId
           in: query
-          description: The client ID. This value is required if `appId` is not used.
+          description: The client ID. This value is required if `_id` is not used.
           schema:
             type: string
           example: nkn8jk67b8b99b78
