@@ -11540,6 +11540,120 @@ paths:
               Example 1:
                 value:
                   id: 682223ba30c9c71254e46012
+  /api/v1/livechat/tags.save:
+    post:
+      summary: Create a Tag
+      tags:
+        - Omnichannel Tags
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  numDepartments:
+                    type: integer
+                  departments:
+                    type: array
+                    items:
+                      type: string
+                  _id:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                New tag created:
+                  value:
+                    name: apiTag01
+                    description: testing api endpoint
+                    numDepartments: 1
+                    departments:
+                      - TEST-DEPT
+                    _id: 69536ca06ff48667974be86d
+                    success: true
+                Updated existing tag:
+                  value:
+                    name: apiTag-updated
+                    description: testing api endpoint
+                    numDepartments: 1
+                    departments:
+                      - TEST-DEPT
+                    _updatedAt: '2025-12-30T06:06:00.995Z'
+                    _id: 69536b7a6ff48667974be86b
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  errorType:
+                    type: string
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    errorType: invalid-params
+                    error: must have required property 'tagData'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-livechat-tags.save
+      description: |-
+       <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto"></div>
+       
+       Use this endpoint to create an Omnichannel tag. Permission required: `manage-livechat-tags`
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - tagData
+              properties:
+                tagData:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      description: Enter a name for the tag.
+                      example: Support
+                    description:
+                      type: string
+                      description: Enter the tag's description.
+                      example: Tag for support team
+                tagDepartments:
+                  type: array
+                  description: Enter the department IDs that can use this tag.
+                  items:
+                    type: string
+                    example: '["68304887113ac52640bc1ca6"]'
+                _id:
+                  type: string
+                  description: Use this parameter to update an existing tag.
+                  example: 69536b596ff48667974be868
+            examples:
+              Example 1:
+                value:
+                  tagData:
+                    name: apiTag
+                    description: testing
+                  tagDepartments:
+                    - TEST-DEPT
+                  _id: 69536b7a6ff48667974be86b
                     
   /api/v1/livechat/units:
     post:
