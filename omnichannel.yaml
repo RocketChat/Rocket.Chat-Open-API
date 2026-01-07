@@ -8744,6 +8744,130 @@ paths:
                 value:
                   _id: 6953aca46ff48667974be88c
                   type: custom
+  /api/v1/livechat/business-hours.save:
+    post:
+      summary: Create a Business Hour
+      tags:
+        - Omnichannel Business Hours
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  errorType:
+                    type: string
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    errorType: invalid-params
+                    error: must have required property 'name'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-livechat-business-hours.save
+      description: Use this endpoint to create a new Omnichannel business hour.
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - timezoneName
+                - daysOpen
+                - departmentsToApplyBusinessHour
+                - active
+                - type
+                - workHours
+              properties:
+                name:
+                  type: string
+                  description: Enter a name for the business hour.
+                  example: Support Business Hour
+                timezoneName:
+                  type: string
+                  description: Enter the timezone for the business hour. You can view the list of time zones from the Business Hours settings in the workspace.
+                  example: Asia/Bangkok
+                daysOpen:
+                  type: array
+                  description: Enter the days of the week that the business hour will apply to.
+                  items:
+                    type: string
+                    example: '["Monday", "Tuesday", "Wednesday"]'
+                departmentsToApplyBusinessHour:
+                  type: string
+                  description: Enter the department ID to which the business hour must be applied.
+                  example: 68304887113ac52640bc1ca6
+                active:
+                  type: boolean
+                  description: Enter whether or not the business hour must be active as soon as it is created.
+                type:
+                  type: string
+                  description: Enter the type of the business hour. It can be `default` or `custom`.
+                workHours:
+                  type: array
+                  description: 'Enter the work hours for each open day. Make sure to include the day you have added to the `daysOpen` parameter. Otherwise, it will not be included in the business hour.'
+                  items:
+                    type: object
+                    required:
+                      - day
+                      - start
+                      - finish
+                      - open
+                    properties:
+                      day:
+                        type: string
+                        description: Enter the day of the week.
+                        example: Monday
+                      start:
+                        type: string
+                        description: Enter the start time of the business hour.
+                        example: '08:00:00'
+                      finish:
+                        type: string
+                        description: Enter the end time of the business hour.
+                        example: '16:00:00'
+                      open:
+                        type: boolean
+                        description: 'Enter whether or not this work hour is active. If you set this as `false`, the work hour will not be included in the business hour.'
+                        default: true
+                _id:
+                  type: string
+                  description: Use this parameter to update an existing business hour.
+                  example: 668c72e86dfe572b40b90e30
+            examples:
+              Example 1:
+                value:
+                  name: api-BH
+                  timezoneName: Asia/Bangkok
+                  daysOpen:
+                    - Monday
+                    - Wednesday
+                  departmentsToApplyBusinessHour: TEST-DEPT
+                  active: true
+                  type: custom
+                  workHours:
+                    - day: Monday
+                      start: '08:00:00'
+                      finish: '16:00:00'
+                      open: true
+                    - day: Wednesday
+                      start: '08:00:00'
+                      finish: '16:00:00'
+                      open: true
+                  _id: 6953b3bc6ff48667974be88e
 
   /api/v1/livechat/analytics/dashboards/conversation-totalizers:
     get:
