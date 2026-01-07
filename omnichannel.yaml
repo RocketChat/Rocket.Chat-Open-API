@@ -4528,6 +4528,63 @@ paths:
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
+  /api/v1/livechat/visitor/department.transfer:
+    post:
+      summary: Visitor Transfer Room
+      tags:
+        - Omnichannel Rooms
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  errorType:
+                    type: string
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    errorType: invalid-params
+                    error: must have required property 'token'
+      operationId: post-api-v1-livechat-visitor-department.transfer
+      description: This endpoint can be used by visitors to transfer an ongoing chat to another department.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - token
+                - rid
+                - department
+              properties:
+                token:
+                  type: string
+                  description: Enter the visitor token.
+                  example: 2c9035b72dec31be7e9ccbb3cbd9952394ea41c1517b76c528d403c00a3fccf9
+                rid:
+                  type: string
+                  description: Enter the room ID.
+                  example: dCBiZX3XPWyPsa6pt
+                department:
+                  type: string
+                  description: Enter the department ID to which you want to transfer the chat.
+                  example: 68304887113ac52640bc1ca6
+            examples:
+              Example 1:
+                value:
+                  token: 2c9035b72dec31be7e9ccbb3cbd9952394ea41c1517b76c528d403c00a3fccf9
+                  rid: dCBiZX3XPWyPsa6pt
+                  department: 68304887113ac52640bc1ca6
         
   /api/v1/livechat/department:
     get:
