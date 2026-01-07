@@ -1450,6 +1450,9 @@ paths:
                       type: boolean
                       default: false
                       description: Whether the user should get a welcome email.
+                    freeSwitchExtension:
+                      type: string
+                      description: The voice call extension.
                     verified:
                       type: boolean
                       description: Whether the user's email address should be verified.
