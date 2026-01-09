@@ -150,7 +150,7 @@ paths:
       summary: Add all Users to a Channel
       description: |-
         Adds all users in the workspace to a public room. Permission required: `add-all-to-room`.
-        The maximum number of users you can add at once depends on your workspace's REST API settings. To access this setting, go to **Administration** > **Settings** > **General** > **REST API** > **User Limit for Adding All Users to Channel**.
+        The maximum number of users you can add at once depends on your workspace's REST API settings. To access this setting, go to **Manage** > **Workspace** > **Settings** > **General** > **REST API** > **User Limit for Adding All Users to Channel**.
         
         ### Changelog
         | Version | Description               |
