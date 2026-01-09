@@ -3106,7 +3106,7 @@ paths:
     get:
       summary: Get All Subscriptions
       description: |-
-        Get the room notification subscription details and the latest updates. Note that the unread counter value depends on your settings in the **Administration** > <a href='https://docs.rocket.chat/docs/general' target='_blank'>**General**</a> section.
+        Get the room notification subscription details and the latest updates. Note that the unread counter value depends on your settings in the **Manage** > **Workspace** > <a href='https://docs.rocket.chat/docs/general' target='_blank'>**General**</a> section.
 
         ### Changelog
         | Version      | Description | 
@@ -3170,7 +3170,7 @@ paths:
     get:
       summary: Get Subscription Room
       description: |-
-        Get the notification subscription details for a specific room. Note that the unread counter value depends on your settings at the **Administration** > <a href='https://docs.rocket.chat/docs/general' target='_blank'>**General**</a> section.
+        Get the notification subscription details for a specific room. Note that the unread counter value depends on your settings at the **Manage** > **Workspace** > <a href='https://docs.rocket.chat/docs/general' target='_blank'>**General**</a> section.
 
         ### Changelog
         | Version      | Description | 
