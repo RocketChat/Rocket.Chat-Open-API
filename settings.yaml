@@ -1865,7 +1865,7 @@ paths:
             4. The default roles will be added to all users automatically.
             5. If no password is added, a temporary random password will be generated automatically.
             6. Users flagged as `deleted` will be created as `Deactivated` on Rocket.Chat.
-            7. Avatar URLs will not be fetched automatically. The workspace administrator needs to use the **Download Pending Avatars** button in **Administration** > **Workspace** > **Import** on the workspace after the import is completed.
+            7. Avatar URLs will not be fetched automatically. The workspace administrator needs to use the **Download Pending Avatars** button in **Manage** > **Workspace** > **Import** on the workspace after the import is completed.
             8. Import IDs will not be used as IDs by Rocket.Chat, but you can query users by their import ID with the  <a href="https://developer.rocket.chat/apidocs/get-users-info" target="_blank">users.info</a>.
   /api/v1/import.run:
     parameters: []
@@ -3952,5 +3952,6 @@ components:
               value:
                 success: false
                 error: 'User does not have the permissions required for this action [error-unauthorized]'
+
 
 
