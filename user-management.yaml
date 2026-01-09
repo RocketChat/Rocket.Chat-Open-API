@@ -1280,7 +1280,7 @@ paths:
       summary: Register User
       description: |-
         * An external member can use this endpoint to create an account on the workspace.
-        * The number of requests you can make and the interval between each request depends on the workspace's rate limiter settings. You can find the settings from **Administration** > **Settings** > **Rate Limiter** > **API Rate Limiter**.
+        * The number of requests you can make and the interval between each request depends on the workspace's rate limiter settings. You can find the settings from **Manage** > **Workspace** > **Settings** > **Rate Limiter** > **API Rate Limiter**.
         
         ### Changelog
         | Version      | Description |
@@ -1464,7 +1464,7 @@ paths:
                         team: Queen
                       description: |-
                         Any custom fields the user should have on their account.
-                        To save custom fields, you must first define the custom fields in the admin panel (Administration > Settings > Accounts > Registration > Custom Fields). For details on how to configure this field, see [Custom Fields](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/accounts/custom-fields).
+                        To save custom fields, you must first define the custom fields in the admin panel (Manage > Workspace > Settings > Accounts > Registration > Custom Fields). For details on how to configure this field, see [Custom Fields](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/accounts/custom-fields).
                         For information on how to view the custom fields, see the [Get Users List](https://developer.rocket.chat/reference/api/rest-api/endpoints/user-management/users-endpoints/get-users-list) endpoint.
               required:
                 - userId
@@ -2920,7 +2920,7 @@ paths:
           description: The user IDs whose status you want.
       description: |-
         Get presence of multiple workspace users. You can filter by date and user IDs.
-        If the `Presence_broadcast_disabled` setting is true, the endpoint returns an empty array. You can find this setting under **Administration** > **Settings** > **Troubleshoot**.
+        If the `Presence_broadcast_disabled` setting is true, the endpoint returns an empty array. You can find this setting under **Manage** > **Workspace** > **Settings** > **Troubleshoot**.
         
         ### Changelog
         | Version      | Description |
@@ -3030,7 +3030,7 @@ paths:
         - Users
       summary: Delete Own Account
       description: |-
-        Deletes your own user account. Requires the `Allow Users to Delete Own Account` setting enabled. Access this setting from **Administration** > **Workspace** > **Settings** > **Accounts**.
+        Deletes your own user account. Requires the `Allow Users to Delete Own Account` setting enabled. Access this setting from **Manage** > **Workspace** > **Settings** > **Accounts**.
         
         ### Changelog
         | Version      | Description |
@@ -3742,7 +3742,7 @@ paths:
                     success: false
                     error: The 'email' param is required
       description: |-
-        Send an email to reset your password. Ensure that you have completed the configuration of the email; otherwise, your users will not receive the mail normally. Access this from **Administration** > **Workspace** > **Settings** > **Email**. <br>
+        Send an email to reset your password. Ensure that you have completed the configuration of the email; otherwise, your users will not receive the mail normally. Access this from **Manage** > **Workspace** > **Settings** > **Email**. <br>
         To use this endpoint, the `PasswordReset` setting must be enabled in **Settings** > **Accounts** > **Registration** > **Password Reset**.
         
         ### Changelog
@@ -4687,7 +4687,7 @@ paths:
         - $ref: '#/components/parameters/x-2fa-code'
         - $ref: '#/components/parameters/x-2fa-method'
       description: |-
-        Reset 2FA via TOTP for a user in the workspace. Make sure that the `Enable Two Factor Authentication` setting is enabled under **Administration** > **Settings** > **Accounts** > **Two Factor Authentication**.
+        Reset 2FA via TOTP for a user in the workspace. Make sure that the `Enable Two Factor Authentication` setting is enabled under **Manage** > **Workspace** > **Settings** > **Accounts** > **Two Factor Authentication**.
         * Permission required: `edit-other-user-totp`.
         * It requires two-factor authentication, if 2FA is enabled and configured in your workspace.
         
