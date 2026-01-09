@@ -85,7 +85,7 @@ paths:
       description: |-
         Use this endpoint to send WhatsApp template messages directly to specified contacts from your workspace.
 
-        1. Navigate to **Administration > Apps > Marketplace**.
+        1. Click the **Marketplace** icon from the main menu. Select **Explore** from the drop-down menu.
         2. Locate your preferred <a href="https://docs.rocket.chat/docs/whatsapp-apps" target="_blank">WhatsApp App</a>.
         3. Go to *App Info > Details > APIs* and find the `POST templateMessage` section.
         4. Copy the `POST templateMessage` endpoint URL for your WhatsApp app from the provided curl example. This URL includes the required `appId`. Send a template message request using this URL as the endpoint.
@@ -970,3 +970,4 @@ components:
 tags:
   - name: Rasa App
   - name: WhatsApp
+
