@@ -3397,7 +3397,7 @@ paths:
                 forceClose:
                   type: boolean
                   description: |-
-                    Use this parameter to forcefully close a room. Before using this parameter, make sure to enable the [`Force Close Conversation API`](https://docs.rocket.chat/v1/docs/omnichannel-admins-guide#api) setting in Administration > Settings > Omnichannel > API. Exercise caution when using this parameter and reserve it for situations involving misconfigured rooms.
+                    Use this parameter to forcefully close a room. Before using this parameter, make sure to enable the [`Force Close Conversation API`](https://docs.rocket.chat/v1/docs/omnichannel-admins-guide#api) setting in **Manage > Workspace > Settings > Omnichannel > API**. Exercise caution when using this parameter and reserve it for situations involving misconfigured rooms.
                 tags:
                   type: array
                   description: 'Add [tags](https://docs.rocket.chat/docs/tags).'
@@ -4257,7 +4257,7 @@ paths:
       description: |-
        Use this endpoint to remove closed Omnichannel rooms. 
        
-       Permission required: `remove-closed-livechat-rooms`. (On the workspace UI, go to **Administration** > **Workspace** > **Permissions**. Search for the `Remove All Closed Omnichannel Rooms` permission. By default, livechat managers and monitors have this permission.)
+       Permission required: `remove-closed-livechat-rooms`. (On the workspace UI, go to **Manage** > **Workspace** > **Permissions**. Search for the `Remove All Closed Omnichannel Rooms` permission. By default, livechat managers and monitors have this permission.)
        
        ### Changelog
        | Version      | Description |
@@ -6892,7 +6892,7 @@ paths:
                     error: 'User does not have the permissions required for this action [error-unauthorized]'
       operationId: post-api-v1-livechat-custom-fields.delete
       description: |-
-       Delete an Omnichannel custom field entry. Permission required: `view-livechat-manager`. (On the workspace UI, go to **Administration** > **Workspace** > **Permissions**. Search for the `View Omnichannel Manager` permission. By default, livechat managers and agents have this permission.)
+       Delete an Omnichannel custom field entry. Permission required: `view-livechat-manager`. (On the workspace UI, go to **Manage** > **Workspace** > **Permissions**. Search for the `View Omnichannel Manager` permission. By default, livechat managers and agents have this permission.)
        
        ### Changelog
        | Version      | Description |
@@ -9368,7 +9368,7 @@ paths:
                     error: 'User does not have the permissions required for this action [error-unauthorized]'
       operationId: get-api-v1-livechat-livechat-analytics-dashboards-charts-data
       description: |-
-       View the Omnichannel analytics chart data by chart name within a specific duration. On the workspace UI, you can access this feature by going to `Administration` > `Omnichannel` > `Analytics`.
+       View the Omnichannel analytics chart data by chart name within a specific duration. On the workspace UI, you can access this feature by going to `Manage` > `Omnichannel` > `Analytics`.
        
        Permission required: `view-livechat-manager`
        
