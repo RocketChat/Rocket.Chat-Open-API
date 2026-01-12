@@ -3093,7 +3093,7 @@ paths:
       summary: Create Users Token
       description: |-        
         As a workspace admin, you can create temporary authentication tokens for users. This is the same type of session authentication token a user gets via <a href="https://developer.rocket.chat/apidocs/login-with-username-and-password" target="_blank">login</a> and expires the same way.
-        * To be able to use this endpoint, you must set a secret with the  `CREATE_TOKENS_FOR_USERS_SECRET`<a href="https://docs.rocket.chat/docs/deployment-environment-variables" target="_blank">environment variable</a> in your deployment configuration. This secret will be used to authorize all requests made to this endpoint.
+        * To use this endpoint, you must set a secret with the `CREATE_TOKENS_FOR_USERS_SECRET` <a href="https://docs.rocket.chat/docs/deployment-environment-variables" target="_blank">environment variable</a> in your deployment configuration. This secret will be used to authorize all requests made to this endpoint.
         * For SaaS workspaces, <a href="https://desk.rocket.chat/portal/en/signin" target="_blank">contact</a> support to set this variable.
         * Permission required: `user-generate-access-token`
         * The maximum number of login tokens per user is 50. See this <a href='https://github.com/RocketChat/Rocket.Chat/pull/32216' target='_blank'>GitHub PR</a> for details.
@@ -3101,7 +3101,7 @@ paths:
         ### Changelog
           | Version      | Description |
           | ---------------- | ------------|
-          |8.0.0             | Added `CREATE_TOKENS_FOR_USERS_SECRET` enviroment variable to define a shared secret that will be used to authorize this endpoint.|
+          |8.0.0             | Added `CREATE_TOKENS_FOR_USERS_SECRET` <a href="https://docs.rocket.chat/docs/deployment-environment-variables" target="_blank">environment variable</a> to define a shared secret that will be used to authorize this endpoint.|
           |2.1.0            | Added ENV VAR to be able to use this endpoint (process.env.CREATE_TOKENS_FOR_USERS).       |
           |0.56.0            | Added       |
       operationId: post-api-v1-users.createToken
