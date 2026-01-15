@@ -754,6 +754,33 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
+  /api/v1/smtp.check:
+    get:
+      summary: Check SMTP
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSMTPConfigured:
+                    type: boolean
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    isSMTPConfigured: true
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-smtp.check
+      description: Use this endpoint to verify whether or not SMTP has been configured in the workspace.
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
   /api/v1/licenses.info:
     get:
       tags:
