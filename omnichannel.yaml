@@ -118,6 +118,9 @@ paths:
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
         - name: type
           in: path
           description: The type of user that you want to register. The value can either be `agent` or `manager`.
@@ -125,14 +128,30 @@ paths:
           schema:
             type: string
           example: agent
-        - $ref: '#/components/parameters/offset'
-        - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/sort'
-        - schema:
-            type: string
+        - name: onlyAvailable
           in: query
-          name: text
-          description: Enter the text you want to filter the search result with.
+          schema:
+            type: boolean
+          description: When set to `true`, it only list agents whose [livechat status](https://docs.rocket.chat/docs/omnichannel-users#edit-agent) (`statusLivechat`) is `available`.
+          example: true
+        - name: showIdleAgents
+          in: query
+          schema:
+            type: boolean
+          description: When set to `true`, idle agents will be included in the response.
+          example: true
+        - name: excludeId
+          in: query
+          schema:
+            type: string  
+          example: Ahgfwk9sasYEsMjwX
+          description: The ID of a specific agent to exclude from the list.
+        - name: text
+          in: query
+          schema:
+            type: string
+          description: Enter the text you want to filter the search result with.     
+          example: true
       responses:
         '200':
           description: OK
