@@ -806,6 +806,8 @@ paths:
   /api/v1/video-conference/jitsi.update-timeout:
     post:
       summary: Update Jitsi Timeout
+      tags:
+        - Jitsi App
       description: |- 
         ### Changelog
         | Version      | Description |
@@ -1910,5 +1912,7 @@ components:
 
 tags:
   - name: Rasa App
-  - name: WhatsApp
+  - name: WhatsApp App
   - name: Manage Apps
+  - name: Jitsi App
+
