@@ -138,8 +138,8 @@ paths:
           in: query
           schema:
             type: boolean
-          description: When set to `true`, idle agents will be included in the response.
-          example: true
+          description: When set to `false`, offline agents will be excluded from the response. This filter does not apply to bots. All bot agents will be returned in the response.
+          example: false
         - name: excludeId
           in: query
           schema:
