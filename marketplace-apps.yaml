@@ -252,7 +252,7 @@ paths:
       tags:
         - Manage Apps
       description: |- 
-        Install a <a href="https://docs.rocket.chat/docs/rocketchat-marketplace#private-apps" target="_blank">private app</a> via URL. <a href="https://docs.rocket.chat/docs/permissions" target="_blank">Permission</a> required: `manage-apps`
+        Install a <a href="https://docs.rocket.chat/docs/rocketchat-marketplace#private-apps" target="_blank">private app</a> via URL. <a href="https://docs.rocket.chat/docs/permissions" target="_blank">Permission</a> required: `Manage Apps`.
 
         ### Changelog
         | Version      | Description |
@@ -510,6 +510,8 @@ paths:
   /api/apps/logs:
     get:
       summary: Get All Apps Logs
+      tags:
+        - Manage Apps
       responses:
         '200':
           description: OK
@@ -567,7 +569,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                All App Logs:
                   value:
                     offset: 0
                     logs:
@@ -625,7 +627,6 @@ paths:
       operationId: get-api-apps-logs
       description: |-
        Use this endpoint to get the list of apps' logs for your workspace.
-       Permission required: `manage-apps`
        
        ### Changelog
        | Version      | Description |
@@ -651,6 +652,8 @@ paths:
   '/app/{id}/logs':
     get:
       summary: Get an App's Logs
+      tags:
+        - Manage Apps
       responses:
         '200':
           description: OK
@@ -708,7 +711,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                App Log:
                   value:
                     offset: 0
                     logs:
@@ -775,14 +778,13 @@ paths:
                   error:
                     type: string
               examples:
-                Example 1:
+                App not found:
                   value:
                     success: false
                     error: 'No App found by the id of: :id'
       operationId: 'get-app-:id-logs'
       description: |-
         Use this endpoint to get a specific app's logs for your workspace.
-        Permission required: `manage-apps`
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
@@ -1150,6 +1152,8 @@ paths:
                       isUsageBased: false
                       createdAt: '2020-09-11T18:55:17.724Z'
                       modifiedAt: '2024-09-26T17:13:24.241Z'
+        '401':
+          $ref: '#/components/responses/authorizationError'      
       operationId: get-api-apps-marketplace
       parameters:
         - $ref: '#/components/parameters/UserId'
@@ -1341,6 +1345,8 @@ paths:
                         hidden: false
                         createdDate: '2018-08-07T21:32:36.508Z'
                         modifiedDate: '2018-08-07T21:32:36.508Z'
+          '401':
+            $ref: '#/components/responses/authorizationError'                        
         operationId: get-api-apps-categories
         parameters:
           - $ref: '#/components/parameters/Auth-Token'
@@ -1495,12 +1501,292 @@ paths:
                         private: false
                         migrated: false
                     success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
       operationId: get-api-apps-installed
-      x-stoplight:
-        id: bgkvpg869jrn8
       parameters:
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/Auth-Token'
+  /apps/count:
+    get:
+      summary: Get Apps Count
+      tags:
+        - Manage Apps
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalMarketplaceEnabled:
+                    type: integer
+                  totalPrivateEnabled:
+                    type: integer
+                  maxMarketplaceApps:
+                    type: integer
+                  maxPrivateApps:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                'Total app count ':
+                  value:
+                    totalMarketplaceEnabled: 8
+                    totalPrivateEnabled: 3
+                    maxMarketplaceApps: -1
+                    maxPrivateApps: -1
+                    success: true
+        '401':
+         $ref: '#/components/responses/authorizationError'
+      operationId: get-apps-count
+      description: |-
+        Get a total count of apps in your workspace including private and public apps.
+
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |6.0.0     | Added       |
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+  /apps/buildExternalAppRequest:
+    get:
+      summary: Generate External App Request Form
+      tags:
+        - Manage Apps
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                External URL to request app:
+                  value:
+                    url: 'https://marketplace.rocket.chat/apps/ce0e318b-ffc0-4ce4-832b-f1b464beb22a/requestAccess?workspaceId=64df890111e1f20001d201b4&frameworkVersion=1.59.0&requester=eyJpZCI6ImtiMldCa2prdXQ0WUpwRlFrIiwidXNlcm5hbWUiOiJhZ2VudDIiLCJuYW1lIjoiVGVzdCBVc2VyIDUiLCJlbWFpbHMiOlsiYWdlbnQyQGFnZW50LmNvbSJdfQ%3D%3D&admins=W3siaWQiOiJQMmRnV1BQdzV2ZWlnd2NkSyIsInVzZXJuYW1lIjoiZnVua2Uub2xhc3VwbyIsIm5hbWUiOiJUZXN0IFVzZXIgMyJ9LHsiaWQiOiJxSFdob0p3d2drNGJ3Y29OcSIsInVzZXJuYW1lIjoib2x1ZnVua2UiLCJuYW1lIjoiT2x1ZnVua2UifSx7ImlkIjoiTUVwc3dGZnI1dTNXUGVYcWIiLCJ1c2VybmFtZSI6ImZhcmlhIiwibmFtZSI6IkZhcmlhIn0seyJpZCI6IkMzOFdTU3pyR2QyTkNqenFKIiwidXNlcm5hbWUiOiJ0ZXN0LmNhdCIsIm5hbWUiOiJ0ZXN0IGNhdCIsIm5pY2tuYW1lIjoiY2FrZSJ9LHsiaWQiOiJhblpDalQzeUpDTmphUGtvbyIsInVzZXJuYW1lIjoia2V2aW4uc3VwZXJtYW4iLCJuYW1lIjoia2V2aW4uc3VwZXJtYW4ifSx7ImlkIjoiY2tON3BuOHFrS3BQb0hZUXkiLCJ1c2VybmFtZSI6InRlc3QuZ3VzdGF2byIsIm5hbWUiOiJHdXN0YXZvIn0seyJpZCI6Ik1mYnZtRE12Y1d6eHdpakFzIiwidXNlcm5hbWUiOiJ1c2VyMTEiLCJuYW1lIjoidXNlciBqb24ifSx7ImlkIjoiQWhnZjVrOUNhNFlFZE1qd1giLCJ1c2VybmFtZSI6ImF5dGFqIiwibmFtZSI6IkF5dGFqIn0seyJpZCI6ImFQaHJQWndlVDk2cUxuUjdNIiwidXNlcm5hbWUiOiJzYXJhaC53aWxsaWFtcyIsIm5hbWUiOiJTYXJhaCBXaWxsaWFtcyJ9LHsiaWQiOiJqdmdXbWpjOFRCdDVMWWFqRiIsInVzZXJuYW1lIjoieW9uZy5oaW5keSIsIm5hbWUiOiJZb25nIEhpbmR5In1d'
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'      
+      operationId: get-apps-buildExternalAppRequest
+      description: 'Build an external app request form. This endpoint returns a link that workspace users can use to request an app externally without being in Rocket.Chat. '
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+  '/api/apps/{appId}':
+    get:
+      summary: Fetch details of an app
+      tags:
+        - Manage Apps
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  app:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      version:
+                        type: string
+                      requiredApiVersion:
+                        type: string
+                      iconFile:
+                        type: string
+                      author:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          homepage:
+                            type: string
+                          support:
+                            type: string
+                      name:
+                        type: string
+                      nameSlug:
+                        type: string
+                      classFile:
+                        type: string
+                      description:
+                        type: string
+                      implements:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+                      permissions:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                      iconFileContent:
+                        type: string
+                      status:
+                        type: string
+                      languages:
+                        type: object
+                        properties: {}
+                      private:
+                        type: boolean
+                      migrated:
+                        type: boolean
+                  success:
+                    type: boolean
+              examples:
+                Fetch app details:
+                  value:
+                    app:
+                      id: d05142b1-60b6-4562-9940-86be9b548f43
+                      version: 6.5.0
+                      requiredApiVersion: ^1.40.0
+                      iconFile: icon.png
+                      author:
+                        name: Neal Richardson
+                        homepage: 'https://www.bluescape.com'
+                        support: neal.richardson@bluescape.com
+                      name: bluescape
+                      nameSlug: bluescape
+                      classFile: BluescapeApp.js
+                      description: bluescape workspace slash commands
+                      implements: []
+                      permissions:
+                        - name: user.read
+                        - name: server-setting.read
+                        - name: room.read
+                        - name: message.read
+                        - name: message.write
+                        - name: slashcommand
+                        - name: networking
+                      iconFileContent: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAEOCAYAAABB1kj+AAAACXBIWXMAABcSAAAXEgFnn9JSAAAKT2lDQ1BQaG90b3Nob3AgSUNDIHByb2ZpbGUAAHjanVNnVFPpFj333vRCS4iAlEtvUhUIIFJCi4AUkSYqIQkQSoghodkVUcERRUUEG8igiAOOjoCMFVEsDIoK2AfkIaKOg6OIisr74Xuja9a89+bN/rXXPues852zzwfACAyWSDNRNYAMqUIeEeCDx8TG4eQuQIEKJHAAEAizZCFz/SMBAPh+PDwrIsAHvgABeNMLCADATZvAMByH/w/qQplcAYCEAcB0kThLCIAUAEB6jkKmAEBGAYCdmCZTAKAEAGDLY2LjAFAtAGAnf+bTAICd+Jl7AQBblCEVAaCRACATZYhEAGg7AKzPVem+eTkQnk2OXqkmo/0sAVkTQSsfOHuQph8pzJ6Bx1ti0961GvdLw7tknT0p5v51z790bM5Jst+w3Ks/niM3lkAlk7epEliyETx7FJ5ETP63J/+0yvs2pp3Ewep7lHkJGRkZEJJCMjIxNIRkZGJpCMjIxMIBkZGRmZQDIyMjKBZGRkZALJyMg4U7HqhWSquXEhIyNbIBkZGRmZQDIyMjKBZGRkZALJyMjIBJKRkZGRCSQjIyMTSEZGRiaQjIyMTCAZGRlnBZZUotZp1GFGRkbGJDc8I4E8+uij+UxlZGRkFyYjIyMTSEZGRiaQjIyM9Yb/fwBLYM4biudGLgAAAABJRU5ErkJggg=='
+                      status: manually_enabled
+                      languages: {}
+                      private: false
+                      migrated: false
+                    success: true
+        '400':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-apps
+      description: |
+        Get all the details of an app in your workspace. The app must already be installed in your workspace. Permission required: `Manage Apps`.
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+    parameters:
+      - schema:
+          type: string
+          example: d05142b1-60b6-4562-9940-86be9b548f43
+        name: appId
+        in: path
+        required: true
+        description: The id of the app 
+    delete:
+      summary: Uninstall an App
+      tags:
+        - Manage Apps
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  app:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      version:
+                        type: string
+                      requiredApiVersion:
+                        type: string
+                      iconFile:
+                        type: string
+                      author:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          homepage:
+                            type: string
+                          support:
+                            type: string
+                      name:
+                        type: string
+                      nameSlug:
+                        type: string
+                      classFile:
+                        type: string
+                      description:
+                        type: string
+                      implements:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+                      permissions:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                      iconFileContent:
+                        type: string
+                      status:
+                        type: string
+                  success:
+                    type: boolean
+              examples:
+                Uninstall an app:
+                  value:
+                    app:
+                      id: d05142b1-60b6-4562-9940-86be9b548f43
+                      version: 6.5.0
+                      requiredApiVersion: ^1.40.0
+                      iconFile: icon.png
+                      author:
+                        name: Neal Richardson
+                        homepage: 'https://www.bluescape.com'
+                        support: neal.richardson@bluescape.com
+                      name: bluescape
+                      nameSlug: bluescape
+                      classFile: BluescapeApp.js
+                      description: bluescape workspace slash commands
+                      implements: []
+                      permissions:
+                        - name: user.read
+                        - name: server-setting.read
+                        - name: room.read
+                        - name: message.read
+                        - name: message.write
+                        - name: slashcommand
+                        - name: networking
+                      iconFileContent: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAEOCAYAAABB1kj+AAAACXBIWXMAABcSAAAXEgFnn9JSAAAKT2lDQ1BQaG90b3Nob3AgSUNDIHByb2ZpbGUAAHjanVNnVFPpFj333vRCS4iAlEtvUhUIIFJCi4AUkSYqIQkQSoghodkVUcERRUUEG8igiAOOjoCMFVEsDIoK2AfkIaKOg6OIisr74Xuja9a89+bN/rXXPues852zzwfACAyWSDNRNYAMqUIeEeCDx8TG4eQuQIEKJHAAEAizZCFz/SMBAPh+PDwrIsAHvgABeNMLCADATZvAMByH/w/qQplcAYCEAcB0kThLCIAUAEB6jkKmAEBGAYCdmCZTAKAEAGDLY2LjAFAtAGAnf+bTAICd+Jl7AQBblCEVAaCRACATZYhEAGg7AKzPVopFAFgwABRmS8Q5ANgtADBJV2ZIALC3AMDOEAuyAAgMADBRiIUpAAR7AGDIIyN4AISZABRG8lc88SuuEOcqAAB4mbI8uSQ5RYFbCC1xB1dXLh4ozkkXKxQ2YQJhmkAuwnmZGTKBNA/g88wAAKCRFRHgg/P9eM4Ors7ONo62Dl8t6r8G/yJiYuP+5c+rcEAAAOF0ftH+LC+zGoA7BoBt/qIl7gRoXgugdZQDIyMjKBZGRkZALJyMjIBJKRkZGRCSQjIyMTSEZGRiaQjIyMTCAZGRlnBZZUotZp1GFGRkbGJDc8I4E8+uij+UxlZGRkFyYjIyMTSEZGRiaQjIyM9Yb/fwBLYM4biudGLgAAAABJRU5ErkJggg=='
+                      status: disabled
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: delete-api-apps-appId
+      description: 'Uninstall an app from your workspace. Permission required: `Manage Apps`.'
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+
 components:
   schemas: {}
   parameters:
