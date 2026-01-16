@@ -2921,7 +2921,6 @@ paths:
       tags:
         - Moderation
   /api/v1/moderation.user.deleteReportedMessages:
-    parameters: []
     post:
       summary: Delete Reported Messages of a User
       operationId: post-api-v1-moderation.user.deleteReportedMessages
@@ -2954,8 +2953,301 @@ paths:
                 - userId
       tags:
         - Moderation
+  /api/v1/moderation.dismissUserReports:
+    post:
+      summary: Dismiss User Reports
+      tags:
+        - Moderation
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: |-
+                      must have required property 'msgId'
+                       must have required property 'userId'
+                       must match exactly one schema in oneOf [invalid-params]
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-moderation.dismissUserReports
+      description: 'Dismiss a specific reported user from the list of reported users. Permission required: `manage-moderation-actions`'
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - userId
+              properties:
+                userId:
+                  type: string
+                  example: qHWhoJwwgk4bwcoNq
+                  description: Enter the user ID of the reported user that you want to dismiss. Make sure that the ID belongs to the reported user.
+                reason:
+                  type: string
+                  description: Enter a reason for dismissing the reported user.
+            examples:
+              Example 1:
+                value:
+                  userId: qHWhoJwwgk4bwcoNq
+                  reason: Description
+  /api/v1/moderation.user.reportsByUserId:
+    get:
+      summary: Get User Reports by User ID
+      tags:
+        - Moderation
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      createdAt:
+                        type: string
+                      username:
+                        type: string
+                      emails:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            address:
+                              type: string
+                            verified:
+                              type: boolean
+                      roles:
+                        type: array
+                        items:
+                          type: string
+                      active:
+                        type: boolean
+                      name:
+                        type: string
+                      avatarETag:
+                        type: string
+                  reports:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        description:
+                          type: string
+                        reportedBy:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            name:
+                              type: string
+                            username:
+                              type: string
+                            createdAt:
+                              type: string
+                        reportedUser:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            createdAt:
+                              type: string
+                            username:
+                              type: string
+                            emails:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  address:
+                                    type: string
+                                  verified:
+                                    type: boolean
+                            name:
+                              type: string
+                        ts:
+                          type: string
+                  count:
+                    type: integer
+                  total:
+                    type: integer
+                  offset:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    user:
+                      _id: J6Q87AnWP5aNc9xhx
+                      createdAt: '2025-02-04T13:02:39.356Z'
+                      username: cat.kate
+                      emails:
+                        - address: testaz@example.com
+                          verified: false
+                      roles:
+                        - user
+                        - livechat-agent
+                        - livechat-monitor
+                      active: true
+                      name: cat kate
+                      avatarETag: pwJbBtoz47Zkf9myK
+                    reports:
+                      - _id: 6969ea608de1f4fa0e7f62fa
+                        description: issue
+                        reportedBy:
+                          _id: C38WSSzrGd2NCjzqJ
+                          name: test cat
+                          username: test.cat
+                          createdAt: null
+                        reportedUser:
+                          _id: J6Q87AnWP5aNc9xhx
+                          createdAt: '2025-02-04T13:02:39.356Z'
+                          username: cat.kate
+                          emails:
+                            - address: testaz@example.com
+                              verified: false
+                          name: cat kate
+                        ts: '2026-01-16T07:36:00.020Z'
+                    count: 1
+                    total: 1
+                    offset: 0
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''userId'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-moderation.user.reportsByUserId
+      description: 'Get the details of a specific user''s reports. Permission required: `view-moderation-console`'
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - schema:
+            type: string
+            example: Ahgf5k9Ca4YEdMjwX
+          in: query
+          name: userId
+          description: Enter the user ID for which you want to retrieve the reports. Make sure that the user ID belongs to the user whose reports you want to retrieve. Entering a user ID with no reports returns the user details, and an incorrect ID returns null results.
+          required: true
+  /api/v1/moderation.userReports:
+    get:
+      summary: Get Reported Users
+      tags:
+        - Moderation
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reports:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        count:
+                          type: integer
+                        reportedUser:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            createdAt:
+                              type: string
+                            username:
+                              type: string
+                            emails:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  address:
+                                    type: string
+                                  verified:
+                                    type: boolean
+                            name:
+                              type: string
+                        ts:
+                          type: string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    reports:
+                      - count: 1
+                        reportedUser:
+                          _id: J6Q87AnWP5aNc9xhx
+                          createdAt: '2025-02-04T13:02:39.356Z'
+                          username: cat.kate
+                          emails:
+                            - address: testaz@example.com
+                              verified: false
+                          name: cat kate
+                        ts: '2026-01-16T07:36:00.020Z'
+                    count: 1
+                    offset: 0
+                    total: 1
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-moderation.userReports
+      description: 'Get the list of reported users. Permission required: `view-moderation-console`'
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
   /api/v1/sessions/list:
-    parameters: []
     get:
       summary: Get Current User Sessions
       operationId: get-api-v1-sessions-list
@@ -3952,6 +4244,7 @@ components:
               value:
                 success: false
                 error: 'User does not have the permissions required for this action [error-unauthorized]'
+
 
 
 
