@@ -1593,8 +1593,6 @@ paths:
                       method: deleteOAuthApp
 tags:
   - name: Integration
-  - name: OAuth Apps
-  - name: WebDAV
 components:
   parameters:
     offset:
