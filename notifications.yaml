@@ -77,7 +77,6 @@ paths:
           description: The platform rendering the banner.
           required: true
   /api/v1/banners:
-    parameters: []
     get:
       summary: Get Banners
       operationId: get-api-v1-banners
@@ -137,7 +136,6 @@ paths:
       tags:
         - Banners
   /api/v1/banners.dismiss:
-    parameters: []
     post:
       summary: Dismiss a Banner
       operationId: post-api-v1-banners.dismiss
@@ -189,7 +187,6 @@ paths:
         - Banners
 
   /api/v1/push.get:
-    parameters: []
     get:
       summary: Get Push Notification
       operationId: get-api-v1-push.get
@@ -400,7 +397,7 @@ paths:
           description: The message ID.
           required: true
       tags:
-        - Push Token
+        - Push Notifications
   /api/v1/push.token:
     delete:
       summary: Delete Push Token
@@ -451,7 +448,7 @@ paths:
                 value:
                   token: abc
       tags:
-        - Push Token
+        - Push Notifications
     post:
       summary: Create Push Token
       operationId: post-api-v1-push.token
@@ -520,7 +517,7 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       tags:
-        - Push Token
+        - Push Notifications
       parameters:
         - $ref: '#/components/parameters/X-Auth-Token'
         - $ref: '#/components/parameters/X-User-Id'
@@ -558,7 +555,7 @@ paths:
     get:
       summary: Get Push Info
       tags:
-        - Push Token
+        - Push Notifications
       responses:
         '200':
           description: OK
@@ -590,7 +587,7 @@ paths:
     post:
       summary: Test Push Notifications
       tags:
-        - Push Token
+        - Push Notifications
       responses:
         '200':
           description: OK
@@ -615,6 +612,9 @@ paths:
       parameters:
         - $ref: '#/components/parameters/X-Auth-Token'
         - $ref: '#/components/parameters/X-User-Id'
+tags:
+  - name: Push Notifications
+  - name: Banners
 components:
   parameters:
     X-Auth-Token:
@@ -698,6 +698,4 @@ components:
             Success Example:
               value:
                 success: true
-
-
 
