@@ -6236,6 +6236,44 @@ paths:
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
+  /api/v1/livechat/department/isDepartmentCreationAvailable:
+    get:
+      summary: Check Department Creation
+      tags:
+        - Omnichannel Departments
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isDepartmentCreationAvailable:
+                    type: boolean
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    isDepartmentCreationAvailable: true
+                    success: true
+                If a department already exists in Community workspaces:
+                  value:
+                    isDepartmentCreationAvailable: false
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-livechat-department-isDepartmentCreationAvailable
+      description: |-
+       Use this endpoint to check whether departments can be created on the workspace. Workspaces on the Premium plans have no limit to the number of departments that can be created. On Community workspaces, only one department can be created.
+       
+       Any of the following permissions is required:
+        * `view-livechat-departments`
+        * `manage-livechat-departments`
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
 
   /api/v1/livechat/custom-fields.save:
     post:
