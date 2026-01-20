@@ -586,6 +586,35 @@ paths:
       parameters:
         - $ref: '#/components/parameters/X-Auth-Token'
         - $ref: '#/components/parameters/X-User-Id'
+  /api/v1/push.test:
+    post:
+      summary: Test Push Notifications
+      tags:
+        - Push Token
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tokensCount:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    tokensCount: 1
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-push.test
+      description: "Use this endpoint to test the push notifications configuration. Permission required: `test-push-notifications`.\r\nBy default, one request is allowed every 1000 milliseconds. To test successfully, make sure that you have logged into the workspace on the Rocket.Chat mobile app."
+      parameters:
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/X-User-Id'
 components:
   parameters:
     X-Auth-Token:
@@ -669,5 +698,6 @@ components:
             Success Example:
               value:
                 success: true
+
 
 
