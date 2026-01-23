@@ -10572,6 +10572,109 @@ paths:
           schema:
             type: string
           example: Lk52shJFYyb55trw8
+  /api/v1/livechat/triggers/external-service/test:
+    post:
+      summary: Test Trigger with External Service
+      tags:
+        - Livechat Triggers
+      responses:
+        '200':
+          description: |-
+           OK
+           
+           Rocket.Chat sends a request to the webhook containing a payload of the visitor metadata. The webhook returns the response as demonstrated in this example.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  triggerId:
+                    type: string
+                  response:
+                    type: object
+                    properties:
+                      statusCode:
+                        type: integer
+                      contents:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            msg:
+                              type: string
+                            order:
+                              type: integer
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    triggerId: test-trigger
+                    response:
+                      statusCode: 200
+                      contents:
+                        - msg: 'Welcome to our support center, Morgan! How can we assist you today?'
+                          order: 0
+                        - msg: Feel free to ask any questions you have. We're here to help!
+                          order: 1
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''webhookUrl'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-livechat-triggers-external-service-test
+      description: |-
+       <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+       
+       Test your Livechat trigger setup with external service using this endpoint. Make sure that you have created the <a href='https://docs.rocket.chat/docs/livechat-triggers' target='_blank'>trigger</a>. Permission required: `view-livechat-manager`. Rate limit applies: 15 requests per 60000 milliseconds.
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhookUrl
+                - timeout
+                - fallbackMessage
+              properties:
+                webhookUrl:
+                  type: string
+                  description: Enter the external webhook URL.
+                  example: 'https://webhook.site/2f5df6a1-592c-4d9f-8f36-ab15ca3caf23'
+                timeout:
+                  type: string
+                  description: Enter the time in milliseconds to wait for the external service to respond before cancelling the request.
+                  example: '10000'
+                fallbackMessage:
+                  type: string
+                  description: Enter the message to send after the timeout ends.
+                  default: Request timeout
+            examples:
+              Example 1:
+                value:
+                  webhookUrl: 'https://webhook.site/2f5df6a1-592c-4d9f-8f36-ab15ca3caf23'
+                  timeout: '10000'
+                  fallbackMessage: Request timeout
   /api/v1/livechat/monitors:
     get:
       tags:
