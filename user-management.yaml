@@ -2413,6 +2413,8 @@ paths:
           name: userId
           description: 'The user ID. Alternatively, you can enter the `username` parameter.'
           required: true
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
       description: |-
         View a user's avatar.
         
@@ -2421,7 +2423,6 @@ paths:
         | ------------ | ------------|
         |0.50.0        | Added       |
   /api/v1/users.resetAvatar:
-    parameters: []
     post:
       summary: Reset Avatar
       operationId: post-api-v1-users.resetAvatar
