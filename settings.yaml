@@ -4118,6 +4118,636 @@ paths:
       parameters:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/X-Auth-Token'
+  /api/v1/video-conference.capabilities:
+    get:
+      summary: Get Video Conference Capabilities
+      tags:
+        - Video Conference
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  providerName:
+                    type: string
+                  capabilities:
+                    type: object
+                    properties:
+                      mic:
+                        type: boolean
+                      cam:
+                        type: boolean
+                      title:
+                        type: boolean
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    providerName: googlemeet
+                    capabilities:
+                      mic: false
+                      cam: false
+                      title: false
+                    success: true
+                Example 2:
+                  value:
+                    providerName: jitsi
+                    capabilities:
+                      mic: true
+                      cam: true
+                      title: true
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: no-active-video-conf-provider
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-video-conference.capabilities
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      description: |-
+       Get details on the video call capabilities, such as the name of the provider, and whether Rocket.Chat can control the microphone and camera state. This endpoint is used for the video conference system to dynamically adapt the UI based on provider capabilities, ensuring users only see controls that are actually supported by the configured video conference provider.
+       
+       Rate limiting: 3 requests per 1000ms"
+  /api/v1/video-conference.list:
+    get:
+      summary: Get List of Video Conferences
+      tags:
+        - Video Conference
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        type:
+                          type: string
+                        users:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              _id:
+                                type: string
+                              username:
+                                type: string
+                              name:
+                                type: string
+                              avatarETag:
+                                type: string
+                              ts:
+                                type: string
+                        messages:
+                          type: object
+                          properties:
+                            started:
+                              type: string
+                        status:
+                          type: integer
+                        anonymousUsers:
+                          type: integer
+                        createdAt:
+                          type: string
+                        providerName:
+                          type: string
+                        ringing:
+                          type: boolean
+                        title:
+                          type: string
+                        rid:
+                          type: string
+                        createdBy:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            name:
+                              type: string
+                            username:
+                              type: string
+                        _updatedAt:
+                          type: string
+                        url:
+                          type: string
+                        endedAt:
+                          type: string
+                  offset:
+                    type: integer
+                  count:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    data:
+                      - _id: 69786d0ac8b05330207814bd
+                        type: videoconference
+                        users:
+                          - _id: fRv4qm8ycWHXSA7af
+                            username: jane.doe
+                            name: jane
+                            avatarETag: null
+                            ts: '2026-01-27T07:45:14.977Z'
+                        messages:
+                          started: 8AqsmsMXDePKfDbHv
+                        status: 1
+                        anonymousUsers: 0
+                        createdAt: '2026-01-27T07:45:14.533Z'
+                        providerName: googlemeet
+                        ringing: true
+                        title: ui-test
+                        rid: 674eca3e43725ce31dd9a2e8
+                        createdBy:
+                          _id: fRv4qm8ycWHXSA7af
+                          name: jane
+                          username: jane.doe
+                        _updatedAt: '2026-01-27T07:45:14.977Z'
+                        url: 'http://g.co/meet/RocketChat_69786d0ac8b05330207814bd'
+                      - _id: 6772586c8dd061cca4edc998
+                        type: videoconference
+                        users:
+                          - _id: fRv4qm8ycWHXSA7af
+                            username: jane.doe
+                            name: jane
+                            ts: '2024-12-30T08:23:11.130Z'
+                        messages:
+                          started: sTDmP2WSH6Rwt89iw
+                        status: 2
+                        anonymousUsers: 0
+                        createdAt: '2024-12-30T08:23:08.655Z'
+                        providerName: jitsi
+                        rid: 674eca3e43725ce31dd9a2e8
+                        title: ui-test
+                        createdBy:
+                          _id: fRv4qm8ycWHXSA7af
+                          name: jane
+                          username: jane.doe
+                        _updatedAt: '2024-12-31T09:00:00.025Z'
+                        url: 'https://meet.jit.si/RocketChat6772586c8dd061cca4edc998'
+                        endedAt: '2024-12-31T09:00:00.025Z'
+                    offset: 0
+                    count: 2
+                    total: 2
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''roomId'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-video-conference.list
+      description: 'Use this endpoint to get the list of video calls for a specific room. Rate limiting: 3 requests per 1000ms.'
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - schema:
+            type: string
+            example: 674eca3e43725ce31dd9a2e8
+          in: query
+          name: roomId
+          description: Enter the room ID for which you want to view the list of video conferences. Make sure that you have access to the room.
+          required: true
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+  /api/v1/video-conference.info:
+    get:
+      summary: Get Video Conference Details
+      tags:
+        - Video Conference
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  type:
+                    type: string
+                  users:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        username:
+                          type: string
+                        name:
+                          type: string
+                        avatarETag:
+                          type: string
+                        ts:
+                          type: string
+                  messages:
+                    type: object
+                    properties:
+                      started:
+                        type: string
+                  status:
+                    type: integer
+                  anonymousUsers:
+                    type: integer
+                  createdAt:
+                    type: string
+                  providerName:
+                    type: string
+                  ringing:
+                    type: boolean
+                  title:
+                    type: string
+                  rid:
+                    type: string
+                  createdBy:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      name:
+                        type: string
+                      username:
+                        type: string
+                  _updatedAt:
+                    type: string
+                  url:
+                    type: string
+                  capabilities:
+                    type: object
+                    properties:
+                      mic:
+                        type: boolean
+                      cam:
+                        type: boolean
+                      title:
+                        type: boolean
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    _id: 697866d5c8b053302078137a
+                    type: videoconference
+                    users:
+                      - _id: fRv4qm8ycWHXSA7af
+                        username: jane.doe
+                        name: jane
+                        avatarETag: null
+                        ts: '2026-01-27T07:18:46.491Z'
+                    messages:
+                      started: RdiQLFktbFxtK2XTZ
+                    status: 1
+                    anonymousUsers: 0
+                    createdAt: '2026-01-27T07:18:45.956Z'
+                    providerName: googlemeet
+                    ringing: true
+                    title: testdiscussion
+                    rid: 68c8071650223764573dd2dc
+                    createdBy:
+                      _id: fRv4qm8ycWHXSA7af
+                      name: jane
+                      username: jane.doe
+                    _updatedAt: '2026-01-27T07:18:46.491Z'
+                    url: 'http://g.co/meet/RocketChat_697866d5c8b053302078137a'
+                    capabilities:
+                      mic: false
+                      cam: false
+                      title: false
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''callId'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-video-conference.info
+      description: 'Get details about a specific video conference. Rate limiting: 15 requests per 3000ms.'
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - schema:
+            type: string
+            example: 697866d5c8b053302078137a
+          in: query
+          name: callId
+          description: Enter the call ID.
+          required: true
+  /api/v1/video-conference.providers:
+    get:
+      summary: Get Video Conference Providers
+      tags:
+        - Video Conference
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        key:
+                          type: string
+                        label:
+                          type: string
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    data:
+                      - key: pexip
+                        label: Pexip
+                      - key: googlemeet
+                        label: GoogleMeet
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-video-conference.providers
+      description: 'Get the list of available video conference providers in your workspace, regardless of their active status. Rate limiting: 3 requests per 1000ms.'
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+  /api/v1/video-conference.start:
+    post:
+      summary: Start Video Conference
+      tags:
+        - Video Conference
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                      callId:
+                        type: string
+                      rid:
+                        type: string
+                      providerName:
+                        type: string
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    data:
+                      type: videoconference
+                      callId: 697887e3c8b0533020781a4a
+                      rid: 674eca3e43725ce31dd9a2e8
+                      providerName: googlemeet
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''roomId'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-video-conference.start
+      description: 'Use this endpoint to begin a video call in a specific room. Rate limiting: 3 requests per 60000ms. Permission required: `call-management`.'
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - roomId
+              properties:
+                roomId:
+                  type: string
+                  description: Enter the room ID where you want to start the video call.
+                  example: 674eca3e43725ce31dd9a2e8
+                title:
+                  type: string
+                  description: Enter a title for the video call.
+                allowRinging:
+                  type: boolean
+                  description: 'Whether to enable ringing for direct calls (requires `videoconf-ring-users` permission; by default admin, users, moderators, and owners have this permission).'
+            examples:
+              Example 1:
+                value:
+                  roomId: 674eca3e43725ce31dd9a2e8
+                  title: Test Call
+                  allowRinging: true
+  /api/v1/video-conference.join:
+    post:
+      summary: Join a Video Conference
+      tags:
+        - Video Conference
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  providerName:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    url: 'http://g.co/meet/RocketChat_697887e3c8b0533020781a4a'
+                    providerName: googlemeet
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''callId'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-video-conference.join
+      description: 'Join a specific video conference. Rate limiting: 2 requests per 5000ms. This endpoint also allows anonymous access for guest users.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - callId
+              properties:
+                callId:
+                  type: string
+                  example: 697887e3c8b0533020781a4a
+                  description: Enter the video conference call ID that you want to join.
+                state:
+                  type: object
+                  description: Object containing initial device states.
+                  properties:
+                    mic:
+                      type: boolean
+                      description: Whether the microphone starts muted or unmuted.
+                    cam:
+                      type: boolean
+                      description: Whether the camera starts enabled or disabled.
+            examples:
+              Example 1:
+                value:
+                  callId: 697887e3c8b0533020781a4a
+                  state:
+                    mic: true
+                    cam: true
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+  /api/v1/video-conference.cancel:
+    post:
+      summary: Cancel Video Conference
+      tags:
+        - Video Conference
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''callId'' [invalid-params]'
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: invalid-call
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-video-conference.cancel
+      description: "Cancel a specific video conference call. You can only cancel a call that is in the calling state. Rate limiting: 3 requests per 60 seconds."
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - callId
+              properties:
+                callId:
+                  type: string
+                  example: 697887e3c8b0533020781a4a
+                  description: Enter the call ID that you want to cancel.
 
 tags:
   - name: Settings
@@ -4131,6 +4761,7 @@ tags:
   - name: Moderation
   - name: Device Management
   - name: Password policy
+  - name: Video Conference
 components:
   parameters:
     X-User-Id:
@@ -4244,6 +4875,7 @@ components:
               value:
                 success: false
                 error: 'User does not have the permissions required for this action [error-unauthorized]'
+
 
 
 
