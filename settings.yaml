@@ -4186,7 +4186,7 @@ paths:
       description: |-
        Get details on the video call capabilities, such as the name of the provider, and whether Rocket.Chat can control the microphone and camera state. This endpoint is used for the video conference system to dynamically adapt the UI based on provider capabilities, ensuring users only see controls that are actually supported by the configured video conference provider.
        
-       Rate limiting: 3 requests per 1000ms"
+       Rate limiting: 3 requests per 1000ms
   /api/v1/video-conference.list:
     get:
       summary: Get List of Video Conferences
@@ -4875,6 +4875,7 @@ components:
               value:
                 success: false
                 error: 'User does not have the permissions required for this action [error-unauthorized]'
+
 
 
 
