@@ -4912,7 +4912,6 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/fields'
         - $ref: '#/components/parameters/query'
         - name: roomId
@@ -4937,8 +4936,18 @@ paths:
           in: query
           description: Filter pinned messages.
           schema:
-            type: boolean
-          example: 'true' 
+            type: string
+          example: 'true'
+        - schema: {}
+          in: query
+          name: sort
+          description: |-
+           Sort the order in which messages are returned, ascending (`1`) or descending (`-1`). The options are:
+            * `ts`: Sort by message timestamp. For example, `{"ts": -1}`, this is the default sorting mechanism.
+            * `u.username`: Sort by username. For example, `{"u.username": 1}`.
+            * `msg`: Sort by message content. For example, `{"msg": 1}`.
+            * `_id`: Sort by message ID. For example, `{"_id": -1}`.
+            * `mentions._id`: Sort by mentioned user IDs. For example, `{"mentions._id": 1}`.
       responses:
         '200':
           description: OK
