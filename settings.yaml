@@ -459,7 +459,6 @@ paths:
         - Settings
 
   /api/v1/audit.settings:
-    parameters: []
     get:
       summary: Get Settings History
       operationId: get-api-v1-settings-history
@@ -687,10 +686,12 @@ paths:
             Filter the results by the user details that performed the action.
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/offset'
-        - $ref: '#/components/parameters/sort'
+        - schema: {}
+          in: query
+          name: sort
+          description: 'Sort the events in the ascending (`1`) or descending (`-1`) order. By default, the result is sorted in descending order. The most recent audit events are returned first. Enter the value as: `sort[ts]=1` or `sort[ts]=-1`.'
 
   /api/v1/cloud.manualRegister:
-    parameters: []
     post:
       summary: Manual Cloud Register
       operationId: post-api-v1-cloud.manualRegister
@@ -4875,6 +4876,7 @@ components:
               value:
                 success: false
                 error: 'User does not have the permissions required for this action [error-unauthorized]'
+
 
 
 
