@@ -14019,8 +14019,33 @@ paths:
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - schema: {}
+          in: query
+          name: sort
+          description: 'Sort the events in the ascending (`1`) or descending (`-1`) order. By default, the result is sorted in descending order. The most recent chats are returned first. Enter the value as: `sort[ts]=1` or `sort[ts]=-1`. Here `ts` refers to timestamp.'
+        - schema:
+            type: string
+          in: query
+          name: searchText
+          description: Enter the text to search for within the chat.
+        - schema:
+            type: string
+          in: query
+          name: closedChatsOnly
+          description: Filter the results to display only closed chats. The value can be `"true"` or `"false"`.
+        - schema:
+            type: string
+          in: query
+          name: servedChatsOnly
+          description: Filter the results to display only chats that are joined by agents. The value can be `"true"` or `"false"`.
+        - schema:
+            type: string
+          in: query
+          name: source
+          description: 'Filter the results by the source of the chat. The value can be: `widget`, `sms`, `api`, `email`, `app`, `other`.'
   /api/v1/livechat/visitors.autocomplete:
-    parameters: []
     get:
       summary: Autocomplete Visitors
       tags:
