@@ -11271,7 +11271,6 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/sort'
         - schema:
             type: string
           in: query
@@ -11287,6 +11286,16 @@ paths:
           in: query
           name: viewAll
           description: Select whether you want to view all tags.
+        - schema: {}
+          in: query
+          name: sort
+          description: |-
+           Sort tags in ascending (`1`) or descending (`-1`) order. The options are:
+            * `name`: Sort by tag name. `sort={"name": 1}` (default) or `sort={"name": -1}`
+            * `description`: Sort by tag description. `sort={"description": 1}` or `sort={"description": -1}`
+            * `numDepartments`: Sort by number of departments associated with the tag.
+            * `_createdAt`: Sort by date of tag creation.
+            * `_updatedAt`: Sort by the update timestamp.
       responses:
         '200':
           description: OK
