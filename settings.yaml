@@ -17,7 +17,6 @@ servers:
   - url: https://apiexplorer.support.rocket.chat
 paths:
   /api/v1/settings.public:
-    parameters: []
     get:
       summary: Get Public Settings
       operationId: get-api-v1-settings.public
@@ -73,7 +72,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/fields'
         - name: _id
           in: query
@@ -81,8 +79,15 @@ paths:
           schema:
             type: string
           example: Site_Url, LDAP_Enable
+        - schema:
+            type: string
+          in: query
+          name: sort
+          description: |-
+           Sort the settings in ascending or descending order. By default, settings are sorted by setting ID in ascending order. The sort options are:
+            * `createdAt`: Sort by creation date. `sort={"createdAt": 1}` or `sort={"createdAt": -1}`
+            * `_id`: Sort by setting ID. `sort={"_id": 1}` or `sort={"_id": -1}`
   /api/v1/settings.oauth:
-    parameters: []
     get:
       summary: Get OAuth Settings
       operationId: get-api-v1-settings.oauth
@@ -4876,6 +4881,7 @@ components:
               value:
                 success: false
                 error: 'User does not have the permissions required for this action [error-unauthorized]'
+
 
 
 
