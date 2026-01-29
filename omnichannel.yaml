@@ -9315,7 +9315,17 @@ paths:
             type: string
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/sort'
+        - schema: {}
+          in: query
+          name: sort
+          description: |-
+           Sort the inquiries in ascending (`1`) or descending (`-1`) order. The available options are:
+            * `ts`: Sort by timestamp. `sort={"ts": 1}` or `sort={"ts": -1}` (newest first, default)
+            * `name`: Sort by inquiry name. `sort={"name": 1}` or `sort={"name": -1}`
+            * `priorityWeight`: Sort by priority of the inquiry. `sort={"priorityWeight": 1}` or `sort={"priorityWeight": -1}`
+            * `estimatedWaitingTimeQueue`: Sort by the estimated waiting time in the queue. `sort={"estimatedWaitingTimeQueue": 1}` or `sort={"estimatedWaitingTimeQueue": -1}`
+            * `status`: Sort by inquiry status. `sort={"status": 1}` or `sort={"status": 1}`
+            * You can also use multiple options for the sort query. For example, `sort={"estimatedWaitingTimeQueue": 1, "priorityWeight": -1}`.
       responses:
         '200':
           description: OK
