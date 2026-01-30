@@ -2194,13 +2194,300 @@ paths:
                   description: Description8
                   reminderMinutesBeforeStart: 10
                   busy: true
+  '/api/apps/public/{app-id}/incoming':
+    parameters:
+      - schema:
+          type: string
+        name: app-id
+        in: path
+        required: true
+        description: The app id. Navigate to App Info > Details > APIs > POST incoming to get the complete URL for this endpoint.
+    post:
+      summary: Close Chat or Perform Handover
+      tags:
+        - Rasa App
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+              examples:
+                Close chat:
+                  value:
+                    msg: ' Close chat request handled successfully'
+                Perform handover:
+                  value:
+                    msg: ' Perform Handover request handled successfully'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-apps-public-app-id-incoming
+      description: |-
+        Close a chat session or perform handover. The appropriate endpoint URL including the `appId` for  closing chat or perfoming handover in your workspace is displayed under **App Info > Details > APIs > POST incoming** section of the Rasa app.
 
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |5.0.0     | Added       |
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - action
+                - sessionId
+              properties:
+                action:
+                  type: string
+                  description: 'The action can either be `handover` or `close-chat`. '
+                sessionId:
+                  type: string
+                  description: The ID of the Rasa session.
+                actionData:
+                  type: object
+                  properties:
+                    targetDepartment:
+                      type: string
+                      description: The targeted department.
+            examples:
+              Example:
+                value:
+                  action: close-chat
+                  sessionId: 2Sfq8wXw4fYPMf6r4
+  /api/v1/video-conference/jitsi.update-timeout:
+    post:
+      summary: Update Jitsi Timeout
+      tags:
+        - Jitsi App
+      description: |- 
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |0.74.0        | Added       |
+      operationId: post-api-v1-video-conference-jitsi.update-timeout
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roomId:
+                  type: string
+                  description: The room Id of the room to update the jitsi timeout.
+              required:
+                - roomId
+            examples:
+              Example:
+                value:
+                  roomId: hyoM5JSQi94RwqPE7
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jitsiTimeout:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    jitsiTimeout: '2019-01-16T13:17:11.951Z'
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  /api/apps/public/{appId}/templateMessage:
+    post:
+      tags:
+        - WhatsApp
+      summary: Send a WhatsApp Template Message
+      description: |-
+        Use this endpoint to send WhatsApp template messages directly to specified contacts from your workspace.
+
+        1. Click the **Marketplace** icon from the main menu. Select **Explore** from the drop-down menu.
+        2. Locate your preferred <a href="https://docs.rocket.chat/docs/whatsapp-apps" target="_blank">WhatsApp App</a>.
+        3. Go to *App Info > Details > APIs* and find the `POST templateMessage` section.
+        4. Copy the `POST templateMessage` endpoint URL for your WhatsApp app from the provided curl example. This URL includes the required `appId`. Send a template message request using this URL as the endpoint.
+        
+        Before sending template messages from Rocket.Chat through any <a href="https://docs.rocket.chat/docs/whatsapp-apps" target="_blank">WhatsApp App</a>, ensure that you have set up the templates in respective WhatsApp provider account. Refer to the official guide for details on <a href="https://developer.rocket.chat/docs/whatsapp-business-template-messages#set-up-template-messages-on-whatsapp" target="_blank">configuring template messages for each WhatsApp app</a>.
+      operationId: post-api-apps-public-app_id-templateMessage
+      parameters:
+        - name: appId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: 'We strongly recommend including the + prefix for all phone numbers in the payload. While you can submit numbers without the leading + sign, we have encountered cases where WhatsApp will return an invalid response despite the number being in use.'
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phoneNumbers:
+                  type: array
+                  description: 'Recipient WhatsApp IDs where you want to send the template message. You can validate a WhatsApp id from <a href="https://developers.facebook.com/docs/whatsapp/on-premises/reference/contacts" target="_blank">here</a>.'
+                  items:
+                    type: string
+                connectedWhatsAppNo:
+                  type: string
+                  description: The WhatsApp Number from which you want to send this template message. The WhatsApp number connected to your workspace via the app.
+                targetAgent:
+                  type: string
+                  description: Username of the agent you want to transfer the chat to when the WhatsApp user replies.
+                targetDepartment:
+                  type: string
+                  description: Department name or ID where you want to transfer the chat to when the WhatsApp user replies.
+                template:
+                  type: object
+                  description: |-
+                    Provide the details of the template message you want to send. The structure of the template object may differ depending on the template defined within your WhatsApp provider account. For further clarification, refer to the official guide on <a href="https://developer.rocket.chat/docs/whatsapp-business-template-messages#api-endpoint" target="_blank">sending template messages via API in Rocket.Chat</a>. The example template object provided here is based on the configuration outlined in the official guide for the <a href="https://developer.rocket.chat/docs/whatsapp-business-template-messages#whatsapp-cloud" target="_blank">WhatsApp Cloud App</a>.
+                    
+                    If your template message includes parameters, make sure to replace all of them with the appropriate information before sending. Failure to do so may lead to an error.
+                  properties:
+                    namespace:
+                      type: string
+                    name:
+                      type: string
+                    language:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                        policy:
+                          type: string
+                    components:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          type:
+                            type: string
+                          parameters:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                type:
+                                  type: string
+                                text:
+                                  type: string
+              required:
+                - phoneNumbers
+                - connectedWhatsAppNo
+                - template
+            examples:
+              WhatsApp Cloud:
+                value:
+                  phoneNumbers:
+                    - '2368106035555'
+                  connectedWhatsAppNo: '104920685899299'
+                  template:
+                    name: ship
+                    language:
+                      code: en
+                      policy: deterministic
+                    components:
+                      - type: body
+                        parameters:
+                          - type: text
+                            text: '20' 
+              WhatsApp 360Dialog (Cloud API):
+                value:                            
+                  phoneNumbers:
+                    - "xxxxxxxxxxxxx"
+                  connectedWhatsAppNo: "555195251xxx"
+                  template:
+                    name: "boarding_pass"
+                    language:
+                      code: "en"
+                      policy: "deterministic"
+                    components:
+                      - type: "header"
+                        parameters:
+                          - type: "text"
+                            text: "halo"
+                      - type: "body"
+                        parameters:
+                          - type: "text"
+                            text: "abc"
+                          - type: "text"
+                            text: "xyz"
+              Whatsapp Sandbox:
+                value:
+                  phoneNumbers:
+                    - "50364357612"
+                  template:
+                    name: "first_welcome_messsage"
+                    language:
+                      code: "en"
+                    components:
+                      - type: "body"
+                        parameters:
+                          - type: "text"
+                            text: "Your name goes here"
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Too many phone numbers:
+                  value:
+                    success: false
+                    error: Too many phone numbers! Please make sure that phoneNumbers are <= 250
+                Agent Not Found:
+                  value:
+                    success: false
+                    error: No Agent found with username abc98
+                Department Not Found:
+                  value:
+                    success: false
+                    error: No Department found with id/Name SalesDepartment
+                Invalid WhatsApp Contact:
+                  value:
+                    success: false
+                    error: Connected WhatsApp Number (connectedWhatsAppNo) i.e. 565412001234 is not a valid WhatsApp contact. Contact Status is invalid
+                Invalid Connected WhatsApp Number:
+                  value:
+                    success: false
+                    error: 'Error! Connected WhatsApp Number (connectedWhatsAppNo) i.e. 565412001234 has not been registered yet on Rocket.Chat. Please goto #omnichannel-whatsapp-setup channel and connect this WhatsApp number first there before sending this request again.'
 tags:
   - name: Commands
   - name: Email Inbox
   - name: Licenses
   - name: Mailer
   - name: Calendar Events
+  - name: WhatsApp
+  - name: Rasa App
+  - name: Jitsi App
   
 components:
   parameters:
