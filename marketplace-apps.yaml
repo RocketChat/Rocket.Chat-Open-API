@@ -1,3 +1,4 @@
+# We have officially pulled down marketp[lace endpoint from docs because it's not for users but Rocket.Chat Client
 openapi: 3.0.0
 info:
   version: 1.0.0
@@ -1915,4 +1916,5 @@ tags:
   - name: WhatsApp App
   - name: Manage Apps
   - name: Jitsi App
+
 
