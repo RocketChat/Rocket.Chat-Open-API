@@ -5714,7 +5714,10 @@ paths:
                       url: /file-upload/67109d6c25682c7469486008/Screenshot%202024-10-15%20at%2010.17.39.png
                     success: true
       operationId: post-api-v1-rooms.media
-      description: Upload media files to a room.
+      description: |-
+       To upload media files to a room, follow these steps:
+        1. Call this endpoint first. This endpoint uploads the file to the database and returns a file object with the file ID and URL data. Save the file ID, we will need this to send the file in the next step.
+        2. To send the file to a room, use the <a href='https://developer.rocket.chat/apidocs/check-uploaded-file' target='_blank'>Confirm Uploaded File</a> endpoint.
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
@@ -5737,11 +5740,11 @@ paths:
     parameters:
       - schema:
           type: string
-          example: GENERAL
+          example: 674eca3e43725ce31dd9a2e8
         name: rid
         in: path
         required: true
-        description: The id of the room.
+        description: The room ID.
 
   /api/v1/rooms.autocomplete.availableForTeams:
     get:
@@ -13635,9 +13638,9 @@ paths:
         name: fileId
         in: path
         required: true
-        description: Enter the file ID.
+        description: Enter the file ID you get from the <a href='https://developer.rocket.chat/apidocs/upload-media-files-to-a-room' target='_blank'>Upload Files to a Room</a> endpoint.
     post:
-      summary: Check Uploaded File
+      summary: Confirm Uploaded File
       tags:
         - Rooms
       responses:
@@ -13799,7 +13802,7 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: post-api-v1-rooms.mediaConfirm-rid-fileId
-      description: Use this endpoint to get details of a specific file uploaded to a room.
+      description: Use this endpoint to send a specific file to a room. You can use this endpoint only after calling the <a href='https://developer.rocket.chat/apidocs/upload-media-files-to-a-room' target='_blank'>Upload Media Files to a Room</a> endpoint and getting the file ID.
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
