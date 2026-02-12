@@ -2188,7 +2188,7 @@ paths:
         **Permissons required**:
         - `view-d-room`: Required to view direct messages
         - `view-full-other-user-info`: Required to view complete user information (e.g., account creation date, last login)
-        - `view-outside-room`: (Only required if the setting `Apply_permission_view-outside-room` is enabled on under **Settings** > **General** > **Rest API**). Required to view rooms outside of which the request sender is a member of
+        - `view-outside-room`: (Only required if the setting `Apply_permission_view-outside-room` is enabled on under **Settings** > **General** > **Rest API**). Required to view rooms that the user is not a member of.
 
         ### Changelog
         | Version      | Description |
@@ -2202,8 +2202,16 @@ paths:
         - $ref: '#/components/parameters/query'
         - $ref: '#/components/parameters/fields'
         - $ref: '#/components/parameters/offset'
-        - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/count'
+        - schema:
+            type: string
+          in: query
+          name: sort
+          description: |-
+           Sort the users in ascending (`1`) or descending (`-1`) order. The value must be entered as a JSON string. The options are as follows:
+            * `status`: Sort by users' status. For example, `sort={"status":1}` (this maps to the `active` status).
+            * `createdAt`: Sort by the time of user creation. For example, `sort={"createdAt":-1}`
+            * `sort`: Sort by user name. For example, `sort={"name":1}`
       responses:
         '200':
           description: OK
