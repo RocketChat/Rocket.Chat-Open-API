@@ -5528,14 +5528,12 @@ components:
       description: >-
         Enter the 2FA code. This parameter is required if 2FA is enabled in your workspace.
         See the <a href="https://developer.rocket.chat/apidocs/introduction-to-two-factor-authentication" target="_blank">Introduction to Two-Factor Authentication</a> document for details.
-      required: true
       schema:
         type: string
       example: '148750'
     x-2fa-method:
       name: x-2fa-method
       in: header
-      required: true
       schema:
         type: string
       description: 'Enter the method with which you get the 2FA code. It can be `email`, `totp`, or `password`. This parameter is required if 2FA is enabled in your workspace.'
