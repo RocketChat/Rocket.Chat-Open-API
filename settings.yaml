@@ -4821,19 +4821,19 @@ components:
       schema: {}
       description: 'This parameter accepts a JSON object with properties that have a value of 1 or 0 to include or exclude them in the response. For example, to only retrieve the usernames of users: `fields={ "username": 1 }`. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more.'
     x-2fa-code:
-      name: X-2fa-Code
+      name: x-2fa-code
       in: header
-      required: true
       schema:
         type: string
-      description: 'The 2FA code from the authentication method. If the method is password, encrypt it as SHA256.'
+      description: >-
+        The 2FA code. This parameter is required if 2FA is enabled in your workspace.
+        See the <a href="https://developer.rocket.chat/apidocs/introduction-to-two-factor-authentication" target="_blank">Introduction to Two-Factor Authentication</a> document for details.
     X-2fa-method:
-      name: X-2fa-method
+      name: x-2fa-method
       in: header
-      required: true
       schema:
         type: string
-      description: 'The desired method to get the 2FA code. It can be `email`, `totp`, or `password`.'
+      description: 'Enter the method with which you get the 2FA code. It can be `email`, `totp`, or `password`. This parameter is required if 2FA is enabled in your workspace.'
   schemas: {}
   responses:
     authorizationError:
@@ -4881,6 +4881,7 @@ components:
               value:
                 success: false
                 error: 'User does not have the permissions required for this action [error-unauthorized]'
+
 
 
 
