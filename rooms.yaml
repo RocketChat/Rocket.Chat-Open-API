@@ -5082,7 +5082,15 @@ paths:
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/fields'
         - $ref: '#/components/parameters/offset'
-        - $ref: '#/components/parameters/sort'
+        - schema:
+            type: string
+          in: query
+          name: sort
+          description: |-
+           Sort the channels in ascending (`1`) or descending (`-1`) order. The value must be entered as a JSON object. The options are as follows:
+            * `fname`: Sort by discussion name. For example, `sort={"fname":1}` (this is the default sorting mechanism).
+            * `ts`: Sort by creation timestamp. For example, `sort={"ts":-1}`
+            * `usersCount`: Sort by number of users. For example, `sort={"usersCount":1}`
       responses:
         '200':
           description: OK
