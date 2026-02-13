@@ -4719,8 +4719,16 @@ paths:
           schema:
             type: string
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/offset'
+        - schema:
+            type: string
+          in: query
+          name: sort
+          description: |-
+           Sort the channels in ascending (`1`) or descending (`-1`) order. The value must be entered as a JSON object. The options are as follows:
+            * `ts`: Sort by creation timestamp. For example, `sort={"ts":-1}`
+            * `usersCount`: Sort by number of users. For example, `sort={"usersCount":1}`
+            * `name`: Sort by the room name. For example, `sort={"name":1}`
       responses:
         '200':
           description: OK
