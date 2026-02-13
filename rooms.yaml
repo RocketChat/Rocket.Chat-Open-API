@@ -10941,7 +10941,7 @@ paths:
         - Groups
       summary: Get Groups
       description: |-
-        Lists all the private groups/channels that you are a member of.
+        Lists all the private channels you are a member of.
         
         ### Changelog
         | Version | Description                                  |
@@ -10956,7 +10956,15 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/sort'
+        - schema:
+            type: string
+          in: query
+          name: sort
+          description: |-
+           Sort the channels in ascending (`1`) or descending (`-1`) order. The value must be entered as a JSON object. The options are as follows:
+            * `name`: Sort by the channel name. For example, `sort={"name":1}` (this is the default sorting mechanism).
+            * `ts`: Sort by channel creation timestamp. For example, `sort={"ts":-1}`
+            * `usersCount`: Sort by the number of users in the channel. For example, `sort={"usersCount":1}`
       responses:
         '200':
           description: OK
