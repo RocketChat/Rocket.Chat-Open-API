@@ -1275,6 +1275,16 @@ paths:
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/offset'
+        - schema:
+            type: string
+          in: query
+          name: sort
+          description: |-
+           Sort the commands in ascending (`1`) or descending (`-1`) order. The value must be entered as a JSON string. The options are as follows:
+            * `command`: Sort by command name. For example, `sort={"command":1}`
+            * `description`: Sort by description. For example, `sort={"description":-1}`
       responses:
         '200':
           description: OK
