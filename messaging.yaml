@@ -3089,15 +3089,17 @@ paths:
         - $ref: '#/components/parameters/sort'
         - name: rid
           in: query
-          description: The room Id.
+          description: The room ID.
           required: true
           schema:
             type: string
+            example: J8Sqi5zPw62WgE4Md
         - name: updatedSince
           in: query
           description: Date as an ISO string. When you provide the `updatedSince` query parameter, then the `update` and `remove` parameters in the response will contain only those updated and removed since this date and time.
           schema:
             type: string
+            example: 2026-01-01T00:00:00Z
           required: true
       responses:
         '200':
