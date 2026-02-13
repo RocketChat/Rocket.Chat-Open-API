@@ -2187,7 +2187,7 @@ paths:
         - Channels
       summary: Get Channel List
       description: |-
-        Lists all the channels on the workspace. Any of the following permissions are required:
+        Lists all the channels in the workspace. Any of the following permissions are required:
         * `view-c-room`
         * `view-joined-room`
         
@@ -2202,9 +2202,17 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/query'
         - $ref: '#/components/parameters/fields'
+        - schema:
+            type: string
+          in: query
+          name: sort
+          description: |-
+           Sort the channels in ascending (`1`) or descending (`-1`) order. The value must be entered as a JSON object. The options are as follows:
+            * `name`: Sort by the channel name. For example, `sort={"name":1}` (this is the default sorting mechanism).
+            * `ts`: Sort by channel creation timestamp. For example, `sort={"ts":-1}`
+            * `usersCount`: Sort by the number of users in the channel. For example, `sort={"usersCount":1}`
       responses:
         '200':
           description: OK
