@@ -6982,7 +6982,6 @@ paths:
         - $ref: '#/components/parameters/sort'
           
   /api/v1/rooms.membersOrderedByRole:
-    parameters: []
     get:
       summary: Get Room Members Ordered by Role
       tags:
@@ -7114,7 +7113,14 @@ paths:
           description: Filter the results by using the text that you want to view.
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/sort'
+        - schema:
+            type: string
+          in: query
+          name: sort
+          description: |-
+           Sort the rooms in ascending (`1`) or descending (`-1`) order. The value must be entered as a JSON string. The options are as follows:
+            * `rolePriority`: Sort by priority of role (`Owners` > `Moderators` > all other members). For example, `sort={"rolePriority":-1}`
+            * `username`: Sort by usernames. For example, `sort={"username":-1}`
         - schema:
             type: array
             items:
