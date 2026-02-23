@@ -1981,7 +1981,7 @@ paths:
       description: |- 
         Send messages to channels or users on your workspace.
         
-        **Note**: You can only send alias and avatar properties if your user has the `message-impersonate permission`. We implemented this rule to avoid users impersonating other users. By default, only the bot role has this permission, but that can be changed in **Administration** -> **Permissions** -> **message-impersonate** 
+        **Note**: You can only send alias and avatar properties if your user has the `message-impersonate permission`. We implemented this rule to avoid users impersonating other users. By default, only the bot role has this permission, but that can be changed in **Manage** -> **Permissions** -> **message-impersonate**. 
         
         ### Change Log
         | Version | Description |
@@ -2445,7 +2445,7 @@ paths:
       description: |- 
         The difference between `chat.postMessage` and `chat.sendMessage` is that `chat.sendMessage` allows for passing a value for `_id` and the other one doesn't. Also, `chat.sendMessage` only sends it to one channel whereas the other one allows for sending to more than one channel at a time.<br />
         
-        **Note**: You can only send alias and avatar properties if your user has the `message-impersonate permission`. We implemented this rule to avoid users impersonating other users. By default, only the bot role has this permission, but that can be changed in **Administration** -> **Permissions** -> **message-impersonate**.
+        **Note**: You can only send alias and avatar properties if your user has the `message-impersonate permission`. We implemented this rule to avoid users impersonating other users. By default, only the bot role has this permission, but that can be changed in **Manage** -> **Permissions** -> **message-impersonate**.
         
         ### Change Log
         | Version | Description                         |
@@ -2466,7 +2466,7 @@ paths:
           * If the message contains attachments or quotes, no URL is previewed.
           * Internal URLs are not considered in the `previewUrls` array.
           * A maximum of five external URLs is previewed  per message. If there are more than 5 external URLs, no URL is previewed.
-          > URLs that include the same text as the <a href='https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/general#general-settings' target='_blank'>**Site URL**</a> are referred to as Internal URLs.
+          > URLs that include the same text as the <a href='https://docs.rocket.chat/docs/general' target='_blank'>**Site URL**</a> are referred to as Internal URLs.
         content:
           application/json:
             schema:
@@ -2897,15 +2897,17 @@ paths:
         - $ref: '#/components/parameters/sort'
         - name: rid
           in: query
-          description: The room Id.
+          description: The room ID.
           required: true
           schema:
             type: string
+            example: J8Sqi5zPw62WgE4Md
         - name: updatedSince
           in: query
           description: Date as an ISO string. When you provide the `updatedSince` query parameter, then the `update` and `remove` parameters in the response will contain only those updated and removed since this date and time.
           schema:
             type: string
+            example: 2026-01-01T00:00:00Z
           required: true
       responses:
         '200':
@@ -3418,6 +3420,94 @@ paths:
                     success: false
                     error: 'The "lastUpdate" query parameter must be a valid date. [error-roomId-param-invalid]'
                     errorType: error-roomId-param-invalid
+  /api/v1/chat.getURLPreview:
+    get:
+      summary: Get URL Preview
+      tags:
+        - Chat
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  urlPreview:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                      meta:
+                        type: object
+                        properties: {}
+                      headers:
+                        type: object
+                        properties:
+                          contentLength:
+                            type: string
+                          contentType:
+                            type: string
+                      ignoreParse:
+                        type: boolean
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    urlPreview:
+                      url: 'http://www.w3schools.com/tags/movie.mp4'
+                      meta: {}
+                      headers:
+                        contentLength: '318465'
+                        contentType: video/mp4
+                      ignoreParse: true
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''url'' [invalid-params]'
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: 'must have required property ''roomId'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-chat.getURLPreview
+      description: Use this endpoint to get a URL preview that can be used in the send and update message endpoints.
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - schema:
+            type: string
+            example: Xnb2kLD2Pnhdwe3RH
+          in: query
+          name: roomId
+          description: Enter the room ID where you want to send or update the message.
+          required: true
+        - schema:
+            type: string
+            example: 'http://www.w3schools.com/tags/movie.mp4'
+          in: query
+          name: url
+          description: Enter the URL that you want to preview.
+          required: true
   /api/v1/dm.close:
     post:
       tags:
@@ -4563,7 +4653,6 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/fields'
         - $ref: '#/components/parameters/query'
         - name: roomId
@@ -4588,8 +4677,18 @@ paths:
           in: query
           description: Filter pinned messages.
           schema:
-            type: boolean
-          example: 'true' 
+            type: string
+          example: 'true'
+        - schema: {}
+          in: query
+          name: sort
+          description: |-
+           Sort the order in which messages are returned, ascending (`1`) or descending (`-1`). The options are:
+            * `ts`: Sort by message timestamp. For example, `{"ts": -1}`, this is the default sorting mechanism.
+            * `u.username`: Sort by username. For example, `{"u.username": 1}`.
+            * `msg`: Sort by message content. For example, `{"msg": 1}`.
+            * `_id`: Sort by message ID. For example, `{"_id": -1}`.
+            * `mentions._id`: Sort by mentioned user IDs. For example, `{"mentions._id": 1}`.
       responses:
         '200':
           description: OK
@@ -4752,7 +4851,7 @@ paths:
         - DM
       summary: Message Others
       description: |-
-        Retrieves the messages from any direct message in the server.  For this method to work, navigate to  **Administration > Workspace > Settings > General > REST API > Enable Direct Message History Endpoint** and enable it. 
+        Retrieves the messages from any direct message in the server.  For this method to work, navigate to  **Manage > Workspace > Settings > General > REST API > Enable Direct Message History Endpoint** and enable it. 
         
         Permission required: `view-room-administration`.
         ### Change Log

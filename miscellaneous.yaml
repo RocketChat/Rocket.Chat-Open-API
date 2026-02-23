@@ -636,109 +636,7 @@ paths:
           $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/forbiddenError'
-  /api/v1/sendInvitationEmail:
-    post:
-      summary: Send Invitation Email
-      tags:
-        - Email Inbox
-      responses:
-        '200':
-          $ref: '#/components/responses/trueSuccess'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  error:
-                    type: string
-                  errorType:
-                    type: string
-              examples:
-                Example 1:
-                  value:
-                    success: false
-                    error: 'must have required property ''emails'' [invalid-params]'
-                    errorType: invalid-params
-        '401':
-          $ref: '#/components/responses/authorizationError'
-      operationId: post-api-v1-sendInvitationEmail
-      parameters:
-        - $ref: '#/components/parameters/Auth-Token'
-        - $ref: '#/components/parameters/UserId'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - emails
-              properties:
-                emails:
-                  type: array
-                  description: Enter the list of emails to which you want to send the invitation.
-                  items:
-                    type: string
-                    example: example@example.com
-            examples:
-              Example 1:
-                value:
-                  emails:
-                    - example@example.com
-      description: Send workspace invitation emails using this endpoint.
-  /api/v1/users.sendConfirmationEmail:
-    post:
-      summary: Send Email Verification
-      tags:
-        - Email Inbox
-      responses:
-        '200':
-          $ref: '#/components/responses/trueSuccess'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  error:
-                    type: string
-                  errorType:
-                    type: string
-              examples:
-                Example 1:
-                  value:
-                    success: false
-                    error: 'must have required property ''email'' [invalid-params]'
-                    errorType: invalid-params
-        '401':
-          $ref: '#/components/responses/authorizationError'
-      operationId: post-api-v1-users.sendConfirmationEmail
-      description: Send an email to verify a user's email address. The user receives the email and they must click the confirmation button to confirm their email address.
-      parameters:
-        - $ref: '#/components/parameters/Auth-Token'
-        - $ref: '#/components/parameters/UserId'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - email
-              properties:
-                email:
-                  type: string
-                  description: Enter the email address that needs to be verified.
-                  example: example@example.com
-            examples:
-              Example 1:
-                value:
-                  email: example@example.com
+
   /api/v1/shield.svg:
     get:
       summary: Shield SVG
@@ -856,17 +754,9 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
-  /api/v1/stdout.queue:
+  /api/v1/smtp.check:
     get:
-      summary: Get Server Logs
-      description: |- 
-        Retrieves last 1000 lines of server logs.
-        
-        Permissions required: `view-logs`
-      operationId: get-api-v1-stdout.queue
-      parameters:
-        - $ref: '#/components/parameters/Auth-Token'
-        - $ref: '#/components/parameters/UserId'
+      summary: Check SMTP
       responses:
         '200':
           description: OK
@@ -875,187 +765,22 @@ paths:
               schema:
                 type: object
                 properties:
-                  queue:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                        string:
-                          type: string
-                        ts:
-                          type: string
+                  isSMTPConfigured:
+                    type: boolean
                   success:
                     type: boolean
               examples:
-                Success:
+                Example 1:
                   value:
-                    queue:
-                      - id: logid-0
-                        string: |
-                          LocalStore: store created at 
-                        ts: '2024-01-26T13:16:11.945Z'
-                      - id: logid-1
-                        string: |
-                          LocalStore: store created at 
-                        ts: '2024-01-26T13:16:11.946Z'
-                      - id: logid-2
-                        string: |
-                          LocalStore: store created at 
-                        ts: '2024-01-26T13:16:11.947Z'
-                      - id: logid-3
-                        string: |
-                          {"level":40,"time":"2024-01-26T13:16:12.803Z","pid":1,"hostname":"cb52a01481fa","name":"VoIPService","msg":"Voip is not enabled. Cant start the service"}
-                        ts: '2024-01-26T13:16:12.804Z'
-                      - id: logid-4
-                        string: |
-                          {"level":51,"time":"2024-01-26T13:16:16.856Z","pid":1,"hostname":"cb52a01481fa","name":"Migrations","msg":"Not migrating, already at version 304"}
-                        ts: '2024-01-26T13:16:16.856Z'
-                      - id: logid-5
-                        string: |
-                          [2024-01-26T13:16:16.929Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/BROKER: Moleculer v0.14.31 is starting...
-                        ts: '2024-01-26T13:16:16.929Z'
-                      - id: logid-6
-                        string: |
-                          [2024-01-26T13:16:16.929Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/BROKER: Namespace: <not defined>
-                        ts: '2024-01-26T13:16:16.929Z'
-                      - id: logid-7
-                        string: |
-                          [2024-01-26T13:16:16.929Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/BROKER: Node ID: 5da8aab5-e32e-4a0a-b53e-62b027b331cf
-                        ts: '2024-01-26T13:16:16.930Z'
-                      - id: logid-8
-                        string: |
-                          [2024-01-26T13:16:16.931Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/REGISTRY: Strategy: RoundRobinStrategy
-                        ts: '2024-01-26T13:16:16.931Z'
-                      - id: logid-9
-                        string: |
-                          [2024-01-26T13:16:16.932Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/REGISTRY: Discoverer: LocalDiscoverer
-                        ts: '2024-01-26T13:16:16.932Z'
-                      - id: logid-10
-                        string: |
-                          [2024-01-26T13:16:16.933Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/BROKER: Serializer: JSONSerializer
-                        ts: '2024-01-26T13:16:16.933Z'
-                      - id: logid-11
-                        string: |
-                          [2024-01-26T13:16:16.965Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/BROKER: Validator: FastestValidator
-                        ts: '2024-01-26T13:16:16.965Z'
-                      - id: logid-12
-                        string: |
-                          [2024-01-26T13:16:16.968Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/BROKER: Registered 13 middleware(s).
-                        ts: '2024-01-26T13:16:16.968Z'
-                      - id: logid-13
-                        string: |
-                          [2024-01-26T13:16:16.970Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/BROKER: Transporter: TcpTransporter
-                        ts: '2024-01-26T13:16:16.970Z'
-                      - id: logid-14
-                        string: |
-                          {"level":51,"time":"2024-01-26T13:16:17.015Z","pid":1,"hostname":"cb52a01481fa","name":"DatabaseWatcher","msg":"Using change streams"}
-                        ts: '2024-01-26T13:16:17.016Z'
-                      - id: logid-15
-                        string: |
-                          [2024-01-26T13:16:17.031Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/TRANSIT: Connecting to the transporter...
-                        ts: '2024-01-26T13:16:17.032Z'
-                      - id: logid-16
-                        string: |
-                          [2024-01-26T13:16:17.261Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/TRANSPORTER: TCP server is listening on port 32911
-                        ts: '2024-01-26T13:16:17.262Z'
-                      - id: logid-17
-                        string: |
-                          [2024-01-26T13:16:17.263Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/TRANSPORTER: UDP Discovery is disabled.
-                        ts: '2024-01-26T13:16:17.263Z'
-                      - id: logid-18
-                        string: |
-                          [2024-01-26T13:16:17.263Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/TRANSPORTER: TCP Transporter started.
-                        ts: '2024-01-26T13:16:17.264Z'
-                      - id: logid-19
-                        string: |
-                          [2024-01-26T13:16:17.786Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/REGISTRY: '$node' service is registered.
-                        ts: '2024-01-26T13:16:17.787Z'
-                      - id: logid-20
-                        string: |
-                          [2024-01-26T13:16:17.788Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/REGISTRY: 'matrix' service is registered.
-                        ts: '2024-01-26T13:16:17.788Z'
-                      - id: logid-21
-                        string: |
-                          [2024-01-26T13:16:17.790Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/$NODE: Service '$node' started.
-                        ts: '2024-01-26T13:16:17.791Z'
-                      - id: logid-22
-                        string: |
-                          [2024-01-26T13:16:17.791Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/MATRIX: Service 'matrix' started.
-                        ts: '2024-01-26T13:16:17.791Z'
-                      - id: logid-23
-                        string: |
-                          [2024-01-26T13:16:17.793Z] INFO  5da8aab5-e32e-4a0a-b53e-62b027b331cf/BROKER: ✔ ServiceBroker with 2 service(s) started successfully in 788ms.
-                        ts: '2024-01-26T13:16:17.793Z'
-                      - id: logid-24
-                        string: |
-                          +----------------------------------------------+
-                        ts: '2024-01-26T13:16:18.723Z'
-                      - id: logid-25
-                        string: |
-                          |                SERVER RUNNING                |
-                        ts: '2024-01-26T13:16:18.723Z'
-                      - id: logid-26
-                        string: |
-                          +----------------------------------------------+
-                        ts: '2024-01-26T13:16:18.724Z'
-                      - id: logid-27
-                        string: |
-                          |                                              |
-                        ts: '2024-01-26T13:16:18.726Z'
-                      - id: logid-28
-                        string: |
-                          |  Rocket.Chat Version: 6.5.3                  |
-                        ts: '2024-01-26T13:16:18.726Z'
-                      - id: logid-29
-                        string: |
-                          |       NodeJS Version: 14.21.3 - x64          |
-                        ts: '2024-01-26T13:16:18.726Z'
-                      - id: logid-30
-                        string: |
-                          |      MongoDB Version: 5.0.23                 |
-                        ts: '2024-01-26T13:16:18.726Z'
-                      - id: logid-31
-                        string: |
-                          |       MongoDB Engine: wiredTiger             |
-                        ts: '2024-01-26T13:16:18.726Z'
-                      - id: logid-32
-                        string: |
-                          |             Platform: linux                  |
-                        ts: '2024-01-26T13:16:18.726Z'
-                      - id: logid-33
-                        string: |
-                          |         Process Port: 3000                   |
-                        ts: '2024-01-26T13:16:18.726Z'
-                      - id: logid-34
-                        string: |
-                          |             Site URL: http://localhost:3000  |
-                        ts: '2024-01-26T13:16:18.727Z'
-                      - id: logid-35
-                        string: |
-                          |     ReplicaSet OpLog: Enabled                |
-                        ts: '2024-01-26T13:16:18.727Z'
-                      - id: logid-36
-                        string: |
-                          |          Commit Hash: 726574cfe3             |
-                        ts: '2024-01-26T13:16:18.730Z'
-                      - id: logid-37
-                        string: |
-                          |        Commit Branch: HEAD                   |
-                        ts: '2024-01-26T13:16:18.730Z'
-                      - id: logid-38
-                        string: |
-                          |                                              |
-                        ts: '2024-01-26T13:16:18.731Z'
-                      - id: logid-39
-                        string: |
-                          +----------------------------------------------+
-                        ts: '2024-01-26T13:16:18.731Z'
+                    isSMTPConfigured: true
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
-
+      operationId: get-api-v1-smtp.check
+      description: Use this endpoint to verify whether or not SMTP has been configured in the workspace.
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
   /api/v1/licenses.info:
     get:
       tags:
@@ -1550,6 +1275,16 @@ paths:
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/offset'
+        - schema:
+            type: string
+          in: query
+          name: sort
+          description: |-
+           Sort the commands in ascending (`1`) or descending (`-1`) order. The value must be entered as a JSON string. The options are as follows:
+            * `command`: Sort by command name. For example, `sort={"command":1}`
+            * `description`: Sort by description. For example, `sort={"description":-1}`
       responses:
         '200':
           description: OK
@@ -2469,13 +2204,300 @@ paths:
                   description: Description8
                   reminderMinutesBeforeStart: 10
                   busy: true
+  '/api/apps/public/{app-id}/incoming':
+    parameters:
+      - schema:
+          type: string
+        name: app-id
+        in: path
+        required: true
+        description: The app id. Navigate to App Info > Details > APIs > POST incoming to get the complete URL for this endpoint.
+    post:
+      summary: Close Chat or Perform Handover
+      tags:
+        - Rasa App
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+              examples:
+                Close chat:
+                  value:
+                    msg: ' Close chat request handled successfully'
+                Perform handover:
+                  value:
+                    msg: ' Perform Handover request handled successfully'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-apps-public-app-id-incoming
+      description: |-
+        Close a chat session or perform handover. The appropriate endpoint URL including the `appId` for  closing chat or perfoming handover in your workspace is displayed under **App Info > Details > APIs > POST incoming** section of the Rasa app.
 
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |5.0.0     | Added       |
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - action
+                - sessionId
+              properties:
+                action:
+                  type: string
+                  description: 'The action can either be `handover` or `close-chat`. '
+                sessionId:
+                  type: string
+                  description: The ID of the Rasa session.
+                actionData:
+                  type: object
+                  properties:
+                    targetDepartment:
+                      type: string
+                      description: The targeted department.
+            examples:
+              Example:
+                value:
+                  action: close-chat
+                  sessionId: 2Sfq8wXw4fYPMf6r4
+  /api/v1/video-conference/jitsi.update-timeout:
+    post:
+      summary: Update Jitsi Timeout
+      tags:
+        - Jitsi App
+      description: |- 
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |0.74.0        | Added       |
+      operationId: post-api-v1-video-conference-jitsi.update-timeout
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roomId:
+                  type: string
+                  description: The room Id of the room to update the jitsi timeout.
+              required:
+                - roomId
+            examples:
+              Example:
+                value:
+                  roomId: hyoM5JSQi94RwqPE7
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jitsiTimeout:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    jitsiTimeout: '2019-01-16T13:17:11.951Z'
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  /api/apps/public/{appId}/templateMessage:
+    post:
+      tags:
+        - WhatsApp
+      summary: Send a WhatsApp Template Message
+      description: |-
+        Use this endpoint to send WhatsApp template messages directly to specified contacts from your workspace.
+
+        1. Click the **Marketplace** icon from the main menu. Select **Explore** from the drop-down menu.
+        2. Locate your preferred <a href="https://docs.rocket.chat/docs/whatsapp-apps" target="_blank">WhatsApp App</a>.
+        3. Go to *App Info > Details > APIs* and find the `POST templateMessage` section.
+        4. Copy the `POST templateMessage` endpoint URL for your WhatsApp app from the provided curl example. This URL includes the required `appId`. Send a template message request using this URL as the endpoint.
+        
+        Before sending template messages from Rocket.Chat through any <a href="https://docs.rocket.chat/docs/whatsapp-apps" target="_blank">WhatsApp App</a>, ensure that you have set up the templates in respective WhatsApp provider account. Refer to the official guide for details on <a href="https://developer.rocket.chat/docs/whatsapp-business-template-messages#set-up-template-messages-on-whatsapp" target="_blank">configuring template messages for each WhatsApp app</a>.
+      operationId: post-api-apps-public-app_id-templateMessage
+      parameters:
+        - name: appId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: 'We strongly recommend including the + prefix for all phone numbers in the payload. While you can submit numbers without the leading + sign, we have encountered cases where WhatsApp will return an invalid response despite the number being in use.'
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phoneNumbers:
+                  type: array
+                  description: 'Recipient WhatsApp IDs where you want to send the template message. You can validate a WhatsApp id from <a href="https://developers.facebook.com/docs/whatsapp/on-premises/reference/contacts" target="_blank">here</a>.'
+                  items:
+                    type: string
+                connectedWhatsAppNo:
+                  type: string
+                  description: The WhatsApp Number from which you want to send this template message. The WhatsApp number connected to your workspace via the app.
+                targetAgent:
+                  type: string
+                  description: Username of the agent you want to transfer the chat to when the WhatsApp user replies.
+                targetDepartment:
+                  type: string
+                  description: Department name or ID where you want to transfer the chat to when the WhatsApp user replies.
+                template:
+                  type: object
+                  description: |-
+                    Provide the details of the template message you want to send. The structure of the template object may differ depending on the template defined within your WhatsApp provider account. For further clarification, refer to the official guide on <a href="https://developer.rocket.chat/docs/whatsapp-business-template-messages#api-endpoint" target="_blank">sending template messages via API in Rocket.Chat</a>. The example template object provided here is based on the configuration outlined in the official guide for the <a href="https://developer.rocket.chat/docs/whatsapp-business-template-messages#whatsapp-cloud" target="_blank">WhatsApp Cloud App</a>.
+                    
+                    If your template message includes parameters, make sure to replace all of them with the appropriate information before sending. Failure to do so may lead to an error.
+                  properties:
+                    namespace:
+                      type: string
+                    name:
+                      type: string
+                    language:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                        policy:
+                          type: string
+                    components:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          type:
+                            type: string
+                          parameters:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                type:
+                                  type: string
+                                text:
+                                  type: string
+              required:
+                - phoneNumbers
+                - connectedWhatsAppNo
+                - template
+            examples:
+              WhatsApp Cloud:
+                value:
+                  phoneNumbers:
+                    - '2368106035555'
+                  connectedWhatsAppNo: '104920685899299'
+                  template:
+                    name: ship
+                    language:
+                      code: en
+                      policy: deterministic
+                    components:
+                      - type: body
+                        parameters:
+                          - type: text
+                            text: '20' 
+              WhatsApp 360Dialog (Cloud API):
+                value:                            
+                  phoneNumbers:
+                    - "xxxxxxxxxxxxx"
+                  connectedWhatsAppNo: "555195251xxx"
+                  template:
+                    name: "boarding_pass"
+                    language:
+                      code: "en"
+                      policy: "deterministic"
+                    components:
+                      - type: "header"
+                        parameters:
+                          - type: "text"
+                            text: "halo"
+                      - type: "body"
+                        parameters:
+                          - type: "text"
+                            text: "abc"
+                          - type: "text"
+                            text: "xyz"
+              Whatsapp Sandbox:
+                value:
+                  phoneNumbers:
+                    - "50364357612"
+                  template:
+                    name: "first_welcome_messsage"
+                    language:
+                      code: "en"
+                    components:
+                      - type: "body"
+                        parameters:
+                          - type: "text"
+                            text: "Your name goes here"
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Too many phone numbers:
+                  value:
+                    success: false
+                    error: Too many phone numbers! Please make sure that phoneNumbers are <= 250
+                Agent Not Found:
+                  value:
+                    success: false
+                    error: No Agent found with username abc98
+                Department Not Found:
+                  value:
+                    success: false
+                    error: No Department found with id/Name SalesDepartment
+                Invalid WhatsApp Contact:
+                  value:
+                    success: false
+                    error: Connected WhatsApp Number (connectedWhatsAppNo) i.e. 565412001234 is not a valid WhatsApp contact. Contact Status is invalid
+                Invalid Connected WhatsApp Number:
+                  value:
+                    success: false
+                    error: 'Error! Connected WhatsApp Number (connectedWhatsAppNo) i.e. 565412001234 has not been registered yet on Rocket.Chat. Please goto #omnichannel-whatsapp-setup channel and connect this WhatsApp number first there before sending this request again.'
 tags:
   - name: Commands
   - name: Email Inbox
   - name: Licenses
   - name: Mailer
   - name: Calendar Events
+  - name: WhatsApp
+  - name: Rasa App
+  - name: Jitsi App
   
 components:
   parameters:

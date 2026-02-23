@@ -398,7 +398,6 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/query'
         - name: name
           in: query
@@ -407,6 +406,13 @@ paths:
           schema:
             type: string
           example: drill
+        - schema: {}
+          in: query
+          name: sort
+          description: |-
+           Sort the results in ascending (`1`) or descending (`-1`) order. The options are:
+            * `name`: Sort the results by name. For example, `sort={"name": 1}` (default) or `sort={"name": -1}`.
+            * `_id`: Sort by ID. For example, `sort={"_id": 1}` or `sort={"_id": -1}`.
       responses:
         '200':
           description: OK
@@ -481,6 +487,16 @@ paths:
           schema:
             type: string
           example: 6731e2ce3b74d3c57d334d0f
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/offset'
+        - schema: {}
+          in: query
+          name: sort
+          description: |-
+           Sort the order of custom user status in ascending (`1`) or descending (`-1`) order. The options are:
+            * `name`: Sort by name. For example, `sort={"name": 1}` (default) or `sort={"name": -1}`.
+            * `statusType`: Sort by status type. For example, `sort={"statusType": 1}` or sort=`{"statusType": -1}`.
+            * You can also sort using both parameters. For example, `sort={"name": 1, "statusType": -1}`.
       responses:
         '200':
           description: OK

@@ -494,7 +494,6 @@ paths:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/query'
         - $ref: '#/components/parameters/fields'
         - name: name
@@ -511,6 +510,17 @@ paths:
           schema:
             type: string
           example: webhook-incoming
+        - schema: {}
+          in: query
+          name: sort
+          description: |-
+           Sort the results in ascending (`1`) or descending order (`-1`). By default, the results are sorted in descending order of timestamp (`{"ts": -1}`). The additional options for the sort parameter are:
+            * `name`: Sort by the integration name. `sort={"name": 1}` or `sort={"name": -1}`
+            * `channel`: Sort by target channel. `sort={"channel": 1}` or `sort={"channel": -1}`
+            * `_createdAt`: Sort by date of creation. `sort={"_createdAt": 1}` or `sort={"_createdAt": -1}`
+            * `_createdBy`: Sort by user who created the integration. `sort={"_createdBy": 1}` or `sort={"_createdBy": -1}`
+            * `username`: Sort by the value in the "post-as" username field. `sort={"username": 1}` or `sort={"username": -1}`
+            * You can also use multiple options for one sort query. For example, `sort={"_createdAt": -1, "name": 1}`. This sorts by creation date in descending order, then by name in ascending order.
       responses:
         '200':
           description: ''
@@ -1436,18 +1446,9 @@ paths:
       parameters:
         - $ref: '#/components/parameters/X-Auth-Token'
         - $ref: '#/components/parameters/X-User-Id'
-        - name: appId
-          in: query
-          description: |-
-            The app ID.  This value is required if `clientId` is not used.
-            
-            The parameter will stop being accepted from 7.0.0 (use the `clientId` or `_id` parameters instead).
-          schema:
-            type: string
-          example: jn32kjnnd0943j4njk
         - name: clientId
           in: query
-          description: The client ID. This value is required if `appId` is not used.
+          description: The client ID. This value is required if `_id` is not used.
           schema:
             type: string
           example: nkn8jk67b8b99b78

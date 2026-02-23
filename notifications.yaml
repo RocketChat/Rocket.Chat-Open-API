@@ -77,7 +77,6 @@ paths:
           description: The platform rendering the banner.
           required: true
   /api/v1/banners:
-    parameters: []
     get:
       summary: Get Banners
       operationId: get-api-v1-banners
@@ -137,7 +136,6 @@ paths:
       tags:
         - Banners
   /api/v1/banners.dismiss:
-    parameters: []
     post:
       summary: Dismiss a Banner
       operationId: post-api-v1-banners.dismiss
@@ -187,55 +185,8 @@ paths:
                   bannerId: ByehQjC44FwMeiLbX
       tags:
         - Banners
-  /api/v1/banners.getNew:
-    get:
-      summary: Get a banner
-      deprecated: true
-      tags:
-        - Banners
-      responses:
-        '200':
-          description: OK
-          headers: {}
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  banners:
-                    type: array
-                    items:
-                      type: object
-                      properties: {}
-                  success:
-                    type: boolean
-              examples:
-                Example:
-                  value:
-                    banners:
-                      - {}
-                    success: true
-      operationId: get-api-v1-banners.getNew
-      description: '> This endpoint has been deprecated and is scheduled for removal in the 8.0.0 <a href="https://github.com/RocketChat/Rocket.Chat/releases" target="_blank">release</a>. Use [`banners`](https://developer.rocket.chat/apidocs/get-banners) or [`banners/:id`](https://developer.rocket.chat/apidocs/get-banner-by-id) instead.'
-      parameters:
-        - $ref: '#/components/parameters/X-Auth-Token'
-        - $ref: '#/components/parameters/X-User-Id'
-        - schema:
-            type: string
-            example: web
-          in: query
-          name: platform
-          description: The platform rendering the banner.
-          required: true
-        - schema:
-            type: string
-          in: query
-          name: bid
-          description: The banner ID
-          required: true
 
   /api/v1/push.get:
-    parameters: []
     get:
       summary: Get Push Notification
       operationId: get-api-v1-push.get
@@ -446,7 +397,7 @@ paths:
           description: The message ID.
           required: true
       tags:
-        - Push Token
+        - Push Notifications
   /api/v1/push.token:
     delete:
       summary: Delete Push Token
@@ -497,7 +448,7 @@ paths:
                 value:
                   token: abc
       tags:
-        - Push Token
+        - Push Notifications
     post:
       summary: Create Push Token
       operationId: post-api-v1-push.token
@@ -566,7 +517,7 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       tags:
-        - Push Token
+        - Push Notifications
       parameters:
         - $ref: '#/components/parameters/X-Auth-Token'
         - $ref: '#/components/parameters/X-User-Id'
@@ -604,7 +555,7 @@ paths:
     get:
       summary: Get Push Info
       tags:
-        - Push Token
+        - Push Notifications
       responses:
         '200':
           description: OK
@@ -632,6 +583,38 @@ paths:
       parameters:
         - $ref: '#/components/parameters/X-Auth-Token'
         - $ref: '#/components/parameters/X-User-Id'
+  /api/v1/push.test:
+    post:
+      summary: Test Push Notifications
+      tags:
+        - Push Notifications
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tokensCount:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    tokensCount: 1
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-push.test
+      description: "Use this endpoint to test the push notifications configuration. Permission required: `test-push-notifications`.\r\nBy default, one request is allowed every 1000 milliseconds. To test successfully, make sure that you have logged into the workspace on the Rocket.Chat mobile app."
+      parameters:
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/X-User-Id'
+tags:
+  - name: Push Notifications
+  - name: Banners
 components:
   parameters:
     X-Auth-Token:

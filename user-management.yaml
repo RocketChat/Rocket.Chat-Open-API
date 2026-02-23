@@ -471,16 +471,10 @@ paths:
             schema:
               type: object
               properties:
-                roleName:
+                roleId:
                   type: string
-                  description: |-
-                    The role name. Alternatively, use the `roleId` parameter.
-                    Note: 
-                      * For default roles, the role name and ID are the same. For custom roles, the name and ID are different. 
-                      * If you are setting a custom role for a user, make sure to enter the custom role ID and not the role name.
-                      * The `roleName` parameter will be removed from 7.0.0. Use the `roleId` parameter instead.
-                      Refer to [Roles](https://docs.rocket.chat/setup-and-configure/roles-in-rocket.chat) for more information.
-                  example: auditor-log
+                  example: 6579adcf2dd9f9d9514f6
+                  description: The ID of an existing role.
                 username:
                   type: string
                   description: The user name.
@@ -493,9 +487,9 @@ paths:
                 - roleName
                 - username
             examples:
-              Example 1:
+              Example:
                 value:
-                  roleName: auditor-log
+                  roleId: 6579adcf2dd9f9d9514f6
                   username: test.fun
                   roomId: 64adb09baa5ad4273bfc
       responses:
@@ -583,7 +577,7 @@ paths:
       parameters:
         - name: role
           in: query
-          description: The role name or the role ID. For custom roles, use the role ID.
+          description: The ID of the role
           required: true
           schema:
             type: string
@@ -1286,7 +1280,7 @@ paths:
       summary: Register User
       description: |-
         * An external member can use this endpoint to create an account on the workspace.
-        * The number of requests you can make and the interval between each request depends on the workspace's rate limiter settings. You can find the settings from **Administration** > **Settings** > **Rate Limiter** > **API Rate Limiter**.
+        * The number of requests you can make and the interval between each request depends on the workspace's rate limiter settings. You can find the settings from **Manage** > **Workspace** > **Settings** > **Rate Limiter** > **API Rate Limiter**.
         
         ### Changelog
         | Version      | Description |
@@ -1456,6 +1450,9 @@ paths:
                       type: boolean
                       default: false
                       description: Whether the user should get a welcome email.
+                    freeSwitchExtension:
+                      type: string
+                      description: The voice call extension.
                     verified:
                       type: boolean
                       description: Whether the user's email address should be verified.
@@ -1467,7 +1464,7 @@ paths:
                         team: Queen
                       description: |-
                         Any custom fields the user should have on their account.
-                        To save custom fields, you must first define the custom fields in the admin panel (Administration > Settings > Accounts > Registration > Custom Fields). For details on how to configure this field, see [Custom Fields](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/accounts/custom-fields).
+                        To save custom fields, you must first define the custom fields in the admin panel (Manage > Workspace > Settings > Accounts > Registration > Custom Fields). For details on how to configure this field, see [Custom Fields](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/accounts/custom-fields).
                         For information on how to view the custom fields, see the [Get Users List](https://developer.rocket.chat/reference/api/rest-api/endpoints/user-management/users-endpoints/get-users-list) endpoint.
               required:
                 - userId
@@ -2191,7 +2188,7 @@ paths:
         **Permissons required**:
         - `view-d-room`: Required to view direct messages
         - `view-full-other-user-info`: Required to view complete user information (e.g., account creation date, last login)
-        - `view-outside-room`: (Only required if the setting `Apply_permission_view-outside-room` is enabled on under **Settings** > **General** > **Rest API**). Required to view rooms outside of which the request sender is a member of
+        - `view-outside-room`: (Only required if the setting `Apply_permission_view-outside-room` is enabled on under **Settings** > **General** > **Rest API**). Required to view rooms that the user is not a member of.
 
         ### Changelog
         | Version      | Description |
@@ -2205,8 +2202,16 @@ paths:
         - $ref: '#/components/parameters/query'
         - $ref: '#/components/parameters/fields'
         - $ref: '#/components/parameters/offset'
-        - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/count'
+        - schema:
+            type: string
+          in: query
+          name: sort
+          description: |-
+           Sort the users in ascending (`1`) or descending (`-1`) order. The value must be entered as a JSON string. The options are as follows:
+            * `status`: Sort by users' status. For example, `sort={"status":1}` (this maps to the `active` status).
+            * `createdAt`: Sort by the time of user creation. For example, `sort={"createdAt":-1}`
+            * `sort`: Sort by user name. For example, `sort={"name":1}`
       responses:
         '200':
           description: OK
@@ -2416,6 +2421,8 @@ paths:
           name: userId
           description: 'The user ID. Alternatively, you can enter the `username` parameter.'
           required: true
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
       description: |-
         View a user's avatar.
         
@@ -2424,7 +2431,6 @@ paths:
         | ------------ | ------------|
         |0.50.0        | Added       |
   /api/v1/users.resetAvatar:
-    parameters: []
     post:
       summary: Reset Avatar
       operationId: post-api-v1-users.resetAvatar
@@ -2923,7 +2929,7 @@ paths:
           description: The user IDs whose status you want.
       description: |-
         Get presence of multiple workspace users. You can filter by date and user IDs.
-        If the `Presence_broadcast_disabled` setting is true, the endpoint returns an empty array. You can find this setting under **Administration** > **Settings** > **Troubleshoot**.
+        If the `Presence_broadcast_disabled` setting is true, the endpoint returns an empty array. You can find this setting under **Manage** > **Workspace** > **Settings** > **Troubleshoot**.
         
         ### Changelog
         | Version      | Description |
@@ -3033,7 +3039,7 @@ paths:
         - Users
       summary: Delete Own Account
       description: |-
-        Deletes your own user account. Requires the `Allow Users to Delete Own Account` setting enabled. Access this setting from **Administration** > **Workspace** > **Settings** > **Accounts**.
+        Deletes your own user account. Requires the `Allow Users to Delete Own Account` setting enabled. Access this setting from **Manage** > **Workspace** > **Settings** > **Accounts**.
         
         ### Changelog
         | Version      | Description |
@@ -3094,29 +3100,20 @@ paths:
       tags:
         - Users
       summary: Create Users Token
-      description: |-
-        > This endpoint has been deprecated and is scheduled for removal in the 8.0.0 <a href="https://github.com/RocketChat/Rocket.Chat/releases" target="_blank">release</a>.
-        
+      description: |-        
         As a workspace admin, you can create temporary authentication tokens for users. This is the same type of session authentication token a user gets via <a href="https://developer.rocket.chat/apidocs/login-with-username-and-password" target="_blank">login</a> and expires the same way.
-        * To be able to use this endpoint, you must add the <a href="https://docs.rocket.chat/docs/deployment-environment-variables" target="_blank">environment variable</a> `CREATE_TOKENS_FOR_USERS=true` in your compose file.
+        * To use this endpoint, you must set a secret with the `CREATE_TOKENS_FOR_USERS_SECRET` <a href="https://docs.rocket.chat/docs/deployment-environment-variables" target="_blank">environment variable</a> in your deployment configuration. This secret will be used to authorize all requests made to this endpoint.
         * For SaaS workspaces, <a href="https://desk.rocket.chat/portal/en/signin" target="_blank">contact</a> support to set this variable.
         * Permission required: `user-generate-access-token`
         * The maximum number of login tokens per user is 50. See this <a href='https://github.com/RocketChat/Rocket.Chat/pull/32216' target='_blank'>GitHub PR</a> for details.
-        
-        For example, if you use Snaps to deploy, set the environment variable as shown below:
-          ```
-          echo "CREATE_TOKENS_FOR_USERS=true" > /var/snap/rocketchat-server/common/create-tokens.env
           
-          sudo systemctl restart snap.rocketchat-server.rocketchat-server.service
-          ```
-          
-          ### Changelog
+        ### Changelog
           | Version      | Description |
           | ---------------- | ------------|
+          |8.0.0             | Added `CREATE_TOKENS_FOR_USERS_SECRET` <a href="https://docs.rocket.chat/docs/deployment-environment-variables" target="_blank">environment variable</a> to define a shared secret that will be used to authorize this endpoint.|
           |2.1.0            | Added ENV VAR to be able to use this endpoint (process.env.CREATE_TOKENS_FOR_USERS).       |
           |0.56.0            | Added       |
       operationId: post-api-v1-users.createToken
-      deprecated: true
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
@@ -3129,14 +3126,21 @@ paths:
                     userId:
                       type: string
                       description: |-
-                        The user ID. Alternatively, you can use the `username` parameter and enter the user name value. (For example, `test.user`)
+                        The ID of the user you want to generate a token for.
                       example: BsNr28znDkG8aeo7W
+                    secret:
+                      type: string
+                      description: |-
+                        The secret defined in the `CREATE_TOKENS_FOR_USERS_SECRET` <a href="https://docs.rocket.chat/docs/deployment-environment-variables" target="_blank">environment variable</a>. Without the valid secret, you can't access this endpoint.
+                      example: pass123
               required:
                 - userId
+                - secret
             examples:
               Example:
                 value:
                   userId: BsNr28znDkG8aeo7W
+                  secret: pass123
       responses:
         '200':
           description: ''
@@ -3175,20 +3179,18 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                Invalid user:
                   value:
                     success: false
                     error: >-
                       The required "userId" or "username" param was not provided
                       [error-user-param-not-provided]
                     errorType: error-user-param-not-provided
-                Example 2:
+                Invalid secret:
                   value:
                     success: false
                     error: 'Not authorized [error-not-authorized]'
                     errorType: error-not-authorized
-                    details:
-                      method: createToken
         '401':
           $ref: '#/components/responses/authorizationError'
     parameters: []
@@ -3748,7 +3750,7 @@ paths:
                     success: false
                     error: The 'email' param is required
       description: |-
-        Send an email to reset your password. Ensure that you have completed the configuration of the email; otherwise, your users will not receive the mail normally. Access this from **Administration** > **Workspace** > **Settings** > **Email**. <br>
+        Send an email to reset your password. Ensure that you have completed the configuration of the email; otherwise, your users will not receive the mail normally. Access this from **Manage** > **Workspace** > **Settings** > **Email**. <br>
         To use this endpoint, the `PasswordReset` setting must be enabled in **Settings** > **Accounts** > **Registration** > **Password Reset**.
         
         ### Changelog
@@ -3809,6 +3811,52 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
+  /api/v1/users.getAvatarSuggestion:
+    get:
+      summary: Get Avatar Suggestion
+      tags:
+        - Users
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  suggestions:
+                    type: object
+                    properties:
+                      gravatar:
+                        type: object
+                        properties:
+                          service:
+                            type: string
+                          url:
+                            type: string
+                          blob:
+                            type: string
+                          contentType:
+                            type: string
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    suggestions:
+                      gravatar:
+                        service: gravatar
+                        url: 'https://s.gravatar.com/avatar/6da0187ff0de738a86a62b0e9e34ffbf?default=404&size=200'
+                        blob: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAgAElEQVR42my9y49k2ZHm9zM75153j8jIjMysyqxKVrGKZJNsstjvbrTUg1bPQAIaGgkYCCMtpIWglTba6g+YP0CA/gBBO61moYUEYQRpMNBooWlyptmcLrJZZFXWu/L9iqe733uOmRZ27nWP4hSQiKjMCPfr955j9tn3fWZHfvCX/8iTLhA6/vCHP+TenWOuHR5Rxy0'
+                        contentType: image/png
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-users.getAvatarSuggestion
+      description: Use this endpoint to get suggestions for your workspace avatar image. The endpoint may return an empty string if no images associated with your email ID are found.
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
   /api/v1/users.checkUsernameAvailability:
     get:
       tags:
@@ -4647,7 +4695,7 @@ paths:
         - $ref: '#/components/parameters/x-2fa-code'
         - $ref: '#/components/parameters/x-2fa-method'
       description: |-
-        Reset 2FA via TOTP for a user in the workspace. Make sure that the `Enable Two Factor Authentication` setting is enabled under **Administration** > **Settings** > **Accounts** > **Two Factor Authentication**.
+        Reset 2FA via TOTP for a user in the workspace. Make sure that the `Enable Two Factor Authentication` setting is enabled under **Manage** > **Workspace** > **Settings** > **Accounts** > **Two Factor Authentication**.
         * Permission required: `edit-other-user-totp`.
         * It requires two-factor authentication, if 2FA is enabled and configured in your workspace.
         
@@ -5179,6 +5227,109 @@ paths:
                       method: sendWelcomeEmail
         '401':
           $ref: '#/components/responses/authorizationError'
+  /api/v1/sendInvitationEmail:
+    post:
+      summary: Send Invitation Email
+      tags:
+        - Users
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''emails'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-sendInvitationEmail
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - emails
+              properties:
+                emails:
+                  type: array
+                  description: Enter the list of emails to which you want to send the invitation.
+                  items:
+                    type: string
+                    example: example@example.com
+            examples:
+              Example 1:
+                value:
+                  emails:
+                    - example@example.com
+      description: Send workspace invitation emails using this endpoint.
+  /api/v1/users.sendConfirmationEmail:
+    post:
+      summary: Send Email Verification
+      tags:
+        - Users
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''email'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-users.sendConfirmationEmail
+      description: Send an email to verify a user's email address. The user receives the email and they must click the confirmation button to confirm their email address.
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+                  description: Enter the email address that needs to be verified.
+                  example: example@example.com
+            examples:
+              Example 1:
+                value:
+                  email: example@example.com
   /api/v1/users.listByStatus:
     get:
       tags:
@@ -5231,6 +5382,12 @@ paths:
           schema:
             type: string
             example: test
+        - schema:
+            type: string
+            example: deactivated
+          in: query
+          name: 'inactiveReason[]'
+          description: 'Filter the users based on the reason for inactive status. The options are: `idle_too_long`, `deactivated`, and `pending_approval`.'
       responses:
         '200':
           description: OK
@@ -5377,18 +5534,17 @@ components:
       name: x-2fa-code
       in: header
       description: >-
-        The 2fa code. See <a href="https://developer.rocket.chat/apidocs/introduction-to-two-factor-authentication" target="_blank">Introduction to Two-Factor Authentication</a>.
-      required: true
+        Enter the 2FA code. This parameter is required if 2FA is enabled in your workspace.
+        See the <a href="https://developer.rocket.chat/apidocs/introduction-to-two-factor-authentication" target="_blank">Introduction to Two-Factor Authentication</a> document for details.
       schema:
         type: string
       example: '148750'
     x-2fa-method:
       name: x-2fa-method
       in: header
-      required: true
       schema:
         type: string
-      description: 'The desired method to get the 2FA code. It can be `email`, `totp`, or `password`.'
+      description: 'Enter the method with which you get the 2FA code. It can be `email`, `totp`, or `password`. This parameter is required if 2FA is enabled in your workspace.'
     query:
       name: query
       in: query

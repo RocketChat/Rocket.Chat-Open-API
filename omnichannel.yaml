@@ -12,7 +12,6 @@ info:
 
 #    This section includes the following endpoints:
 #    * **Livechat**: Manage livechat users, visitors, conversations, and view analytics.
-#    * **Voice Channel**: Initiate and receive [calls](https://docs.rocket.chat/use-rocket.chat/rocket.chat-voice-channel) with visitors.
 #    * **Canned Responses**: Create and manage [template messages](https://docs.rocket.chat/use-rocket.chat/omnichannel/canned-responses).
 servers:
   - url: https://apiexplorer.support.rocket.chat
@@ -119,6 +118,9 @@ paths:
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
         - name: type
           in: path
           description: The type of user that you want to register. The value can either be `agent` or `manager`.
@@ -126,14 +128,30 @@ paths:
           schema:
             type: string
           example: agent
-        - $ref: '#/components/parameters/offset'
-        - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/sort'
-        - schema:
-            type: string
+        - name: onlyAvailable
           in: query
-          name: text
-          description: Enter the text you want to filter the search result with.
+          schema:
+            type: boolean
+          description: When set to `true`, it only list agents whose [livechat status](https://docs.rocket.chat/docs/omnichannel-users#edit-agent) (`statusLivechat`) is `available`.
+          example: true
+        - name: showIdleAgents
+          in: query
+          schema:
+            type: boolean
+          description: When set to `false`, offline agents will be excluded from the response. This filter does not apply to bots. All bot agents will be returned in the response.
+          example: false
+        - name: excludeId
+          in: query
+          schema:
+            type: string  
+          example: Ahgfwk9sasYEsMjwX
+          description: The ID of a specific agent to exclude from the list.
+        - name: text
+          in: query
+          schema:
+            type: string
+          description: Enter the text you want to filter the search result with.     
+          example: true
       responses:
         '200':
           description: OK
@@ -474,88 +492,6 @@ paths:
                     success: true
       tags:
         - Omnichannel Agents
-  /api/v1/omnichannel/agents/available:
-    get:
-      summary: Get Available Agent Information
-      description: |-
-        Get information about the currently available agent. Permission required: `manage-agent-extension-association`
-      operationId: get-api-v1-omnichannel-agents-available
-      parameters:
-        - $ref: '#/components/parameters/AuthToken'
-        - $ref: '#/components/parameters/UserId'
-        - $ref: '#/components/parameters/query'
-        - name: text
-          in: query
-          description: The response is the data that contains this text.
-          schema:
-            type: string
-        - name: includeExtension
-          in: query
-          description: 'The voice channel extension associated with the agent. If you don''t enter any extension number, the endpoint returns a list of all agents who have not been assigned any extensions. For information about extensions, see <a href="https://docs.rocket.chat/docs/associate-agents-with-extensions-in-rocketchat" target="_blank">Associate agents with extensions in Rocket.Chat</a>.'
-          schema:
-            type: string
-        - $ref: '#/components/parameters/offset'
-        - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/sort'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  agent:
-                    type: object
-                    properties:
-                      _id:
-                        type: string
-                      username:
-                        type: string
-                      name:
-                        type: string
-                      status:
-                        type: string
-                      statusLivechat:
-                        type: string
-                      emails:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            address:
-                              type: string
-                            verified:
-                              type: boolean
-                      livechat:
-                        type: object
-                        properties:
-                          maxNumberSimultaneousChat:
-                            type: string
-                  success:
-                    type: boolean
-              examples:
-                Success Example:
-                  value:
-                     agent:
-                       _id: XycfA5CetCPuEjqxw
-                       username: test.agent
-                       name: agent123
-                       status: online
-                       statusLivechat: online
-                       emails:
-                         - address: agent123@rocket.chat
-                           verified: true
-                       livechat:
-                         maxNumberSimultaneousChat: '5'
-                     success: true
-        '401':
-          $ref: '#/components/responses/authorizationError'
-        '403':
-          $ref: '#/components/responses/permissionError'
-      tags:
-        - Omnichannel Agents
-
   /api/v1/livechat/agents.saveInfo:
     post:
       summary: Update Agent Info
@@ -3397,7 +3333,7 @@ paths:
                 forceClose:
                   type: boolean
                   description: |-
-                    Use this parameter to forcefully close a room. Before using this parameter, make sure to enable the [`Force Close Conversation API`](https://docs.rocket.chat/v1/docs/omnichannel-admins-guide#api) setting in Administration > Settings > Omnichannel > API. Exercise caution when using this parameter and reserve it for situations involving misconfigured rooms.
+                    Use this parameter to forcefully close a room. Before using this parameter, make sure to enable the [`Force Close Conversation API`](https://docs.rocket.chat/v1/docs/omnichannel-admins-guide#api) setting in **Manage > Workspace > Settings > Omnichannel > API**. Exercise caution when using this parameter and reserve it for situations involving misconfigured rooms.
                 tags:
                   type: array
                   description: 'Add [tags](https://docs.rocket.chat/docs/tags).'
@@ -3594,98 +3530,6 @@ paths:
       tags:
         - Omnichannel Rooms
 
-  /api/v1/livechat/room.transfer:
-    post:
-      summary: Transfer Omnichannel Room
-      description: |-
-        > This endpoint has been deprecated in the 7.0.0 <a href="https://github.com/RocketChat/Rocket.Chat/releases" target="_blank">release</a>. Use the <a href="https://developer.rocket.chat/apidocs/forward-livechat-room" target="_blank">Forward Livechat Room</a> endpoint instead.
-
-        Transfer an omnichannel conversation to another department.
-      operationId: post-api-v1-livechat-room.transfer
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                rid:
-                  type: string
-                  description: The room _id.
-                token:
-                  type: string
-                  description: The visitor token.
-                department:
-                  type: string
-                  description: 'The new department. To get the department ID, call the <a href="https://developer.rocket.chat/apidocs/get-livechat-configurations" target="_blank">Get Livechat Configurations</a> endpoint. Note that the endpoint only returns public departments.'
-              required:
-                - rid
-                - token
-                - department
-            examples:
-              Example 1:
-                value:
-                  rid: XFzMqgn33DcsQkpJp
-                  token: iNKE8a6k6cjbqWhWd
-                  department: wXpPLofkffqWAwDNF
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  room:
-                    type: object
-                    properties:
-                      _id:
-                        type: string
-                      servedBy:
-                        type: object
-                        properties:
-                          _id:
-                            type: string
-                          username:
-                            type: string
-                      open:
-                        type: boolean
-                      departmentId:
-                        type: string
-                  success:
-                    type: boolean
-              examples:
-                Success Example:
-                  value:
-                    room:
-                      _id: XFzMqgn33DcsQkpJp
-                      servedBy:
-                        _id: wiyTfFKXr5GhgRu9A
-                        username: livechat.agent
-                      open: true
-                      departmentId: wXpPLofkffqWAwDNF
-                    success: true
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  error:
-                    type: string
-                  errorType:
-                    type: string
-              examples:
-                Example 1:
-                  value:
-                    success: false
-                    error: 'must have required property ''rid'' [invalid-params]'
-                    errorType: invalid-params
-      deprecated: true
-      tags:
-        - Omnichannel Rooms
   /api/v1/livechat/room.forward:
     post:
       summary: Forward Omnichannel Room
@@ -4349,7 +4193,7 @@ paths:
       description: |-
        Use this endpoint to remove closed Omnichannel rooms. 
        
-       Permission required: `remove-closed-livechat-rooms`. (On the workspace UI, go to **Administration** > **Workspace** > **Permissions**. Search for the `Remove All Closed Omnichannel Rooms` permission. By default, livechat managers and monitors have this permission.)
+       Permission required: `remove-closed-livechat-rooms`. (On the workspace UI, go to **Manage** > **Workspace** > **Permissions**. Search for the `Remove All Closed Omnichannel Rooms` permission. By default, livechat managers and monitors have this permission.)
        
        ### Changelog
        | Version      | Description |
@@ -4528,6 +4372,63 @@ paths:
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
+  /api/v1/livechat/visitor/department.transfer:
+    post:
+      summary: Visitor Transfer Room
+      tags:
+        - Omnichannel Rooms
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  errorType:
+                    type: string
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    errorType: invalid-params
+                    error: must have required property 'token'
+      operationId: post-api-v1-livechat-visitor-department.transfer
+      description: This endpoint can be used by visitors to transfer an ongoing chat to another department.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - token
+                - rid
+                - department
+              properties:
+                token:
+                  type: string
+                  description: Enter the visitor token.
+                  example: 2c9035b72dec31be7e9ccbb3cbd9952394ea41c1517b76c528d403c00a3fccf9
+                rid:
+                  type: string
+                  description: Enter the room ID.
+                  example: dCBiZX3XPWyPsa6pt
+                department:
+                  type: string
+                  description: Enter the department ID to which you want to transfer the chat.
+                  example: 68304887113ac52640bc1ca6
+            examples:
+              Example 1:
+                value:
+                  token: 2c9035b72dec31be7e9ccbb3cbd9952394ea41c1517b76c528d403c00a3fccf9
+                  rid: dCBiZX3XPWyPsa6pt
+                  department: 68304887113ac52640bc1ca6
         
   /api/v1/livechat/department:
     get:
@@ -6335,27 +6236,11 @@ paths:
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
-  '/api/v1/livechat/departments.available-by-unit/{unitId}':
+  /api/v1/livechat/department/isDepartmentCreationAvailable:
     get:
-      summary: Get Available Departments by Unit ID
-      description: |-
-        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-
-
-        Gives departments that have not been associated to another unit yet. This endpoint has been renamed to <a href="https://developer.rocket.chat/apidocs/get-departments-by-unit-id-1" target="_blank">Get Available Departments by Unit Id</a> from Rocket.Chat 5.0.
-
-
-      operationId: 'get-api-v1-livechat-departments.available-by-unit-:unitId'
-      parameters:
-        - $ref: '#/components/parameters/AuthToken'
-        - $ref: '#/components/parameters/UserId'
-        - name: unitId
-          in: path
-          description: The unit ID.
-          required: true
-          schema:
-            type: string
-            example: sriw2wmP2Zz2pPrre
+      summary: Check Department Creation
+      tags:
+        - Omnichannel Departments
       responses:
         '200':
           description: OK
@@ -6364,338 +6249,31 @@ paths:
               schema:
                 type: object
                 properties:
-                  departments:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        _id:
-                          type: string
-                        enabled:
-                          type: boolean
-                        name:
-                          type: string
-                        description:
-                          type: string
-                        showOnRegistration:
-                          type: boolean
-                        showOnOfflineForm:
-                          type: boolean
-                        requestTagBeforeClosingChat:
-                          type: boolean
-                        email:
-                          type: string
-                        maxNumberSimultaneousChat:
-                          type: string
-                        waitingQueueMessage:
-                          type: string
-                        type:
-                          type: string
-                        numAgents:
-                          type: integer
-                        _updatedAt:
-                          type: string
-                        ancestors:
-                          type: array
-                          items:
-                            type: string
-                        chatClosingTags:
-                          type: array
-                          items:
-                            type: string
-                        abandonedRoomsCloseCustomMessage:
-                          type: string
-                        departmentsAllowedToForward:
-                          type: array
-                          items:
-                            type: string
-                        offlineMessageChannelName:
-                          type: string
-                        visitorInactivityTimeoutInSeconds:
-                          type: string
-                        parentId:
-                          type: string
-                  count:
-                    type: integer
-                  offset:
-                    type: integer
-                  total:
-                    type: integer
+                  isDepartmentCreationAvailable:
+                    type: boolean
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    departments:
-                      - _id: Yi87Ju7eTHiZQ7CJt
-                        enabled: false
-                        name: Customer Success
-                        description: TEST
-                        showOnRegistration: false
-                        showOnOfflineForm: true
-                        requestTagBeforeClosingChat: false
-                        email: ''
-                        maxNumberSimultaneousChat: ''
-                        waitingQueueMessage: TEST
-                        type: d
-                        numAgents: 13
-                        _updatedAt: '2021-06-28T22:10:01.360Z'
-                        ancestors:
-                          - sriw2wmP2Zz2pPrre
-                        chatClosingTags: []
-                        abandonedRoomsCloseCustomMessage: ''
-                        departmentsAllowedToForward: ''
-                        offlineMessageChannelName: ''
-                        visitorInactivityTimeoutInSeconds: ''
-                        parentId: sriw2wmP2Zz2pPrre
-                      - _id: fqjhjfuygXBRsPBJf
-                        enabled: true
-                        name: Marketing Support
-                        description: Issues about merchandising actions
-                        numAgents: 3
-                        showOnRegistration: false
-                        showOnOfflineForm: false
-                        email: ''
-                        _updatedAt: '2021-06-15T21:12:35.469Z'
-                        maxNumberSimultaneousChat: ''
-                        requestTagBeforeClosingChat: false
-                        type: d
-                        waitingQueueMessage: ''
-                        chatClosingTags: []
-                        abandonedRoomsCloseCustomMessage: ''
-                        departmentsAllowedToForward: ''
-                        offlineMessageChannelName: ''
-                        visitorInactivityTimeoutInSeconds: ''
-                      - _id: qajzu7WaBRoQBpq6Z
-                        enabled: true
-                        name: Brazil
-                        description: ''
-                        numAgents: 3
-                        showOnRegistration: false
-                        showOnOfflineForm: true
-                        email: ''
-                        _updatedAt: '2021-06-23T06:02:02.931Z'
-                        chatClosingTags: []
-                        maxNumberSimultaneousChat: ''
-                        requestTagBeforeClosingChat: false
-                        type: d
-                        waitingQueueMessage: ''
-                        abandonedRoomsCloseCustomMessage: ''
-                        departmentsAllowedToForward: ''
-                        offlineMessageChannelName: ''
-                        visitorInactivityTimeoutInSeconds: ''
-                        ancestors: []
-                      - _id: GgYvrkAF63aeQmsh4
-                        enabled: true
-                        name: Sales
-                        description: 'For sales purposes only, we are happy to help'
-                        showOnRegistration: true
-                        showOnOfflineForm: true
-                        requestTagBeforeClosingChat: true
-                        email: ''
-                        chatClosingTags:
-                          - Junk lead
-                          - Valuable lead
-                        maxNumberSimultaneousChat: ''
-                        waitingQueueMessage: ''
-                        type: d
-                        numAgents: 20
-                        _updatedAt: '2021-06-27T05:52:01.775Z'
-                        abandonedRoomsCloseCustomMessage: ''
-                        departmentsAllowedToForward:
-                          - qajzu7WaBRoQBpq6Z
-                          - CAJioQNAvLnYWTy8i
-                        visitorInactivityTimeoutInSeconds: ''
-                        offlineMessageChannelName: ''
-                        ancestors: []
-                    count: 4
-                    offset: 0
-                    total: 4
+              examples:
+                Example 1:
+                  value:
+                    isDepartmentCreationAvailable: true
                     success: true
-      deprecated: true
-      tags:
-        - Omnichannel Departments
-  '/api/v1/livechat/departments.by-unit/{unitid}':
-    get:
-      summary: Get Departments by Unit ID
+                If a department already exists in Community workspaces:
+                  value:
+                    isDepartmentCreationAvailable: false
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-v1-livechat-department-isDepartmentCreationAvailable
       description: |-
-        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-
-        <p>Gives departments included in a specific unit ID. This endpoint has been renamed to <a href="https://developer.rocket.chat/apidocs/get-departments-by-unit-id-1" target="_blank">Get Departments by Unit ID</a> as from Rocket.Chat 5.0
-
-
-      operationId: 'get-api-v1-livechat-departments.by-unit-:unitId'
+       Use this endpoint to check whether departments can be created on the workspace. Workspaces on the Premium plans have no limit to the number of departments that can be created. On Community workspaces, only one department can be created.
+       
+       Any of the following permissions is required:
+        * `view-livechat-departments`
+        * `manage-livechat-departments`
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
-        - $ref: '#/components/parameters/start'
-        - $ref: '#/components/parameters/end'
-        - name: unitid
-          in: path
-          description: The unit ID.
-          required: true
-          schema:
-            type: string
-            example: sriw2wmP2Zz2pPrre
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  departments:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        _id:
-                          type: string
-                        enabled:
-                          type: boolean
-                        name:
-                          type: string
-                        description:
-                          type: string
-                        showOnRegistration:
-                          type: boolean
-                        showOnOfflineForm:
-                          type: boolean
-                        requestTagBeforeClosingChat:
-                          type: boolean
-                        email:
-                          type: string
-                        maxNumberSimultaneousChat:
-                          type: string
-                        waitingQueueMessage:
-                          type: string
-                        type:
-                          type: string
-                        numAgents:
-                          type: integer
-                        _updatedAt:
-                          type: string
-                        ancestors:
-                          type: array
-                          items:
-                            type: string
-                        chatClosingTags:
-                          type: array
-                          items:
-                            type: object
-                        abandonedRoomsCloseCustomMessage:
-                          type: string
-                        departmentsAllowedToForward:
-                          type: array
-                          items:
-                            type: string
-                        offlineMessageChannelName:
-                          type: string
-                        visitorInactivityTimeoutInSeconds:
-                          type: string
-                        parentId:
-                          type: string
-                  count:
-                    type: integer
-                  offset:
-                    type: integer
-                  total:
-                    type: integer
-                  success:
-                    type: boolean
-                x-examples:
-                  Example 1:
-                    departments:
-                      - _id: Yi87Ju7eTHiZQ7CJt
-                        enabled: false
-                        name: Customer Success
-                        description: TEST
-                        showOnRegistration: false
-                        showOnOfflineForm: true
-                        requestTagBeforeClosingChat: false
-                        email: roger.sab@test.comt
-                        maxNumberSimultaneousChat: ''
-                        waitingQueueMessage: TEST
-                        type: d
-                        numAgents: 13
-                        _updatedAt: '2021-06-28T22:10:01.360Z'
-                        ancestors:
-                          - sriw2wmP2Zz2pPrre
-                        chatClosingTags: []
-                        abandonedRoomsCloseCustomMessage: ''
-                        departmentsAllowedToForward: ''
-                        offlineMessageChannelName: ''
-                        visitorInactivityTimeoutInSeconds: ''
-                        parentId: sriw2wmP2Zz2pPrre
-                      - _id: CAJioQNAvLnYWTy8i
-                        enabled: true
-                        name: Support
-                        description: ''
-                        showOnRegistration: true
-                        showOnOfflineForm: true
-                        requestTagBeforeClosingChat: false
-                        email: maryna.vdov@test.com
-                        maxNumberSimultaneousChat: ''
-                        waitingQueueMessage: ''
-                        type: d
-                        numAgents: 24
-                        _updatedAt: '2021-06-28T22:10:01.373Z'
-                        ancestors:
-                          - sriw2wmP2Zz2pPrre
-                        chatClosingTags: []
-                        abandonedRoomsCloseCustomMessage: ''
-                        departmentsAllowedToForward: ''
-                        offlineMessageChannelName: ''
-                        visitorInactivityTimeoutInSeconds: '10'
-                        parentId: sriw2wmP2Zz2pPrre
-                      - _id: Z2KWYBJQFR7AzfmQL
-                        enabled: false
-                        name: Support Email
-                        description: testing emails
-                        showOnRegistration: false
-                        showOnOfflineForm: false
-                        requestTagBeforeClosingChat: false
-                        email: karina.aes@hotmail.com
-                        chatClosingTags: []
-                        offlineMessageChannelName: ''
-                        maxNumberSimultaneousChat: ''
-                        visitorInactivityTimeoutInSeconds: '30'
-                        abandonedRoomsCloseCustomMessage: ''
-                        waitingQueueMessage: ''
-                        departmentsAllowedToForward:
-                          - qajzu7WaBRoQBpq6Z
-                          - 4LCeYmCHHnQ3EDBgf
-                        type: d
-                        numAgents: 5
-                        _updatedAt: '2021-06-28T22:10:01.347Z'
-                        ancestors:
-                          - sriw2wmP2Zz2pPrre
-                        parentId: sriw2wmP2Zz2pPrre
-                      - _id: mHcx4rbi7htAmCCR5
-                        enabled: true
-                        name: Chatbot Support
-                        description: ''
-                        showOnRegistration: false
-                        showOnOfflineForm: false
-                        requestTagBeforeClosingChat: false
-                        email: chatbotSupport@g.c
-                        chatClosingTags: []
-                        offlineMessageChannelName: ''
-                        abandonedRoomsCloseCustomMessage: ''
-                        waitingQueueMessage: ''
-                        departmentsAllowedToForward: ''
-                        _updatedAt: '2021-06-28T22:10:01.371Z'
-                        numAgents: 3
-                        ancestors:
-                          - sriw2wmP2Zz2pPrre
-                        parentId: sriw2wmP2Zz2pPrre
-                    count: 4
-                    offset: 0
-                    total: 4
-                    success: true
-      deprecated: true
-      tags:
-        - Omnichannel Departments
 
   /api/v1/livechat/custom-fields.save:
     post:
@@ -7288,7 +6866,7 @@ paths:
                     error: 'User does not have the permissions required for this action [error-unauthorized]'
       operationId: post-api-v1-livechat-custom-fields.delete
       description: |-
-       Delete an Omnichannel custom field entry. Permission required: `view-livechat-manager`. (On the workspace UI, go to **Administration** > **Workspace** > **Permissions**. Search for the `View Omnichannel Manager` permission. By default, livechat managers and agents have this permission.)
+       Delete an Omnichannel custom field entry. Permission required: `view-livechat-manager`. (On the workspace UI, go to **Manage** > **Workspace** > **Permissions**. Search for the `View Omnichannel Manager` permission. By default, livechat managers and agents have this permission.)
        
        ### Changelog
        | Version      | Description |
@@ -7314,104 +6892,6 @@ paths:
                 value:
                   customFieldId: class
         
-  /api/v1/livechat/webrtc.call:
-    get:
-      tags:
-        - Livechat Audio Video Calls
-      summary: Start Call
-      description: |-
-        **Note**: WebRTC is no longer supported with Omnichannel Livechat audio/video calls.
-        - To configure audio/video calls, see <a href="https://docs.rocket.chat/docs/omnichannel-videoaudio-call-configuration" target="_blank">Omnichannel Video/Audio Call Configuration</a>.
-        - To configure voice channel, see <a href="https://docs.rocket.chat/docs/rocketchat-conference-call" target="_blank">Voice Channel</a>. <br>
-        - To start a WebRTC audio/video call in a room requires the `view-l-room` <a href="https://docs.rocket.chat/docs/permissions" target="_blank">permission</a>.
-      operationId: get-api-v1-livechat-webrtc.call
-      parameters:
-        - $ref: '#/components/parameters/AuthToken'
-        - $ref: '#/components/parameters/UserId'
-        - name: rid
-          in: query
-          description: The room ID.
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  videoCall:
-                    type: object
-                    properties:
-                      rid:
-                        type: string
-                      provider:
-                        type: string
-                      callStatus:
-                        type: string
-                  success:
-                    type: boolean
-                x-examples:
-                  Example 1:
-                    videoCall:
-                      rid: 123abcxyz123
-                      provider: webrtc
-                      callStatus: ringing
-                    success: true
-  '/api/v1/livechat/webrtc.call/{callId}':
-    put:
-      summary: Update Call Status
-      description: |-
-        **Note**: WebRTC is no longer supported with Omnichannel Livechat audio/video calls.
-        - To configure audio/video calls, see <a href="https://docs.rocket.chat/docs/omnichannel-videoaudio-call-configuration" target="_blank">Omnichannel Video/Audio Call Configuration</a>.
-        - To configure voice channel, see <a href="https://docs.rocket.chat/docs/rocketchat-conference-call" target="_blank">Voice Channel</a>. <br>
-        - To  Update the call status of an existing WebRTC audio/video call requires the `view-l-room` <a href="https://docs.rocket.chat/docs/permissions" target="_blank">permission</a>.
-      operationId: 'put-api-v1-livechat-webrtc.call-:callId'
-      parameters:
-        - $ref: '#/components/parameters/AuthToken'
-        - $ref: '#/components/parameters/UserId'
-        - name: callId
-          in: path
-          description: The call message _id.
-          required: true
-          schema:
-            type: string
-          example: zRAeTszXor8CCPceB
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                rid:
-                  type: string
-                  description: The room ID.
-                status:
-                  type: string
-                  description: The status of the call.
-              required:
-                - rid
-                - status
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                  success:
-                    type: boolean
-                x-examples:
-                  Example 1:
-                    status: ended
-                    success: true
-      tags:
-        - Livechat Audio Video Calls
   /api/v1/livechat/page.visited:
     post:
       tags:
@@ -9049,247 +8529,187 @@ paths:
           $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/permissionError'
-  /api/v1/livechat/business-hours.list:
-    get:
+  /api/v1/livechat/business-hours.remove:
+    post:
+      summary: Remove Business Hour
       tags:
         - Omnichannel Business Hours
-      summary: Business Hours List
-      description: Gives a list of existing business hours. This endpoint has been renamed to Get Business Hours from Rocket.Chat 5.0.
-      operationId: get-api-v1-livechat-business-hours.list
-      parameters:
-        - $ref: '#/components/parameters/AuthToken'
-        - $ref: '#/components/parameters/UserId'
       responses:
         '200':
-          description: OK
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  businessHours:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        _id:
-                          type: string
-                        ts:
-                          type: string
-                        name:
-                          type: string
-                        active:
-                          type: boolean
-                        type:
-                          type: string
-                        workHours:
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              day:
-                                type: string
-                              start:
-                                type: object
-                                properties:
-                                  time:
-                                    type: string
-                                  utc:
-                                    type: object
-                                    properties:
-                                      dayOfWeek:
-                                        type: string
-                                      time:
-                                        type: string
-                                  cron:
-                                    type: object
-                                    properties:
-                                      dayOfWeek:
-                                        type: string
-                                      time:
-                                        type: string
-                              finish:
-                                type: object
-                                properties:
-                                  time:
-                                    type: string
-                                  utc:
-                                    type: object
-                                    properties:
-                                      dayOfWeek:
-                                        type: string
-                                      time:
-                                        type: string
-                                  cron:
-                                    type: object
-                                    properties:
-                                      dayOfWeek:
-                                        type: string
-                                      time:
-                                        type: string
-                              open:
-                                type: boolean
-                        timezone:
-                          type: object
-                          properties:
-                            name:
-                              type: string
-                            utc:
-                              type: string
-                        departmentsToApplyBusinessHour:
-                          type: string
-                  count:
-                    type: integer
-                  offset:
-                    type: integer
-                  total:
-                    type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    businessHours:
-                      - _id: 5f071f83a05d58ba2cd8b046
-                        ts: '2020-07-09T13:45:39.633Z'
-                        name: ''
-                        active: true
-                        type: default
-                        workHours:
-                          - day: Monday
-                            start:
-                              time: '06:00'
-                              utc:
-                                dayOfWeek: Monday
-                                time: '09:00'
-                              cron:
-                                dayOfWeek: Monday
-                                time: '09:00'
-                            finish:
-                              time: '22:00'
-                              utc:
-                                dayOfWeek: Tuesday
-                                time: '01:00'
-                              cron:
-                                dayOfWeek: Tuesday
-                                time: '01:00'
-                            open: true
-                          - day: Tuesday
-                            start:
-                              time: '06:00'
-                              utc:
-                                dayOfWeek: Tuesday
-                                time: '09:00'
-                              cron:
-                                dayOfWeek: Tuesday
-                                time: '09:00'
-                            finish:
-                              time: '21:00'
-                              utc:
-                                dayOfWeek: Wednesday
-                                time: '00:00'
-                              cron:
-                                dayOfWeek: Wednesday
-                                time: '00:00'
-                            open: true
-                          - day: Wednesday
-                            start:
-                              time: '06:00'
-                              utc:
-                                dayOfWeek: Wednesday
-                                time: '09:00'
-                              cron:
-                                dayOfWeek: Wednesday
-                                time: '09:00'
-                            finish:
-                              time: '22:00'
-                              utc:
-                                dayOfWeek: Thursday
-                                time: '01:00'
-                              cron:
-                                dayOfWeek: Thursday
-                                time: '01:00'
-                            open: true
-                          - day: Thursday
-                            start:
-                              time: '06:00'
-                              utc:
-                                dayOfWeek: Thursday
-                                time: '09:00'
-                              cron:
-                                dayOfWeek: Thursday
-                                time: '09:00'
-                            finish:
-                              time: '21:00'
-                              utc:
-                                dayOfWeek: Friday
-                                time: '00:00'
-                              cron:
-                                dayOfWeek: Friday
-                                time: '00:00'
-                            open: true
-                          - day: Friday
-                            start:
-                              time: '06:00'
-                              utc:
-                                dayOfWeek: Friday
-                                time: '09:00'
-                              cron:
-                                dayOfWeek: Friday
-                                time: '09:00'
-                            finish:
-                              time: '21:00'
-                              utc:
-                                dayOfWeek: Saturday
-                                time: '00:00'
-                              cron:
-                                dayOfWeek: Saturday
-                                time: '00:00'
-                            open: true
-                          - day: Saturday
-                            start:
-                              time: '08:00'
-                              utc:
-                                dayOfWeek: Saturday
-                                time: '11:00'
-                              cron:
-                                dayOfWeek: Saturday
-                                time: '11:00'
-                            finish:
-                              time: '20:00'
-                              utc:
-                                dayOfWeek: Saturday
-                                time: '23:00'
-                              cron:
-                                dayOfWeek: Saturday
-                                time: '23:00'
-                            open: false
-                          - day: Sunday
-                            start:
-                              time: '08:00'
-                              utc:
-                                dayOfWeek: Sunday
-                                time: '11:00'
-                              cron:
-                                dayOfWeek: Sunday
-                                time: '11:00'
-                            finish:
-                              time: '20:00'
-                              utc:
-                                dayOfWeek: Sunday
-                                time: '23:00'
-                              cron:
-                                dayOfWeek: Sunday
-                                time: '23:00'
-                            open: false
-                        timezone:
-                          name: America/Sao_Paulo
-                          utc: '-03:00'
-                        departmentsToApplyBusinessHour: ''
-                    count: 1
-                    offset: 0
-                    total: 1
-                    success: true
-      deprecated: true
+                  errorType:
+                    type: string
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    errorType: invalid-params
+                    error: must have required property '_id'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-livechat-business-hours.remove
+      description: 'Remove an Omnichannel business hour. '
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - _id
+                - type
+              properties:
+                _id:
+                  type: string
+                  description: Enter the business hour ID that you want to delete.
+                  example: 6953aca46ff48667974be88c
+                type:
+                  type: string
+                  description: Enter the type of the business hour. It can be `default` or `custom`.
+                  example: default
+            examples:
+              Example 1:
+                value:
+                  _id: 6953aca46ff48667974be88c
+                  type: custom
+  /api/v1/livechat/business-hours.save:
+    post:
+      summary: Create a Business Hour
+      tags:
+        - Omnichannel Business Hours
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  errorType:
+                    type: string
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    errorType: invalid-params
+                    error: must have required property 'name'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-livechat-business-hours.save
+      description: Use this endpoint to create a new Omnichannel business hour.
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - timezoneName
+                - daysOpen
+                - departmentsToApplyBusinessHour
+                - active
+                - type
+                - workHours
+              properties:
+                name:
+                  type: string
+                  description: Enter a name for the business hour.
+                  example: Support Business Hour
+                timezoneName:
+                  type: string
+                  description: Enter the timezone for the business hour. You can view the list of time zones from the Business Hours settings in the workspace.
+                  example: Asia/Bangkok
+                daysOpen:
+                  type: array
+                  description: Enter the days of the week that the business hour will apply to.
+                  items:
+                    type: string
+                    example: '["Monday", "Tuesday", "Wednesday"]'
+                departmentsToApplyBusinessHour:
+                  type: string
+                  description: Enter the department ID to which the business hour must be applied.
+                  example: 68304887113ac52640bc1ca6
+                active:
+                  type: boolean
+                  description: Enter whether or not the business hour must be active as soon as it is created.
+                type:
+                  type: string
+                  description: Enter the type of the business hour. It can be `default` or `custom`.
+                workHours:
+                  type: array
+                  description: 'Enter the work hours for each open day. Make sure to include the day you have added to the `daysOpen` parameter. Otherwise, it will not be included in the business hour.'
+                  items:
+                    type: object
+                    required:
+                      - day
+                      - start
+                      - finish
+                      - open
+                    properties:
+                      day:
+                        type: string
+                        description: Enter the day of the week.
+                        example: Monday
+                      start:
+                        type: string
+                        description: Enter the start time of the business hour.
+                        example: '08:00:00'
+                      finish:
+                        type: string
+                        description: Enter the end time of the business hour.
+                        example: '16:00:00'
+                      open:
+                        type: boolean
+                        description: 'Enter whether or not this work hour is active. If you set this as `false`, the work hour will not be included in the business hour.'
+                        default: true
+                _id:
+                  type: string
+                  description: Use this parameter to update an existing business hour.
+                  example: 668c72e86dfe572b40b90e30
+            examples:
+              Example 1:
+                value:
+                  name: api-BH
+                  timezoneName: Asia/Bangkok
+                  daysOpen:
+                    - Monday
+                    - Wednesday
+                  departmentsToApplyBusinessHour: TEST-DEPT
+                  active: true
+                  type: custom
+                  workHours:
+                    - day: Monday
+                      start: '08:00:00'
+                      finish: '16:00:00'
+                      open: true
+                    - day: Wednesday
+                      start: '08:00:00'
+                      finish: '16:00:00'
+                      open: true
+                  _id: 6953b3bc6ff48667974be88e
+
   /api/v1/livechat/analytics/dashboards/conversation-totalizers:
     get:
       tags:
@@ -9824,7 +9244,7 @@ paths:
                     error: 'User does not have the permissions required for this action [error-unauthorized]'
       operationId: get-api-v1-livechat-livechat-analytics-dashboards-charts-data
       description: |-
-       View the Omnichannel analytics chart data by chart name within a specific duration. On the workspace UI, you can access this feature by going to `Administration` > `Omnichannel` > `Analytics`.
+       View the Omnichannel analytics chart data by chart name within a specific duration. On the workspace UI, you can access this feature by going to `Manage` > `Omnichannel` > `Analytics`.
        
        Permission required: `view-livechat-manager`
        
@@ -9895,7 +9315,17 @@ paths:
             type: string
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/sort'
+        - schema: {}
+          in: query
+          name: sort
+          description: |-
+           Sort the inquiries in ascending (`1`) or descending (`-1`) order. The available options are:
+            * `ts`: Sort by timestamp. `sort={"ts": 1}` or `sort={"ts": -1}` (newest first, default)
+            * `name`: Sort by inquiry name. `sort={"name": 1}` or `sort={"name": -1}`
+            * `priorityWeight`: Sort by priority of the inquiry. `sort={"priorityWeight": 1}` or `sort={"priorityWeight": -1}`
+            * `estimatedWaitingTimeQueue`: Sort by the estimated waiting time in the queue. `sort={"estimatedWaitingTimeQueue": 1}` or `sort={"estimatedWaitingTimeQueue": -1}`
+            * `status`: Sort by inquiry status. `sort={"status": 1}` or `sort={"status": 1}`
+            * You can also use multiple options for the sort query. For example, `sort={"estimatedWaitingTimeQueue": 1, "priorityWeight": -1}`.
       responses:
         '200':
           description: OK
@@ -11152,6 +10582,109 @@ paths:
           schema:
             type: string
           example: Lk52shJFYyb55trw8
+  /api/v1/livechat/triggers/external-service/test:
+    post:
+      summary: Test Trigger with External Service
+      tags:
+        - Livechat Triggers
+      responses:
+        '200':
+          description: |-
+           OK
+           
+           Rocket.Chat sends a request to the webhook containing a payload of the visitor metadata. The webhook returns the response as demonstrated in this example.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  triggerId:
+                    type: string
+                  response:
+                    type: object
+                    properties:
+                      statusCode:
+                        type: integer
+                      contents:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            msg:
+                              type: string
+                            order:
+                              type: integer
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    triggerId: test-trigger
+                    response:
+                      statusCode: 200
+                      contents:
+                        - msg: 'Welcome to our support center, Morgan! How can we assist you today?'
+                          order: 0
+                        - msg: Feel free to ask any questions you have. We're here to help!
+                          order: 1
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''webhookUrl'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-livechat-triggers-external-service-test
+      description: |-
+       <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+       
+       Test your Livechat trigger setup with external service using this endpoint. Make sure that you have created the <a href='https://docs.rocket.chat/docs/livechat-triggers' target='_blank'>trigger</a>. Permission required: `view-livechat-manager`. Rate limit applies: 15 requests per 60000 milliseconds.
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhookUrl
+                - timeout
+                - fallbackMessage
+              properties:
+                webhookUrl:
+                  type: string
+                  description: Enter the external webhook URL.
+                  example: 'https://webhook.site/2f5df6a1-592c-4d9f-8f36-ab15ca3caf23'
+                timeout:
+                  type: string
+                  description: Enter the time in milliseconds to wait for the external service to respond before cancelling the request.
+                  example: '10000'
+                fallbackMessage:
+                  type: string
+                  description: Enter the message to send after the timeout ends.
+                  default: Request timeout
+            examples:
+              Example 1:
+                value:
+                  webhookUrl: 'https://webhook.site/2f5df6a1-592c-4d9f-8f36-ab15ca3caf23'
+                  timeout: '10000'
+                  fallbackMessage: Request timeout
   /api/v1/livechat/monitors:
     get:
       tags:
@@ -11315,102 +10848,64 @@ paths:
           $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/permissionError'
-  /api/v1/livechat/monitors.list:
-    get:
+  /api/v1/livechat/monitors.delete:
+    post:
+      summary: Delete a Monitor
       tags:
         - Omnichannel Monitors
-      summary: List of Monitors
-      description: |-
-        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-
-        This endpoint has been renamed to Get List of Monitors as from Rocket.Chat 5.0.
-      operationId: get-api-v1-livechat-monitors.list
-      parameters:
-        - $ref: '#/components/parameters/AuthToken'
-        - $ref: '#/components/parameters/UserId'
       responses:
         '200':
-          description: OK
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  monitors:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        _id:
-                          type: string
-                        username:
-                          type: string
-                        emails:
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              address:
-                                type: string
-                              verified:
-                                type: boolean
-                        status:
-                          type: string
-                        name:
-                          type: string
-                        statusLivechat:
-                          type: string
-                  count:
-                    type: integer
-                  offset:
-                    type: integer
-                  total:
-                    type: integer
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    monitors:
-                      - _id: gxcJTYapi5mPxuAme
-                        username: Bruno
-                        emails:
-                          - address: ''
-                            verified: false
-                        status: offline
-                        name: Bruno
-                        statusLivechat: not-available
-                      - _id: QDHWqcubZunM8C4NR
-                        username: gomes
-                        emails:
-                          - address: ''
-                            verified: true
-                        status: offline
-                        name: Gomes
-                        statusLivechat: not-available
-                    count: 2
-                    offset: 0
-                    total: 2
-                    success: true
-      deprecated: true
-  /api/v1/livechat/monitors.getOne:
-    get:
-      tags:
-        - Omnichannel Monitors
-      summary: Get One Monitor
+                  errorType:
+                    type: string
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    errorType: invalid-params
+                    error: must have required property 'username'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-livechat-monitors.delete
       description: |-
-        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-
-        This endpoint has been renamed to Get a Monitor as from Rocket.Chat 5.0
-      operationId: get-api-v1-livechat-monitors.getOne
+       <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+       
+       Delete an Omnichannel monitor. Permission required: `manage-livechat-monitors`
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
-        - name: username
-          in: query
-          description: The username of the person monitoring.
-          required: true
-          schema:
-            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+              properties:
+                username:
+                  type: string
+                  description: Enter the username that you want to remove as the monitor.
+                  example: test.user
+            examples:
+              Example 1:
+                value:
+                  username: test.user
+  /api/v1/livechat/monitors.create:
+    post:
+      summary: Create a Monitor
+      tags:
+        - Omnichannel Monitors
       responses:
         '200':
           description: OK
@@ -11423,35 +10918,67 @@ paths:
                     type: string
                   username:
                     type: string
-                  emails:
+                  roles:
                     type: array
                     items:
-                      type: object
-                      properties:
-                        address:
-                          type: string
-                        verified:
-                          type: boolean
-                  status:
-                    type: string
-                  name:
-                    type: string
-                  statusLivechat:
-                    type: string
+                      type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    _id: gxcJTYapi5mPxuAme
-                    username: Bruno.Solis
-                    emails:
-                      - address: ''
-                        verified: false
-                    status: offline
-                    name: Bruno Solis
-                    statusLivechat: not-available
+              examples:
+                Example 1:
+                  value:
+                    _id: J6Q87AnWP5aNc9xhx
+                    username: cat.kat
+                    roles:
+                      - user
+                      - livechat-agent
                     success: true
-      deprecated: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  errorType:
+                    type: string
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    errorType: invalid-params
+                    error: must have required property 'username'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-livechat-monitors.create
+      description: |-
+       <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+       
+       Add a user as monitor. Permission required: `manage-livechat-monitors`
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+              properties:
+                username:
+                  type: string
+                  description: Enter the username that you want to add as monitor.
+                  example: test.user
+            examples:
+              Example 1:
+                value:
+                  username: cat.kat
+
   /api/v1/livechat/priorities:
     get:
       tags:
@@ -11721,239 +11248,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
-  /livechat/priorities:
-    get:
-      tags:
-        - Omnichannel Priorities
-      summary: Get Priorities
-      description: |-
-        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
 
-        This endpoint is used to get a list of all priorities in a workspace below version 6.0. It supports the optional <a href="https://developer.rocket.chat/apidocs#pagination" target="_blank">pagination</a> query parameters.
-      operationId: get-livechat-priorities
-      parameters:
-        - $ref: '#/components/parameters/UserId'
-        - $ref: '#/components/parameters/AuthToken'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  priorities:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        _id:
-                          type: string
-                        name:
-                          type: string
-                        dueTimeInMinutes:
-                          type: integer
-                        _updatedAt:
-                          type: string
-                        description:
-                          type: string
-                  count:
-                    type: integer
-                  offset:
-                    type: integer
-                  total:
-                    type: integer
-                  success:
-                    type: boolean
-                x-examples:
-                  Example 1:
-                    priorities:
-                      - _id: e6pjPYF4pFWr7g59F
-                        name: high
-                        dueTimeInMinutes: 1
-                        _updatedAt: '2022-10-04T13:48:21.016Z'
-                        description: high
-                      - _id: 5PMgshbQWsoHsYy2c
-                        name: medium
-                        dueTimeInMinutes: 6
-                        _updatedAt: '2022-09-01T13:51:20.710Z'
-                      - _id: idQkJgzTND3gBRNWJ
-                        name: low
-                        description: test
-                        dueTimeInMinutes: 2
-                        _updatedAt: '2022-10-04T13:48:07.371Z'
-                      - _id: WXbWQSPevAyY2CjRq
-                        name: low
-                        dueTimeInMinutes: 4
-                        _updatedAt: '2022-09-01T13:51:04.837Z'
-                    count: 4
-                    offset: 0
-                    total: 4
-                    success: true
-      deprecated: true
-
-  '/livechat/priorities/{priorityId}':
-    get:
-      tags:
-        - Omnichannel Priorities
-      summary: Get a Priority
-      description: |-
-        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-
-        This endpoint is used to get the details of a priority in a workspace below version 6.0.
-      operationId: get-livechat-priorities-priorityId
-      parameters:
-        - $ref: '#/components/parameters/AuthToken'
-        - $ref: '#/components/parameters/UserId'
-        - name: priorityId
-          in: path
-          description: Priority ID
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  _id:
-                    type: string
-                  name:
-                    type: string
-                  description:
-                    type: string
-                  dueTimeInMinutes:
-                    type: integer
-                  _updatedAt:
-                    type: string
-                  success:
-                    type: boolean
-                x-examples:
-                  Example 1:
-                    _id: idQkJgzTND3gBRNWJ
-                    name: low
-                    description: test
-                    dueTimeInMinutes: 2
-                    _updatedAt: '2022-10-04T13:48:07.371Z'
-                    success: true
-      deprecated: true
-  /livechat/priorities.list:
-    get:
-      tags:
-        - Omnichannel Priorities
-      summary: List of Priorities
-      description: |-
-        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-
-        This endpoint has been renamed to <b><a href='https://rocketchat-developer.us.document360.io/apidocs/get-priorities' target='_blank'>Get Priorities</a></b> as from Rocket.Chat 5.0."
-      operationId: get-livechat-priorities.list
-      parameters:
-        - $ref: '#/components/parameters/AuthToken'
-        - $ref: '#/components/parameters/UserId'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  priorities:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        _id:
-                          type: string
-                        name:
-                          type: string
-                        description:
-                          type: string
-                        dueTimeInMinutes:
-                          type: integer
-                        _updatedAt:
-                          type: string
-                  count:
-                    type: integer
-                  offset:
-                    type: integer
-                  total:
-                    type: integer
-                  success:
-                    type: boolean
-                x-examples:
-                  Example 1:
-                    priorities:
-                      - _id: kihPsGwKWTzf9amQk
-                        name: High
-                        description: High
-                        dueTimeInMinutes: 1
-                        _updatedAt: '2020-12-04T19:10:36.875Z'
-                      - _id: 4WcmeBE4spXx6AxrC
-                        name: Low
-                        description: Low
-                        dueTimeInMinutes: 3
-                        _updatedAt: '2020-10-06T22:33:58.571Z'
-                      - _id: 7Hu352k892rNh45j9
-                        name: Medium
-                        description: Medium
-                        dueTimeInMinutes: 2
-                        _updatedAt: '2020-10-06T22:33:40.768Z'
-                    count: 3
-                    offset: 0
-                    total: 3
-                    success: true
-      deprecated: true
-  /livechat/priority.getOne:
-    get:
-      tags:
-        - Omnichannel Priorities
-      summary: Get one Priority
-      description: |-
-        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-
-        This endpoint has been renamed to <b><a href='https://developer.rocket.chat/apidocs/get-a-priority' target='_blank'>Get a Priority</a></b> as from Rocket.Chat 5.0."
-      operationId: get-livechat-priority.getOne
-      parameters:
-        - $ref: '#/components/parameters/AuthToken'
-        - $ref: '#/components/parameters/UserId'
-        - name: priorityId
-          in: query
-          description: Priority ID
-          schema:
-            type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  _id:
-                    type: string
-                  name:
-                    type: string
-                  description:
-                    type: string
-                  dueTimeInMinutes:
-                    type: integer
-                  _updatedAt:
-                    type: string
-                  success:
-                    type: boolean
-                x-examples:
-                  Example 1:
-                    _id: 7Hu352k892rNh45j9
-                    name: Medium
-                    description: Medium
-                    dueTimeInMinutes: 2
-                    _updatedAt: '2020-10-06T22:33:40.768Z'
-                    success: true
-      deprecated: true
   /api/v1/livechat/tags:
     get:
       tags:
@@ -11976,7 +11271,6 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/sort'
         - schema:
             type: string
           in: query
@@ -11992,6 +11286,16 @@ paths:
           in: query
           name: viewAll
           description: Select whether you want to view all tags.
+        - schema: {}
+          in: query
+          name: sort
+          description: |-
+           Sort tags in ascending (`1`) or descending (`-1`) order. The options are:
+            * `name`: Sort by tag name. `sort={"name": 1}` (default) or `sort={"name": -1}`
+            * `description`: Sort by tag description. `sort={"description": 1}` or `sort={"description": -1}`
+            * `numDepartments`: Sort by number of departments associated with the tag.
+            * `_createdAt`: Sort by date of tag creation.
+            * `_updatedAt`: Sort by the update timestamp.
       responses:
         '200':
           description: OK
@@ -12199,22 +11503,11 @@ paths:
               Example 1:
                 value:
                   id: 682223ba30c9c71254e46012
-                    
-  /api/v1/livechat/tags.list:
-    get:
+  /api/v1/livechat/tags.save:
+    post:
+      summary: Create a Tag
       tags:
         - Omnichannel Tags
-      summary: List of Tags
-      description: |-
-        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-
-        This endpoint has been renamed to <a href="https://developer.rocket.chat/apidocs/get-list-of-tags" target="_blank">Get List of Tags</a> as from Rocket.Chat 5.0.
-
-
-      operationId: get-api-v1-livechat-tags.list
-      parameters:
-        - $ref: '#/components/parameters/AuthToken'
-        - $ref: '#/components/parameters/UserId'
       responses:
         '200':
           description: OK
@@ -12223,68 +11516,6 @@ paths:
               schema:
                 type: object
                 properties:
-                  tags:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        _id:
-                          type: string
-                        name:
-                          type: string
-                        description:
-                          type: string
-                        numDepartments:
-                          type: integer
-                        departments:
-                          type: array
-                          items:
-                            type: string
-                        _updatedAt:
-                          type: string
-                  count:
-                    type: integer
-                  offset:
-                    type: integer
-                  total:
-                    type: integer
-                  success:
-                    type: boolean
-                x-examples:
-                  Example 1:
-                    tags:
-                      - _id: pXkCRLGxD34y2FEZq
-                        name: Valuable  lead
-                        description: high chances of conversion
-                        numDepartments: 1
-                        departments:
-                          - GgYvrkAF63aeQmsh4
-                        _updatedAt: '2021-06-28T16:43:57.688Z'
-                    count: 1
-                    offset: 0
-                    total: 1
-                    success: true
-      deprecated: true
-  /livechat/tags.getOne:
-    get:
-      tags:
-        - Omnichannel Tags
-      summary: Get One Tag
-      description: |-
-        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-
-        This endpoint has been renamed to  <b><a href='https://developer.rocket.chat/apidocs/get-a-tag' target='_blank'>Get a Tag</a><b> as from Rocket.Chat 5.0
-      operationId: get-livechat-tags.getOne
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  _id:
-                    type: string
                   name:
                     type: string
                   description:
@@ -12295,23 +11526,99 @@ paths:
                     type: array
                     items:
                       type: string
-                  _updatedAt:
+                  _id:
                     type: string
                   success:
                     type: boolean
-                x-examples:
-                  Example 1:
-                    _id: pXkCRLGxD34y2FEZq
-                    name: Valuable  lead
-                    description: high chances of conversion
+              examples:
+                New tag created:
+                  value:
+                    name: apiTag01
+                    description: testing api endpoint
                     numDepartments: 1
                     departments:
-                      - GgYvrkAF63aeQmsh4
-                    _updatedAt: '2021-06-28T16:43:57.688Z'
+                      - TEST-DEPT
+                    _id: 69536ca06ff48667974be86d
                     success: true
-      deprecated: true
+                Updated existing tag:
+                  value:
+                    name: apiTag-updated
+                    description: testing api endpoint
+                    numDepartments: 1
+                    departments:
+                      - TEST-DEPT
+                    _updatedAt: '2025-12-30T06:06:00.995Z'
+                    _id: 69536b7a6ff48667974be86b
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  errorType:
+                    type: string
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    errorType: invalid-params
+                    error: must have required property 'tagData'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-livechat-tags.save
+      description: |-
+       <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto"></div>
+       
+       Use this endpoint to create an Omnichannel tag. Permission required: `manage-livechat-tags`
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - tagData
+              properties:
+                tagData:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      description: Enter a name for the tag.
+                      example: Support
+                    description:
+                      type: string
+                      description: Enter the tag's description.
+                      example: Tag for support team
+                tagDepartments:
+                  type: array
+                  description: Enter the department IDs that can use this tag.
+                  items:
+                    type: string
+                    example: '["68304887113ac52640bc1ca6"]'
+                _id:
+                  type: string
+                  description: Use this parameter to update an existing tag.
+                  example: 69536b596ff48667974be868
+            examples:
+              Example 1:
+                value:
+                  tagData:
+                    name: apiTag
+                    description: testing
+                  tagDepartments:
+                    - TEST-DEPT
+                  _id: 69536b7a6ff48667974be86b
+                    
   /api/v1/livechat/units:
-    parameters: []
     post:
       summary: Create Unit
       operationId: post-api-v1-livechat-units
@@ -13081,180 +12388,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
-  /api/v1/livechat/units.list:
-    parameters: []
-    get:
-      summary: List of Units
-      operationId: get-api-v1-livechat-units.list
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  units:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        _id:
-                          type: string
-                        name:
-                          type: string
-                        visibility:
-                          type: string
-                        type:
-                          type: string
-                        numMonitors:
-                          type: integer
-                        numDepartments:
-                          type: integer
-                        _updatedAt:
-                          type: string
-                  count:
-                    type: integer
-                  offset:
-                    type: integer
-                  total:
-                    type: integer
-                  success:
-                    type: boolean
-                x-examples:
-                  Example 1:
-                    units:
-                      - _id: sriw2wmP2Zz2pPrre
-                        name: Support
-                        visibility: public
-                        type: u
-                        numMonitors: 3
-                        numDepartments: 4
-                        _updatedAt: '2021-06-28T22:10:01.295Z'
-                    count: 1
-                    offset: 0
-                    total: 1
-                    success: true
-              examples: {}
-      description: "<div style='text-align: center; margin: 1rem 0 1rem 0;'><img src='https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg' alt='Premium tag' style='display: block; margin: auto;'></div>\r\nThis endpoint has been renamed to Get List of Units from Rocket.Chat 5.0."
 
-      tags:
-        - Omnichannel Units
-      parameters:
-        - $ref: '#/components/parameters/AuthToken'
-        - $ref: '#/components/parameters/UserId'
-      deprecated: true
-  /api/v1/livechat/units.getOne:
-    parameters: []
-    get:
-      summary: Get One Unit
-      operationId: get-api-v1-livechat-units.getOne
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  _id:
-                    type: string
-                  name:
-                    type: string
-                  visibility:
-                    type: string
-                  type:
-                    type: string
-                  numMonitors:
-                    type: integer
-                  numDepartments:
-                    type: integer
-                  _updatedAt:
-                    type: string
-                  success:
-                    type: boolean
-                x-examples:
-                  Example 1:
-                    _id: sriw2wmP2Zz2pPrre
-                    name: Support
-                    visibility: public
-                    type: u
-                    numMonitors: 3
-                    numDepartments: 4
-                    _updatedAt: '2021-06-28T22:10:01.295Z'
-                    success: true
-              examples: {}
-      description: "<div style='text-align: center; margin: 1rem 0 1rem 0;'><img src='https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg' alt='Premium tag' style='display: block; margin: auto;'></div>\r\nThis endpoint has been renamed to Get a Unit from Rocket.Chat 5.0."
-
-      tags:
-        - Omnichannel Units
-      parameters:
-        - $ref: '#/components/parameters/AuthToken'
-        - $ref: '#/components/parameters/UserId'
-        - schema:
-            type: string
-          in: query
-          name: unitId
-          description: The unit ID.
-      deprecated: true
-  /api/v1/livechat/unitMonitors.list:
-    parameters: []
-    get:
-      summary: List of Unit Monitors
-      operationId: get-api-v1-livechat-unitsMonitors.list
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  monitors:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        _id:
-                          type: string
-                        monitorId:
-                          type: string
-                        unitId:
-                          type: string
-                        _updatedAt:
-                          type: string
-                        username:
-                          type: string
-                  success:
-                    type: boolean
-                x-examples:
-                  Example 1:
-                    monitors:
-                      - _id: a8RSA5hSzuiKg34PG
-                        monitorId: gxcJTYapi5mPxuAme
-                        unitId: sriw2wmP2Zz2pPrre
-                        _updatedAt: '2021-06-28T22:10:01.324Z'
-                        username: Bruno.Solis
-                      - _id: fTayxRuJiRCFfREWc
-                        monitorId: Nn4ocDJqoJshcoFJi
-                        unitId: sriw2wmP2Zz2pPrre
-                        _updatedAt: '2021-06-28T22:10:01.329Z'
-                        username: mauricio.pretto
-                      - _id: X2keMaN4WX2zmA99u
-                        monitorId: cLNSTRsipLCSq7qno
-                        unitId: sriw2wmP2Zz2pPrre
-                        _updatedAt: '2021-06-28T22:10:01.342Z'
-                        username: miln.ru
-                    success: true
-              examples: {}
-      description: "<div style='text-align: center; margin: 1rem 0 1rem 0;'><img src='https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg' alt='Premium tag' style='display: block; margin: auto;'></div>\r\nThis endpoint has been renamed to Get List of Unit Monitors from Rocket.Chat 5.0."
-
-      tags:
-        - Omnichannel Units
-      parameters:
-        - $ref: '#/components/parameters/AuthToken'
-        - $ref: '#/components/parameters/UserId'
-      deprecated: true
   /api/v1/livechat/analytics/dashboards/conversations-by-status:
     get:
       tags:
@@ -13945,1186 +13079,6 @@ paths:
           $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/permissionError'
-  /api/v1/connector.extension.getRegistrationInfoByUserId:
-    get:
-      tags:
-        - Voice Channel
-      summary: Get Voice Channel Registration Information
-      description: |-
-        Retrieves the user registration Information for the user ID.
-        Permission required: `view-agent-extension-association`
-      operationId: get-api-v1-connector.extension.getRegistrationInfoByUserId
-      parameters:
-        - $ref: '#/components/parameters/AuthToken'
-        - $ref: '#/components/parameters/UserId'
-        - name: id
-          in: query
-          description: The user ID whose registration is being retrieved.
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  host:
-                    type: string
-                  callServerConfig:
-                    type: object
-                    properties:
-                      websocketPort:
-                        type: string
-                      websocketPath:
-                        type: string
-                  extensionDetails:
-                    type: object
-                    properties:
-                      extension:
-                        type: string
-                      password:
-                        type: string
-                      authtype:
-                        type: string
-                      state:
-                        type: string
-              examples:
-                Success Example:
-                  value:
-                    host: omni-asterisk.dev.rocket.chat
-                    callServerConfig:
-                      websocketPort: '443'
-                      websocketPath: 'wss://omni-asterisk.dev.rocket.chat/ws'
-                    extensionDetails:
-                      extension: '12342'
-                      password: my$up3erP@ssw0rd
-                      authtype: password
-                      state: Not in use
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  error:
-                    type: string
-              examples:
-                Example 1:
-                  value:
-                    success: false
-                    error: 'Match error: Missing key ''id'''
-        '401':
-          $ref: '#/components/responses/authorizationError'
-        '403':
-          $ref: '#/components/responses/permissionError'
-  /api/v1/voip/queues.getSummary:
-    get:
-      tags:
-        - Voice Channel
-      summary: Get Voice Channel Queue Summary
-      description: 'Permission required: `inbound-voip-calls`'
-      operationId: get-api-v1-voip-queues.getSummary
-      parameters:
-        - $ref: '#/components/parameters/AuthToken'
-        - $ref: '#/components/parameters/UserId'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  name:
-                    type: string
-                  loggedin:
-                    type: string
-                  available:
-                    type: string
-                  callers:
-                    type: string
-                  holdtime:
-                    type: string
-                  talktime:
-                    type: string
-                  logestholdtime:
-                    type: string
-              examples:
-                Example 1:
-                  value:
-                    name: string
-                    loggedin: string
-                    available: string
-                    callers: string
-                    holdtime: string
-                    talktime: string
-                    logestholdtime: string
-        '401':
-          $ref: '#/components/responses/authorizationError'
-        '403':
-          $ref: '#/components/responses/permissionError'
-  /api/v1/voip/queues.getQueuedCallsForThisExtension:
-    get:
-      tags:
-        - Voice Channel Queue Membership
-      summary: Get Call Center Queue Membership Information
-      description: 'Permission required: `inbound-voip-calls`'
-      operationId: get-api-v1-voip-queues.getQueuedCallsForThisExtension
-      parameters:
-        - $ref: '#/components/parameters/AuthToken'
-        - $ref: '#/components/parameters/UserId'
-        - name: extension
-          in: query
-          description: The phone extension for VoIP.
-          required: true
-          schema:
-            type: string
-            example: '1293'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  extension:
-                    type: string
-                  queueCount:
-                    type: string
-                  callWaitingCount:
-                    type: string
-              examples:
-                Success Example:
-                  value:
-                    extension: '12234'
-                    queueCount: '1'
-                    callWaitingCount: '2'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  error:
-                    type: string
-              examples:
-                Example 1:
-                  value:
-                    success: false
-                    error: 'Match error: Missing key ''extension'''
-        '401':
-          $ref: '#/components/responses/authorizationError'
-        '403':
-          $ref: '#/components/responses/permissionError'
-  /api/v1/voip/queues.getMembershipSubscription:
-    get:
-      tags:
-        - Voice Channel Queue Membership
-      summary: Get Call Center Queue Membership Subscription Information
-      description: 'Permission required: `inbound-voip-calls`'
-      operationId: get-api-v1-voip-queues.getMembershipSubscription
-      parameters:
-        - $ref: '#/components/parameters/AuthToken'
-        - $ref: '#/components/parameters/UserId'
-        - name: extension
-          in: query
-          description: The phone extension for VoIP.
-          schema:
-            type: string
-            example: '1293'
-          required: true
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  queues:
-                    type: object
-                    properties:
-                      name:
-                        type: string
-                      loggedin:
-                        type: string
-                      available:
-                        type: string
-                      callers:
-                        type: string
-                      holdtime:
-                        type: string
-                      talktime:
-                        type: string
-                      longestholdtime:
-                        type: string
-                  extension:
-                    type: string
-              examples:
-                Success Example:
-                  value:
-                    queues:
-                      name: event.queue
-                      loggedin: event.loggedin
-                      available: event.available
-                      callers: event.available
-                      holdtime: event.holdtime
-                      talktime: event.talktime
-                      longestholdtime: event.logestholdtime
-                    extension: '1293'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  error:
-                    type: string
-              examples:
-                Example 1:
-                  value:
-                    success: false
-                    error: 'Match error: Missing key ''extension'''
-        '401':
-          $ref: '#/components/responses/authorizationError'
-        '403':
-          $ref: '#/components/responses/permissionError'
-  /api/v1/voip/callServer/checkConnection:
-    get:
-      tags:
-        - Voice Channel Server Connection
-      summary: Check Call Server Connection
-      description: |-
-        Check the SIP call server connection status.
-        Permission required: `manage-voip-contact-center-settings`
-      operationId: get-api-v1-voip-callServer-checkConnection
-      parameters:
-        - $ref: '#/components/parameters/AuthToken'
-        - $ref: '#/components/parameters/UserId'
-        - name: websocketUrl
-          in: query
-          description: The websocket URL.
-          required: true
-          schema:
-            type: string
-            example: 'wss://omni-asterisk.dev.rocket.chat/ws'
-        - name: host
-          in: query
-          description: The hostname of the call server.
-          required: true
-          schema:
-            type: string
-            example: localhost
-        - name: port
-          in: query
-          description: The port number of the websocket.
-          required: true
-          schema:
-            type: string
-            example: '3000'
-        - name: path
-          in: query
-          description: The path of the websocket.
-          required: true
-          schema:
-            type: string
-            example: test/voip
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                  error:
-                    type: string
-              examples:
-                Example 1:
-                  value:
-                    status: connected | connection-error
-                    error: string
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  error:
-                    type: string
-              examples:
-                Example 1:
-                  value:
-                    success: false
-                    error: Incorrect / Insufficient Parameters
-        '401':
-          $ref: '#/components/responses/authorizationError'
-        '403':
-          $ref: '#/components/responses/permissionError'
-  /api/v1/voip/managementServer/checkConnection:
-    get:
-      tags:
-        - Voice Channel Server Connection
-      summary: Check Management Server Connection
-      description: |-
-        Check the VoIP management server connection status.
-        Permission required: `manage-voip-contact-center-settings`
-      operationId: get-api-v1-voip-managementServer-checkConnection
-      parameters:
-        - $ref: '#/components/parameters/AuthToken'
-        - $ref: '#/components/parameters/UserId'
-        - name: host
-          in: query
-          description: The hostname of the management server.
-          required: true
-          schema:
-            type: string
-            example: localhost
-        - name: port
-          in: query
-          description: The port number of the management server.
-          required: true
-          schema:
-            type: string
-            example: '3000'
-        - name: username
-          in: query
-          description: The user name of the administrator user.
-          required: true
-          schema:
-            type: string
-            example: user1
-        - name: password
-          in: query
-          description: The password of the administrator user.
-          required: true
-          schema:
-            type: string
-            example: idosfiejifc354
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                  error:
-                    type: string
-              examples:
-                Example 1:
-                  value:
-                    status: connected | connection-error
-                    error: string
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  error:
-                    type: string
-              examples:
-                Example 1:
-                  value:
-                    success: false
-                    error: 'Match error: Missing key ''port'''
-                Example 2:
-                  value:
-                    success: false
-                    error: 'Match error: Missing key ''host'''
-        '401':
-          $ref: '#/components/responses/authorizationError'
-        '403':
-          $ref: '#/components/responses/permissionError'
-  /api/v1/voip/events:
-    post:
-      tags:
-        - Voice Channel Events
-      summary: Send Call Center Events
-      description: |-
-        Send the VoIP client events.
-        Permission required: `view-l-room`
-        ### VoIP Client Events
-        List of VoIP client Events available in enum format:
-          ```json
-          {"VOIP-CALL-STARTED" = "voip-call-started",
-           "VOIP-CALL-ENDED" = "voip-call-ended",
-           "VOIP-CALL-DECLINED" = "voip-call-declined",
-           "VOIP-CALL-ON-HOLD" = "voip-call-on-hold",
-           "VOIP-CALL-UNHOLD" = "voip-call-unhold",
-           "VOIP-CALL-DURATION" = "voip-call-duration" }
-          ```
-      operationId: get-api-v1-voip-events
-      parameters:
-        - $ref: '#/components/parameters/AuthToken'
-        - $ref: '#/components/parameters/UserId'
-      responses:
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  error:
-                    type: string
-              examples:
-                Example 1:
-                  value:
-                    success: false
-                    error: 'Match error: Missing key ''event'''
-                Example 2:
-                  value:
-                    success: false
-                    error: 'Match error: Missing key ''rid'''
-        '401':
-          $ref: '#/components/responses/authorizationError'
-        '403':
-          $ref: '#/components/responses/permissionError'
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  error:
-                    type: string
-              examples:
-                Example 1:
-                  value:
-                    success: false
-                    error: Resource not found
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                rid:
-                  type: string
-                event:
-                  type: string
-                comment:
-                  type: string
-            examples:
-              Example 1:
-                value:
-                  rid: oWLW6v8c8oRGb4cC9
-                  event: voip-call-started
-  /api/v1/voip/rooms:
-    get:
-      tags:
-        - Voice Channel Rooms
-      summary: Get List of Call Center Rooms
-      description: |-
-        Permissions required:
-          - For an admin: `view-livechat-rooms`
-          - For an agent: `view-l-room`
-      operationId: get-api-v1-voip-rooms
-      parameters:
-        - $ref: '#/components/parameters/AuthToken'
-        - $ref: '#/components/parameters/UserId'
-        - name: agents
-          in: query
-          description: List of agent information.
-          schema:
-            type: string
-            example: 'string[]'
-        - name: open
-          in: query
-          description: The status of the room. The value can be true or false.
-          schema:
-            type: string
-        - name: createdAt
-          in: query
-          description: The date and time when the room was created.
-          schema:
-            type: string
-            example: '2021-07-09T20:20:58.755Z'
-        - name: closedAt
-          in: query
-          description: The date and time when the room was closed.
-          schema:
-            type: string
-            example: '2021-07-09T21:20:58.755Z'
-        - name: tags
-          in: query
-          description: List of tag information.
-          schema:
-            type: string
-            example: 'string[]'
-        - name: queue
-          in: query
-          description: The ID assigned to the call (opaque ID).
-          schema:
-            type: string
-        - name: visitorId
-          in: query
-          description: The visitor ID.
-          schema:
-            type: string
-        - name: direction
-          in: query
-          description: The direction of the call.
-          schema:
-            type: string
-            example: inbound
-        - name: roomName
-          in: query
-          description: The name of the room.
-          schema:
-            type: string
-            example: The name of the room.
-        - $ref: '#/components/parameters/offset'
-        - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/fields'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  room:
-                    type: object
-                    properties:
-                      _id:
-                        type: string
-                      fname:
-                        type: string
-                      t:
-                        type: string
-                      v:
-                        type: object
-                        properties:
-                          _id:
-                            type: string
-                          username:
-                            type: string
-                          token:
-                            type: string
-                          status:
-                            type: string
-                          lastMessageTs:
-                            type: string
-                      departmentId:
-                        type: string
-                      default:
-                        type: boolean
-                      ro:
-                        type: boolean
-                      sysMes:
-                        type: boolean
-                      open:
-                        type: boolean
-                      msgs:
-                        type: integer
-                      ts:
-                        type: string
-                      _updatedAt:
-                        type: string
-                      lm:
-                        type: string
-                      customFields:
-                        type: object
-                        properties:
-                          salesforceCrmContactId:
-                            type: string
-                      usersCount:
-                        type: integer
-                      cl:
-                        type: boolean
-                      departmentAncestors:
-                        type: array
-                        items:
-                          type: string
-                      lastMessage:
-                        type: object
-                        properties:
-                          _id:
-                            type: string
-                          rid:
-                            type: string
-                          msg:
-                            type: string
-                          token:
-                            type: string
-                          alias:
-                            type: string
-                          ts:
-                            type: string
-                          u:
-                            type: object
-                            properties:
-                              _id:
-                                type: string
-                              username:
-                                type: string
-                              name:
-                                type: string
-                          _updatedAt:
-                            type: string
-                          urls:
-                            type: array
-                            items:
-                              type: object
-                          mentions:
-                            type: array
-                            items:
-                              type: object
-                          channels:
-                            type: array
-                            items:
-                              type: object
-                          md:
-                            type: array
-                            items:
-                              type: object
-                              properties:
-                                type:
-                                  type: string
-                                value:
-                                  type: array
-                                  items:
-                                    type: object
-                                    properties:
-                                      type:
-                                        type: string
-                                      value:
-                                        type: string
-                          newRoom:
-                            type: boolean
-                          showConnecting:
-                            type: boolean
-                      metrics:
-                        type: object
-                        properties:
-                          reaction:
-                            type: object
-                            properties:
-                              fd:
-                                type: string
-                              ft:
-                                type: number
-                              tt:
-                                type: number
-                          response:
-                            type: object
-                            properties:
-                              avg:
-                                type: number
-                              fd:
-                                type: string
-                              ft:
-                                type: number
-                              total:
-                                type: integer
-                              tt:
-                                type: number
-                          v:
-                            type: object
-                            properties:
-                              lq:
-                                type: string
-                          servedBy:
-                            type: object
-                            properties:
-                              lr:
-                                type: string
-                      servedBy:
-                        type: object
-                        properties:
-                          _id:
-                            type: string
-                          username:
-                            type: string
-                          ts:
-                            type: string
-                      waitingResponse:
-                        type: boolean
-                  success:
-                    type: boolean
-              examples:
-                Success Example:
-                  value:
-                    room:
-                      _id: kCJDd5peKiZnGJLPq
-                      fname: Mary
-                      t: l
-                      v:
-                        _id: 47Dajwh9DjpnTAugW
-                        username: guest-165
-                        token: 8s7e9ony6ctl27e1qf8kue
-                        status: offline
-                        lastMessageTs: '2021-07-09T20:20:58.755Z'
-                      departmentId: CAJioQNAvLnYWTy8i
-                      default: false
-                      ro: false
-                      sysMes: true
-                      open: true
-                      msgs: 7
-                      ts: '2021-07-09T20:12:19.795Z'
-                      _updatedAt: '2021-07-09T20:21:07.334Z'
-                      lm: '2021-07-09T20:20:58.755Z'
-                      customFields:
-                        salesforceCrmContactId: 0032y000009mtOIAAY
-                      usersCount: 2
-                      cl: false
-                      departmentAncestors:
-                        - sriw2wmP2Zz2pPrre
-                      lastMessage:
-                        _id: SgrsSm3HNGrG5xTmk
-                        rid: kCJDd5peKiZnGJLPq
-                        msg: d
-                        token: 8s7e9ony6ctl27e1qf8kue
-                        alias: Mary
-                        ts: '2021-07-09T20:20:58.755Z'
-                        u:
-                          _id: 47Dajwh9DjpnTAugW
-                          username: guest-165
-                          name: Mary
-                        _updatedAt: '2021-07-09T20:20:58.896Z'
-                        urls: []
-                        mentions: []
-                        channels: []
-                        md:
-                          - type: PARAGRAPH
-                            value:
-                              - type: PLAIN_TEXT
-                                value: d
-                        newRoom: false
-                        showConnecting: true
-                      metrics:
-                        reaction:
-                          fd: '2021-07-09T20:19:53.243Z'
-                          ft: 23.821
-                          tt: 24.006
-                        response:
-                          avg: 226.4365
-                          fd: '2021-07-09T20:19:53.243Z'
-                          ft: 452.688
-                          total: 2
-                          tt: 452.873
-                        v:
-                          lq: '2021-07-09T20:20:58.755Z'
-                        servedBy:
-                          lr: '2021-07-09T20:19:53.077Z'
-                      servedBy:
-                        _id: XycfA5CetCPuEjqxw
-                        username: kim.jane
-                        ts: '2021-07-09T20:19:29.422Z'
-                      waitingResponse: true
-                    success: true
-        '401':
-          $ref: '#/components/responses/authorizationError'
-        '403':
-          $ref: '#/components/responses/permissionError'
-  /api/v1/voip/room:
-    get:
-      tags:
-        - Voice Channel Rooms
-      summary: Create or Get Call Center Room
-      description: 'Creates a VoIP room if the room ID is not passed; otherwise, it gets an existing room based on the room ID and token.'
-      operationId: get-api-v1-voip-room
-      parameters:
-        - $ref: '#/components/parameters/AuthToken'
-        - $ref: '#/components/parameters/UserId'
-        - name: token
-          in: query
-          description: The visitor token.
-          schema:
-            type: string
-            example: 867ad6a09fc4af29f6f1f2a9cf1deaba
-          required: true
-        - name: agentId
-          in: query
-          description: The agent ID.
-          schema:
-            type: string
-            example: 6vHSSqdBHdm2
-          required: true
-        - name: rid
-          in: query
-          description: 'The room ID. If the room ID is not provided, a new room is created. If the room ID is provided, the room''s details are returned, if the room exists.'
-          schema:
-            type: string
-            example: jiuriewcnm2R4gfi
-        - schema:
-            type: string
-            example: inbound
-          in: query
-          name: direction
-          description: 'The direction of the call, inbound or outbound.'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  room:
-                    type: object
-                    properties:
-                      _id:
-                        type: string
-                      fname:
-                        type: string
-                      t:
-                        type: string
-                      v:
-                        type: object
-                        properties:
-                          _id:
-                            type: string
-                          username:
-                            type: string
-                          token:
-                            type: string
-                          status:
-                            type: string
-                          lastMessageTs:
-                            type: string
-                      departmentId:
-                        type: string
-                      default:
-                        type: boolean
-                      ro:
-                        type: boolean
-                      sysMes:
-                        type: boolean
-                      open:
-                        type: boolean
-                      msgs:
-                        type: integer
-                      ts:
-                        type: string
-                      _updatedAt:
-                        type: string
-                      lm:
-                        type: string
-                      customFields:
-                        type: object
-                        properties:
-                          salesforceCrmContactId:
-                            type: string
-                      usersCount:
-                        type: integer
-                      cl:
-                        type: boolean
-                      departmentAncestors:
-                        type: array
-                        items:
-                          type: string
-                      lastMessage:
-                        type: object
-                        properties:
-                          _id:
-                            type: string
-                          rid:
-                            type: string
-                          msg:
-                            type: string
-                          token:
-                            type: string
-                          alias:
-                            type: string
-                          ts:
-                            type: string
-                          u:
-                            type: object
-                            properties:
-                              _id:
-                                type: string
-                              username:
-                                type: string
-                              name:
-                                type: string
-                          _updatedAt:
-                            type: string
-                          urls:
-                            type: array
-                            items:
-                              type: object
-                          mentions:
-                            type: array
-                            items:
-                              type: object
-                          channels:
-                            type: array
-                            items:
-                              type: object
-                          md:
-                            type: array
-                            items:
-                              type: object
-                              properties:
-                                type:
-                                  type: string
-                                value:
-                                  type: array
-                                  items:
-                                    type: object
-                                    properties:
-                                      type:
-                                        type: string
-                                      value:
-                                        type: string
-                          newRoom:
-                            type: boolean
-                          showConnecting:
-                            type: boolean
-                      metrics:
-                        type: object
-                        properties:
-                          reaction:
-                            type: object
-                            properties:
-                              fd:
-                                type: string
-                              ft:
-                                type: number
-                              tt:
-                                type: number
-                          response:
-                            type: object
-                            properties:
-                              avg:
-                                type: number
-                              fd:
-                                type: string
-                              ft:
-                                type: number
-                              total:
-                                type: integer
-                              tt:
-                                type: number
-                          v:
-                            type: object
-                            properties:
-                              lq:
-                                type: string
-                          servedBy:
-                            type: object
-                            properties:
-                              lr:
-                                type: string
-                      servedBy:
-                        type: object
-                        properties:
-                          _id:
-                            type: string
-                          username:
-                            type: string
-                          ts:
-                            type: string
-                      waitingResponse:
-                        type: boolean
-                  newRoom:
-                    type: boolean
-                  success:
-                    type: boolean
-              examples:
-                Success Example:
-                  value:
-                    room:
-                      _id: kCJDd5peKiZnGJLPq
-                      fname: Mary
-                      t: l
-                      v:
-                        _id: 47Dajwh9DjpnTAugW
-                        username: guest-165
-                        token: 8s7e9ony6ctl27e1qf8kue
-                        status: offline
-                        lastMessageTs: '2021-07-09T20:20:58.755Z'
-                      departmentId: CAJioQNAvLnYWTy8i
-                      default: false
-                      ro: false
-                      sysMes: true
-                      open: true
-                      msgs: 7
-                      ts: '2021-07-09T20:12:19.795Z'
-                      _updatedAt: '2021-07-09T20:21:07.334Z'
-                      lm: '2021-07-09T20:20:58.755Z'
-                      customFields:
-                        salesforceCrmContactId: 0032y000009mtOIAAY
-                      usersCount: 2
-                      cl: false
-                      departmentAncestors:
-                        - sriw2wmP2Zz2pPrre
-                      lastMessage:
-                        _id: SgrsSm3HNGrG5xTmk
-                        rid: kCJDd5peKiZnGJLPq
-                        msg: d
-                        token: 8s7e9ony6ctl27e1qf8kue
-                        alias: Mary
-                        ts: '2021-07-09T20:20:58.755Z'
-                        u:
-                          _id: 47Dajwh9DjpnTAugW
-                          username: guest-165
-                          name: Mary
-                        _updatedAt: '2021-07-09T20:20:58.896Z'
-                        urls: []
-                        mentions: []
-                        channels: []
-                        md:
-                          - type: PARAGRAPH
-                            value:
-                              - type: PLAIN_TEXT
-                                value: d
-                        newRoom: false
-                        showConnecting: true
-                      metrics:
-                        reaction:
-                          fd: '2021-07-09T20:19:53.243Z'
-                          ft: 23.821
-                          tt: 24.006
-                        response:
-                          avg: 226.4365
-                          fd: '2021-07-09T20:19:53.243Z'
-                          ft: 452.688
-                          total: 2
-                          tt: 452.873
-                        v:
-                          lq: '2021-07-09T20:20:58.755Z'
-                        servedBy:
-                          lr: '2021-07-09T20:19:53.077Z'
-                      servedBy:
-                        _id: XycfA5CetCPuEjqxw
-                        username: kim.jane
-                        ts: '2021-07-09T20:19:29.422Z'
-                      waitingResponse: true
-                    newRoom: false
-                    success: true
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  error:
-                    type: string
-                  errorType:
-                    type: string
-              examples:
-                Example 1:
-                  value:
-                    success: false
-                    error: |-
-                      must have required property 'token'
-                       must have required property 'rid'
-                       must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params
-        '401':
-          $ref: '#/components/responses/authorizationError'
-        '403':
-          $ref: '#/components/responses/permissionError'
-  /api/v1/voip/room.close:
-    post:
-      tags:
-        - Voice Channel Rooms
-      summary: Close Call Center Room
-      description: 'Permission required: `inbound-voip-calls`'
-      operationId: post-api-v1-voip-room.close
-      parameters:
-        - $ref: '#/components/parameters/AuthToken'
-        - $ref: '#/components/parameters/UserId'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - rid
-                - token
-              properties:
-                rid:
-                  type: string
-                  description: The ID of the open room.
-                token:
-                  type: string
-                  description: The visitor token.
-            examples:
-              Example 1:
-                value:
-                  rid: c9YW3rejo7HeL6ZDW
-                  token: yHoawq4s9bDn4dM5H
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  rid:
-                    type: string
-              examples:
-                Success Example:
-                  value:
-                    rid: c9YW3rejo7HeL6ZDW
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  error:
-                    type: string
-                  errorType:
-                    type: string
-              examples:
-                Example 1:
-                  value:
-                    success: false
-                    error: 'must have required property ''rid'' [invalid-params]'
-                    errorType: invalid-params
-                Example 2:
-                  value:
-                    success: false
-                    error: 'must have required property ''token'' [invalid-params]'
-                    errorType: invalid-params
-        '401':
-          $ref: '#/components/responses/authorizationError'
-        '403':
-          $ref: '#/components/responses/permissionError'
   /api/v1/livechat/visitor:
     post:
       summary: Register Livechat Visitor
@@ -15533,7 +13487,6 @@ paths:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
   /api/v1/livechat/visitors.search:
-    parameters: []
     get:
       summary: Search Visitors by Term
       tags:
@@ -15637,7 +13590,15 @@ paths:
           required: true
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/sort'
+        - schema: {}
+          in: query
+          name: sort
+          description: |-
+           Sort the results by ascending (`1`) or descending (`-1`) order. The following options are available:
+            * `ts`: Sort by timestamp. For example, `sort={"ts":1}` or `sort={"ts":-1}`. By default, results are sorted in descending order of timestamp.
+            * `lastChat.ts`: Last chat timestamp. For example, `sort={"lastChat.ts":1}` or `sort={"lastChat":-1}`.
+            * `name`: Visitor name. For example, `sort={"name":1}` or `sort={"name":-1}`.
+            * `username`: Visitor username. For example, `sort={"username":1}` or `sort={"username":-1}`.
   '/api/v1/livechat/visitors.pagesVisited/{roomId}':
     parameters:
       - schema:
@@ -16077,8 +14038,33 @@ paths:
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - schema: {}
+          in: query
+          name: sort
+          description: 'Sort the events in the ascending (`1`) or descending (`-1`) order. By default, the result is sorted in descending order. The most recent chats are returned first. Enter the value as: `sort[ts]=1` or `sort[ts]=-1`. Here `ts` refers to timestamp.'
+        - schema:
+            type: string
+          in: query
+          name: searchText
+          description: Enter the text to search for within the chat.
+        - schema:
+            type: string
+          in: query
+          name: closedChatsOnly
+          description: Filter the results to display only closed chats. The value can be `"true"` or `"false"`.
+        - schema:
+            type: string
+          in: query
+          name: servedChatsOnly
+          description: Filter the results to display only chats that are joined by agents. The value can be `"true"` or `"false"`.
+        - schema:
+            type: string
+          in: query
+          name: source
+          description: 'Filter the results by the source of the chat. The value can be: `widget`, `sms`, `api`, `email`, `app`, `other`.'
   /api/v1/livechat/visitors.autocomplete:
-    parameters: []
     get:
       summary: Autocomplete Visitors
       tags:
@@ -16213,205 +14199,6 @@ paths:
                   status: busy
       tags:
         - Omnichannel Visitors
-  /api/v1/omnichannel/extensions:
-    get:
-      tags:
-        - Voice Channel Extensions
-      summary: Get List of Call Center Extensions
-      description: 'Permission required: `manage-agent-extension-association`'
-      operationId: get-api-v1-omnichannel-extensions
-      parameters:
-        - $ref: '#/components/parameters/AuthToken'
-        - $ref: '#/components/parameters/UserId'
-        - name: status
-          in: query
-          description: The status of the extension.
-          schema:
-            type: string
-            example: free
-        - name: agentId
-          in: query
-          description: The agent ID.
-          schema:
-            type: string
-        - name: queues
-          in: query
-          description: The queues associated with the extension.
-          schema:
-            type: string
-        - name: extension
-          in: query
-          description: Extension number.
-          schema:
-            type: string
-        - $ref: '#/components/parameters/offset'
-        - $ref: '#/components/parameters/count'
-      responses:
-        '200':
-          $ref: '#/components/responses/trueSuccess'
-        '401':
-          $ref: '#/components/responses/authorizationError'
-        '403':
-          $ref: '#/components/responses/permissionError'
-  /api/v1/omnichannel/extension:
-    get:
-      tags:
-        - Voice Channel Extensions
-      summary: Get Call Center Extension
-      description: 'Permission required: `manage-agent-extension-association`'
-      operationId: get-api-v1-omnichannel-extension
-      parameters:
-        - $ref: '#/components/parameters/AuthToken'
-        - $ref: '#/components/parameters/UserId'
-        - name: userId
-          in: query
-          description: 'The value of the user ID. Alternatively, you can enter the `username` parameter.'
-          schema:
-            type: string
-          required: true
-        - name: type
-          in: query
-          description: 'The type of extension. The values can be: `free`, `allocated`, and  `available`'
-          schema:
-            type: string
-          required: true
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  extensions:
-                    type: string
-              examples:
-                Success Example:
-                  value:
-                    extensions: '10023'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  error:
-                    type: string
-              examples:
-                Example 1:
-                  value:
-                    success: false
-                    error: 'Match error: Failed Match.OneOf, Match.Maybe or Match.Optional validation'
-                Example 2:
-                  value:
-                    success: false
-                    error: Connection error
-        '401':
-          $ref: '#/components/responses/authorizationError'
-        '403':
-          $ref: '#/components/responses/permissionError'
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  error:
-                    type: string
-              examples:
-                Example 1:
-                  value:
-                    success: false
-                    error: Extension not found
-  '/api/v1/omnichannel/agent/extension/{username}':
-    get:
-      tags:
-        - Agent Extensions
-      summary: Get Omnichannel Agent Extension
-      description: 'Permission required: `view-agent-extension-association`'
-      operationId: get-api-v1-omnichannel-agent-extension-username
-      parameters:
-        - $ref: '#/components/parameters/AuthToken'
-        - $ref: '#/components/parameters/UserId'
-        - name: username
-          in: path
-          description: The user name of the agent.
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: OK
-          content: {}
-        '401':
-          $ref: '#/components/responses/authorizationError'
-        '403':
-          $ref: '#/components/responses/permissionError'
-    delete:
-      tags:
-        - Agent Extensions
-      summary: Delete Omnichannel Agent Extension
-      description: 'Permission required: `manage-agent-extension-association`'
-      operationId: delete-api-v1-omnichannel-agent-extension-username
-      parameters:
-        - name: username
-          in: path
-          description: The user name of the agent.
-          required: true
-          schema:
-            type: string
-        - $ref: '#/components/parameters/AuthToken'
-        - $ref: '#/components/parameters/UserId'
-      responses:
-        '200':
-          $ref: '#/components/responses/trueSuccess'
-        '401':
-          $ref: '#/components/responses/authorizationError'
-        '403':
-          $ref: '#/components/responses/permissionError'
-    parameters:
-      - schema:
-          type: string
-          example: agent5
-        name: username
-        in: path
-        required: true
-        description: The agent's username
-  /api/v1/omnichannel/agent/extension:
-    post:
-      tags:
-        - Agent Extensions
-      summary: Update Omnichannel Agent Extension
-      description: |-
-        Update the extension associated with a specific agent.
-        Permission required: `manage-agent-extension-association`
-      operationId: post-api-v1-omnichannel-agent-extension
-      parameters:
-        - $ref: '#/components/parameters/AuthToken'
-        - $ref: '#/components/parameters/UserId'
-        - name: userId
-          in: query
-          description: 'The value of the user ID. Alternatively, you can enter the `username` parameter.'
-          schema:
-            type: string
-          required: true
-        - name: extension
-          in: query
-          description: The extension number that you want to update.
-          schema:
-            type: string
-          required: true
-      responses:
-        '401':
-          $ref: '#/components/responses/authorizationError'
-        '403':
-          $ref: '#/components/responses/permissionError'
   /api/v1/canned-responses:
     post:
       tags:
@@ -17625,6 +15412,264 @@ paths:
                   host: 'null'
       tags:
         - Livechat Messages
+  '/api/v1/livechat/messages/{rid}':
+    get:
+      summary: Get Livechat Messages
+      tags:
+        - Livechat Messages
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        rid:
+                          type: string
+                        ts:
+                          type: string
+                        msg:
+                          type: string
+                        groupable:
+                          type: boolean
+                        file:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            name:
+                              type: string
+                            type:
+                              type: string
+                            size:
+                              type: integer
+                            format:
+                              type: string
+                        files:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              _id:
+                                type: string
+                              name:
+                                type: string
+                              type:
+                                type: string
+                              size:
+                                type: integer
+                              format:
+                                type: string
+                        attachments:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              title:
+                                type: string
+                              title_link:
+                                type: string
+                              title_link_download:
+                                type: boolean
+                              image_dimensions:
+                                type: object
+                                properties:
+                                  width:
+                                    type: integer
+                                  height:
+                                    type: integer
+                              image_preview:
+                                type: string
+                              image_url:
+                                type: string
+                              image_type:
+                                type: string
+                              image_size:
+                                type: integer
+                              type:
+                                type: string
+                              description:
+                                type: string
+                        u:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                            name:
+                              type: string
+                        _updatedAt:
+                          type: string
+                        urls:
+                          type: array
+                          items:
+                            type: object
+                            properties: {}
+                        mentions:
+                          type: array
+                          items:
+                            type: object
+                            properties: {}
+                        channels:
+                          type: array
+                          items:
+                            type: object
+                            properties: {}
+                        md:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              type:
+                                type: string
+                              value:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                    value:
+                                      type: string
+                        token:
+                          type: string
+                        alias:
+                          type: string
+                  offset:
+                    type: integer
+                  count:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    messages:
+                      - _id: hmnQoYcnSJp7c9f2v
+                        rid: dCBiZX3XPWyPsa6pt
+                        ts: '2025-10-16T11:17:07.068Z'
+                        msg: ''
+                        groupable: false
+                        file:
+                          _id: 68f0d43201e202fefed836cf
+                          name: video-designs (1).png
+                          type: image/png
+                          size: 17466
+                          format: png
+                        files:
+                          - _id: 68f0d43201e202fefed836cf
+                            name: video-designs (1).png
+                            type: image/png
+                            size: 17466
+                            format: png
+                          - _id: 68f0d43301e202fefed836d1
+                            name: thumb-video-designs (1).png
+                            type: image/png
+                            size: 14848
+                            format: png
+                        attachments:
+                          - title: video-designs (1).png
+                            title_link: /file-upload/68f0d43201e202fefed836cf/video-designs%20(1).png
+                            title_link_download: true
+                            image_dimensions:
+                              width: 480
+                              height: 301
+                            image_preview: /9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAUACADASIAAhEBAxEB/8QAGQABAAMBAQAAAAAAAAAAAAAAAAIDBAUI/8QAHRAAAgIDAAMAAAAAAAAAAAAAAQIAAwQRMQUhIv/EABUBAQEAAAAAAAAAAAAAAAAAAAAB/8QAFxEBAQEBAAAAAAAAAAAAAAAAAAERQf/aAAwDAQACEQMRAD8A8qqCzAKNk8EtbGvW4VNUwsPF17kKXNVquvVO5vt8pdZnpklvpRoHUszqXWNca5rjUKmNg6uvcqYFWIYaI6J0a/KXJnvkhvthrepgusNtrO3WOzFzhLUIiJFIiIH/2Q==
+                            image_url: /file-upload/68f0d43301e202fefed836d1/video-designs%20(1).png
+                            image_type: image/png
+                            image_size: 17466
+                            type: file
+                            description: ''
+                        u:
+                          _id: C38WSSzrGd2NCjzqJ
+                          username: test.cat
+                          name: Test Cat
+                        _updatedAt: '2025-11-12T10:24:44.420Z'
+                        urls: []
+                        mentions: []
+                        channels: []
+                      - _id: 6j9hrchZBHwZHpsF2
+                        rid: dCBiZX3XPWyPsa6pt
+                        msg: hello
+                        ts: '2025-10-16T11:16:58.948Z'
+                        u:
+                          _id: C38WSSzrGd2NCjzqJ
+                          username: test.cat
+                          name: Test Cat
+                        _updatedAt: '2025-11-12T10:24:44.420Z'
+                        urls: []
+                        mentions: []
+                        channels: []
+                        md:
+                          - type: PARAGRAPH
+                            value:
+                              - type: PLAIN_TEXT
+                                value: hello
+                      - _id: CfD55oXeSvvC3jmZS
+                        rid: dCBiZX3XPWyPsa6pt
+                        msg: hello
+                        token: 2c9035b72dec31be7e9ccbb3cbd9952394ea41c1517b76c528d403c00a3fccf9
+                        alias: swayyy
+                        ts: '2025-10-16T11:16:36.406Z'
+                        u:
+                          _id: 68f0d41001e202fefed836af
+                          username: guest-49
+                          name: swayyy
+                        _updatedAt: '2025-10-16T11:16:36.447Z'
+                        urls: []
+                        mentions: []
+                        channels: []
+                        md:
+                          - type: PARAGRAPH
+                            value:
+                              - type: PLAIN_TEXT
+                                value: hello
+                    offset: 0
+                    count: 50
+                    total: 3
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: invalid-room
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: 'get-api-v1-livechat-:rid-messages'
+      description: 'View the messages of a specific Livechat room. Permission required: `view-l-room`'
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+        - schema:
+            type: string
+          in: query
+          name: searchTerm
+          description: Enter a term that you want to search in the messages.
   /api/v1/omnichannel/integrations:
     post:
       summary: Set up Omnichannel webhook
@@ -17783,16 +15828,8 @@ tags:
   - name: Livechat
   - name: Livechat Appearance
   - name: Livechat Triggers
-  - name: Livechat Audio Video Calls
   - name: Livechat Messages
   - name: Livechat Page Visited
-  - name: Agent Extensions
-  - name: Voice Channel
-  - name: Voice Channel Events
-  - name: Voice Channel Extensions
-  - name: Voice Channel Queue Membership
-  - name: Voice Channel Rooms
-  - name: Voice Channel Server Connection
 components:
   parameters:
     start:

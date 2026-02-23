@@ -1,3 +1,4 @@
+# We have officially pulled down marketp[lace endpoint from docs because it's not for users but Rocket.Chat Client
 openapi: 3.0.0
 info:
   version: 1.0.0
@@ -85,7 +86,7 @@ paths:
       description: |-
         Use this endpoint to send WhatsApp template messages directly to specified contacts from your workspace.
 
-        1. Navigate to **Administration > Apps > Marketplace**.
+        1. Click the **Marketplace** icon from the main menu. Select **Explore** from the drop-down menu.
         2. Locate your preferred <a href="https://docs.rocket.chat/docs/whatsapp-apps" target="_blank">WhatsApp App</a>.
         3. Go to *App Info > Details > APIs* and find the `POST templateMessage` section.
         4. Copy the `POST templateMessage` endpoint URL for your WhatsApp app from the provided curl example. This URL includes the required `appId`. Send a template message request using this URL as the endpoint.
@@ -249,8 +250,10 @@ paths:
   /api/apps:
     post:
       summary: Install Private Apps
+      tags:
+        - Manage Apps
       description: |- 
-        Install a <a href="https://docs.rocket.chat/docs/rocketchat-marketplace#private-apps" target="_blank">private app</a> via URL. <a href="https://docs.rocket.chat/docs/permissions" target="_blank">Permission</a> required: `manage-apps`
+        Install a <a href="https://docs.rocket.chat/docs/rocketchat-marketplace#private-apps" target="_blank">private app</a> via URL. <a href="https://docs.rocket.chat/docs/permissions" target="_blank">Permission</a> required: `Manage Apps`.
 
         ### Changelog
         | Version      | Description |
@@ -508,6 +511,8 @@ paths:
   /api/apps/logs:
     get:
       summary: Get All Apps Logs
+      tags:
+        - Manage Apps
       responses:
         '200':
           description: OK
@@ -565,7 +570,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                All App Logs:
                   value:
                     offset: 0
                     logs:
@@ -623,7 +628,6 @@ paths:
       operationId: get-api-apps-logs
       description: |-
        Use this endpoint to get the list of apps' logs for your workspace.
-       Permission required: `manage-apps`
        
        ### Changelog
        | Version      | Description |
@@ -649,6 +653,8 @@ paths:
   '/app/{id}/logs':
     get:
       summary: Get an App's Logs
+      tags:
+        - Manage Apps
       responses:
         '200':
           description: OK
@@ -706,7 +712,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                App Log:
                   value:
                     offset: 0
                     logs:
@@ -773,14 +779,13 @@ paths:
                   error:
                     type: string
               examples:
-                Example 1:
+                App not found:
                   value:
                     success: false
                     error: 'No App found by the id of: :id'
       operationId: 'get-app-:id-logs'
       description: |-
         Use this endpoint to get a specific app's logs for your workspace.
-        Permission required: `manage-apps`
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
@@ -802,6 +807,8 @@ paths:
   /api/v1/video-conference/jitsi.update-timeout:
     post:
       summary: Update Jitsi Timeout
+      tags:
+        - Jitsi App
       description: |- 
         ### Changelog
         | Version      | Description |
@@ -845,7 +852,944 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
-  
+  /api/apps/marketplace:
+    get:
+      summary: List Marketplace Apps
+      description: Get a list of all the apps on [Rocket.Chat marketplace](https://www.rocket.chat/marketplace).
+      tags:
+        - Manage Apps
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    appId:
+                      type: string
+                    latest:
+                      type: object
+                      properties:
+                        internalId:
+                          type: string
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        nameSlug:
+                          type: string
+                        version:
+                          type: string
+                        categories:
+                          type: array
+                          items:
+                            type: string
+                        languages:
+                          type: array
+                          items:
+                            type: string
+                        shortDescription:
+                          type: string
+                        description:
+                          type: string
+                        privacyPolicySummary:
+                          type: string
+                        documentationUrl:
+                          type: string
+                        detailedDescription:
+                          type: object
+                          properties:
+                            raw:
+                              type: string
+                            rendered:
+                              type: string
+                        detailedChangelog:
+                          type: object
+                          properties:
+                            raw:
+                              type: string
+                            rendered:
+                              type: string
+                        requiredApiVersion:
+                          type: string
+                        author:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                            support:
+                              type: string
+                            homepage:
+                              type: string
+                        classFile:
+                          type: string
+                        iconFile:
+                          type: string
+                        iconFileData:
+                          type: string
+                        status:
+                          type: string
+                        changesNote:
+                          type: string
+                        internalChangesNote:
+                          type: string
+                        isVisible:
+                          type: boolean
+                        createdDate:
+                          type: string
+                        modifiedDate:
+                          type: string
+                        isPurchased:
+                          type: boolean
+                        isSubscribed:
+                          type: boolean
+                        subscriptionInfo:
+                          type: object
+                          properties:
+                            typeOf:
+                              type: string
+                            status:
+                              type: string
+                            statusFromBilling:
+                              type: boolean
+                            isSeatBased:
+                              type: boolean
+                            seats:
+                              type: integer
+                            maxSeats:
+                              type: integer
+                            license:
+                              type: object
+                              properties:
+                                license:
+                                  type: string
+                                version:
+                                  type: integer
+                                expireDate:
+                                  type: string
+                            startDate:
+                              type: string
+                            periodEnd:
+                              type: string
+                            endDate:
+                              type: string
+                            externallyManaged:
+                              type: boolean
+                            isSubscribedViaBundle:
+                              type: boolean
+                        addonId:
+                          type: string
+                        compileJobId:
+                          type: string
+                        compiled:
+                          type: boolean
+                        isEnterpriseOnly:
+                          type: boolean
+                        permissions:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                    isAddon:
+                      type: boolean
+                    addonId:
+                      type: string
+                    isEnterpriseOnly:
+                      type: boolean
+                    isBundle:
+                      type: boolean
+                    bundledAppIds:
+                      type: array
+                      items:
+                        type: object
+                        properties: {}
+                    bundledIn:
+                      type: array
+                      items:
+                        type: object
+                        properties: {}
+                    isPurchased:
+                      type: boolean
+                    isSubscribed:
+                      type: boolean
+                    subscriptionInfo:
+                      type: object
+                      properties:
+                        typeOf:
+                          type: string
+                        status:
+                          type: string
+                        statusFromBilling:
+                          type: boolean
+                        isSeatBased:
+                          type: boolean
+                        seats:
+                          type: integer
+                        maxSeats:
+                          type: integer
+                        license:
+                          type: object
+                          properties:
+                            license:
+                              type: string
+                            version:
+                              type: integer
+                            expireDate:
+                              type: string
+                        startDate:
+                          type: string
+                        periodEnd:
+                          type: string
+                        endDate:
+                          type: string
+                        externallyManaged:
+                          type: boolean
+                        isSubscribedViaBundle:
+                          type: boolean
+                    price:
+                      type: integer
+                    purchaseType:
+                      type: string
+                    isUsageBased:
+                      type: boolean
+                    createdAt:
+                      type: string
+                    modifiedAt:
+                      type: string
+              examples:
+                List of marketplace apps:
+                  value:
+                    - appId: 58eba86a-58e0-4fa2-b26c-2ef03d7dc18d
+                      latest:
+                        internalId: 66f553aefb6a87ead50d1e54
+                        id: 58eba86a-58e0-4fa2-b26c-2ef03d7dc18d
+                        name: Hubspot CRM
+                        nameSlug: hubspot
+                        version: 1.1.4
+                        categories:
+                          - Communication
+                          - Omnichannel
+                          - Productivity
+                        languages:
+                          - en
+                        shortDescription: 'Increase leads, accelerate sales'
+                        description: "The HubSpot CRM app is a software application created by HubSpot that allows businesses to track, organize, and manage their customer relationships and interactions. The CRM (Customer Relationship Management) app provides tools for contact management, sales pipeline tracking, email tracking, scheduling meetings, and more. It also offers detailed analytics to help businesses understand their customers’ behavior and preferences to improve their sales and marketing strategies. HubSpot CRM app can also be synced with other HubSpot’s marketing, sales, and service software and is accessible from both desktop and mobile devices, providing real-time data access and management.\n\nWhy should you integrate Rocket.Chat with the HubSpot CRM app\n\nIntegrating Rocket.Chat with the HubSpot CRM app can result in several benefits:\n\n\U0001F680 Improved Customer Service: With integration, customer support agents can access customer data from HubSpot CRM within the Rocket.Chat interface. This helps agents to respond to customer queries more effectively and efficiently.\n\n\U0001F680 Real-Time Updates: Changes and updates in the CRM are instantly reflected in Rocket.Chat. This ensures all team members are working with the most accurate and current data.\n\n\U0001F680 Streamlined Process: Integration eliminates the need for switching between multiple platforms to access customer data, thus streamlining the process and saving time.\n\n\U0001F680 Improved Lead Management: Conversations on Rocket.Chat can be automatically converted into leads or contacts in HubSpot CRM, aiding the sales process.\n\n\U0001F680 Better Reporting: Businesses can track their performance and sales activity through a unified dashboard as conversation data from Rocket.Chat can be synced with HubSpot CRM for analysis and reporting.\n\n\U0001F680 Enhanced Collaboration: Team members can share customer data and coordinate their actions better as both Rocket.Chat and HubSpot CRM are synced.\n\n\U0001F680 Automatic Data Sync: Any data or interaction from Rocket.Chat can be automatically synced to the HubSpot CRM, ensuring no important information is missed.\n\nBy integrating these two platforms, businesses can enhance their customer service, streamline their workflow, improve lead management and collaboration, and provide accurate and efficient reporting. This in turn can lead to:\n\nIncreased Productivity: With streamlined workflow and enhanced collaboration, your team can work more efficiently, which can boost their productivity.\n\n_Improved Sales Conversion: With better lead management and customer service, you can improve your sales conversion rate. Informed Business Decisions: With more accurate reporting, you can make more informed decisions for your business. _\n\nEnhanced Customer Satisfaction: Faster, more coordinated responses and personalized interactions can significantly improve customer satisfaction, which can ultimately lead to increased customer loyalty and higher retention rates.\n\nTherefore, integrating Rocket.Chat with HubSpot CRM can significantly strengthen your team’s performance and your business’s outcomes.\n"
+                        privacyPolicySummary: 'We use your data to provide and improve the Service. By using the Service, you agree to the collection and use of information in accordance with this policy. Unless otherwise defined in this Privacy Policy, the terms used in this Privacy Policy have the same meanings as in our Terms and Conditions.'
+                        documentationUrl: docs.rocket.chat/extend-rocket.chat-capabilities/rocket.chat-marketplace/rocket.chat-public-apps-guides/omnichannel-apps/hubspot-crm
+                        detailedDescription:
+                          raw: "The HubSpot CRM app is a software application created by HubSpot that allows businesses to track, organize, and manage their customer relationships and interactions. The CRM (Customer Relationship Management) app provides tools for contact management, sales pipeline tracking, email tracking, scheduling meetings, and more. It also offers detailed analytics to help businesses understand their customers’ behavior and preferences to improve their sales and marketing strategies. HubSpot CRM app can also be synced with other HubSpot’s marketing, sales, and service software and is accessible from both desktop and mobile devices, providing real-time data access and management.\n\nWhy should you integrate Rocket.Chat with the HubSpot CRM app\n\nIntegrating Rocket.Chat with the HubSpot CRM app can result in several benefits:\n\n\U0001F680 Improved Customer Service: With integration, customer support agents can access customer data from HubSpot CRM within the Rocket.Chat interface. This helps agents to respond to customer queries more effectively and efficiently.\n\n\U0001F680 Real-Time Updates: Changes and updates in the CRM are instantly reflected in Rocket.Chat. This ensures all team members are working with the most accurate and current data.\n\n\U0001F680 Streamlined Process: Integration eliminates the need for switching between multiple platforms to access customer data, thus streamlining the process and saving time.\n\n\U0001F680 Improved Lead Management: Conversations on Rocket.Chat can be automatically converted into leads or contacts in HubSpot CRM, aiding the sales process.\n\n\U0001F680 Better Reporting: Businesses can track their performance and sales activity through a unified dashboard as conversation data from Rocket.Chat can be synced with HubSpot CRM for analysis and reporting.\n\n\U0001F680 Enhanced Collaboration: Team members can share customer data and coordinate their actions better as both Rocket.Chat and HubSpot CRM are synced.\n\n\U0001F680 Automatic Data Sync: Any data or interaction from Rocket.Chat can be automatically synced to the HubSpot CRM, ensuring no important information is missed.\n\nBy integrating these two platforms, businesses can enhance their customer service, streamline their workflow, improve lead management and collaboration, and provide accurate and efficient reporting. This in turn can lead to:\n\n*Increased Productivity: With streamlined workflow and enhanced collaboration, your team can work more efficiently, which can boost their productivity.*\n\n_Improved Sales Conversion: With better lead management and customer service, you can improve your sales conversion rate. Informed Business Decisions: With more accurate reporting, you can make more informed decisions for your business. _\n\n*Enhanced Customer Satisfaction: Faster, more coordinated responses and personalized interactions can significantly improve customer satisfaction, which can ultimately lead to increased customer loyalty and higher retention rates.*\n\nTherefore, integrating Rocket.Chat with HubSpot CRM can significantly strengthen your team’s performance and your business’s outcomes."
+                          rendered: "<p>The HubSpot CRM app is a software application created by HubSpot that allows businesses to track, organize, and manage their customer relationships and interactions. The CRM (Customer Relationship Management) app provides tools for contact management, sales pipeline tracking, email tracking, scheduling meetings, and more. It also offers detailed analytics to help businesses understand their customers’ behavior and preferences to improve their sales and marketing strategies. HubSpot CRM app can also be synced with other HubSpot’s marketing, sales, and service software and is accessible from both desktop and mobile devices, providing real-time data access and management.</p>\n\n<p>Why should you integrate Rocket.Chat with the HubSpot CRM app</p>\n\n<p>Integrating Rocket.Chat with the HubSpot CRM app can result in several benefits:</p>\n\n<p>\U0001F680 Improved Customer Service: With integration, customer support agents can access customer data from HubSpot CRM within the Rocket.Chat interface. This helps agents to respond to customer queries more effectively and efficiently.</p>\n\n<p>\U0001F680 Real-Time Updates: Changes and updates in the CRM are instantly reflected in Rocket.Chat. This ensures all team members are working with the most accurate and current data.</p>\n\n<p>\U0001F680 Streamlined Process: Integration eliminates the need for switching between multiple platforms to access customer data, thus streamlining the process and saving time.</p>\n\n<p>\U0001F680 Improved Lead Management: Conversations on Rocket.Chat can be automatically converted into leads or contacts in HubSpot CRM, aiding the sales process.</p>\n\n<p>\U0001F680 Better Reporting: Businesses can track their performance and sales activity through a unified dashboard as conversation data from Rocket.Chat can be synced with HubSpot CRM for analysis and reporting.</p>\n\n<p>\U0001F680 Enhanced Collaboration: Team members can share customer data and coordinate their actions better as both Rocket.Chat and HubSpot CRM are synced.</p>\n\n<p>\U0001F680 Automatic Data Sync: Any data or interaction from Rocket.Chat can be automatically synced to the HubSpot CRM, ensuring no important information is missed.</p>\n\n<p>By integrating these two platforms, businesses can enhance their customer service, streamline their workflow, improve lead management and collaboration, and provide accurate and efficient reporting. This in turn can lead to:</p>\n\n<p><em>Increased Productivity: With streamlined workflow and enhanced collaboration, your team can work more efficiently, which can boost their productivity.</em></p>\n\n<p>_Improved Sales Conversion: With better lead management and customer service, you can improve your sales conversion rate. Informed Business Decisions: With more accurate reporting, you can make more informed decisions for your business. _</p>\n\n<p><em>Enhanced Customer Satisfaction: Faster, more coordinated responses and personalized interactions can significantly improve customer satisfaction, which can ultimately lead to increased customer loyalty and higher retention rates.</em></p>\n\n<p>Therefore, integrating Rocket.Chat with HubSpot CRM can significantly strengthen your team’s performance and your business’s outcomes.</p>\n"
+                        detailedChangelog:
+                          raw: |
+                            Fixes an issue that was causing the app to return an invalid API Key.
+                          rendered: |
+                            <p>Fixes an issue that was causing the app to return an invalid API Key.</p>
+                        requiredApiVersion: ^1.40.0
+                        author:
+                          name: Rocket.Chat
+                          support: support@rocket.chat
+                          homepage: 'http://rocket.chat'
+                        classFile: HubspotIntegrationApp.ts
+                        iconFile: icon.png
+                        iconFileData: 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
+                        status: published
+                        changesNote: |
+                          Fixes an issue that was causing the app to return an invalid API Key.
+                        internalChangesNote: Fixes an issue that was causing the app to return an invalid API Key.
+                        isVisible: true
+                        createdDate: '2024-09-26T12:29:34.4Z'
+                        modifiedDate: '2024-09-26T17:13:24.241Z'
+                        isPurchased: false
+                        isSubscribed: false
+                        subscriptionInfo:
+                          typeOf: ''
+                          status: ''
+                          statusFromBilling: false
+                          isSeatBased: false
+                          seats: 0
+                          maxSeats: 0
+                          license:
+                            license: ''
+                            version: 0
+                            expireDate: '0001-01-01T00:00:00Z'
+                          startDate: '0001-01-01T00:00:00Z'
+                          periodEnd: '0001-01-01T00:00:00Z'
+                          endDate: '0001-01-01T00:00:00Z'
+                          externallyManaged: false
+                          isSubscribedViaBundle: false
+                        addonId: '000000000000000000000000'
+                        compileJobId: 66f56bf4fb6a87ead50d3e8b
+                        compiled: true
+                        isEnterpriseOnly: false
+                      isAddon: false
+                      addonId: '000000000000000000000000'
+                      isEnterpriseOnly: false
+                      isBundle: false
+                      bundledAppIds: []
+                      bundledIn: []
+                      isPurchased: false
+                      isSubscribed: false
+                      subscriptionInfo:
+                        typeOf: ''
+                        status: ''
+                        statusFromBilling: false
+                        isSeatBased: false
+                        seats: 0
+                        maxSeats: 0
+                        license:
+                          license: ''
+                          version: 0
+                          expireDate: '0001-01-01T00:00:00Z'
+                        startDate: '0001-01-01T00:00:00Z'
+                        periodEnd: '0001-01-01T00:00:00Z'
+                        endDate: '0001-01-01T00:00:00Z'
+                        externallyManaged: false
+                        isSubscribedViaBundle: false
+                      price: 0
+                      purchaseType: buy
+                      isUsageBased: false
+                      createdAt: '2020-09-11T18:55:17.724Z'
+                      modifiedAt: '2024-09-26T17:13:24.241Z'
+        '401':
+          $ref: '#/components/responses/authorizationError'      
+      operationId: get-api-apps-marketplace
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+  /api/apps/categories:
+      get:
+        summary: List App Categories
+        description: Get a list of the various categories of apps on [Rocket.Chat marketplace](https://www.rocket.chat/marketplace).
+        tags:
+        - Manage Apps
+        responses:
+          '200':
+            description: OK
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      title:
+                        type: string
+                      description:
+                        type: string
+                      hidden:
+                        type: boolean
+                      createdDate:
+                        type: string
+                      modifiedDate:
+                        type: string
+                examples:
+                  List of app categories:
+                    value:
+                      - id: 67055de9b7e61e16fecb7dd9
+                        title: Add-on
+                        description: ''
+                        hidden: false
+                        createdDate: '2024-10-08T16:29:29.586Z'
+                        modifiedDate: '2024-10-08T16:29:29.586Z'
+                      - id: 5b6a0ff43b82b700010eedae
+                        title: Analytics
+                        description: ''
+                        hidden: false
+                        createdDate: '2018-08-07T21:32:36.502Z'
+                        modifiedDate: '2018-08-07T21:32:36.502Z'
+                      - id: 5b6a0ff43b82b700010eedaf
+                        title: Bots
+                        description: ''
+                        hidden: false
+                        createdDate: '2018-08-07T21:32:36.502Z'
+                        modifiedDate: '2018-08-07T21:32:36.502Z'
+                      - id: 5b6a0ff43b82b700010eedb0
+                        title: Communication
+                        description: ''
+                        hidden: false
+                        createdDate: '2018-08-07T21:32:36.503Z'
+                        modifiedDate: '2018-08-07T21:32:36.503Z'
+                      - id: 636008a52f3d64000c4450da
+                        title: Content Management
+                        description: ''
+                        hidden: false
+                        createdDate: '2022-10-31T17:40:53.609Z'
+                        modifiedDate: '2022-10-31T17:40:53.609Z'
+                      - id: 5b6a0ff43b82b700010eedb2
+                        title: Customer Support
+                        description: ''
+                        hidden: false
+                        createdDate: '2018-08-07T21:32:36.504Z'
+                        modifiedDate: '2018-08-07T21:32:36.504Z'
+                      - id: 5b6a0ff43b82b700010eedb3
+                        title: Design
+                        description: ''
+                        hidden: false
+                        createdDate: '2018-08-07T21:32:36.504Z'
+                        modifiedDate: '2018-08-07T21:32:36.504Z'
+                      - id: 5b6a0ff43b82b700010eedb4
+                        title: Developer Tools
+                        description: ''
+                        hidden: false
+                        createdDate: '2018-08-07T21:32:36.504Z'
+                        modifiedDate: '2018-08-07T21:32:36.504Z'
+                      - id: 65300f118a13fcf25bde1e29
+                        title: Enterprise
+                        description: ''
+                        hidden: true
+                        createdDate: '0001-01-01T00:00:00Z'
+                        modifiedDate: '2023-10-25T21:24:24.122Z'
+                      - id: 5b6a0ff43b82b700010eedb5
+                        title: File Management
+                        description: ''
+                        hidden: false
+                        createdDate: '2018-08-07T21:32:36.504Z'
+                        modifiedDate: '2018-08-07T21:32:36.504Z'
+                      - id: 5b6a0ff43b82b700010eedb6
+                        title: Finance
+                        description: ''
+                        hidden: false
+                        createdDate: '2018-08-07T21:32:36.505Z'
+                        modifiedDate: '2018-08-07T21:32:36.505Z'
+                      - id: 5b6a0ff43b82b700010eedb7
+                        title: Health & Wellness
+                        description: ''
+                        hidden: false
+                        createdDate: '2018-08-07T21:32:36.505Z'
+                        modifiedDate: '2018-08-07T21:32:36.505Z'
+                      - id: 5b6a0ff43b82b700010eedb8
+                        title: Human Resources
+                        description: ''
+                        hidden: false
+                        createdDate: '2018-08-07T21:32:36.505Z'
+                        modifiedDate: '2018-08-07T21:32:36.505Z'
+                      - id: 5b6a0ff43b82b700010eedb9
+                        title: Marketing
+                        description: ''
+                        hidden: false
+                        createdDate: '2018-08-07T21:32:36.505Z'
+                        modifiedDate: '2018-08-07T21:32:36.505Z'
+                      - id: 5b6a0ff43b82b700010eedba
+                        title: Media & News
+                        description: ''
+                        hidden: false
+                        createdDate: '2018-08-07T21:32:36.505Z'
+                        modifiedDate: '2018-08-07T21:32:36.505Z'
+                      - id: 5b6a0ff43b82b700010eedbb
+                        title: Office Management
+                        description: ''
+                        hidden: false
+                        createdDate: '2018-08-07T21:32:36.506Z'
+                        modifiedDate: '2018-08-07T21:32:36.506Z'
+                      - id: 602e7e9786adb7000121b1ae
+                        title: Omnichannel
+                        description: ''
+                        hidden: false
+                        createdDate: '2021-02-18T14:49:59.821Z'
+                        modifiedDate: '2021-02-18T14:49:59.821Z'
+                      - id: 5b6a0ff43b82b700010eedc4
+                        title: Other
+                        description: ''
+                        hidden: false
+                        createdDate: '2018-08-07T21:32:36.508Z'
+                        modifiedDate: '2018-08-07T21:32:36.508Z'
+                      - id: 63333f6e05a7ab0001aa0fdf
+                        title: Premium
+                        description: ''
+                        hidden: false
+                        createdDate: '2022-09-27T18:22:38.92Z'
+                        modifiedDate: '2022-09-27T18:22:38.92Z'
+                      - id: 5b6a0ff43b82b700010eedbc
+                        title: Productivity
+                        description: ''
+                        hidden: false
+                        createdDate: '2018-08-07T21:32:36.506Z'
+                        modifiedDate: '2018-08-07T21:32:36.506Z'
+                      - id: 5b6a0ff43b82b700010eedbd
+                        title: Project Management
+                        description: ''
+                        hidden: false
+                        createdDate: '2018-08-07T21:32:36.506Z'
+                        modifiedDate: '2018-08-07T21:32:36.506Z'
+                      - id: 5b6a0ff43b82b700010eedbe
+                        title: Sales
+                        description: ''
+                        hidden: false
+                        createdDate: '2018-08-07T21:32:36.506Z'
+                        modifiedDate: '2018-08-07T21:32:36.506Z'
+                      - id: 5b6a0ff43b82b700010eedbf
+                        title: Security & Compliance
+                        description: ''
+                        hidden: false
+                        createdDate: '2018-08-07T21:32:36.507Z'
+                        modifiedDate: '2018-08-07T21:32:36.507Z'
+                      - id: 5b6a0ff43b82b700010eedc0
+                        title: Social & Fun
+                        description: ''
+                        hidden: false
+                        createdDate: '2018-08-07T21:32:36.507Z'
+                        modifiedDate: '2018-08-07T21:32:36.507Z'
+                      - id: 5b6a0ff43b82b700010eedc1
+                        title: Team Culture
+                        description: ''
+                        hidden: false
+                        createdDate: '2018-08-07T21:32:36.507Z'
+                        modifiedDate: '2018-08-07T21:32:36.507Z'
+                      - id: 5b6a0ff43b82b700010eedc3
+                        title: Voice & Video
+                        description: ''
+                        hidden: false
+                        createdDate: '2018-08-07T21:32:36.508Z'
+                        modifiedDate: '2018-08-07T21:32:36.508Z'
+          '401':
+            $ref: '#/components/responses/authorizationError'                        
+        operationId: get-api-apps-categories
+        parameters:
+          - $ref: '#/components/parameters/Auth-Token'
+          - $ref: '#/components/parameters/UserId'
+  /api/apps/installed:
+    get:
+      summary: List Installed Apps
+      description: Get a list of the installed apps on your workspace.
+      tags:
+        - Manage Apps
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  apps:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        version:
+                          type: string
+                        requiredApiVersion:
+                          type: string
+                        iconFile:
+                          type: string
+                        author:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                            homepage:
+                              type: string
+                            support:
+                              type: string
+                        name:
+                          type: string
+                        nameSlug:
+                          type: string
+                        classFile:
+                          type: string
+                        description:
+                          type: string
+                        implements:
+                          type: array
+                          items:
+                            type: object
+                            properties: {}
+                        iconFileContent:
+                          type: string
+                        status:
+                          type: string
+                        languages:
+                          type: object
+                          properties:
+                            en:
+                              type: object
+                              properties:
+                                params_example:
+                                  type: string
+                                command_description:
+                                  type: string
+                                bbb_url:
+                                  type: string
+                                bbb_url_description:
+                                  type: string
+                                bbb_shared_secret:
+                                  type: string
+                                bbb_shared_secret_description:
+                                  type: string
+                                bbb_register_hook:
+                                  type: string
+                                bbb_register_hook_description:
+                                  type: string
+                                bbb_additional_params:
+                                  type: string
+                                bbb_additional_params_Description:
+                                  type: string
+                            de:
+                              type: object
+                              properties:
+                                bbb_additional_params:
+                                  type: string
+                                bbb_additional_params_Description:
+                                  type: string
+                        private:
+                          type: boolean
+                        migrated:
+                          type: boolean
+                  success:
+                    type: boolean
+              examples:
+                List of  installed apps:
+                  value:
+                    apps:
+                      - id: 346b465f-3087-4596-ad7f-b0885540451c
+                        version: 1.0.4
+                        requiredApiVersion: ^1.33.0
+                        iconFile: icon.png
+                        author:
+                          name: Rocket.Chat Technologies Corp.
+                          homepage: 'https://github.com/RocketChat/Rocket.Chat'
+                          support: 'https://github.com/RocketChat/Rocket.Chat'
+                        name: Google Meet
+                        nameSlug: google-meet
+                        classFile: GoogleMeetApp.js
+                        description: Google Meet Conference Calls Provider
+                        implements: []
+                        iconFileContent: 'data:image/png;base64,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'
+                        status: invalid_installation_disabled
+                        languages:
+                          en:
+                            params_example: '[room name (optional)]'
+                            command_description: Generate a Google Meet conference call.
+                        private: false
+                        migrated: false
+                      - id: c95ba73a-0485-4d12-ae8a-a3e68330065a
+                        version: 1.0.6
+                        requiredApiVersion: ^1.33.0
+                        iconFile: icon.png
+                        author:
+                          name: Rocket.Chat Technologies Corp.
+                          homepage: 'https://github.com/RocketChat/Rocket.Chat'
+                          support: 'https://github.com/RocketChat/Rocket.Chat'
+                        name: Big Blue Button
+                        nameSlug: bigbluebutton
+                        classFile: src/BigBlueButtonApp.js
+                        description: Big Blue Button Conference Calls Provider
+                        implements: []
+                        iconFileContent: 'data:image/png;base64,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'
+                        status: initialized
+                        languages:
+                          de:
+                            bbb_additional_params: spezifische Einstellungen zum BBB-Client
+                            bbb_additional_params_Description: Hier können die benutzerspezifische Parameter für den BBB-Client angegeben werden
+                          en:
+                            params_example: '[room name (optional)]'
+                            command_description: Generate a Big Blue Button conference call.
+                            bbb_url: Url
+                            bbb_url_description: The Url where BBB is running;
+                            bbb_shared_secret: Shared Secret
+                            bbb_shared_secret_description: ''
+                            bbb_register_hook: Register Hook
+                            bbb_register_hook_description: Register a Hook on BBB to close conference calls automatically when they end. Requires the `bbb-webhook` package.
+                            bbb_additional_params: Custom parameter for bbb-client
+                            bbb_additional_params_Description: 'Set the custom parameter for the bbb-client (https://docs.bigbluebutton.org/admin/customize.html#passing-custom-parameters-to-the-client-on-join). only parameter starts with ''userdata-bbb'' used.'
+                        private: false
+                        migrated: false
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-apps-installed
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+  /apps/count:
+    get:
+      summary: Get Apps Count
+      tags:
+        - Manage Apps
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalMarketplaceEnabled:
+                    type: integer
+                  totalPrivateEnabled:
+                    type: integer
+                  maxMarketplaceApps:
+                    type: integer
+                  maxPrivateApps:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                'Total app count ':
+                  value:
+                    totalMarketplaceEnabled: 8
+                    totalPrivateEnabled: 3
+                    maxMarketplaceApps: -1
+                    maxPrivateApps: -1
+                    success: true
+        '401':
+         $ref: '#/components/responses/authorizationError'
+      operationId: get-apps-count
+      description: |-
+        Get a total count of apps in your workspace including private and public apps.
+
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |6.0.0     | Added       |
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+  /apps/buildExternalAppRequest:
+    get:
+      summary: Generate External App Request Form
+      tags:
+        - Manage Apps
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                External URL to request app:
+                  value:
+                    url: 'https://marketplace.rocket.chat/apps/ce0e318b-ffc0-4ce4-832b-f1b464beb22a/requestAccess?workspaceId=64df890111e1f20001d201b4&frameworkVersion=1.59.0&requester=eyJpZCI6ImtiMldCa2prdXQ0WUpwRlFrIiwidXNlcm5hbWUiOiJhZ2VudDIiLCJuYW1lIjoiVGVzdCBVc2VyIDUiLCJlbWFpbHMiOlsiYWdlbnQyQGFnZW50LmNvbSJdfQ%3D%3D&admins=W3siaWQiOiJQMmRnV1BQdzV2ZWlnd2NkSyIsInVzZXJuYW1lIjoiZnVua2Uub2xhc3VwbyIsIm5hbWUiOiJUZXN0IFVzZXIgMyJ9LHsiaWQiOiJxSFdob0p3d2drNGJ3Y29OcSIsInVzZXJuYW1lIjoib2x1ZnVua2UiLCJuYW1lIjoiT2x1ZnVua2UifSx7ImlkIjoiTUVwc3dGZnI1dTNXUGVYcWIiLCJ1c2VybmFtZSI6ImZhcmlhIiwibmFtZSI6IkZhcmlhIn0seyJpZCI6IkMzOFdTU3pyR2QyTkNqenFKIiwidXNlcm5hbWUiOiJ0ZXN0LmNhdCIsIm5hbWUiOiJ0ZXN0IGNhdCIsIm5pY2tuYW1lIjoiY2FrZSJ9LHsiaWQiOiJhblpDalQzeUpDTmphUGtvbyIsInVzZXJuYW1lIjoia2V2aW4uc3VwZXJtYW4iLCJuYW1lIjoia2V2aW4uc3VwZXJtYW4ifSx7ImlkIjoiY2tON3BuOHFrS3BQb0hZUXkiLCJ1c2VybmFtZSI6InRlc3QuZ3VzdGF2byIsIm5hbWUiOiJHdXN0YXZvIn0seyJpZCI6Ik1mYnZtRE12Y1d6eHdpakFzIiwidXNlcm5hbWUiOiJ1c2VyMTEiLCJuYW1lIjoidXNlciBqb24ifSx7ImlkIjoiQWhnZjVrOUNhNFlFZE1qd1giLCJ1c2VybmFtZSI6ImF5dGFqIiwibmFtZSI6IkF5dGFqIn0seyJpZCI6ImFQaHJQWndlVDk2cUxuUjdNIiwidXNlcm5hbWUiOiJzYXJhaC53aWxsaWFtcyIsIm5hbWUiOiJTYXJhaCBXaWxsaWFtcyJ9LHsiaWQiOiJqdmdXbWpjOFRCdDVMWWFqRiIsInVzZXJuYW1lIjoieW9uZy5oaW5keSIsIm5hbWUiOiJZb25nIEhpbmR5In1d'
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'      
+      operationId: get-apps-buildExternalAppRequest
+      description: 'Build an external app request form. This endpoint returns a link that workspace users can use to request an app externally without being in Rocket.Chat. '
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+  '/api/apps/{appId}':
+    get:
+      summary: Fetch details of an app
+      tags:
+        - Manage Apps
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  app:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      version:
+                        type: string
+                      requiredApiVersion:
+                        type: string
+                      iconFile:
+                        type: string
+                      author:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          homepage:
+                            type: string
+                          support:
+                            type: string
+                      name:
+                        type: string
+                      nameSlug:
+                        type: string
+                      classFile:
+                        type: string
+                      description:
+                        type: string
+                      implements:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+                      permissions:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                      iconFileContent:
+                        type: string
+                      status:
+                        type: string
+                      languages:
+                        type: object
+                        properties: {}
+                      private:
+                        type: boolean
+                      migrated:
+                        type: boolean
+                  success:
+                    type: boolean
+              examples:
+                Fetch app details:
+                  value:
+                    app:
+                      id: d05142b1-60b6-4562-9940-86be9b548f43
+                      version: 6.5.0
+                      requiredApiVersion: ^1.40.0
+                      iconFile: icon.png
+                      author:
+                        name: Neal Richardson
+                        homepage: 'https://www.bluescape.com'
+                        support: neal.richardson@bluescape.com
+                      name: bluescape
+                      nameSlug: bluescape
+                      classFile: BluescapeApp.js
+                      description: bluescape workspace slash commands
+                      implements: []
+                      permissions:
+                        - name: user.read
+                        - name: server-setting.read
+                        - name: room.read
+                        - name: message.read
+                        - name: message.write
+                        - name: slashcommand
+                        - name: networking
+                      iconFileContent: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAEOCAYAAABB1kj+AAAACXBIWXMAABcSAAAXEgFnn9JSAAAKT2lDQ1BQaG90b3Nob3AgSUNDIHByb2ZpbGUAAHjanVNnVFPpFj333vRCS4iAlEtvUhUIIFJCi4AUkSYqIQkQSoghodkVUcERRUUEG8igiAOOjoCMFVEsDIoK2AfkIaKOg6OIisr74Xuja9a89+bN/rXXPues852zzwfACAyWSDNRNYAMqUIeEeCDx8TG4eQuQIEKJHAAEAizZCFz/SMBAPh+PDwrIsAHvgABeNMLCADATZvAMByH/w/qQplcAYCEAcB0kThLCIAUAEB6jkKmAEBGAYCdmCZTAKAEAGDLY2LjAFAtAGAnf+bTAICd+Jl7AQBblCEVAaCRACATZYhEAGg7AKzPVem+eTkQnk2OXqkmo/0sAVkTQSsfOHuQph8pzJ6Bx1ti0961GvdLw7tknT0p5v51z790bM5Jst+w3Ks/niM3lkAlk7epEliyETx7FJ5ETP63J/+0yvs2pp3Ewep7lHkJGRkZEJJCMjIxNIRkZGJpCMjIxMIBkZGRmZQDIyMjKBZGRkZALJyMg4U7HqhWSquXEhIyNbIBkZGRmZQDIyMjKBZGRkZALJyMjIBJKRkZGRCSQjIyMTSEZGRiaQjIyMTCAZGRlnBZZUotZp1GFGRkbGJDc8I4E8+uij+UxlZGRkFyYjIyMTSEZGRiaQjIyM9Yb/fwBLYM4biudGLgAAAABJRU5ErkJggg=='
+                      status: manually_enabled
+                      languages: {}
+                      private: false
+                      migrated: false
+                    success: true
+        '400':
+          $ref: '#/components/responses/authorizationError'
+      operationId: get-api-apps
+      description: |
+        Get all the details of an app in your workspace. The app must already be installed in your workspace. Permission required: `Manage Apps`.
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+    parameters:
+      - schema:
+          type: string
+          example: d05142b1-60b6-4562-9940-86be9b548f43
+        name: appId
+        in: path
+        required: true
+        description: The id of the app 
+    delete:
+      summary: Uninstall an App
+      tags:
+        - Manage Apps
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  app:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      version:
+                        type: string
+                      requiredApiVersion:
+                        type: string
+                      iconFile:
+                        type: string
+                      author:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          homepage:
+                            type: string
+                          support:
+                            type: string
+                      name:
+                        type: string
+                      nameSlug:
+                        type: string
+                      classFile:
+                        type: string
+                      description:
+                        type: string
+                      implements:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+                      permissions:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                      iconFileContent:
+                        type: string
+                      status:
+                        type: string
+                  success:
+                    type: boolean
+              examples:
+                Uninstall an app:
+                  value:
+                    app:
+                      id: d05142b1-60b6-4562-9940-86be9b548f43
+                      version: 6.5.0
+                      requiredApiVersion: ^1.40.0
+                      iconFile: icon.png
+                      author:
+                        name: Neal Richardson
+                        homepage: 'https://www.bluescape.com'
+                        support: neal.richardson@bluescape.com
+                      name: bluescape
+                      nameSlug: bluescape
+                      classFile: BluescapeApp.js
+                      description: bluescape workspace slash commands
+                      implements: []
+                      permissions:
+                        - name: user.read
+                        - name: server-setting.read
+                        - name: room.read
+                        - name: message.read
+                        - name: message.write
+                        - name: slashcommand
+                        - name: networking
+                      iconFileContent: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAEOCAYAAABB1kj+AAAACXBIWXMAABcSAAAXEgFnn9JSAAAKT2lDQ1BQaG90b3Nob3AgSUNDIHByb2ZpbGUAAHjanVNnVFPpFj333vRCS4iAlEtvUhUIIFJCi4AUkSYqIQkQSoghodkVUcERRUUEG8igiAOOjoCMFVEsDIoK2AfkIaKOg6OIisr74Xuja9a89+bN/rXXPues852zzwfACAyWSDNRNYAMqUIeEeCDx8TG4eQuQIEKJHAAEAizZCFz/SMBAPh+PDwrIsAHvgABeNMLCADATZvAMByH/w/qQplcAYCEAcB0kThLCIAUAEB6jkKmAEBGAYCdmCZTAKAEAGDLY2LjAFAtAGAnf+bTAICd+Jl7AQBblCEVAaCRACATZYhEAGg7AKzPVopFAFgwABRmS8Q5ANgtADBJV2ZIALC3AMDOEAuyAAgMADBRiIUpAAR7AGDIIyN4AISZABRG8lc88SuuEOcqAAB4mbI8uSQ5RYFbCC1xB1dXLh4ozkkXKxQ2YQJhmkAuwnmZGTKBNA/g88wAAKCRFRHgg/P9eM4Ors7ONo62Dl8t6r8G/yJiYuP+5c+rcEAAAOF0ftH+LC+zGoA7BoBt/qIl7gRoXgugdZQDIyMjKBZGRkZALJyMjIBJKRkZGRCSQjIyMTSEZGRiaQjIyMTCAZGRlnBZZUotZp1GFGRkbGJDc8I4E8+uij+UxlZGRkFyYjIyMTSEZGRiaQjIyM9Yb/fwBLYM4biudGLgAAAABJRU5ErkJggg=='
+                      status: disabled
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: delete-api-apps-appId
+      description: 'Uninstall an app from your workspace. Permission required: `Manage Apps`.'
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+
 components:
   schemas: {}
   parameters:
@@ -969,4 +1913,8 @@ components:
 
 tags:
   - name: Rasa App
-  - name: WhatsApp
+  - name: WhatsApp App
+  - name: Manage Apps
+  - name: Jitsi App
+
+

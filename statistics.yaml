@@ -3023,7 +3023,7 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         
-        Retrieve all channels and the number of messages in each channel within a specific period.
+        Retrieve all active channels and the number of messages in each channel within a specific period.
         
         Permission required: `view-engagement-dashboard` 
 
@@ -3039,13 +3039,6 @@ paths:
         - $ref: '#/components/parameters/end'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/offset'
-        - in: query
-          name: hideRoomsWithNoActivity
-          schema:
-            type: boolean
-          required: false
-          description: Enable this option to remove rooms without any activity from the response. This parameter has been deprecated and is scheduled for removal in the 7.0.0 <a href="https://github.com/RocketChat/Rocket.Chat/releases" target="_blank">release</a>. After the removal, this endpoint will automatically omit such inactive rooms from the response.
- 
       responses:
         '200':
           description: OK
@@ -3113,7 +3106,7 @@ paths:
     get:
       summary: Get All Subscriptions
       description: |-
-        Get the room notification subscription details and the latest updates. Note that the unread counter value depends on your settings in the **Administration** > <a href='https://docs.rocket.chat/docs/general' target='_blank'>**General**</a> section.
+        Get the room notification subscription details and the latest updates. Note that the unread counter value depends on your settings in the **Manage** > **Workspace** > <a href='https://docs.rocket.chat/docs/general' target='_blank'>**General**</a> section.
 
         ### Changelog
         | Version      | Description | 
@@ -3177,7 +3170,7 @@ paths:
     get:
       summary: Get Subscription Room
       description: |-
-        Get the notification subscription details for a specific room. Note that the unread counter value depends on your settings at the **Administration** > <a href='https://docs.rocket.chat/docs/general' target='_blank'>**General**</a> section.
+        Get the notification subscription details for a specific room. Note that the unread counter value depends on your settings at the **Manage** > **Workspace** > <a href='https://docs.rocket.chat/docs/general' target='_blank'>**General**</a> section.
 
         ### Changelog
         | Version      | Description | 
