@@ -694,7 +694,7 @@ paths:
         - schema: {}
           in: query
           name: sort
-          description: 'Sort the events in the ascending (`1`) or descending (`-1`) order. By default, the result is sorted in descending order. The most recent audit events are returned first. Enter the value as: `sort[ts]=1` or `sort[ts]=-1`.'
+          description: 'Sort the events in the ascending (`1`) or descending (`-1`) order. By default, the result is sorted in descending order. The most recent audit events are returned first. Enter the value as: `sort={"ts":1}` or `sort={"ts":-1}`.'
 
   /api/v1/cloud.manualRegister:
     post:
@@ -4881,6 +4881,7 @@ components:
               value:
                 success: false
                 error: 'User does not have the permissions required for this action [error-unauthorized]'
+
 
 
 
