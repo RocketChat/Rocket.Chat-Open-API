@@ -3508,65 +3508,6 @@ paths:
           name: url
           description: Enter the URL that you want to preview.
           required: true
-  /api/v1/dm.close:
-    post:
-      tags:
-        - DM
-      summary: Close DM
-      description: |-
-        Removes the direct message from the user's list of direct messages.
-
-        ### Changelog
-        | Version      | Description | 
-        | ------------ | ------------|
-        | 0.48.0       | Added       |
-      operationId: post-api-v1-im.close
-      parameters:
-        - $ref: '#/components/parameters/Auth-Token'
-        - $ref: '#/components/parameters/UserId'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                roomId:
-                  type: string
-                  description: The room ID.
-              required:
-                - roomId
-            examples:
-              Example:
-                value:
-                  roomId: ByehQjC44FwMeiLbX
-      responses:
-        '200':
-          $ref: '#/components/responses/trueSuccess'
-        '401':
-          $ref: '#/components/responses/authorizationError'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  error:
-                    type: string
-                  errorType:
-                    type: string
-              examples:
-                RoomId is required:
-                  value:
-                    success: false
-                    error: 'Body param "roomId" is required [error-room-param-not-provided]'
-                    errorType: error-room-param-not-provided
-                Invalid room ID or user is not member of room:
-                  value:
-                    success: false
-                    error: The user is not subscribed to the room
   /api/v1/dm.counters:
     get:
       tags:
