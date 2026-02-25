@@ -1401,8 +1401,21 @@ paths:
       parameters:
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/Auth-Token'
-        - $ref: '#/components/parameters/x-2fa-code'
-        - $ref: '#/components/parameters/x-2fa-method'
+        - name: x-2fa-code
+          in: header
+          required: true
+          description: >-
+            Enter the 2FA code. This parameter is required if 2FA is enabled in your workspace.
+            See the <a href="https://developer.rocket.chat/apidocs/introduction-to-two-factor-authentication" target="_blank">Introduction to Two-Factor Authentication</a> document for details.
+          schema:
+            type: string
+          example: '148750'
+        - name: x-2fa-method
+          in: header
+          required: true
+          schema:
+            type: string
+          description: 'Enter the method with which you get the 2FA code. It can be `email`, `totp`, or `password`. This parameter is required if 2FA is enabled in your workspace.'
       requestBody:
         content:
           application/json:
@@ -1412,7 +1425,7 @@ paths:
                 userId:
                   type: string
                   description: The user ID to update. This value must not be empty.
-                  example: BsNr28znDkG8aeo7W
+                  example: PMGoujw82oETsaw9828rQh2oXM
                 data:
                   type: object
                   description: 'The object that includes the user information to update with the following parameters. Note: If you provide an empty object, the user details are returned.'
@@ -1420,10 +1433,10 @@ paths:
                     name:
                       type: string
                       description: The name of the user.
-                      example: Example User
+                      example: Agent 2 Updated
                     email:
                       type: string
-                      example: example@example.com
+                      example: agent2@agent.com
                       description: The email ID of the user.
                     password:
                       type: string
@@ -1484,14 +1497,6 @@ paths:
                         type: string
                       createdAt:
                         type: string
-                      services:
-                        type: object
-                        properties:
-                          password:
-                            type: object
-                            properties:
-                              bcrypt:
-                                type: string
                       username:
                         type: string
                       emails:
@@ -1505,47 +1510,63 @@ paths:
                               type: boolean
                       type:
                         type: string
-                      status:
-                        type: string
-                      active:
-                        type: boolean
                       roles:
                         type: array
                         items:
                           type: string
-                      _updatedAt:
+                      status:
+                        type: string
+                      active:
+                        type: boolean
+                      inactiveReason:
                         type: string
                       name:
                         type: string
-                      customFields:
+                      _updatedAt:
+                        type: string
+                      __rooms:
+                        type: array
+                        items:
+                          type: string
+                      requirePasswordChange:
+                        type: boolean
+                      settings:
                         type: object
-                        properties:
-                          twitter:
-                            type: string
+                        properties: {}
+                      statusText:
+                        type: string
+                      livechatStatusSystemModified:
+                        type: boolean
+                      statusLivechat:
+                        type: string
                   success:
                     type: boolean
               examples:
-                Success Example:
+                Example:
                   value:
                     user:
-                      _id: BsNr28znDkG8aeo7W
-                      createdAt: '2016-09-13T14:57:56.037Z'
-                      services:
-                        password:
-                          bcrypt: $2a$10$5I5nUzqNEs8jKhi7BFS55uFYRf5TE4ErSUH8HymMNAbpMAvsOcl2C
-                      username: uniqueusername
+                      _id: PMGoujw82oETsaw9828rQh2oXM
+                      createdAt: '2026-02-24T23:22:54.986Z'
+                      username: agent2
                       emails:
-                        - address: newemail@user.tld
+                        - address: agent2@agent.com
                           verified: false
                       type: user
-                      status: offline
-                      active: true
                       roles:
                         - user
-                      _updatedAt: '2016-09-13T14:57:56.175Z'
-                      name: new name
-                      customFields:
-                        twitter: userstwitter
+                        - livechat-agent
+                      status: offline
+                      active: true
+                      inactiveReason: null
+                      name: Agent 2 Updated
+                      _updatedAt: '2026-02-25T14:25:59.157Z'
+                      __rooms:
+                        - GENERAL
+                      requirePasswordChange: false
+                      settings: {}
+                      statusText: ''
+                      livechatStatusSystemModified: false
+                      statusLivechat: not-available
                     success: true
         '400':
           description: Bad Request
