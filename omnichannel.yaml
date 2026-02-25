@@ -6296,7 +6296,7 @@ paths:
                       scope:
                         type: string
                       visibility:
-                        type: boolean
+                        type: string
                       type:
                         type: string
                       searchable:
@@ -6321,7 +6321,7 @@ paths:
                     customField:
                       label: address11
                       scope: visitor
-                      visibility: true
+                      visibility: "hidden"
                       type: input
                       searchable: true
                       regexp: ''
@@ -6387,8 +6387,8 @@ paths:
                       description: Enter a label for the field.
                       example: address-line
                     visibility:
-                      type: boolean
-                      description: Enter whether the custom field is displayed in a contact’s details.
+                      type: string
+                      description: Enter whether the custom field is displayed in a contact’s details. The only options are "hidden" or "visible".
                     scope:
                       type: string
                       description: "Set the scope of the custom field. The options are: `visitor` and `room`.\r\nRefer to the user guide for details."
