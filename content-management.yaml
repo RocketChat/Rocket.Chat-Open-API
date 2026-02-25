@@ -86,69 +86,6 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'  
-  /api/v1/emoji-custom.create:
-    post:
-      tags:
-        - Custom Emoji
-      summary: Create an Emoji
-      description: |
-        Upload a custom emoji to the workspace. Make sure that you have configured the storage system. For details, refer to the [Manage Custom Sounds and Emojis](https://docs.rocket.chat/docs/manage-custom-sounds-and-emojis) document.
-
-        Permission required: `manage-emoji`
-
-        ### Changelog
-        | Version      | Description | 
-        | ---------------- | ------------|
-        |0.74.0            | Added       |
-      operationId: post-api-v1-emoji-custom.create
-      parameters:
-        - $ref: '#/components/parameters/Auth-Token'
-        - $ref: '#/components/parameters/UserId'
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              required:
-                - emoji
-                - name
-              properties:
-                emoji:
-                  type: string
-                  description: The image file to use as the new custom emoji.
-                  format: binary
-                name:
-                  type: string
-                  description: The name of the new custom emoji.
-                aliases:
-                  type: string
-                  description: The alias of the new custom emoji.
-      responses:
-        '200':
-          $ref: '#/components/responses/trueSuccess'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  error:
-                    type: string
-              examples:
-                Example 1:
-                  value:
-                    success: false
-                    error: Missing Content-Type
-                Example 2:
-                  value:
-                    success: false
-                    error: '[No file uploaded]'
-                    errorType: No file uploaded
-        '401':
-          $ref: '#/components/responses/authorizationError'  
   /api/v1/emoji-custom.delete:
     post:
       tags:
