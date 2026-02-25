@@ -5564,39 +5564,6 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
-  /api/v1/rooms.leave:
-    post:
-      tags:
-        - Rooms
-      summary: Leave Room
-      description: |-
-        Leave a room. The following permissions are required:
-        * `leave-c`: To leave a public room.
-        * `leave-p`: To leave private room.
-        
-        ### Changelog
-        | Version | Description   |
-        | ------- | --------------|
-        | 0.72.0  | Added         |
-      operationId: post-api-v1-rooms.leave
-      parameters:
-        - $ref: '#/components/parameters/Auth-Token'
-        - $ref: '#/components/parameters/UserId'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                roomId:
-                  type: string
-                  example: ByehQjC44FwMeiLbX
-                  description: The room ID that you want to leave.
-      responses:
-        '200':
-          $ref: '#/components/responses/trueSuccess'
-        '401':
-          $ref: '#/components/responses/authorizationError'
   /api/v1/rooms.delete:
     post:
       tags:
