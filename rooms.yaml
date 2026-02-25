@@ -13844,6 +13844,88 @@ paths:
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
+
+  /api/v1/uploads.delete:
+    post:
+      summary: Delete Uploaded File
+      tags:
+        - Rooms
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  deletedFiles:
+                    type: array
+                    items:
+                      type: string
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    deletedFiles:
+                      - 699e6b8a8eddae7c5eaed9c3
+                      - 699e6b8b8eddae7c5eaed9c5
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  errorType:
+                    type: string
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    errorType: invalid-params
+                    error: must have required property 'fileId'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+      operationId: post-api-v1-uploads.delete
+      description: |-
+       Delete a specific file uploaded to a room. The response includes the list of files that were successfully removed. It may include additional files such as image thumbnails. 
+       
+       Users can delete messages only in the following cases:
+        * The **Allow Message Deleting** setting is enabled in the workspace's **<a href='https://docs.rocket.chat/docs/message' target='_blank'>Message</a>** settings.
+        * If the `Block Message Deleting After (n) Minutes` message setting has a non-zero value, the `bypass-time-limit-edit-and-delete` permission is required to delete messages after the defined time limit.
+        * In read-only rooms, the `post-readonly` permission is required to delete messages.
+        * The `delete-own-message` permission is required to delete users' own messages.
+        * The `delete-message` permission is required for users to delete messages from other users.
+        
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.2.0   | Added       |
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - fileId
+              properties:
+                fileId:
+                  type: string
+                  description: Enter the file ID of the file that you want to delete. You can get this value from the <a href='https://developer.rocket.chat/apidocs/get-room-images' target='_blank'>Get Room Images</a> endpoint.
+                  example: 699e6b8a8eddae7c5eaed9c3
+            examples:
+              Example 1:
+                value:
+                  fileId: 699e6b8a8eddae7c5eaed9c3
           
   /api/v1/listInvites:
     get:
