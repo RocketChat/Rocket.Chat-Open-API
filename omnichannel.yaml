@@ -15166,7 +15166,8 @@ paths:
                     error: 'must have required property ''token'' [invalid-params]'
                     errorType: invalid-params
       operationId: delete-api-v1-livechat-message-_id
-      description: Remove a specific livechat message.
+      description: |
+       Remove a specific livechat message. You can only delete your messages if the **Allow Message Deleting** setting is enabled in the Rocket.Chat workspace.
       requestBody:
         content:
           application/json:
