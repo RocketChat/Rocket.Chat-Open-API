@@ -6316,7 +6316,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Example:
                   value:
                     customField:
                       label: address11
@@ -6345,13 +6345,13 @@ paths:
                   error:
                     type: string
               examples:
-                Example 1:
+                Example:
                   value:
                     success: false
                     error: 'User does not have the permissions required for this action [error-unauthorized]'
       operationId: post-api-v1-livechat-custom-fields.save
       description: |-
-       Create a new Omnichannel custom field or update an existing on. You can refer to the <a href='https://docs.rocket.chat/docs/omnichannel-custom-fields' target='_blank'>Omnichannel Custom Fields</a> user guide for details.
+       Create a new Omnichannel custom field or update an existing custom field. You can refer to the <a href='https://docs.rocket.chat/docs/omnichannel-custom-fields' target='_blank'>Omnichannel Custom Fields</a> user guide for details.
        
        Permission required: `view-livechat-manager`
        
@@ -6388,7 +6388,7 @@ paths:
                       example: address-line
                     visibility:
                       type: string
-                      description: Enter whether the custom field is displayed in a contact’s details. The only options are "hidden" or "visible".
+                      description: The only options are `hidden` or `visible`. When visible, the custom field is displayed in the contact or room info for agents.
                     scope:
                       type: string
                       description: "Set the scope of the custom field. The options are: `visitor` and `room`.\r\nRefer to the user guide for details."
