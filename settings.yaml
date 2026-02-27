@@ -878,64 +878,6 @@ paths:
                 value:
                   public_key: My-9UbLiK-k34
                   private_key: 9R1V4t3_k3Y
-  /api/v1/e2e.updateGroupKey:
-    post:
-      summary: Update User E2E Key in Room
-      operationId: post-api-v1-e2e.updateGroupKey
-      responses:
-        '200':
-          $ref: '#/components/responses/trueSuccess'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  error:
-                    type: string
-                  errorType:
-                    type: string
-              examples:
-                Invalid Params:
-                  value:
-                    success: false
-                    error: 'must have required property ''rid'' [invalid-params]'
-                    errorType: invalid-params
-        '401':
-          $ref: '#/components/responses/authorizationError'
-      tags:
-        - E2E
-      parameters:
-        - $ref: '#/components/parameters/X-User-Id'
-        - $ref: '#/components/parameters/X-Auth-Token'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                uid:
-                  type: string
-                  description: The user ID whose key you want to update.
-                rid:
-                  type: string
-                  description: The room ID.
-                key:
-                  type: string
-                  description: The updated key.
-              required:
-                - uid
-                - rid
-                - key
-            examples:
-              Example:
-                value:
-                  uid: d26x6zSkaPSe5gCyy
-                  rid: 9R1V4t3_k3Y
-                  key: M4-Ubd4T3d-k39
   /api/v1/uploadImportFile:
     parameters: []
     post:
