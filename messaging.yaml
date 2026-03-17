@@ -14,7 +14,12 @@ paths:
         - Chat
       summary: Delete Chat Message
       description: |
-        Delete a chat message.
+        Delete a chat message. Users can delete messages only in the following cases:
+          * The **Allow Message Deleting** setting is enabled in the workspace's **Message** settings.
+          * If the **Block Message Deleting After (n) Minutes** message setting has a non-zero value, the `bypass-time-limit-edit-and-delete` permission is required to delete messages after the defined time limit.
+          * In read-only rooms, the `post-readonly` permission is required to delete messages, or the user must be unmuted.
+          * The `delete-own-message` permission is required to delete users' own messages.
+          * The `delete-message` permission is required for users to delete messages from other users.
 
         ### Changelog
         | Version      | Description | 
@@ -36,7 +41,7 @@ paths:
                   description: The room ID
                 msgId:
                   type: string
-                  description: The id of the message to delete.
+                  description: The ID of the message to delete.
                 asUser:
                   type: boolean
                   description: Should the message be deleted as the user who sent it? It is `false` by default.

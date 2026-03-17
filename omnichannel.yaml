@@ -6296,7 +6296,7 @@ paths:
                       scope:
                         type: string
                       visibility:
-                        type: boolean
+                        type: string
                       type:
                         type: string
                       searchable:
@@ -6316,12 +6316,12 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Example:
                   value:
                     customField:
                       label: address11
                       scope: visitor
-                      visibility: true
+                      visibility: "hidden"
                       type: input
                       searchable: true
                       regexp: ''
@@ -6345,13 +6345,13 @@ paths:
                   error:
                     type: string
               examples:
-                Example 1:
+                Example:
                   value:
                     success: false
                     error: 'User does not have the permissions required for this action [error-unauthorized]'
       operationId: post-api-v1-livechat-custom-fields.save
       description: |-
-       Create a new Omnichannel custom field or update an existing on. You can refer to the <a href='https://docs.rocket.chat/docs/omnichannel-custom-fields' target='_blank'>Omnichannel Custom Fields</a> user guide for details.
+       Create a new Omnichannel custom field or update an existing custom field. You can refer to the <a href='https://docs.rocket.chat/docs/omnichannel-custom-fields' target='_blank'>Omnichannel Custom Fields</a> user guide for details.
        
        Permission required: `view-livechat-manager`
        
@@ -6387,8 +6387,8 @@ paths:
                       description: Enter a label for the field.
                       example: address-line
                     visibility:
-                      type: boolean
-                      description: Enter whether the custom field is displayed in a contact’s details.
+                      type: string
+                      description: The only options are `hidden` or `visible`. When visible, the custom field is displayed in the contact or room info for agents.
                     scope:
                       type: string
                       description: "Set the scope of the custom field. The options are: `visitor` and `room`.\r\nRefer to the user guide for details."
@@ -15166,7 +15166,8 @@ paths:
                     error: 'must have required property ''token'' [invalid-params]'
                     errorType: invalid-params
       operationId: delete-api-v1-livechat-message-_id
-      description: Remove a specific livechat message.
+      description: |
+       Remove a specific livechat message. You can only delete your messages if the **Allow Message Deleting** setting is enabled in the Rocket.Chat workspace.
       requestBody:
         content:
           application/json:
