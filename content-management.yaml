@@ -122,7 +122,7 @@ paths:
                   description: The name of the new custom emoji.
                 aliases:
                   type: string
-                  description: The alias of the new custom emoji.
+                  description: The alias of the new custom emoji. You can enter more than one alias as comma-separated values.
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
@@ -348,7 +348,7 @@ paths:
                   example: AG7DSB2H32YHS
                 aliases:
                   type: string
-                  description: The alias of the custom emoji.
+                  description: The alias of the custom emoji. You can enter more than one alias as comma-separated values.
                   example: emoji-alias
       responses:
         '200':
