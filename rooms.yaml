@@ -14192,24 +14192,8 @@ paths:
                     error: error-not-authorized
       operationId: post-abac-rooms-rid-attributes
       parameters:
-        - schema:
-            type: string
-          in: header
-          name: x-auth-token
-          description: Authentication token for the user
-          required: true
-        - schema:
-            type: string
-          in: header
-          name: x-user-id
-          description: User ID of the authenticated user
-          required: true
-        - schema:
-            type: string
-          in: header
-          name: Content-Type
-          required: true
-          description: Must be application/json
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
       description: |
         - Replaces the full ABAC attribute set for a room.
         - Sets the complete set of ABAC attributes on the specified room by providing an attributes object that maps attribute keys to arrays of allowed values; any previously assigned attributes not included in the request are removed.
@@ -14297,24 +14281,8 @@ paths:
                     error: error-not-authorized
       operationId: delete-abac-rooms-rid-attributes
       parameters:
-        - schema:
-            type: string
-          in: header
-          name: X-auth-token
-          description: Authentication token for the user
-          required: true
-        - schema:
-            type: string
-          in: header
-          name: X-user-id
-          description: User ID of the authenticated user
-          required: true
-        - schema:
-            type: string
-          in: header
-          name: Content-Type
-          description: Must be application/json
-          required: true
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
       description: |
         - Clears all ABAC attributes from a room.
         - Removes every ABAC attribute key and value currently assigned to the specified room, leaving it with no ABAC attributes configured.
@@ -14408,24 +14376,8 @@ paths:
         - Adds a single ABAC attribute key to a room.
         - Creates a new ABAC attribute on the specified room for the given key, assigning it the provided values array; fails if the room already has this key or if the key/values are not allowed by the global attribute definition.
       parameters:
-        - schema:
-            type: string
-          in: header
-          name: X-Auth-Token
-          required: true
-          description: Authentication token for the user
-        - schema:
-            type: string
-          in: header
-          name: X-User-Id
-          required: true
-          description: User ID of the authenticated user
-        - schema:
-            type: string
-          in: header
-          name: Content-Type
-          required: true
-          description: Must be application/json
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
       requestBody:
         content:
           application/json:
@@ -14530,24 +14482,8 @@ paths:
         - Sets the values of a single ABAC attribute on a room.
         - Replaces the existing values for the given attribute key on the specified room with the provided values array (or creates the attribute if it does not yet exist), enforcing the global attribute definition and ABAC validation rules.
       parameters:
-        - schema:
-            type: string
-          in: header
-          name: X-Auth-Token
-          description: Authentication token for the user
-          required: true
-        - schema:
-            type: string
-          in: header
-          name: X-User-Id
-          description: User ID of the authenticated user
-          required: true
-        - schema:
-            type: string
-          in: header
-          name: Content-Type
-          description: Must be application/json
-          required: true
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
       requestBody:
         content:
           application/json:
@@ -14641,24 +14577,8 @@ paths:
         - Removes a single ABAC attribute key from a room.
         - Deletes the specified attribute key and all its values from the room's ABAC configuration, leaving other attributes unchanged.
       parameters:
-        - schema:
-            type: string
-          in: header
-          required: true
-          name: X-Auth-Token
-          description: Authentication token for the user
-        - schema:
-            type: string
-          in: header
-          required: true
-          name: X-User-Id
-          description: User ID of the authenticated user
-        - schema:
-            type: string
-          in: header
-          required: true
-          name: Content-Type
-          description: Must be application/json
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
   /api/v1/abac/attributes:
     get:
       summary: List ABAC attribute definitions
@@ -14767,24 +14687,6 @@ paths:
         - Supports optional filtering by attribute key or value, and pagination via offset and count query parameters.
       parameters:
         - schema:
-            type: string
-          in: header
-          name: X-Auth-Token
-          description: Authentication token for the user
-          required: true
-        - schema:
-            type: string
-          in: header
-          name: X-User-Id
-          description: User ID of the authenticated user
-          required: true
-        - schema:
-            type: string
-          in: header
-          name: Content-Type
-          description: Must be application/json
-          required: true
-        - schema:
             type: number
           in: query
           name: offset
@@ -14804,6 +14706,8 @@ paths:
           in: query
           name: values
           description: Filter attribute definitions by values (case-insensitive match)
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
     post:
       summary: Create ABAC attribute definition
       tags:
@@ -14887,24 +14791,8 @@ paths:
         - Creates a new ABAC attribute definition.
         - Registers a global ABAC attribute by specifying its key and the list of allowed values, making it available for use on rooms and users.
       parameters:
-        - schema:
-            type: string
-          in: header
-          name: X-Auth-Token
-          required: true
-          description: Authentication token for the user
-        - schema:
-            type: string
-          in: header
-          name: X-User-Id
-          required: true
-          description: User ID of the authenticated user
-        - schema:
-            type: string
-          in: header
-          name: Content-Type
-          required: true
-          description: Must be application/json
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
       requestBody:
         content:
           application/json:
@@ -15006,24 +14894,8 @@ paths:
         - Users can be identified by usernames, ids, emails, or ldapIds. 
         - Requires LDAP Enterprise license and ABAC to be enabled.
       parameters:
-        - schema:
-            type: string
-          in: header
-          name: X-Auth-Token
-          description: Authentication token for the user
-          required: true
-        - schema:
-            type: string
-          in: header
-          name: X-User-Id
-          description: User ID of the authenticated user
-          required: true
-        - schema:
-            type: string
-          in: header
-          name: Content-Type
-          description: Must be application/json
-          required: true
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
       requestBody:
         description: |-
           At least one of these properties is required:
@@ -15152,24 +15024,8 @@ paths:
         - Updates an existing ABAC attribute definition.
         - Modifies the attribute identified by _id, allowing you to rename its key, change its list of allowed values, or both, subject to in‑use and validation checks.
       parameters:
-        - schema:
-            type: string
-          in: header
-          required: true
-          name: X-Auth-Token
-          description: Authentication token for the user
-        - schema:
-            type: string
-          in: header
-          required: true
-          name: X-User-Id
-          description: User ID of the authenticated user
-        - schema:
-            type: string
-          in: header
-          required: true
-          name: Content-Type
-          description: Must be application/json
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
       requestBody:
         content:
           application/json:
@@ -15274,23 +15130,8 @@ paths:
         - Retrieves a single ABAC attribute definition by ID.
         - Returns the attribute key and its allowed values for the definition identified by _id.
       parameters:
-        - schema:
-            type: string
-          in: header
-          name: X-Auth-Token
-          required: true
-          description: Authentication token for the user
-        - schema:
-            type: string
-          in: header
-          name: X-User-Id
-          description: User ID of the authenticated user
-          required: true
-        - schema:
-            type: string
-          in: header
-          name: Content-Type
-          description: Must be application/json
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
     delete:
       summary: Delete ABAC attribute definition by ID
       tags:
@@ -15370,23 +15211,8 @@ paths:
         - Deletes an ABAC attribute definition by ID.
         - Removes the attribute definition identified by _id; the delete will fail if the attribute is currently in use (e.g., assigned to any room).
       parameters:
-        - schema:
-            type: string
-          in: header
-          name: X-Auth-Token
-          description: Authentication token for the user
-          required: true
-        - schema:
-            type: string
-          in: header
-          name: X-User-Id
-          description: User ID of the authenticated user
-          required: true
-        - schema:
-            type: string
-          in: header
-          name: Content-Type
-          description: Must be application/json
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
     parameters: []
   '/api/v1/abac/attributes/:key/is-in-use':
     get:
@@ -15458,23 +15284,8 @@ paths:
       description: |
         - Check whether an ABAC attribute definition is currently used by any room.
       parameters:
-        - schema:
-            type: string
-          in: header
-          name: X-Auth-Token
-          description: Authentication token for the user
-          required: true
-        - schema:
-            type: string
-          in: header
-          name: X-User-Id
-          description: User ID of the authenticated user
-          required: true
-        - schema:
-            type: string
-          in: header
-          name: Content-Type
-          description: Must be application/json
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
     parameters: []
   /api/v1/abac/rooms:
     get:
@@ -15616,23 +15427,6 @@ paths:
         - Returns a paginated list of rooms that have ABAC attributes configured, with optional filtering by room name, attribute key, or attribute value using the filter and filterType query parameters.
       parameters:
         - schema:
-            type: string
-          in: header
-          name: X-Auth-Token
-          description: Authentication token for the user
-          required: true
-        - schema:
-            type: string
-          in: header
-          name: X-User-Id
-          description: User ID of the authenticated user
-          required: true
-        - schema:
-            type: string
-          in: header
-          name: Content-Type
-          description: Must be application/json
-        - schema:
             type: number
           in: query
           name: offset
@@ -15652,6 +15446,8 @@ paths:
           in: query
           name: filterType
           description: 'One of: all, roomName, attribute, value'
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
     parameters: []
   /api/v1/abac/audit:
     get:
@@ -15796,23 +15592,6 @@ paths:
       parameters:
         - schema:
             type: string
-          in: header
-          name: X-Auth-Token
-          required: true
-          description: Authentication token for the user
-        - schema:
-            type: string
-          in: header
-          name: X-User-Id
-          required: true
-          description: User ID of the authenticated user
-        - schema:
-            type: string
-          in: header
-          name: Content-Type
-          description: Must be application/json
-        - schema:
-            type: string
           in: query
           name: start
           description: start of time range (defaults to epoch if omitted)
@@ -15841,6 +15620,8 @@ paths:
           in: query
           name: sort
           description: 'Sorting, typically { "ts": -1 } or { "ts": 1 }'
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
     parameters: []
 
 tags:
