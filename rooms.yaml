@@ -14144,6 +14144,1485 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
+  '/api/v1/abac/rooms/:rid/attributes':
+    post:
+      summary: Replace room ABAC attributes
+      tags:
+        - ABAC
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Attribute definition missing:
+                  value:
+                    success: false
+                    error: error-attribute-definition-not-found
+                Invalid attribute values:
+                  value:
+                    success: false
+                    error: error-invalid-attribute-values
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                'No "abac-management" ':
+                  value:
+                    success: false
+                    error: error-not-authorized
+      operationId: post-abac-rooms-rid-attributes
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      description: |
+        - Replaces the full ABAC attribute set for a room.
+        - Sets the complete set of ABAC attributes on the specified room by providing an attributes object that maps attribute keys to arrays of allowed values; any previously assigned attributes not included in the request are removed.
+        - Requires the Enterprise ABAC license, the abac-management permission, and global setting ABAC_Enabled to be enabled. 
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            examples:
+              Example 1:
+                value:
+                  attributes:
+                    department:
+                      - it
+                      - sales
+                    region:
+                      - asia
+                      - europa
+    delete:
+      summary: Delete all ABAC attributes
+      tags:
+        - ABAC
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Room not found:
+                  value:
+                    success: false
+                    error: error-room-not-found
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Unauthorized login attempt:
+                  value:
+                    success: false
+                    error: error-unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                'No "abac-management" ':
+                  value:
+                    success: false
+                    error: error-not-authorized
+      operationId: delete-abac-rooms-rid-attributes
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      description: |
+        - Clears all ABAC attributes from a room.
+        - Removes every ABAC attribute key and value currently assigned to the specified room, leaving it with no ABAC attributes configured.
+        - Requires the Enterprise ABAC license, the abac-management permission, and global setting ABAC_Enabled to be enabled. 
+    parameters: []
+  '/api/v1/abac/rooms/:rid/attributes/:key':
+    post:
+      summary: Add ABAC attribute key to room
+      tags:
+        - ABAC
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Attribute definition missing:
+                  value:
+                    success: false
+                    error: error-attribute-definition-not-found
+                Invalid attribute values:
+                  value:
+                    success: false
+                    error: error-invalid-attribute-values
+                Duplicate key on a room:
+                  value:
+                    success: false
+                    error: error-duplicate-attribute-key
+                Cannot convert default room to ABAC:
+                  value:
+                    success: false
+                    error: error-cannot-convert-default-room-to-abac
+                Room not found:
+                  value:
+                    success: false
+                    error: error-room-not-found
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Unauthorized login attempt:
+                  value:
+                    success: false
+                    error: error-unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                'No "abac-management" ':
+                  value:
+                    success: false
+                    error: error-not-authorized
+      operationId: post-abac-rooms-rid-attributes-key
+      description: |-
+        - Adds a single ABAC attribute key to a room.
+        - Creates a new ABAC attribute on the specified room for the given key, assigning it the provided values array; fails if the room already has this key or if the key/values are not allowed by the global attribute definition.
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                values:
+                  type: array
+                  items:
+                    type: string
+            examples:
+              Example 1:
+                value:
+                  values:
+                    - asia
+        description: |-
+          - Values (array of strings, required): The attribute values to assign for this key. 
+          - Must have at least 1 item, max 10 items, and all values must be unique.
+    parameters: []
+    put:
+      summary: Set room ABAC attribute values
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Attribute definition missing:
+                  value:
+                    success: false
+                    error: error-attribute-definition-not-found
+                Invalid attribute values:
+                  value:
+                    success: false
+                    error: error-invalid-attribute-values
+                Room not found:
+                  value:
+                    success: false
+                    error: error-room-not-found
+                Cannot convert default room to ABAC:
+                  value:
+                    success: false
+                    error: error-cannot-convert-default-room-to-abac
+                ABAC not enabled:
+                  value:
+                    success: false
+                    error: error-abac-not-enabled
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Unauthorized login attempt:
+                  value:
+                    success: false
+                    error: error-unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                'No "abac-management" ':
+                  value:
+                    success: false
+                    error: error-not-authorized
+      operationId: put-abac-rooms-rid-attributes-key
+      description: |-
+        - Sets the values of a single ABAC attribute on a room.
+        - Replaces the existing values for the given attribute key on the specified room with the provided values array (or creates the attribute if it does not yet exist), enforcing the global attribute definition and ABAC validation rules.
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                values:
+                  type: array
+                  items:
+                    type: string
+            examples:
+              Example 1:
+                value:
+                  values:
+                    - eng
+                    - sales
+                    - hr
+        description: |-
+          - Values (array of strings, required): The attribute values to assign for this key. 
+          - Must have at least 1 item, max 10 items, and all values must be unique.
+      tags:
+        - ABAC
+    delete:
+      summary: Delete room ABAC attribute key
+      tags:
+        - ABAC
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Room not found:
+                  value:
+                    success: false
+                    error: error-room-not-found
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Unauthorized login attempt:
+                  value:
+                    success: false
+                    error: error-unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                'No "abac-management" ':
+                  value:
+                    success: false
+                    error: error-not-authorized
+      operationId: delete-abac-rooms-rid-attributes-key
+      description: |-
+        - Removes a single ABAC attribute key from a room.
+        - Deletes the specified attribute key and all its values from the room's ABAC configuration, leaving other attributes unchanged.
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+  /api/v1/abac/attributes:
+    get:
+      summary: List ABAC attribute definitions
+      tags:
+        - ABAC
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  attributes:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        key:
+                          type: string
+                        values:
+                          type: array
+                          items:
+                            type: string
+                  offset:
+                    type: integer
+                  count:
+                    type: integer
+                  total:
+                    type: integer
+              examples:
+                Success:
+                  value:
+                    success: true
+                    attributes:
+                      - _id: 69778264070f6083845051e6
+                        key: departmentNumber
+                        values:
+                          - department
+                      - _id: 697ca091070f60838450580d
+                        key: my_department
+                        values:
+                          - eng
+                          - sales
+                          - hr
+                          - it
+                    offset: 0
+                    count: 25
+                    total: 5
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Invalid query:
+                  value:
+                    success: false
+                    error: error-invalid-query-parameters
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Unauthorized login attempt:
+                  value:
+                    success: false
+                    error: error-unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                'No "abac-management" ':
+                  value:
+                    success: false
+                    error: error-not-authorized
+      operationId: get-abac-attributes
+      description: |-
+        - Lists all ABAC attribute definitions.
+        - Returns a paginated list of attribute definitions (key and allowed values). 
+        - Supports optional filtering by attribute key or value, and pagination via offset and count query parameters.
+      parameters:
+        - schema:
+            type: number
+          in: query
+          name: offset
+          description: 'Pagination offset (default: 0)'
+        - schema:
+            type: number
+          in: query
+          name: count
+          description: 'Number of items per page (default: 25)'
+        - schema:
+            type: string
+          in: query
+          name: key
+          description: Filter attribute definitions by key (case-insensitive match)
+        - schema:
+            type: string
+          in: query
+          name: values
+          description: Filter attribute definitions by values (case-insensitive match)
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+    post:
+      summary: Create ABAC attribute definition
+      tags:
+        - ABAC
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                ABAC disabled:
+                  value:
+                    success: false
+                    error: error-abac-not-enabled
+                Invalid attribute values:
+                  value:
+                    success: false
+                    error: error-invalid-attribute-values
+                Invalid attribute key:
+                  value:
+                    success: false
+                    error: error-invalid-attribute-key
+                Duplicate attribute key:
+                  value:
+                    success: false
+                    error: error-duplicate-attribute-key
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Unauthorized login attempt:
+                  value:
+                    success: false
+                    error: error-unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                'No "abac-management" ':
+                  value:
+                    success: false
+                    error: error-not-authorized
+      operationId: post-abac-attributes
+      description: |-
+        - Creates a new ABAC attribute definition.
+        - Registers a global ABAC attribute by specifying its key and the list of allowed values, making it available for use on rooms and users.
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                key:
+                  type: string
+                values:
+                  type: array
+                  items:
+                    type: string
+            examples:
+              Example 1:
+                value:
+                  key: my_department
+                  values:
+                    - eng
+                    - sales
+                    - hr
+                    - it
+    parameters: []
+  /api/v1/abac/users/sync:
+    post:
+      summary: Sync users ABAC attributes from LDAP
+      tags:
+        - ABAC
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    success: true
+        '400':
+          description: Bad Request
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                ABAC disabled:
+                  value:
+                    success: false
+                    error: error-abac-not-enabled
+                Invalid body (schema validation):
+                  value:
+                    success: false
+                    error: error-invalid-body-params
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Unauthorized login attempt:
+                  value:
+                    success: false
+                    error: error-unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                'No "abac-management" ':
+                  value:
+                    success: false
+                    error: error-not-authorized
+      operationId: post-abac-users-sync
+      description: |-
+        - Syncs ABAC attributes for specified users from LDAP.
+        - Refreshes user ABAC attributes by reading current data from LDAP and applying the configured LDAP → ABAC attribute mapping. 
+        - Users can be identified by usernames, ids, emails, or ldapIds. 
+        - Requires LDAP Enterprise license and ABAC to be enabled.
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        description: |-
+          At least one of these properties is required:
+          - usernames (string[]) — Array of Rocket.Chat usernames (1–100 items, unique)
+          - ids (string[]) — Array of Rocket.Chat user IDs (1–100 items, unique)
+          - emails (string[]) — Array of email addresses (1–100 items, unique)
+          - ldapIds (string[]) — Array of LDAP IDs (1–100 items, unique)
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                usernames:
+                  type: array
+                  items:
+                    type: string
+                ids:
+                  type: array
+                  items:
+                    type: string
+                emails:
+                  type: array
+                  items:
+                    type: string
+                ldapIds:
+                  type: array
+                  items:
+                    type: string
+            examples:
+              Example 1:
+                value:
+                  usernames:
+                    - alice
+                  ids:
+                    - userId1
+                  emails:
+                    - bob@example.com
+                  ldapIds:
+                    - ldapId123
+    parameters: []
+  '/api/v1/abac/attributes/:_id':
+    put:
+      summary: Update ABAC attribute definition
+      tags:
+        - ABAC
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                ABAC disabled:
+                  value:
+                    success: false
+                    error: error-abac-not-enabled
+                Attribute not found:
+                  value:
+                    success: false
+                    error: error-attribute-not-found
+                Attribute in use (cannot rename key / cannot remove used values):
+                  value:
+                    success: false
+                    error: error-attribute-in-use
+                Invalid values (e.g. empty values):
+                  value:
+                    success: false
+                    error: error-invalid-attribute-values
+                Duplicate attribute key (renaming to an existing key):
+                  value:
+                    success: false
+                    error: error-duplicate-attribute-key
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Unauthorized login attempt:
+                  value:
+                    success: false
+                    error: error-unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                'No "abac-management" ':
+                  value:
+                    success: false
+                    error: error-not-authorized
+      operationId: 'put-abac-attributes-:_id'
+      description: |-
+        - Updates an existing ABAC attribute definition.
+        - Modifies the attribute identified by _id, allowing you to rename its key, change its list of allowed values, or both, subject to in‑use and validation checks.
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              x-examples:
+                Example 1:
+                  key: my_department
+                  values:
+                    - eng
+                    - sales
+              required:
+                - key
+                - values
+              properties:
+                key:
+                  type: string
+                values:
+                  type: array
+                  items:
+                    type: string
+    get:
+      summary: Get ABAC attribute definition by ID
+      tags:
+        - ABAC
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  key:
+                    type: string
+                  values:
+                    type: array
+                    items:
+                      type: string
+              examples:
+                Success:
+                  value:
+                    success: true
+                    key: my_department
+                    values:
+                      - eng
+                      - sales
+                      - hr
+                      - it
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Attribute not found:
+                  value:
+                    success: false
+                    error: error-attribute-not-found
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Unauthorized login attempt:
+                  value:
+                    success: false
+                    error: error-unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                'No "abac-management" ':
+                  value:
+                    success: false
+                    error: error-not-authorized
+      operationId: 'get-abac-attributes-:_id'
+      description: |-
+        - Retrieves a single ABAC attribute definition by ID.
+        - Returns the attribute key and its allowed values for the definition identified by _id.
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+    delete:
+      summary: Delete ABAC attribute definition by ID
+      tags:
+        - ABAC
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Attribute not found:
+                  value:
+                    success: false
+                    error: error-attribute-not-found
+                Attribute in use:
+                  value:
+                    success: false
+                    error: error-attribute-in-use
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Unauthorized login attempt:
+                  value:
+                    success: false
+                    error: error-unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                x-examples:
+                  Example 1:
+                    success: false
+                    error: error-not-authorized
+              examples:
+                'No "abac-management" ':
+                  value:
+                    success: false
+                    error: error-not-authorized
+      operationId: 'delete-abac-attributes-:_id'
+      description: |-
+        - Deletes an ABAC attribute definition by ID.
+        - Removes the attribute definition identified by _id; the delete will fail if the attribute is currently in use (e.g., assigned to any room).
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+    parameters: []
+  '/api/v1/abac/attributes/:key/is-in-use':
+    get:
+      summary: Check if ABAC attribute is in use
+      tags:
+        - ABAC
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  inUse:
+                    type: boolean
+                x-examples:
+                  Example 1:
+                    success: true
+                    inUse: true
+              examples:
+                Success:
+                  value:
+                    success: true
+                    inUse: true
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                x-examples:
+                  Example 1:
+                    success: false
+                    error: error-unauthorized
+              examples:
+                Unauthorized login attempt:
+                  value:
+                    success: false
+                    error: error-unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                x-examples:
+                  Example 1:
+                    success: false
+                    error: error-not-authorized
+              examples:
+                'No "abac-management" ':
+                  value:
+                    success: false
+                    error: error-not-authorized
+      operationId: 'get-abac-attributes-:key-is-in-use'
+      description: |
+        - Check whether an ABAC attribute definition is currently used by any room.
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+    parameters: []
+  /api/v1/abac/rooms:
+    get:
+      summary: List rooms with ABAC attributes
+      tags:
+        - ABAC
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  rooms:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        t:
+                          type: string
+                        abacAttributes:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              key:
+                                type: string
+                              values:
+                                type: array
+                                items:
+                                  type: string
+                  offset:
+                    type: integer
+                  count:
+                    type: integer
+                  total:
+                    type: integer
+                x-examples:
+                  Example 1:
+                    success: true
+                    rooms:
+                      - _id: ROOM_ID
+                        name: private-room
+                        t: p
+                        abacAttributes:
+                          - key: my_department
+                            values:
+                              - eng
+                              - sales
+                    offset: 0
+                    count: 25
+                    total: 1
+              examples:
+                Success:
+                  value:
+                    success: true
+                    rooms:
+                      - _id: ROOM_ID
+                        name: private-room
+                        t: p
+                        abacAttributes:
+                          - key: my_department
+                            values:
+                              - eng
+                              - sales
+                    offset: 0
+                    count: 25
+                    total: 1
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                x-examples:
+                  Example 1:
+                    success: false
+                    error: error-invalid-query-parameters
+              examples:
+                Invalid query:
+                  value:
+                    success: false
+                    error: error-invalid-query-parameters
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                x-examples:
+                  Example 1:
+                    success: false
+                    error: error-unauthorized
+              examples:
+                Unauthorized login attempt:
+                  value:
+                    success: false
+                    error: error-unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                x-examples:
+                  Example 1:
+                    success: false
+                    error: error-not-authorized
+              examples:
+                'No "abac-management" ':
+                  value:
+                    success: false
+                    error: error-not-authorized
+      operationId: get-abac-rooms
+      description: |-
+        - Lists rooms with ABAC attributes.
+        - Returns a paginated list of rooms that have ABAC attributes configured, with optional filtering by room name, attribute key, or attribute value using the filter and filterType query parameters.
+      parameters:
+        - schema:
+            type: number
+          in: query
+          name: offset
+          description: Pagination offset (default 0)
+        - schema:
+            type: number
+          in: query
+          name: count
+          description: Page size (default 25)
+        - schema:
+            type: string
+          in: query
+          name: filter
+          description: Search text
+        - schema:
+            type: string
+          in: query
+          name: filterType
+          description: 'One of: all, roomName, attribute, value'
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+    parameters: []
+  /api/v1/abac/audit:
+    get:
+      summary: List ABAC audit events
+      tags:
+        - ABAC
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  events:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        t:
+                          type: string
+                        ts:
+                          type: string
+                        actor:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                            name:
+                              type: string
+                        data:
+                          type: object
+                          properties: {}
+                  offset:
+                    type: integer
+                  count:
+                    type: integer
+                  total:
+                    type: integer
+                x-examples:
+                  Example 1:
+                    success: true
+                    events:
+                      - _id: EVENT_ID
+                        t: abac.object.attribute.changed
+                        ts: '2026-01-30T12:34:56.789Z'
+                        actor:
+                          _id: USER_ID
+                          username: admin
+                          name: Admin
+                        data: {}
+                    offset: 0
+                    count: 25
+                    total: 1
+              examples:
+                Success:
+                  value:
+                    success: true
+                    events:
+                      - _id: EVENT_ID
+                        t: abac.object.attribute.changed
+                        ts: '2026-01-30T12:34:56.789Z'
+                        actor:
+                          _id: USER_ID
+                          username: admin
+                          name: Admin
+                        data: {}
+                    offset: 0
+                    count: 25
+                    total: 1
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                x-examples:
+                  Example 1:
+                    success: false
+                    error: error-invalid-query-parameters
+              examples:
+                Invalid query:
+                  value:
+                    success: false
+                    error: error-invalid-query-parameters
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                x-examples:
+                  Example 1:
+                    success: false
+                    error: error-unauthorized
+              examples:
+                Unauthorized login attempt:
+                  value:
+                    success: false
+                    error: error-unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                x-examples:
+                  Example 1:
+                    success: false
+                    error: error-not-authorized
+              examples:
+                'No "abac-management" ':
+                  value:
+                    success: false
+                    error: error-not-authorized
+      operationId: get-abac-audit
+      description: |-
+        - Lists ABAC audit events.
+        - Returns a paginated audit log of ABAC-related actions (attribute changes, room attribute changes/removals, and ABAC actions), filterable by time range (start, end) and optional actor, with optional sorting. 
+        - Requires ABAC and Auditing licenses.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: start
+          description: start of time range (defaults to epoch if omitted)
+        - schema:
+            type: string
+          in: query
+          name: end
+          description: end of time range (defaults to now if omitted)
+        - schema:
+            type: string
+          in: query
+          description: Filter by actor fields
+          name: actor
+        - schema:
+            type: number
+          in: query
+          name: offset
+          description: Pagination offset (default 0)
+        - schema:
+            type: number
+          in: query
+          name: count
+          description: Page size (default 25)
+        - schema:
+            type: string
+          in: query
+          name: sort
+          description: 'Sorting, typically { "ts": -1 } or { "ts": 1 }'
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+    parameters: []
 
 tags:
   - name: Channels
