@@ -1067,8 +1067,7 @@ paths:
           name: _id
           required: true
           description: ID of the custom sound
-      requestBody:
-        content: {}
+          example: 65462caea2f73c7460e18f83
 tags:
   - name: Assets
   - name: Custom Emoji
