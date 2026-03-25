@@ -5752,7 +5752,6 @@ paths:
               type: object
               required:
                 - file
-                - msg
               properties:
                 file:
                   type: string
