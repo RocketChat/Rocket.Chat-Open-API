@@ -2,14 +2,8 @@ openapi: 3.0.0
 info:
   version: 1.0.0
   title: Content Management
-#  description: |-
-#    The following endpoints are used to manage workspace resources:
-#    * **Assets**: Set and unset various [assets](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/assets) to customize your workspace.
-#    * **Custom Emoji**: Create and manage custom [emojis](https://docs.rocket.chat/use-rocket.chat/workspace-administration/emoji).
-#    * **Custom Sounds**: View custom [sounds](https://docs.rocket.chat/use-rocket.chat/workspace-administration/sounds).
-#    * **Custom User Status**: Create and manager custom [user status](https://docs.rocket.chat/use-rocket.chat/workspace-administration/user-status).
 servers:
-  - url: https://apiexplorer.support.rocket.chat
+  - url: 'https://apiexplorer.support.rocket.chat'
 paths:
   /api/v1/emoji-custom.all:
     get:
@@ -85,9 +79,7 @@ paths:
                     total: 1
                     success: true
         '401':
-          $ref: '#/components/responses/authorizationError'  
-<<<<<<< feat/openapi
-=======
+          $ref: '#/components/responses/authorizationError'
   /api/v1/emoji-custom.create:
     post:
       tags:
@@ -151,7 +143,6 @@ paths:
                     errorType: No file uploaded
         '401':
           $ref: '#/components/responses/authorizationError'  
->>>>>>> main
   /api/v1/emoji-custom.delete:
     post:
       tags:
@@ -210,7 +201,7 @@ paths:
                     details:
                       method: deleteEmojiCustom
         '401':
-          $ref: '#/components/responses/authorizationError' 
+          $ref: '#/components/responses/authorizationError'
   /api/v1/emoji-custom.list:
     get:
       tags:
@@ -236,16 +227,16 @@ paths:
           example: '2017-11-25T15:08:17.248Z'
         - name: _updatedAt
           in: query
-          description: ''  
+          description: ''
           schema:
             type: string
           example: '2024-11-02T06:40:43.751Z'
         - name: _id
           in: query
-          description: 'Filter list by custom emoji id.'  
+          description: Filter list by custom emoji id.
           schema:
             type: string
-          example: '6725ca0a101755229a8cb3bf'
+          example: 6725ca0a101755229a8cb3bf
       responses:
         '200':
           description: ''
@@ -311,7 +302,7 @@ paths:
                           _updatedAt: '2019-02-18T16:48:35.119Z'
                     success: true
         '401':
-          $ref: '#/components/responses/authorizationError'  
+          $ref: '#/components/responses/authorizationError'
   /api/v1/emoji-custom.update:
     post:
       tags:
@@ -381,7 +372,7 @@ paths:
                     error: '[Emoji not found.]'
                     errorType: Emoji not found.
         '401':
-          $ref: '#/components/responses/authorizationError'          
+          $ref: '#/components/responses/authorizationError'
   /api/v1/custom-sounds.list:
     get:
       tags:
@@ -404,8 +395,7 @@ paths:
         - $ref: '#/components/parameters/query'
         - name: name
           in: query
-          description: |-
-            Filter list by the name of the custom sound.
+          description: Filter list by the name of the custom sound.
           schema:
             type: string
           example: drill
@@ -413,9 +403,9 @@ paths:
           in: query
           name: sort
           description: |-
-           Sort the results in ascending (`1`) or descending (`-1`) order. The options are:
-            * `name`: Sort the results by name. For example, `sort={"name": 1}` (default) or `sort={"name": -1}`.
-            * `_id`: Sort by ID. For example, `sort={"_id": 1}` or `sort={"_id": -1}`.
+            Sort the results in ascending (`1`) or descending (`-1`) order. The options are:
+             * `name`: Sort the results by name. For example, `sort={"name": 1}` (default) or `sort={"name": -1}`.
+             * `_id`: Sort by ID. For example, `sort={"_id": 1}` or `sort={"_id": -1}`.
       responses:
         '200':
           description: OK
@@ -458,7 +448,89 @@ paths:
                     total: 1
                     success: true
         '401':
-          $ref: '#/components/responses/authorizationError'  
+          $ref: '#/components/responses/authorizationError'
+  /api/v1/custom-user-status.list:
+    get:
+      tags:
+        - Custom User Status
+      summary: List Custom User Status
+      description: |-
+        Lists all available custom user's status.
+
+        ### Changelog
+        | Version      | Description | 
+        | ---------------- | ------------|
+        |7.0.0           | Added `name` and `_id` query parameters for filtering.      |
+        |2.4.0            | Added       |
+      operationId: get-api-v1-custom-user-status.list
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - name: name
+          in: query
+          description: Filter list by the name of the custom status.
+          schema:
+            type: string
+          example: lunch
+        - name: _id
+          in: query
+          description: Filter list by the _id of the custom status.
+          schema:
+            type: string
+          example: 6731e2ce3b74d3c57d334d0f
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/offset'
+        - schema: {}
+          in: query
+          name: sort
+          description: |-
+            Sort the order of custom user status in ascending (`1`) or descending (`-1`) order. The options are:
+             * `name`: Sort by name. For example, `sort={"name": 1}` (default) or `sort={"name": -1}`.
+             * `statusType`: Sort by status type. For example, `sort={"statusType": 1}` or sort=`{"statusType": -1}`.
+             * You can also sort using both parameters. For example, `sort={"name": 1, "statusType": -1}`.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statuses:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        statusType:
+                          type: string
+                        _updatedAt:
+                          type: string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    statuses:
+                      - _id: 63f61be0b000b6b6d86704c8
+                        name: brb
+                        statusType: away
+                        _updatedAt: '2023-02-22T13:42:56.811Z'
+                    count: 1
+                    offset: 0
+                    total: 1
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/custom-user-status.create:
     post:
       tags:
@@ -705,7 +777,7 @@ paths:
                   error:
                     type: string
               examples:
-                User status Id is required::
+                'User status Id is required:':
                   value:
                     success: false
                     error: The "customUserStatusId" params is required!
@@ -739,27 +811,27 @@ paths:
               properties:
                 asset:
                   type: string
-                  description: 'Upload the file as form-data.'
+                  description: Upload the file as form-data.
                 assetName:
                   type: string
                   description: |-
-                   Type of asset to upload. The value can be one of the following:
-                   * `logo`
-                   * `background`
-                   * `favicon_ico`
-                   * `favicon`
-                   * `favicon_16`
-                   * `favicon_32`
-                   * `favicon_192`
-                   * `favicon_512`
-                   * `touchicon_180`
-                   * `touchicon_180_pre`
-                   * `tile_70`
-                   * `tile_144`
-                   * `tile_150`
-                   * `tile_310_square`
-                   * `tile_310_wide`
-                   * `safari_pinned`
+                    Type of asset to upload. The value can be one of the following:
+                    * `logo`
+                    * `background`
+                    * `favicon_ico`
+                    * `favicon`
+                    * `favicon_16`
+                    * `favicon_32`
+                    * `favicon_192`
+                    * `favicon_512`
+                    * `touchicon_180`
+                    * `touchicon_180_pre`
+                    * `tile_70`
+                    * `tile_144`
+                    * `tile_150`
+                    * `tile_310_square`
+                    * `tile_310_wide`
+                    * `safari_pinned`
                 refreshAllClients:
                   type: boolean
                   description: Set to true if all clients must be refreshed to immediately apply the changes.
@@ -788,7 +860,7 @@ paths:
                     error: '[No file uploaded]'
                     errorType: No file uploaded
         '401':
-          $ref: '#/components/responses/authorizationError' 
+          $ref: '#/components/responses/authorizationError'
   /api/v1/assets.unsetAsset:
     post:
       tags:
@@ -814,23 +886,23 @@ paths:
                 assetName:
                   type: string
                   description: |-
-                   Type of asset to remove. The value can be one of the following:
-                   * `logo`
-                   * `background`
-                   * `favicon_ico`
-                   * `favicon`
-                   * `favicon_16`
-                   * `favicon_32`
-                   * `favicon_192`
-                   * `favicon_512`
-                   * `touchicon_180`
-                   * `touchicon_180_pre`
-                   * `tile_70`
-                   * `tile_144`
-                   * `tile_150`
-                   * `tile_310_square`
-                   * `tile_310_wide`
-                   * `safari_pinned`
+                    Type of asset to remove. The value can be one of the following:
+                    * `logo`
+                    * `background`
+                    * `favicon_ico`
+                    * `favicon`
+                    * `favicon_16`
+                    * `favicon_32`
+                    * `favicon_192`
+                    * `favicon_512`
+                    * `touchicon_180`
+                    * `touchicon_180_pre`
+                    * `tile_70`
+                    * `tile_144`
+                    * `tile_150`
+                    * `tile_310_square`
+                    * `tile_310_wide`
+                    * `safari_pinned`
                 refreshAllClients:
                   type: boolean
                   description: Set to true if all clients must be refreshed to immediately apply the changes.
@@ -864,7 +936,114 @@ paths:
                     error: 'must have required property ''assetName'' [invalid-params]'
                     errorType: invalid-params
         '401':
-          $ref: '#/components/responses/authorizationError'            
+          $ref: '#/components/responses/authorizationError'
+  /api/v1/custom-sounds.getOne:
+    get:
+      summary: Get Custom Sound
+      tags:
+        - Custom Sounds
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  sound:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      name:
+                        type: string
+                      extension:
+                        type: string
+                      _updatedAt:
+                        type: string
+              examples:
+                Request succeeded; returns the sound metadata.:
+                  value:
+                    success: true
+                    sound:
+                      _id: 65462caea2f73c7460e18f83
+                      name: doremi
+                      extension: mp3
+                      _updatedAt: '2023-11-04T11:36:14.171Z'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Invalid or missing _id:
+                  value:
+                    success: false
+                    error: '[The required "_id" query param is missing.]'
+                    errorType: The required "_id" query param is missing.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Unauthorized login attempt:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                No permission:
+                  value:
+                    success: false
+                    error: 'User does not have the permissions required for this action [error-unauthorized]'
+      operationId: get-api-v1-custom-sounds.getOne
+      description: |-
+        - Returns one custom sound record for the workspace. You must pass the sound’s `_id` as a query parameter.
+
+        - Authentication is required. The response includes the sound’s metadata (`name`, `extension`, `_updatedAt`), not the binary file.
+
+        ### Changelog
+
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.3.0   | Added       |
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - schema:
+            type: string
+          in: query
+          name: _id
+          required: true
+          description: ID of the custom sound
+          example: 65462caea2f73c7460e18f83
 tags:
   - name: Assets
   - name: Custom Emoji
@@ -883,8 +1062,7 @@ components:
     count:
       name: count
       in: query
-      description: |-
-        The number of items to return. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.
+      description: 'The number of items to return. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
       required: false
       schema:
         type: integer

@@ -2736,6 +2736,7 @@ paths:
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/fields'
+        - $ref: '#/components/parameters/query'
       responses:
         '200':
           description: OK
