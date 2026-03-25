@@ -5757,10 +5757,7 @@ paths:
                 file:
                   type: string
                   format: binary
-                  description: The file to upload
-                msg:
-                  type: string
-                  description: The text to be added to the file message.
+                  description: The file to upload.
     parameters:
       - schema:
           type: string
