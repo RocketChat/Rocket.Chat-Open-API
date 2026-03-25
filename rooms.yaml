@@ -13844,6 +13844,54 @@ paths:
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                  description: Enter a file description.
+                  example: file description
+                emoji:
+                  type: string
+                  description: The emoji you enter will be displayed as the avatar when the message is sent.
+                  example: ':one:'
+                groupable:
+                  type: boolean
+                  description: Whether or not multiple messages can be grouped.
+                msg:
+                  type: string
+                  description: Enter a message to be sent with the file.
+                  example: hello world
+                tmid:
+                  type: string
+                  description: 'If you want to send the file to a thread, enter the thread ID here.'
+                  example: ZSnsznbWKqppnRny5
+                avatar:
+                  type: string
+                  description: Enter the avatar that will be displayed when the message is sent. You need the `message-impersonate` permission.
+                  example: 'https://picsum.photos/200'
+                alias:
+                  type: string
+                  description: Enter the alias that will be used instead of your username when sending the message. You need the `message-impersonate` permission.
+                  example: test user
+                customFields:
+                  type: string
+                  description: Enter custom fields if you have defined them in the <a href='https://docs.rocket.chat/docs/message' target='_blank'>Message</a> settings.
+                  example: '{\"priority\": \"low\"}'
+            examples:
+              Example 1:
+                value:
+                  alias: test
+                  avatar: 'https://picsum.photos/200'
+                  description: file upload description parameter
+                  groupable: false
+                  msg: file upload message parameter
+                  customFields: '{"priority": "low"}'
+                  emoji: ':one:'
+                  tmid: ZSnsznbWKqppnRny5
 
   /api/v1/uploads.delete:
     post:
