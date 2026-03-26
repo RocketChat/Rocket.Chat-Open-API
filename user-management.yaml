@@ -2001,9 +2001,9 @@ paths:
         - Users
       summary: Get User's Info
       description: |-
-        Retrieves information about a user. The result is limited only to what you have access to view.
-
-        From version `7.0.0`, this endpoint no longer supports the `fields` parameter, even when the `ALLOW_UNSAFE_QUERY_AND_FIELDS_API_PARAMS: true` environment variable is set. Instead, use the `includeUserRooms` parameter.
+        - Retrieves information about a user. The result is limited only to what you have access to view.
+        - This endpoint supports lookup by `userId`, `username`, or `importId`. Email-based lookup is not supported.
+        - From version `7.0.0`, this endpoint no longer supports the `fields` parameter, even when the `ALLOW_UNSAFE_QUERY_AND_FIELDS_API_PARAMS: true` environment variable is set. Instead, use the `includeUserRooms` parameter.
 
         ### Changelog
         | Version      | Description |
@@ -2020,23 +2020,26 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: userId
           in: query
-          description: 'The `userId` of the user. Alternatively, you can use the `username` parameter and value.'
+          description: 'The `userId` of the user. Alternatively, you can use `username` or `importId` to retrieve user information. Email-based lookup is not supported.'
           required: true
           schema:
             type: string
           example: W7NHuX5ri2e3mu2Fc
         - schema:
-            type: boolean
-            example: true
+            type: string
           in: query
-          name: includeUserRooms
-          description: Enter whether or not the rooms that the user is a member of are included in the response. To view the list of rooms, you need the `view-other-user-channels` permission.
+          name: username
+          description: 'The username of the user. Alternatively, you can use `userId` or `importId` to retrieve user information.'
         - schema:
             type: string
-            example: hXBuCLPDnsLgSJLiL
           in: query
           name: importId
-          description: 'You can use this parameter to search for users that were imported from external channels, such as Slack. You can also get the value of the import ID using this endpoint if you have the `view-full-other-user-info` permission.'
+          description: 'The username of the user. Alternatively, you can use `userId` or `username` to retrieve user information.'
+        - schema:
+            type: string
+          in: query
+          name: includeUserRooms
+          description: Whether to include the list of rooms the user is a member of.
       responses:
         '200':
           description: OK
@@ -2126,7 +2129,7 @@ paths:
                       statusText: ''
                       avatarETag: GFoEi6wv3uAxnzDcD
                       nickname: tesuser2
-                      freeSwitchExtension: "1234"
+                      freeSwitchExtension: '1234'
                       canViewAllInfo: true
                       rooms:
                         - _id: 651667dda2f73c7460e18cce
@@ -2184,7 +2187,7 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                Missing / invalid lookup:
                   value:
                     success: false
                     error: |-
@@ -2193,7 +2196,7 @@ paths:
                        must have required property 'importId'
                        must match a schema in anyOf [invalid-params]
                     errorType: invalid-params
-                Example 2:
+                User not found:
                   value:
                     success: false
                     error: User not found.
@@ -2205,7 +2208,10 @@ paths:
         - Users
       summary: Get Users List
       description: |-
-        Gets all of the users in the system and their information. The result is limited to what the request sender has permission to view. <br>
+        - Gets all of the users in the system and their information. The result is limited to what the request sender has permission to view.
+        - This endpoint supports filtering users using the `query` parameter. It can be used to locate a user record and retrieve the corresponding `userId` for use with the `users.info` endpoint.
+        - The `query` parameter is considered unsafe and is deprecated. Its support is expected to be removed in a future major version. There is currently no direct replacement for email-based user lookup.
+
         **Permissons required**:
         - `view-d-room`: Required to view direct messages
         - `view-full-other-user-info`: Required to view complete user information (e.g., account creation date, last login)
@@ -2228,11 +2234,7 @@ paths:
             type: string
           in: query
           name: sort
-          description: |-
-           Sort the users in ascending (`1`) or descending (`-1`) order. The value must be entered as a JSON string. The options are as follows:
-            * `status`: Sort by users' status. For example, `sort={"status":1}` (this maps to the `active` status).
-            * `createdAt`: Sort by the time of user creation. For example, `sort={"createdAt":-1}`
-            * `sort`: Sort by user name. For example, `sort={"name":1}`
+          description: 'Sort the users in ascending (`1`) or descending (`-1`) order. The value must be entered as a JSON string. The options are as follows: * `status`: Sort by users'' status. For example, `sort={"status":1}` (this maps to the `active` status). * `createdAt`: Sort by the time of user creation. For example, `sort={"createdAt":-1}` * `name`: Sort by user name. For example, `sort={"name":1}`'
       responses:
         '200':
           description: OK
@@ -3648,12 +3650,8 @@ paths:
                         properties:
                           action:
                             type: string
-                            x-stoplight:
-                              id: lz3claakkkr40
                           label:
                             type: string
-                            x-stoplight:
-                              id: mvk5kcn8m8kmc
                     notifyCalendarEvents:
                       type: boolean
                       description: 'If you are using Outlook Calendar in your workspace, you can enable or disable calendar event notifications using this parameter.'
