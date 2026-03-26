@@ -3650,12 +3650,8 @@ paths:
                         properties:
                           action:
                             type: string
-                            x-stoplight:
-                              id: lz3claakkkr40
                           label:
                             type: string
-                            x-stoplight:
-                              id: mvk5kcn8m8kmc
                     notifyCalendarEvents:
                       type: boolean
                       description: 'If you are using Outlook Calendar in your workspace, you can enable or disable calendar event notifications using this parameter.'
