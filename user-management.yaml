@@ -1,11 +1,15 @@
 openapi: 3.0.0
-x-stoplight:
-  id: 7n29jdz2nd395
 info:
   version: 1.0.0
   title: User Management
+#  description: |-
+#    User management in Rocket.Chat includes the following:
+#      * **Users**: Manage [users](https://docs.rocket.chat/use-rocket.chat/workspace-administration/users), preferences, and tokens.
+#      * **Permissions**: Manage user [permissions](https://docs.rocket.chat/use-rocket.chat/workspace-administration/permissions) and access.
+#      * **Roles**: Assign and manage user [roles](https://docs.rocket.chat/use-rocket.chat/workspace-administration/permissions#roles).
+#      * **LDAP**: Test and sync [LDAP](https://docs.rocket.chat/use-rocket.chat/authentication/ldap) connection.
 servers:
-  - url: 'https://apiexplorer.support.rocket.chat'
+  - url: https://apiexplorer.support.rocket.chat
 paths:
   /api/v1/permissions.listAll:
     get:
@@ -14,7 +18,7 @@ paths:
       summary: List All Permissions
       description: |-
         Returns the list of <a href='https://docs.rocket.chat/docs/permissions' target='_blank'>permissions</a> from the workspace.
-
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -76,8 +80,6 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
-      x-stoplight:
-        id: 8qojo451pcpb3
   /api/v1/permissions.update:
     post:
       summary: Update Permissions
@@ -109,7 +111,7 @@ paths:
                         type: array
                         items:
                           type: string
-                          description: 'For default Rocket.Chat roles, you can enter the role names such as `admin`, `user`, `owner`, etc. If you are updating the permissions for a custom role, enter the custom role ID instead of the role name. Use the <a href=''https://developer.rocket.chat/apidocs/get-roles'' target=''_blank''>Get Roles</a> endpoint to get the list of roles with IDs in your workspace.'
+                          description: For default Rocket.Chat roles, you can enter the role names such as `admin`, `user`, `owner`, etc. If you are updating the permissions for a custom role, enter the custom role ID instead of the role name. Use the <a href='https://developer.rocket.chat/apidocs/get-roles' target='_blank'>Get Roles</a> endpoint to get the list of roles with IDs in your workspace.
                           example: admin
               required:
                 - permissions
@@ -180,28 +182,26 @@ paths:
         - $ref: '#/components/parameters/Auth-Token'
       tags:
         - Permissions
-      x-stoplight:
-        id: bwot3sfeheywh
   /api/v1/roles.create:
     post:
       tags:
         - Roles
       summary: Create Role
       description: |-
-        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+       <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
 
-         Create a new <a href='https://docs.rocket.chat/docs/roles-in-rocketchat' target='_blank'>role</a> in the workspace. See <a href='https://docs.rocket.chat/v1/docs/custom-roles' target='_blank'>Custom Roles</a> for further information.
+        Create a new <a href='https://docs.rocket.chat/docs/roles-in-rocketchat' target='_blank'>role</a> in the workspace. See <a href='https://docs.rocket.chat/v1/docs/custom-roles' target='_blank'>Custom Roles</a> for further information.
 
-         * You can't create new roles with the same name as existing roles. For example, it is not possible to create a new role with the name `admin`.
-         * The scope can either be `Users`(user level) or `Subscriptions`(room level).
-         * Permission required: `access-permissions`
-         
-         ### Changelog
-         | Version      | Description |
-         | ---------------- | ------------|
-         |6.0.0            | Moved to Enterprise plan.       |
-         |3.15.0            | The endpoint is no longer used to update roles.       |
-         |0.70.0            | Added       |
+        * You can't create new roles with the same name as existing roles. For example, it is not possible to create a new role with the name `admin`.
+        * The scope can either be `Users`(user level) or `Subscriptions`(room level).
+        * Permission required: `access-permissions`
+        
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |6.0.0            | Moved to Enterprise plan.       |
+        |3.15.0            | The endpoint is no longer used to update roles.       |
+        |0.70.0            | Added       |
       operationId: post-api-v1-roles.create
       requestBody:
         content:
@@ -223,7 +223,9 @@ paths:
                   example: Role description
                 mandatory2fa:
                   type: boolean
-                  description: 'Whether the role should have a mandatory 2FA. The default value is `false`. If set to true, users assigned to this role are prompted to enter a 2FA code for certain activities.'
+                  description: >-
+                    Whether the role should have a mandatory 2FA. The default
+                    value is `false`. If set to true, users assigned to this role are prompted to enter a 2FA code for certain activities.
                   default: false
               required:
                 - name
@@ -290,25 +292,29 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'The role properties are invalid. [error-invalid-role-properties]'
+                    error: >-
+                      The role properties are invalid.
+                      [error-invalid-role-properties]
                     errorType: error-invalid-role-properties
                 Example 2:
                   value:
                     success: false
-                    error: 'Role name already exists [error-duplicate-role-names-not-allowed]'
+                    error: >-
+                      Role name already exists
+                      [error-duplicate-role-names-not-allowed]
                     errorType: error-duplicate-role-names-not-allowed
                 Example 3:
                   value:
                     success: false
-                    error: 'Accessing permissions is not allowed [error-action-not-allowed]'
+                    error: >-
+                      Accessing permissions is not allowed
+                      [error-action-not-allowed]
                     errorType: error-action-not-allowed
         '401':
           $ref: '#/components/responses/authorizationError'
       parameters:
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/Auth-Token'
-      x-stoplight:
-        id: 2kh4pikcf6haq
   /api/v1/roles.update:
     post:
       tags:
@@ -316,9 +322,9 @@ paths:
       summary: Update Role
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-
+        
         Update a role in the workspace. <br>
-
+        
         Permission required: `access-permissions`
                 
         ### Changelog
@@ -343,7 +349,9 @@ paths:
                 scope:
                   type: string
                   example: Subscriptions
-                  description: The updated  scope of the role. The scope can either be Users (user level) or Subscriptions (room level). The default value is `Users`.
+                  description: >-
+                    The updated  scope of the role. The scope can either be Users (user level) or Subscriptions (room level). The default value is
+                    `Users`.
                 description:
                   type: string
                   example: Role description
@@ -351,7 +359,9 @@ paths:
                 mandatory2fa:
                   type: boolean
                   default: false
-                  description: 'Whether the role should have a mandatory 2FA. The default value is `false`. If set to true, users assigned to this role are prompted to enter a 2FA code for certain activities.'
+                  description: >-
+                    Whether the role should have a mandatory 2FA. The default
+                    value is `false`. If set to true, users assigned to this role are prompted to enter a 2FA code for certain activities.
               required:
                 - roleId
                 - name
@@ -419,20 +429,22 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'The role properties are invalid. [error-invalid-role-properties]'
+                    error: >-
+                      The role properties are invalid.
+                      [error-invalid-role-properties]
                     errorType: error-invalid-role-properties
                 Example 2:
                   value:
                     success: false
-                    error: 'Accessing permissions is not allowed [error-action-not-allowed]'
+                    error: >-
+                      Accessing permissions is not allowed
+                      [error-action-not-allowed]
                     errorType: error-action-not-allowed
         '401':
           $ref: '#/components/responses/authorizationError'
       parameters:
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/Auth-Token'
-      x-stoplight:
-        id: lurcwe10z7xlj
   /api/v1/roles.addUserToRole:
     post:
       tags:
@@ -443,7 +455,7 @@ paths:
         **Permissions required**:
         - `access-permissions`: Required to modify permissions for various roles
         - `assign-admin-role`: Permission to assign the admin role to other users
-
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -469,7 +481,7 @@ paths:
                   example: test.fun
                 roomId:
                   type: string
-                  description: 'The ID of the room where the user should be assigned a role, if it is a room role.'
+                  description: The ID of the room where the user should be assigned a role, if it is a room role.
                   example: 4adb09baa5ad42
               required:
                 - roleName
@@ -536,12 +548,16 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''username'' [error-invalid-role-properties]'
+                    error: >-
+                      must have required property 'username'
+                      [error-invalid-role-properties]
                     errorType: error-invalid-role-properties
                 Example 2:
                   value:
                     success: false
-                    error: 'The required "userId" or "username" param provided does not match any users [error-invalid-user]'
+                    error: >-
+                      The required "userId" or "username" param provided does
+                      not match any users [error-invalid-user]
                     errorType: error-invalid-user
                 Example 3:
                   value:
@@ -552,8 +568,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/Auth-Token'
-      x-stoplight:
-        id: 9oey0lj5hpzbl
   /api/v1/roles.getUsersInRole:
     get:
       tags:
@@ -658,8 +672,6 @@ paths:
         | Version      | Description |
         | ---------------- | ------------|
         |1.3.0            | Added       |
-      x-stoplight:
-        id: o7dv09850g6nm
   /api/v1/roles.list:
     get:
       tags:
@@ -759,8 +771,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/Auth-Token'
-      x-stoplight:
-        id: dwtglwnee2b9o
   /api/v1/roles.sync:
     get:
       tags:
@@ -768,7 +778,7 @@ paths:
       summary: Get Updated Roles
       description: |-
         Gets all the roles in the workspace which are updated after a given date.
-
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -862,8 +872,6 @@ paths:
                     error: 'Match error: Missing key ''updatedSince'''
         '401':
           $ref: '#/components/responses/authorizationError'
-      x-stoplight:
-        id: 1f0py21dfba6y
   /api/v1/roles.delete:
     post:
       summary: Delete Role
@@ -889,12 +897,16 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'The role properties are invalid. [error-invalid-role-properties]'
+                    error: >-
+                      The role properties are invalid.
+                      [error-invalid-role-properties]
                     errorType: error-invalid-role-properties
                 Example 2:
                   value:
                     success: false
-                    error: 'Accessing permissions is not allowed [error-action-not-allowed]'
+                    error: >-
+                      Accessing permissions is not allowed
+                      [error-action-not-allowed]
                     errorType: error-action-not-allowed
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -906,7 +918,7 @@ paths:
         Permission required: `access-permissions`
         - Roles that have the protected value as true can't be deleted (such as: `admin`, `moderator`, `user` and so on).
         - You cannot delete roles that are assigned to users. To do that, you must first remove this role from all the users.
-
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -923,8 +935,6 @@ paths:
                   description: The ID of an existing role.
               required:
                 - roleId
-      x-stoplight:
-        id: 12btbvqemf88s
     parameters: []
   /api/v1/roles.removeUserFromRole:
     post:
@@ -951,12 +961,16 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'The role properties are invalid. [error-invalid-role-properties]'
+                    error: >-
+                      The role properties are invalid.
+                      [error-invalid-role-properties]
                     errorType: error-invalid-role-properties
                 Example 2:
                   value:
                     success: false
-                    error: 'Accessing permissions is not allowed [error-action-not-allowed]'
+                    error: >-
+                      Accessing permissions is not allowed
+                      [error-action-not-allowed]
                     errorType: error-action-not-allowed
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -964,7 +978,8 @@ paths:
       parameters:
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/Auth-Token'
-      description: 'Remove a role from a user. Permission required: `access-permissions`'
+      description: |-
+        Remove a role from a user. Permission required: `access-permissions`
       requestBody:
         content:
           application/json:
@@ -985,8 +1000,7 @@ paths:
               required:
                 - roleId
                 - username
-      x-stoplight:
-        id: r6u1z4lfcxqdm
+
   /api/v1/roles.getUsersInPublicRoles:
     get:
       summary: Get Users in Public Roles
@@ -1034,17 +1048,16 @@ paths:
           $ref: '#/components/responses/authorizationError'
       operationId: get-api-v1-roles.getUsersInPublicRoles
       description: |-
-        Use this endpoint to get the list of roles other than `user`, such as admin, livechat, and custom roles.
-
-        ### Changelog
-        | Version      | Description |
-        | ---------------- | ------------|
-        |7.10.0            | Added       |
+       Use this endpoint to get the list of roles other than `user`, such as admin, livechat, and custom roles.
+       
+       ### Changelog
+       | Version      | Description |
+       | ---------------- | ------------|
+       |7.10.0            | Added       |
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
-      x-stoplight:
-        id: qa3yrd0vhi45x
+    
   /api/v1/users.create:
     post:
       tags:
@@ -1260,8 +1273,6 @@ paths:
                       action: Adding_user
         '401':
           $ref: '#/components/responses/authorizationError'
-      x-stoplight:
-        id: jba3iax1d8zar
   /api/v1/users.register:
     post:
       tags:
@@ -1270,7 +1281,7 @@ paths:
       description: |-
         * An external member can use this endpoint to create an account on the workspace.
         * The number of requests you can make and the interval between each request depends on the workspace's rate limiter settings. You can find the settings from **Manage** > **Workspace** > **Settings** > **Rate Limiter** > **API Rate Limiter**.
-
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -1302,7 +1313,7 @@ paths:
                   example: Roger Smith
                 secretURL:
                   type: string
-                  description: 'You may have been provided with a secret URL. It includes a string appended to the registration URL. For example, `https://workspacedomain.com/register/my-secret-code`. For this parameter, enter the additional string at the end of the URL.'
+                  description: You may have been provided with a secret URL. It includes a string appended to the registration URL. For example, `https://workspacedomain.com/register/my-secret-code`. For this parameter, enter the additional string at the end of the URL.
                   example: Jjwjg6gouWLXhMGKW
               required:
                 - username
@@ -1367,8 +1378,6 @@ paths:
                     success: false
                     error: 'must have required property ''pass'' [invalid-params]'
                     errorType: invalid-params
-      x-stoplight:
-        id: 13m85y6oak9ya
     parameters: []
   /api/v1/users.update:
     post:
@@ -1395,7 +1404,9 @@ paths:
         - name: x-2fa-code
           in: header
           required: true
-          description: 'Enter the 2FA code. This parameter is required if 2FA is enabled in your workspace. See the <a href="https://developer.rocket.chat/apidocs/introduction-to-two-factor-authentication" target="_blank">Introduction to Two-Factor Authentication</a> document for details.'
+          description: >-
+            Enter the 2FA code. This parameter is required if 2FA is enabled in your workspace.
+            See the <a href="https://developer.rocket.chat/apidocs/introduction-to-two-factor-authentication" target="_blank">Introduction to Two-Factor Authentication</a> document for details.
           schema:
             type: string
           example: '148750'
@@ -1588,8 +1599,7 @@ paths:
                       action: Editing_user
         '401':
           $ref: '#/components/responses/authorizationError'
-      x-stoplight:
-        id: m0xn5xphegol7
+
   /api/v1/users.updateOwnBasicInfo:
     post:
       tags:
@@ -1621,7 +1631,8 @@ paths:
                   data:
                     email: test@test.com
                     newPassword: testbb
-                    currentPassword: aa856615052ee58e557a2945d53bc90a228915e7d7687ea250f3b4b1581d6e53
+                    currentPassword: >-
+                      aa856615052ee58e557a2945d53bc90a228915e7d7687ea250f3b4b1581d6e53
                     nickname: baby girl
                     bio: Auspicious baby
                     username: roxie
@@ -1632,7 +1643,8 @@ paths:
               properties:
                 data:
                   type: object
-                  description: 'An object of user data to be updated with the following parameters. If you enter an empty string, the user details are returned.'
+                  description: >-
+                    An object of user data to be updated with the following parameters. If you enter an empty string, the user details are returned.
                   properties:
                     email:
                       type: string
@@ -1645,7 +1657,8 @@ paths:
                     currentPassword:
                       type: string
                       description: The password for the user encrypted in SHA256.
-                      example: 5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5
+                      example: >-
+                        5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5
                     nickname:
                       type: string
                       example: cake
@@ -1665,7 +1678,9 @@ paths:
                     statusType:
                       type: string
                       example: offline
-                      description: 'The status type of the user. It can be `online`, `busy`, `away`, or `offline`.'
+                      description: >-
+                        The status type of the user. It can be `online`, `busy`,
+                        `away`, or `offline`.
                     statusText:
                       type: string
                       example: On a vacation
@@ -1870,7 +1885,8 @@ paths:
                       createdAt: '2023-02-20T13:42:07.119Z'
                       services:
                         password:
-                          bcrypt: $2b$10$E9ppW3T2itbMEcDvOdWBR.NXiW3YbifRHwBhjVkt26r1XS8yNhh6u
+                          bcrypt: >-
+                            $2b$10$E9ppW3T2itbMEcDvOdWBR.NXiW3YbifRHwBhjVkt26r1XS8yNhh6u
                         email2fa:
                           enabled: true
                           changedAt: '2023-02-20T13:42:07.118Z'
@@ -1892,9 +1908,12 @@ paths:
                         totp:
                           enabled: false
                         passwordHistory:
-                          - $2b$10$n1.FV8S2mxz7GzXA392V5OaDa5X0WR1DQ4eGGFKI/wpdhS9sVIC6S
-                          - $2b$10$4I68O5mlR.C8dRhtZ4Mj6us6EMwRHNIUqEWQe/nOhISs4e8RtOliW
-                          - $2b$10$AU9Ncfd8bO5TpE.5iLMjyujdd6RVJaoeKckVqo3MMO9Ngc3oyMAs2
+                          - >-
+                            $2b$10$n1.FV8S2mxz7GzXA392V5OaDa5X0WR1DQ4eGGFKI/wpdhS9sVIC6S
+                          - >-
+                            $2b$10$4I68O5mlR.C8dRhtZ4Mj6us6EMwRHNIUqEWQe/nOhISs4e8RtOliW
+                          - >-
+                            $2b$10$AU9Ncfd8bO5TpE.5iLMjyujdd6RVJaoeKckVqo3MMO9Ngc3oyMAs2
                       username: roxie
                       emails:
                         - address: test@test.com
@@ -1929,7 +1948,8 @@ paths:
                           text: New_version_available_(s)
                           textArguments:
                             - 6.0.0
-                          link: 'https://github.com/RocketChat/Rocket.Chat/releases/tag/6.0.0'
+                          link: >-
+                            https://github.com/RocketChat/Rocket.Chat/releases/tag/6.0.0
                           modifiers: []
                           read: true
                         versionUpdate-6_2_8:
@@ -1939,7 +1959,8 @@ paths:
                           text: New_version_available_(s)
                           textArguments:
                             - 6.2.8
-                          link: 'https://github.com/RocketChat/Rocket.Chat/releases/tag/6.2.8'
+                          link: >-
+                            https://github.com/RocketChat/Rocket.Chat/releases/tag/6.2.8
                           modifiers: []
                       statusDefault: offline
                       statusText: On a vacation
@@ -1973,8 +1994,7 @@ paths:
                     errorType: invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
-      x-stoplight:
-        id: o182ur9vkl09p
+
   /api/v1/users.info:
     get:
       tags:
@@ -2314,6 +2334,7 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
+
   /api/v1/users.setAvatar:
     post:
       summary: Set User Avatar
@@ -2341,7 +2362,7 @@ paths:
           $ref: '#/components/responses/authorizationError'
       description: |-
         Use this endpoint to change your or another user's avatar. You can change avatars only if the `AllowUserAvatarChange` setting under **Accounts** is enabled. To change another user's avatar, you need the permission: `edit-other-user-avatar`.
-
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -2363,7 +2384,10 @@ paths:
                   example: 'http://domain.tld/to/my/own/avatar.jpg'
                 userId:
                   type: string
-                  description: 'The ID or username of the user. If not provided, the avatar of the user who is sending the request is updated. Alternatively, you can enter the `username` parameter.'
+                  description: >-
+                    The ID or username of the user. If not provided, the avatar
+                    of the user who is sending the request is updated.
+                    Alternatively, you can enter the `username` parameter.
               required:
                 - avatarUrl
             examples:
@@ -2376,8 +2400,7 @@ paths:
             * Enter the image URL you want to set as the user avatar in the request body, using the parameter `avatarUrl`.
       tags:
         - Users
-      x-stoplight:
-        id: kmjhtsgshge9w
+
   /api/v1/users.getAvatar:
     get:
       summary: Get User Avatar
@@ -2387,10 +2410,10 @@ paths:
         '200':
           description: OK
           content:
-            image/svg+xml:
-              schema:
-                type: string
-                format: binary
+              image/svg+xml:
+                schema: 
+                  type: string
+                  format: binary
         '400':
           description: Bad Request
           content:
@@ -2408,7 +2431,9 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'The required "userId" or "username" param was not provided [error-user-param-not-provided]'
+                    error: >-
+                      The required "userId" or "username" param was not provided
+                      [error-user-param-not-provided]
                     errorType: error-user-param-not-provided
       operationId: get-api-v1-users.getAvatar
       parameters:
@@ -2423,13 +2448,11 @@ paths:
         - $ref: '#/components/parameters/Auth-Token'
       description: |-
         View a user's avatar.
-
+        
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
         |0.50.0        | Added       |
-      x-stoplight:
-        id: sgfnitsqorcap
   /api/v1/users.resetAvatar:
     post:
       summary: Reset Avatar
@@ -2454,7 +2477,9 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'The required "userId" or "username" param was not provided [error-user-param-not-provided]'
+                    error: >-
+                      The required "userId" or "username" param was not provided
+                      [error-user-param-not-provided]
                     errorType: error-user-param-not-provided
                 Example 2:
                   value:
@@ -2486,7 +2511,9 @@ paths:
               properties:
                 userId:
                   type: string
-                  description: 'The user ID. Alternatively, you can enter the `username` parameter.'
+                  description: >-
+                    The user ID. Alternatively, you can enter the `username`
+                    parameter.
                   example: BsNr28znDkG8aeo7W
               required:
                 - userId
@@ -2496,8 +2523,6 @@ paths:
                   userId: BsNr28znDkG8aeo7W
       tags:
         - Users
-      x-stoplight:
-        id: fnsrsunxt5hg2
   /api/v1/users.setStatus:
     post:
       summary: Set User Status
@@ -2547,12 +2572,14 @@ paths:
                   example: My status update
                 status:
                   type: string
-                  description: 'The user''s status like `online`, `away`, `busy`, or `offline`. At least one of the `message` or `status` parameters is required.'
+                  description: >-
+                    The user's status like `online`, `away`, `busy`, or
+                    `offline`. At least one of the `message` or `status` parameters is required.
                   example: online
                 userId:
                   type: string
                   example: zXuq7SvPKYbzYmfpo
-                  description: 'The user ID for which you want to set the status. You don''t need to add this if you are setting the status for yourself. Alternatively, you can use the `username` parameter and enter the username for which you want to set the status.'
+                  description: The user ID for which you want to set the status. You don't need to add this if you are setting the status for yourself. Alternatively, you can use the `username` parameter and enter the username for which you want to set the status.
               required:
                 - message
                 - status
@@ -2565,8 +2592,6 @@ paths:
                   username: bob
       tags:
         - Users
-      x-stoplight:
-        id: nwlp314snt6py
   /api/v1/users.getStatus:
     get:
       tags:
@@ -2574,7 +2599,7 @@ paths:
       summary: Get Status
       description: |-
         Gets a user's status in your workspace.
-
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -2583,7 +2608,10 @@ paths:
       parameters:
         - name: userId
           in: query
-          description: 'The `userId` of the user. Alternatively, you can use the `username` property and value. If the value is not provided, the authenticated user is used. '
+          description: >-
+            The `userId` of the user. Alternatively, you can use the `username`
+            property and value. If the value is not provided, the authenticated
+            user is used. 
           schema:
             type: string
           example: W7NHuX5ri2e3mu2Fc
@@ -2612,8 +2640,6 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
-      x-stoplight:
-        id: n2njooo0083xe
   /api/v1/users.setActiveStatus:
     post:
       summary: Set User's Status Active
@@ -2699,15 +2725,21 @@ paths:
                 confirmRelinquish:
                   type: boolean
                   default: false
-                  description: 'Allows the user to be deactivated even if it is the last owner of a room. If `activeStatus=false` & `confirmRelinquish=true` and the user is the last remaining owner of a room, the oldest member of that room will be chosen as the new owner.'
+                  description: >-
+                    Allows the user to be deactivated even if it is the last
+                    owner of a room. If `activeStatus=false` &
+                    `confirmRelinquish=true` and the user is the last remaining
+                    owner of a room, the oldest member of that room will be
+                    chosen as the new owner.
               required:
                 - activeStatus
                 - userId
-        description: 'If `activeStatus=false` & `confirmRelinquish=true` and the user is the last remaining owner of a room, the oldest member of that room will be chosen as the new owner.'
+        description: >-
+          If `activeStatus=false` & `confirmRelinquish=true` and the user is the
+          last remaining owner of a room, the oldest member of that room will be
+          chosen as the new owner.
       tags:
         - Users
-      x-stoplight:
-        id: wqavv6iuqpv3p
   /api/v1/users.deactivateIdle:
     post:
       summary: Deactivate Idle Users
@@ -2800,8 +2832,7 @@ paths:
                   role: user
       tags:
         - Users
-      x-stoplight:
-        id: 0rkm2su1oh84g
+
   /api/v1/users.getPresence:
     get:
       summary: Get Specific User's Presence
@@ -2833,20 +2864,20 @@ paths:
           example: BsNr28znDkG8aeo7W
           in: query
           name: userId
-          description: 'The user ID. Alternatively, you can enter the `username` parameter. If not provided, the user who sending the request is retrieved.'
+          description: >-
+            The user ID. Alternatively, you can enter the `username` parameter.
+            If not provided, the user who sending the request is retrieved.
       tags:
         - Users
       description: |-
         Get a user's presence in the workspace (offline, busy, active, or away).
-
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |0.49.0            | Updated to support `userId` or `username`       |
         |0.48.0            | Renamed to `users.getPresence`       |
         |0.35.0            | Added       |
-      x-stoplight:
-        id: n1knjhf3hbefb
   /api/v1/users.presence:
     get:
       summary: Get Users Presence
@@ -2908,7 +2939,11 @@ paths:
           example: '2019-05-22T12:11:45.392Z'
           in: query
           name: from
-          description: 'The last date when the status was changed. Format: ISO 8601 datetime. Timezone, milliseconds and seconds are optional. If you don''t pass `from` parameter, you''ll get a list of all users'' presence and the result will have a `full` field with value `true` .'
+          description: >-
+            The last date when the status was changed. Format: ISO 8601
+            datetime. Timezone, milliseconds and seconds are optional. If you
+            don't pass `from` parameter, you'll get a list of all users'
+            presence and the result will have a `full` field with value `true` .
         - schema:
             type: string
           example: J4sWseCgs8eEnWvhE
@@ -2918,15 +2953,13 @@ paths:
       description: |-
         Get presence of multiple workspace users. You can filter by date and user IDs.
         If the `Presence_broadcast_disabled` setting is true, the endpoint returns an empty array. You can find this setting under **Manage** > **Workspace** > **Settings** > **Troubleshoot**.
-
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |1.1.0            | Added       |
       tags:
         - Users
-      x-stoplight:
-        id: 1exmnnez3iw2h
   /api/v1/users.delete:
     post:
       tags:
@@ -2934,7 +2967,7 @@ paths:
       summary: Delete User
       description: |-
         Permanently deletes an existing user from your workspace. Permission required: `delete-user`
-
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -2955,10 +2988,14 @@ paths:
                 userId:
                   type: string
                   example: BsNr28znDkG8aeo7W
-                  description: 'The `userId` of the user. Alternatively, you can use the `username` property and value.'
+                  description: >-
+                    The `userId` of the user. Alternatively, you can use the
+                    `username` property and value.
                 confirmRelinquish:
                   type: boolean
-                  description: 'Deletes the user, even if they are the last owner of a room. By default, it is set to `false`.'
+                  description: >-
+                    Deletes the user, even if they are the last owner of a room. By
+                    default, it is set to `false`.
                   default: false
             examples:
               Example:
@@ -2976,7 +3013,7 @@ paths:
                   success:
                     type: boolean
                   deletedRooms:
-                    description: The rooms deleted as part of the user deletion process.
+                    description: "The rooms deleted as part of the user deletion process."
                     type: array
                     items:
                       type: object
@@ -2997,7 +3034,9 @@ paths:
                 Example:
                   value:
                     success: false
-                    error: 'The required "userId" or "username" param was not provided [error-user-param-not-provided]'
+                    error: >-
+                      The required "userId" or "username" param was not provided
+                      [error-user-param-not-provided]
                     errorType: error-user-param-not-provided
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -3017,8 +3056,6 @@ paths:
                   value:
                     success: false
                     error: unauthorized
-      x-stoplight:
-        id: lypgsdlaz7f1i
   /api/v1/users.deleteOwnAccount:
     post:
       tags:
@@ -3026,7 +3063,7 @@ paths:
       summary: Delete Own Account
       description: |-
         Deletes your own user account. Requires the `Allow Users to Delete Own Account` setting enabled. Access this setting from **Manage** > **Workspace** > **Settings** > **Accounts**.
-
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -3050,13 +3087,15 @@ paths:
                   example: 8f0e2f76e22b43e2855189877e7dc1e1e7d98c226c95db247cd1d547928334a9
                 confirmRelinquish:
                   type: boolean
-                  description: Deletes own account even if user is the last owner of a room.
+                  description: >-
+                    Deletes own account even if user is the last owner of a
+                    room.
                   default: false
             examples:
               Example 1:
                 value:
                   password: 8f0e2f76e22b43e2855189877e7dc1e1e7d98c226c95db247cd1d547928334a9
-                  confirmRelinquish: false
+                  confirmRelinquish: false                    
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
@@ -3078,14 +3117,13 @@ paths:
                     error: Body parameter "password" is required.
         '401':
           $ref: '#/components/responses/authorizationError'
-      x-stoplight:
-        id: hobsg72aud7uc
+
   /api/v1/users.createToken:
     post:
       tags:
         - Users
       summary: Create Users Token
-      description: |-
+      description: |-        
         As a workspace admin, you can create temporary authentication tokens for users. This is the same type of session authentication token a user gets via <a href="https://developer.rocket.chat/apidocs/login-with-username-and-password" target="_blank">login</a> and expires the same way.
         * To use this endpoint, you must set a secret with the `CREATE_TOKENS_FOR_USERS_SECRET` <a href="https://docs.rocket.chat/docs/deployment-environment-variables" target="_blank">environment variable</a> in your deployment configuration. This secret will be used to authorize all requests made to this endpoint.
         * For SaaS workspaces, <a href="https://desk.rocket.chat/portal/en/signin" target="_blank">contact</a> support to set this variable.
@@ -3108,14 +3146,16 @@ paths:
             schema:
               type: object
               properties:
-                userId:
-                  type: string
-                  description: The ID of the user you want to generate a token for.
-                  example: BsNr28znDkG8aeo7W
-                secret:
-                  type: string
-                  description: 'The secret defined in the `CREATE_TOKENS_FOR_USERS_SECRET` <a href="https://docs.rocket.chat/docs/deployment-environment-variables" target="_blank">environment variable</a>. Without the valid secret, you can''t access this endpoint.'
-                  example: pass123
+                    userId:
+                      type: string
+                      description: |-
+                        The ID of the user you want to generate a token for.
+                      example: BsNr28znDkG8aeo7W
+                    secret:
+                      type: string
+                      description: |-
+                        The secret defined in the `CREATE_TOKENS_FOR_USERS_SECRET` <a href="https://docs.rocket.chat/docs/deployment-environment-variables" target="_blank">environment variable</a>. Without the valid secret, you can't access this endpoint.
+                      example: pass123
               required:
                 - userId
                 - secret
@@ -3165,7 +3205,9 @@ paths:
                 Invalid user:
                   value:
                     success: false
-                    error: 'The required "userId" or "username" param was not provided [error-user-param-not-provided]'
+                    error: >-
+                      The required "userId" or "username" param was not provided
+                      [error-user-param-not-provided]
                     errorType: error-user-param-not-provided
                 Invalid secret:
                   value:
@@ -3174,8 +3216,6 @@ paths:
                     errorType: error-not-authorized
         '401':
           $ref: '#/components/responses/authorizationError'
-      x-stoplight:
-        id: eoi30f5qzapv0
     parameters: []
   /api/v1/users.getPreferences:
     get:
@@ -3281,8 +3321,6 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
-      x-stoplight:
-        id: 4ribgmsq4joid
   /api/v1/users.setPreferences:
     post:
       summary: Set User Preferences
@@ -3475,12 +3513,12 @@ paths:
                     newRoomNotification:
                       type: string
                       example: chime
-                      description: 'Set the sound for new room notifications. The notification sounds are customizable, you can check the preferences in your workspace account for the list of options available.'
+                      description: Set the sound for new room notifications. The notification sounds are customizable, you can check the preferences in your workspace account for the list of options available.
                       default: door
                     newMessageNotification:
                       type: string
                       example: chime
-                      description: 'New message notification sound. The notification sounds are customizable, you can check the preferences in your workspace account for the list of options available.'
+                      description: New message notification sound. The notification sounds are customizable, you can check the preferences in your workspace account for the list of options available.
                       default: chime
                     muteFocusedConversations:
                       type: boolean
@@ -3699,8 +3737,6 @@ paths:
                     themeAppearence: auto
       tags:
         - Users
-      x-stoplight:
-        id: 6sg1cg1748kmf
   /api/v1/users.forgotPassword:
     parameters: []
     post:
@@ -3739,7 +3775,7 @@ paths:
       description: |-
         Send an email to reset your password. Ensure that you have completed the configuration of the email; otherwise, your users will not receive the mail normally. Access this from **Manage** > **Workspace** > **Settings** > **Email**. <br>
         To use this endpoint, the `PasswordReset` setting must be enabled in **Settings** > **Accounts** > **Registration** > **Password Reset**.
-
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -3763,8 +3799,6 @@ paths:
                   email: email@rocket.cat
       tags:
         - Users
-      x-stoplight:
-        id: tg0rhh8lm48mh
   /api/v1/users.getUsernameSuggestion:
     get:
       tags:
@@ -3772,7 +3806,7 @@ paths:
       summary: Get Username Suggestion
       description: |-
         Get a username suggestion for the authenticated user.
-
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -3800,8 +3834,6 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
-      x-stoplight:
-        id: fm4kzwragz4jw
   /api/v1/users.getAvatarSuggestion:
     get:
       summary: Get Avatar Suggestion
@@ -3848,14 +3880,12 @@ paths:
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
-      x-stoplight:
-        id: u5oqdpipqy43u
   /api/v1/users.checkUsernameAvailability:
     get:
       tags:
         - Users
       summary: Check Username Availability
-      description: Check if the username is available or used by another user
+      description: 'Check if the username is available or used by another user'
       operationId: get-api-v1-users.checkUsernameAvailability
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -3863,7 +3893,7 @@ paths:
         - name: username
           in: query
           required: true
-          description: The username to check for availability
+          description: 'The username to check for availability'
           schema:
             type: string
             example: johnDoe
@@ -3920,12 +3950,10 @@ paths:
                     error: 'system is blocked and can''t be used! [error-blocked-username]'
                     errorType: error-blocked-username
                     details:
-                      method: checkUsernameAvailability
-                      field: system
+                      method: "checkUsernameAvailability"
+                      field: "system"
         '401':
           $ref: '#/components/responses/authorizationError'
-      x-stoplight:
-        id: nk0ngp2t2d9ce
   /api/v1/users.generatePersonalAccessToken:
     parameters: []
     post:
@@ -3998,13 +4026,13 @@ paths:
           $ref: '#/components/responses/authorizationError'
       description: |-
         Permission required: `create-personal-access-tokens`. 
-
+        
         * This endpoint requires <a href="https://developer.rocket.chat/apidocs/introduction-to-two-factor-authentication" target="_blank">two-factor authentication</a>.
-
+        
         * Note that the generated access tokens are irrecoverable, so storing them safely is essential. If a token is lost or forgotten, it can be regenerated or deleted.
         * When making calls to the API that mandate authentication, include the generated token in the `X-Auth-Token` header and your user ID in the `X-User-Id` header to authenticate the requests.
         Visit the <a href="https://docs.rocket.chat/docs/manage-personal-access-tokens" target="_blank"> Personal Access Token user guide</a> for more details.
-
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -4037,8 +4065,6 @@ paths:
                   bypassTwoFactor: false
       tags:
         - Users
-      x-stoplight:
-        id: ga1h9l6897lxk
   /api/v1/users.regeneratePersonalAccessToken:
     parameters: []
     post:
@@ -4112,7 +4138,7 @@ paths:
       description: |-
         Permission required: `create-personal-access-tokens`.
         This endpoint requires 2FA.
-
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -4139,8 +4165,6 @@ paths:
                   tokenName: mypersonaltoken
       tags:
         - Users
-      x-stoplight:
-        id: cmyhein0vdycw
   /api/v1/users.getPersonalAccessTokens:
     parameters: []
     get:
@@ -4200,7 +4224,7 @@ paths:
         - Users
       description: |-
         Permission required: `create-personal-access-tokens`
-
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -4208,8 +4232,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/Auth-Token'
-      x-stoplight:
-        id: czoxo78aeh6rz
   /api/v1/users.removePersonalAccessToken:
     parameters: []
     post:
@@ -4261,7 +4283,7 @@ paths:
           $ref: '#/components/responses/authorizationError'
       description: |-
         This endpoint requires 2FA and the `create-personal-access-tokens` permission.
-
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -4288,8 +4310,6 @@ paths:
               Example 1:
                 value:
                   tokenName: mytoken
-      x-stoplight:
-        id: 9gkru5j5hhwdk
   /api/v1/users.requestDataDownload:
     get:
       summary: Request Data Download
@@ -4387,16 +4407,16 @@ paths:
             default: false
           in: query
           name: fullExport
-          description: 'Whether you want a full export or not. By default, the value is false.'
+          description: >-
+            Whether you want a full export or not. By default, the value is
+            false.
       description: |-
         Request download of your personal data using this endpoint. The <a href='https://docs.rocket.chat/v1/docs/user-data-download' target='_blank'>User Data Download</a> feature must be configured in the workspace by the admin. The exported file is available in the configured directory.
-
+       
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |1.2.0            | Added as `users.requestDataDownload`       |
-      x-stoplight:
-        id: 2liqrqun9qfuv
   /api/v1/users.logoutOtherClients:
     post:
       summary: Logout Other Clients
@@ -4430,8 +4450,6 @@ paths:
         - $ref: '#/components/parameters/UserId'
       description: |
         Logs out of user sessions in other clients while keeping the current session active. The response the current token and its expiration date. Requires the `LoginExpiration` settings enabled in **Accounts** > **Login Expiration in Days** which defines how long a login token remains valid before expiration.
-      x-stoplight:
-        id: q7ryiz7k543hx
   /api/v1/users.autocomplete:
     get:
       summary: Autocomplete User
@@ -4522,22 +4540,13 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - schema:
             type: object
-          example:
-            exceptions:
-              - john.doe
-            conditions:
-              status: offline
-            term: user
-            $or:
-              - type: user
-              - roles:
-                  - bot
+          example: {
+            "exceptions": ["john.doe"], "conditions": {"status": "offline"}, "term": "user", "$or": [{"type": "user"}, {"roles": ["bot"]}]}
           in: query
           name: selector
           required: true
-          description: Filter the response with the parameters.
-      x-stoplight:
-        id: j26t2sjqj64p6
+          description: |-
+            Filter the response with the parameters.
   /api/v1/users.removeOtherTokens:
     post:
       summary: Remove Other Tokens
@@ -4554,13 +4563,11 @@ paths:
         - Users
       description: |-
         Remove user's login tokens. This endpoint is primarily used when a user changes their password and they need to log in to the workspace again on other devices.
-
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |3.1.0            | Added       |
-      x-stoplight:
-        id: gyqe1fydwmm0j
   /api/v1/users.resetE2EKey:
     post:
       summary: Reset Users E2E Key
@@ -4611,7 +4618,9 @@ paths:
                 Example 3:
                   value:
                     success: false
-                    error: 'The required "userId" or "username" param provided does not match any users [error-invalid-user]'
+                    error: >-
+                      The required "userId" or "username" param provided does
+                      not match any users [error-invalid-user]
                     errorType: error-invalid-user
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -4624,7 +4633,7 @@ paths:
         <a href="https://docs.rocket.chat/docs/manage-your-account-settings#endtoend-encryption" target="_blank">Reset the E2E key</a> for your account or another user in the workspace.
         * To reset other users' E2EE key, you need the `edit-other-user-e2ee` permission.
         * This endpoint requires 2FA, if 2FA is enabled and configured on your workspace.
-
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -4639,13 +4648,14 @@ paths:
               properties:
                 userId:
                   type: string
-                  description: 'The `userId` of the user whose e2e key you want to reset. You can also use the `username` parameter. If you don''t enter a value, the sender''s E2E value is reset.'
+                  description: >-
+                    The `userId` of the user whose e2e key you want to reset.
+                    You can also use the `username` parameter. If you don't enter a value,
+                    the sender's E2E value is reset.
             examples:
               Example 1:
                 value:
                   userId: GonjPyg3gB3Z9ur9s
-      x-stoplight:
-        id: px5np1bwm2q24
   /api/v1/users.resetTOTP:
     post:
       summary: Reset Users TOTP
@@ -4696,7 +4706,9 @@ paths:
                 Example 3:
                   value:
                     success: false
-                    error: 'The required "userId" or "username" param provided does not match any users [error-invalid-user]'
+                    error: >-
+                      The required "userId" or "username" param provided does
+                      not match any users [error-invalid-user]
                     errorType: error-invalid-user
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -4709,7 +4721,7 @@ paths:
         Reset 2FA via TOTP for a user in the workspace. Make sure that the `Enable Two Factor Authentication` setting is enabled under **Manage** > **Workspace** > **Settings** > **Accounts** > **Two Factor Authentication**.
         * Permission required: `edit-other-user-totp`.
         * It requires two-factor authentication, if 2FA is enabled and configured in your workspace.
-
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -4724,19 +4736,21 @@ paths:
               properties:
                 userId:
                   type: string
-                  description: 'The `userId` of the user whose TOTP you want to reset. You can also use the username. If you do not enter a value, the sender''s TOTP is reset.'
+                  description: >-
+                    The `userId` of the user whose TOTP you want to reset. You
+                    can also use the username. If you do not enter a value, the
+                    sender's TOTP is reset.
             examples:
               Example 1:
                 value:
                   userId: GonjPyg3gB3Z9ur9s
-      x-stoplight:
-        id: mfy1cyz5golqb
   /api/v1/users.listTeams:
     get:
       tags:
         - Users
       summary: List User's Teams
-      description: 'Get the list of teams that a specific user is a member of. The teams returned by the endpoint depend on your permissions. To view all teams, you need the `view-all-teams` permission.'
+      description: |-
+        Get the list of teams that a specific user is a member of. The teams returned by the endpoint depend on your permissions. To view all teams, you need the `view-all-teams` permission.
       operationId: get-api-v1-users.listTeams
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -4820,8 +4834,6 @@ paths:
                     errorType: invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
-      x-stoplight:
-        id: ws4mu1w9hh0tz
   /api/v1/moderation.reportUser:
     post:
       summary: Report User
@@ -4879,13 +4891,11 @@ paths:
                   description: test
       description: |-
         Report a user for offensive messages in the workspace.
-
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
         |6.4.0            | Added       |
-      x-stoplight:
-        id: bc8n33d9cuxd8
   /api/v1/users.logout:
     post:
       summary: Logout User
@@ -4924,8 +4934,6 @@ paths:
                 userId:
                   type: string
                   description: Enter the user ID to be logged out.
-      x-stoplight:
-        id: lciyil5jat6y3
   /api/v1/ldap.syncNow:
     post:
       tags:
@@ -4933,13 +4941,13 @@ paths:
       summary: LDAP Sync
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-
+        
         Syncs your <a href="https://docs.rocket.chat/use-rocket.chat/authentication/ldap" target="_blank">LDAP data</a> based on the <a href="https://docs.rocket.chat/use-rocket.chat/authentication/ldap/ldap-data-sync-settings" target="_blank">data sync configurations</a>. This endpoints requires 2FA. <br>
-
+        
         Make sure LDAP is enabled in **Settings** > **LDAP** > **Enable** before using this endpoint.
 
         Permission required: `sync-auth-services-users`.
-
+        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -5013,8 +5021,6 @@ paths:
                     error: error-not-authorized
         '401':
           $ref: '#/components/responses/authorizationError'
-      x-stoplight:
-        id: tjr52tdr8e4yz
   /api/v1/ldap.testConnection:
     post:
       tags:
@@ -5048,8 +5054,6 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
-      x-stoplight:
-        id: 39eoje24xkmip
     parameters: []
   /api/v1/ldap.testSearch:
     post:
@@ -5059,7 +5063,7 @@ paths:
       description: |-
         Test if a given username can be found in the LDAP server using the authentication and filter <a href='https://docs.rocket.chat/docs/configure-ldap-connection' target='_blank'>settings</a> provided to Rocket.Chat.
         Make sure LDAP is enabled in **Settings** > **LDAP** > **Enable** before using this endpoint.
-
+        
         Permission required: `test-admin-options`
       operationId: post-api-v1-ldap.testSearch
       parameters:
@@ -5117,8 +5121,6 @@ paths:
               Example 1:
                 value:
                   username: bob
-      x-stoplight:
-        id: kqcnzyhqvd9qh
   '/api/v1/avatar/{subject}':
     parameters:
       - schema:
@@ -5127,7 +5129,10 @@ paths:
         name: subject
         in: path
         required: true
-        description: Name of the user or channel.  Channels are always preceded by an `@` symbol. Rooms that are DMs are always represented by the other participant's user avatar.
+        description: >-
+          Name of the user or channel.  Channels are always preceded by an `@`
+          symbol. Rooms that are DMs are always represented by the other
+          participant's user avatar.
     get:
       summary: Get Avatars
       operationId: get-api-v1-avatar-subject
@@ -5135,10 +5140,10 @@ paths:
         '200':
           description: OK
           content:
-            image/svg+xml:
-              schema:
-                type: string
-                format: binary
+              image/svg+xml:
+                schema: 
+                  type: string
+                  format: binary
       description: |-
         Note:
           * This is a RESTful endpoint that sits separately from the REST API in the server codebase and behaves slightly differently.
@@ -5153,7 +5158,9 @@ paths:
           example: png
           in: query
           name: format
-          description: 'Format of the image requested.  The values can be one of: jpg, jpeg, png.'
+          description: >-
+            Format of the image requested.  The values can be one of: jpg, jpeg,
+            png.
         - schema:
             type: integer
           example: 50
@@ -5165,17 +5172,19 @@ paths:
           example: aobEdbYhXfu5hkeqG
           in: query
           name: rc_uid
-          description: User ID for authenticating is only required if `Accounts_AvatarBlockUnauthenticatedAccess` is enabled.
+          description: >-
+            User ID for authenticating is only required if
+            `Accounts_AvatarBlockUnauthenticatedAccess` is enabled.
         - schema:
             type: string
           example: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq
           in: query
           name: rc_token
-          description: User auth token for authenticating is only required if `Accounts_AvatarBlockUnauthenticatedAccess` is enabled.
+          description: >-
+            User auth token for authenticating is only required if
+            `Accounts_AvatarBlockUnauthenticatedAccess` is enabled.
       tags:
         - Users
-      x-stoplight:
-        id: j0lt7zkndn5en
   /api/v1/users.sendWelcomeEmail:
     post:
       tags:
@@ -5183,13 +5192,14 @@ paths:
       summary: Send Welcome Email to User
       description: |-
         Ensure that you have configured the <a href='https://docs.rocket.chat/docs/email' target='_blank'>email settings</a> in your workspace to send emails. 
-
+        
         Permission required: `send-mail`
-
+        
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
         |6.8.0         | Added       |
+
       operationId: get-api-v1-users.sendWelcomeEmail
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -5240,8 +5250,6 @@ paths:
                       method: sendWelcomeEmail
         '401':
           $ref: '#/components/responses/authorizationError'
-      x-stoplight:
-        id: 6zqaiejolvbwh
   /api/v1/sendInvitationEmail:
     post:
       summary: Send Invitation Email
@@ -5295,8 +5303,6 @@ paths:
                   emails:
                     - example@example.com
       description: Send workspace invitation emails using this endpoint.
-      x-stoplight:
-        id: roeq7qa92gktz
   /api/v1/users.sendConfirmationEmail:
     post:
       summary: Send Email Verification
@@ -5327,7 +5333,8 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: post-api-v1-users.sendConfirmationEmail
-      description: 'Send an email to verify a user''s email address. The user receives the email and they must click the confirmation button to confirm their email address. Rate limit applies: One request can be sent every 60000ms.'
+      description: |-
+       Send an email to verify a user's email address. The user receives the email and they must click the confirmation button to confirm their email address. Rate limit applies: One request can be sent every 60000ms.
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
@@ -5347,8 +5354,6 @@ paths:
               Example 1:
                 value:
                   email: example@example.com
-      x-stoplight:
-        id: 6vyetn0wfpfjz
   /api/v1/users.listByStatus:
     get:
       tags:
@@ -5526,8 +5531,6 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
-      x-stoplight:
-        id: c8t866qb6g0nd
 tags:
   - name: LDAP
   - name: Permissions
@@ -5554,7 +5557,9 @@ components:
     x-2fa-code:
       name: x-2fa-code
       in: header
-      description: 'Enter the 2FA code. This parameter is required if 2FA is enabled in your workspace. See the <a href="https://developer.rocket.chat/apidocs/introduction-to-two-factor-authentication" target="_blank">Introduction to Two-Factor Authentication</a> document for details.'
+      description: >-
+        Enter the 2FA code. This parameter is required if 2FA is enabled in your workspace.
+        See the <a href="https://developer.rocket.chat/apidocs/introduction-to-two-factor-authentication" target="_blank">Introduction to Two-Factor Authentication</a> document for details.
       schema:
         type: string
       example: '148750'
@@ -5569,7 +5574,12 @@ components:
       in: query
       required: false
       schema: {}
-      description: 'This parameter allows you to use [MongoDB query](https://www.mongodb.com/docs/manual/reference/operator/query/) operators to search for specific data. For example, to query users with a name that contains the letter "g": query=`{ "name": { "$regex": "g" } }`. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more. '
+      description: >-
+        This parameter allows you to use [MongoDB
+        query](https://www.mongodb.com/docs/manual/reference/operator/query/)
+        operators to search for specific data. For example, to query users with
+        a name that contains the letter "g": query=`{ "name": { "$regex": "g" }
+        }`. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more. 
       allowEmptyValue: false
     fields:
       name: fields
@@ -5584,13 +5594,18 @@ components:
       schema:
         type: integer
       example: 50
-      description: 'Number of items to "skip" in the query, i.e. requests return count items, skipping the first offset items. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
+      description: >-
+        Number of items to "skip" in the query, i.e. requests return count
+        items, skipping the first offset items. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.
     sort:
       name: sort
       in: query
       required: false
       schema: {}
-      description: 'List of fields to order by, and in which direction. JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending. For example, {"value": -1, "_id": 1}. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
+      description: >-
+        List of fields to order by, and in which direction. JSON object, with
+        properties listed in desired order, with values of 1 for ascending, or
+        -1 for descending. For example, {"value": -1, "_id": 1}. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.
     count:
       name: count
       in: query
@@ -5612,7 +5627,7 @@ components:
               message:
                 type: string
           examples:
-            Authorization error:
+            Authorization Error:
               value:
                 status: error
                 message: You must be logged in to do this.
