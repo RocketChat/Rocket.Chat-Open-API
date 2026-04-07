@@ -5666,47 +5666,6 @@ paths:
                       method: eraseRoom
         '401':
           $ref: '#/components/responses/authorizationError'
-  /api/v1/rooms.favorite:
-    post:
-      tags:
-        - Rooms
-      summary: Favorite/Unfavourite a Room
-      description: |-
-        Mark/Unmark a room as favourite.
-        
-        ### Changelog
-        | Version | Description   |
-        | ------- | --------------|
-        | 0.64.0   | Added        |
-      operationId: post-api-v1-rooms.favorite
-      parameters:
-        - $ref: '#/components/parameters/Auth-Token'
-        - $ref: '#/components/parameters/UserId'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                roomId:
-                  type: string
-                  description: The room ID. Alternatively, enter the `roomName` parameter and provide the room's name as the value. You must be a member of the room.
-                favorite:
-                  type: boolean
-                  description: A boolean to mark the room as favourite or not.
-              required:
-                - roomId
-                - favorite
-            examples:
-              Example:
-                value:
-                  roomId: GENERAL
-                  favorite: true
-      responses:
-        '200':
-          $ref: '#/components/responses/trueSuccess'
-        '401':
-          $ref: '#/components/responses/authorizationError'
   '/api/v1/rooms.media/{rid}':
     post:
       summary: Upload Media Files to a Room
