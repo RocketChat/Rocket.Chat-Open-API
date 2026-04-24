@@ -2008,6 +2008,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |8.4.0             | Added `email` query parameter for user lookup |
         |7.0.0             | Removed the `fields` query parameter       |
         |3.4.0             | Added `unread` property inside `rooms` object       |
         |0.70.0            | Added `rooms` property to response if the user request it and has the `view-other-user-channels` permission       |
@@ -2040,6 +2041,13 @@ paths:
           in: query
           name: includeUserRooms
           description: Whether to include the list of rooms the user is a member of.
+        - name: email
+          in: query
+          required: false
+          description: Filter the results by entering the user's email. Either userId, username, or email must be provided. 
+          schema:
+            type: string
+          example: john@example.com
       responses:
         '200':
           description: OK
@@ -2220,6 +2228,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |8.4.0             | Added `email` query parameter for filtering |
         |0.49.0            | `Count` and `offset` query parameters supported.       |
         |0.35.0            | Added       |
       operationId: get-api-v1-users.list
@@ -2235,6 +2244,16 @@ paths:
           in: query
           name: sort
           description: 'Sort the users in ascending (`1`) or descending (`-1`) order. The value must be entered as a JSON string. The options are as follows: * `status`: Sort by users'' status. For example, `sort={"status":1}` (this maps to the `active` status). * `createdAt`: Sort by the time of user creation. For example, `sort={"createdAt":-1}` * `name`: Sort by user name. For example, `sort={"name":1}`'
+        - name: email
+          in: query
+          required: false
+          description: |-
+            Filter users by email address. Minimum length: 1 character.
+          schema:
+            type: string
+            minLength: 1
+            nullable: true
+          example: user@example.com
       responses:
         '200':
           description: OK
