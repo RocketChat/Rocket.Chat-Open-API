@@ -15667,7 +15667,100 @@ paths:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
     parameters: []
+  /api/v1/abac/pdp/health:
+    get:
+      tags:
+        - ABAC
+      summary: Get PDP Health Status
+      description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Enterprise tag" style="display: block; margin: auto;"></div>
 
+        Checks the health and availability of the configured Policy Decision Point (PDP)
+        for Attribute-Based Access Control (ABAC).
+
+        This endpoint is used by administrators to verify that the external PDP service
+        is operational and properly configured. It includes rate limiting to prevent abuse.
+
+        Permission required: `abac-management`
+
+        ### Changelog
+        | Version | Change |
+        |---------|--------|
+        | 8.4.0   | Added endpoint to check external PDP health status |
+      operationId: get-abac-pdp-health
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: OK - PDP is available and healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  available:
+                    type: boolean
+                    description: Indicates whether the PDP is available.
+                    enum: [true]
+                  message:
+                    type: string
+                    description: Health check message.
+                  success:
+                    type: boolean
+                    description: Indicates if the request was successful.
+              examples:
+                PDP Healthy:
+                  value:
+                    available: true
+                    message: ABAC_PDP_Health_OK
+                    success: true
+        '400':
+          description: Bad Request - PDP is unavailable or unhealthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  available:
+                    type: boolean
+                    description: Indicates whether the PDP is available.
+                    enum: [false]
+                  message:
+                    type: string
+                    description: Error message describing why the PDP is unavailable.
+                  success:
+                    type: boolean
+                    description: Indicates if the request was successful.
+              examples:
+                PDP Unavailable:
+                  value:
+                    available: false
+                    message: ABAC_PDP_Health_Not_OK
+                    success: false
+                Connection Error:
+                  value:
+                    available: false
+                    message: Failed to connect to external PDP service
+                    success: false
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: You do not have permission to manage ABAC
   /api/v1/subscriptions.get:
     get:
       summary: Get All Subscriptions
