@@ -14095,13 +14095,24 @@ paths:
     post:
       tags:
         - Room Invites
-      summary: Report Invite Token Usage
-      description: Report to the workspace that an invite token was used.
-      operationId: post-api-v1-useInviteToken
+      summary: Use Invite Token
+      description: |-
+        Uses an invite token to join a channel or room.
+        
+        This endpoint also checks whether the user is banned from the target room before
+        allowing them to use the invite link. A banned user must be unbanned first
+        before they can join via an invite token.
+
+        ### Changelog
+        | Version | Change |
+        |---------|--------|
+        | 8.4.0   | Added ban check — banned users can no longer join via invite token |
+      operationId: post-useInviteToken
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -14109,13 +14120,13 @@ paths:
               properties:
                 token:
                   type: string
-                  description: The invite ID being used.
+                  description: The invite token to use.
               required:
                 - token
             examples:
-              Example:
+              Use Invite Token:
                 value:
-                  token: iS7pza
+                  token: R4VDXJ9KJZB8M2QW
       responses:
         '200':
           description: OK
@@ -14126,66 +14137,53 @@ paths:
                 properties:
                   room:
                     type: object
+                    description: The room information.
                     properties:
-                      rid:
-                        type: string
-                      fname:
+                      _id:
                         type: string
                       name:
                         type: string
-                      t:
+                      topic:
                         type: string
                   success:
                     type: boolean
               examples:
-                Success:
+                Success Example:
                   value:
                     room:
-                      rid: QqsWiqNH2TnxtvZQq
-                      fname: a-room-name
-                      name: a-room-name
-                      t: p
+                      _id: sN9KJZX2aX7aXqB2a
+                      name: general
+                      topic: General discussion
                     success: true
-        '401':
-          $ref: '#/components/responses/authorizationError'
-  /api/v1/validateInviteToken:
-    post:
-      tags:
-        - Room Invites
-      summary: Validate Invite Token
-      description: Checks if an invite token is valid.
-      operationId: post-api-v1-validateInviteToken
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                token:
-                  type: string
-                  description: The invite ID being validated.
-              required:
-                - token
-            examples:
-              Example:
-                value: iS7pza
-      responses:
-        '200':
-          description: OK
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  valid:
-                    type: boolean
                   success:
                     type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
               examples:
-                Success:
+                User Is Banned:
                   value:
-                    valid: true
-                    success: true
+                    success: false
+                    error: User is banned from this room
+                    errorType: error-user-is-banned
+                Invalid Token:
+                  value:
+                    success: false
+                    error: Invalid invite token
+                    errorType: error-invalid-token
+                Token Expired:
+                  value:
+                    success: false
+                    error: Invite token has expired
+                    errorType: error-invite-token-expired
         '401':
           $ref: '#/components/responses/authorizationError'
   '/api/v1/abac/rooms/:rid/attributes':
