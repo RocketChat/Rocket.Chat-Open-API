@@ -14098,12 +14098,10 @@ paths:
       summary: Use Invite Token Ban Check
       description: |-
         Uses an invite token to join a channel or room.
-
-        This endpoint now checks whether the user is banned from the target room before
+        
+        This endpoint also checks whether the user is banned from the target room before
         allowing them to use the invite link. A banned user must be unbanned first
         before they can join via an invite token.
-
-        Permission required: None (guest endpoint)
 
         ### Changelog
         | Version | Change |
