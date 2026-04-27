@@ -14095,7 +14095,7 @@ paths:
     post:
       tags:
         - Room Invites
-      summary: Use Invite Token Ban Check
+      summary: Use Invite Token
       description: |-
         Uses an invite token to join a channel or room.
         
