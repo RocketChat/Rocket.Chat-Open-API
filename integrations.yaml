@@ -28,6 +28,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |8.4.0            | Added `skipTranspile` field to opt-out of Babel transpilation |
         |1.1.0            | Separate permissions in incoming and outgoing.       |
         |0.49.0            | Added       |
       operationId: post-api-v1-integrations-create
@@ -104,6 +105,18 @@ paths:
                   description: |-
                     This is an outgoing integration parameter.
                     If your integration requires a special token from the server (API key), use this parameter.
+                skipTranspile:
+                  type: boolean
+                  description: |-
+                   From 8.4.0, the optional `skipTranspile` field is available to opt out of Babel transpilation for the integration script.
+                   From 9.0.0, Babel will no longer be used for webhook integration script compilation. This is a breaking change for scripts that rely on sloppy-mode behavior. Admins must review the existing integrations. 
+                   
+                   This parameter lets you test each integration so you can fix any scripts that break and reliably upgrade to 9.0.0 with `scriptTranspile: false` set on every integration.
+
+                   When `skipTranspile` is true, the script is stored as-is without Babel processing, matching the 9.0.0 default. Defaults to false for backward compatibility. Refer to the <a href='https://docs.rocket.chat/docs/integrations#script-compatibility' target='_blank'>Script compatibility</a> section in the Integrations user guide for more details.
+
+                   Note: This parameter is deprecated and will be removed in the 9.0.0 version.
+                  default: false
               required:
                 - type
                 - username
@@ -661,6 +674,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |8.4.0   | Added `skipTranspile` field to opt-out of Babel transpilation |
         |3.4.0            | Added       |
       operationId: put-api-v1-integrations.update
       parameters:
@@ -727,6 +741,18 @@ paths:
                 target_url:
                   type: string
                   description: The target url to set.
+                skipTranspile:
+                  type: boolean
+                  description: |-
+                   From 8.4.0, the optional `skipTranspile` field is available to opt out of Babel transpilation for the integration script.
+                   From 9.0.0, Babel will no longer be used for webhook integration script compilation. This is a breaking change for scripts that rely on sloppy-mode behavior. Admins must review the existing integrations. 
+                   
+                   This parameter lets you test each integration so you can fix any scripts that break and reliably upgrade to 9.0.0 with `scriptTranspile: false` set on every integration.
+
+                   When `skipTranspile` is true, the script is stored as-is without Babel processing, matching the 9.0.0 default. Defaults to false for backward compatibility. Refer to the <a href='https://docs.rocket.chat/docs/integrations#script-compatibility' target='_blank'>Script compatibility</a> section in the Integrations user guide for more details.
+
+                   Note: This parameter is deprecated and will be removed in the 9.0.0 version.
+                  default: false
               required:
                 - type
                 - name
