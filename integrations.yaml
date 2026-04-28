@@ -115,7 +115,7 @@ paths:
 
                    When `skipTranspile` is true, the script is stored as-is without Babel processing, matching the 9.0.0 default. Defaults to false for backward compatibility. Refer to the <a href='https://docs.rocket.chat/docs/integrations#script-compatibility' target='_blank'>Script compatibility</a> section in the Integrations user guide for more details.
 
-                   Note: This endpoint is deprecated and will be removed in the 9.0.0 version.
+                   Note: This parameter is deprecated and will be removed in the 9.0.0 version.
                   default: false
               required:
                 - type
@@ -751,7 +751,7 @@ paths:
 
                    When `skipTranspile` is true, the script is stored as-is without Babel processing, matching the 9.0.0 default. Defaults to false for backward compatibility. Refer to the <a href='https://docs.rocket.chat/docs/integrations#script-compatibility' target='_blank'>Script compatibility</a> section in the Integrations user guide for more details.
 
-                   Note: This endpoint is deprecated and will be removed in the 9.0.0 version.
+                   Note: This parameter is deprecated and will be removed in the 9.0.0 version.
                   default: false
               required:
                 - type
