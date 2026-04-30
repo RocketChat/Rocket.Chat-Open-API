@@ -142,7 +142,7 @@ paths:
                     error: '[No file uploaded]'
                     errorType: No file uploaded
         '401':
-          $ref: '#/components/responses/authorizationError'
+          $ref: '#/components/responses/authorizationError'  
   /api/v1/emoji-custom.delete:
     post:
       tags:
