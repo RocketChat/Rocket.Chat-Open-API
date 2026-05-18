@@ -14236,7 +14236,9 @@ paths:
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
-      description: |
+      description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Defense.svg" alt="Defense tag" style="display: block; margin: auto;"></div>
+        
         - Replaces the full ABAC attribute set for a room.
         - Sets the complete set of ABAC attributes on the specified room by providing an attributes object that maps attribute keys to arrays of allowed values; any previously assigned attributes not included in the request are removed.
         - Requires the Enterprise ABAC license, the abac-management permission, and global setting ABAC_Enabled to be enabled. 
@@ -14325,7 +14327,9 @@ paths:
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
-      description: |
+      description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Defense.svg" alt="Defense tag" style="display: block; margin: auto;"></div>
+        
         - Clears all ABAC attributes from a room.
         - Removes every ABAC attribute key and value currently assigned to the specified room, leaving it with no ABAC attributes configured.
         - Requires the Enterprise ABAC license, the abac-management permission, and global setting ABAC_Enabled to be enabled. 
@@ -14415,6 +14419,8 @@ paths:
                     error: error-not-authorized
       operationId: post-abac-rooms-rid-attributes-key
       description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Defense.svg" alt="Defense tag" style="display: block; margin: auto;"></div>
+        
         - Adds a single ABAC attribute key to a room.
         - Creates a new ABAC attribute on the specified room for the given key, assigning it the provided values array; fails if the room already has this key or if the key/values are not allowed by the global attribute definition.
       parameters:
@@ -14521,6 +14527,8 @@ paths:
                     error: error-not-authorized
       operationId: put-abac-rooms-rid-attributes-key
       description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Defense.svg" alt="Defense tag" style="display: block; margin: auto;"></div>
+        
         - Sets the values of a single ABAC attribute on a room.
         - Replaces the existing values for the given attribute key on the specified room with the provided values array (or creates the attribute if it does not yet exist), enforcing the global attribute definition and ABAC validation rules.
       parameters:
@@ -14616,6 +14624,8 @@ paths:
                     error: error-not-authorized
       operationId: delete-abac-rooms-rid-attributes-key
       description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Defense.svg" alt="Defense tag" style="display: block; margin: auto;"></div>
+        
         - Removes a single ABAC attribute key from a room.
         - Deletes the specified attribute key and all its values from the room's ABAC configuration, leaving other attributes unchanged.
       parameters:
@@ -14724,6 +14734,8 @@ paths:
                     error: error-not-authorized
       operationId: get-abac-attributes
       description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Defense.svg" alt="Defense tag" style="display: block; margin: auto;"></div>
+        
         - Lists all ABAC attribute definitions.
         - Returns a paginated list of attribute definitions (key and allowed values). 
         - Supports optional filtering by attribute key or value, and pagination via offset and count query parameters.
@@ -14830,6 +14842,8 @@ paths:
                     error: error-not-authorized
       operationId: post-abac-attributes
       description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Defense.svg" alt="Defense tag" style="display: block; margin: auto;"></div>
+        
         - Creates a new ABAC attribute definition.
         - Registers a global ABAC attribute by specifying its key and the list of allowed values, making it available for use on rooms and users.
       parameters:
@@ -14931,6 +14945,8 @@ paths:
                     error: error-not-authorized
       operationId: post-abac-users-sync
       description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Defense.svg" alt="Defense tag" style="display: block; margin: auto;"></div>
+        
         - Syncs ABAC attributes for specified users from LDAP.
         - Refreshes user ABAC attributes by reading current data from LDAP and applying the configured LDAP → ABAC attribute mapping. 
         - Users can be identified by usernames, ids, emails, or ldapIds. 
@@ -15063,6 +15079,8 @@ paths:
                     error: error-not-authorized
       operationId: 'put-abac-attributes-:_id'
       description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Defense.svg" alt="Defense tag" style="display: block; margin: auto;"></div>
+        
         - Updates an existing ABAC attribute definition.
         - Modifies the attribute identified by _id, allowing you to rename its key, change its list of allowed values, or both, subject to in‑use and validation checks.
       parameters:
@@ -15169,6 +15187,8 @@ paths:
                     error: error-not-authorized
       operationId: 'get-abac-attributes-:_id'
       description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Defense.svg" alt="Defense tag" style="display: block; margin: auto;"></div>
+      
         - Retrieves a single ABAC attribute definition by ID.
         - Returns the attribute key and its allowed values for the definition identified by _id.
       parameters:
@@ -15250,6 +15270,8 @@ paths:
                     error: error-not-authorized
       operationId: 'delete-abac-attributes-:_id'
       description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Defense.svg" alt="Defense tag" style="display: block; margin: auto;"></div>
+      
         - Deletes an ABAC attribute definition by ID.
         - Removes the attribute definition identified by _id; the delete will fail if the attribute is currently in use (e.g., assigned to any room).
       parameters:
@@ -15323,7 +15345,9 @@ paths:
                     success: false
                     error: error-not-authorized
       operationId: 'get-abac-attributes-:key-is-in-use'
-      description: |
+      description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Defense.svg" alt="Defense tag" style="display: block; margin: auto;"></div>
+        
         - Check whether an ABAC attribute definition is currently used by any room.
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -15465,6 +15489,8 @@ paths:
                     error: error-not-authorized
       operationId: get-abac-rooms
       description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Defense.svg" alt="Defense tag" style="display: block; margin: auto;"></div>
+      
         - Lists rooms with ABAC attributes.
         - Returns a paginated list of rooms that have ABAC attributes configured, with optional filtering by room name, attribute key, or attribute value using the filter and filterType query parameters.
       parameters:
@@ -15628,6 +15654,8 @@ paths:
                     error: error-not-authorized
       operationId: get-abac-audit
       description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Defense.svg" alt="Defense tag" style="display: block; margin: auto;"></div>
+      
         - Lists ABAC audit events.
         - Returns a paginated audit log of ABAC-related actions (attribute changes, room attribute changes/removals, and ABAC actions), filterable by time range (start, end) and optional actor, with optional sorting. 
         - Requires ABAC and Auditing licenses.
@@ -15671,7 +15699,7 @@ paths:
         - ABAC
       summary: Get PDP Health Status
       description: |-
-        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Enterprise tag" style="display: block; margin: auto;"></div>
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Defense.svg" alt="Defense tag" style="display: block; margin: auto;"></div>
 
         Checks the health and availability of the configured Policy Decision Point (PDP)
         for Attribute-Based Access Control (ABAC).
