@@ -2368,7 +2368,7 @@ paths:
         - Users Engagement
       summary: Get New Users
       description: |-
-        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise1.svg" alt="Enterprise tag" style="display: block; margin: auto;"></div>
         
         Retrieve the metrics of newly registered users during a specific period.
         
@@ -2450,7 +2450,7 @@ paths:
         - Users Engagement
       summary: Get Active Users
       description: |-
-        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise1.svg" alt="Enterprise tag" style="display: block; margin: auto;"></div>
         
         Retrieve the metrics of active users in the workspace during a specific period.
         
@@ -2541,7 +2541,7 @@ paths:
         - Users Engagement
       summary: Get User By Time of the Day
       description: |-
-        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise1.svg" alt="Enterprise tag" style="display: block; margin: auto;"></div>
         
         Retrieve users by hours at a particular time of the day in a week.
 
@@ -2654,7 +2654,7 @@ paths:
         - Users Engagement
       summary: Get Hourly Data When Chat is Busier
       description: |-
-        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise1.svg" alt="Enterprise tag" style="display: block; margin: auto;"></div>
         
         Retrieve hourly data when chat is busier.
         
@@ -2729,7 +2729,7 @@ paths:
         - Users Engagement
       summary: Get Weekly Data When Chat is Busier
       description: |-
-        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise1.svg" alt="Enterprise tag" style="display: block; margin: auto;"></div>
         
         Retrieves weekly data when chat is busier. 
         
@@ -2796,7 +2796,7 @@ paths:
         - Messages Engagement
       summary: Get Number of Sent Messages
       description: |-
-        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise1.svg" alt="Enterprise tag" style="display: block; margin: auto;"></div>
         
         Retrieve the number of messages sent daily during a specific period.
         
@@ -2872,7 +2872,7 @@ paths:
         - Messages Engagement
       summary: Get Origin of Message Sent
       description: |-
-        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise1.svg" alt="Enterprise tag" style="display: block; margin: auto;"></div>
         
         Get the origin of messages sent during a specific period. It highlights the number of messages sent in private channels, private chats, and public channels.
         
@@ -2934,7 +2934,7 @@ paths:
         - Messages Engagement
       summary: Get the Most Popular Channels
       description: |-
-        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise1.svg" alt="Enterprise tag" style="display: block; margin: auto;"></div>
         
         Retrieves the top 5 popular channels in your workspace by the number of messages sent. It highlights the number of messages sent in private channels, private chats, and public channels. 
         
@@ -3021,7 +3021,7 @@ paths:
         - Channels Engagement
       summary: Get Channels Engagement
       description: |-
-        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise1.svg" alt="Enterprise tag" style="display: block; margin: auto;"></div>
         
         Retrieve all active channels and the number of messages in each channel within a specific period.
         
