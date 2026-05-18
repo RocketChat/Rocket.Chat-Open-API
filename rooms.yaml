@@ -6948,7 +6948,7 @@ paths:
           $ref: '#/components/responses/forbiddenError'
       operationId: get-api-v1-audit-rooms.members
       description: |-
-        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Enterprise" style="display: block; margin: auto"></div>
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise1.svg" alt="Enterprise" style="display: block; margin: auto"></div>
         
         Audit any public or private room and view the room members. You don't need to be a member of the room.
         
@@ -14241,7 +14241,7 @@ paths:
         
         - Replaces the full ABAC attribute set for a room.
         - Sets the complete set of ABAC attributes on the specified room by providing an attributes object that maps attribute keys to arrays of allowed values; any previously assigned attributes not included in the request are removed.
-        - Requires the Enterprise ABAC license, the abac-management permission, and global setting ABAC_Enabled to be enabled. 
+        - Requires the ABAC license, the abac-management permission, and global setting ABAC_Enabled to be enabled. 
       requestBody:
         content:
           application/json:
@@ -14332,7 +14332,7 @@ paths:
         
         - Clears all ABAC attributes from a room.
         - Removes every ABAC attribute key and value currently assigned to the specified room, leaving it with no ABAC attributes configured.
-        - Requires the Enterprise ABAC license, the abac-management permission, and global setting ABAC_Enabled to be enabled. 
+        - Requires the ABAC license, the abac-management permission, and global setting ABAC_Enabled to be enabled. 
     parameters: []
   '/api/v1/abac/rooms/:rid/attributes/:key':
     post:
@@ -14950,7 +14950,7 @@ paths:
         - Syncs ABAC attributes for specified users from LDAP.
         - Refreshes user ABAC attributes by reading current data from LDAP and applying the configured LDAP → ABAC attribute mapping. 
         - Users can be identified by usernames, ids, emails, or ldapIds. 
-        - Requires LDAP Enterprise license and ABAC to be enabled.
+        - Requires LDAP license and ABAC to be enabled.
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
