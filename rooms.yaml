@@ -6948,7 +6948,7 @@ paths:
           $ref: '#/components/responses/forbiddenError'
       operationId: get-api-v1-audit-rooms.members
       description: |-
-        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise1.svg" alt="Enterprise" style="display: block; margin: auto"></div>
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise.svg" alt="Enterprise" style="display: block; margin: auto"></div>
         
         Audit any public or private room and view the room members. You don't need to be a member of the room.
         

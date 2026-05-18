@@ -1314,7 +1314,7 @@ paths:
         - Chat
       summary: Get Message Read Receipts
       description: |-
-        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise1.svg" alt="Enterprise tag" style="display: block; margin: auto;"></div>
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise.svg" alt="Enterprise tag" style="display: block; margin: auto;"></div>
         
         Get the <a href='https://docs.rocket.chat/docs/message-actions#read-receipts' target='_blank'>read receipts</a> of messages.
         
