@@ -13362,8 +13362,6 @@ paths:
                           properties:
                             phoneNumber:
                               type: string
-                      token:
-                        type: string
                       visitorEmails:
                         type: array
                         items:
@@ -13387,7 +13385,6 @@ paths:
                       name: Livechat Visitor
                       phone:
                         - phoneNumber: 55 51 5555-5555
-                      token: iNKE8a6k6cjbqWhWd
                       visitorEmails:
                         - address: visitor@rocket.chat
                       department: 64181a0728384134ed600dcc
@@ -13414,7 +13411,17 @@ paths:
                     errorType: invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
-      description: Get the information of a specific visitor.
+      description: |-
+        Get the information of a specific visitor.
+
+        The response does not include the visitor `token`. To obtain a visitor token, use the visitor-registration flow (<a href='https://developer.rocket.chat/apidocs/register-a-new-livechat-visitor' target='_blank'>Register a New Livechat Visitor</a>), which returns the token at creation time.
+
+        Permission required: `view-l-room`
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.5.0   | **BREAKING**: The `token` field is no longer returned in the response. Integrations that read `token` from this endpoint must retrieve it from the visitor-creation response instead. |
       parameters:
         - schema:
             type: string

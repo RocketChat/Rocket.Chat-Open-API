@@ -2002,12 +2002,13 @@ paths:
       summary: Get User's Info
       description: |-
         - Retrieves information about a user. The result is limited only to what you have access to view.
-        - This endpoint supports lookup by `userId`, `username`, or `importId`. Email-based lookup is not supported.
+        - This endpoint supports lookup by `userId`, `username`, `importId`, `email`, or `freeSwitchExtension`. Provide exactly one of these parameters per request.
         - From version `7.0.0`, this endpoint no longer supports the `fields` parameter, even when the `ALLOW_UNSAFE_QUERY_AND_FIELDS_API_PARAMS: true` environment variable is set. Instead, use the `includeUserRooms` parameter.
 
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |8.5.0             | Added `freeSwitchExtension` query parameter for user lookup |
         |8.4.0             | Added `email` query parameter for user lookup |
         |7.0.0             | Removed the `fields` query parameter       |
         |3.4.0             | Added `unread` property inside `rooms` object       |
@@ -2044,10 +2045,17 @@ paths:
         - name: email
           in: query
           required: false
-          description: Filter the results by entering the user's email. Either userId, username, or email must be provided. 
+          description: Filter the results by entering the user's email. Either userId, username, or email must be provided.
           schema:
             type: string
           example: john@example.com
+        - name: freeSwitchExtension
+          in: query
+          required: false
+          description: 'The FreeSwitch voice call extension assigned to the user. Alternatively, you can use `userId`, `username`, `importId`, or `email` to retrieve user information.'
+          schema:
+            type: string
+          example: '1234'
       responses:
         '200':
           description: OK
@@ -2711,13 +2719,16 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       description: |-
-        Activate a deactivated user in the workspace. Any one of the following permissions is required:
+        Activate or deactivate a user in the workspace. Any one of the following permissions is required:
           * `edit-other-user-active-status`: Permission to change other user's status.
           * `manage-moderation-actions`: Permission to manage moderation actions, perform actions on reported users.
-          
+
+          When a user is deactivated (`activeStatus=false`), Rocket.Chat revokes all of the user's login tokens and OAuth access tokens, refresh tokens, and authorization codes. The user can no longer call the REST API with previously issued OAuth credentials.
+
           ### Changelog
           | Version      | Description |
           | ---------------- | ------------|
+          |8.5.0            | Deactivation now also revokes the user's OAuth access tokens, refresh tokens, and authorization codes. |
           |3.7.0            | Added `confirmRelinquish` to the payload.       |
           |0.75.0            | Added       |
       parameters:
@@ -2818,11 +2829,16 @@ paths:
                     success: false
                     error: unauthorized
       description: |-
-        Automatically deactivate idle users in your workspace based on the number of days and roles. Permission required: `edit-other-user-active-status`
-          
+        Automatically deactivate idle users in your workspace based on the number of days and roles.
+
+        For every user that this endpoint deactivates, Rocket.Chat clears the user's login tokens and revokes their OAuth access tokens, refresh tokens, and authorization codes. Deactivated users can no longer call the REST API with previously issued OAuth credentials.
+
+        Permission required: `edit-other-user-active-status`
+
           ### Changelog
           | Version      | Description |
           | ---------------- | ------------|
+          |8.5.0            | Deactivated users now also have their login tokens cleared and their OAuth access tokens, refresh tokens, and authorization codes revoked. |
           |3.1.0            | Added       |
       parameters:
         - $ref: '#/components/parameters/UserId'
@@ -2965,17 +2981,18 @@ paths:
             presence and the result will have a `full` field with value `true` .
         - schema:
             type: string
-          example: J4sWseCgs8eEnWvhE
+          example: J4sWseCgs8eEnWvhE,BsNr28znDkG8aeo7W
           in: query
           name: ids
-          description: The user IDs whose status you want.
+          description: The user IDs whose status you want. You can pass more than one ID as comma-separated values.
       description: |-
         Get presence of multiple workspace users. You can filter by date and user IDs.
         If the `Presence_broadcast_disabled` setting is true, the endpoint returns an empty array. You can find this setting under **Manage** > **Workspace** > **Settings** > **Troubleshoot**.
-        
+
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |8.5.0            | Restored support for comma-separated values in `ids`.       |
         |1.1.0            | Added       |
       tags:
         - Users

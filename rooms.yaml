@@ -4086,11 +4086,14 @@ paths:
         Set the channel type. The channel type can be either `c` (public) or `p` (private). The following permissions are required:
         * `create-c`: To change a private group to a public channel.
         * `create-p`: To change a public channel to a private room.
-        
+
+        When the type changes to `c` (public) on a room that has ABAC attributes, all ABAC attributes on the room are cleared as part of the conversion.
+
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
-        |0.49.0  | Added        |
+        | 8.5.0   | ABAC attributes on the room are dropped when converting to a public (`c`) channel. |
+        | 0.49.0  | Added       |
       operationId: post-api-v1-channels.setType
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -6057,11 +6060,20 @@ paths:
         - Rooms
       summary: Save Room Settings
       description: |-
+        Updates the settings of an existing room.
+
+        For ABAC-managed rooms (Enterprise, with the ABAC license and `ABAC_Enabled`), the following guardrails apply:
+
+        - Changing `roomAnnouncement`, `roomTopic`, or `roomDescription` is rejected with `error-action-not-allowed`.
+        - Setting `default: true` on an ABAC-managed room is rejected with `error-action-not-allowed`.
+        - Changing `roomType` from `p` to `c` is rejected with `error-action-not-allowed`. The same guard applies to private rooms in ABAC-managed private teams.
+
         Permission required: `edit-room`
-      
+
         ### Changelog
         | Version | Description |
         | ------- | ------------|
+        | 8.5.0   | Added ABAC guardrails: announcement, topic, description, default flag, and conversion to public are blocked on ABAC-managed rooms. |
         | 3.13.0  | Added       |
       operationId: post-api-v1-rooms.saveRoomSettings
       parameters:
@@ -12455,10 +12467,13 @@ paths:
         * `create-p`: This permission is required if you are changing a public channel to a private room.
         * `create-team-channel`: This permission is required if you are changing a team's private channel to a public channel.
         * `create-team-group`: This permission is required if you are changing a team's public channel to a private room.
-        
+
+        When the type changes to `c` (public) on a group that has ABAC attributes, all ABAC attributes on the group are cleared as part of the conversion.
+
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 8.5.0   | ABAC attributes on the group are dropped when converting to a public (`c`) channel. |
         | 0.49.0  | Added       |
       operationId: post-api-v1-groups.setType
       parameters:
@@ -14241,7 +14256,12 @@ paths:
 
         - Replaces the full ABAC attribute set for a room.
         - Sets the complete set of ABAC attributes on the specified room by providing an attributes object that maps attribute keys to arrays of allowed values; any previously assigned attributes not included in the request are removed.
-        - Requires the Enterprise ABAC license, the abac-management permission, and global setting ABAC_Enabled to be enabled. 
+        - Requires the Enterprise ABAC license, the `abac-management` and `manage-abac-admin-rooms` permissions, and the global setting `ABAC_Enabled` to be turned on.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.5.0   | Added the `manage-abac-admin-rooms` granular permission requirement. |
       requestBody:
         content:
           application/json:
@@ -14332,7 +14352,12 @@ paths:
 
         - Clears all ABAC attributes from a room.
         - Removes every ABAC attribute key and value currently assigned to the specified room, leaving it with no ABAC attributes configured.
-        - Requires the Enterprise ABAC license, the abac-management permission, and global setting ABAC_Enabled to be enabled. 
+        - Requires the Enterprise ABAC license and the `abac-management` and `manage-abac-admin-rooms` permissions. This call does not require the global setting `ABAC_Enabled` to be on, so attributes can be cleared after disabling ABAC.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.5.0   | Added the `manage-abac-admin-rooms` granular permission requirement. |
     parameters: []
   '/api/v1/abac/rooms/:rid/attributes/:key':
     post:
@@ -14423,6 +14448,12 @@ paths:
 
         - Adds a single ABAC attribute key to a room.
         - Creates a new ABAC attribute on the specified room for the given key, assigning it the provided values array; fails if the room already has this key or if the key/values are not allowed by the global attribute definition.
+        - Requires the Enterprise ABAC license, the `abac-management` and `manage-abac-admin-rooms` permissions, and the global setting `ABAC_Enabled` to be turned on.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.5.0   | Added the `manage-abac-admin-rooms` granular permission requirement. |
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
@@ -14531,6 +14562,12 @@ paths:
 
         - Sets the values of a single ABAC attribute on a room.
         - Replaces the existing values for the given attribute key on the specified room with the provided values array (or creates the attribute if it does not yet exist), enforcing the global attribute definition and ABAC validation rules.
+        - Requires the Enterprise ABAC license, the `abac-management` and `manage-abac-admin-rooms` permissions, and the global setting `ABAC_Enabled` to be turned on.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.5.0   | Added the `manage-abac-admin-rooms` granular permission requirement. |
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
@@ -14628,6 +14665,12 @@ paths:
 
         - Removes a single ABAC attribute key from a room.
         - Deletes the specified attribute key and all its values from the room's ABAC configuration, leaving other attributes unchanged.
+        - Requires the Enterprise ABAC license and the `abac-management` and `manage-abac-admin-rooms` permissions.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.5.0   | Added the `manage-abac-admin-rooms` granular permission requirement. |
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
@@ -14737,8 +14780,14 @@ paths:
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Defense.svg" alt="Defense" style="display: block; margin: auto"></div>
 
         - Lists all ABAC attribute definitions.
-        - Returns a paginated list of attribute definitions (key and allowed values). 
+        - Returns a paginated list of attribute definitions (key and allowed values).
         - Supports optional filtering by attribute key or value, and pagination via offset and count query parameters.
+        - Requires the Enterprise ABAC license and the `abac-management` and `manage-abac-admin-room-attributes` permissions.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.5.0   | Added the `manage-abac-admin-room-attributes` granular permission requirement. |
       parameters:
         - schema:
             type: number
@@ -14846,6 +14895,12 @@ paths:
 
         - Creates a new ABAC attribute definition.
         - Registers a global ABAC attribute by specifying its key and the list of allowed values, making it available for use on rooms and users.
+        - Requires the Enterprise ABAC license, the `abac-management` and `manage-abac-admin-room-attributes` permissions, and the global setting `ABAC_Enabled` to be turned on.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.5.0   | Added the `manage-abac-admin-room-attributes` granular permission requirement. |
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
@@ -14948,9 +15003,14 @@ paths:
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Defense.svg" alt="Defense" style="display: block; margin: auto"></div>
 
         - Syncs ABAC attributes for specified users from LDAP.
-        - Refreshes user ABAC attributes by reading current data from LDAP and applying the configured LDAP → ABAC attribute mapping. 
-        - Users can be identified by usernames, ids, emails, or ldapIds. 
-        - Requires LDAP Enterprise license and ABAC to be enabled.
+        - Refreshes user ABAC attributes by reading current data from LDAP and applying the configured LDAP → ABAC attribute mapping.
+        - Users can be identified by usernames, ids, emails, or ldapIds.
+        - Requires the LDAP Enterprise and ABAC licenses, the `abac-management` and `manage-abac-admin-room-attributes` permissions, and the global setting `ABAC_Enabled` to be turned on.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.5.0   | Added the `manage-abac-admin-room-attributes` granular permission requirement. |
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
@@ -15082,7 +15142,13 @@ paths:
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Defense.svg" alt="Defense" style="display: block; margin: auto"></div>
 
         - Updates an existing ABAC attribute definition.
-        - Modifies the attribute identified by _id, allowing you to rename its key, change its list of allowed values, or both, subject to in‑use and validation checks.
+        - Modifies the attribute identified by `_id`, allowing you to rename its key, change its list of allowed values, or both, subject to in-use and validation checks.
+        - Requires the Enterprise ABAC license, the `abac-management` and `manage-abac-admin-room-attributes` permissions, and the global setting `ABAC_Enabled` to be turned on.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.5.0   | Added the `manage-abac-admin-room-attributes` granular permission requirement. |
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
@@ -15190,7 +15256,13 @@ paths:
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Defense.svg" alt="Defense" style="display: block; margin: auto"></div>
 
         - Retrieves a single ABAC attribute definition by ID.
-        - Returns the attribute key and its allowed values for the definition identified by _id.
+        - Returns the attribute key and its allowed values for the definition identified by `_id`.
+        - Requires the Enterprise ABAC license and the `abac-management` and `manage-abac-admin-room-attributes` permissions.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.5.0   | Added the `manage-abac-admin-room-attributes` granular permission requirement. |
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
@@ -15273,7 +15345,13 @@ paths:
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Defense.svg" alt="Defense" style="display: block; margin: auto"></div>
 
         - Deletes an ABAC attribute definition by ID.
-        - Removes the attribute definition identified by _id; the delete will fail if the attribute is currently in use (e.g., assigned to any room).
+        - Removes the attribute definition identified by `_id`. The delete fails if the attribute is currently in use, for example assigned to any room.
+        - Requires the Enterprise ABAC license and the `abac-management` and `manage-abac-admin-room-attributes` permissions.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.5.0   | Added the `manage-abac-admin-room-attributes` granular permission requirement. |
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
@@ -15348,7 +15426,13 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Defense.svg" alt="Defense" style="display: block; margin: auto"></div>
 
-        - Check whether an ABAC attribute definition is currently used by any room.
+        - Checks whether an ABAC attribute definition is currently used by any room.
+        - Requires the Enterprise ABAC license and the `abac-management` and `manage-abac-admin-room-attributes` permissions.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.5.0   | Added the `manage-abac-admin-room-attributes` granular permission requirement. |
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
@@ -15492,7 +15576,13 @@ paths:
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Defense.svg" alt="Defense" style="display: block; margin: auto"></div>
 
         - Lists rooms with ABAC attributes.
-        - Returns a paginated list of rooms that have ABAC attributes configured, with optional filtering by room name, attribute key, or attribute value using the filter and filterType query parameters.
+        - Returns a paginated list of rooms that have ABAC attributes configured, with optional filtering by room name, attribute key, or attribute value using the `filter` and `filterType` query parameters.
+        - Requires the Enterprise ABAC license and the `abac-management` and `manage-abac-admin-rooms` permissions.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.5.0   | Added the `manage-abac-admin-rooms` granular permission requirement. |
       parameters:
         - schema:
             type: number
@@ -15657,8 +15747,13 @@ paths:
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Defense.svg" alt="Defense" style="display: block; margin: auto"></div>
 
         - Lists ABAC audit events.
-        - Returns a paginated audit log of ABAC-related actions (attribute changes, room attribute changes/removals, and ABAC actions), filterable by time range (start, end) and optional actor, with optional sorting. 
-        - Requires ABAC and Auditing licenses.
+        - Returns a paginated audit log of ABAC-related actions (attribute changes, room attribute changes/removals, and ABAC actions), filterable by time range (`start`, `end`) and optional `actor`, with optional sorting.
+        - Requires the ABAC and Auditing licenses, the `abac-management` and `view-abac-admin-audit` permissions.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.5.0   | Added the `view-abac-admin-audit` granular permission requirement. |
       parameters:
         - schema:
             type: string
@@ -15707,11 +15802,12 @@ paths:
         This endpoint is used by administrators to verify that the external PDP service
         is operational and properly configured. It includes rate limiting to prevent abuse.
 
-        Permission required: `abac-management`
+        Permissions required: `abac-management` and `manage-abac-admin-settings`.
 
         ### Changelog
         | Version | Change |
         |---------|--------|
+        | 8.5.0   | Added the `manage-abac-admin-settings` granular permission requirement. |
         | 8.4.0   | Added endpoint to check external PDP health status |
       operationId: get-abac-pdp-health
       parameters:
@@ -16100,6 +16196,7 @@ tags:
   - name: Teams
   - name: Room Invites
   - name: Subscriptions
+  - name: ABAC
 
 components:
   schemas:

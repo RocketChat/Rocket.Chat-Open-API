@@ -1115,6 +1115,179 @@ paths:
                       method: password
                       codeGenerated: false
                       availableMethods: []
+  /api/v1/twoFactorChallenges.sendEmailCode:
+    post:
+      tags:
+        - Two-Factor Authentication
+      summary: Send Two-Factor Challenge Email Code
+      description: |-
+        Sends a two-factor authentication code by email for an in-progress login challenge. Use this endpoint after a login attempt returns a `challengeId` for the email two-factor method, to deliver a fresh code to the user.
+
+        The endpoint does not require an authenticated session. It is rate-limited to 5 requests per minute per caller. The challenge must exist, must not be expired, and must use the `email` method.
+
+        <!-- TODO: Confirm the exact login response shape that returns `challengeId` so the description can cross-reference the source endpoint. -->
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.5.0   | Added       |
+      operationId: post-api-v1-twoFactorChallenges.sendEmailCode
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                challengeId:
+                  type: string
+                  description: The ID of the pending two-factor challenge returned by the login flow.
+                  example: 8f4c2d1e9a7b6c5d3e2f1a0b
+              required:
+                - challengeId
+            examples:
+              Example 1:
+                value:
+                  challengeId: 8f4c2d1e9a7b6c5d3e2f1a0b
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Missing challengeId:
+                  value:
+                    success: false
+                    error: challengeId is required
+                    errorType: error-parameter-required
+                Challenge not found:
+                  value:
+                    success: false
+                    error: challenge not found
+                    errorType: error-challenge-not-found
+                Challenge expired:
+                  value:
+                    success: false
+                    error: challenge expired
+                    errorType: error-challenge-expired
+                Invalid challenge method:
+                  value:
+                    success: false
+                    error: invalid challenge method
+                    errorType: error-invalid-challenge-method
+                User not found:
+                  value:
+                    success: false
+                    error: user not found
+                    errorType: error-user-not-found
+  /api/v1/twoFactorChallenges.verifyChallenge:
+    post:
+      tags:
+        - Two-Factor Authentication
+      summary: Verify Two-Factor Challenge
+      description: |-
+        Verifies a two-factor authentication code submitted against a pending challenge and, on success, returns a login token for the associated user. Use this endpoint to complete the second factor of a login flow that issued a `challengeId`.
+
+        The endpoint does not require an authenticated session. It is rate-limited to 5 requests per minute per caller. Exceeding the per-user maximum failed attempts removes the challenge and returns a `totp-max-attempts` error.
+
+        <!-- TODO: Confirm whether the returned `loginToken` is intended to be paired with `X-User-Id` in subsequent requests, and document the expected client handling here. -->
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.5.0   | Added       |
+      operationId: post-api-v1-twoFactorChallenges.verifyChallenge
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                challengeId:
+                  type: string
+                  description: The ID of the pending two-factor challenge returned by the login flow.
+                  example: 8f4c2d1e9a7b6c5d3e2f1a0b
+                code:
+                  type: string
+                  description: The two-factor code provided by the user for the challenge.
+                  example: '482913'
+              required:
+                - challengeId
+                - code
+            examples:
+              Example 1:
+                value:
+                  challengeId: 8f4c2d1e9a7b6c5d3e2f1a0b
+                  code: '482913'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  loginToken:
+                    type: string
+                  userId:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Verification successful:
+                  value:
+                    loginToken: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq
+                    userId: aobEdbYhXfu5hkeqG
+                    success: true
+                Invalid code:
+                  value:
+                    success: false
+                    error: Invalid code
+                    errorType: error-invalid-code
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Missing parameters:
+                  value:
+                    success: false
+                    error: challengeId and code are required
+                    errorType: error-parameter-required
+                Challenge not found:
+                  value:
+                    success: false
+                    error: challenge not found
+                    errorType: error-challenge-not-found
+                User not found:
+                  value:
+                    success: false
+                    error: user not found
+                    errorType: error-user-not-found
+                Max attempts reached:
+                  value:
+                    success: false
+                    error: TOTP Maximun Failed Attempts Reached
+                    errorType: totp-max-attempts
 tags:
   - name: Authentication
   - name: Two-Factor Authentication

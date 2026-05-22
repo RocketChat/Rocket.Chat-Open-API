@@ -449,6 +449,213 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
+  /api/v1/custom-sounds.create:
+    post:
+      tags:
+        - Custom Sounds
+      summary: Create Custom Sound
+      description: |-
+        Upload a new custom sound to the workspace. The request must be sent as `multipart/form-data` and contain the audio file in the `sound` field and the display name in the `name` field. The file size must not exceed `5 MB` (5242880 bytes), and the file MIME type must be one of `audio/mpeg`, `audio/mp3`, `audio/wav`, or `audio/x-wav`.
+
+        This endpoint replaces the deprecated DDP methods `insertOrUpdateSound` and `uploadCustomSound`, which now log a deprecation warning and are scheduled for removal in `9.0.0`.
+
+        Permission required: `manage-sounds`
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.5.0   | Added       |
+      operationId: post-api-v1-custom-sounds.create
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                sound:
+                  type: string
+                  format: binary
+                  description: The audio file to upload. Allowed MIME types are `audio/mpeg`, `audio/mp3`, `audio/wav`, and `audio/x-wav`. Maximum size is `5 MB` (5242880 bytes).
+                name:
+                  type: string
+                  description: The display name of the custom sound. Must be at least one character long.
+                  example: doremi
+              required:
+                - sound
+                - name
+            examples:
+              Example:
+                value:
+                  name: doremi
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sound:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    sound:
+                      _id: 65462caea2f73c7460e18f83
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                MIME type not allowed:
+                  value:
+                    success: false
+                    error: MIME type not allowed
+                File too large:
+                  value:
+                    success: false
+                    error: 'File exceeds allowed size of 5 MB.'
+                Missing required field:
+                  value:
+                    success: false
+                    error: 'must have required property ''name'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: 'User does not have the permissions required for this action [error-unauthorized]'
+                    errorType: error-unauthorized
+  /api/v1/custom-sounds.update:
+    post:
+      tags:
+        - Custom Sounds
+      summary: Update Custom Sound
+      description: |-
+        Update an existing custom sound. The request must be sent as `multipart/form-data`. The `_id` and `name` fields are required; the `sound` file field is optional and only required when replacing the audio file. When a new file is provided, the same MIME type and size rules apply as for `custom-sounds.create`: allowed MIME types are `audio/mpeg`, `audio/mp3`, `audio/wav`, and `audio/x-wav`, and the maximum size is `5 MB` (5242880 bytes).
+
+        This endpoint replaces the deprecated DDP methods `insertOrUpdateSound` and `uploadCustomSound`, which now log a deprecation warning and are scheduled for removal in `9.0.0`.
+
+        Permission required: `manage-sounds`
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.5.0   | Added       |
+      operationId: post-api-v1-custom-sounds.update
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                _id:
+                  type: string
+                  description: The ID of the custom sound to update.
+                  example: 65462caea2f73c7460e18f83
+                name:
+                  type: string
+                  description: The updated display name of the custom sound. Must be at least one character long.
+                  example: doremi-v2
+                sound:
+                  type: string
+                  format: binary
+                  description: Optional. A new audio file to replace the existing one. If omitted, the current file is kept. Allowed MIME types are `audio/mpeg`, `audio/mp3`, `audio/wav`, and `audio/x-wav`. Maximum size is `5 MB` (5242880 bytes).
+              required:
+                - _id
+                - name
+            examples:
+              Example:
+                value:
+                  _id: 65462caea2f73c7460e18f83
+                  name: doremi-v2
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Sound not found:
+                  value:
+                    success: false
+                    error: Custom Sound not found.
+                MIME type not allowed:
+                  value:
+                    success: false
+                    error: MIME type not allowed
+                Missing required field:
+                  value:
+                    success: false
+                    error: 'must have required property ''_id'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: 'User does not have the permissions required for this action [error-unauthorized]'
+                    errorType: error-unauthorized
   /api/v1/custom-user-status.list:
     get:
       tags:

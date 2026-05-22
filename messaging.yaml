@@ -5545,11 +5545,15 @@ paths:
       tags:
         - Auto-Translate
       summary: Translate Message
-      description: |- 
+      description: |-
         Auto-translates the provided message.
+
+        The caller must have access to the room that contains the message. If the user is not a member of the room (or otherwise cannot access it), the endpoint returns a `403 Forbidden` response and no translation is performed.
+
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |8.5.0          | **BREAKING**: Added room-access check. Callers without access to the message's room now receive a `403 Forbidden` response. |
         |1.3.0          | Added       |
       operationId: post-api-v1-autotranslate.translateMessage
       parameters:
@@ -5639,7 +5643,23 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
-                    
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: unauthorized
+
 tags:
   - name: Chat
   - name: DM
