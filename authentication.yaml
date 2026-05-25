@@ -1115,7 +1115,7 @@ paths:
                       method: password
                       codeGenerated: false
                       availableMethods: []
-/api/v1/twoFactorChallenges.sendEmailCode:
+  /api/v1/twoFactorChallenges.sendEmailCode:
     post:
       tags:
         - Two-Factor Authentication
@@ -1188,7 +1188,7 @@ paths:
                     success: false
                     error: user not found
                     errorType: error-user-not-found
-/api/v1/twoFactorChallenges.verifyChallenge:
+  /api/v1/twoFactorChallenges.verifyChallenge:
     post:
       tags:
         - Two-Factor Authentication
