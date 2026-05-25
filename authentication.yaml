@@ -1115,7 +1115,7 @@ paths:
                       method: password
                       codeGenerated: false
                       availableMethods: []
-  /api/v1/twoFactorChallenges.sendEmailCode:
+/api/v1/twoFactorChallenges.sendEmailCode:
     post:
       tags:
         - Two-Factor Authentication
@@ -1124,8 +1124,6 @@ paths:
         Sends a two-factor authentication code by email for an in-progress login challenge. Use this endpoint after a login attempt returns a `challengeId` for the email two-factor method, to deliver a fresh code to the user.
 
         The endpoint does not require an authenticated session. It is rate-limited to 5 requests per minute per caller. The challenge must exist, must not be expired, and must use the `email` method.
-
-        <!-- TODO: Confirm the exact login response shape that returns `challengeId` so the description can cross-reference the source endpoint. -->
 
         ### Changelog
         | Version | Description |
@@ -1200,8 +1198,6 @@ paths:
 
         The endpoint does not require an authenticated session. It is rate-limited to 5 requests per minute per caller. Exceeding the per-user maximum failed attempts removes the challenge and returns a `totp-max-attempts` error.
 
-        <!-- TODO: Confirm whether the returned `loginToken` is intended to be paired with `X-User-Id` in subsequent requests, and document the expected client handling here. -->
-
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
@@ -1246,14 +1242,9 @@ paths:
               examples:
                 Verification successful:
                   value:
-                    loginToken: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq
+                    loginToken: exampleLoginTokenString123
                     userId: aobEdbYhXfu5hkeqG
                     success: true
-                Invalid code:
-                  value:
-                    success: false
-                    error: Invalid code
-                    errorType: error-invalid-code
         '400':
           description: Bad Request
           content:
@@ -1273,6 +1264,11 @@ paths:
                     success: false
                     error: challengeId and code are required
                     errorType: error-parameter-required
+                Invalid code:
+                  value:
+                    success: false
+                    error: Invalid code
+                    errorType: error-invalid-code
                 Challenge not found:
                   value:
                     success: false
