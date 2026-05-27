@@ -4087,12 +4087,13 @@ paths:
         * `create-c`: To change a private group to a public channel.
         * `create-p`: To change a public channel to a private room.
 
-        When the type changes to `c` (public) on a room that has ABAC attributes, all ABAC attributes on the room are cleared as part of the conversion.
+        For ABAC-managed private rooms, changing the type from `p` to `c` is rejected with `error-action-not-allowed`.
+        When the type changes to `c` (public) and the room has ABAC attributes, all ABAC attributes on the room are cleared as part of the conversion.
 
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
-        | 8.5.0   | ABAC attributes on the room are dropped when converting to a public (`c`) channel. |
+        | 8.5.0   | Added ABAC behavior for `p` -> `c`: ABAC-managed private rooms are rejected, and successful conversions to public clear room ABAC attributes. |
         | 0.49.0  | Added       |
       operationId: post-api-v1-channels.setType
       parameters:
@@ -4191,6 +4192,35 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+                      action:
+                        type: string
+              examples:
+                ABAC-managed room conversion blocked:
+                  value:
+                    success: false
+                    error: 'Changing an ABAC managed private room to public is not allowed [error-action-not-allowed]'
+                    errorType: error-action-not-allowed
+                    details:
+                      method: saveRoomSettings
+                      action: Change_Room_Type
 
   /api/v1/channels.unarchive:
     post:
