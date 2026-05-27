@@ -6092,11 +6092,12 @@ paths:
       description: |-
         Updates the settings of an existing room.
 
-        For ABAC-managed rooms (Enterprise, with the ABAC license and `ABAC_Enabled`), the following guardrails apply:
+        For ABAC-managed rooms, the following guardrails apply:
 
         - Changing `roomAnnouncement`, `roomTopic`, or `roomDescription` is rejected with `error-action-not-allowed`.
         - Setting `default: true` on an ABAC-managed room is rejected with `error-action-not-allowed`.
         - Changing `roomType` from `p` to `c` is rejected with `error-action-not-allowed`. The same guard applies to private rooms in ABAC-managed private teams.
+        - When `roomType` changes to `c` (public) and conversion is allowed, existing room ABAC attributes are cleared as part of the conversion.
 
         Permission required: `edit-room`
 
@@ -6234,12 +6235,35 @@ paths:
                     type: string
                   errorType:
                     type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+                      action:
+                        type: string
               examples:
-                roomId or roomName is required:
+                Invalid room:
                   value:
                     success: false
-                    error: 'The required "roomId" or "roomName" param provided does not match any group [error-room-not-found]'
-                    errorType: error-room-not-found
+                    error: 'Invalid room [error-invalid-room]'
+                    errorType: error-invalid-room
+                ABAC-managed room type conversion blocked:
+                  value:
+                    success: false
+                    error: 'Changing an ABAC managed private room to public is not allowed [error-action-not-allowed]'
+                    errorType: error-action-not-allowed
+                    details:
+                      method: saveRoomSettings
+                      action: Change_Room_Type
+                ABAC-managed room default blocked:
+                  value:
+                    success: false
+                    error: 'Setting an ABAC managed room as default is not allowed [error-action-not-allowed]'
+                    errorType: error-action-not-allowed
+                    details:
+                      method: saveRoomSettings
+                      action: Viewing_room_administration
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/rooms.nameExists:
