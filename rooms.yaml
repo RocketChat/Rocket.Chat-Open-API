@@ -12468,12 +12468,13 @@ paths:
         * `create-team-channel`: This permission is required if you are changing a team's private channel to a public channel.
         * `create-team-group`: This permission is required if you are changing a team's public channel to a private room.
 
-        When the type changes to `c` (public) on a group that has ABAC attributes, all ABAC attributes on the group are cleared as part of the conversion.
+        For ABAC-managed private rooms, changing the type from `p` to `c` is rejected with `error-action-not-allowed`.
+        When the type changes to `c` (public) and the group has ABAC attributes, all ABAC attributes on the group are cleared as part of the conversion.
 
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
-        | 8.5.0   | ABAC attributes on the group are dropped when converting to a public (`c`) channel. |
+        | 8.5.0   | Added ABAC behavior for `p` -> `c`: ABAC-managed private rooms are rejected, and successful conversions to public clear group ABAC attributes. |
         | 0.49.0  | Added       |
       operationId: post-api-v1-groups.setType
       parameters:
@@ -12580,11 +12581,28 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+                      action:
+                        type: string
               examples:
-                Example 1:
+                Missing body param: type:
                   value:
                     success: false
-                    error: The bodyParam "type" is required                    
+                    error: The bodyParam "type" is required
+                ABAC-managed room conversion blocked:
+                  value:
+                    success: false
+                    error: 'Changing an ABAC managed private room to public is not allowed [error-action-not-allowed]'
+                    errorType: error-action-not-allowed
+                    details:
+                      method: saveRoomSettings
+                      action: Change_Room_Type
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.unarchive:
