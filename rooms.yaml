@@ -12591,7 +12591,7 @@ paths:
                       action:
                         type: string
               examples:
-                Missing body param: type:
+                'Missing body param: type':
                   value:
                     success: false
                     error: The bodyParam "type" is required
