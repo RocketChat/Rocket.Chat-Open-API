@@ -14332,7 +14332,7 @@ paths:
 
         - Replaces the full ABAC attribute set for a room.
         - Sets the complete set of ABAC attributes on the specified room by providing an attributes object that maps attribute keys to arrays of allowed values; any previously assigned attributes not included in the request are removed.
-        - Requires the Enterprise ABAC license, the `abac-management` and `manage-abac-admin-rooms` permissions, and the global setting `ABAC_Enabled` to be turned on.
+        - Requires the ABAC license, the `abac-management` and `manage-abac-admin-rooms` permissions, and the global setting `ABAC_Enabled` to be turned on.
 
         ### Changelog
         | Version | Description |
@@ -14530,7 +14530,7 @@ paths:
 
         - Adds a single ABAC attribute key to a room.
         - Creates a new ABAC attribute on the specified room for the given key, assigning it the provided values array; fails if the room already has this key or if the key/values are not allowed by the global attribute definition.
-        - Requires the Enterprise ABAC license, the `abac-management` and `manage-abac-admin-rooms` permissions, and the global setting `ABAC_Enabled` to be turned on.
+        - Requires the ABAC license, the `abac-management` and `manage-abac-admin-rooms` permissions, and the global setting `ABAC_Enabled` to be turned on.
 
         ### Changelog
         | Version | Description |
@@ -14645,7 +14645,7 @@ paths:
 
         - Sets the values of a single ABAC attribute on a room.
         - Replaces the existing values for the given attribute key on the specified room with the provided values array (or creates the attribute if it does not yet exist), enforcing the global attribute definition and ABAC validation rules.
-        - Requires the Enterprise ABAC license, the `abac-management` and `manage-abac-admin-rooms` permissions, and the global setting `ABAC_Enabled` to be turned on.
+        - Requires the ABAC license, the `abac-management` and `manage-abac-admin-rooms` permissions, and the global setting `ABAC_Enabled` to be turned on.
 
         ### Changelog
         | Version | Description |
@@ -14981,7 +14981,7 @@ paths:
 
         - Creates a new ABAC attribute definition.
         - Registers a global ABAC attribute by specifying its key and the list of allowed values, making it available for use on rooms and users.
-        - Requires the Enterprise ABAC license, the `abac-management` and `manage-abac-admin-room-attributes` permissions, and the global setting `ABAC_Enabled` to be turned on.
+        - Requires the ABAC license, the `abac-management` and `manage-abac-admin-room-attributes` permissions, and the global setting `ABAC_Enabled` to be turned on.
 
         ### Changelog
         | Version | Description |
@@ -15231,7 +15231,7 @@ paths:
 
         - Updates an existing ABAC attribute definition.
         - Modifies the attribute identified by `_id`, allowing you to rename its key, change its list of allowed values, or both, subject to in-use and validation checks.
-        - Requires the Enterprise ABAC license, the `abac-management` and `manage-abac-admin-room-attributes` permissions, and the global setting `ABAC_Enabled` to be turned on.
+        - Requires the ABAC license, the `abac-management` and `manage-abac-admin-room-attributes` permissions, and the global setting `ABAC_Enabled` to be turned on.
 
         ### Changelog
         | Version | Description |
