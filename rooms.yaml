@@ -14282,7 +14282,7 @@ paths:
         '200':
           $ref: '#/components/responses/trueSuccess'
         '400':
-          description: Bad request
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -14293,6 +14293,10 @@ paths:
                   error:
                     type: string
               examples:
+                ABAC not enabled:
+                  value:
+                    success: false
+                    error: error-abac-not-enabled
                 Attribute definition missing:
                   value:
                     success: false
@@ -14315,7 +14319,7 @@ paths:
                   error:
                     type: string
               examples:
-                'No "abac-management" ':
+                Missing required ABAC permissions:
                   value:
                     success: false
                     error: error-not-authorized
@@ -14333,6 +14337,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 8.0.0   | Added |
         | 8.5.0   | Added the `manage-abac-admin-rooms` granular permission requirement. |
       requestBody:
         content:
@@ -14411,7 +14416,7 @@ paths:
                   error:
                     type: string
               examples:
-                'No "abac-management" ':
+                Missing required ABAC permissions:
                   value:
                     success: false
                     error: error-not-authorized
@@ -14424,11 +14429,12 @@ paths:
 
         - Clears all ABAC attributes from a room.
         - Removes every ABAC attribute key and value currently assigned to the specified room, leaving it with no ABAC attributes configured.
-        - Requires the Enterprise ABAC license and the `abac-management` and `manage-abac-admin-rooms` permissions. This call does not require the global setting `ABAC_Enabled` to be on, so attributes can be cleared after disabling ABAC.
+        - Requires the `abac-management` and `manage-abac-admin-rooms` permissions. This call does not require the global setting `ABAC_Enabled` to be on, so attributes can be cleared after disabling ABAC.
 
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 8.0.0   | Added |
         | 8.5.0   | Added the `manage-abac-admin-rooms` granular permission requirement. |
     parameters: []
   '/api/v1/abac/rooms/:rid/attributes/:key':
@@ -14462,6 +14468,10 @@ paths:
                   error:
                     type: string
               examples:
+                ABAC not enabled:
+                  value:
+                    success: false
+                    error: error-abac-not-enabled
                 Attribute definition missing:
                   value:
                     success: false
@@ -14510,7 +14520,7 @@ paths:
                   error:
                     type: string
               examples:
-                'No "abac-management" ':
+                Missing required ABAC permissions:
                   value:
                     success: false
                     error: error-not-authorized
@@ -14525,6 +14535,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 8.0.0   | Added |
         | 8.5.0   | Added the `manage-abac-admin-rooms` granular permission requirement. |
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -14624,7 +14635,7 @@ paths:
                   error:
                     type: string
               examples:
-                'No "abac-management" ':
+                Missing required ABAC permissions:
                   value:
                     success: false
                     error: error-not-authorized
@@ -14639,6 +14650,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 8.0.0   | Added |
         | 8.5.0   | Added the `manage-abac-admin-rooms` granular permission requirement. |
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -14727,7 +14739,7 @@ paths:
                   error:
                     type: string
               examples:
-                'No "abac-management" ':
+                Missing required ABAC permissions:
                   value:
                     success: false
                     error: error-not-authorized
@@ -14737,11 +14749,12 @@ paths:
 
         - Removes a single ABAC attribute key from a room.
         - Deletes the specified attribute key and all its values from the room's ABAC configuration, leaving other attributes unchanged.
-        - Requires the Enterprise ABAC license and the `abac-management` and `manage-abac-admin-rooms` permissions.
+        - Requires the `abac-management` and `manage-abac-admin-rooms` permissions.
 
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 8.0.0   | Added |
         | 8.5.0   | Added the `manage-abac-admin-rooms` granular permission requirement. |
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -14843,7 +14856,7 @@ paths:
                   error:
                     type: string
               examples:
-                'No "abac-management" ':
+                Missing required ABAC permissions:
                   value:
                     success: false
                     error: error-not-authorized
@@ -14854,11 +14867,12 @@ paths:
         - Lists all ABAC attribute definitions.
         - Returns a paginated list of attribute definitions (key and allowed values).
         - Supports optional filtering by attribute key or value, and pagination via offset and count query parameters.
-        - Requires the Enterprise ABAC license and the `abac-management` and `manage-abac-admin-room-attributes` permissions.
+        - Requires the `abac-management` and `manage-abac-admin-room-attributes` permissions.
 
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 8.0.0   | Added |
         | 8.5.0   | Added the `manage-abac-admin-room-attributes` granular permission requirement. |
       parameters:
         - schema:
@@ -14957,7 +14971,7 @@ paths:
                   error:
                     type: string
               examples:
-                'No "abac-management" ':
+                Missing required ABAC permissions:
                   value:
                     success: false
                     error: error-not-authorized
@@ -14972,6 +14986,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 8.0.0   | Added |
         | 8.5.0   | Added the `manage-abac-admin-room-attributes` granular permission requirement. |
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -15066,7 +15081,7 @@ paths:
                   error:
                     type: string
               examples:
-                'No "abac-management" ':
+                Missing required ABAC permissions:
                   value:
                     success: false
                     error: error-not-authorized
@@ -15082,6 +15097,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 8.0.0   | Added |
         | 8.5.0   | Added the `manage-abac-admin-room-attributes` granular permission requirement. |
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -15205,7 +15221,7 @@ paths:
                   error:
                     type: string
               examples:
-                'No "abac-management" ':
+                Missing required ABAC permissions:
                   value:
                     success: false
                     error: error-not-authorized
@@ -15220,6 +15236,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 8.0.0   | Added |
         | 8.5.0   | Added the `manage-abac-admin-room-attributes` granular permission requirement. |
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -15319,7 +15336,7 @@ paths:
                   error:
                     type: string
               examples:
-                'No "abac-management" ':
+                Missing required ABAC permissions:
                   value:
                     success: false
                     error: error-not-authorized
@@ -15329,11 +15346,12 @@ paths:
 
         - Retrieves a single ABAC attribute definition by ID.
         - Returns the attribute key and its allowed values for the definition identified by `_id`.
-        - Requires the Enterprise ABAC license and the `abac-management` and `manage-abac-admin-room-attributes` permissions.
+        - Requires the `abac-management` and `manage-abac-admin-room-attributes` permissions.
 
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 8.0.0   | Added |
         | 8.5.0   | Added the `manage-abac-admin-room-attributes` granular permission requirement. |
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -15408,7 +15426,7 @@ paths:
                     success: false
                     error: error-not-authorized
               examples:
-                'No "abac-management" ':
+                Missing required ABAC permissions:
                   value:
                     success: false
                     error: error-not-authorized
@@ -15418,11 +15436,12 @@ paths:
 
         - Deletes an ABAC attribute definition by ID.
         - Removes the attribute definition identified by `_id`. The delete fails if the attribute is currently in use, for example assigned to any room.
-        - Requires the Enterprise ABAC license and the `abac-management` and `manage-abac-admin-room-attributes` permissions.
+        - Requires the `abac-management` and `manage-abac-admin-room-attributes` permissions.
 
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 8.0.0   | Added |
         | 8.5.0   | Added the `manage-abac-admin-room-attributes` granular permission requirement. |
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -15490,7 +15509,7 @@ paths:
                     success: false
                     error: error-not-authorized
               examples:
-                'No "abac-management" ':
+                Missing required ABAC permissions:
                   value:
                     success: false
                     error: error-not-authorized
@@ -15499,11 +15518,12 @@ paths:
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Defense.svg" alt="Defense" style="display: block; margin: auto"></div>
 
         - Checks whether an ABAC attribute definition is currently used by any room.
-        - Requires the Enterprise ABAC license and the `abac-management` and `manage-abac-admin-room-attributes` permissions.
+        - Requires the `abac-management` and `manage-abac-admin-room-attributes` permissions.
 
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 8.0.0   | Added |
         | 8.5.0   | Added the `manage-abac-admin-room-attributes` granular permission requirement. |
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -15639,7 +15659,7 @@ paths:
                     success: false
                     error: error-not-authorized
               examples:
-                'No "abac-management" ':
+                Missing required ABAC permissions:
                   value:
                     success: false
                     error: error-not-authorized
@@ -15649,11 +15669,12 @@ paths:
 
         - Lists rooms with ABAC attributes.
         - Returns a paginated list of rooms that have ABAC attributes configured, with optional filtering by room name, attribute key, or attribute value using the `filter` and `filterType` query parameters.
-        - Requires the Enterprise ABAC license and the `abac-management` and `manage-abac-admin-rooms` permissions.
+        - Requires the `abac-management` and `manage-abac-admin-rooms` permissions.
 
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 8.0.0   | Added |
         | 8.5.0   | Added the `manage-abac-admin-rooms` granular permission requirement. |
       parameters:
         - schema:
@@ -15810,7 +15831,7 @@ paths:
                     success: false
                     error: error-not-authorized
               examples:
-                'No "abac-management" ':
+                Missing required ABAC permissions:
                   value:
                     success: false
                     error: error-not-authorized
@@ -15825,6 +15846,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 8.0.0   | Added |
         | 8.5.0   | Added the `view-abac-admin-audit` granular permission requirement. |
       parameters:
         - schema:
@@ -15879,6 +15901,7 @@ paths:
         ### Changelog
         | Version | Change |
         |---------|--------|
+        | 8.0.0   | Added |
         | 8.5.0   | Added the `manage-abac-admin-settings` granular permission requirement. |
         | 8.4.0   | Added endpoint to check external PDP health status |
       operationId: get-abac-pdp-health
