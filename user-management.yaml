@@ -2036,7 +2036,7 @@ paths:
             type: string
           in: query
           name: importId
-          description: 'The username of the user. Alternatively, you can use `userId` or `username` to retrieve user information.'
+          description: 'The import ID of the user. Alternatively, you can use `userId`, `username`, `email`, or `freeSwitchExtension` to retrieve user information.'
         - schema:
             type: string
           in: query
@@ -2045,7 +2045,7 @@ paths:
         - name: email
           in: query
           required: false
-          description: Filter the results by entering the user's email. Either userId, username, or email must be provided.
+          description: Filter the results by entering the user's email. Alternatively, you can use `userId`, `username`, `importId`, or `freeSwitchExtension` to retrieve user information.
           schema:
             type: string
           example: john@example.com
@@ -2719,9 +2719,8 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       description: |-
-        Activate or deactivate a user in the workspace. Any one of the following permissions is required:
-          * `edit-other-user-active-status`: Permission to change other user's status.
-          * `manage-moderation-actions`: Permission to manage moderation actions, perform actions on reported users.
+        Activate or deactivate a user in the workspace.
+        Permission required: `edit-other-user-active-status`
 
           When a user is deactivated (`activeStatus=false`), Rocket.Chat revokes all of the user's login tokens and OAuth access tokens, refresh tokens, and authorization codes. The user can no longer call the REST API with previously issued OAuth credentials.
 
