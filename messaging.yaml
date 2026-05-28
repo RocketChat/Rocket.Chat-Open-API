@@ -5548,13 +5548,14 @@ paths:
       description: |-
         Auto-translates the provided message.
 
-        The caller must have access to the room that contains the message. If the user is not a member of the room (or otherwise cannot access it), the endpoint returns a `403 Forbidden` response and no translation is performed.
+        The caller must have access to the room that contains the message.
+        If the caller is not a room member (or otherwise cannot access it), the endpoint returns `403 Forbidden` and no translation is performed.
 
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
-        |8.5.0          | **BREAKING**: Added room-access check. Callers without access to the message's room now receive a `403 Forbidden` response. |
         |1.3.0          | Added       |
+        |8.5.0          | Added room-access check. |
       operationId: post-api-v1-autotranslate.translateMessage
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -5641,6 +5642,29 @@ paths:
                       translations:
                         en: This is a test
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Invalid Params:
+                  value:
+                    success: false
+                    error: 'Invalid request body. [error-invalid-params]'
+                    errorType: error-invalid-params
+                Message Not Found:
+                  value:
+                    success: false
+                    error: 'Message not found.'
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -5652,8 +5676,12 @@ paths:
                 properties:
                   success:
                     type: boolean
+                    enum: [false]
                   error:
                     type: string
+                required:
+                  - success
+                  - error
               examples:
                 Permission Error:
                   value:
