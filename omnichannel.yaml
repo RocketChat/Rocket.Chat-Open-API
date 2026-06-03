@@ -13334,7 +13334,7 @@ paths:
       operationId: get-api-v1-livechat-visitor.info
       responses:
         '200':
-          description: ''
+          description: OK
           content:
             application/json:
               schema:
@@ -13391,7 +13391,6 @@ paths:
                     success: true
         '400':
           description: Bad Request
-          headers: {}
           content:
             application/json:
               schema:
@@ -13409,19 +13408,25 @@ paths:
                     success: false
                     error: 'must have required property ''visitorId'' [invalid-params]'
                     errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: visitor-not-found
         '401':
           $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/permissionError'
       description: |-
-        Get the information of a specific visitor.
-
-        The response does not include the visitor `token`. To obtain a visitor token, use the visitor-registration flow (<a href='https://developer.rocket.chat/apidocs/register-a-new-livechat-visitor' target='_blank'>Register a New Livechat Visitor</a>), which returns the token at creation time.
+        Retrieve information for a Livechat visitor by ID.
 
         Permission required: `view-l-room`
+
+        The response does not include the visitor `token`. To obtain a token, register or update the visitor using <a href='https://developer.rocket.chat/apidocs/register-a-new-livechat-visitor' target='_blank'>Register a New Livechat Visitor</a>, which returns the token in the response.
 
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
-        | 8.5.0   | **BREAKING**: The `token` field is no longer returned in the response. Integrations that read `token` from this endpoint must retrieve it from the visitor-creation response instead. |
+        | 8.5.0   | The `token` field is no longer returned in the response. Retrieve the token from the visitor registration endpoint instead. |
       parameters:
         - schema:
             type: string
