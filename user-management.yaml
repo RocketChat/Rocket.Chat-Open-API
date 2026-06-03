@@ -2022,8 +2022,8 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: userId
           in: query
-          description: 'The `userId` of the user. Alternatively, you can use `username` or `importId` to retrieve user information. Email-based lookup is not supported.'
-          required: true
+          description: 'The `userId` of the user. Alternatively, you can use `username`, `importId`, `email`, or `freeSwitchExtension` to retrieve user information.'
+          required: false
           schema:
             type: string
           example: W7NHuX5ri2e3mu2Fc
@@ -2031,7 +2031,7 @@ paths:
             type: string
           in: query
           name: username
-          description: 'The username of the user. Alternatively, you can use `userId` or `importId` to retrieve user information.'
+          description: 'The username of the user. Alternatively, you can use `userId`, `importId`, `email`, or `freeSwitchExtension` to retrieve user information.'
         - schema:
             type: string
           in: query
@@ -2720,16 +2720,19 @@ paths:
           $ref: '#/components/responses/authorizationError'
       description: |-
         Activate or deactivate a user in the workspace.
-        Permission required: `edit-other-user-active-status`
 
-          When a user is deactivated (`activeStatus=false`), Rocket.Chat revokes all of the user's login tokens and OAuth access tokens, refresh tokens, and authorization codes. The user can no longer call the REST API with previously issued OAuth credentials.
+        Any one of the following permissions is required:
+        * `edit-other-user-active-status`: Change another user's active status.
+        * `manage-moderation-actions`: Manage moderation actions on reported users.
 
-          ### Changelog
-          | Version      | Description |
-          | ---------------- | ------------|
-          |8.5.0            | Deactivation now also revokes the user's OAuth access tokens, refresh tokens, and authorization codes. |
-          |3.7.0            | Added `confirmRelinquish` to the payload.       |
-          |0.75.0            | Added       |
+        When a user is deactivated (`activeStatus=false`), Rocket.Chat revokes all of the user's login tokens and OAuth access tokens, refresh tokens, and authorization codes. The user can no longer call the REST API with previously issued OAuth credentials.
+
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |8.5.0            | Added OAuth access token, refresh token, and authorization code revocation on deactivation. |
+        |3.7.0            | Added `confirmRelinquish` to the payload.       |
+        |0.75.0            | Added       |
       parameters:
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/Auth-Token'
@@ -2834,11 +2837,11 @@ paths:
 
         Permission required: `edit-other-user-active-status`
 
-          ### Changelog
-          | Version      | Description |
-          | ---------------- | ------------|
-          |8.5.0            | Deactivated users now also have their login tokens cleared and their OAuth access tokens, refresh tokens, and authorization codes revoked. |
-          |3.1.0            | Added       |
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |8.5.0            | Added login and OAuth token revocation for users deactivated by this endpoint. |
+        |3.1.0            | Added       |
       parameters:
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/Auth-Token'
@@ -2983,7 +2986,11 @@ paths:
           example: J4sWseCgs8eEnWvhE,BsNr28znDkG8aeo7W
           in: query
           name: ids
-          description: The user IDs whose status you want. You can pass more than one ID as comma-separated values.
+          description: |-
+            The user IDs whose presence you want. Provide one or more IDs using any of these formats:
+            * `?ids=userId1` — single ID
+            * `?ids=userId1,userId2` — comma-separated string
+            * `?ids=userId1&ids=userId2` — repeated query parameter
       description: |-
         Get presence of multiple workspace users. You can filter by date and user IDs.
         If the `Presence_broadcast_disabled` setting is true, the endpoint returns an empty array. You can find this setting under **Manage** > **Workspace** > **Settings** > **Troubleshoot**.
@@ -2991,7 +2998,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
-        |8.5.0            | Restored support for comma-separated values in `ids`.       |
+        |8.5.0            | Restored comma-separated `ids` query parameter support.       |
         |1.1.0            | Added       |
       tags:
         - Users
