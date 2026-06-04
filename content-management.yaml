@@ -384,8 +384,8 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
-        |2.4.0            | Added `name` query parameter for filtering.      |
-        |2.4.0            | Added       |
+        | 2.4.0            | Added       |
+        | 2.4.0            | Added `name` query parameter for filtering.      |
       operationId: get-api-v1-custom-sounds.list
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -455,9 +455,13 @@ paths:
         - Custom Sounds
       summary: Create Custom Sound
       description: |-
-        Upload a new custom sound to the workspace. The request must be sent as `multipart/form-data` and contain the audio file in the `sound` field and the display name in the `name` field. The file size must not exceed `5 MB` (5242880 bytes), and the file MIME type must be one of `audio/mpeg`, `audio/mp3`, `audio/wav`, or `audio/x-wav`.
+        Upload a new custom sound to the workspace.
 
-        This endpoint replaces the deprecated DDP methods `insertOrUpdateSound` and `uploadCustomSound`, which now log a deprecation warning and are scheduled for removal in `9.0.0`.
+        - The request must be sent as `multipart/form-data` and contain the audio file in the `sound` field and the display name in the `name` field.
+
+        - The file size must not exceed `5 MB` (5242880 bytes), and the file MIME type must be one of `audio/mpeg`, `audio/mp3`, `audio/wav`, or `audio/x-wav`.
+
+        This endpoint replaces the deprecated DDP methods `insertOrUpdateSound` and `uploadCustomSound`, which will be removed in `9.0.0`.
 
         Permission required: `manage-sounds`
 
@@ -481,7 +485,7 @@ paths:
                   description: The audio file to upload. Allowed MIME types are `audio/mpeg`, `audio/mp3`, `audio/wav`, and `audio/x-wav`. Maximum size is `5 MB` (5242880 bytes).
                 name:
                   type: string
-                  description: The display name of the custom sound. Must be at least one character long.
+                  description: The display name of the custom sound. Must be at least one character long and must not contain colons, whitespace, or the characters `,`, `>`, `<`, `&`, `"`, `'`, `/`, `\`, `(`, or `)`.
                   example: doremi
               required:
                 - sound
@@ -532,7 +536,15 @@ paths:
                 File too large:
                   value:
                     success: false
-                    error: 'File exceeds allowed size of 5 MB.'
+                    error: '[error-file-too-large]'
+                Name already in use:
+                  value:
+                    success: false
+                    error: 'The custom sound name is already in use [Custom_Sound_Error_Name_Already_In_Use]'
+                Invalid name:
+                  value:
+                    success: false
+                    error: '<script> is not a valid name'
                 Missing required field:
                   value:
                     success: false
@@ -565,9 +577,13 @@ paths:
         - Custom Sounds
       summary: Update Custom Sound
       description: |-
-        Update an existing custom sound. The request must be sent as `multipart/form-data`. The `_id` and `name` fields are required; the `sound` file field is optional and only required when replacing the audio file. When a new file is provided, the same MIME type and size rules apply as for `custom-sounds.create`: allowed MIME types are `audio/mpeg`, `audio/mp3`, `audio/wav`, and `audio/x-wav`, and the maximum size is `5 MB` (5242880 bytes).
+        Update an existing custom sound.
 
-        This endpoint replaces the deprecated DDP methods `insertOrUpdateSound` and `uploadCustomSound`, which now log a deprecation warning and are scheduled for removal in `9.0.0`.
+        - The request must be sent as `multipart/form-data`. The `_id` and `name` fields are required; the `sound` file field is optional and only required when replacing the audio file.
+
+        - When a new file is provided, the file size must not exceed `5 MB` (5242880 bytes), and the file MIME type must be one of `audio/mpeg`, `audio/mp3`, `audio/wav`, or `audio/x-wav`.
+
+        This endpoint replaces the deprecated DDP methods `insertOrUpdateSound` and `uploadCustomSound`, which will be removed in `9.0.0`.
 
         Permission required: `manage-sounds`
 
@@ -591,7 +607,7 @@ paths:
                   example: 65462caea2f73c7460e18f83
                 name:
                   type: string
-                  description: The updated display name of the custom sound. Must be at least one character long.
+                  description: The updated display name of the custom sound. Must be at least one character long and must not contain colons, whitespace, or the characters `,`, `>`, `<`, `&`, `"`, `'`, `/`, `\`, `(`, or `)`.
                   example: doremi-v2
                 sound:
                   type: string
@@ -630,6 +646,18 @@ paths:
                   value:
                     success: false
                     error: MIME type not allowed
+                File too large:
+                  value:
+                    success: false
+                    error: '[error-file-too-large]'
+                Name already in use:
+                  value:
+                    success: false
+                    error: 'The custom sound name is already in use [Custom_Sound_Error_Name_Already_In_Use]'
+                Invalid name:
+                  value:
+                    success: false
+                    error: '<script> is not a valid name'
                 Missing required field:
                   value:
                     success: false
@@ -1198,6 +1226,22 @@ paths:
                     success: false
                     error: '[The required "_id" query param is missing.]'
                     errorType: The required "_id" query param is missing.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Sound not found:
+                  value:
+                    success: false
+                    error: Custom Sound not found.
         '401':
           description: Unauthorized
           content:
