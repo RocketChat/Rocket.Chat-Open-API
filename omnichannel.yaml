@@ -13125,24 +13125,39 @@ paths:
                               type: string
                       department:
                         type: string
+                      externalIds:
+                        type: array
+                        description: Channel-specific external identifiers (e.g. WhatsApp BSUID). Set by omnichannel apps via apps-engine, not through this REST endpoint's request body.
+                        items:
+                          type: object
+                          properties:
+                            appId:
+                              type: string
+                              description: ID of the omnichannel app that registered this identifier.
+                            entityId:
+                              type: string
+                              description: External identifier value (e.g. Meta BSUID).
+                            metadata:
+                              type: object
+                              additionalProperties: true
+                              description: Optional app-specific metadata (e.g. WhatsApp username).
                   success:
                     type: boolean
               examples:
                 Success Example:
                   value:
                     visitor:
-                      _id: 642fc15452492a08c3a756de
-                      username: guest-19
+                      _id: 6a22b1765528fa64dd29de70
+                      username: guest-10
                       status: online
-                      ts: '2023-04-07T07:08:04.375Z'
-                      _updatedAt: '2023-11-03T08:23:23.449Z'
-                      name: Livechat Visitor
+                      ts: '2026-06-05T11:22:30.664Z'
+                      _updatedAt: '2026-06-05T11:22:30.665Z'
+                      name: Postman Test Visitor
                       phone:
-                        - phoneNumber: 55 51 5555-5555
-                      token: iNKE8a6k6cjbqWhWd
+                        - phoneNumber: '+15551234567'
+                      token: test-token-12345
                       visitorEmails:
-                        - address: visitor@rocket.chat
-                      department: 64181a0728384134ed600dcc
+                        - address: postman-test@example.com
                     success: true
         '400':
           description: Bad Request
@@ -13164,7 +13179,15 @@ paths:
                   value:
                     success: false
                     error: 'Match error: Missing key ''token'' in field visitor'
-      description: 'Register a visitor''s information before creating a new Omnichannel room. You can set basic information such as name, phone, custom fields, and the initial department.'
+      description: |-
+        Register a visitor's information before creating a new Omnichannel room. You can set basic information such as name, phone, custom fields, and the initial department.
+
+        The response may include `externalIds` when the visitor has been linked to an external system by an omnichannel app. This field cannot be set through this endpoint's request body.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.4.0   | Added `externalIds` field to the visitor response. |
       requestBody:
         content:
           application/json:
@@ -13277,25 +13300,47 @@ paths:
                         properties:
                           address:
                             type: string
+                      externalIds:
+                        type: array
+                        description: Channel-specific external identifiers (e.g. WhatsApp BSUID). Set by omnichannel apps via apps-engine, not through this REST endpoint's request body.
+                        items:
+                          type: object
+                          properties:
+                            appId:
+                              type: string
+                              description: ID of the omnichannel app that registered this identifier.
+                            entityId:
+                              type: string
+                              description: External identifier value (e.g. Meta BSUID).
+                            metadata:
+                              type: object
+                              additionalProperties: true
+                              description: Optional app-specific metadata (e.g. WhatsApp username).
                   success:
                     type: boolean
               examples:
                 Success Example:
                   value:
                     visitor:
-                      _id: sGtcfEYz852uguxaS
-                      username: guest-7
-                      _updatedAt: '2018-09-21T14:10:56.529Z'
-                      token: iNKE8a6k6cjbqWhWd
+                      _id: 6a22b1765528fa64dd29de70
+                      username: guest-10
+                      _updatedAt: '2026-06-05T11:22:30.665Z'
+                      token: test-token-12345
                       phone:
-                        - phoneNumber: 55 51 5555-5555
+                        - phoneNumber: '+15551234567'
                       visitorEmails:
-                        - address: visitor@rocket.chat
-                      name: Livechat Visitor
-                      livechatData:
-                        address: Rocket.Chat street
+                        - address: postman-test@example.com
+                      name: Postman Test Visitor
                     success: true
-      description: Get the details of a specific visitor.
+      description: |-
+        Get the details of a specific visitor.
+
+        The response may include `externalIds` when the visitor has been linked to an external system by an omnichannel app.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.4.0   | Added `externalIds` field to the visitor response. |
       tags:
         - Omnichannel Visitors
     delete:
@@ -13371,23 +13416,38 @@ paths:
                               type: string
                       department:
                         type: string
+                      externalIds:
+                        type: array
+                        description: Channel-specific external identifiers (e.g. WhatsApp BSUID). Set by omnichannel apps via apps-engine, not through this REST endpoint's request body.
+                        items:
+                          type: object
+                          properties:
+                            appId:
+                              type: string
+                              description: ID of the omnichannel app that registered this identifier.
+                            entityId:
+                              type: string
+                              description: External identifier value (e.g. Meta BSUID).
+                            metadata:
+                              type: object
+                              additionalProperties: true
+                              description: Optional app-specific metadata (e.g. WhatsApp username).
                   success:
                     type: boolean
               examples:
                 Success Example:
                   value:
                     visitor:
-                      _id: 642fc15452492a08c3a756de
-                      username: guest-19
+                      _id: 6a22b1765528fa64dd29de70
+                      username: guest-10
                       status: online
-                      ts: '2023-04-07T07:08:04.375Z'
-                      _updatedAt: '2023-11-03T08:23:23.449Z'
-                      name: Livechat Visitor
+                      ts: '2026-06-05T11:22:30.664Z'
+                      _updatedAt: '2026-06-05T11:22:30.665Z'
+                      name: Postman Test Visitor
                       phone:
-                        - phoneNumber: 55 51 5555-5555
+                        - phoneNumber: '+15551234567'
                       visitorEmails:
-                        - address: visitor@rocket.chat
-                      department: 64181a0728384134ed600dcc
+                        - address: postman-test@example.com
                     success: true
         '400':
           description: Bad Request
@@ -13423,10 +13483,13 @@ paths:
 
         The response does not include the visitor `token`. To obtain a token, register or update the visitor using <a href='https://developer.rocket.chat/apidocs/register-a-new-livechat-visitor' target='_blank'>Register a New Livechat Visitor</a>, which returns the token in the response.
 
+        The response may include `externalIds` when the visitor has been linked to an external system by an omnichannel app (e.g. WhatsApp BSUID). This field cannot be set through REST registration endpoints.
+
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 8.5.0   | The `token` field is no longer returned in the response. Retrieve the token from the visitor registration endpoint instead. |
+        | 8.4.0   | Added `externalIds` field to the visitor response. |
       parameters:
         - schema:
             type: string
