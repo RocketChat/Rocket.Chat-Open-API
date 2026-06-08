@@ -10560,6 +10560,8 @@ paths:
         Invite one user or bulk users to a private channel. Any of the following permissions are required:
         * `add-user-to-joined-room`: This permission is required if you want to add users to the channel that you have joined.
         * `add-user-to-any-p-room`: This permission is required to add users to any private channel.
+
+        You can identify the group by `roomId` or `roomName`, and the user(s) by `userId`, `username`, `userIds`, or `usernames`.
         
         ### Changelog
         | Version | Description |
@@ -10578,22 +10580,59 @@ paths:
                 roomId:
                   type: string
                   description: |- 
-                    The group ID. You can find the IDs by using any of the following endpoints:
+                    The group ID. This parameter is required if no `roomName` is provided. You can find the IDs by using any of the following endpoints:
                     * <a href='https://developer.rocket.chat/apidocs/get-list-of-user-groups' target='_blank'>Get List of User Groups</a>: This endpoint returns all private channels in the workspace, if you have the required permissions to view them.
                     * <a href='https://developer.rocket.chat/apidocs/get-groups' target='_blank'>Get Groups</a>: This endpoint returns the private channels that you are a member of.
-                  example: ByehQjC44FwMeiLbX  
+                  example: ByehQjC44FwMeiLbX
+                roomName:
+                  type: string
+                  description: The group name. This parameter is required if no `roomId` is provided.
+                  example: private-abc
                 userId:
                   type: string
-                  description: The ID of the user to be invited. You can also use the parameter `userIds` as an array to invite more than one user. For example, `["nSYqWzZ4GsKTX4dyK", "SYqWzZ4Gsasdfgh"]`
+                  description: The ID of the user to be invited. This parameter is required if no `username`, `userIds`, or `usernames` is provided.
                   example: nSYqWzZ4GsKTX4dyK
-              required:
-                - roomId
-                - userId
+                username:
+                  type: string
+                  description: The username of the user to be invited. This parameter is required if no `userId`, `userIds`, or `usernames` is provided.
+                  example: john.doe
+                userIds:
+                  type: array
+                  description: An array of user IDs to invite. This parameter is required if no `userId`, `username`, or `usernames` is provided.
+                  items:
+                    type: string
+                  example:
+                    - nSYqWzZ4GsKTX4dyK
+                    - SYqWzZ4Gsasdfgh
+                usernames:
+                  type: array
+                  description: An array of usernames to invite. This parameter is required if no `userId`, `username`, or `userIds` is provided.
+                  items:
+                    type: string
+                  example:
+                    - john.doe
+                    - jane.doe
             examples:
-              Example:
+              Invite by IDs:
                 value:
                   roomId: ByehQjC44FwMeiLbX
                   userId: nSYqWzZ4GsKTX4dyK
+              Invite by names:
+                value:
+                  roomName: private-abc
+                  username: john.doe
+              Invite multiple users by ID:
+                value:
+                  roomId: ByehQjC44FwMeiLbX
+                  userIds:
+                    - nSYqWzZ4GsKTX4dyK
+                    - SYqWzZ4Gsasdfgh
+              Invite multiple users by username:
+                value:
+                  roomName: private-abc
+                  usernames:
+                    - john.doe
+                    - jane.doe
       responses:
         '200':
           description: OK
@@ -10669,6 +10708,16 @@ paths:
                       method:
                         type: string
               examples:
+                Room parameter required:
+                  value:
+                    success: false
+                    error: 'The parameter "roomId" or "roomName" is required [error-room-param-not-provided]'
+                    errorType: error-room-param-not-provided
+                User parameter required:
+                  value:
+                    success: false
+                    error: 'Please provide "userId" or "username" or "userIds" or "usernames" as param [error-users-params-not-provided]'
+                    errorType: error-users-params-not-provided
                 Permission required:
                   value:
                     success: false
