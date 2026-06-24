@@ -5567,6 +5567,154 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
+  /api/v1/rooms.join:
+    post:
+      tags:
+        - Rooms
+      summary: Join a Room
+      description: |-
+        Join a room of any type, including public channels, private groups, and discussions.
+
+        Unlike the <a href='https://developer.rocket.chat/apidocs/join-a-channel' target='_blank'>channels.join</a> endpoint, which only joins public channels, this endpoint resolves all room types and applies the room's access checks, join code requirements, federation rules, and Omnichannel rules.
+
+        Provide either `roomId` or `roomName` to identify the room. If the room is password-protected, also provide `joinCode`. The join code isn't needed if the user has the `join-without-join-code` permission.
+
+        ### Changelog
+        | Version      | Description |
+        | ------------ | ----------- |
+        | 8.6.0-rc.0   | Added       |
+      operationId: post-api-v1-rooms.join
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - type: object
+                  properties:
+                    roomId:
+                      type: string
+                      description: The ID of the room to join. Provide either `roomId` or `roomName`.
+                      example: ByehQjC44FwMeiLbX
+                    joinCode:
+                      type: string
+                      description: |-
+                        The join code of the room. Rooms can be password-protected. In that case, users must enter the password for access. The join code isn't needed if the user has the `join-without-join-code` permission.
+                      example: '1234'
+                  required:
+                    - roomId
+                  additionalProperties: false
+                - type: object
+                  properties:
+                    roomName:
+                      type: string
+                      description: The name of the room to join. Provide either `roomId` or `roomName`.
+                      example: general
+                    joinCode:
+                      type: string
+                      description: |-
+                        The join code of the room. Rooms can be password-protected. In that case, users must enter the password for access. The join code isn't needed if the user has the `join-without-join-code` permission.
+                      example: '1234'
+                  required:
+                    - roomName
+                  additionalProperties: false
+            examples:
+              Join by room ID:
+                value:
+                  roomId: ByehQjC44FwMeiLbX
+                  joinCode: '1234'
+              Join by room name:
+                value:
+                  roomName: general
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  room:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      name:
+                        type: string
+                      fname:
+                        type: string
+                      t:
+                        type: string
+                      msgs:
+                        type: integer
+                      usersCount:
+                        type: integer
+                      u:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          username:
+                            type: string
+                      ts:
+                        type: string
+                      ro:
+                        type: boolean
+                      default:
+                        type: boolean
+                      sysMes:
+                        type: boolean
+                      _updatedAt:
+                        type: string
+                  success:
+                    type: boolean
+              examples:
+                Example:
+                  value:
+                    room:
+                      _id: ByehQjC44FwMeiLbX
+                      name: general
+                      fname: general
+                      t: c
+                      msgs: 8
+                      usersCount: 2
+                      u:
+                        _id: rocketchat.internal.admin.test
+                        username: rocketchat.internal.admin.test
+                      ts: '2026-01-16T12:00:04.783Z'
+                      ro: false
+                      sysMes: true
+                      default: true
+                      _updatedAt: '2026-01-16T12:06:30.426Z'
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Invalid params:
+                  value:
+                    success: false
+                    error: 'Match error: Missing key ''roomId'''
+                    errorType: error-invalid-params
+                Room not found:
+                  value:
+                    success: false
+                    error: 'The required "roomId" or "roomName" param provided does not match any channel [error-room-not-found]'
+                    errorType: error-room-not-found
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/rooms.leave:
     post:
       tags:

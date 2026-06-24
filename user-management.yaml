@@ -2579,10 +2579,11 @@ paths:
         * You can set the status for yourself or another user. The `AllowUserStatusMessageChange` setting must be enabled in the `Accounts` workspace settings.
         * To change another user's status, you must have the `edit-other-user-info` permission.
         * According to your workspace settings (under **Accounts**), you will only be able to set the invisible or `offline` status if the `Allow Invisible status option` setting is enabled.
-          
+
           ### Changelog
           | Version      | Description |
           | ---------------- | ------------|
+          |8.6.0            | Added the `expiresAt` parameter to set an expiration time for the status, after which the presence engine restores the previous status. |
           |1.2.0            | Added       |
       parameters:
         - $ref: '#/components/parameters/UserId'
@@ -2603,6 +2604,10 @@ paths:
                     The user's status like `online`, `away`, `busy`, or
                     `offline`. At least one of the `message` or `status` parameters is required.
                   example: online
+                expiresAt:
+                  type: string
+                  description: Date as an ISO 8601 string. Sets an expiration time for the status. When this time passes, the presence engine restores the user's previous status. Omit this parameter to keep the status until it is changed again.
+                  example: '2026-06-22T18:00:00.000Z'
                 userId:
                   type: string
                   example: zXuq7SvPKYbzYmfpo
@@ -2615,6 +2620,7 @@ paths:
                 value:
                   message: My status update
                   status: online
+                  expiresAt: '2026-06-22T18:00:00.000Z'
                   userId: zXuq7SvPKYbzYmfpo
                   username: bob
       tags:
@@ -2626,10 +2632,11 @@ paths:
       summary: Get Status
       description: |-
         Gets a user's status in your workspace.
-        
+
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |8.6.0            | Added `statusSource` and `statusExpiresAt` to the response. `statusSource` reports which claim set the current status: `internal`, `manual`, or `external`. |
         |1.2.0            | Added       |
       operationId: get-api-v1-users.getStatus
       parameters:
@@ -2650,20 +2657,31 @@ paths:
               schema:
                 type: object
                 properties:
+                  _id:
+                    type: string
                   message:
                     type: string
                   connectionStatus:
                     type: string
                   status:
                     type: string
+                  statusSource:
+                    type: string
+                    description: The claim that set the current status. One of `internal`, `manual`, or `external`. Omitted when the user has no recorded status source.
+                  statusExpiresAt:
+                    type: string
+                    description: Date as an ISO 8601 string indicating when the current status expires. Omitted when the status has no expiration.
                   success:
                     type: boolean
               examples:
                 Success Example:
                   value:
+                    _id: W7NHuX5ri2e3mu2Fc
                     message: Latest status
                     connectionStatus: online
                     status: online
+                    statusSource: manual
+                    statusExpiresAt: '2026-06-22T18:00:00.000Z'
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -2940,6 +2958,12 @@ paths:
                           type: string
                         utcOffset:
                           type: integer
+                        statusSource:
+                          type: string
+                          description: The claim that set the user's current status. One of `internal`, `manual`, or `external`. Omitted when the user has no recorded status source.
+                        statusExpiresAt:
+                          type: string
+                          description: Date as an ISO 8601 string indicating when the user's current status expires. Omitted when the status has no expiration.
                         avatarETag:
                           type: string
                   full:
@@ -2955,12 +2979,15 @@ paths:
                         username: rocket.cat
                         status: online
                         utcOffset: 0
+                        statusSource: internal
                         avatarETag: 5BB9B5ny5DkKdrwkq
                       - _id: rocketchat.internal.admin.test
                         name: RocketChat Internal Admin Test
                         username: rocketchat.internal.admin.test
                         status: online
                         utcOffset: -2
+                        statusSource: manual
+                        statusExpiresAt: '2026-06-22T18:00:00.000Z'
                         avatarETag: iEbEm4bTT327NJjXt
                     full: true
                     success: true
@@ -2992,6 +3019,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |8.6.0            | Added `statusSource` and `statusExpiresAt` to each returned user. `statusSource` reports which claim set the status: `internal`, `manual`, or `external`. |
         |8.5.0            | Restored support for comma-separated values in `ids`.       |
         |1.1.0            | Added       |
       tags:
@@ -3523,6 +3551,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |8.6.0            | Added `utcOffset` property.       |
         |2.3.0            | Added `desktopNotificationRequireInteraction` property.       |
       parameters:
         - $ref: '#/components/parameters/UserId'
@@ -3727,6 +3756,10 @@ paths:
                     enableMobileRinging:
                       type: boolean
                       description: 'If you are using the Rocket.Chat Voice feature, you can set this parameter to true for mobile call notifications.'
+                    utcOffset:
+                      type: number
+                      description: The user's UTC offset in hours. Used to localize times such as notification schedules.
+                      example: -3
             examples:
               Example 1:
                 value:
@@ -5362,14 +5395,17 @@ paths:
                     success: false
                     error: 'must have required property ''email'' [invalid-params]'
                     errorType: invalid-params
-        '401':
-          $ref: '#/components/responses/authorizationError'
       operationId: post-api-v1-users.sendConfirmationEmail
       description: |-
-       Send an email to verify a user's email address. The user receives the email and they must click the confirmation button to confirm their email address. Rate limit applies: One request can be sent every 60000ms.
-      parameters:
-        - $ref: '#/components/parameters/Auth-Token'
-        - $ref: '#/components/parameters/UserId'
+        Send an email to verify a user's email address. The user receives the email and they must click the confirmation button to confirm their email address. Rate limit applies: One request can be sent every 60000ms.
+
+        This endpoint does not require authentication. An unverified user can call it from the login screen to resend their own verification email.
+
+        ### Changelog
+        | Version    | Description                            |
+        | ---------- | -------------------------------------- |
+        | 8.6.0-rc.0 | Authentication is no longer required.  |
+      parameters: []
       requestBody:
         content:
           application/json:
