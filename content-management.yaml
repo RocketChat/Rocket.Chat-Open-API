@@ -662,9 +662,7 @@ paths:
         - Custom Sounds
       summary: Delete Custom Sound
       description: |-
-        Delete a custom sound from the workspace by its `_id`. This also removes the associated audio file from storage.
-
-        This endpoint replaces the deprecated DDP method `deleteCustomSound`, which now logs a deprecation warning and is scheduled for removal in `9.0.0`.
+        Delete a custom sound from the workspace by its `_id`. This also removes the associated audio file from storage. This endpoint replaces the deprecated DDP method `deleteCustomSound`, which now logs a deprecation warning and is scheduled for removal in `9.0.0`.
 
         Permission required: `manage-sounds`
 
@@ -739,23 +737,6 @@ paths:
                     success: false
                     error: 'User does not have the permissions required for this action [error-unauthorized]'
                     errorType: error-unauthorized
-        # <!-- TODO: Verify the exact status code returned when `_id` does not match an existing sound. The endpoint's response validators declare both 404 (validateNotFoundErrorResponse) and 500 (validateInternalErrorResponse), but the handler in apps/meteor/app/api/server/v1/custom-sounds.ts maps the `Custom_Sound_Error_Invalid_Sound` error to API.v1.failure (400) and falls back to API.v1.internalError (500) for other errors. Confirm whether a 404 is ever returned in practice before documenting it. -->
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  error:
-                    type: string
-              examples:
-                Internal Error:
-                  value:
-                    success: false
-                    error: Internal server error
   /api/v1/custom-user-status.list:
     get:
       tags:
