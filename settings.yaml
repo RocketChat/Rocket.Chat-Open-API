@@ -266,104 +266,6 @@ paths:
           description: 'When set to true, it fetches both the current value and the default value (packageValue) of the settings'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
-    post:
-      summary: Update Settings in Bulk
-      operationId: post-api-v1-settings
-      description: |-
-        Update multiple private settings in a single request.This endpoint replaces the deprecated `saveSettings` DDP method.
-
-        Permission required: `Edit Privileged Setting` 
-
-        ### Changelog
-        | Version      | Description |
-        | ---------------- | ------------|
-        |8.6.0            | Added       |
-      tags:
-        - Settings
-      parameters:
-        - $ref: '#/components/parameters/X-User-Id'
-        - $ref: '#/components/parameters/X-Auth-Token'
-        - $ref: '#/components/parameters/x-2fa-code'
-        - $ref: '#/components/parameters/X-2fa-method'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                settings:
-                  type: array
-                  description: The list of settings to update.
-                  minItems: 1
-                  items:
-                    type: object
-                    properties:
-                      _id:
-                        type: string
-                        description: The unique ID of the setting.
-                      value:
-                        description: The value to set for the setting. The accepted type depends on the setting.
-                    required:
-                      - _id
-                      - value
-              required:
-                - settings
-            examples:
-              Example:
-                value:
-                  settings:
-                    - _id: API_Allow_Infinite_Count
-                      value: false
-                    - _id: API_CORS_Origin
-                      value: 'https://example.com'
-      responses:
-        '200':
-          $ref: '#/components/responses/trueSuccess'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  error:
-                    type: string
-                  errorType:
-                    type: string
-              examples:
-                Invalid Params:
-                  value:
-                    success: false
-                    error: 'must have required property ''settings'' [invalid-params]'
-                    errorType: invalid-params
-        '401':
-          $ref: '#/components/responses/authorizationError'
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  error:
-                    type: string
-                  errorType:
-                    type: string
-              examples:
-                Permission Error:
-                  value:
-                    success: false
-                    error: 'Editing settings is not allowed [error-action-not-allowed]'
-                    errorType: error-action-not-allowed
-                    details:
-                      method: saveSettings
-                      settingIds:
-                        - API_Allow_Infinite_Count
-                        - API_CORS_Origin
   /api/v1/settings.addCustomOAuth:
     parameters: []
     post:
@@ -970,6 +872,27 @@ paths:
                   uid: d26x6zSkaPSe5gCyy
                   rid: 9R1V4t3_k3Y
                   key: M4-Ubd4T3d-k39
+  /api/v1/e2e.requestSubscriptionKeys:
+    post:
+      summary: Request Subscription Keys
+      operationId: post-api-v1-e2e.requestSubscriptionKeys
+      description: |-
+        Requests the E2E encryption keys for the rooms the authenticated user is subscribed to. Other room members are notified to share their keys with the requesting user. This endpoint replaces the deprecated `e2e.requestSubscriptionKeys` DDP method. 
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ------------|
+        | 8.6.0   | Added       |
+      tags:
+        - E2E
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/uploadImportFile:
     parameters: []
     post:
