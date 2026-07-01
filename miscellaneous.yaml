@@ -693,12 +693,15 @@ paths:
   /api/v1/spotlight:
     get:
       summary: Spotlight
-      description: |- 
+      description: |-
         Searches for users or rooms that are visible to the user. It will only return rooms that user didn't join yet.
-        
+
+        If the  <a href="https://docs.rocket.chat/docs/accounts" target="_blank">`Allow Anonymous Read` setting</a> is enabled, anonymous callers can use this endpoint to resolve public channels through the navbar search.
+
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        | 8.6.0       | Added `usernames`, `type`, and `rid` query parameters, and allowed anonymous read when `Allow Anonymous Read` is enabled. |
         |0.64.0       | Added support to '#' and '@' searches, for channels and users respectively.       |
         |0.61.0      | Added       |
       operationId: get-api-v1-spotlight
@@ -712,6 +715,27 @@ paths:
           schema:
             type: string
           example: john
+        - name: usernames
+          in: query
+          description: Comma-separated list of usernames to exclude from the user results.
+          required: false
+          schema:
+            type: string
+          example: 'rocket.cat,john.doe'
+        - name: type
+          in: query
+          description: Restricts the search to a single result type. Accepts `users` or `rooms`.
+          required: false
+          schema:
+            type: string
+          example: users
+        - name: rid
+          in: query
+          description: The room ID to scope the user search to a specific room.
+          required: false
+          schema:
+            type: string
+          example: GENERAL
       responses:
         '200':
           description: OK
