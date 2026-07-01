@@ -3713,6 +3713,70 @@ paths:
           name: url
           description: Enter the URL that you want to preview.
           required: true
+  /api/v1/im.blockUser:
+    post:
+      tags:
+        - DM
+      summary: Block User in DM
+      description: |-
+        Blocks or unblocks the other user in a direct message room. This endpoint replaces the deprecated `blockUser` and `unblockUser` DDP methods.
+
+        ### Changelog
+        | Version      | Description |
+        | ------------ | ------------|
+        | 8.6.0        | Added       |
+      operationId: post-api-v1-im.blockUser
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roomId:
+                  type: string
+                  description: The direct message room ID.
+                block:
+                  type: boolean
+                  description: Set to `true` to block the other user, or `false` to unblock them.
+              required:
+                - roomId
+                - block
+            examples:
+              Block User:
+                value:
+                  roomId: ByehQjC44FwMeiLbX
+                  block: true
+              Unblock User:
+                value:
+                  roomId: ByehQjC44FwMeiLbX
+                  block: false
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Invalid room:
+                  value:
+                    success: false
+                    error: '[invalid-channel]'
+                    errorType: invalid-channel
+        '401':
+          $ref: '#/components/responses/authorizationError'        
   /api/v1/dm.close:
     post:
       tags:
