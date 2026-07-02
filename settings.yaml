@@ -872,6 +872,27 @@ paths:
                   uid: d26x6zSkaPSe5gCyy
                   rid: 9R1V4t3_k3Y
                   key: M4-Ubd4T3d-k39
+  /api/v1/e2e.requestSubscriptionKeys:
+    post:
+      summary: Request Subscription Keys
+      operationId: post-api-v1-e2e.requestSubscriptionKeys
+      description: |-
+        Requests the E2E encryption keys for the rooms the authenticated user is subscribed to. Other room members are notified to share their keys with the requesting user. This endpoint replaces the deprecated `e2e.requestSubscriptionKeys` DDP method. 
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ------------|
+        | 8.6.0   | Added       |
+      tags:
+        - E2E
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/uploadImportFile:
     parameters: []
     post:

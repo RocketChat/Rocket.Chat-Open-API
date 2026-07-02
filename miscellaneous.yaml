@@ -693,12 +693,15 @@ paths:
   /api/v1/spotlight:
     get:
       summary: Spotlight
-      description: |- 
+      description: |-
         Searches for users or rooms that are visible to the user. It will only return rooms that user didn't join yet.
-        
+
+        If the  <a href="https://docs.rocket.chat/docs/accounts" target="_blank">`Allow Anonymous Read` setting</a> is enabled, anonymous callers can use this endpoint to resolve public channels through the navbar search.
+
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        | 8.6.0       | Added `usernames`, `type`, and `rid` query parameters, and allowed anonymous read when `Allow Anonymous Read` is enabled. |
         |0.64.0       | Added support to '#' and '@' searches, for channels and users respectively.       |
         |0.61.0      | Added       |
       operationId: get-api-v1-spotlight
@@ -712,6 +715,27 @@ paths:
           schema:
             type: string
           example: john
+        - name: usernames
+          in: query
+          description: Comma-separated list of usernames to exclude from the user results.
+          required: false
+          schema:
+            type: string
+          example: 'rocket.cat,john.doe'
+        - name: type
+          in: query
+          description: Restricts the search to a single result type. Accepts `users` or `rooms`.
+          required: false
+          schema:
+            type: string
+          example: users
+        - name: rid
+          in: query
+          description: The room ID to scope the user search to a specific room.
+          required: false
+          schema:
+            type: string
+          example: GENERAL
       responses:
         '200':
           description: OK
@@ -781,6 +805,92 @@ paths:
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
+  /api/v1/fingerprint:
+    post:
+      summary: Update Fingerprint
+      description: |-
+        Confirms how the workspace deployment should be handled after Rocket.Chat detects a change to its deployment fingerprint.
+
+        On startup, Rocket.Chat generates a deployment fingerprint based on the configured Site_Url and MongoDB connection string. If the generated fingerprint differs from the stored value, Rocket.Chat assumes the workspace may have been duplicated, migrated, or reconfigured.
+
+        Use this endpoint to confirm how the deployment should be treated:
+
+        - `new-workspace`: Treats the deployment as a new workspace. This clears the existing Rocket.Chat Cloud registration data and related credentials so the workspace can register again as a new instance. Use this option for cloned environments, staging instances created from production backups, or other duplicated deployments.
+
+        - `updated-configuration`: Confirms that the deployment is the same workspace and that only its configuration has changed. This preserves the existing Rocket.Chat Cloud registration and is intended for legitimate migrations, infrastructure changes, or Site_Url updates.
+
+        After processing either option, Rocket.Chat marks the deployment fingerprint as verified and dismisses the fingerprint verification prompt.
+
+        Permission required: `manage-cloud`
+          
+        ### Changelog
+        | Version | Description | 
+        | ------- | ----------- | 
+        | 8.6.0 | Added an authorization check. Callers without the `manage-cloud` permission now receive a `403` error instead of a successful response. |
+      operationId: post-api-v1-fingerprint
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                setDeploymentAs:
+                  type: string
+                  description: |-
+                    Specifies how Rocket.Chat should handle a detected deployment fingerprint change. Use `new-workspace` to reset the current workspace registration and register the deployment as a new workspace, or `updated-configuration` to preserve the existing workspace registration and confirm that only the deployment configuration has changed. Either `new-workspace` or `updated-configuration`.
+                  example: new-workspace
+              required:
+                - setDeploymentAs
+            examples:
+              Example:
+                value:
+                  setDeploymentAs: new-workspace
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Invalid Parameter:
+                  value:
+                    success: false
+                    error: 'Invalid body params'
+                    errorType: error-invalid-body-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: 'User does not have the permissions required for this action [error-unauthorized]'
+                    errorType: error-unauthorized
   /api/v1/licenses.info:
     get:
       tags:

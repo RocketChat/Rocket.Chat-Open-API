@@ -1172,6 +1172,87 @@ paths:
                     errorType: invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
+  /api/v1/custom-sounds.delete:
+    post:
+      tags:
+        - Custom Sounds
+      summary: Delete Custom Sound
+      description: |-
+        Delete a custom sound from the workspace by its `_id`. This also removes the associated audio file from storage. This endpoint replaces the deprecated DDP method `deleteCustomSound`, which now logs a deprecation warning and is scheduled for removal in `9.0.0`.
+
+        Permission required: `manage-sounds`
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.6.0   | Added       |
+      operationId: post-api-v1-custom-sounds.delete
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                _id:
+                  type: string
+                  description: The ID of the custom sound to delete. Must be at least one character long.
+                  example: 65462caea2f73c7460e18f83
+              required:
+                - _id
+            examples:
+              Example:
+                value:
+                  _id: 65462caea2f73c7460e18f83
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Invalid sound:
+                  value:
+                    success: false
+                    error: Custom_Sound_Error_Invalid_Sound
+                Missing required field:
+                  value:
+                    success: false
+                    error: 'must have required property ''_id'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: 'User does not have the permissions required for this action [error-unauthorized]'
+                    errorType: error-unauthorized 
   /api/v1/custom-sounds.getOne:
     get:
       summary: Get Custom Sound

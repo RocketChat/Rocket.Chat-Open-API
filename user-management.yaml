@@ -3517,7 +3517,7 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                Invalid Parameter:
                   value:
                     success: false
                     error: 'must have required property ''data'' [invalid-params]'
@@ -3529,6 +3529,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |8.6.0            | Added `utcOffset` property.       |
         |2.3.0            | Added `desktopNotificationRequireInteraction` property.       |
       parameters:
         - $ref: '#/components/parameters/UserId'
@@ -3733,8 +3734,12 @@ paths:
                     enableMobileRinging:
                       type: boolean
                       description: 'If you are using the Rocket.Chat Voice feature, you can set this parameter to true for mobile call notifications.'
+                    utcOffset:
+                      type: number
+                      description: The user's UTC offset in hours. Used to localize times such as notification schedules.
+                      example: -3
             examples:
-              Example 1:
+              Example:
                 value:
                   userId: rbAXPnMktTFbNpwtJ
                   data:
@@ -5363,19 +5368,19 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                Missing parameter:
                   value:
                     success: false
                     error: 'must have required property ''email'' [invalid-params]'
                     errorType: invalid-params
-        '401':
-          $ref: '#/components/responses/authorizationError'
       operationId: post-api-v1-users.sendConfirmationEmail
       description: |-
-       Send an email to verify a user's email address. The user receives the email and they must click the confirmation button to confirm their email address. Rate limit applies: One request can be sent every 60000ms.
-      parameters:
-        - $ref: '#/components/parameters/Auth-Token'
-        - $ref: '#/components/parameters/UserId'
+       Send an email to verify a user's email address. The user receives the email and they must click the confirmation button to confirm their email address. Rate limit applies: One request can be sent every 60000ms. This endpoint does not require authentication. An unverified user can call it from the login screen to resend their own verification email.
+       
+       ### Changelog
+        | Version    | Description                            |
+        | ---------- | -------------------------------------- |
+        | 8.6.0 | Authentication is no longer required.  |
       requestBody:
         content:
           application/json:
@@ -5389,7 +5394,7 @@ paths:
                   description: Enter the email address that needs to be verified.
                   example: example@example.com
             examples:
-              Example 1:
+              Example:
                 value:
                   email: example@example.com
   /api/v1/users.listByStatus:

@@ -21,9 +21,12 @@ paths:
           * The `delete-own-message` permission is required to delete users' own messages.
           * The `delete-message` permission is required for users to delete messages from other users.
 
+        You can delete a message by its `roomId` and `msgId`, or delete a message by its `fileId` to remove the message that holds an uploaded file.
+
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
+        | 8.6.0            | Added `fileId` to delete a message by the file it contains. |
         | 0.48.0           | Added       |
       operationId: post-api-v1-chat.delete
       parameters:
@@ -35,25 +38,30 @@ paths:
           application/json:
             schema:
               type: object
+              description: |-
+                Provide either `roomId` and `msgId` together, or `fileId` on its own.
               properties:
                 roomId:
                   type: string
-                  description: The room ID
+                  description: The room ID. Required when deleting by `msgId`.
                 msgId:
                   type: string
-                  description: The ID of the message to delete.
+                  description: The ID of the message to delete. Required together with `roomId`.
+                fileId:
+                  type: string
+                  description: The ID of the uploaded file whose message you want to delete. Use this instead of `roomId` and `msgId` to delete the message that contains the file.
                 asUser:
                   type: boolean
                   description: Should the message be deleted as the user who sent it? It is `false` by default.
-              required:
-                - roomId
-                - msgId
             examples:
-              Example:
+              Delete by message:
                 value:
                   roomId: ByehQjC44FwMeiLbX
                   msgId: 7aDSXtjMA3KPLxLjt
                   asUser: false
+              Delete by file:
+                value:
+                  fileId: 9aFcj4XmgQ7eYpLbT
       responses:
         '200':
           description: OK
@@ -85,7 +93,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Example:
                   value:
                     _id: jEnjsxuoDJamGjbH2
                     ts: '1696533809813'
@@ -109,10 +117,10 @@ paths:
                   error:
                     type: string
               examples:
-                Example 1:
+                Invalid Message ID:
                   value:
                     success: false
-                    error: The room id provided does not match where the message is from.
+                    error: No message found with the id of \"MvHcX2WKSrmdArmktz\".
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/chat.react:
@@ -3705,6 +3713,70 @@ paths:
           name: url
           description: Enter the URL that you want to preview.
           required: true
+  /api/v1/im.blockUser:
+    post:
+      tags:
+        - DM
+      summary: Block User in DM
+      description: |-
+        Blocks or unblocks the other user in a direct message room. This endpoint replaces the deprecated `blockUser` and `unblockUser` DDP methods.
+
+        ### Changelog
+        | Version      | Description |
+        | ------------ | ------------|
+        | 8.6.0        | Added       |
+      operationId: post-api-v1-im.blockUser
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roomId:
+                  type: string
+                  description: The direct message room ID.
+                block:
+                  type: boolean
+                  description: Set to `true` to block the other user, or `false` to unblock them.
+              required:
+                - roomId
+                - block
+            examples:
+              Block User:
+                value:
+                  roomId: ByehQjC44FwMeiLbX
+                  block: true
+              Unblock User:
+                value:
+                  roomId: ByehQjC44FwMeiLbX
+                  block: false
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Invalid room:
+                  value:
+                    success: false
+                    error: '[invalid-channel]'
+                    errorType: invalid-channel
+        '401':
+          $ref: '#/components/responses/authorizationError'        
   /api/v1/dm.close:
     post:
       tags:
