@@ -4774,7 +4774,7 @@ tags:
   - name: Settings
   - name: Cloud
   - name: DNS
-  - name: E2EE
+  - name: E2E
   - name: Import
   - name: Bulk User Import
   - name: Instances
