@@ -3716,7 +3716,7 @@ paths:
   /api/v1/im.blockUser:
     post:
       tags:
-        - DM
+        - Direct Messages
       summary: Block User in DM
       description: |-
         Blocks or unblocks the other user in a direct message room. This endpoint replaces the deprecated `blockUser` and `unblockUser` DDP methods.
@@ -3780,7 +3780,7 @@ paths:
   /api/v1/dm.close:
     post:
       tags:
-        - DM
+        - Direct Messages
       summary: Close DM
       description: |-
         Removes the direct message from the user's list of direct messages.
@@ -3839,7 +3839,7 @@ paths:
   /api/v1/dm.counters:
     get:
       tags:
-        - DM
+        - Direct Messages
       summary: Get DM Counters
       description: |-
         Gets counters and information of direct messages. Permission required: `view-room-administration`.
@@ -3932,7 +3932,7 @@ paths:
   /api/v1/dm.create:
     post:
       tags:
-        - DM
+        - Direct Messages
       summary: Create DM
       description: |-
         Create a direct message session with another user or more than one user.
@@ -4038,7 +4038,7 @@ paths:
   /api/v1/dm.delete:
     post:
       tags:
-        - DM
+        - Direct Messages
       summary: Delete DM
       description: |-
         Delete a DM. Permission required: `view-room-administration`.
@@ -4107,7 +4107,7 @@ paths:
   /api/v1/dm.files:
     get:
       tags:
-        - DM
+        - Direct Messages
       summary: Get DM Files
       description: |-
         Get all files in a DM. 
@@ -4232,7 +4232,7 @@ paths:
   /api/v1/dm.history:
     get:
       tags:
-        - DM
+        - Direct Messages
       summary: DM History
       description: |-
         Retrieves the message history from a direct message.
@@ -4385,7 +4385,7 @@ paths:
   /api/v1/dm.list.everyone:
     get:
       tags:
-        - DM
+        - Direct Messages
       summary: List All DMs
       description: |-
         List all DMs in the workspace.  
@@ -4623,7 +4623,7 @@ paths:
   /api/v1/dm.list:
     get:
       tags:
-        - DM
+        - Direct Messages
       summary: List DMs
       description: |-
         List all the DMs of the authenticated user. 
@@ -4862,7 +4862,7 @@ paths:
   /api/v1/dm.members:
     get:
       tags:
-        - DM
+        - Direct Messages
       summary: List DM Members
       description: |-
         List all the members of a DM. 
@@ -4975,7 +4975,7 @@ paths:
   /api/v1/dm.messages:
     get:
       tags:
-        - DM
+        - Direct Messages
       summary: List DM Messages
       description: |-
         List all the messages in a DM. 
@@ -5186,7 +5186,7 @@ paths:
   /api/v1/dm.messages.others:
     get:
       tags:
-        - DM
+        - Direct Messages
       summary: Message Others
       description: |-
         Retrieves the messages from any direct message in the server.  For this method to work, navigate to  **Manage > Workspace > Settings > General > REST API > Enable Direct Message History Endpoint** and enable it. 
@@ -5326,7 +5326,7 @@ paths:
   /api/v1/dm.open:
     post:
       tags:
-        - DM
+        - Direct Messages
       summary: Open DM
       description: |-
         Adds a DM back to the user's list of direct messages.
@@ -5381,7 +5381,7 @@ paths:
   /api/v1/dm.setTopic:
     post:
       tags:
-        - DM
+        - Direct Messages
       summary: Set DM Topic
       description: |-
         Set the topic of a DM.
@@ -5762,7 +5762,7 @@ paths:
 
 tags:
   - name: Chat
-  - name: DM
+  - name: Direct Messages
   - name: Auto-Translate
 components:
   parameters:
