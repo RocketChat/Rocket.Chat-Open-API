@@ -2573,6 +2573,11 @@ paths:
                   value:
                     success: false
                     error: 'Match error: Failed Match.OneOf, Match.Maybe or Match.Optional validation'
+                Invalid expiresAt date:
+                  value:
+                    success: false
+                    error: 'expiresAt must be a future date [error-invalid-date]'
+                    errorType: error-invalid-date
         '401':
           $ref: '#/components/responses/authorizationError'
       description: |-
@@ -2583,6 +2588,7 @@ paths:
           ### Changelog
           | Version      | Description |
           | ---------------- | ------------|
+          |8.6.0            | Added `expiresAt` request parameter for timed status expiration. |
           |1.2.0            | Added       |
       parameters:
         - $ref: '#/components/parameters/UserId'
@@ -2603,18 +2609,20 @@ paths:
                     The user's status like `online`, `away`, `busy`, or
                     `offline`. At least one of the `message` or `status` parameters is required.
                   example: online
+                expiresAt:
+                  type: string
+                  description: Date as an ISO 8601 string. Sets an expiration time for the status. When this time passes, the presence engine restores the user's previous status. Must be a future date. Omit this parameter to keep the status until it is changed again.
+                  example: '2026-06-22T18:00:00.000Z'
                 userId:
                   type: string
                   example: zXuq7SvPKYbzYmfpo
                   description: The user ID for which you want to set the status. You don't need to add this if you are setting the status for yourself. Alternatively, you can use the `username` parameter and enter the username for which you want to set the status.
-              required:
-                - message
-                - status
             examples:
               Example 1:
                 value:
                   message: My status update
                   status: online
+                  expiresAt: '2026-06-22T18:00:00.000Z'
                   userId: zXuq7SvPKYbzYmfpo
                   username: bob
       tags:
@@ -2630,6 +2638,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |8.6.0            | Added `statusSource` and `statusExpiresAt` response fields. |
         |1.2.0            | Added       |
       operationId: get-api-v1-users.getStatus
       parameters:
@@ -2650,20 +2659,30 @@ paths:
               schema:
                 type: object
                 properties:
-                  message:
+                  _id:
                     type: string
+                    description: The user ID.
                   connectionStatus:
                     type: string
+                    description: The connection status. Returned when requesting the authenticated user's own status.
                   status:
                     type: string
+                  statusSource:
+                    type: string
+                    description: The claim that set the current status. One of `internal`, `manual`, or `external`. Omitted when the user has no recorded status source.
+                  statusExpiresAt:
+                    type: string
+                    description: Date as an ISO 8601 string indicating when the current status expires. Omitted when the status has no expiration.
                   success:
                     type: boolean
               examples:
                 Success Example:
                   value:
-                    message: Latest status
+                    _id: W7NHuX5ri2e3mu2Fc
                     connectionStatus: online
                     status: online
+                    statusSource: manual
+                    statusExpiresAt: '2026-06-22T18:00:00.000Z'
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -2942,6 +2961,15 @@ paths:
                           type: string
                         utcOffset:
                           type: integer
+                        statusText:
+                          type: string
+                          description: The user's status message.
+                        statusSource:
+                          type: string
+                          description: 'The claim that set the user''s current status. One of `internal`, `manual`, or `external` (priority order: `internal` > `manual` > `external`). Omitted when the user has no recorded status source.'
+                        statusExpiresAt:
+                          type: string
+                          description: Date as an ISO 8601 string indicating when the user's current status expires. Omitted when the status has no expiration.
                         avatarETag:
                           type: string
                   full:
@@ -2957,12 +2985,17 @@ paths:
                         username: rocket.cat
                         status: online
                         utcOffset: 0
+                        statusText: In a call
+                        statusSource: internal
                         avatarETag: 5BB9B5ny5DkKdrwkq
                       - _id: rocketchat.internal.admin.test
                         name: RocketChat Internal Admin Test
                         username: rocketchat.internal.admin.test
                         status: online
                         utcOffset: -2
+                        statusText: Focus time
+                        statusSource: manual
+                        statusExpiresAt: '2026-06-22T18:00:00.000Z'
                         avatarETag: iEbEm4bTT327NJjXt
                     full: true
                     success: true
@@ -2998,6 +3031,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |8.6.0            | Added `statusSource` and `statusExpiresAt` to returned user objects. |
         |8.5.0            | Restored comma-separated `ids` query parameter support.       |
         |1.1.0            | Added       |
       tags:
