@@ -15737,6 +15737,13 @@ paths:
       operationId: 'get-api-v1-livechat-:rid-messages'
       description: 'View the messages of a specific Livechat room. Permission required: `view-l-room`'
       parameters:
+        - name: rid
+          in: path
+          description: The room ID.
+          required: true
+          schema:
+            type: string
+          example: zRAeTszXor8CCPceB
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/offset'
