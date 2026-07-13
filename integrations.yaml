@@ -40,92 +40,14 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                type:
-                  type: string
-                  description: "The type of integration to create. The possible values are:\r\n* `webhook-incoming`\r\n* `webhook-outgoing`"
-                username:
-                  type: string
-                  description: The username to post this the messages as.
-                channel:
-                  type: string
-                  description: 'The channel, group, or @username. The value can also be `all_public_channels`, `all_private_groups`, or `all_direct_messages`. Comma separated for more than one.'
-                  example: '#general'
-                scriptEnabled:
-                  type: boolean
-                  description: Whether the script should be enabled.
-                script:
-                  type: string
-                  description: The script that is triggered when this integration is triggered.
-                name:
-                  type: string
-                  description: The name of the integration.
-                enabled:
-                  type: boolean
-                  description: Whether this integration should be enabled or not.
-                alias:
-                  type: string
-                  description: The alias which should be applied to messages when this integration is processed.
-                avatar:
-                  type: string
-                  description: 'The logo to apply to the messages that this integration sends. For example, http://res.guggy.com/logo_128.png'
-                emoji:
-                  type: string
-                  description: The emoji which should be displayed as the avatar for messages from this integration.
-                  example: ':ghost:'
-                event:
-                  type: string
-                  description: |-
-                    **Required for outgoing integrations.**
-                    
-                    The type of event can be any of the following: 
-                    * `sendMessage`
-                    * `fileUploaded`
-                    * `roomArchived`
-                    * `roomCreated`
-                    * `roomJoined`
-                    * `roomLeft`
-                    * `userCreated`
-                urls:
-                  type: array
-                  description: |-
-                    **Required for outgoing integrations.**
-                    
-                    The urls to call whenever this integration is triggered.
-                  items:
-                    type: string
-                triggerWords:
-                  type: string
-                  description: |-
-                    This is an outgoing integration parameter.
-                    Specific words, separated by commas, that should trigger this integration.
-                token:
-                  type: string
-                  description: |-
-                    This is an outgoing integration parameter.
-                    If your integration requires a special token from the server (API key), use this parameter.
-                skipTranspile:
-                  type: boolean
-                  description: |-
-                   From 8.4.0, the optional `skipTranspile` field is available to opt out of Babel transpilation for the integration script.
-                   From 9.0.0, Babel will no longer be used for webhook integration script compilation. This is a breaking change for scripts that rely on sloppy-mode behavior. Admins must review the existing integrations. 
-                   
-                   This parameter lets you test each integration so you can fix any scripts that break and reliably upgrade to 9.0.0 with `scriptTranspile: false` set on every integration.
-
-                   When `skipTranspile` is true, the script is stored as-is without Babel processing, matching the 9.0.0 default. Defaults to false for backward compatibility. Refer to the <a href='https://docs.rocket.chat/docs/integrations#script-compatibility' target='_blank'>Script compatibility</a> section in the Integrations user guide for more details.
-
-                   Note: This parameter is deprecated and will be removed in the 9.0.0 version.
-                  default: false
-              required:
-                - type
-                - username
-                - channel
-                - scriptEnabled
-                - name
-                - enabled
-                - event
-                - urls
+              oneOf:
+                - $ref: '#/components/schemas/IncomingIntegrationRequest'
+                - $ref: '#/components/schemas/OutgoingIntegrationRequest'
+              discriminator:
+                propertyName: type
+                mapping:
+                  webhook-incoming: '#/components/schemas/IncomingIntegrationRequest'
+                  webhook-outgoing: '#/components/schemas/OutgoingIntegrationRequest'
             examples:
               Incoming integration example:
                 value:
@@ -1701,3 +1623,106 @@ components:
               value:
                 status: error
                 message: You must be logged in to do this.
+  schemas:
+    IntegrationRequestBase:
+      type: object
+      properties:
+        username:
+          type: string
+          description: The username to post this the messages as.
+        channel:
+          type: string
+          description: 'The channel, group, or @username. The value can also be `all_public_channels`, `all_private_groups`, or `all_direct_messages`. Comma separated for more than one.'
+          example: '#general'
+        scriptEnabled:
+          type: boolean
+          description: Whether the script should be enabled.
+        script:
+          type: string
+          description: The script that is triggered when this integration is triggered.
+        name:
+          type: string
+          description: The name of the integration.
+        enabled:
+          type: boolean
+          description: Whether this integration should be enabled or not.
+        alias:
+          type: string
+          description: The alias which should be applied to messages when this integration is processed.
+        avatar:
+          type: string
+          description: 'The logo to apply to the messages that this integration sends. For example, http://res.guggy.com/logo_128.png'
+        emoji:
+          type: string
+          description: The emoji which should be displayed as the avatar for messages from this integration.
+          example: ':ghost:'
+        skipTranspile:
+          type: boolean
+          description: |-
+           From 8.4.0, the optional `skipTranspile` field is available to opt out of Babel transpilation for the integration script.
+           From 9.0.0, Babel will no longer be used for webhook integration script compilation. This is a breaking change for scripts that rely on sloppy-mode behavior. Admins must review the existing integrations.
+
+           This parameter lets you test each integration so you can fix any scripts that break and reliably upgrade to 9.0.0 with `scriptTranspile: false` set on every integration.
+
+           When `skipTranspile` is true, the script is stored as-is without Babel processing, matching the 9.0.0 default. Defaults to false for backward compatibility. Refer to the <a href='https://docs.rocket.chat/docs/integrations#script-compatibility' target='_blank'>Script compatibility</a> section in the Integrations user guide for more details.
+
+           Note: This parameter is deprecated and will be removed in the 9.0.0 version.
+          default: false
+      required:
+        - username
+        - channel
+        - scriptEnabled
+        - name
+        - enabled
+    IncomingIntegrationRequest:
+      allOf:
+        - $ref: '#/components/schemas/IntegrationRequestBase'
+        - type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - webhook-incoming
+              description: The type of integration to create.
+          required:
+            - type
+    OutgoingIntegrationRequest:
+      allOf:
+        - $ref: '#/components/schemas/IntegrationRequestBase'
+        - type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - webhook-outgoing
+              description: The type of integration to create.
+            event:
+              type: string
+              description: |-
+                The type of event can be any of the following:
+                * `sendMessage`
+                * `fileUploaded`
+                * `roomArchived`
+                * `roomCreated`
+                * `roomJoined`
+                * `roomLeft`
+                * `userCreated`
+            urls:
+              type: array
+              description: The urls to call whenever this integration is triggered.
+              items:
+                type: string
+            triggerWords:
+              type: string
+              description: |-
+                This is an outgoing integration parameter.
+                Specific words, separated by commas, that should trigger this integration.
+            token:
+              type: string
+              description: |-
+                This is an outgoing integration parameter.
+                If your integration requires a special token from the server (API key), use this parameter.
+          required:
+            - type
+            - event
+            - urls
