@@ -701,7 +701,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
-        | 8.6.0       | Added `usernames`, `type`, and `rid` query parameters, and allowed anonymous read when `Allow Anonymous Read` is enabled. |
+        |8.6.0       | Added `usernames`, `type`, and `rid` query parameters, and allowed anonymous read when `Allow Anonymous Read` is enabled. |
         |0.64.0       | Added support to '#' and '@' searches, for channels and users respectively.       |
         |0.61.0      | Added       |
       operationId: get-api-v1-spotlight
