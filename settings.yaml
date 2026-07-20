@@ -462,7 +462,6 @@ paths:
       description: List out all the active OAuth services configured with details.
       tags:
         - Settings
-
   /api/v1/cloud.manualRegister:
     post:
       summary: Manual Cloud Register
@@ -515,6 +514,60 @@ paths:
               Example:
                 value:
                   cloudBlob: jfiscsm38urc3ujd
+  /api/v1/cloud.registrationStatus:
+    get:
+      summary: Get Workspace Registration Status
+      operationId: get-api-v1-cloud.registrationStatus
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  registrationStatus:
+                    type: object
+                    properties:
+                      workspaceRegistered:
+                        type: boolean
+                        description: 'Whether the workspace has an active Cloud Client ID and Secret configured.'
+                      workspaceId:
+                        type: string
+                        description: 'The workspace''s Rocket.Chat Cloud ID.'
+                      uniqueId:
+                        type: string
+                        description: 'The workspace''s unique installation ID.'
+                      token:
+                        type: string
+                      email:
+                        type: string
+                        description: 'The registered organization email on Rocket.Chat Cloud.'
+                  success:
+                    type: boolean
+              examples:
+                Example:
+                  value:
+                    registrationStatus:
+                      workspaceRegistered: true
+                      workspaceId: abc123-workspace-id
+                      uniqueId: xyz789-unique-id
+                      token: ''
+                      email: admin@example.com
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      description: |-
+        Returns the workspace's current Rocket.Chat Cloud registration status. 
+        
+        Permission required: `manage-cloud`.
+      tags:
+        - Cloud
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
   /api/v1/dns.resolve.txt:
     parameters: []
     post:
