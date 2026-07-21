@@ -7198,7 +7198,7 @@ paths:
           $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/permissionError'
-  '/api/vi/omnichannel/{rid}/request-transcript':
+  '/api/v1/omnichannel/{rid}/request-transcript':
     post:
       summary: Request PDF Transcript
       description: |-
@@ -7213,7 +7213,7 @@ paths:
         | Version      | Description |
         | ---------------- | ------------|
         |6.0.0            | Added       |
-      operationId: post-api-vi-omnichannel-rid-request-transcript
+      operationId: post-api-v1-omnichannel-rid-request-transcript
       parameters:
         - name: rid
           in: path
