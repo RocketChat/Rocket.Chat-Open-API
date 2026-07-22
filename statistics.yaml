@@ -23,8 +23,9 @@ paths:
         Permission required: `view-statistics` 
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
+        |8.7.0             | Added the `fips` field to statistics records. |
         |0.51.0            | Added       |
       operationId: get-api-v1-statistics.list
       parameters:
@@ -218,6 +219,9 @@ paths:
                               type: string
                             platform:
                               type: string
+                        fips:
+                          type: boolean
+                          description: Whether the workspace is running in FIPS mode. Statistics records created before version 8.7.0 don't include this field.
                         readReceiptsEnabled:
                           type: boolean
                         readReceiptsDetailed:
@@ -729,8 +733,9 @@ paths:
         Permission required: `view-statistics` 
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
+        |8.7.0             | Added the `fips` field to the response. |
         |0.51.0            | Added       |
       operationId: get-api-v1-statistics
       parameters:
@@ -1007,6 +1012,9 @@ paths:
                         type: string
                       platform:
                         type: string
+                  fips:
+                    type: boolean
+                    description: Whether the workspace is running in FIPS mode.
                   readReceiptsEnabled:
                     type: boolean
                   readReceiptsDetailed:
@@ -1762,6 +1770,7 @@ paths:
                     type: string
                   success:
                     type: boolean
+                # <!-- TODO: Pre-existing issue (not from 8.7.0): this Stoplight `x-examples` block must be removed per api-reference-guide.md. Move its statistics payload into the named `examples` block below, adding `fips: false` after `enterpriseReady`. -->
                 x-examples:
                   Success Example:
                     _id: 6683e080ffe932842327bf81
@@ -2328,6 +2337,7 @@ paths:
                     _updatedAt: '2024-07-02T11:12:14.147Z'
                     statsToken: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3b3Jrc3BhY2VJZCI6IiIsInVuaXF1ZUlkIjoiMGVkNWIxYzctODc2Mi00NjAzLWJhZGQtY2YzNWYwZTYzNWQzIiwicmVjb3JkSWQiOiI2NjgzZTA4MGZmZTkzMjg0MjMyN2JmODEiLCJ0aW1lc3RhbXAiOiIyMDI0LTA3LTAyVDExOjEyOjEyLjAyOTU4ODQ4OVoiLCJpbmZvIjp7fX0.l0vBdjR7Oyk7yfw7hwvJe9tlfnWLkiXJ5ysGxLqqx6g_2NvjvogsapFZvwCpyiH1JadvysiNNF53jeDfmG95yfn2sFpGLJXCjACPMHYTkTZ2jiPe7pqm62SFnlnSTU_9ietfUMXkxt21FgOrtDrS9HjiCw1g4Sxd-khz71E6p9OgdnGmOs8YWSSP-ejflEr-H6cOXoXktizgDQXlreF7ggwuov9G6Y4uXsnj8wouU_HNwAJua0pInTiyFe6ZM9TXdtfC-4ghpCT1ccGynKPC4HQT3g_RCCMkTG5A-IeSD5D1hGWhgTfHza0W7f7s4r_Ly0G2FBAgJ_54ykc4FNdbDw
                     success: true
+              # <!-- TODO: Pre-existing issue (not from 8.7.0): this `Success Example` shows a users.list-style `result` payload, not a statistics response. Replace it with the statistics payload from the x-examples block above (including the `fips` field). -->
               examples:
                 Success Example:
                   value:

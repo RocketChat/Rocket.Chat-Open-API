@@ -182,6 +182,191 @@ paths:
         - $ref: '#/components/parameters/Auth-Token'
       tags:
         - Permissions
+  /api/v1/permissions.addRole:
+    post:
+      tags:
+        - Permissions
+      summary: Add Role to Permission
+      description: |-
+        Grant a <a href='https://docs.rocket.chat/docs/permissions' target='_blank'>permission</a> to a role. This endpoint replaces the deprecated `authorization:addPermissionToRole` DDP method, which is scheduled for removal in version 9.0.0.
+
+        Permission required: `access-permissions`. To modify a setting-level permission, the `access-setting-permissions` permission is also required.
+
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |8.7.0            | Added       |
+      operationId: post-api-v1-permissions.addRole
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                permissionId:
+                  type: string
+                  description: The permission ID.
+                  example: access-permissions
+                role:
+                  type: string
+                  description: The role to grant the permission to. For default Rocket.Chat roles, enter the role name, such as `admin`. For custom roles, enter the role ID.
+                  example: admin
+              required:
+                - permissionId
+                - role
+            examples:
+              Example 1:
+                value:
+                  permissionId: access-permissions
+                  role: admin
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''role'' [invalid-params]'
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: 'Adding permission is not allowed [error-action-not-allowed]'
+                    errorType: error-action-not-allowed
+                Example 3:
+                  value:
+                    success: false
+                    error: 'Permission does not exist [error-invalid-permission]'
+                    errorType: error-invalid-permission
+                Example 4:
+                  value:
+                    success: false
+                    error: 'Role does not exist [error-invalid-role]'
+                    errorType: error-invalid-role
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: 'User does not have the permissions required for this action [error-unauthorized]'
+  /api/v1/permissions.removeRole:
+    post:
+      tags:
+        - Permissions
+      summary: Remove Role from Permission
+      description: |-
+        Revoke a <a href='https://docs.rocket.chat/docs/permissions' target='_blank'>permission</a> from a role. This endpoint replaces the deprecated `authorization:removeRoleFromPermission` DDP method, which is scheduled for removal in version 9.0.0.
+
+        Permission required: `access-permissions`. To modify a setting-level permission, the `access-setting-permissions` permission is also required.
+
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |8.7.0            | Added       |
+      operationId: post-api-v1-permissions.removeRole
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                permissionId:
+                  type: string
+                  description: The permission ID.
+                  example: access-permissions
+                role:
+                  type: string
+                  description: The role to revoke the permission from. For default Rocket.Chat roles, enter the role name, such as `admin`. For custom roles, enter the role ID.
+                  example: admin
+              required:
+                - permissionId
+                - role
+            examples:
+              Example 1:
+                value:
+                  permissionId: access-permissions
+                  role: admin
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''role'' [invalid-params]'
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: 'Removing permission is not allowed [error-action-not-allowed]'
+                    errorType: error-action-not-allowed
+                Example 3:
+                  value:
+                    success: false
+                    error: 'Permission not found [error-permission-not-found]'
+                    errorType: error-permission-not-found
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: 'User does not have the permissions required for this action [error-unauthorized]'
   /api/v1/roles.create:
     post:
       tags:
@@ -2393,6 +2578,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |8.7.0            | Added optional `service` form-data field to set the avatar origin.       |
         |0.56.0            | Add support for `username` argument.       |
         |0.48.0            | Set other users avatars if the callee has permission.       |
         |0.46.0            | Added       |
@@ -2423,7 +2609,7 @@ paths:
                   avatarUrl: 'http://domain.tld/to/my/own/avatar.jpg'
         description: |-
           You have two options to set the user avatar:
-            * Upload the image file to use as the new avatar, as form-data. For example, `image=@my-own-avatar.png`.
+            * Upload the image file to use as the new avatar, as form-data. For example, `image=@my-own-avatar.png`. Optionally, include a `service` form-data field with the name of the avatar service the image comes from (for example, an OAuth provider). When `service` is set, the `image` field is read as the image URL or data URI supplied by that service, and the service name is stored as the user's avatar origin. It replaces the deprecated `setAvatarFromService` DDP method, which is scheduled for removal in version 9.0.0.
             * Enter the image URL you want to set as the user avatar in the request body, using the parameter `avatarUrl`.
       tags:
         - Users
@@ -3203,12 +3389,13 @@ paths:
         As a workspace admin, you can create temporary authentication tokens for users. This is the same type of session authentication token a user gets via <a href="https://developer.rocket.chat/apidocs/login-with-username-and-password" target="_blank">login</a> and expires the same way.
         * To use this endpoint, you must set a secret with the `CREATE_TOKENS_FOR_USERS_SECRET` <a href="https://docs.rocket.chat/docs/deployment-environment-variables" target="_blank">environment variable</a> in your deployment configuration. This secret will be used to authorize all requests made to this endpoint.
         * For SaaS workspaces, <a href="https://desk.rocket.chat/portal/en/signin" target="_blank">contact</a> support to set this variable.
-        * Permission required: `user-generate-access-token`
+        * Permission required: `user-generate-access-token`. This permission is enforced only when you generate a token for another user; it is not required when you generate a token for your own account. Callers without this permission receive a `Not authorized [error-not-authorized]` error.
         * The maximum number of login tokens per user is 50. See this <a href='https://github.com/RocketChat/Rocket.Chat/pull/32216' target='_blank'>GitHub PR</a> for details.
-          
+
         ### Changelog
           | Version      | Description |
           | ---------------- | ------------|
+          |8.7.0             | Enforced `user-generate-access-token` for other users' tokens.|
           |8.0.0             | Added `CREATE_TOKENS_FOR_USERS_SECRET` <a href="https://docs.rocket.chat/docs/deployment-environment-variables" target="_blank">environment variable</a> to define a shared secret that will be used to authorize this endpoint.|
           |2.1.0            | Added ENV VAR to be able to use this endpoint (process.env.CREATE_TOKENS_FOR_USERS).       |
           |0.56.0            | Added       |
@@ -3290,8 +3477,14 @@ paths:
                     success: false
                     error: 'Not authorized [error-not-authorized]'
                     errorType: error-not-authorized
+                Missing permission:
+                  value:
+                    success: false
+                    error: 'Not authorized [error-not-authorized]'
+                    errorType: error-not-authorized
         '401':
           $ref: '#/components/responses/authorizationError'
+        # <!-- TODO: Confirm the HTTP status for the missing `user-generate-access-token` permission case. The endpoint's response schema (users.ts) declares only 200/400, and generateAccessToken() throws MeteorError('error-not-authorized'), so it is documented as 400 here — verify it is not surfaced as 403 before publishing. -->
     parameters: []
   /api/v1/users.getPreferences:
     get:
@@ -5001,7 +5194,13 @@ paths:
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
-      description: Log out of your account. You can also log out of another user's session. You will need the `logout-other-user` permission.
+      description: |-
+        Log out of your account. You can also log out of another user's session. You will need the `logout-other-user` permission.
+
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |8.7.0            | Post-logout cleanup hooks now also run on REST logout.       |
       requestBody:
         content:
           application/json:
@@ -5011,6 +5210,76 @@ paths:
                 userId:
                   type: string
                   description: Enter the user ID to be logged out.
+  /api/v1/users.verifyEmail:
+    post:
+      tags:
+        - Users
+      summary: Verify User Email
+      description: |-
+        Verify a user's email address with the verification token that Rocket.Chat sends by email. The server marks the email as verified and, if the user has the `anonymous` role, replaces it with the `user` role in the same request. This endpoint replaces the two-step DDP flow of the `verifyEmail` and `afterVerifyEmail` methods; the `afterVerifyEmail` DDP method is deprecated and scheduled for removal in version 9.0.0.
+
+        This endpoint does not require authentication.
+        <!-- TODO: Regression fix PR #41491 for this endpoint was NOT merged at the 8.7.0-rc.0 cut. Verify the endpoint behavior against the final 8.7.0 build before publishing. -->
+
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |8.7.0            | Added       |
+      operationId: post-api-v1-users.verifyEmail
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  description: The email verification token the user received by email.
+                  example: hf5Wf4Kj9R3mR7cQ2xkPd
+              required:
+                - token
+            examples:
+              Example 1:
+                value:
+                  token: hf5Wf4Kj9R3mR7cQ2xkPd
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''token'' [invalid-params]'
+                    errorType: invalid-params
+        '404':
+          description: Not Found. Returned when the verification token does not match any user.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: Resource not found
   /api/v1/ldap.syncNow:
     post:
       tags:

@@ -742,6 +742,76 @@ paths:
                     status: success
                     data:
                       message: You've been logged out!
+  /api/v1/loginCode.redeem:
+    post:
+      tags:
+        - Authentication
+      summary: Redeem Login Code
+      description: |-
+        Redeems a one-time login code for a login token. When the modern server-side OAuth flow is enabled through the `Accounts_OAuth_Use_Modern_Flow` setting, the server completes the OAuth login and redirects the browser back to the workspace with a `loginCode` query parameter. Call this endpoint with that code to get the `loginToken` and `userId` for the session. Pass the `loginToken` as the `X-Auth-Token` header and the `userId` as the `X-User-Id` header in later requests.
+
+        The endpoint does not require an authenticated session. It is rate-limited to 10 requests per minute per caller. Each code is a 64-character string, is single-use, and expires 60 seconds after it is issued.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.7.0   | Added       |
+      operationId: post-api-v1-loginCode.redeem
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  description: The one-time login code issued by the server-side OAuth flow. It must be exactly 64 characters long.
+                  example: 4f1d2c3b4a5968778695a4b3c2d1e0f1123456789abcdef00fedcba987654321
+              required:
+                - code
+            examples:
+              Example 1:
+                value:
+                  code: 4f1d2c3b4a5968778695a4b3c2d1e0f1123456789abcdef00fedcba987654321
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  loginToken:
+                    type: string
+                  userId:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Redemption successful:
+                  value:
+                    loginToken: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq
+                    userId: aobEdbYhXfu5hkeqG
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              # <!-- TODO: Verify the exact error body returned when the `code` body parameter fails schema validation (missing, wrong length, or extra properties) on POST /api/v1/loginCode.redeem. -->
+              examples:
+                Invalid or expired code:
+                  value:
+                    success: false
+                    error: error-invalid-code
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/me:
     get:
       tags:
@@ -1121,14 +1191,14 @@ paths:
         - Two-Factor Authentication
       summary: Send Two-Factor Challenge Email Code
       description: |-
-        Sends a two-factor authentication code by email for an in-progress login challenge. Use this endpoint after a login attempt returns a `challengeId` for the email two-factor method, to deliver a fresh code to the user.
+        Sends a two-factor authentication code by email for an in-progress login challenge. When a user signs in through the server-side OAuth flow and their account requires email two-factor authentication, the server issues a `challengeId` and sends an initial code automatically. Use this endpoint with that `challengeId` to deliver a fresh code to the user.
 
         The endpoint does not require an authenticated session. It is rate-limited to 5 requests per minute per caller. The challenge must exist, must not be expired, and must use the `email` method.
 
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
-        | 8.5.0   | Added       |
+        | 8.7.0   | Added       |
       operationId: post-api-v1-twoFactorChallenges.sendEmailCode
       requestBody:
         content:
@@ -1194,14 +1264,14 @@ paths:
         - Two-Factor Authentication
       summary: Verify Two-Factor Challenge
       description: |-
-        Verifies a two-factor authentication code submitted against a pending challenge and, on success, returns a login token for the associated user. Use this endpoint to complete the second factor of a login flow that issued a `challengeId`.
+        Verifies a two-factor authentication code submitted against a pending challenge and, on success, returns a login token for the associated user. Use this endpoint to complete the second factor of a server-side OAuth login that issued a `challengeId`. It supports the `email` and `totp` challenge methods.
 
         The endpoint does not require an authenticated session. It is rate-limited to 5 requests per minute per caller. Exceeding the per-user maximum failed attempts removes the challenge and returns a `totp-max-attempts` error.
 
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
-        | 8.5.0   | Added       |
+        | 8.7.0   | Added       |
       operationId: post-api-v1-twoFactorChallenges.verifyChallenge
       requestBody:
         content:

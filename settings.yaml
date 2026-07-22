@@ -675,6 +675,70 @@ paths:
       parameters:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/X-Auth-Token'
+  /api/v1/cloud.connectWorkspace:
+    post:
+      summary: Connect Workspace to Cloud
+      operationId: post-api-v1-cloud.connectWorkspace
+      description: |-
+        Connect the workspace to <a href="https://docs.rocket.chat/docs/rocketchat-cloud" target="_blank">Rocket.Chat Cloud</a> using a registration token. This endpoint replaces the deprecated `cloud:connectWorkspace` DDP method, which is scheduled for removal in version 9.0.0.
+
+        Permission required: `manage-cloud`.
+
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |8.7.0            | Added       |
+      tags:
+        - Cloud
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  description: The registration token from your Rocket.Chat Cloud account.
+                  example: aBcDeFgHiJkLmNoP
+              required:
+                - token
+            examples:
+              Example 1:
+                value:
+                  token: aBcDeFgHiJkLmNoP
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''token'' [invalid-params]'
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: Failed to connect the workspace with Rocket.Chat Cloud
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
   /api/v1/dns.resolve.txt:
     parameters: []
     post:
@@ -3248,6 +3312,9 @@ paths:
                           type: string
                         _id:
                           type: string
+                        current:
+                          type: boolean
+                          description: Whether the session belongs to the device making the request.
                   total:
                     type: integer
                   count:
@@ -3274,6 +3341,7 @@ paths:
                         ip: 172.20.0.2
                         loginAt: '2023-05-23T16:33:45.202Z'
                         _id: QoYYFw2t9oKks2niG
+                        current: true
                       - sessionId: WJ2giBwm4B9mcojFi
                         userId: rbAXPnMktTFbNpwtJ
                         device:
@@ -3288,6 +3356,7 @@ paths:
                         ip: 172.20.0.2
                         loginAt: '2023-05-23T12:43:52.023Z'
                         _id: WJ2giBwm4B9mcojFi
+                        current: false
                     total: 2
                     count: 50
                     offset: 0
@@ -3297,11 +3366,12 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
 
-        Retrieves all sessions of the authenticated user making the request.
+        Retrieves all sessions of the authenticated user making the request. Each session in the response includes a `current` field that is `true` for the session of the device making the request.
 
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |8.7.0            | Added `current` field to each session in the response |
         |5.0.0            | Added       |
       tags:
         - Device Management

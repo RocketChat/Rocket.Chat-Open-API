@@ -482,6 +482,174 @@ paths:
                     success: false
                     error: 'must have required property ''id'' [invalid-params]'
                     errorType: invalid-params
+  /api/v1/integrations.clearHistory:
+    post:
+      tags:
+        - Integration
+      summary: Clear Integration History
+      description: |-
+        Clear the history of an outgoing <a href='https://docs.rocket.chat/docs/integrations' target='_blank'>integration</a>. This endpoint replaces the deprecated `clearIntegrationHistory` DDP method, which is scheduled for removal in version 9.0.0.
+
+        Any of the following permissions is required:
+          * `manage-outgoing-integrations`
+          * `manage-own-outgoing-integrations` (clears history only for integrations created by the calling user)
+
+        ### Changelog
+        |Version      | Description |
+        | ---------------- | ------------|
+        |8.7.0            | Added       |
+      operationId: post-api-v1-integrations.clearHistory
+      parameters:
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/X-User-Id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                integrationId:
+                  type: string
+                  description: The ID of the integration whose history you want to clear.
+                  example: nvdQuJQ6tE9HRFBzd
+              required:
+                - integrationId
+            examples:
+              Example 1:
+                value:
+                  integrationId: nvdQuJQ6tE9HRFBzd
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''integrationId'' [invalid-params]'
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: 'Invalid integration [error-invalid-integration]'
+                    errorType: error-invalid-integration
+                Example 3:
+                  value:
+                    success: false
+                    error: 'Unauthorized [not_authorized]'
+                    errorType: not_authorized
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  /api/v1/integrations.replayOutgoing:
+    post:
+      tags:
+        - Integration
+      summary: Replay Outgoing Integration
+      description: |-
+        Replay a history entry of an outgoing <a href='https://docs.rocket.chat/docs/integrations' target='_blank'>integration</a>, triggering the integration again with the recorded data. This endpoint replaces the deprecated `replayOutgoingIntegration` DDP method, which is scheduled for removal in version 9.0.0.
+
+        Any of the following permissions is required:
+          * `manage-outgoing-integrations`
+          * `manage-own-outgoing-integrations` (replays only integrations created by the calling user)
+
+        ### Changelog
+        |Version      | Description |
+        | ---------------- | ------------|
+        |8.7.0            | Added       |
+      operationId: post-api-v1-integrations.replayOutgoing
+      parameters:
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/X-User-Id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                integrationId:
+                  type: string
+                  description: The ID of the outgoing integration.
+                  example: nvdQuJQ6tE9HRFBzd
+                historyId:
+                  type: string
+                  description: The ID of the integration history entry to replay. Use the <a href='https://developer.rocket.chat/apidocs/get-integration-history' target='_blank'>Get Integration History</a> endpoint to list history entries.
+                  example: 8G2GfBz3prSampleId
+              required:
+                - integrationId
+                - historyId
+            examples:
+              Example 1:
+                value:
+                  integrationId: nvdQuJQ6tE9HRFBzd
+                  historyId: 8G2GfBz3prSampleId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''historyId'' [invalid-params]'
+                    errorType: invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: 'Invalid integration [error-invalid-integration]'
+                    errorType: error-invalid-integration
+                Example 3:
+                  value:
+                    success: false
+                    error: 'Invalid Integration History [error-invalid-integration-history]'
+                    errorType: error-invalid-integration-history
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/integrations.list:
     get:
       tags:

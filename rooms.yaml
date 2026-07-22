@@ -4526,7 +4526,13 @@ paths:
       summary: Convert Channel to Team
       description: |-
         Convert a channel to a team.
-        Permissions required: `create-team`, `edit-room`
+
+        Permissions required: `create-team`, `edit-room`. Both permissions are checked against the target channel regardless of whether you identify it by `channelId` or `channelName`. Callers without both permissions on that channel receive a `403 Forbidden` response.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.7.0   | Added room-access check; unauthorized callers now receive 403. |
       operationId: post-api-v1-channels.convertToTeam
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -4594,6 +4600,22 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: unauthorized
   /api/v1/rooms.saveNotification:
     post:
       tags:
@@ -4726,6 +4748,7 @@ paths:
         ### Changelog
         | Version | Description  |
         | ------- |--------------|
+        | 8.7.0  | Restored `customFields` in the response |
         | 2.4.0  | Added         |
       operationId: get-api-v1-rooms.adminRooms
       parameters:
@@ -4808,6 +4831,9 @@ paths:
                           type: string
                         announcement:
                           type: string
+                        customFields:
+                          type: object
+                          description: The custom fields set on the room.
                   count:
                     type: integer
                   offset:
@@ -4834,6 +4860,9 @@ paths:
                           name: kim.jane
                         ro: false
                         default: false
+                        customFields:
+                          department: engineering
+                          priority: high
                     count: 1
                     offset: 0
                     total: 1
@@ -6163,6 +6192,7 @@ paths:
         ### Changelog
         | Version | Description     |
         | ------- | --------------- |
+        | 8.7.0   | Restored `customFields` in the response |
         | 2.4.0   | Added           |
       operationId: get-api-v1-rooms.adminRooms.getRoom
       parameters:
@@ -6206,6 +6236,9 @@ paths:
                     type: boolean
                   default:
                     type: boolean
+                  customFields:
+                    type: object
+                    description: The custom fields set on the room.
                   success:
                     type: boolean
               examples:
@@ -6222,6 +6255,9 @@ paths:
                       username: bruno.raymundo
                     ro: false
                     default: false
+                    customFields:
+                      department: engineering
+                      priority: high
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -7341,9 +7377,14 @@ paths:
         - Teams
       summary: Create a New Team
       description: |-
-        Create a new public or private team in the workspace. 
-        
-        Permission required: `create-team`
+        Create a new public or private team in the workspace.
+
+        Permission required: `create-team`. When you create a team from an existing room by passing `room.id`, you must also hold `edit-room` on that room. Callers without both permissions on that room receive a `403 Forbidden` response.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.7.0   | Added room-access check when creating a team from a room (403). |
       operationId: post-api-v1-teams.create
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -7368,6 +7409,9 @@ paths:
                 room:
                   type: object
                   properties:
+                    id:
+                      type: string
+                      description: The ID of an existing room to convert into the new team. Requires the `edit-room` permission on that room.
                     readOnly:
                       type: boolean
                 sidepanel:
@@ -7450,6 +7494,22 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: unauthorized
   /api/v1/teams.listAll:
     get:
       tags:
