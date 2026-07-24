@@ -4526,7 +4526,14 @@ paths:
       summary: Convert Channel to Team
       description: |-
         Convert a channel to a team.
-        Permissions required: `create-team`, `edit-room`
+
+        Permissions required: `create-team`, `edit-room`. Both permissions are checked against the target channel, whether you identify it by `channelId` or `channelName`.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.7.0   | Enforced room permission checks regardless of whether the channel is identified by ID or name. |
+        | 3.13.0  | Added |
       operationId: post-api-v1-channels.convertToTeam
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -4539,13 +4546,22 @@ paths:
               properties:
                 channelId:
                   type: string
-                  description: The channel's ID. Alternatively, enter the `channelName` parameter and provide the channel's name as the value.
-              required:
-                - channelId
+                  description: The channel's ID. Provide either `channelId` or `channelName`, but not both.
+                channelName:
+                  type: string
+                  description: The channel's name. Provide either `channelName` or `channelId`, but not both.
+              oneOf:
+                - required:
+                    - channelId
+                - required:
+                    - channelName
             examples:
-              Example:
+              Convert channel by ID:
                 value:
                   channelId: 6513afeda2f73c7460e18c86
+              Convert channel by name:
+                value:
+                  channelName: messages
       responses:
         '200':
           description: OK
@@ -4579,7 +4595,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Success:
+                Channel converted to team:
                   value:
                     team:
                       _id: 65149c7ea2f73c7460e18cab
@@ -4594,6 +4610,22 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Missing channel permissions:
+                  value:
+                    success: false
+                    error: unauthorized
   /api/v1/rooms.saveNotification:
     post:
       tags:
@@ -7341,9 +7373,15 @@ paths:
         - Teams
       summary: Create a New Team
       description: |-
-        Create a new public or private team in the workspace. 
-        
-        Permission required: `create-team`
+        Create a new public or private team in the workspace.
+
+        Permission required: `create-team`. When you create a team from an existing room by passing `room.id`, you also need the `edit-room` permission for that room.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.7.0   | Enforced room permission checks when creating a team from an existing room. |
+        | 3.13.0  | Added |
       operationId: post-api-v1-teams.create
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -7368,6 +7406,9 @@ paths:
                 room:
                   type: object
                   properties:
+                    id:
+                      type: string
+                      description: The ID of an existing room to use as the team's main room.
                     readOnly:
                       type: boolean
                 sidepanel:
@@ -7387,7 +7428,7 @@ paths:
                 - name
                 - type
             examples:
-              Example:
+              Create a public team:
                 value:
                   name: teamName
                   type: 0
@@ -7399,6 +7440,12 @@ paths:
                     items:
                       - discussions
                       - channels
+              Create a team from an existing room:
+                value:
+                  name: teamName
+                  type: 0
+                  room:
+                    id: 6513afeda2f73c7460e18c86
       responses:
         '200':
           description: |-
@@ -7435,7 +7482,7 @@ paths:
                   success:
                     type: boolean
               examples:
-                Success:
+                Team created:
                   value:
                     team:
                       _id: 651619e3a2f73c7460e18cc5
@@ -7450,6 +7497,22 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Missing room permissions:
+                  value:
+                    success: false
+                    error: unauthorized
   /api/v1/teams.listAll:
     get:
       tags:
