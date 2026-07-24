@@ -3248,6 +3248,9 @@ paths:
                           type: string
                         _id:
                           type: string
+                        current:
+                          type: boolean
+                          description: Whether the session belongs to the device making the request.  
                   total:
                     type: integer
                   count:
@@ -3274,6 +3277,7 @@ paths:
                         ip: 172.20.0.2
                         loginAt: '2023-05-23T16:33:45.202Z'
                         _id: QoYYFw2t9oKks2niG
+                        current: false
                       - sessionId: WJ2giBwm4B9mcojFi
                         userId: rbAXPnMktTFbNpwtJ
                         device:
@@ -3288,6 +3292,7 @@ paths:
                         ip: 172.20.0.2
                         loginAt: '2023-05-23T12:43:52.023Z'
                         _id: WJ2giBwm4B9mcojFi
+                        current: false
                     total: 2
                     count: 50
                     offset: 0
