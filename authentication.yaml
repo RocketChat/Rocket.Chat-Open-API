@@ -742,6 +742,90 @@ paths:
                     status: success
                     data:
                       message: You've been logged out!
+  /api/v1/loginCode.redeem:
+    post:
+      tags:
+        - Authentication
+      summary: Redeem Login Code
+      description: |-
+        Redeems a one-time OAuth login code and returns the `loginToken` and `userId`. Use these values as the `X-Auth-Token` and `X-User-Id` headers in authenticated requests.
+
+        This endpoint does not require authentication. Each code is single-use, expires after 60 seconds, and is limited to 10 redemption requests per minute per caller.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.7.0   | Added       |
+      operationId: post-api-v1-loginCode.redeem
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                code:
+                  type: string
+                  minLength: 64
+                  maxLength: 64
+                  description: The one-time login code issued by the server-side OAuth flow.
+                  example: 4f1d2c3b4a5968778695a4b3c2d1e0f1123456789abcdef00fedcba987654321
+              required:
+                - code
+            examples:
+              Redeem login code:
+                value:
+                  code: 4f1d2c3b4a5968778695a4b3c2d1e0f1123456789abcdef00fedcba987654321
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  loginToken:
+                    type: string
+                  userId:
+                    type: string
+                  success:
+                    type: boolean
+                required:
+                  - loginToken
+                  - userId
+                  - success
+              examples:
+                Redemption successful:
+                  value:
+                    loginToken: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq
+                    userId: aobEdbYhXfu5hkeqG
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Invalid request:
+                  value:
+                    success: false
+                    error: must NOT have fewer than 64 characters [invalid-params]
+                    errorType: invalid-params
+                Invalid or expired code:
+                  value:
+                    success: false
+                    error: error-invalid-code
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/me:
     get:
       tags:
@@ -1121,20 +1205,22 @@ paths:
         - Two-Factor Authentication
       summary: Send Two-Factor Challenge Email Code
       description: |-
-        Sends a two-factor authentication code by email for an in-progress login challenge. Use this endpoint after a login attempt returns a `challengeId` for the email two-factor method, to deliver a fresh code to the user.
+        Sends a new email code for an OAuth two-factor authentication challenge.
 
-        The endpoint does not require an authenticated session. It is rate-limited to 5 requests per minute per caller. The challenge must exist, must not be expired, and must use the `email` method.
+        This endpoint does not require authentication. The challenge must exist, must not be expired, and must use the `email` method. Requests are limited to 5 per minute per caller.
 
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
-        | 8.5.0   | Added       |
+        | 8.7.0   | Added       |
       operationId: post-api-v1-twoFactorChallenges.sendEmailCode
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               type: object
+              additionalProperties: false
               properties:
                 challengeId:
                   type: string
@@ -1143,7 +1229,7 @@ paths:
               required:
                 - challengeId
             examples:
-              Example 1:
+              Send email code:
                 value:
                   challengeId: 8f4c2d1e9a7b6c5d3e2f1a0b
       responses:
@@ -1194,20 +1280,22 @@ paths:
         - Two-Factor Authentication
       summary: Verify Two-Factor Challenge
       description: |-
-        Verifies a two-factor authentication code submitted against a pending challenge and, on success, returns a login token for the associated user. Use this endpoint to complete the second factor of a login flow that issued a `challengeId`.
+        Verifies the email or TOTP code for an OAuth two-factor authentication challenge and returns the `loginToken` and `userId`.
 
-        The endpoint does not require an authenticated session. It is rate-limited to 5 requests per minute per caller. Exceeding the per-user maximum failed attempts removes the challenge and returns a `totp-max-attempts` error.
+        This endpoint does not require authentication. Requests are limited to 5 per minute per caller. The challenge is removed when the maximum number of failed attempts is reached.
 
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
-        | 8.5.0   | Added       |
+        | 8.7.0   | Added       |
       operationId: post-api-v1-twoFactorChallenges.verifyChallenge
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               type: object
+              additionalProperties: false
               properties:
                 challengeId:
                   type: string
@@ -1221,7 +1309,7 @@ paths:
                 - challengeId
                 - code
             examples:
-              Example 1:
+              Verify challenge:
                 value:
                   challengeId: 8f4c2d1e9a7b6c5d3e2f1a0b
                   code: '482913'
@@ -1239,6 +1327,10 @@ paths:
                     type: string
                   success:
                     type: boolean
+                required:
+                  - loginToken
+                  - userId
+                  - success
               examples:
                 Verification successful:
                   value:
@@ -1274,6 +1366,11 @@ paths:
                     success: false
                     error: challenge not found
                     errorType: error-challenge-not-found
+                Challenge expired:
+                  value:
+                    success: false
+                    error: challenge expired
+                    errorType: error-challenge-expired
                 User not found:
                   value:
                     success: false
