@@ -4758,6 +4758,7 @@ paths:
         ### Changelog
         | Version | Description  |
         | ------- |--------------|
+        | 8.7.0  | Restored `customFields` in the response |
         | 2.4.0  | Added         |
       operationId: get-api-v1-rooms.adminRooms
       parameters:
@@ -4840,6 +4841,9 @@ paths:
                           type: string
                         announcement:
                           type: string
+                        customFields:
+                          type: object
+                          description: The custom fields set on the room.
                   count:
                     type: integer
                   offset:
@@ -4866,6 +4870,9 @@ paths:
                           name: kim.jane
                         ro: false
                         default: false
+                        customFields:
+                          department: engineering
+                          priority: high
                     count: 1
                     offset: 0
                     total: 1
@@ -6195,6 +6202,7 @@ paths:
         ### Changelog
         | Version | Description     |
         | ------- | --------------- |
+        | 8.7.0   | Restored `customFields` in the response |
         | 2.4.0   | Added           |
       operationId: get-api-v1-rooms.adminRooms.getRoom
       parameters:
@@ -6238,6 +6246,9 @@ paths:
                     type: boolean
                   default:
                     type: boolean
+                  customFields:
+                    type: object
+                    description: The custom fields set on the room.
                   success:
                     type: boolean
               examples:
@@ -6254,6 +6265,9 @@ paths:
                       username: bruno.raymundo
                     ro: false
                     default: false
+                    customFields:
+                      department: engineering
+                      priority: high
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
