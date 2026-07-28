@@ -182,6 +182,205 @@ paths:
         - $ref: '#/components/parameters/Auth-Token'
       tags:
         - Permissions
+  /api/v1/permissions.addRole:
+    post:
+      tags:
+        - Permissions
+      summary: Add Permission to a Role
+      description: |-
+        Grant a <a href='https://docs.rocket.chat/docs/permissions' target='_blank'>permission</a> to a role. 
+
+        Permission required: `access-permissions`. 
+        
+        To modify a setting-level permission, the `access-setting-permissions` permission is also required.
+
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |8.7.0            | Added       |
+      operationId: post-api-v1-permissions.addRole
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                permissionId:
+                  type: string
+                  description: The permission ID.
+                  example: create-team-channel
+                role:
+                  type: string
+                  description: The role to grant the permission to. For default Rocket.Chat roles, enter the role name, such as `admin` or `user`. For custom roles, enter the role ID.
+                  example: user
+              required:
+                - permissionId
+                - role
+            examples:
+              Example:
+                value:
+                  permissionId: create-team-channel
+                  role: user
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+                      action:
+                        type: string
+              examples:
+                Invalid Parameters:
+                  value:
+                    success: false
+                    error: "must have required property 'role'"
+                    errorType: invalid-params
+                Permission does not exist:
+                  value:
+                    success: false
+                    error: "Permission does not exist [error-invalid-permission]"
+                    errorType: error-invalid-permission
+                    details:
+                      method: authorization:addPermissionToRole
+                      action: Adding_permission
+                Invalid Role:
+                  value:
+                    success: false
+                    error: "Role does not exist [error-invalid-role]"
+                    errorType: error-invalid-role
+                    details:
+                      method: authorization:addPermissionToRole
+                      action: Adding_permission
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: 'User does not have the permissions required for this action [error-unauthorized]'
+  /api/v1/permissions.removeRole:
+    post:
+      tags:
+        - Permissions
+      summary: Remove Role from Permission
+      description: |-
+        Revoke a <a href='https://docs.rocket.chat/docs/permissions' target='_blank'>permission</a> from a role. 
+
+        Permission required: `access-permissions`. 
+        
+        To modify a setting-level permission, the `access-setting-permissions` permission is also required.
+
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |8.7.0            | Added       |
+      operationId: post-api-v1-permissions.removeRole
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                permissionId:
+                  type: string
+                  description: The permission ID.
+                  example: create-team-channel
+                role:
+                  type: string
+                  description: The role to revoke the permission from. For default Rocket.Chat roles, enter the role name, such as `admin` or `user`. For custom roles, enter the role ID.
+                  example: user
+              required:
+                - permissionId
+                - role
+            examples:
+              Example:
+                value:
+                  permissionId: create-team-channel
+                  role: user
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+              examples:
+                Invalid Parameters:
+                  value:
+                    success: false
+                    error: "must have required property 'role'"
+                    errorType: invalid-params
+                Permission not found:
+                  value:
+                    success: false
+                    error: "Permission not found [error-permission-not-found]"
+                    errorType: error-permission-not-found
+                    details:
+                      method: authorization:removeRoleFromPermission
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: 'User does not have the permissions required for this action [error-unauthorized]'
   /api/v1/roles.create:
     post:
       tags:
@@ -5437,6 +5636,61 @@ paths:
               Example:
                 value:
                   email: example@example.com
+  /api/v1/users.verifyEmail:
+    post:
+      tags:
+        - Users
+      summary: Verify User Email
+      description: |-
+        Verifies a user's email address using the token embedded in the verification sent to thier email. If the user has the `anonymous` role, it is replaced with the `user` role as part of the verification.
+
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |8.7.0            | Added       |
+      operationId: post-api-v1-users.verifyEmail
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  description: The email verification token the user received by email.
+                  example: hf5Wf4Kj9R3mR7cQ2xkPd
+              required:
+                - token
+            examples:
+              Example:
+                value:
+                  token: hf5Wf4Kj9R3mR7cQ2xkPd
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Missing token:
+                  value:
+                    success: false
+                    error: 'must have required property ''token'' [invalid-params]'
+                    errorType: invalid-params
+                Verification link expired:
+                  value:
+                    success: false
+                    error: Verify email link expired
   /api/v1/users.listByStatus:
     get:
       tags:
