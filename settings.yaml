@@ -569,6 +569,70 @@ paths:
       description: List out all the active OAuth services configured with details.
       tags:
         - Settings
+  /api/v1/cloud.connectWorkspace:
+    post:
+      summary: Connect Workspace to Cloud
+      operationId: post-api-v1-cloud.connectWorkspace
+      description: |-
+        Connect the workspace to <a href="https://docs.rocket.chat/docs/rocketchat-cloud" target="_blank">Rocket.Chat Cloud</a> using a registration token. To get a registration token, refer to [Registration via Token](https://docs.rocket.chat/docs/register-your-workspace#how-to-get-a-token).
+
+        Permission required: `manage-cloud`.
+
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |8.7.0            | Added       |
+      tags:
+        - Cloud
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  description: The registration token from your Rocket.Chat Cloud account.
+                  example: 5f03461b-9073-41e5-986d-e70f4d6ecbd1
+              required:
+                - token
+            examples:
+              Example:
+                value:
+                  token: 5f03461b-9073-41e5-986d-e70f4d6ecbd1
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Invalid Parameter:
+                  value:
+                    success: false
+                    error: 'must have required property ''token'' [invalid-params]'
+                    errorType: invalid-params
+                Failed to Connect:
+                  value:
+                    success: false
+                    error: Failed to connect the workspace with Rocket.Chat Cloud
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
   /api/v1/cloud.manualRegister:
     post:
       summary: Manual Cloud Register
