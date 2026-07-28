@@ -2592,6 +2592,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |8.7.0             | Added optional `service` multipart field (stored as `avatarOrigin`)       |
         |0.56.0            | Add support for `username` argument.       |
         |0.48.0            | Set other users avatars if the callee has permission.       |
         |0.46.0            | Added       |
@@ -2617,12 +2618,39 @@ paths:
               required:
                 - avatarUrl
             examples:
-              Example 1:
+              Example:
                 value:
                   avatarUrl: 'http://domain.tld/to/my/own/avatar.jpg'
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+                  description: The image file to upload as the new avatar.
+                service:
+                  type: string
+                  description: >-
+                    Optional. The name of the OAuth/external service the avatar
+                    originates from (e.g. `google`, `facebook`, `gravatar`).
+                    Stored as `avatarOrigin`. 
+                  example: 'google'
+                userId:
+                  type: string
+                  description: >-
+                    The ID or username of the user. If not provided, the avatar
+                    of the user who is sending the request is updated.
+              required:
+                - image
+            examples:
+              Example:
+                value:
+                  image: '@my-own-avatar.png'
+                  service: 'google'
         description: |-
           You have two options to set the user avatar:
-            * Upload the image file to use as the new avatar, as form-data. For example, `image=@my-own-avatar.png`.
+            * Upload the image file to use as the new avatar, as form-data. For example, `image=@my-own-avatar.png`. Optionally include a `service` field to record which OAuth/external service the avatar came from (stored as `avatarOrigin`).
             * Enter the image URL you want to set as the user avatar in the request body, using the parameter `avatarUrl`.
       tags:
         - Users
