@@ -25,6 +25,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |8.7.0             | Added the `fips` field to statistics records. |        
         |0.51.0            | Added       |
       operationId: get-api-v1-statistics.list
       parameters:
@@ -71,7 +72,15 @@ paths:
                           type: string
                         installedAt:
                           type: string
+                        deploymentFingerprintHash:
+                          type: string
+                        deploymentFingerprintVerified:
+                          type: boolean
                         version:
+                          type: string
+                        tag:
+                          type: string
+                        branch:
                           type: string
                         totalUsers:
                           type: integer
@@ -93,13 +102,13 @@ paths:
                           type: integer
                         offlineUsers:
                           type: integer
-                        totalRooms:
-                          type: integer
                         userLanguages:
                           type: object
                           properties:
                             none:
                               type: integer
+                        totalRooms:
+                          type: integer
                         totalChannels:
                           type: integer
                         totalPrivateGroups:
@@ -116,12 +125,43 @@ paths:
                           type: integer
                         totalLivechatAgents:
                           type: integer
-                        voipEnabled:
+                        totalLivechatManagers:
+                          type: integer
+                        livechatEnabled:
+                          type: boolean
+                        isDepartmentRemovalEnabled:
                           type: boolean
                         omnichannelSources:
                           type: array
                           items:
                             type: object
+                            properties: {}
+                        totalLivechatRoomsWithDepartment:
+                          type: integer
+                        departments:
+                          type: integer
+                        totalTriggers:
+                          type: integer
+                        archivedDepartments:
+                          type: integer
+                        totalCustomFields:
+                          type: integer
+                        totalLivechatPublicCustomFields:
+                          type: integer
+                        livechatAutomaticForwardingUnansweredChats:
+                          type: boolean
+                        routingAlgorithm:
+                          type: string
+                        onHoldEnabled:
+                          type: string
+                        lastChattedAgentPreferred:
+                          type: string
+                        assignNewConversationsToContactManager:
+                          type: string
+                        visitorAbandonment:
+                          type: string
+                        emailInboxes:
+                          type: integer
                         BusinessHours:
                           type: object
                           properties:
@@ -131,23 +171,59 @@ paths:
                               type: string
                         chatsOnHold:
                           type: integer
-                        departments:
-                          type: integer
-                        emailInboxes:
-                          type: integer
-                        voipCalls:
-                          type: integer
-                        voipExtensions:
-                          type: integer
-                        voipErrorCalls:
-                          type: integer
-                        voipSuccessfulCalls:
-                          type: integer
+                        uniqueContactsOfLastMonth:
+                          type: object
+                          properties:
+                            contactsCount:
+                              type: integer
+                            conversationsCount:
+                              type: integer
+                            sources:
+                              type: array
+                              items:
+                                type: object
+                                properties: {}
+                        omnichannelContactsBySource:
+                          type: object
+                          properties:
+                            contactsCount:
+                              type: integer
+                            conversationsCount:
+                              type: integer
+                            sources:
+                              type: array
+                              items:
+                                type: object
+                                properties: {}
                         totalChannelMessages:
                           type: integer
-                        voipOnHoldCalls:
-                          type: integer
+                        uniqueContactsOfYesterday:
+                          type: object
+                          properties:
+                            contactsCount:
+                              type: integer
+                            conversationsCount:
+                              type: integer
+                            sources:
+                              type: array
+                              items:
+                                type: object
+                                properties: {}
+                        uniqueContactsOfLastWeek:
+                          type: object
+                          properties:
+                            contactsCount:
+                              type: integer
+                            conversationsCount:
+                              type: integer
+                            sources:
+                              type: array
+                              items:
+                                type: object
+                                properties: {}
                         totalPrivateGroupMessages:
+                          type: integer
+                        totalDiscussionsMessages:
                           type: integer
                         totalDirectMessages:
                           type: integer
@@ -155,10 +231,12 @@ paths:
                           type: integer
                         totalMessages:
                           type: integer
-                        federatedServers:
-                          type: integer
-                        federatedUsers:
-                          type: integer
+                        lastLogin:
+                          type: string
+                        lastMessageSentAt:
+                          type: string
+                        lastSeenSubscription:
+                          type: string
                         os:
                           type: object
                           properties:
@@ -218,12 +296,16 @@ paths:
                               type: string
                             platform:
                               type: string
+                        fips:
+                          type: boolean
                         readReceiptsEnabled:
                           type: boolean
                         readReceiptsDetailed:
                           type: boolean
                         enterpriseReady:
                           type: boolean
+                        fileStoreType:
+                          type: string
                         uploadsTotal:
                           type: integer
                         uploadsTotalSize:
@@ -232,6 +314,8 @@ paths:
                           type: object
                           properties:
                             _id:
+                              type: string
+                            _updatedAt:
                               type: string
                             locked:
                               type: boolean
@@ -252,14 +336,16 @@ paths:
                           properties:
                             engineVersion:
                               type: string
-                            enabled:
-                              type: boolean
                             totalInstalled:
-                              type: boolean
+                              type: integer
                             totalActive:
-                              type: boolean
+                              type: integer
                             totalFailed:
-                              type: boolean
+                              type: integer
+                            totalPrivateApps:
+                              type: integer
+                            totalPrivateAppsEnabled:
+                              type: integer
                         uniqueUsersOfYesterday:
                           type: object
                           properties:
@@ -273,71 +359,7 @@ paths:
                               type: array
                               items:
                                 type: object
-                        uniqueDevicesOfLastWeek:
-                          type: object
-                          properties:
-                            year:
-                              type: integer
-                            month:
-                              type: integer
-                            day:
-                              type: integer
-                            data:
-                              type: array
-                              items:
-                                type: object
-                        uniqueOSOfLastWeek:
-                          type: object
-                          properties:
-                            year:
-                              type: integer
-                            month:
-                              type: integer
-                            day:
-                              type: integer
-                            data:
-                              type: array
-                              items:
-                                type: object
-                        uniqueDevicesOfLastMonth:
-                          type: object
-                          properties:
-                            year:
-                              type: integer
-                            month:
-                              type: integer
-                            day:
-                              type: integer
-                            data:
-                              type: array
-                              items:
-                                type: object
-                        uniqueOSOfYesterday:
-                          type: object
-                          properties:
-                            year:
-                              type: integer
-                            month:
-                              type: integer
-                            day:
-                              type: integer
-                            data:
-                              type: array
-                              items:
-                                type: object
-                        uniqueOSOfLastMonth:
-                          type: object
-                          properties:
-                            year:
-                              type: integer
-                            month:
-                              type: integer
-                            day:
-                              type: integer
-                            data:
-                              type: array
-                              items:
-                                type: object
+                                properties: {}
                         uniqueDevicesOfYesterday:
                           type: object
                           properties:
@@ -351,19 +373,7 @@ paths:
                               type: array
                               items:
                                 type: object
-                        uniqueUsersOfLastWeek:
-                          type: object
-                          properties:
-                            year:
-                              type: integer
-                            month:
-                              type: integer
-                            day:
-                              type: integer
-                            data:
-                              type: array
-                              items:
-                                type: object
+                                properties: {}
                         uniqueUsersOfLastMonth:
                           type: object
                           properties:
@@ -377,6 +387,91 @@ paths:
                               type: array
                               items:
                                 type: object
+                                properties: {}
+                        uniqueUsersOfLastWeek:
+                          type: object
+                          properties:
+                            year:
+                              type: integer
+                            month:
+                              type: integer
+                            day:
+                              type: integer
+                            data:
+                              type: array
+                              items:
+                                type: object
+                                properties: {}
+                        uniqueOSOfYesterday:
+                          type: object
+                          properties:
+                            year:
+                              type: integer
+                            month:
+                              type: integer
+                            day:
+                              type: integer
+                            data:
+                              type: array
+                              items:
+                                type: object
+                                properties: {}
+                        uniqueDevicesOfLastMonth:
+                          type: object
+                          properties:
+                            year:
+                              type: integer
+                            month:
+                              type: integer
+                            day:
+                              type: integer
+                            data:
+                              type: array
+                              items:
+                                type: object
+                                properties: {}
+                        uniqueOSOfLastMonth:
+                          type: object
+                          properties:
+                            year:
+                              type: integer
+                            month:
+                              type: integer
+                            day:
+                              type: integer
+                            data:
+                              type: array
+                              items:
+                                type: object
+                                properties: {}
+                        uniqueDevicesOfLastWeek:
+                          type: object
+                          properties:
+                            year:
+                              type: integer
+                            month:
+                              type: integer
+                            day:
+                              type: integer
+                            data:
+                              type: array
+                              items:
+                                type: object
+                                properties: {}
+                        uniqueOSOfLastWeek:
+                          type: object
+                          properties:
+                            year:
+                              type: integer
+                            month:
+                              type: integer
+                            day:
+                              type: integer
+                            data:
+                              type: array
+                              items:
+                                type: object
+                                properties: {}
                         services:
                           type: object
                           properties:
@@ -391,20 +486,68 @@ paths:
                                   type: boolean
                                 encryption:
                                   type: string
+                                mergeUsers:
+                                  type: boolean
+                                syncRoles:
+                                  type: string
+                                syncRolesAutoRemove:
+                                  type: string
+                                syncData:
+                                  type: string
+                                syncChannels:
+                                  type: string
+                                syncAvatar:
+                                  type: boolean
+                                groupFilter:
+                                  type: boolean
                                 backgroundSync:
                                   type: object
+                                  properties:
+                                    enabled:
+                                      type: string
+                                    interval:
+                                      type: string
+                                    newUsers:
+                                      type: string
+                                    existingUsers:
+                                      type: string
                                 ee:
                                   type: object
+                                  properties:
+                                    syncActiveState:
+                                      type: string
+                                    syncTeams:
+                                      type: string
+                                    syncRoles:
+                                      type: string
                             saml:
                               type: object
                               properties:
+                                enabled:
+                                  type: string
                                 users:
                                   type: integer
+                                signatureValidationType:
+                                  type: string
+                                generateUsername:
+                                  type: string
+                                updateSubscriptionsOnLogin:
+                                  type: string
+                                syncRoles:
+                                  type: string
+                                userDataCustomFieldMap:
+                                  type: boolean
                             cas:
                               type: object
                               properties:
+                                enabled:
+                                  type: boolean
                                 users:
                                   type: integer
+                                allowUserCreation:
+                                  type: boolean
+                                alwaysSyncUserData:
+                                  type: boolean
                             oauth:
                               type: object
                               properties:
@@ -485,13 +628,6 @@ paths:
                                       type: boolean
                                     users:
                                       type: integer
-                                tokenpass:
-                                  type: object
-                                  properties:
-                                    enabled:
-                                      type: boolean
-                                    users:
-                                      type: integer
                                 twitter:
                                   type: object
                                   properties:
@@ -508,6 +644,7 @@ paths:
                                       type: integer
                                 custom:
                                   type: object
+                                  properties: {}
                         importer:
                           type: object
                           properties:
@@ -547,14 +684,172 @@ paths:
                                   type: integer
                             settings:
                               type: object
+                              properties:
+                                provider:
+                                  type: string
+                                dms:
+                                  type: string
+                                channels:
+                                  type: string
+                                groups:
+                                  type: string
+                                teams:
+                                  type: string
+                        contactVerification:
+                          type: object
+                          properties:
+                            totalContacts:
+                              type: integer
+                            totalUnknownContacts:
+                              type: integer
+                            totalMergedContacts:
+                              type: string
+                            totalConflicts:
+                              type: integer
+                            totalResolvedConflicts:
+                              type: string
+                            totalBlockedContacts:
+                              type: integer
+                            totalPartiallyBlockedContacts:
+                              type: integer
+                            totalFullyBlockedContacts:
+                              type: integer
+                            totalVerifiedContacts:
+                              type: integer
+                            avgChannelsPerContact:
+                              type: integer
+                            totalContactsWithoutChannels:
+                              type: integer
+                            totalImportedContacts:
+                              type: string
+                            totalUpsellViews:
+                              type: string
+                            totalUpsellClicks:
+                              type: string
                         dashboardCount:
                           type: integer
                         messageAuditApply:
                           type: integer
                         messageAuditLoad:
                           type: integer
+                        joinJitsiButton:
+                          type: integer
+                        slashCommandsJitsi:
+                          type: integer
                         settings:
                           type: object
+                          properties:
+                            accounts:
+                              type: object
+                              properties:
+                                account2fa:
+                                  type: boolean
+                            cannedResponses:
+                              type: object
+                              properties:
+                                cannedResponsesEnabled:
+                                  type: boolean
+                            e2ee:
+                              type: object
+                              properties:
+                                e2e:
+                                  type: boolean
+                                e2eDefaultDirectRoom:
+                                  type: boolean
+                                e2eDefaultPrivateRoom:
+                                  type: boolean
+                            email:
+                              type: object
+                              properties:
+                                smtp:
+                                  type: object
+                                  properties:
+                                    smtpHost:
+                                      type: string
+                                    smtpPort:
+                                      type: string
+                                    fromEmail:
+                                      type: string
+                            fileUpload:
+                              type: object
+                              properties:
+                                fileUploadEnable:
+                                  type: boolean
+                            general:
+                              type: object
+                              properties:
+                                apps:
+                                  type: object
+                                  properties:
+                                    frameworkDevMode:
+                                      type: string
+                                    frameworkEnable:
+                                      type: string
+                                nps:
+                                  type: object
+                                  properties:
+                                    surveyEnabled:
+                                      type: boolean
+                                update:
+                                  type: object
+                                  properties:
+                                    updateChecker:
+                                      type: boolean
+                            liveStreamAndBroadcasting:
+                              type: object
+                              properties:
+                                liveStream:
+                                  type: string
+                                broadcasting:
+                                  type: string
+                            message:
+                              type: object
+                              properties:
+                                allowEditing:
+                                  type: boolean
+                                allowDeleting:
+                                  type: boolean
+                                allowUnrecognizedSlashCommand:
+                                  type: boolean
+                                allowBadWordsFilter:
+                                  type: boolean
+                                readReceiptEnabled:
+                                  type: boolean
+                                readReceiptStoreUsers:
+                                  type: boolean
+                            push:
+                              type: object
+                              properties:
+                                pushEnable:
+                                  type: boolean
+                            search:
+                              type: object
+                              properties:
+                                defaultProvider:
+                                  type: object
+                                  properties:
+                                    globalSearchEnabled:
+                                      type: string
+                            threads:
+                              type: object
+                              properties:
+                                threadsEnabled:
+                                  type: boolean
+                            webRTC:
+                              type: object
+                              properties:
+                                webRTCEnableChannel:
+                                  type: string
+                                webRTCEnablePrivate:
+                                  type: string
+                                webRTCEnableDirect:
+                                  type: string
+                        totalBroadcastRooms:
+                          type: integer
+                        totalTriggeredEmails:
+                          type: integer
+                        pushQueue:
+                          type: integer
                         integrations:
                           type: object
                           properties:
@@ -570,27 +865,35 @@ paths:
                               type: integer
                             totalWithScriptEnabled:
                               type: integer
-                        pushQueue:
-                          type: integer
                         enterprise:
                           type: object
                           properties:
                             modules:
                               type: array
                               items:
-                                type: object
+                                type: string
                             tags:
                               type: array
                               items:
-                                type: object
+                                type: string
                             seatRequests:
                               type: integer
-                        totalOTRRooms:
-                          type: integer
-                        totalOTR:
-                          type: integer
-                        totalBroadcastRooms:
-                          type: integer
+                            livechatTags:
+                              type: integer
+                            cannedResponses:
+                              type: integer
+                            slas:
+                              type: integer
+                            omnichannelRoomsWithPriorities:
+                              type: integer
+                            omnichannelRoomsWithSlas:
+                              type: integer
+                            businessUnits:
+                              type: integer
+                            omnichannelPdfTranscriptSucceeded:
+                              type: integer
+                            livechatMonitors:
+                              type: integer
                         teams:
                           type: object
                           properties:
@@ -600,10 +903,6 @@ paths:
                               type: integer
                             totalDefaultRoomsInsideTeams:
                               type: integer
-                        totalRoomsWithActiveLivestream:
-                          type: integer
-                        totalTriggeredEmails:
-                          type: integer
                         totalRoomsWithStarred:
                           type: integer
                         totalRoomsWithPinned:
@@ -636,12 +935,16 @@ paths:
                           type: integer
                         totalUserRoles:
                           type: integer
-                        totalWebRTCCalls:
+                        totalCustomRoles:
                           type: integer
-                        matrixBridgeEnabled:
-                          type: boolean
+                        totalWebRTCCalls:
+                          type: string
                         uncaughtExceptionsCount:
                           type: integer
+                        push:
+                          type: integer
+                        pushSecured:
+                          type: boolean
                         homeTitleChanged:
                           type: boolean
                         homeBodyChanged:
@@ -654,9 +957,42 @@ paths:
                           type: boolean
                         loggedInCustomScriptChanged:
                           type: boolean
+                        dailyPeakConnections:
+                          type: integer
+                        maxMonthlyPeakConnections:
+                          type: integer
+                        matrixFederation:
+                          type: object
+                          properties:
+                            enabled:
+                              type: boolean
+                            maximumSizeOfPublicRoomsUsers:
+                              type: boolean
+                            biggestRoom:
+                              type: string
+                            smallestRoom:
+                              type: string
+                            amountOfExternalUsers:
+                              type: integer
+                            amountOfFederatedRooms:
+                              type: integer
+                            externalConnectedServers:
+                              type: object
+                              properties:
+                                quantity:
+                                  type: integer
+                                servers:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties: {}
+                        allowUnsafeQueryAndFieldsApiParamsEnabled:
+                          type: boolean
                         createdAt:
                           type: string
                         _updatedAt:
+                          type: string
+                        statsToken:
                           type: string
                   count:
                     type: integer
@@ -667,35 +1003,451 @@ paths:
                   success:
                     type: boolean
               examples:
-                Success Example:
+                Example:
                   value:
                     statistics:
-                      - _id: v3D4mvobwfznKozH8
-                        uniqueId: wD4EP3M7FeFzJZgk9
-                        installedAt: '2018-02-18T19:40:45.369Z'
-                        version: 0.61.0-develop
-                        totalUsers: 88
-                        activeUsers: 88
+                      - _id: 6a708537c8fc3c65b1808baf
+                        wizard:
+                          organizationType: ''
+                          industry: ''
+                          size: ''
+                          country: ''
+                          language: ''
+                          serverType: ''
+                          registerServer: false
+                        uniqueId: 2d3ad4fb-d515-4f09-8f02-0f186c8cc929
+                        installedAt: '2026-08-03T12:10:10.817Z'
+                        deploymentFingerprintHash: ''
+                        deploymentFingerprintVerified: true
+                        version: 8.7.0-rc.3
+                        tag: null
+                        branch: null
+                        totalUsers: 0
+                        activeUsers: 0
+                        activeGuests: 0
                         nonActiveUsers: 0
+                        appUsers: 0
                         onlineUsers: 0
-                        awayUsers: 1
-                        offlineUsers: 87
-                        totalRooms: 81
-                        totalChannels: 41
-                        totalPrivateGroups: 37
-                        totalDirect: 3
-                        totlalLivechat: 0
-                        totalMessages: 2408
-                        totalChannelMessages: 730
-                        totalPrivateGroupMessages: 1869
-                        totalDirectMessages: 25
+                        awayUsers: 0
+                        busyUsers: 0
+                        totalConnectedUsers: 0
+                        offlineUsers: 0
+                        userLanguages:
+                          none: 0
+                        totalRooms: 0
+                        totalChannels: 0
+                        totalPrivateGroups: 0
+                        totalDirect: 0
+                        totalLivechat: 0
+                        totalDiscussions: 0
+                        totalThreads: 0
+                        totalLivechatVisitors: 0
+                        totalLivechatAgents: 0
+                        totalLivechatManagers: 0
+                        livechatEnabled: true
+                        isDepartmentRemovalEnabled: false
+                        omnichannelSources: []
+                        totalLivechatRoomsWithDepartment: 0
+                        departments: 0
+                        totalTriggers: 0
+                        archivedDepartments: 0
+                        totalCustomFields: 0
+                        totalLivechatPublicCustomFields: 0
+                        livechatAutomaticForwardingUnansweredChats: true
+                        routingAlgorithm: Auto_Selection
+                        onHoldEnabled: null
+                        lastChattedAgentPreferred: null
+                        assignNewConversationsToContactManager: null
+                        visitorAbandonment: null
+                        emailInboxes: 0
+                        BusinessHours:
+                          total: 0
+                          strategy: ''
+                        chatsOnHold: 0
+                        uniqueContactsOfLastMonth:
+                          contactsCount: 0
+                          conversationsCount: 0
+                          sources: []
+                        omnichannelContactsBySource:
+                          contactsCount: 0
+                          conversationsCount: 0
+                          sources: []
+                        totalChannelMessages: 0
+                        uniqueContactsOfYesterday:
+                          contactsCount: 0
+                          conversationsCount: 0
+                          sources: []
+                        uniqueContactsOfLastWeek:
+                          contactsCount: 0
+                          conversationsCount: 0
+                          sources: []
+                        totalPrivateGroupMessages: 0
+                        totalDiscussionsMessages: 0
+                        totalDirectMessages: 0
                         totalLivechatMessages: 0
-                        lastLogin: '2018-02-24T12:44:45.045Z'
-                        lastMessageSentAt: '2018-02-23T18:14:03.490Z'
-                        lastSeenSubscription: '2018-02-23T17:58:54.779Z'
-                        instanceCount: 1
-                        createdAt: '2018-02-24T15:13:00.312Z'
-                        _updatedAt: '2018-02-24T15:13:00.312Z'
+                        totalMessages: 0
+                        lastLogin: ''
+                        lastMessageSentAt: null
+                        lastSeenSubscription: ''
+                        os:
+                          type: Linux
+                          platform: linux
+                          arch: x64
+                          release: 6.17.0-1017-aws
+                          uptime: 2119.94
+                          loadavg:
+                            - 6.92
+                            - 5.81
+                            - 3.52
+                          totalmem: 8220839936
+                          freemem: 3768729600
+                          cpus:
+                            - model: AMD EPYC 7571
+                              speed: 0
+                              times:
+                                user: 404110
+                                nice: 0
+                                sys: 206780
+                                idle: 1425940
+                                irq: 0
+                            - model: AMD EPYC 7571
+                              speed: 0
+                              times:
+                                user: 416850
+                                nice: 0
+                                sys: 203030
+                                idle: 1418740
+                                irq: 0
+                        process:
+                          nodeVersion: v22.22.3
+                          pid: 1
+                          uptime: 74.175831587
+                        deploy:
+                          method: docker
+                          platform: helm-chart
+                        fips: true
+                        readReceiptsEnabled: false
+                        readReceiptsDetailed: false
+                        enterpriseReady: true
+                        fileStoreType: GridFS
+                        uploadsTotal: 0
+                        uploadsTotalSize: 0
+                        migration:
+                          _id: control
+                          _updatedAt: '2026-08-03T12:10:13.492Z'
+                          locked: false
+                          version: 335
+                        instanceCount: 0
+                        msEnabled: true
+                        oplogEnabled: false
+                        mongoVersion: 8.0.0
+                        mongoStorageEngine: unknown
+                        apps:
+                          engineVersion: 1.65.1-rc.0
+                          totalInstalled: 0
+                          totalActive: 0
+                          totalFailed: 0
+                          totalPrivateApps: 0
+                          totalPrivateAppsEnabled: 0
+                        uniqueUsersOfYesterday:
+                          year: 2026
+                          month: 8
+                          day: 2
+                          data: []
+                        uniqueDevicesOfYesterday:
+                          year: 2026
+                          month: 8
+                          day: 2
+                          data: []
+                        uniqueUsersOfLastMonth:
+                          year: 2026
+                          month: 8
+                          day: 2
+                          data: []
+                        uniqueUsersOfLastWeek:
+                          year: 2026
+                          month: 8
+                          day: 2
+                          data: []
+                        uniqueOSOfYesterday:
+                          year: 2026
+                          month: 8
+                          day: 2
+                          data: []
+                        uniqueDevicesOfLastMonth:
+                          year: 2026
+                          month: 8
+                          day: 2
+                          data: []
+                        uniqueOSOfLastMonth:
+                          year: 2026
+                          month: 8
+                          day: 2
+                          data: []
+                        uniqueDevicesOfLastWeek:
+                          year: 2026
+                          month: 8
+                          day: 2
+                          data: []
+                        uniqueOSOfLastWeek:
+                          year: 2026
+                          month: 8
+                          day: 2
+                          data: []
+                        services:
+                          ldap:
+                            users: 0
+                            enabled: false
+                            loginFallback: false
+                            encryption: plain
+                            mergeUsers: false
+                            syncRoles: null
+                            syncRolesAutoRemove: null
+                            syncData: null
+                            syncChannels: null
+                            syncAvatar: true
+                            groupFilter: false
+                            backgroundSync:
+                              enabled: null
+                              interval: null
+                              newUsers: null
+                              existingUsers: null
+                            ee:
+                              syncActiveState: null
+                              syncTeams: null
+                              syncRoles: null
+                          saml:
+                            enabled: null
+                            users: 0
+                            signatureValidationType: null
+                            generateUsername: null
+                            updateSubscriptionsOnLogin: null
+                            syncRoles: null
+                            userDataCustomFieldMap: false
+                          cas:
+                            enabled: false
+                            users: 0
+                            allowUserCreation: true
+                            alwaysSyncUserData: true
+                          oauth:
+                            apple:
+                              enabled: false
+                              users: 0
+                            dolphin:
+                              enabled: false
+                              users: 0
+                            drupal:
+                              enabled: false
+                              users: 0
+                            facebook:
+                              enabled: false
+                              users: 0
+                            github:
+                              enabled: false
+                              users: 0
+                            githubEnterprise:
+                              enabled: false
+                              users: 0
+                            gitlab:
+                              enabled: false
+                              users: 0
+                            google:
+                              enabled: false
+                              users: 0
+                            linkedin:
+                              enabled: false
+                              users: 0
+                            meteor:
+                              enabled: false
+                              users: 0
+                            nextcloud:
+                              enabled: false
+                              users: 0
+                            twitter:
+                              enabled: false
+                              users: 0
+                            wordpress:
+                              enabled: false
+                              users: 0
+                            custom: {}
+                        importer:
+                          totalCSVImportedUsers: 0
+                          totalHipchatEnterpriseImportedUsers: 0
+                          totalSlackImportedUsers: 0
+                          totalSlackUsersImportedUsers: 0
+                        videoConf:
+                          videoConference:
+                            started: 0
+                            ended: 0
+                          direct:
+                            calling: 0
+                            started: 0
+                            ended: 0
+                          livechat:
+                            started: 0
+                            ended: 0
+                          settings:
+                            provider: ''
+                            dms: null
+                            channels: null
+                            groups: null
+                            teams: null
+                        contactVerification:
+                          totalContacts: 0
+                          totalUnknownContacts: 0
+                          totalMergedContacts: null
+                          totalConflicts: 0
+                          totalResolvedConflicts: null
+                          totalBlockedContacts: 0
+                          totalPartiallyBlockedContacts: 0
+                          totalFullyBlockedContacts: 0
+                          totalVerifiedContacts: 0
+                          avgChannelsPerContact: 0
+                          totalContactsWithoutChannels: 0
+                          totalImportedContacts: null
+                          totalUpsellViews: null
+                          totalUpsellClicks: null
+                        dashboardCount: 0
+                        messageAuditApply: 0
+                        messageAuditLoad: 0
+                        joinJitsiButton: 0
+                        slashCommandsJitsi: 0
+                        settings:
+                          accounts:
+                            account2fa: true
+                          cannedResponses:
+                            cannedResponsesEnabled: true
+                          e2ee:
+                            e2e: false
+                            e2eDefaultDirectRoom: false
+                            e2eDefaultPrivateRoom: false
+                          email:
+                            smtp:
+                              smtpHost: ''
+                              smtpPort: ''
+                              fromEmail: ''
+                          fileUpload:
+                            fileUploadEnable: true
+                          general:
+                            apps:
+                              frameworkDevMode: null
+                              frameworkEnable: null
+                            nps:
+                              surveyEnabled: true
+                            update:
+                              updateChecker: true
+                          liveStreamAndBroadcasting:
+                            liveStream: null
+                            broadcasting: null
+                          message:
+                            allowEditing: true
+                            allowDeleting: true
+                            allowUnrecognizedSlashCommand: false
+                            allowBadWordsFilter: false
+                            readReceiptEnabled: false
+                            readReceiptStoreUsers: false
+                          push:
+                            pushEnable: true
+                          search:
+                            defaultProvider:
+                              globalSearchEnabled: null
+                          threads:
+                            threadsEnabled: true
+                          webRTC:
+                            webRTCEnableChannel: null
+                            webRTCEnablePrivate: null
+                            webRTCEnableDirect: null
+                        totalBroadcastRooms: 0
+                        totalTriggeredEmails: 0
+                        pushQueue: 0
+                        integrations:
+                          totalIntegrations: 0
+                          totalIncoming: 0
+                          totalIncomingActive: 0
+                          totalOutgoing: 0
+                          totalOutgoingActive: 0
+                          totalWithScriptEnabled: 0
+                        enterprise:
+                          modules:
+                            - auditing
+                            - canned-responses
+                            - ldap-enterprise
+                            - livechat-enterprise
+                            - voip-enterprise
+                            - omnichannel-mobile-enterprise
+                            - engagement-dashboard
+                            - push-privacy
+                            - scalability
+                            - teams-mention
+                            - saml-enterprise
+                            - oauth-enterprise
+                            - device-management
+                            - federation
+                            - videoconference-enterprise
+                            - message-read-receipt
+                            - outlook-calendar
+                            - hide-watermark
+                            - custom-roles
+                            - accessibility-certification
+                            - fips
+                          tags:
+                            - Commercial
+                          seatRequests: 0
+                          livechatTags: 0
+                          cannedResponses: 0
+                          slas: 0
+                          omnichannelRoomsWithPriorities: 0
+                          omnichannelRoomsWithSlas: 0
+                          businessUnits: 0
+                          omnichannelPdfTranscriptSucceeded: 0
+                          livechatMonitors: 0
+                        teams:
+                          totalTeams: 0
+                          totalRoomsInsideTeams: 0
+                          totalDefaultRoomsInsideTeams: 0
+                        totalRoomsWithStarred: 0
+                        totalRoomsWithPinned: 0
+                        totalUserTOTP: 0
+                        totalUserEmail2fa: 0
+                        totalPinned: 0
+                        totalStarred: 0
+                        totalLinkInvitation: 0
+                        totalLinkInvitationUses: 0
+                        totalEmailInvitation: 0
+                        totalE2ERooms: 0
+                        logoChange: false
+                        showHomeButton: true
+                        totalEncryptedMessages: 0
+                        totalManuallyAddedUsers: 0
+                        totalSubscriptionRoles: 3
+                        totalUserRoles: 11
+                        totalCustomRoles: 0
+                        totalWebRTCCalls: null
+                        uncaughtExceptionsCount: 0
+                        push: 3
+                        pushSecured: false
+                        homeTitleChanged: false
+                        homeBodyChanged: false
+                        customCSSChanged: false
+                        onLogoutCustomScriptChanged: false
+                        loggedOutCustomScriptChanged: false
+                        loggedInCustomScriptChanged: false
+                        dailyPeakConnections: 0
+                        maxMonthlyPeakConnections: 0
+                        matrixFederation:
+                          enabled: false
+                          maximumSizeOfPublicRoomsUsers: false
+                          biggestRoom: null
+                          smallestRoom: null
+                          amountOfExternalUsers: 0
+                          amountOfFederatedRooms: 0
+                          externalConnectedServers:
+                            quantity: 0
+                            servers: []
+                        allowUnsafeQueryAndFieldsApiParamsEnabled: false
+                        createdAt: '2026-08-03T12:10:31.265Z'
+                        _updatedAt: '2026-08-03T12:10:31.426Z'
+                        statsToken: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3b3Jrc3BhY2VJZCI6IiIsInVuaXF1ZUlkIjoiMmQzYWQ0ZmItZDUxNS00ZjA5LThmMDItMGYxODZjOGNjOTI5IiwicmVjb3JkSWQiOiI2YTcwODUzN2M4ZmMzYzY1YjE4MDhiYWYiLCJ0aW1lc3RhbXAiOiIyMDI2LTA4LTAzVDEyOjEwOjMxLjQwNzk5NzEyOFoiLCJpbmZvIjp7InRvdGFsVXNlcnMiOjAsImFjdGl2ZVVzZXJzIjowLCJ0b3RhbENvbm5lY3RlZFVzZXJzIjowLCJvbW5pQ2hhbm5lbENvbnZlcnNhdGlvbnMiOjAsInRvdGFsUm9vbXMiOjAsInRvdGFsTWVzc2FnZXMiOjAsInVwbG9hZHNUb3RhbFNpemUiOjAsIm1pY3Jvc2VydmljZUVuYWJsZWQiOnRydWUsImZpbGVTdG9yZVR5cGUiOiJHcmlkRlMifX0.JnBb7z--brY2k00kIkC_Rp502P8wdKVcC2kAxEKK0OBFJlAgLM4ezZ5m_xG2w1wX3wCTNKnrjO3D5Mi-bzYNmNNBcJQbujP2uUGWMnr42UUAbyPY9VWKCf4L3H9cgzB9WjJX94KiVlwLjnbqle9TE0wAubP-NR1lzZn06GrnD9bAFSdz2E5lI4s6qozfUW5z8ZmSgXs5MBSbhBQczUbmQkQoj2XjKs5Mkqow0qLeBsCrc0F2m_92YeO1S6StRGvLIVyce-qvm0DLT8hXhpoJyRRgLz_3JyOzOE6hfxcgWI43YUZ4o4n7QruSYDhSFnAjuAlZjHasBCKPfs9ht9vRtQ
                     count: 1
                     offset: 0
                     total: 1
@@ -718,6 +1470,7 @@ paths:
                     error: error-not-allowed
         '401':
           $ref: '#/components/responses/authorizationError'
+
   /api/v1/statistics:
     get:
       tags:
@@ -731,6 +1484,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |8.7.0             | Added the `fips` field to statistics records. |        
         |0.51.0            | Added       |
       operationId: get-api-v1-statistics
       parameters:
@@ -778,6 +1532,10 @@ paths:
                   deploymentFingerprintVerified:
                     type: boolean
                   version:
+                    type: string
+                  tag:
+                    type: string
+                  branch:
                     type: string
                   totalUsers:
                     type: integer
@@ -828,19 +1586,21 @@ paths:
                     type: boolean
                   isDepartmentRemovalEnabled:
                     type: boolean
-                  totalTriggers:
-                    type: integer
-                  archivedDepartments:
-                    type: integer
-                  departments:
-                    type: integer
-                  totalCustomFields:
-                    type: integer
                   omnichannelSources:
                     type: array
                     items:
                       type: object
                       properties: {}
+                  totalLivechatRoomsWithDepartment:
+                    type: integer
+                  departments:
+                    type: integer
+                  totalTriggers:
+                    type: integer
+                  archivedDepartments:
+                    type: integer
+                  totalCustomFields:
+                    type: integer
                   totalLivechatPublicCustomFields:
                     type: integer
                   livechatAutomaticForwardingUnansweredChats:
@@ -848,15 +1608,13 @@ paths:
                   routingAlgorithm:
                     type: string
                   onHoldEnabled:
-                    type: boolean
+                    type: string
                   lastChattedAgentPreferred:
-                    type: boolean
+                    type: string
                   assignNewConversationsToContactManager:
-                    type: boolean
+                    type: string
                   visitorAbandonment:
                     type: string
-                  voipEnabled:
-                    type: boolean
                   emailInboxes:
                     type: integer
                   BusinessHours:
@@ -866,19 +1624,35 @@ paths:
                         type: integer
                       strategy:
                         type: string
-                  voipCalls:
-                    type: integer
-                  voipExtensions:
-                    type: integer
                   chatsOnHold:
                     type: integer
-                  voipSuccessfulCalls:
-                    type: integer
-                  voipErrorCalls:
-                    type: integer
-                  voipOnHoldCalls:
-                    type: integer
+                  uniqueContactsOfLastMonth:
+                    type: object
+                    properties:
+                      contactsCount:
+                        type: integer
+                      conversationsCount:
+                        type: integer
+                      sources:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
                   omnichannelContactsBySource:
+                    type: object
+                    properties:
+                      contactsCount:
+                        type: integer
+                      conversationsCount:
+                        type: integer
+                      sources:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+                  totalChannelMessages:
+                    type: integer
+                  uniqueContactsOfYesterday:
                     type: object
                     properties:
                       contactsCount:
@@ -902,32 +1676,6 @@ paths:
                         items:
                           type: object
                           properties: {}
-                  uniqueContactsOfLastMonth:
-                    type: object
-                    properties:
-                      contactsCount:
-                        type: integer
-                      conversationsCount:
-                        type: integer
-                      sources:
-                        type: array
-                        items:
-                          type: object
-                          properties: {}
-                  uniqueContactsOfYesterday:
-                    type: object
-                    properties:
-                      contactsCount:
-                        type: integer
-                      conversationsCount:
-                        type: integer
-                      sources:
-                        type: array
-                        items:
-                          type: object
-                          properties: {}
-                  totalChannelMessages:
-                    type: integer
                   totalPrivateGroupMessages:
                     type: integer
                   totalDiscussionsMessages:
@@ -942,10 +1690,6 @@ paths:
                     type: string
                   lastMessageSentAt:
                     type: string
-                  federatedServers:
-                    type: integer
-                  federatedUsers:
-                    type: integer
                   lastSeenSubscription:
                     type: string
                   os:
@@ -964,7 +1708,7 @@ paths:
                       loadavg:
                         type: array
                         items:
-                          type: integer
+                          type: number
                       totalmem:
                         type: integer
                       freemem:
@@ -1007,13 +1751,19 @@ paths:
                         type: string
                       platform:
                         type: string
+                  fips:
+                    type: boolean
                   readReceiptsEnabled:
                     type: boolean
                   readReceiptsDetailed:
                     type: boolean
                   enterpriseReady:
                     type: boolean
+                  fileStoreType:
+                    type: string
                   uploadsTotal:
+                    type: integer
+                  uploadsTotalSize:
                     type: integer
                   migration:
                     type: object
@@ -1026,12 +1776,6 @@ paths:
                         type: boolean
                       version:
                         type: integer
-                      buildAt:
-                        type: string
-                      lockedAt:
-                        type: string
-                  uploadsTotalSize:
-                    type: integer
                   instanceCount:
                     type: integer
                   msEnabled:
@@ -1052,6 +1796,10 @@ paths:
                       totalActive:
                         type: integer
                       totalFailed:
+                        type: integer
+                      totalPrivateApps:
+                        type: integer
+                      totalPrivateAppsEnabled:
                         type: integer
                   uniqueUsersOfYesterday:
                     type: object
@@ -1081,6 +1829,20 @@ paths:
                         items:
                           type: object
                           properties: {}
+                  uniqueUsersOfLastMonth:
+                    type: object
+                    properties:
+                      year:
+                        type: integer
+                      month:
+                        type: integer
+                      day:
+                        type: integer
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
                   uniqueUsersOfLastWeek:
                     type: object
                     properties:
@@ -1094,26 +1856,7 @@ paths:
                         type: array
                         items:
                           type: object
-                          properties:
-                            roles:
-                              type: array
-                              items:
-                                type: object
-                                properties:
-                                  role:
-                                    type: string
-                                  count:
-                                    type: integer
-                                  sessions:
-                                    type: integer
-                                  time:
-                                    type: integer
-                            count:
-                              type: integer
-                            sessions:
-                              type: integer
-                            time:
-                              type: integer
+                          properties: {}
                   uniqueOSOfYesterday:
                     type: object
                     properties:
@@ -1141,96 +1884,7 @@ paths:
                         type: array
                         items:
                           type: object
-                          properties:
-                            count:
-                              type: integer
-                            time:
-                              type: integer
-                            type:
-                              type: string
-                            name:
-                              type: string
-                            version:
-                              type: string
-                  uniqueOSOfLastWeek:
-                    type: object
-                    properties:
-                      year:
-                        type: integer
-                      month:
-                        type: integer
-                      day:
-                        type: integer
-                      data:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            count:
-                              type: integer
-                            time:
-                              type: integer
-                            name:
-                              type: string
-                            version:
-                              type: string
-                  uniqueDevicesOfLastWeek:
-                    type: object
-                    properties:
-                      year:
-                        type: integer
-                      month:
-                        type: integer
-                      day:
-                        type: integer
-                      data:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            count:
-                              type: integer
-                            time:
-                              type: integer
-                            type:
-                              type: string
-                            name:
-                              type: string
-                            version:
-                              type: string
-                  uniqueUsersOfLastMonth:
-                    type: object
-                    properties:
-                      year:
-                        type: integer
-                      month:
-                        type: integer
-                      day:
-                        type: integer
-                      data:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            roles:
-                              type: array
-                              items:
-                                type: object
-                                properties:
-                                  role:
-                                    type: string
-                                  count:
-                                    type: integer
-                                  sessions:
-                                    type: integer
-                                  time:
-                                    type: integer
-                            count:
-                              type: integer
-                            sessions:
-                              type: integer
-                            time:
-                              type: integer
+                          properties: {}
                   uniqueOSOfLastMonth:
                     type: object
                     properties:
@@ -1244,15 +1898,35 @@ paths:
                         type: array
                         items:
                           type: object
-                          properties:
-                            count:
-                              type: integer
-                            time:
-                              type: integer
-                            name:
-                              type: string
-                            version:
-                              type: string
+                          properties: {}
+                  uniqueDevicesOfLastWeek:
+                    type: object
+                    properties:
+                      year:
+                        type: integer
+                      month:
+                        type: integer
+                      day:
+                        type: integer
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+                  uniqueOSOfLastWeek:
+                    type: object
+                    properties:
+                      year:
+                        type: integer
+                      month:
+                        type: integer
+                      day:
+                        type: integer
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
                   services:
                     type: object
                     properties:
@@ -1270,13 +1944,13 @@ paths:
                           mergeUsers:
                             type: boolean
                           syncRoles:
-                            type: boolean
+                            type: string
                           syncRolesAutoRemove:
-                            type: boolean
+                            type: string
                           syncData:
-                            type: boolean
+                            type: string
                           syncChannels:
-                            type: boolean
+                            type: string
                           syncAvatar:
                             type: boolean
                           groupFilter:
@@ -1285,37 +1959,37 @@ paths:
                             type: object
                             properties:
                               enabled:
-                                type: boolean
+                                type: string
                               interval:
                                 type: string
                               newUsers:
-                                type: boolean
+                                type: string
                               existingUsers:
-                                type: boolean
+                                type: string
                           ee:
                             type: object
                             properties:
                               syncActiveState:
                                 type: string
                               syncTeams:
-                                type: boolean
+                                type: string
                               syncRoles:
-                                type: boolean
+                                type: string
                       saml:
                         type: object
                         properties:
                           enabled:
-                            type: boolean
+                            type: string
                           users:
                             type: integer
                           signatureValidationType:
                             type: string
                           generateUsername:
-                            type: boolean
+                            type: string
                           updateSubscriptionsOnLogin:
-                            type: boolean
+                            type: string
                           syncRoles:
-                            type: boolean
+                            type: string
                           userDataCustomFieldMap:
                             type: boolean
                       cas:
@@ -1409,13 +2083,6 @@ paths:
                                 type: boolean
                               users:
                                 type: integer
-                          tokenpass:
-                            type: object
-                            properties:
-                              enabled:
-                                type: boolean
-                              users:
-                                type: integer
                           twitter:
                             type: object
                             properties:
@@ -1476,13 +2143,44 @@ paths:
                           provider:
                             type: string
                           dms:
-                            type: boolean
+                            type: string
                           channels:
-                            type: boolean
+                            type: string
                           groups:
-                            type: boolean
+                            type: string
                           teams:
-                            type: boolean
+                            type: string
+                  contactVerification:
+                    type: object
+                    properties:
+                      totalContacts:
+                        type: integer
+                      totalUnknownContacts:
+                        type: integer
+                      totalMergedContacts:
+                        type: string
+                      totalConflicts:
+                        type: integer
+                      totalResolvedConflicts:
+                        type: string
+                      totalBlockedContacts:
+                        type: integer
+                      totalPartiallyBlockedContacts:
+                        type: integer
+                      totalFullyBlockedContacts:
+                        type: integer
+                      totalVerifiedContacts:
+                        type: integer
+                      avgChannelsPerContact:
+                        type: integer
+                      totalContactsWithoutChannels:
+                        type: integer
+                      totalImportedContacts:
+                        type: string
+                      totalUpsellViews:
+                        type: string
+                      totalUpsellClicks:
+                        type: string
                   dashboardCount:
                     type: integer
                   messageAuditApply:
@@ -1537,7 +2235,11 @@ paths:
                         properties:
                           apps:
                             type: object
-                            properties: {}
+                            properties:
+                              frameworkDevMode:
+                                type: string
+                              frameworkEnable:
+                                type: string
                           nps:
                             type: object
                             properties:
@@ -1550,7 +2252,11 @@ paths:
                                 type: boolean
                       liveStreamAndBroadcasting:
                         type: object
-                        properties: {}
+                        properties:
+                          liveStream:
+                            type: string
+                          broadcasting:
+                            type: string
                       message:
                         type: object
                         properties:
@@ -1566,11 +2272,6 @@ paths:
                             type: boolean
                           readReceiptStoreUsers:
                             type: boolean
-                      otr:
-                        type: object
-                        properties:
-                          otrEnable:
-                            type: boolean
                       push:
                         type: object
                         properties:
@@ -1583,7 +2284,7 @@ paths:
                             type: object
                             properties:
                               globalSearchEnabled:
-                                type: boolean
+                                type: string
                       threads:
                         type: object
                         properties:
@@ -1593,16 +2294,16 @@ paths:
                         type: object
                         properties:
                           webRTCEnableChannel:
-                            type: boolean
+                            type: string
                           webRTCEnablePrivate:
-                            type: boolean
+                            type: string
                           webRTCEnableDirect:
-                            type: boolean
+                            type: string
+                  totalBroadcastRooms:
+                    type: integer
+                  totalTriggeredEmails:
+                    type: integer
                   pushQueue:
-                    type: integer
-                  totalOTRRooms:
-                    type: integer
-                  totalOTR:
                     type: integer
                   integrations:
                     type: object
@@ -1619,8 +2320,6 @@ paths:
                         type: integer
                       totalWithScriptEnabled:
                         type: integer
-                  totalBroadcastRooms:
-                    type: integer
                   enterprise:
                     type: object
                     properties:
@@ -1634,9 +2333,9 @@ paths:
                           type: string
                       seatRequests:
                         type: integer
-                      cannedResponses:
-                        type: integer
                       livechatTags:
+                        type: integer
+                      cannedResponses:
                         type: integer
                       slas:
                         type: integer
@@ -1646,11 +2345,9 @@ paths:
                         type: integer
                       businessUnits:
                         type: integer
-                      livechatMonitors:
-                        type: integer
                       omnichannelPdfTranscriptSucceeded:
                         type: integer
-                      omnichannelPdfTranscriptRequested:
+                      livechatMonitors:
                         type: integer
                   teams:
                     type: object
@@ -1661,10 +2358,6 @@ paths:
                         type: integer
                       totalDefaultRoomsInsideTeams:
                         type: integer
-                  totalRoomsWithActiveLivestream:
-                    type: integer
-                  totalTriggeredEmails:
-                    type: integer
                   totalRoomsWithStarred:
                     type: integer
                   totalRoomsWithPinned:
@@ -1700,7 +2393,7 @@ paths:
                   totalCustomRoles:
                     type: integer
                   totalWebRTCCalls:
-                    type: integer
+                    type: string
                   uncaughtExceptionsCount:
                     type: integer
                   push:
@@ -1729,7 +2422,7 @@ paths:
                       enabled:
                         type: boolean
                       maximumSizeOfPublicRoomsUsers:
-                        type: integer
+                        type: boolean
                       biggestRoom:
                         type: string
                       smallestRoom:
@@ -1748,12 +2441,8 @@ paths:
                             items:
                               type: object
                               properties: {}
-                  webRTCEnabled:
+                  allowUnsafeQueryAndFieldsApiParamsEnabled:
                     type: boolean
-                  webRTCEnabledForOmnichannel:
-                    type: boolean
-                  omnichannelWebRTCCalls:
-                    type: integer
                   createdAt:
                     type: string
                   _updatedAt:
@@ -1762,70 +2451,77 @@ paths:
                     type: string
                   success:
                     type: boolean
-                x-examples:
-                  Success Example:
-                    _id: 6683e080ffe932842327bf81
+              examples:
+                Example:
+                  value:
+                    _id: 6a708537c8fc3c65b1808baf
                     wizard:
-                      organizationType: enterprise
+                      organizationType: ''
                       industry: ''
                       size: ''
                       country: ''
                       language: ''
-                      serverType: publicCommunity
-                      registerServer: true
-                    uniqueId: 0ed5b1c7-8762-4603-badd-cf35f0e635d3
-                    installedAt: '2024-02-14T14:34:30.521Z'
-                    deploymentFingerprintHash: vmR/GJuaVBp1DVI0dGNf+mC5kN1FMIl5/LUv16hpgk0=
+                      serverType: ''
+                      registerServer: false
+                    uniqueId: 2d3ad4fb-d515-4f09-8f02-0f186c8cc929
+                    installedAt: '2026-08-03T12:10:10.817Z'
+                    deploymentFingerprintHash: ''
                     deploymentFingerprintVerified: true
-                    version: 6.8.0
-                    totalUsers: 17
-                    activeUsers: 16
+                    version: 8.7.0
+                    tag: null
+                    branch: null
+                    totalUsers: 0
+                    activeUsers: 0
                     activeGuests: 0
                     nonActiveUsers: 0
                     appUsers: 0
-                    onlineUsers: 1
+                    onlineUsers: 0
                     awayUsers: 0
                     busyUsers: 0
-                    totalConnectedUsers: 1
-                    offlineUsers: 16
+                    totalConnectedUsers: 0
+                    offlineUsers: 0
                     userLanguages:
-                      none: 17
-                    totalRooms: 9
-                    totalChannels: 3
-                    totalPrivateGroups: 2
-                    totalDirect: 4
+                      none: 0
+                    totalRooms: 0
+                    totalChannels: 0
+                    totalPrivateGroups: 0
+                    totalDirect: 0
                     totalLivechat: 0
                     totalDiscussions: 0
                     totalThreads: 0
-                    totalLivechatVisitors: 1
-                    totalLivechatAgents: 1
-                    totalLivechatManagers: 1
+                    totalLivechatVisitors: 0
+                    totalLivechatAgents: 0
+                    totalLivechatManagers: 0
                     livechatEnabled: true
                     isDepartmentRemovalEnabled: false
+                    omnichannelSources: []
+                    totalLivechatRoomsWithDepartment: 0
+                    departments: 0
                     totalTriggers: 0
                     archivedDepartments: 0
-                    departments: 0
                     totalCustomFields: 0
-                    omnichannelSources: []
                     totalLivechatPublicCustomFields: 0
-                    livechatAutomaticForwardingUnansweredChats: false
+                    livechatAutomaticForwardingUnansweredChats: true
                     routingAlgorithm: Auto_Selection
-                    onHoldEnabled: false
-                    lastChattedAgentPreferred: false
-                    assignNewConversationsToContactManager: true
-                    visitorAbandonment: none
-                    voipEnabled: false
+                    onHoldEnabled: null
+                    lastChattedAgentPreferred: null
+                    assignNewConversationsToContactManager: null
+                    visitorAbandonment: null
                     emailInboxes: 0
                     BusinessHours:
-                      total: 1
+                      total: 0
                       strategy: ''
-                    voipCalls: 0
-                    voipExtensions: 0
                     chatsOnHold: 0
-                    voipSuccessfulCalls: 0
-                    voipErrorCalls: 0
-                    voipOnHoldCalls: 0
+                    uniqueContactsOfLastMonth:
+                      contactsCount: 0
+                      conversationsCount: 0
+                      sources: []
                     omnichannelContactsBySource:
+                      contactsCount: 0
+                      conversationsCount: 0
+                      sources: []
+                    totalChannelMessages: 0
+                    uniqueContactsOfYesterday:
                       contactsCount: 0
                       conversationsCount: 0
                       sources: []
@@ -1833,255 +2529,119 @@ paths:
                       contactsCount: 0
                       conversationsCount: 0
                       sources: []
-                    uniqueContactsOfLastMonth:
-                      contactsCount: 0
-                      conversationsCount: 0
-                      sources: []
-                    uniqueContactsOfYesterday:
-                      contactsCount: 0
-                      conversationsCount: 0
-                      sources: []
-                    totalChannelMessages: 18
-                    totalPrivateGroupMessages: 1
+                    totalPrivateGroupMessages: 0
                     totalDiscussionsMessages: 0
-                    totalDirectMessages: 41
+                    totalDirectMessages: 0
                     totalLivechatMessages: 0
-                    totalMessages: 60
-                    lastLogin: 'Sat Jun 29 2024 12:57:57 GMT+0000 (Coordinated Universal Time)'
-                    lastMessageSentAt: '2024-06-29T12:57:17.035Z'
-                    federatedServers: 0
-                    federatedUsers: 0
-                    lastSeenSubscription: 'Sat Jun 29 2024 12:57:29 GMT+0000 (Coordinated Universal Time)'
+                    totalMessages: 0
+                    lastLogin: ''
+                    lastMessageSentAt: null
+                    lastSeenSubscription: ''
                     os:
                       type: Linux
                       platform: linux
                       arch: x64
-                      release: 5.10.165-143.735.amzn2.x86_64
-                      uptime: 11997671.54
+                      release: 6.17.0-1017-aws
+                      uptime: 2119.94
                       loadavg:
-                        - 0.01
-                        - 0.01
-                        - 0
-                      totalmem: 4110323712
-                      freemem: 600911872
+                        - 6.92
+                        - 5.81
+                        - 3.52
+                      totalmem: 8220839936
+                      freemem: 3768729600
                       cpus:
-                        - model: Intel(R) Xeon(R) CPU E5-2686 v4 @ 2.30GHz
-                          speed: 2300
+                        - model: AMD EPYC 7571
+                          speed: 0
                           times:
-                            user: 50782950
-                            nice: 20380
-                            sys: 8222330
-                            idle: 11882173640
+                            user: 404110
+                            nice: 0
+                            sys: 206780
+                            idle: 1425940
                             irq: 0
-                        - model: Intel(R) Xeon(R) CPU E5-2686 v4 @ 2.30GHz
-                          speed: 2300
+                        - model: AMD EPYC 7571
+                          speed: 0
                           times:
-                            user: 52045760
-                            nice: 20510
-                            sys: 8248680
-                            idle: 11884224410
+                            user: 416850
+                            nice: 0
+                            sys: 203030
+                            idle: 1418740
                             irq: 0
                     process:
-                      nodeVersion: v14.21.3
+                      nodeVersion: v22.22.3
                       pid: 1
-                      uptime: 3542285.043719739
+                      uptime: 74.175831587
                     deploy:
                       method: docker
-                      platform: selfinstall
+                      platform: helm-chart
+                    fips: true
                     readReceiptsEnabled: false
                     readReceiptsDetailed: false
                     enterpriseReady: true
+                    fileStoreType: GridFS
                     uploadsTotal: 0
+                    uploadsTotalSize: 0
                     migration:
                       _id: control
-                      _updatedAt: '2024-05-22T11:14:11.174Z'
+                      _updatedAt: '2026-08-03T12:10:13.492Z'
                       locked: false
-                      version: 304
-                      buildAt: '2024-05-12T20:21:55.350Z'
-                      lockedAt: '2024-05-22T11:14:11.168Z'
-                    uploadsTotalSize: 0
-                    instanceCount: 1
-                    msEnabled: false
-                    oplogEnabled: true
-                    mongoVersion: 5.0.15
-                    mongoStorageEngine: wiredTiger
+                      version: 335
+                    instanceCount: 0
+                    msEnabled: true
+                    oplogEnabled: false
+                    mongoVersion: 8.0.0
+                    mongoStorageEngine: unknown
                     apps:
-                      engineVersion: 1.42.2
+                      engineVersion: 1.65.1-rc.0
                       totalInstalled: 0
                       totalActive: 0
                       totalFailed: 0
+                      totalPrivateApps: 0
+                      totalPrivateAppsEnabled: 0
                     uniqueUsersOfYesterday:
-                      year: 2024
-                      month: 7
-                      day: 1
+                      year: 2026
+                      month: 8
+                      day: 2
                       data: []
                     uniqueDevicesOfYesterday:
-                      year: 2024
-                      month: 7
-                      day: 1
+                      year: 2026
+                      month: 8
+                      day: 2
+                      data: []
+                    uniqueUsersOfLastMonth:
+                      year: 2026
+                      month: 8
+                      day: 2
                       data: []
                     uniqueUsersOfLastWeek:
-                      year: 2024
-                      month: 7
-                      day: 1
-                      data:
-                        - roles:
-                            - role: user
-                              count: 5
-                              sessions: 11
-                              time: 256571
-                            - role: admin
-                              count: 1
-                              sessions: 1
-                              time: 429
-                          count: 6
-                          sessions: 12
-                          time: 257000
+                      year: 2026
+                      month: 8
+                      day: 2
+                      data: []
                     uniqueOSOfYesterday:
-                      year: 2024
-                      month: 7
-                      day: 1
+                      year: 2026
+                      month: 8
+                      day: 2
                       data: []
                     uniqueDevicesOfLastMonth:
-                      year: 2024
-                      month: 7
-                      day: 1
-                      data:
-                        - count: 97
-                          time: 259843
-                          type: ''
-                          name: Chrome
-                          version: 124.0.0
-                        - count: 17
-                          time: 152717
-                          type: ''
-                          name: Chrome
-                          version: 125.0.0
-                        - count: 3
-                          time: 133383
-                          type: other
-                          name: ''
-                          version: ''
-                        - count: 6
-                          time: 85257
-                          type: browser
-                          name: Chrome
-                          version: 125.0.0
-                        - count: 2
-                          time: 43189
-                          type: ''
-                          name: Safari
-                          version: 17.1.2
-                        - count: 3
-                          time: 39852
-                          type: browser
-                          name: Chrome
-                          version: 124.0.0
-                        - count: 2
-                          time: 32461
-                          type: browser
-                          name: Firefox
-                          version: '127.0'
-                        - count: 2
-                          time: 9499
-                          type: ''
-                          name: Chrome
-                          version: 126.0.0
-                        - count: 2
-                          time: 1006
-                          type: browser
-                          name: Chrome
-                          version: 126.0.0
-                    uniqueOSOfLastWeek:
-                      year: 2024
-                      month: 7
-                      day: 1
-                      data:
-                        - count: 6
-                          time: 184258
-                          name: Mac OS
-                          version: 10.15.7
-                        - count: 3
-                          time: 39852
-                          name: Linux
-                          version: x86_64
-                        - count: 3
-                          time: 32890
-                          name: Windows
-                          version: '10'
-                    uniqueDevicesOfLastWeek:
-                      year: 2024
-                      month: 7
-                      day: 1
-                      data:
-                        - count: 3
-                          time: 97597
-                          type: ''
-                          name: Chrome
-                          version: 125.0.0
-                        - count: 1
-                          time: 43472
-                          type: ''
-                          name: Chrome
-                          version: 124.0.0
-                        - count: 2
-                          time: 43189
-                          type: ''
-                          name: Safari
-                          version: 17.1.2
-                        - count: 3
-                          time: 39852
-                          type: browser
-                          name: Chrome
-                          version: 124.0.0
-                        - count: 2
-                          time: 32461
-                          type: browser
-                          name: Firefox
-                          version: '127.0'
-                        - count: 1
-                          time: 429
-                          type: browser
-                          name: Chrome
-                          version: 126.0.0
-                    uniqueUsersOfLastMonth:
-                      year: 2024
-                      month: 7
-                      day: 1
-                      data:
-                        - roles:
-                            - role: user
-                              count: 8
-                              sessions: 23
-                              time: 490348
-                            - role: admin
-                              count: 2
-                              sessions: 111
-                              time: 266859
-                          count: 10
-                          sessions: 134
-                          time: 757207
+                      year: 2026
+                      month: 8
+                      day: 2
+                      data: []
                     uniqueOSOfLastMonth:
-                      year: 2024
-                      month: 7
-                      day: 1
-                      data:
-                        - count: 118
-                          time: 465248
-                          name: Mac OS
-                          version: 10.15.7
-                        - count: 3
-                          time: 133383
-                          name: ''
-                          version: ''
-                        - count: 10
-                          time: 118724
-                          name: Windows
-                          version: '10'
-                        - count: 3
-                          time: 39852
-                          name: Linux
-                          version: x86_64
+                      year: 2026
+                      month: 8
+                      day: 2
+                      data: []
+                    uniqueDevicesOfLastWeek:
+                      year: 2026
+                      month: 8
+                      day: 2
+                      data: []
+                    uniqueOSOfLastWeek:
+                      year: 2026
+                      month: 8
+                      day: 2
+                      data: []
                     services:
                       ldap:
                         users: 0
@@ -2089,28 +2649,28 @@ paths:
                         loginFallback: false
                         encryption: plain
                         mergeUsers: false
-                        syncRoles: false
-                        syncRolesAutoRemove: false
-                        syncData: false
-                        syncChannels: false
+                        syncRoles: null
+                        syncRolesAutoRemove: null
+                        syncData: null
+                        syncChannels: null
                         syncAvatar: true
                         groupFilter: false
                         backgroundSync:
-                          enabled: false
-                          interval: every_24_hours
-                          newUsers: true
-                          existingUsers: true
+                          enabled: null
+                          interval: null
+                          newUsers: null
+                          existingUsers: null
                         ee:
-                          syncActiveState: disable
-                          syncTeams: false
-                          syncRoles: false
+                          syncActiveState: null
+                          syncTeams: null
+                          syncRoles: null
                       saml:
-                        enabled: false
+                        enabled: null
                         users: 0
-                        signatureValidationType: All
-                        generateUsername: false
-                        updateSubscriptionsOnLogin: false
-                        syncRoles: false
+                        signatureValidationType: null
+                        generateUsername: null
+                        updateSubscriptionsOnLogin: null
+                        syncRoles: null
                         userDataCustomFieldMap: false
                       cas:
                         enabled: false
@@ -2151,9 +2711,6 @@ paths:
                         nextcloud:
                           enabled: false
                           users: 0
-                        tokenpass:
-                          enabled: false
-                          users: 0
                         twitter:
                           enabled: false
                           users: 0
@@ -2179,11 +2736,26 @@ paths:
                         ended: 0
                       settings:
                         provider: ''
-                        dms: true
-                        channels: true
-                        groups: true
-                        teams: true
-                    dashboardCount: 17
+                        dms: null
+                        channels: null
+                        groups: null
+                        teams: null
+                    contactVerification:
+                      totalContacts: 0
+                      totalUnknownContacts: 0
+                      totalMergedContacts: null
+                      totalConflicts: 0
+                      totalResolvedConflicts: null
+                      totalBlockedContacts: 0
+                      totalPartiallyBlockedContacts: 0
+                      totalFullyBlockedContacts: 0
+                      totalVerifiedContacts: 0
+                      avgChannelsPerContact: 0
+                      totalContactsWithoutChannels: 0
+                      totalImportedContacts: null
+                      totalUpsellViews: null
+                      totalUpsellClicks: null
+                    dashboardCount: 0
                     messageAuditApply: 0
                     messageAuditLoad: 0
                     joinJitsiButton: 0
@@ -2205,12 +2777,16 @@ paths:
                       fileUpload:
                         fileUploadEnable: true
                       general:
-                        apps: {}
+                        apps:
+                          frameworkDevMode: null
+                          frameworkEnable: null
                         nps:
                           surveyEnabled: true
                         update:
                           updateChecker: true
-                      liveStreamAndBroadcasting: {}
+                      liveStreamAndBroadcasting:
+                        liveStream: null
+                        broadcasting: null
                       message:
                         allowEditing: true
                         allowDeleting: true
@@ -2218,22 +2794,20 @@ paths:
                         allowBadWordsFilter: false
                         readReceiptEnabled: false
                         readReceiptStoreUsers: false
-                      otr:
-                        otrEnable: true
                       push:
                         pushEnable: true
                       search:
                         defaultProvider:
-                          globalSearchEnabled: false
+                          globalSearchEnabled: null
                       threads:
                         threadsEnabled: true
                       webRTC:
-                        webRTCEnableChannel: false
-                        webRTCEnablePrivate: false
-                        webRTCEnableDirect: false
+                        webRTCEnableChannel: null
+                        webRTCEnablePrivate: null
+                        webRTCEnableDirect: null
+                    totalBroadcastRooms: 0
+                    totalTriggeredEmails: 0
                     pushQueue: 0
-                    totalOTRRooms: 0
-                    totalOTR: 0
                     integrations:
                       totalIntegrations: 0
                       totalIncoming: 0
@@ -2241,7 +2815,6 @@ paths:
                       totalOutgoing: 0
                       totalOutgoingActive: 0
                       totalWithScriptEnabled: 0
-                    totalBroadcastRooms: 0
                     enterprise:
                       modules:
                         - auditing
@@ -2264,28 +2837,26 @@ paths:
                         - hide-watermark
                         - custom-roles
                         - accessibility-certification
+                        - fips
                       tags:
-                        - Enterprise
+                        - Commercial
                       seatRequests: 0
-                      cannedResponses: 0
                       livechatTags: 0
+                      cannedResponses: 0
                       slas: 0
                       omnichannelRoomsWithPriorities: 0
                       omnichannelRoomsWithSlas: 0
                       businessUnits: 0
-                      livechatMonitors: 0
                       omnichannelPdfTranscriptSucceeded: 0
-                      omnichannelPdfTranscriptRequested: 0
+                      livechatMonitors: 0
                     teams:
-                      totalTeams: 1
+                      totalTeams: 0
                       totalRoomsInsideTeams: 0
                       totalDefaultRoomsInsideTeams: 0
-                    totalRoomsWithActiveLivestream: 0
-                    totalTriggeredEmails: 38
                     totalRoomsWithStarred: 0
                     totalRoomsWithPinned: 0
                     totalUserTOTP: 0
-                    totalUserEmail2fa: 12
+                    totalUserEmail2fa: 0
                     totalPinned: 0
                     totalStarred: 0
                     totalLinkInvitation: 0
@@ -2295,14 +2866,14 @@ paths:
                     logoChange: false
                     showHomeButton: true
                     totalEncryptedMessages: 0
-                    totalManuallyAddedUsers: 2
+                    totalManuallyAddedUsers: 0
                     totalSubscriptionRoles: 3
                     totalUserRoles: 11
                     totalCustomRoles: 0
-                    totalWebRTCCalls: 0
-                    uncaughtExceptionsCount: 165
+                    totalWebRTCCalls: null
+                    uncaughtExceptionsCount: 0
                     push: 3
-                    pushSecured: true
+                    pushSecured: false
                     homeTitleChanged: false
                     homeBodyChanged: false
                     customCSSChanged: false
@@ -2310,10 +2881,10 @@ paths:
                     loggedOutCustomScriptChanged: false
                     loggedInCustomScriptChanged: false
                     dailyPeakConnections: 0
-                    maxMonthlyPeakConnections: 3
+                    maxMonthlyPeakConnections: 0
                     matrixFederation:
                       enabled: false
-                      maximumSizeOfPublicRoomsUsers: 100
+                      maximumSizeOfPublicRoomsUsers: false
                       biggestRoom: null
                       smallestRoom: null
                       amountOfExternalUsers: 0
@@ -2321,28 +2892,10 @@ paths:
                       externalConnectedServers:
                         quantity: 0
                         servers: []
-                    webRTCEnabled: false
-                    webRTCEnabledForOmnichannel: false
-                    omnichannelWebRTCCalls: 0
-                    createdAt: '2024-07-02T11:12:00.221Z'
-                    _updatedAt: '2024-07-02T11:12:14.147Z'
-                    statsToken: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3b3Jrc3BhY2VJZCI6IiIsInVuaXF1ZUlkIjoiMGVkNWIxYzctODc2Mi00NjAzLWJhZGQtY2YzNWYwZTYzNWQzIiwicmVjb3JkSWQiOiI2NjgzZTA4MGZmZTkzMjg0MjMyN2JmODEiLCJ0aW1lc3RhbXAiOiIyMDI0LTA3LTAyVDExOjEyOjEyLjAyOTU4ODQ4OVoiLCJpbmZvIjp7fX0.l0vBdjR7Oyk7yfw7hwvJe9tlfnWLkiXJ5ysGxLqqx6g_2NvjvogsapFZvwCpyiH1JadvysiNNF53jeDfmG95yfn2sFpGLJXCjACPMHYTkTZ2jiPe7pqm62SFnlnSTU_9ietfUMXkxt21FgOrtDrS9HjiCw1g4Sxd-khz71E6p9OgdnGmOs8YWSSP-ejflEr-H6cOXoXktizgDQXlreF7ggwuov9G6Y4uXsnj8wouU_HNwAJua0pInTiyFe6ZM9TXdtfC-4ghpCT1ccGynKPC4HQT3g_RCCMkTG5A-IeSD5D1hGWhgTfHza0W7f7s4r_Ly0G2FBAgJ_54ykc4FNdbDw
-                    success: true
-              examples:
-                Success Example:
-                  value:
-                    result:
-                      - _id: jRca8kibJx8NkLJxt
-                        createdAt: '2018-04-13T12:46:26.517Z'
-                        emails:
-                          - address: user.test.1523623548558@rocket.chat
-                            verified: false
-                        name: EditedRealNameuser.test.1523623548558
-                        username: editedusernameuser.test.1523623548558
-                        avatarETag: 6YbLtc4v9b4conXon
-                    count: 1
-                    offset: 0
-                    total: 1
+                    allowUnsafeQueryAndFieldsApiParamsEnabled: false
+                    createdAt: '2026-08-03T12:10:31.265Z'
+                    _updatedAt: '2026-08-03T12:10:31.426Z'
+                    statsToken: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3b3Jrc3BhY2VJZCI6IiIsInVuaXF1ZUlkIjoiMmQzYWQ0ZmItZDUxNS00ZjA5LThmMDItMGYxODZjOGNjOTI5IiwicmVjb3JkSWQiOiI2YTcwODUzN2M4ZmMzYzY1YjE4MDhiYWYiLCJ0aW1lc3RhbXAiOiIyMDI2LTA4LTAzVDEyOjEwOjMxLjQwNzk5NzEyOFoiLCJpbmZvIjp7InRvdGFsVXNlcnMiOjAsImFjdGl2ZVVzZXJzIjowLCJ0b3RhbENvbm5lY3RlZFVzZXJzIjowLCJvbW5pQ2hhbm5lbENvbnZlcnNhdGlvbnMiOjAsInRvdGFsUm9vbXMiOjAsInRvdGFsTWVzc2FnZXMiOjAsInVwbG9hZHNUb3RhbFNpemUiOjAsIm1pY3Jvc2VydmljZUVuYWJsZWQiOnRydWUsImZpbGVTdG9yZVR5cGUiOiJHcmlkRlMifX0.JnBb7z--brY2k00kIkC_Rp502P8wdKVcC2kAxEKK0OBFJlAgLM4ezZ5m_xG2w1wX3wCTNKnrjO3D5Mi-bzYNmNNBcJQbujP2uUGWMnr42UUAbyPY9VWKCf4L3H9cgzB9WjJX94KiVlwLjnbqle9TE0wAubP-NR1lzZn06GrnD9bAFSdz2E5lI4s6qozfUW5z8ZmSgXs5MBSbhBQczUbmQkQoj2XjKs5Mkqow0qLeBsCrc0F2m_92YeO1S6StRGvLIVyce-qvm0DLT8hXhpoJyRRgLz_3JyOzOE6hfxcgWI43YUZ4o4n7QruSYDhSFnAjuAlZjHasBCKPfs9ht9vRtQ
                     success: true
         '400':
           description: Bad Request
