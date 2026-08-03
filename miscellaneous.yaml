@@ -15,7 +15,7 @@ paths:
         
         Permissions required:- `manage-email-inbox`
         
-        ### Changelog
+        ### Change
         | Version      | Description |
         | ---------------- | ------------|
         |3.11.0-rc.0         | Added       |
@@ -1233,7 +1233,7 @@ paths:
         | ---------------- | ------------|
         |3.10.0         | Added       |
         
-        A successful response only means the license provided follows the accepted format. Check your <a href="https://docs.rocket.chat/docs/reports" target="_blank">workspace log</a> or <a href="https://docs.rocket.chat/docs/workspace" target="_blank">administration info</a> to confirm if the license is valid and was applied to your workspace. Alternatively, you can check <b><a href="https://developer.rocket.chat/apidocs/get-licenses-1" target="_blank">Get Licenses</a></b> endpoint.
+        A successful response only means the license provided follows the accepted format. Check your <a href="https://docs.rocket.chat/docs/subscription" target="_blank">workspace subscription</a> to confirm if the license is valid and was applied to your workspace. Alternatively, you can check <b><a href="https://developer.rocket.chat/apidocs/get-licenses-1" target="_blank">Get Licenses</a></b> endpoint.
         
       operationId: post-api-v1-licenses.add
       parameters:
