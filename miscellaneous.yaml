@@ -1233,7 +1233,7 @@ paths:
         | ---------------- | ------------|
         |3.10.0         | Added       |
         
-        A successful response only means the license provided follows the accepted format. Check your <a href="https://docs.rocket.chat/docs/reports" target="_blank">workspace log</a> or <a href="https://docs.rocket.chat/docs/workspace" target="_blank">administration info</a> to confirm if the license is valid and was applied to your workspace. Alternatively, you can check <b><a href="https://developer.rocket.chat/apidocs/get-licenses-1" target="_blank">Confirm Enterprise License</a></b> endpoint.
+        A successful response only means the license provided follows the accepted format. Check your <a href="https://docs.rocket.chat/docs/reports" target="_blank">workspace log</a> or <a href="https://docs.rocket.chat/docs/workspace" target="_blank">administration info</a> to confirm if the license is valid and was applied to your workspace. Alternatively, you can check <b><a href="https://developer.rocket.chat/apidocs/get-licenses-1" target="_blank">Get Licenses</a></b> endpoint.
         
       operationId: post-api-v1-licenses.add
       parameters:
@@ -1259,6 +1259,83 @@ paths:
         '403':
           $ref: '#/components/responses/forbiddenError'
 
+  /api/v1/licenses.validate:
+    post:
+      tags:
+        - Licenses
+      summary: Validate License
+      description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+
+        Validates a Rocket.Chat license against the current workspace without applying it. Use this endpoint to preview a license before applying it with the <b><a href="https://developer.rocket.chat/apidocs/add-license" target="_blank">Add License</a></b> endpoint. It accepts both V2 and V3 (JWT) license formats.
+
+        A valid license returns a success response. An invalid license returns a failure response with the validation behaviors that rejected it listed in the `reasons` array.
+
+        Permission required: `edit-privileged-setting`.
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |8.7.0         | Added       |
+      operationId: post-api-v1-licenses.validate
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                license:
+                  type: string
+                  description: The encrypted license string to validate.
+              required:
+                - license
+            examples:
+              Example:
+                value:
+                  license: VFJ0vHf3Jm9AR0minB342MLaHRlZdc3Du5nf0E5Sv0QJ4SUkEIaU2boCYaDsxQ2N1UL4uhLjCF9M7iCZ/yxafJjxbHvOu1D5rOfdgO4RKlAGE9tGHDidJR9crJyXVb16jPHHvLSkUFzb7HoIq/nUXxU8gEgT3uJ9u2+Dw5ukDLX3SG2AFq1hLoPSZqsP6g2AQo=
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  reasons:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        behavior:
+                          type: string
+                        reason:
+                          type: string
+                        modules:
+                          type: array
+                          items:
+                            type: string
+                        limit:
+                          type: string
+              examples:
+                Invalid License:
+                  value:
+                    success: false
+                    error: license-invalid
+                    reasons:
+                      - behavior: invalidate_license
+                        reason: url
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'  
   /licenses.maxActiveUsers:
     get:
       tags:
