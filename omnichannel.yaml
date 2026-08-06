@@ -4653,14 +4653,9 @@ paths:
                       agentId:
                         type: string
                         description: The agent ID that you want to assign to the department.
-                      count:
-                        type: integer
-                        description: |-
-                          The number of chats served by the agent. Enter a value if you want to reset the stored value.
-                          Note: This field is used by the routing algorithm to determine the agents that have served the least number of chats and assign new chats to them.
                       order:
                         type: integer
-                        description: The agent's assignment priority when multiple agents have the same chat count. Agents with lower order values are assigned chats first.
+                        description: Determines agent priority when multiple agents have the same chat count. Agents with lower order values are assigned chats before others.
                 departmentUnit:
                   type: object
                   description: |-
