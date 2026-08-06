@@ -4660,7 +4660,7 @@ paths:
                           Note: This field is used by the routing algorithm to determine the agents that have served the least number of chats and assign new chats to them.
                       order:
                         type: integer
-                        description: The order in which the agents are assigned to chats.
+                        description: The agent's assignment priority when multiple agents have the same chat count. Agents with lower order values are assigned chats first.
                 departmentUnit:
                   type: object
                   description: |-
