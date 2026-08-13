@@ -13563,6 +13563,57 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
+  /api/v1/rooms.open:
+    post:
+      tags:
+        - Rooms
+      summary: Open a Room
+      description: |-
+        Marks a room as "open" for the user, i.e. removes it from the
+        user's list of hidden rooms and puts it back in the sidebar.
+      operationId: post-api-v1-rooms.open
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roomId:
+                  type: string
+                  description: The ID of the room to open.
+              required:
+                - roomId
+            examples:
+              Example:
+                value:
+                  roomId: GENERAL
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Missing roomId:
+                  value:
+                    success: false
+                    error: 'must have required property ''roomId'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/rooms.hide:
     post:
       summary: Hide Room
