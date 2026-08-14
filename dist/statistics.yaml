@@ -1,0 +1,4362 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Statistics
+servers:
+- url: https://apiexplorer.support.rocket.chat
+paths:
+  /api/v1/statistics.list:
+    get:
+      tags:
+      - Statistics
+      summary: Get Statistics List
+      description: "Get statistics about the Rocket.Chat workspace. \n\nPermission required: `view-statistics` \n\n### Changelog\n| Version      | Description | \n| ---------------- | ------------|\n|8.7.0             | Added the `fips` field to statistics records. |        \n|0.51.0            | Added       |\n\n### Example call\n\n```bash\ncurl -X GET 'https://<your-workspace-url>/api/v1/statistics.list?count=50&offset=1' \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\"\n```\n\n### Example success response\n\n```json\n{\n  \"statistics\": [\n    {\n      \"_id\": \"6a708537c8fc3c65b1808baf\",\n      \"wizard\": {\n        \"organizationType\": \"\",\n        \"industry\": \"\",\n        \"size\": \"\",\n        \"country\": \"\",\n        \"language\": \"\",\n        \"serverType\": \"\",\n        \"registerServer\": false\n      },\n      \"uniqueId\": \"2d3ad4fb-d515-4f09-8f02-0f186c8cc929\",\n      \"installedAt\": \"2026-08-03T12:10:10.817Z\",\n      \"deploymentFingerprintHash\": \"\",\n      \"deploymentFingerprintVerified\": true,\n      \"version\": \"8.7.0-rc.3\",\n      \"tag\": null,\n      \"branch\": null,\n      \"totalUsers\": 0,\n      \"activeUsers\": 0,\n      \"activeGuests\": 0,\n      \"nonActiveUsers\": 0,\n      \"appUsers\": 0,\n      \"onlineUsers\": 0,\n      \"awayUsers\": 0,\n      \"busyUsers\": 0,\n      \"totalConnectedUsers\": 0,\n      \"offlineUsers\": 0,\n      \"userLanguages\": {\n        \"none\": 0\n      },\n      \"totalRooms\": 0,\n      \"totalChannels\": 0,\n      \"totalPrivateGroups\": 0,\n      \"totalDirect\": 0,\n      \"totalLivechat\": 0,\n      \"totalDiscussions\": 0,\n      \"totalThreads\": 0,\n      \"totalLivechatVisitors\": 0,\n      \"totalLivechatAgents\": 0,\n      \"totalLivechatManagers\": 0,\n      \"livechatEnabled\": true,\n      \"isDepartmentRemovalEnabled\": false,\n      \"omnichannelSources\": [],\n      \"totalLivechatRoomsWithDepartment\": 0,\n      \"departments\": 0,\n      \"totalTriggers\": 0,\n      \"archivedDepartments\": 0,\n      \"totalCustomFields\": 0,\n      \"totalLivechatPublicCustomFields\": 0,\n      \"livechatAutomaticForwardingUnansweredChats\": true,\n      \"routingAlgorithm\": \"Auto_Selection\",\n      \"onHoldEnabled\": null,\n      \"lastChattedAgentPreferred\": null,\n      \"assignNewConversationsToContactManager\": null,\n      \"visitorAbandonment\": null,\n      \"emailInboxes\": 0,\n      \"BusinessHours\": {\n        \"total\": 0,\n        \"strategy\": \"\"\n      },\n      \"chatsOnHold\": 0,\n      \"uniqueContactsOfLastMonth\": {\n        \"contactsCount\": 0,\n        \"conversationsCount\": 0,\n        \"sources\": []\n      },\n      \"omnichannelContactsBySource\": {\n        \"contactsCount\": 0,\n        \"conversationsCount\": 0,\n        \"sources\": []\n      },\n      \"totalChannelMessages\": 0,\n      \"uniqueContactsOfYesterday\": {\n        \"contactsCount\": 0,\n        \"conversationsCount\": 0,\n        \"sources\": []\n      },\n      \"uniqueContactsOfLastWeek\": {\n        \"contactsCount\": 0,\n        \"conversationsCount\": 0,\n        \"sources\": []\n      },\n      \"totalPrivateGroupMessages\": 0,\n      \"totalDiscussionsMessages\": 0,\n      \"totalDirectMessages\": 0,\n      \"totalLivechatMessages\": 0,\n      \"totalMessages\": 0,\n      \"lastLogin\": \"\",\n      \"lastMessageSentAt\": null,\n      \"lastSeenSubscription\": \"\",\n      \"os\": {\n        \"type\": \"Linux\",\n        \"platform\": \"linux\",\n        \"arch\": \"x64\",\n        \"release\": \"6.17.0-1017-aws\",\n        \"uptime\": 2119.94,\n        \"loadavg\": [\n          6.92,\n          5.81,\n          3.52\n        ],\n        \"totalmem\": 8220839936,\n        \"freemem\": 3768729600,\n        \"cpus\": [\n          {\n            \"model\": \"AMD EPYC 7571\",\n            \"sp\n  ... (truncated)\n```"
+      operationId: get-api-v1-statistics.list
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The token of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The user ID of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      - name: count
+        in: query
+        required: false
+        schema:
+          type: integer
+        example: 50
+        description: The number of items to return. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: Number of items to "skip" in the query, i.e. requests return `count` items, skipping the first `offset` items. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.
+      - name: sort
+        in: query
+        required: false
+        schema: {}
+        description: 'List of fields to order by, and in which direction. JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending. For example, `{"value": -1, "_id": 1}`.  Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
+      - name: fields
+        in: query
+        required: false
+        schema: {}
+        description: 'This parameter accepts a JSON object with properties that have a value of 1 or 0 to include or exclude them in the response. For example, to only retrieve the usernames of users: fields=`{ "username": 1 }`. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more.'
+      - name: query
+        in: query
+        required: false
+        schema: {}
+        description: 'This parameter allows you to use MongoDB query operators to search for specific data. For example, to query users with a name that contains the letter "g": query=`{ "name": { "$regex": "g" } }`. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more.'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statistics:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        wizard:
+                          type: object
+                          properties:
+                            organizationType:
+                              type: string
+                            industry:
+                              type: string
+                            size:
+                              type: string
+                            country:
+                              type: string
+                            language:
+                              type: string
+                            serverType:
+                              type: string
+                            registerServer:
+                              type: boolean
+                        uniqueId:
+                          type: string
+                        installedAt:
+                          type: string
+                        deploymentFingerprintHash:
+                          type: string
+                        deploymentFingerprintVerified:
+                          type: boolean
+                        version:
+                          type: string
+                        tag:
+                          type: string
+                        branch:
+                          type: string
+                        totalUsers:
+                          type: integer
+                        activeUsers:
+                          type: integer
+                        activeGuests:
+                          type: integer
+                        nonActiveUsers:
+                          type: integer
+                        appUsers:
+                          type: integer
+                        onlineUsers:
+                          type: integer
+                        awayUsers:
+                          type: integer
+                        busyUsers:
+                          type: integer
+                        totalConnectedUsers:
+                          type: integer
+                        offlineUsers:
+                          type: integer
+                        userLanguages:
+                          type: object
+                          properties:
+                            none:
+                              type: integer
+                        totalRooms:
+                          type: integer
+                        totalChannels:
+                          type: integer
+                        totalPrivateGroups:
+                          type: integer
+                        totalDirect:
+                          type: integer
+                        totalLivechat:
+                          type: integer
+                        totalDiscussions:
+                          type: integer
+                        totalThreads:
+                          type: integer
+                        totalLivechatVisitors:
+                          type: integer
+                        totalLivechatAgents:
+                          type: integer
+                        totalLivechatManagers:
+                          type: integer
+                        livechatEnabled:
+                          type: boolean
+                        isDepartmentRemovalEnabled:
+                          type: boolean
+                        omnichannelSources:
+                          type: array
+                          items:
+                            type: object
+                            properties: {}
+                        totalLivechatRoomsWithDepartment:
+                          type: integer
+                        departments:
+                          type: integer
+                        totalTriggers:
+                          type: integer
+                        archivedDepartments:
+                          type: integer
+                        totalCustomFields:
+                          type: integer
+                        totalLivechatPublicCustomFields:
+                          type: integer
+                        livechatAutomaticForwardingUnansweredChats:
+                          type: boolean
+                        routingAlgorithm:
+                          type: string
+                        onHoldEnabled:
+                          type: string
+                        lastChattedAgentPreferred:
+                          type: string
+                        assignNewConversationsToContactManager:
+                          type: string
+                        visitorAbandonment:
+                          type: string
+                        emailInboxes:
+                          type: integer
+                        BusinessHours:
+                          type: object
+                          properties:
+                            total:
+                              type: integer
+                            strategy:
+                              type: string
+                        chatsOnHold:
+                          type: integer
+                        uniqueContactsOfLastMonth:
+                          type: object
+                          properties:
+                            contactsCount:
+                              type: integer
+                            conversationsCount:
+                              type: integer
+                            sources:
+                              type: array
+                              items:
+                                type: object
+                                properties: {}
+                        omnichannelContactsBySource:
+                          type: object
+                          properties:
+                            contactsCount:
+                              type: integer
+                            conversationsCount:
+                              type: integer
+                            sources:
+                              type: array
+                              items:
+                                type: object
+                                properties: {}
+                        totalChannelMessages:
+                          type: integer
+                        uniqueContactsOfYesterday:
+                          type: object
+                          properties:
+                            contactsCount:
+                              type: integer
+                            conversationsCount:
+                              type: integer
+                            sources:
+                              type: array
+                              items:
+                                type: object
+                                properties: {}
+                        uniqueContactsOfLastWeek:
+                          type: object
+                          properties:
+                            contactsCount:
+                              type: integer
+                            conversationsCount:
+                              type: integer
+                            sources:
+                              type: array
+                              items:
+                                type: object
+                                properties: {}
+                        totalPrivateGroupMessages:
+                          type: integer
+                        totalDiscussionsMessages:
+                          type: integer
+                        totalDirectMessages:
+                          type: integer
+                        totalLivechatMessages:
+                          type: integer
+                        totalMessages:
+                          type: integer
+                        lastLogin:
+                          type: string
+                        lastMessageSentAt:
+                          type: string
+                        lastSeenSubscription:
+                          type: string
+                        os:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                            platform:
+                              type: string
+                            arch:
+                              type: string
+                            release:
+                              type: string
+                            uptime:
+                              type: number
+                            loadavg:
+                              type: array
+                              items:
+                                type: number
+                            totalmem:
+                              type: integer
+                            freemem:
+                              type: integer
+                            cpus:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  model:
+                                    type: string
+                                  speed:
+                                    type: integer
+                                  times:
+                                    type: object
+                                    properties:
+                                      user:
+                                        type: integer
+                                      nice:
+                                        type: integer
+                                      sys:
+                                        type: integer
+                                      idle:
+                                        type: integer
+                                      irq:
+                                        type: integer
+                        process:
+                          type: object
+                          properties:
+                            nodeVersion:
+                              type: string
+                            pid:
+                              type: integer
+                            uptime:
+                              type: number
+                        deploy:
+                          type: object
+                          properties:
+                            method:
+                              type: string
+                            platform:
+                              type: string
+                        fips:
+                          type: boolean
+                        readReceiptsEnabled:
+                          type: boolean
+                        readReceiptsDetailed:
+                          type: boolean
+                        enterpriseReady:
+                          type: boolean
+                        fileStoreType:
+                          type: string
+                        uploadsTotal:
+                          type: integer
+                        uploadsTotalSize:
+                          type: integer
+                        migration:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            _updatedAt:
+                              type: string
+                            locked:
+                              type: boolean
+                            version:
+                              type: integer
+                        instanceCount:
+                          type: integer
+                        msEnabled:
+                          type: boolean
+                        oplogEnabled:
+                          type: boolean
+                        mongoVersion:
+                          type: string
+                        mongoStorageEngine:
+                          type: string
+                        apps:
+                          type: object
+                          properties:
+                            engineVersion:
+                              type: string
+                            totalInstalled:
+                              type: integer
+                            totalActive:
+                              type: integer
+                            totalFailed:
+                              type: integer
+                            totalPrivateApps:
+                              type: integer
+                            totalPrivateAppsEnabled:
+                              type: integer
+                        uniqueUsersOfYesterday:
+                          type: object
+                          properties:
+                            year:
+                              type: integer
+                            month:
+                              type: integer
+                            day:
+                              type: integer
+                            data:
+                              type: array
+                              items:
+                                type: object
+                                properties: {}
+                        uniqueDevicesOfYesterday:
+                          type: object
+                          properties:
+                            year:
+                              type: integer
+                            month:
+                              type: integer
+                            day:
+                              type: integer
+                            data:
+                              type: array
+                              items:
+                                type: object
+                                properties: {}
+                        uniqueUsersOfLastMonth:
+                          type: object
+                          properties:
+                            year:
+                              type: integer
+                            month:
+                              type: integer
+                            day:
+                              type: integer
+                            data:
+                              type: array
+                              items:
+                                type: object
+                                properties: {}
+                        uniqueUsersOfLastWeek:
+                          type: object
+                          properties:
+                            year:
+                              type: integer
+                            month:
+                              type: integer
+                            day:
+                              type: integer
+                            data:
+                              type: array
+                              items:
+                                type: object
+                                properties: {}
+                        uniqueOSOfYesterday:
+                          type: object
+                          properties:
+                            year:
+                              type: integer
+                            month:
+                              type: integer
+                            day:
+                              type: integer
+                            data:
+                              type: array
+                              items:
+                                type: object
+                                properties: {}
+                        uniqueDevicesOfLastMonth:
+                          type: object
+                          properties:
+                            year:
+                              type: integer
+                            month:
+                              type: integer
+                            day:
+                              type: integer
+                            data:
+                              type: array
+                              items:
+                                type: object
+                                properties: {}
+                        uniqueOSOfLastMonth:
+                          type: object
+                          properties:
+                            year:
+                              type: integer
+                            month:
+                              type: integer
+                            day:
+                              type: integer
+                            data:
+                              type: array
+                              items:
+                                type: object
+                                properties: {}
+                        uniqueDevicesOfLastWeek:
+                          type: object
+                          properties:
+                            year:
+                              type: integer
+                            month:
+                              type: integer
+                            day:
+                              type: integer
+                            data:
+                              type: array
+                              items:
+                                type: object
+                                properties: {}
+                        uniqueOSOfLastWeek:
+                          type: object
+                          properties:
+                            year:
+                              type: integer
+                            month:
+                              type: integer
+                            day:
+                              type: integer
+                            data:
+                              type: array
+                              items:
+                                type: object
+                                properties: {}
+                        services:
+                          type: object
+                          properties:
+                            ldap:
+                              type: object
+                              properties:
+                                users:
+                                  type: integer
+                                enabled:
+                                  type: boolean
+                                loginFallback:
+                                  type: boolean
+                                encryption:
+                                  type: string
+                                mergeUsers:
+                                  type: boolean
+                                syncRoles:
+                                  type: string
+                                syncRolesAutoRemove:
+                                  type: string
+                                syncData:
+                                  type: string
+                                syncChannels:
+                                  type: string
+                                syncAvatar:
+                                  type: boolean
+                                groupFilter:
+                                  type: boolean
+                                backgroundSync:
+                                  type: object
+                                  properties:
+                                    enabled:
+                                      type: string
+                                    interval:
+                                      type: string
+                                    newUsers:
+                                      type: string
+                                    existingUsers:
+                                      type: string
+                                ee:
+                                  type: object
+                                  properties:
+                                    syncActiveState:
+                                      type: string
+                                    syncTeams:
+                                      type: string
+                                    syncRoles:
+                                      type: string
+                            saml:
+                              type: object
+                              properties:
+                                enabled:
+                                  type: string
+                                users:
+                                  type: integer
+                                signatureValidationType:
+                                  type: string
+                                generateUsername:
+                                  type: string
+                                updateSubscriptionsOnLogin:
+                                  type: string
+                                syncRoles:
+                                  type: string
+                                userDataCustomFieldMap:
+                                  type: boolean
+                            cas:
+                              type: object
+                              properties:
+                                enabled:
+                                  type: boolean
+                                users:
+                                  type: integer
+                                allowUserCreation:
+                                  type: boolean
+                                alwaysSyncUserData:
+                                  type: boolean
+                            oauth:
+                              type: object
+                              properties:
+                                apple:
+                                  type: object
+                                  properties:
+                                    enabled:
+                                      type: boolean
+                                    users:
+                                      type: integer
+                                dolphin:
+                                  type: object
+                                  properties:
+                                    enabled:
+                                      type: boolean
+                                    users:
+                                      type: integer
+                                drupal:
+                                  type: object
+                                  properties:
+                                    enabled:
+                                      type: boolean
+                                    users:
+                                      type: integer
+                                facebook:
+                                  type: object
+                                  properties:
+                                    enabled:
+                                      type: boolean
+                                    users:
+                                      type: integer
+                                github:
+                                  type: object
+                                  properties:
+                                    enabled:
+                                      type: boolean
+                                    users:
+                                      type: integer
+                                githubEnterprise:
+                                  type: object
+                                  properties:
+                                    enabled:
+                                      type: boolean
+                                    users:
+                                      type: integer
+                                gitlab:
+                                  type: object
+                                  properties:
+                                    enabled:
+                                      type: boolean
+                                    users:
+                                      type: integer
+                                google:
+                                  type: object
+                                  properties:
+                                    enabled:
+                                      type: boolean
+                                    users:
+                                      type: integer
+                                linkedin:
+                                  type: object
+                                  properties:
+                                    enabled:
+                                      type: boolean
+                                    users:
+                                      type: integer
+                                meteor:
+                                  type: object
+                                  properties:
+                                    enabled:
+                                      type: boolean
+                                    users:
+                                      type: integer
+                                nextcloud:
+                                  type: object
+                                  properties:
+                                    enabled:
+                                      type: boolean
+                                    users:
+                                      type: integer
+                                twitter:
+                                  type: object
+                                  properties:
+                                    enabled:
+                                      type: boolean
+                                    users:
+                                      type: integer
+                                wordpress:
+                                  type: object
+                                  properties:
+                                    enabled:
+                                      type: boolean
+                                    users:
+                                      type: integer
+                                custom:
+                                  type: object
+                                  properties: {}
+                        importer:
+                          type: object
+                          properties:
+                            totalCSVImportedUsers:
+                              type: integer
+                            totalHipchatEnterpriseImportedUsers:
+                              type: integer
+                            totalSlackImportedUsers:
+                              type: integer
+                            totalSlackUsersImportedUsers:
+                              type: integer
+                        videoConf:
+                          type: object
+                          properties:
+                            videoConference:
+                              type: object
+                              properties:
+                                started:
+                                  type: integer
+                                ended:
+                                  type: integer
+                            direct:
+                              type: object
+                              properties:
+                                calling:
+                                  type: integer
+                                started:
+                                  type: integer
+                                ended:
+                                  type: integer
+                            livechat:
+                              type: object
+                              properties:
+                                started:
+                                  type: integer
+                                ended:
+                                  type: integer
+                            settings:
+                              type: object
+                              properties:
+                                provider:
+                                  type: string
+                                dms:
+                                  type: string
+                                channels:
+                                  type: string
+                                groups:
+                                  type: string
+                                teams:
+                                  type: string
+                        contactVerification:
+                          type: object
+                          properties:
+                            totalContacts:
+                              type: integer
+                            totalUnknownContacts:
+                              type: integer
+                            totalMergedContacts:
+                              type: string
+                            totalConflicts:
+                              type: integer
+                            totalResolvedConflicts:
+                              type: string
+                            totalBlockedContacts:
+                              type: integer
+                            totalPartiallyBlockedContacts:
+                              type: integer
+                            totalFullyBlockedContacts:
+                              type: integer
+                            totalVerifiedContacts:
+                              type: integer
+                            avgChannelsPerContact:
+                              type: integer
+                            totalContactsWithoutChannels:
+                              type: integer
+                            totalImportedContacts:
+                              type: string
+                            totalUpsellViews:
+                              type: string
+                            totalUpsellClicks:
+                              type: string
+                        dashboardCount:
+                          type: integer
+                        messageAuditApply:
+                          type: integer
+                        messageAuditLoad:
+                          type: integer
+                        joinJitsiButton:
+                          type: integer
+                        slashCommandsJitsi:
+                          type: integer
+                        settings:
+                          type: object
+                          properties:
+                            accounts:
+                              type: object
+                              properties:
+                                account2fa:
+                                  type: boolean
+                            cannedResponses:
+                              type: object
+                              properties:
+                                cannedResponsesEnabled:
+                                  type: boolean
+                            e2ee:
+                              type: object
+                              properties:
+                                e2e:
+                                  type: boolean
+                                e2eDefaultDirectRoom:
+                                  type: boolean
+                                e2eDefaultPrivateRoom:
+                                  type: boolean
+                            email:
+                              type: object
+                              properties:
+                                smtp:
+                                  type: object
+                                  properties:
+                                    smtpHost:
+                                      type: string
+                                    smtpPort:
+                                      type: string
+                                    fromEmail:
+                                      type: string
+                            fileUpload:
+                              type: object
+                              properties:
+                                fileUploadEnable:
+                                  type: boolean
+                            general:
+                              type: object
+                              properties:
+                                apps:
+                                  type: object
+                                  properties:
+                                    frameworkDevMode:
+                                      type: string
+                                    frameworkEnable:
+                                      type: string
+                                nps:
+                                  type: object
+                                  properties:
+                                    surveyEnabled:
+                                      type: boolean
+                                update:
+                                  type: object
+                                  properties:
+                                    updateChecker:
+                                      type: boolean
+                            liveStreamAndBroadcasting:
+                              type: object
+                              properties:
+                                liveStream:
+                                  type: string
+                                broadcasting:
+                                  type: string
+                            message:
+                              type: object
+                              properties:
+                                allowEditing:
+                                  type: boolean
+                                allowDeleting:
+                                  type: boolean
+                                allowUnrecognizedSlashCommand:
+                                  type: boolean
+                                allowBadWordsFilter:
+                                  type: boolean
+                                readReceiptEnabled:
+                                  type: boolean
+                                readReceiptStoreUsers:
+                                  type: boolean
+                            push:
+                              type: object
+                              properties:
+                                pushEnable:
+                                  type: boolean
+                            search:
+                              type: object
+                              properties:
+                                defaultProvider:
+                                  type: object
+                                  properties:
+                                    globalSearchEnabled:
+                                      type: string
+                            threads:
+                              type: object
+                              properties:
+                                threadsEnabled:
+                                  type: boolean
+                            webRTC:
+                              type: object
+                              properties:
+                                webRTCEnableChannel:
+                                  type: string
+                                webRTCEnablePrivate:
+                                  type: string
+                                webRTCEnableDirect:
+                                  type: string
+                        totalBroadcastRooms:
+                          type: integer
+                        totalTriggeredEmails:
+                          type: integer
+                        pushQueue:
+                          type: integer
+                        integrations:
+                          type: object
+                          properties:
+                            totalIntegrations:
+                              type: integer
+                            totalIncoming:
+                              type: integer
+                            totalIncomingActive:
+                              type: integer
+                            totalOutgoing:
+                              type: integer
+                            totalOutgoingActive:
+                              type: integer
+                            totalWithScriptEnabled:
+                              type: integer
+                        enterprise:
+                          type: object
+                          properties:
+                            modules:
+                              type: array
+                              items:
+                                type: string
+                            tags:
+                              type: array
+                              items:
+                                type: string
+                            seatRequests:
+                              type: integer
+                            livechatTags:
+                              type: integer
+                            cannedResponses:
+                              type: integer
+                            slas:
+                              type: integer
+                            omnichannelRoomsWithPriorities:
+                              type: integer
+                            omnichannelRoomsWithSlas:
+                              type: integer
+                            businessUnits:
+                              type: integer
+                            omnichannelPdfTranscriptSucceeded:
+                              type: integer
+                            livechatMonitors:
+                              type: integer
+                        teams:
+                          type: object
+                          properties:
+                            totalTeams:
+                              type: integer
+                            totalRoomsInsideTeams:
+                              type: integer
+                            totalDefaultRoomsInsideTeams:
+                              type: integer
+                        totalRoomsWithStarred:
+                          type: integer
+                        totalRoomsWithPinned:
+                          type: integer
+                        totalUserTOTP:
+                          type: integer
+                        totalUserEmail2fa:
+                          type: integer
+                        totalPinned:
+                          type: integer
+                        totalStarred:
+                          type: integer
+                        totalLinkInvitation:
+                          type: integer
+                        totalLinkInvitationUses:
+                          type: integer
+                        totalEmailInvitation:
+                          type: integer
+                        totalE2ERooms:
+                          type: integer
+                        logoChange:
+                          type: boolean
+                        showHomeButton:
+                          type: boolean
+                        totalEncryptedMessages:
+                          type: integer
+                        totalManuallyAddedUsers:
+                          type: integer
+                        totalSubscriptionRoles:
+                          type: integer
+                        totalUserRoles:
+                          type: integer
+                        totalCustomRoles:
+                          type: integer
+                        totalWebRTCCalls:
+                          type: string
+                        uncaughtExceptionsCount:
+                          type: integer
+                        push:
+                          type: integer
+                        pushSecured:
+                          type: boolean
+                        homeTitleChanged:
+                          type: boolean
+                        homeBodyChanged:
+                          type: boolean
+                        customCSSChanged:
+                          type: boolean
+                        onLogoutCustomScriptChanged:
+                          type: boolean
+                        loggedOutCustomScriptChanged:
+                          type: boolean
+                        loggedInCustomScriptChanged:
+                          type: boolean
+                        dailyPeakConnections:
+                          type: integer
+                        maxMonthlyPeakConnections:
+                          type: integer
+                        matrixFederation:
+                          type: object
+                          properties:
+                            enabled:
+                              type: boolean
+                            maximumSizeOfPublicRoomsUsers:
+                              type: boolean
+                            biggestRoom:
+                              type: string
+                            smallestRoom:
+                              type: string
+                            amountOfExternalUsers:
+                              type: integer
+                            amountOfFederatedRooms:
+                              type: integer
+                            externalConnectedServers:
+                              type: object
+                              properties:
+                                quantity:
+                                  type: integer
+                                servers:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties: {}
+                        allowUnsafeQueryAndFieldsApiParamsEnabled:
+                          type: boolean
+                        createdAt:
+                          type: string
+                        _updatedAt:
+                          type: string
+                        statsToken:
+                          type: string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Example:
+                  value:
+                    statistics:
+                    - _id: 6a708537c8fc3c65b1808baf
+                      wizard:
+                        organizationType: ''
+                        industry: ''
+                        size: ''
+                        country: ''
+                        language: ''
+                        serverType: ''
+                        registerServer: false
+                      uniqueId: 2d3ad4fb-d515-4f09-8f02-0f186c8cc929
+                      installedAt: '2026-08-03T12:10:10.817Z'
+                      deploymentFingerprintHash: ''
+                      deploymentFingerprintVerified: true
+                      version: 8.7.0-rc.3
+                      tag: null
+                      branch: null
+                      totalUsers: 0
+                      activeUsers: 0
+                      activeGuests: 0
+                      nonActiveUsers: 0
+                      appUsers: 0
+                      onlineUsers: 0
+                      awayUsers: 0
+                      busyUsers: 0
+                      totalConnectedUsers: 0
+                      offlineUsers: 0
+                      userLanguages:
+                        none: 0
+                      totalRooms: 0
+                      totalChannels: 0
+                      totalPrivateGroups: 0
+                      totalDirect: 0
+                      totalLivechat: 0
+                      totalDiscussions: 0
+                      totalThreads: 0
+                      totalLivechatVisitors: 0
+                      totalLivechatAgents: 0
+                      totalLivechatManagers: 0
+                      livechatEnabled: true
+                      isDepartmentRemovalEnabled: false
+                      omnichannelSources: []
+                      totalLivechatRoomsWithDepartment: 0
+                      departments: 0
+                      totalTriggers: 0
+                      archivedDepartments: 0
+                      totalCustomFields: 0
+                      totalLivechatPublicCustomFields: 0
+                      livechatAutomaticForwardingUnansweredChats: true
+                      routingAlgorithm: Auto_Selection
+                      onHoldEnabled: null
+                      lastChattedAgentPreferred: null
+                      assignNewConversationsToContactManager: null
+                      visitorAbandonment: null
+                      emailInboxes: 0
+                      BusinessHours:
+                        total: 0
+                        strategy: ''
+                      chatsOnHold: 0
+                      uniqueContactsOfLastMonth:
+                        contactsCount: 0
+                        conversationsCount: 0
+                        sources: []
+                      omnichannelContactsBySource:
+                        contactsCount: 0
+                        conversationsCount: 0
+                        sources: []
+                      totalChannelMessages: 0
+                      uniqueContactsOfYesterday:
+                        contactsCount: 0
+                        conversationsCount: 0
+                        sources: []
+                      uniqueContactsOfLastWeek:
+                        contactsCount: 0
+                        conversationsCount: 0
+                        sources: []
+                      totalPrivateGroupMessages: 0
+                      totalDiscussionsMessages: 0
+                      totalDirectMessages: 0
+                      totalLivechatMessages: 0
+                      totalMessages: 0
+                      lastLogin: ''
+                      lastMessageSentAt: null
+                      lastSeenSubscription: ''
+                      os:
+                        type: Linux
+                        platform: linux
+                        arch: x64
+                        release: 6.17.0-1017-aws
+                        uptime: 2119.94
+                        loadavg:
+                        - 6.92
+                        - 5.81
+                        - 3.52
+                        totalmem: 8220839936
+                        freemem: 3768729600
+                        cpus:
+                        - model: AMD EPYC 7571
+                          speed: 0
+                          times:
+                            user: 404110
+                            nice: 0
+                            sys: 206780
+                            idle: 1425940
+                            irq: 0
+                        - model: AMD EPYC 7571
+                          speed: 0
+                          times:
+                            user: 416850
+                            nice: 0
+                            sys: 203030
+                            idle: 1418740
+                            irq: 0
+                      process:
+                        nodeVersion: v22.22.3
+                        pid: 1
+                        uptime: 74.175831587
+                      deploy:
+                        method: docker
+                        platform: helm-chart
+                      fips: true
+                      readReceiptsEnabled: false
+                      readReceiptsDetailed: false
+                      enterpriseReady: true
+                      fileStoreType: GridFS
+                      uploadsTotal: 0
+                      uploadsTotalSize: 0
+                      migration:
+                        _id: control
+                        _updatedAt: '2026-08-03T12:10:13.492Z'
+                        locked: false
+                        version: 335
+                      instanceCount: 0
+                      msEnabled: true
+                      oplogEnabled: false
+                      mongoVersion: 8.0.0
+                      mongoStorageEngine: unknown
+                      apps:
+                        engineVersion: 1.65.1-rc.0
+                        totalInstalled: 0
+                        totalActive: 0
+                        totalFailed: 0
+                        totalPrivateApps: 0
+                        totalPrivateAppsEnabled: 0
+                      uniqueUsersOfYesterday:
+                        year: 2026
+                        month: 8
+                        day: 2
+                        data: []
+                      uniqueDevicesOfYesterday:
+                        year: 2026
+                        month: 8
+                        day: 2
+                        data: []
+                      uniqueUsersOfLastMonth:
+                        year: 2026
+                        month: 8
+                        day: 2
+                        data: []
+                      uniqueUsersOfLastWeek:
+                        year: 2026
+                        month: 8
+                        day: 2
+                        data: []
+                      uniqueOSOfYesterday:
+                        year: 2026
+                        month: 8
+                        day: 2
+                        data: []
+                      uniqueDevicesOfLastMonth:
+                        year: 2026
+                        month: 8
+                        day: 2
+                        data: []
+                      uniqueOSOfLastMonth:
+                        year: 2026
+                        month: 8
+                        day: 2
+                        data: []
+                      uniqueDevicesOfLastWeek:
+                        year: 2026
+                        month: 8
+                        day: 2
+                        data: []
+                      uniqueOSOfLastWeek:
+                        year: 2026
+                        month: 8
+                        day: 2
+                        data: []
+                      services:
+                        ldap:
+                          users: 0
+                          enabled: false
+                          loginFallback: false
+                          encryption: plain
+                          mergeUsers: false
+                          syncRoles: null
+                          syncRolesAutoRemove: null
+                          syncData: null
+                          syncChannels: null
+                          syncAvatar: true
+                          groupFilter: false
+                          backgroundSync:
+                            enabled: null
+                            interval: null
+                            newUsers: null
+                            existingUsers: null
+                          ee:
+                            syncActiveState: null
+                            syncTeams: null
+                            syncRoles: null
+                        saml:
+                          enabled: null
+                          users: 0
+                          signatureValidationType: null
+                          generateUsername: null
+                          updateSubscriptionsOnLogin: null
+                          syncRoles: null
+                          userDataCustomFieldMap: false
+                        cas:
+                          enabled: false
+                          users: 0
+                          allowUserCreation: true
+                          alwaysSyncUserData: true
+                        oauth:
+                          apple:
+                            enabled: false
+                            users: 0
+                          dolphin:
+                            enabled: false
+                            users: 0
+                          drupal:
+                            enabled: false
+                            users: 0
+                          facebook:
+                            enabled: false
+                            users: 0
+                          github:
+                            enabled: false
+                            users: 0
+                          githubEnterprise:
+                            enabled: false
+                            users: 0
+                          gitlab:
+                            enabled: false
+                            users: 0
+                          google:
+                            enabled: false
+                            users: 0
+                          linkedin:
+                            enabled: false
+                            users: 0
+                          meteor:
+                            enabled: false
+                            users: 0
+                          nextcloud:
+                            enabled: false
+                            users: 0
+                          twitter:
+                            enabled: false
+                            users: 0
+                          wordpress:
+                            enabled: false
+                            users: 0
+                          custom: {}
+                      importer:
+                        totalCSVImportedUsers: 0
+                        totalHipchatEnterpriseImportedUsers: 0
+                        totalSlackImportedUsers: 0
+                        totalSlackUsersImportedUsers: 0
+                      videoConf:
+                        videoConference:
+                          started: 0
+                          ended: 0
+                        direct:
+                          calling: 0
+                          started: 0
+                          ended: 0
+                        livechat:
+                          started: 0
+                          ended: 0
+                        settings:
+                          provider: ''
+                          dms: null
+                          channels: null
+                          groups: null
+                          teams: null
+                      contactVerification:
+                        totalContacts: 0
+                        totalUnknownContacts: 0
+                        totalMergedContacts: null
+                        totalConflicts: 0
+                        totalResolvedConflicts: null
+                        totalBlockedContacts: 0
+                        totalPartiallyBlockedContacts: 0
+                        totalFullyBlockedContacts: 0
+                        totalVerifiedContacts: 0
+                        avgChannelsPerContact: 0
+                        totalContactsWithoutChannels: 0
+                        totalImportedContacts: null
+                        totalUpsellViews: null
+                        totalUpsellClicks: null
+                      dashboardCount: 0
+                      messageAuditApply: 0
+                      messageAuditLoad: 0
+                      joinJitsiButton: 0
+                      slashCommandsJitsi: 0
+                      settings:
+                        accounts:
+                          account2fa: true
+                        cannedResponses:
+                          cannedResponsesEnabled: true
+                        e2ee:
+                          e2e: false
+                          e2eDefaultDirectRoom: false
+                          e2eDefaultPrivateRoom: false
+                        email:
+                          smtp:
+                            smtpHost: ''
+                            smtpPort: ''
+                            fromEmail: ''
+                        fileUpload:
+                          fileUploadEnable: true
+                        general:
+                          apps:
+                            frameworkDevMode: null
+                            frameworkEnable: null
+                          nps:
+                            surveyEnabled: true
+                          update:
+                            updateChecker: true
+                        liveStreamAndBroadcasting:
+                          liveStream: null
+                          broadcasting: null
+                        message:
+                          allowEditing: true
+                          allowDeleting: true
+                          allowUnrecognizedSlashCommand: false
+                          allowBadWordsFilter: false
+                          readReceiptEnabled: false
+                          readReceiptStoreUsers: false
+                        push:
+                          pushEnable: true
+                        search:
+                          defaultProvider:
+                            globalSearchEnabled: null
+                        threads:
+                          threadsEnabled: true
+                        webRTC:
+                          webRTCEnableChannel: null
+                          webRTCEnablePrivate: null
+                          webRTCEnableDirect: null
+                      totalBroadcastRooms: 0
+                      totalTriggeredEmails: 0
+                      pushQueue: 0
+                      integrations:
+                        totalIntegrations: 0
+                        totalIncoming: 0
+                        totalIncomingActive: 0
+                        totalOutgoing: 0
+                        totalOutgoingActive: 0
+                        totalWithScriptEnabled: 0
+                      enterprise:
+                        modules:
+                        - auditing
+                        - canned-responses
+                        - ldap-enterprise
+                        - livechat-enterprise
+                        - voip-enterprise
+                        - omnichannel-mobile-enterprise
+                        - engagement-dashboard
+                        - push-privacy
+                        - scalability
+                        - teams-mention
+                        - saml-enterprise
+                        - oauth-enterprise
+                        - device-management
+                        - federation
+                        - videoconference-enterprise
+                        - message-read-receipt
+                        - outlook-calendar
+                        - hide-watermark
+                        - custom-roles
+                        - accessibility-certification
+                        - fips
+                        tags:
+                        - Commercial
+                        seatRequests: 0
+                        livechatTags: 0
+                        cannedResponses: 0
+                        slas: 0
+                        omnichannelRoomsWithPriorities: 0
+                        omnichannelRoomsWithSlas: 0
+                        businessUnits: 0
+                        omnichannelPdfTranscriptSucceeded: 0
+                        livechatMonitors: 0
+                      teams:
+                        totalTeams: 0
+                        totalRoomsInsideTeams: 0
+                        totalDefaultRoomsInsideTeams: 0
+                      totalRoomsWithStarred: 0
+                      totalRoomsWithPinned: 0
+                      totalUserTOTP: 0
+                      totalUserEmail2fa: 0
+                      totalPinned: 0
+                      totalStarred: 0
+                      totalLinkInvitation: 0
+                      totalLinkInvitationUses: 0
+                      totalEmailInvitation: 0
+                      totalE2ERooms: 0
+                      logoChange: false
+                      showHomeButton: true
+                      totalEncryptedMessages: 0
+                      totalManuallyAddedUsers: 0
+                      totalSubscriptionRoles: 3
+                      totalUserRoles: 11
+                      totalCustomRoles: 0
+                      totalWebRTCCalls: null
+                      uncaughtExceptionsCount: 0
+                      push: 3
+                      pushSecured: false
+                      homeTitleChanged: false
+                      homeBodyChanged: false
+                      customCSSChanged: false
+                      onLogoutCustomScriptChanged: false
+                      loggedOutCustomScriptChanged: false
+                      loggedInCustomScriptChanged: false
+                      dailyPeakConnections: 0
+                      maxMonthlyPeakConnections: 0
+                      matrixFederation:
+                        enabled: false
+                        maximumSizeOfPublicRoomsUsers: false
+                        biggestRoom: null
+                        smallestRoom: null
+                        amountOfExternalUsers: 0
+                        amountOfFederatedRooms: 0
+                        externalConnectedServers:
+                          quantity: 0
+                          servers: []
+                      allowUnsafeQueryAndFieldsApiParamsEnabled: false
+                      createdAt: '2026-08-03T12:10:31.265Z'
+                      _updatedAt: '2026-08-03T12:10:31.426Z'
+                      statsToken: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3b3Jrc3BhY2VJZCI6IiIsInVuaXF1ZUlkIjoiMmQzYWQ0ZmItZDUxNS00ZjA5LThmMDItMGYxODZjOGNjOTI5IiwicmVjb3JkSWQiOiI2YTcwODUzN2M4ZmMzYzY1YjE4MDhiYWYiLCJ0aW1lc3RhbXAiOiIyMDI2LTA4LTAzVDEyOjEwOjMxLjQwNzk5NzEyOFoiLCJpbmZvIjp7InRvdGFsVXNlcnMiOjAsImFjdGl2ZVVzZXJzIjowLCJ0b3RhbENvbm5lY3RlZFVzZXJzIjowLCJvbW5pQ2hhbm5lbENvbnZlcnNhdGlvbnMiOjAsInRvdGFsUm9vbXMiOjAsInRvdGFsTWVzc2FnZXMiOjAsInVwbG9hZHNUb3RhbFNpemUiOjAsIm1pY3Jvc2VydmljZUVuYWJsZWQiOnRydWUsImZpbGVTdG9yZVR5cGUiOiJHcmlkRlMifX0.JnBb7z--brY2k00kIkC_Rp502P8wdKVcC2kAxEKK0OBFJlAgLM4ezZ5m_xG2w1wX3wCTNKnrjO3D5Mi-bzYNmNNBcJQbujP2uUGWMnr42UUAbyPY9VWKCf4L3H9cgzB9WjJX94KiVlwLjnbqle9TE0wAubP-NR1lzZn06GrnD9bAFSdz2E5lI4s6qozfUW5z8ZmSgXs5MBSbhBQczUbmQkQoj2XjKs5Mkqow0qLeBsCrc0F2m_92YeO1S6StRGvLIVyce-qvm0DLT8hXhpoJyRRgLz_3JyOzOE6hfxcgWI43YUZ4o4n7QruSYDhSFnAjuAlZjHasBCKPfs9ht9vRtQ
+                    count: 1
+                    offset: 0
+                    total: 1
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: error-not-allowed
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+  /api/v1/statistics:
+    get:
+      tags:
+      - Statistics
+      summary: Get Last Statistics
+      description: "Statistics about the Rocket.Chat workspace. \n\nPermission required: `view-statistics` \n\n### Changelog\n| Version      | Description | \n| ---------------- | ------------|\n|8.7.0             | Added the `fips` field to statistics records. |        \n|0.51.0            | Added       |\n\n### Example call\n\n```bash\ncurl -X GET 'https://<your-workspace-url>/api/v1/statistics?refresh=True' \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\"\n```\n\n### Example success response\n\n```json\n{\n  \"_id\": \"6a708537c8fc3c65b1808baf\",\n  \"wizard\": {\n    \"organizationType\": \"\",\n    \"industry\": \"\",\n    \"size\": \"\",\n    \"country\": \"\",\n    \"language\": \"\",\n    \"serverType\": \"\",\n    \"registerServer\": false\n  },\n  \"uniqueId\": \"2d3ad4fb-d515-4f09-8f02-0f186c8cc929\",\n  \"installedAt\": \"2026-08-03T12:10:10.817Z\",\n  \"deploymentFingerprintHash\": \"\",\n  \"deploymentFingerprintVerified\": true,\n  \"version\": \"8.7.0\",\n  \"tag\": null,\n  \"branch\": null,\n  \"totalUsers\": 0,\n  \"activeUsers\": 0,\n  \"activeGuests\": 0,\n  \"nonActiveUsers\": 0,\n  \"appUsers\": 0,\n  \"onlineUsers\": 0,\n  \"awayUsers\": 0,\n  \"busyUsers\": 0,\n  \"totalConnectedUsers\": 0,\n  \"offlineUsers\": 0,\n  \"userLanguages\": {\n    \"none\": 0\n  },\n  \"totalRooms\": 0,\n  \"totalChannels\": 0,\n  \"totalPrivateGroups\": 0,\n  \"totalDirect\": 0,\n  \"totalLivechat\": 0,\n  \"totalDiscussions\": 0,\n  \"totalThreads\": 0,\n  \"totalLivechatVisitors\": 0,\n  \"totalLivechatAgents\": 0,\n  \"totalLivechatManagers\": 0,\n  \"livechatEnabled\": true,\n  \"isDepartmentRemovalEnabled\": false,\n  \"omnichannelSources\": [],\n  \"totalLivechatRoomsWithDepartment\": 0,\n  \"departments\": 0,\n  \"totalTriggers\": 0,\n  \"archivedDepartments\": 0,\n  \"totalCustomFields\": 0,\n  \"totalLivechatPublicCustomFields\": 0,\n  \"livechatAutomaticForwardingUnansweredChats\": true,\n  \"routingAlgorithm\": \"Auto_Selection\",\n  \"onHoldEnabled\": null,\n  \"lastChattedAgentPreferred\": null,\n  \"assignNewConversationsToContactManager\": null,\n  \"visitorAbandonment\": null,\n  \"emailInboxes\": 0,\n  \"BusinessHours\": {\n    \"total\": 0,\n    \"strategy\": \"\"\n  },\n  \"chatsOnHold\": 0,\n  \"uniqueContactsOfLastMonth\": {\n    \"contactsCount\": 0,\n    \"conversationsCount\": 0,\n    \"sources\": []\n  },\n  \"omnichannelContactsBySource\": {\n    \"contactsCount\": 0,\n    \"conversationsCount\": 0,\n    \"sources\": []\n  },\n  \"totalChannelMessages\": 0,\n  \"uniqueContactsOfYesterday\": {\n    \"contactsCount\": 0,\n    \"conversationsCount\": 0,\n    \"sources\": []\n  },\n  \"uniqueContactsOfLastWeek\": {\n    \"contactsCount\": 0,\n    \"conversationsCount\": 0,\n    \"sources\": []\n  },\n  \"totalPrivateGroupMessages\": 0,\n  \"totalDiscussionsMessages\": 0,\n  \"totalDirectMessages\": 0,\n  \"totalLivechatMessages\": 0,\n  \"totalMessages\": 0,\n  \"lastLogin\": \"\",\n  \"lastMessageSentAt\": null,\n  \"lastSeenSubscription\": \"\",\n  \"os\": {\n    \"type\": \"Linux\",\n    \"platform\": \"linux\",\n    \"arch\": \"x64\",\n    \"release\": \"6.17.0-1017-aws\",\n    \"uptime\": 2119.94,\n    \"loadavg\": [\n      6.92,\n      5.81,\n      3.52\n    ],\n    \"totalmem\": 8220839936,\n    \"freemem\": 3768729600,\n    \"cpus\": [\n      {\n        \"model\": \"AMD EPYC 7571\",\n        \"speed\": 0,\n        \"times\": {\n          \"user\": 404110,\n          \"nice\": 0,\n          \"sys\": 206780,\n          \"idle\": 1425940,\n          \"irq\": 0\n        }\n      },\n      {\n        \"model\": \"AMD EPYC 7571\",\n        \"speed\": 0,\n        \"times\": {\n          \"user\": 416850,\n          \"nice\": 0,\n          \"sys\": 203030,\n          \"idle\": 1418740,\n          \"irq\": 0\n        }\n      }\n    ]\n  },\n  \"process\": {\n    \"nodeVersion\": \"v22.22.3\",\n    \"pid\": 1,\n    \n  ... (truncated)\n```"
+      operationId: get-api-v1-statistics
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The token of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The user ID of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      - name: refresh
+        in: query
+        description: Set to true to refresh the statistics.
+        schema:
+          type: boolean
+          example: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  wizard:
+                    type: object
+                    properties:
+                      organizationType:
+                        type: string
+                      industry:
+                        type: string
+                      size:
+                        type: string
+                      country:
+                        type: string
+                      language:
+                        type: string
+                      serverType:
+                        type: string
+                      registerServer:
+                        type: boolean
+                  uniqueId:
+                    type: string
+                  installedAt:
+                    type: string
+                  deploymentFingerprintHash:
+                    type: string
+                  deploymentFingerprintVerified:
+                    type: boolean
+                  version:
+                    type: string
+                  tag:
+                    type: string
+                  branch:
+                    type: string
+                  totalUsers:
+                    type: integer
+                  activeUsers:
+                    type: integer
+                  activeGuests:
+                    type: integer
+                  nonActiveUsers:
+                    type: integer
+                  appUsers:
+                    type: integer
+                  onlineUsers:
+                    type: integer
+                  awayUsers:
+                    type: integer
+                  busyUsers:
+                    type: integer
+                  totalConnectedUsers:
+                    type: integer
+                  offlineUsers:
+                    type: integer
+                  userLanguages:
+                    type: object
+                    properties:
+                      none:
+                        type: integer
+                  totalRooms:
+                    type: integer
+                  totalChannels:
+                    type: integer
+                  totalPrivateGroups:
+                    type: integer
+                  totalDirect:
+                    type: integer
+                  totalLivechat:
+                    type: integer
+                  totalDiscussions:
+                    type: integer
+                  totalThreads:
+                    type: integer
+                  totalLivechatVisitors:
+                    type: integer
+                  totalLivechatAgents:
+                    type: integer
+                  totalLivechatManagers:
+                    type: integer
+                  livechatEnabled:
+                    type: boolean
+                  isDepartmentRemovalEnabled:
+                    type: boolean
+                  omnichannelSources:
+                    type: array
+                    items:
+                      type: object
+                      properties: {}
+                  totalLivechatRoomsWithDepartment:
+                    type: integer
+                  departments:
+                    type: integer
+                  totalTriggers:
+                    type: integer
+                  archivedDepartments:
+                    type: integer
+                  totalCustomFields:
+                    type: integer
+                  totalLivechatPublicCustomFields:
+                    type: integer
+                  livechatAutomaticForwardingUnansweredChats:
+                    type: boolean
+                  routingAlgorithm:
+                    type: string
+                  onHoldEnabled:
+                    type: string
+                  lastChattedAgentPreferred:
+                    type: string
+                  assignNewConversationsToContactManager:
+                    type: string
+                  visitorAbandonment:
+                    type: string
+                  emailInboxes:
+                    type: integer
+                  BusinessHours:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                      strategy:
+                        type: string
+                  chatsOnHold:
+                    type: integer
+                  uniqueContactsOfLastMonth:
+                    type: object
+                    properties:
+                      contactsCount:
+                        type: integer
+                      conversationsCount:
+                        type: integer
+                      sources:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+                  omnichannelContactsBySource:
+                    type: object
+                    properties:
+                      contactsCount:
+                        type: integer
+                      conversationsCount:
+                        type: integer
+                      sources:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+                  totalChannelMessages:
+                    type: integer
+                  uniqueContactsOfYesterday:
+                    type: object
+                    properties:
+                      contactsCount:
+                        type: integer
+                      conversationsCount:
+                        type: integer
+                      sources:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+                  uniqueContactsOfLastWeek:
+                    type: object
+                    properties:
+                      contactsCount:
+                        type: integer
+                      conversationsCount:
+                        type: integer
+                      sources:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+                  totalPrivateGroupMessages:
+                    type: integer
+                  totalDiscussionsMessages:
+                    type: integer
+                  totalDirectMessages:
+                    type: integer
+                  totalLivechatMessages:
+                    type: integer
+                  totalMessages:
+                    type: integer
+                  lastLogin:
+                    type: string
+                  lastMessageSentAt:
+                    type: string
+                  lastSeenSubscription:
+                    type: string
+                  os:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                      platform:
+                        type: string
+                      arch:
+                        type: string
+                      release:
+                        type: string
+                      uptime:
+                        type: number
+                      loadavg:
+                        type: array
+                        items:
+                          type: number
+                      totalmem:
+                        type: integer
+                      freemem:
+                        type: integer
+                      cpus:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            model:
+                              type: string
+                            speed:
+                              type: integer
+                            times:
+                              type: object
+                              properties:
+                                user:
+                                  type: integer
+                                nice:
+                                  type: integer
+                                sys:
+                                  type: integer
+                                idle:
+                                  type: integer
+                                irq:
+                                  type: integer
+                  process:
+                    type: object
+                    properties:
+                      nodeVersion:
+                        type: string
+                      pid:
+                        type: integer
+                      uptime:
+                        type: number
+                  deploy:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+                      platform:
+                        type: string
+                  fips:
+                    type: boolean
+                  readReceiptsEnabled:
+                    type: boolean
+                  readReceiptsDetailed:
+                    type: boolean
+                  enterpriseReady:
+                    type: boolean
+                  fileStoreType:
+                    type: string
+                  uploadsTotal:
+                    type: integer
+                  uploadsTotalSize:
+                    type: integer
+                  migration:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      _updatedAt:
+                        type: string
+                      locked:
+                        type: boolean
+                      version:
+                        type: integer
+                  instanceCount:
+                    type: integer
+                  msEnabled:
+                    type: boolean
+                  oplogEnabled:
+                    type: boolean
+                  mongoVersion:
+                    type: string
+                  mongoStorageEngine:
+                    type: string
+                  apps:
+                    type: object
+                    properties:
+                      engineVersion:
+                        type: string
+                      totalInstalled:
+                        type: integer
+                      totalActive:
+                        type: integer
+                      totalFailed:
+                        type: integer
+                      totalPrivateApps:
+                        type: integer
+                      totalPrivateAppsEnabled:
+                        type: integer
+                  uniqueUsersOfYesterday:
+                    type: object
+                    properties:
+                      year:
+                        type: integer
+                      month:
+                        type: integer
+                      day:
+                        type: integer
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+                  uniqueDevicesOfYesterday:
+                    type: object
+                    properties:
+                      year:
+                        type: integer
+                      month:
+                        type: integer
+                      day:
+                        type: integer
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+                  uniqueUsersOfLastMonth:
+                    type: object
+                    properties:
+                      year:
+                        type: integer
+                      month:
+                        type: integer
+                      day:
+                        type: integer
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+                  uniqueUsersOfLastWeek:
+                    type: object
+                    properties:
+                      year:
+                        type: integer
+                      month:
+                        type: integer
+                      day:
+                        type: integer
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+                  uniqueOSOfYesterday:
+                    type: object
+                    properties:
+                      year:
+                        type: integer
+                      month:
+                        type: integer
+                      day:
+                        type: integer
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+                  uniqueDevicesOfLastMonth:
+                    type: object
+                    properties:
+                      year:
+                        type: integer
+                      month:
+                        type: integer
+                      day:
+                        type: integer
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+                  uniqueOSOfLastMonth:
+                    type: object
+                    properties:
+                      year:
+                        type: integer
+                      month:
+                        type: integer
+                      day:
+                        type: integer
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+                  uniqueDevicesOfLastWeek:
+                    type: object
+                    properties:
+                      year:
+                        type: integer
+                      month:
+                        type: integer
+                      day:
+                        type: integer
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+                  uniqueOSOfLastWeek:
+                    type: object
+                    properties:
+                      year:
+                        type: integer
+                      month:
+                        type: integer
+                      day:
+                        type: integer
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+                  services:
+                    type: object
+                    properties:
+                      ldap:
+                        type: object
+                        properties:
+                          users:
+                            type: integer
+                          enabled:
+                            type: boolean
+                          loginFallback:
+                            type: boolean
+                          encryption:
+                            type: string
+                          mergeUsers:
+                            type: boolean
+                          syncRoles:
+                            type: string
+                          syncRolesAutoRemove:
+                            type: string
+                          syncData:
+                            type: string
+                          syncChannels:
+                            type: string
+                          syncAvatar:
+                            type: boolean
+                          groupFilter:
+                            type: boolean
+                          backgroundSync:
+                            type: object
+                            properties:
+                              enabled:
+                                type: string
+                              interval:
+                                type: string
+                              newUsers:
+                                type: string
+                              existingUsers:
+                                type: string
+                          ee:
+                            type: object
+                            properties:
+                              syncActiveState:
+                                type: string
+                              syncTeams:
+                                type: string
+                              syncRoles:
+                                type: string
+                      saml:
+                        type: object
+                        properties:
+                          enabled:
+                            type: string
+                          users:
+                            type: integer
+                          signatureValidationType:
+                            type: string
+                          generateUsername:
+                            type: string
+                          updateSubscriptionsOnLogin:
+                            type: string
+                          syncRoles:
+                            type: string
+                          userDataCustomFieldMap:
+                            type: boolean
+                      cas:
+                        type: object
+                        properties:
+                          enabled:
+                            type: boolean
+                          users:
+                            type: integer
+                          allowUserCreation:
+                            type: boolean
+                          alwaysSyncUserData:
+                            type: boolean
+                      oauth:
+                        type: object
+                        properties:
+                          apple:
+                            type: object
+                            properties:
+                              enabled:
+                                type: boolean
+                              users:
+                                type: integer
+                          dolphin:
+                            type: object
+                            properties:
+                              enabled:
+                                type: boolean
+                              users:
+                                type: integer
+                          drupal:
+                            type: object
+                            properties:
+                              enabled:
+                                type: boolean
+                              users:
+                                type: integer
+                          facebook:
+                            type: object
+                            properties:
+                              enabled:
+                                type: boolean
+                              users:
+                                type: integer
+                          github:
+                            type: object
+                            properties:
+                              enabled:
+                                type: boolean
+                              users:
+                                type: integer
+                          githubEnterprise:
+                            type: object
+                            properties:
+                              enabled:
+                                type: boolean
+                              users:
+                                type: integer
+                          gitlab:
+                            type: object
+                            properties:
+                              enabled:
+                                type: boolean
+                              users:
+                                type: integer
+                          google:
+                            type: object
+                            properties:
+                              enabled:
+                                type: boolean
+                              users:
+                                type: integer
+                          linkedin:
+                            type: object
+                            properties:
+                              enabled:
+                                type: boolean
+                              users:
+                                type: integer
+                          meteor:
+                            type: object
+                            properties:
+                              enabled:
+                                type: boolean
+                              users:
+                                type: integer
+                          nextcloud:
+                            type: object
+                            properties:
+                              enabled:
+                                type: boolean
+                              users:
+                                type: integer
+                          twitter:
+                            type: object
+                            properties:
+                              enabled:
+                                type: boolean
+                              users:
+                                type: integer
+                          wordpress:
+                            type: object
+                            properties:
+                              enabled:
+                                type: boolean
+                              users:
+                                type: integer
+                          custom:
+                            type: object
+                            properties: {}
+                  importer:
+                    type: object
+                    properties:
+                      totalCSVImportedUsers:
+                        type: integer
+                      totalHipchatEnterpriseImportedUsers:
+                        type: integer
+                      totalSlackImportedUsers:
+                        type: integer
+                      totalSlackUsersImportedUsers:
+                        type: integer
+                  videoConf:
+                    type: object
+                    properties:
+                      videoConference:
+                        type: object
+                        properties:
+                          started:
+                            type: integer
+                          ended:
+                            type: integer
+                      direct:
+                        type: object
+                        properties:
+                          calling:
+                            type: integer
+                          started:
+                            type: integer
+                          ended:
+                            type: integer
+                      livechat:
+                        type: object
+                        properties:
+                          started:
+                            type: integer
+                          ended:
+                            type: integer
+                      settings:
+                        type: object
+                        properties:
+                          provider:
+                            type: string
+                          dms:
+                            type: string
+                          channels:
+                            type: string
+                          groups:
+                            type: string
+                          teams:
+                            type: string
+                  contactVerification:
+                    type: object
+                    properties:
+                      totalContacts:
+                        type: integer
+                      totalUnknownContacts:
+                        type: integer
+                      totalMergedContacts:
+                        type: string
+                      totalConflicts:
+                        type: integer
+                      totalResolvedConflicts:
+                        type: string
+                      totalBlockedContacts:
+                        type: integer
+                      totalPartiallyBlockedContacts:
+                        type: integer
+                      totalFullyBlockedContacts:
+                        type: integer
+                      totalVerifiedContacts:
+                        type: integer
+                      avgChannelsPerContact:
+                        type: integer
+                      totalContactsWithoutChannels:
+                        type: integer
+                      totalImportedContacts:
+                        type: string
+                      totalUpsellViews:
+                        type: string
+                      totalUpsellClicks:
+                        type: string
+                  dashboardCount:
+                    type: integer
+                  messageAuditApply:
+                    type: integer
+                  messageAuditLoad:
+                    type: integer
+                  joinJitsiButton:
+                    type: integer
+                  slashCommandsJitsi:
+                    type: integer
+                  settings:
+                    type: object
+                    properties:
+                      accounts:
+                        type: object
+                        properties:
+                          account2fa:
+                            type: boolean
+                      cannedResponses:
+                        type: object
+                        properties:
+                          cannedResponsesEnabled:
+                            type: boolean
+                      e2ee:
+                        type: object
+                        properties:
+                          e2e:
+                            type: boolean
+                          e2eDefaultDirectRoom:
+                            type: boolean
+                          e2eDefaultPrivateRoom:
+                            type: boolean
+                      email:
+                        type: object
+                        properties:
+                          smtp:
+                            type: object
+                            properties:
+                              smtpHost:
+                                type: string
+                              smtpPort:
+                                type: string
+                              fromEmail:
+                                type: string
+                      fileUpload:
+                        type: object
+                        properties:
+                          fileUploadEnable:
+                            type: boolean
+                      general:
+                        type: object
+                        properties:
+                          apps:
+                            type: object
+                            properties:
+                              frameworkDevMode:
+                                type: string
+                              frameworkEnable:
+                                type: string
+                          nps:
+                            type: object
+                            properties:
+                              surveyEnabled:
+                                type: boolean
+                          update:
+                            type: object
+                            properties:
+                              updateChecker:
+                                type: boolean
+                      liveStreamAndBroadcasting:
+                        type: object
+                        properties:
+                          liveStream:
+                            type: string
+                          broadcasting:
+                            type: string
+                      message:
+                        type: object
+                        properties:
+                          allowEditing:
+                            type: boolean
+                          allowDeleting:
+                            type: boolean
+                          allowUnrecognizedSlashCommand:
+                            type: boolean
+                          allowBadWordsFilter:
+                            type: boolean
+                          readReceiptEnabled:
+                            type: boolean
+                          readReceiptStoreUsers:
+                            type: boolean
+                      push:
+                        type: object
+                        properties:
+                          pushEnable:
+                            type: boolean
+                      search:
+                        type: object
+                        properties:
+                          defaultProvider:
+                            type: object
+                            properties:
+                              globalSearchEnabled:
+                                type: string
+                      threads:
+                        type: object
+                        properties:
+                          threadsEnabled:
+                            type: boolean
+                      webRTC:
+                        type: object
+                        properties:
+                          webRTCEnableChannel:
+                            type: string
+                          webRTCEnablePrivate:
+                            type: string
+                          webRTCEnableDirect:
+                            type: string
+                  totalBroadcastRooms:
+                    type: integer
+                  totalTriggeredEmails:
+                    type: integer
+                  pushQueue:
+                    type: integer
+                  integrations:
+                    type: object
+                    properties:
+                      totalIntegrations:
+                        type: integer
+                      totalIncoming:
+                        type: integer
+                      totalIncomingActive:
+                        type: integer
+                      totalOutgoing:
+                        type: integer
+                      totalOutgoingActive:
+                        type: integer
+                      totalWithScriptEnabled:
+                        type: integer
+                  enterprise:
+                    type: object
+                    properties:
+                      modules:
+                        type: array
+                        items:
+                          type: string
+                      tags:
+                        type: array
+                        items:
+                          type: string
+                      seatRequests:
+                        type: integer
+                      livechatTags:
+                        type: integer
+                      cannedResponses:
+                        type: integer
+                      slas:
+                        type: integer
+                      omnichannelRoomsWithPriorities:
+                        type: integer
+                      omnichannelRoomsWithSlas:
+                        type: integer
+                      businessUnits:
+                        type: integer
+                      omnichannelPdfTranscriptSucceeded:
+                        type: integer
+                      livechatMonitors:
+                        type: integer
+                  teams:
+                    type: object
+                    properties:
+                      totalTeams:
+                        type: integer
+                      totalRoomsInsideTeams:
+                        type: integer
+                      totalDefaultRoomsInsideTeams:
+                        type: integer
+                  totalRoomsWithStarred:
+                    type: integer
+                  totalRoomsWithPinned:
+                    type: integer
+                  totalUserTOTP:
+                    type: integer
+                  totalUserEmail2fa:
+                    type: integer
+                  totalPinned:
+                    type: integer
+                  totalStarred:
+                    type: integer
+                  totalLinkInvitation:
+                    type: integer
+                  totalLinkInvitationUses:
+                    type: integer
+                  totalEmailInvitation:
+                    type: integer
+                  totalE2ERooms:
+                    type: integer
+                  logoChange:
+                    type: boolean
+                  showHomeButton:
+                    type: boolean
+                  totalEncryptedMessages:
+                    type: integer
+                  totalManuallyAddedUsers:
+                    type: integer
+                  totalSubscriptionRoles:
+                    type: integer
+                  totalUserRoles:
+                    type: integer
+                  totalCustomRoles:
+                    type: integer
+                  totalWebRTCCalls:
+                    type: string
+                  uncaughtExceptionsCount:
+                    type: integer
+                  push:
+                    type: integer
+                  pushSecured:
+                    type: boolean
+                  homeTitleChanged:
+                    type: boolean
+                  homeBodyChanged:
+                    type: boolean
+                  customCSSChanged:
+                    type: boolean
+                  onLogoutCustomScriptChanged:
+                    type: boolean
+                  loggedOutCustomScriptChanged:
+                    type: boolean
+                  loggedInCustomScriptChanged:
+                    type: boolean
+                  dailyPeakConnections:
+                    type: integer
+                  maxMonthlyPeakConnections:
+                    type: integer
+                  matrixFederation:
+                    type: object
+                    properties:
+                      enabled:
+                        type: boolean
+                      maximumSizeOfPublicRoomsUsers:
+                        type: boolean
+                      biggestRoom:
+                        type: string
+                      smallestRoom:
+                        type: string
+                      amountOfExternalUsers:
+                        type: integer
+                      amountOfFederatedRooms:
+                        type: integer
+                      externalConnectedServers:
+                        type: object
+                        properties:
+                          quantity:
+                            type: integer
+                          servers:
+                            type: array
+                            items:
+                              type: object
+                              properties: {}
+                  allowUnsafeQueryAndFieldsApiParamsEnabled:
+                    type: boolean
+                  createdAt:
+                    type: string
+                  _updatedAt:
+                    type: string
+                  statsToken:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Example:
+                  value:
+                    _id: 6a708537c8fc3c65b1808baf
+                    wizard:
+                      organizationType: ''
+                      industry: ''
+                      size: ''
+                      country: ''
+                      language: ''
+                      serverType: ''
+                      registerServer: false
+                    uniqueId: 2d3ad4fb-d515-4f09-8f02-0f186c8cc929
+                    installedAt: '2026-08-03T12:10:10.817Z'
+                    deploymentFingerprintHash: ''
+                    deploymentFingerprintVerified: true
+                    version: 8.7.0
+                    tag: null
+                    branch: null
+                    totalUsers: 0
+                    activeUsers: 0
+                    activeGuests: 0
+                    nonActiveUsers: 0
+                    appUsers: 0
+                    onlineUsers: 0
+                    awayUsers: 0
+                    busyUsers: 0
+                    totalConnectedUsers: 0
+                    offlineUsers: 0
+                    userLanguages:
+                      none: 0
+                    totalRooms: 0
+                    totalChannels: 0
+                    totalPrivateGroups: 0
+                    totalDirect: 0
+                    totalLivechat: 0
+                    totalDiscussions: 0
+                    totalThreads: 0
+                    totalLivechatVisitors: 0
+                    totalLivechatAgents: 0
+                    totalLivechatManagers: 0
+                    livechatEnabled: true
+                    isDepartmentRemovalEnabled: false
+                    omnichannelSources: []
+                    totalLivechatRoomsWithDepartment: 0
+                    departments: 0
+                    totalTriggers: 0
+                    archivedDepartments: 0
+                    totalCustomFields: 0
+                    totalLivechatPublicCustomFields: 0
+                    livechatAutomaticForwardingUnansweredChats: true
+                    routingAlgorithm: Auto_Selection
+                    onHoldEnabled: null
+                    lastChattedAgentPreferred: null
+                    assignNewConversationsToContactManager: null
+                    visitorAbandonment: null
+                    emailInboxes: 0
+                    BusinessHours:
+                      total: 0
+                      strategy: ''
+                    chatsOnHold: 0
+                    uniqueContactsOfLastMonth:
+                      contactsCount: 0
+                      conversationsCount: 0
+                      sources: []
+                    omnichannelContactsBySource:
+                      contactsCount: 0
+                      conversationsCount: 0
+                      sources: []
+                    totalChannelMessages: 0
+                    uniqueContactsOfYesterday:
+                      contactsCount: 0
+                      conversationsCount: 0
+                      sources: []
+                    uniqueContactsOfLastWeek:
+                      contactsCount: 0
+                      conversationsCount: 0
+                      sources: []
+                    totalPrivateGroupMessages: 0
+                    totalDiscussionsMessages: 0
+                    totalDirectMessages: 0
+                    totalLivechatMessages: 0
+                    totalMessages: 0
+                    lastLogin: ''
+                    lastMessageSentAt: null
+                    lastSeenSubscription: ''
+                    os:
+                      type: Linux
+                      platform: linux
+                      arch: x64
+                      release: 6.17.0-1017-aws
+                      uptime: 2119.94
+                      loadavg:
+                      - 6.92
+                      - 5.81
+                      - 3.52
+                      totalmem: 8220839936
+                      freemem: 3768729600
+                      cpus:
+                      - model: AMD EPYC 7571
+                        speed: 0
+                        times:
+                          user: 404110
+                          nice: 0
+                          sys: 206780
+                          idle: 1425940
+                          irq: 0
+                      - model: AMD EPYC 7571
+                        speed: 0
+                        times:
+                          user: 416850
+                          nice: 0
+                          sys: 203030
+                          idle: 1418740
+                          irq: 0
+                    process:
+                      nodeVersion: v22.22.3
+                      pid: 1
+                      uptime: 74.175831587
+                    deploy:
+                      method: docker
+                      platform: helm-chart
+                    fips: true
+                    readReceiptsEnabled: false
+                    readReceiptsDetailed: false
+                    enterpriseReady: true
+                    fileStoreType: GridFS
+                    uploadsTotal: 0
+                    uploadsTotalSize: 0
+                    migration:
+                      _id: control
+                      _updatedAt: '2026-08-03T12:10:13.492Z'
+                      locked: false
+                      version: 335
+                    instanceCount: 0
+                    msEnabled: true
+                    oplogEnabled: false
+                    mongoVersion: 8.0.0
+                    mongoStorageEngine: unknown
+                    apps:
+                      engineVersion: 1.65.1-rc.0
+                      totalInstalled: 0
+                      totalActive: 0
+                      totalFailed: 0
+                      totalPrivateApps: 0
+                      totalPrivateAppsEnabled: 0
+                    uniqueUsersOfYesterday:
+                      year: 2026
+                      month: 8
+                      day: 2
+                      data: []
+                    uniqueDevicesOfYesterday:
+                      year: 2026
+                      month: 8
+                      day: 2
+                      data: []
+                    uniqueUsersOfLastMonth:
+                      year: 2026
+                      month: 8
+                      day: 2
+                      data: []
+                    uniqueUsersOfLastWeek:
+                      year: 2026
+                      month: 8
+                      day: 2
+                      data: []
+                    uniqueOSOfYesterday:
+                      year: 2026
+                      month: 8
+                      day: 2
+                      data: []
+                    uniqueDevicesOfLastMonth:
+                      year: 2026
+                      month: 8
+                      day: 2
+                      data: []
+                    uniqueOSOfLastMonth:
+                      year: 2026
+                      month: 8
+                      day: 2
+                      data: []
+                    uniqueDevicesOfLastWeek:
+                      year: 2026
+                      month: 8
+                      day: 2
+                      data: []
+                    uniqueOSOfLastWeek:
+                      year: 2026
+                      month: 8
+                      day: 2
+                      data: []
+                    services:
+                      ldap:
+                        users: 0
+                        enabled: false
+                        loginFallback: false
+                        encryption: plain
+                        mergeUsers: false
+                        syncRoles: null
+                        syncRolesAutoRemove: null
+                        syncData: null
+                        syncChannels: null
+                        syncAvatar: true
+                        groupFilter: false
+                        backgroundSync:
+                          enabled: null
+                          interval: null
+                          newUsers: null
+                          existingUsers: null
+                        ee:
+                          syncActiveState: null
+                          syncTeams: null
+                          syncRoles: null
+                      saml:
+                        enabled: null
+                        users: 0
+                        signatureValidationType: null
+                        generateUsername: null
+                        updateSubscriptionsOnLogin: null
+                        syncRoles: null
+                        userDataCustomFieldMap: false
+                      cas:
+                        enabled: false
+                        users: 0
+                        allowUserCreation: true
+                        alwaysSyncUserData: true
+                      oauth:
+                        apple:
+                          enabled: false
+                          users: 0
+                        dolphin:
+                          enabled: false
+                          users: 0
+                        drupal:
+                          enabled: false
+                          users: 0
+                        facebook:
+                          enabled: false
+                          users: 0
+                        github:
+                          enabled: false
+                          users: 0
+                        githubEnterprise:
+                          enabled: false
+                          users: 0
+                        gitlab:
+                          enabled: false
+                          users: 0
+                        google:
+                          enabled: false
+                          users: 0
+                        linkedin:
+                          enabled: false
+                          users: 0
+                        meteor:
+                          enabled: false
+                          users: 0
+                        nextcloud:
+                          enabled: false
+                          users: 0
+                        twitter:
+                          enabled: false
+                          users: 0
+                        wordpress:
+                          enabled: false
+                          users: 0
+                        custom: {}
+                    importer:
+                      totalCSVImportedUsers: 0
+                      totalHipchatEnterpriseImportedUsers: 0
+                      totalSlackImportedUsers: 0
+                      totalSlackUsersImportedUsers: 0
+                    videoConf:
+                      videoConference:
+                        started: 0
+                        ended: 0
+                      direct:
+                        calling: 0
+                        started: 0
+                        ended: 0
+                      livechat:
+                        started: 0
+                        ended: 0
+                      settings:
+                        provider: ''
+                        dms: null
+                        channels: null
+                        groups: null
+                        teams: null
+                    contactVerification:
+                      totalContacts: 0
+                      totalUnknownContacts: 0
+                      totalMergedContacts: null
+                      totalConflicts: 0
+                      totalResolvedConflicts: null
+                      totalBlockedContacts: 0
+                      totalPartiallyBlockedContacts: 0
+                      totalFullyBlockedContacts: 0
+                      totalVerifiedContacts: 0
+                      avgChannelsPerContact: 0
+                      totalContactsWithoutChannels: 0
+                      totalImportedContacts: null
+                      totalUpsellViews: null
+                      totalUpsellClicks: null
+                    dashboardCount: 0
+                    messageAuditApply: 0
+                    messageAuditLoad: 0
+                    joinJitsiButton: 0
+                    slashCommandsJitsi: 0
+                    settings:
+                      accounts:
+                        account2fa: true
+                      cannedResponses:
+                        cannedResponsesEnabled: true
+                      e2ee:
+                        e2e: false
+                        e2eDefaultDirectRoom: false
+                        e2eDefaultPrivateRoom: false
+                      email:
+                        smtp:
+                          smtpHost: ''
+                          smtpPort: ''
+                          fromEmail: ''
+                      fileUpload:
+                        fileUploadEnable: true
+                      general:
+                        apps:
+                          frameworkDevMode: null
+                          frameworkEnable: null
+                        nps:
+                          surveyEnabled: true
+                        update:
+                          updateChecker: true
+                      liveStreamAndBroadcasting:
+                        liveStream: null
+                        broadcasting: null
+                      message:
+                        allowEditing: true
+                        allowDeleting: true
+                        allowUnrecognizedSlashCommand: false
+                        allowBadWordsFilter: false
+                        readReceiptEnabled: false
+                        readReceiptStoreUsers: false
+                      push:
+                        pushEnable: true
+                      search:
+                        defaultProvider:
+                          globalSearchEnabled: null
+                      threads:
+                        threadsEnabled: true
+                      webRTC:
+                        webRTCEnableChannel: null
+                        webRTCEnablePrivate: null
+                        webRTCEnableDirect: null
+                    totalBroadcastRooms: 0
+                    totalTriggeredEmails: 0
+                    pushQueue: 0
+                    integrations:
+                      totalIntegrations: 0
+                      totalIncoming: 0
+                      totalIncomingActive: 0
+                      totalOutgoing: 0
+                      totalOutgoingActive: 0
+                      totalWithScriptEnabled: 0
+                    enterprise:
+                      modules:
+                      - auditing
+                      - canned-responses
+                      - ldap-enterprise
+                      - livechat-enterprise
+                      - voip-enterprise
+                      - omnichannel-mobile-enterprise
+                      - engagement-dashboard
+                      - push-privacy
+                      - scalability
+                      - teams-mention
+                      - saml-enterprise
+                      - oauth-enterprise
+                      - device-management
+                      - federation
+                      - videoconference-enterprise
+                      - message-read-receipt
+                      - outlook-calendar
+                      - hide-watermark
+                      - custom-roles
+                      - accessibility-certification
+                      - fips
+                      tags:
+                      - Commercial
+                      seatRequests: 0
+                      livechatTags: 0
+                      cannedResponses: 0
+                      slas: 0
+                      omnichannelRoomsWithPriorities: 0
+                      omnichannelRoomsWithSlas: 0
+                      businessUnits: 0
+                      omnichannelPdfTranscriptSucceeded: 0
+                      livechatMonitors: 0
+                    teams:
+                      totalTeams: 0
+                      totalRoomsInsideTeams: 0
+                      totalDefaultRoomsInsideTeams: 0
+                    totalRoomsWithStarred: 0
+                    totalRoomsWithPinned: 0
+                    totalUserTOTP: 0
+                    totalUserEmail2fa: 0
+                    totalPinned: 0
+                    totalStarred: 0
+                    totalLinkInvitation: 0
+                    totalLinkInvitationUses: 0
+                    totalEmailInvitation: 0
+                    totalE2ERooms: 0
+                    logoChange: false
+                    showHomeButton: true
+                    totalEncryptedMessages: 0
+                    totalManuallyAddedUsers: 0
+                    totalSubscriptionRoles: 3
+                    totalUserRoles: 11
+                    totalCustomRoles: 0
+                    totalWebRTCCalls: null
+                    uncaughtExceptionsCount: 0
+                    push: 3
+                    pushSecured: false
+                    homeTitleChanged: false
+                    homeBodyChanged: false
+                    customCSSChanged: false
+                    onLogoutCustomScriptChanged: false
+                    loggedOutCustomScriptChanged: false
+                    loggedInCustomScriptChanged: false
+                    dailyPeakConnections: 0
+                    maxMonthlyPeakConnections: 0
+                    matrixFederation:
+                      enabled: false
+                      maximumSizeOfPublicRoomsUsers: false
+                      biggestRoom: null
+                      smallestRoom: null
+                      amountOfExternalUsers: 0
+                      amountOfFederatedRooms: 0
+                      externalConnectedServers:
+                        quantity: 0
+                        servers: []
+                    allowUnsafeQueryAndFieldsApiParamsEnabled: false
+                    createdAt: '2026-08-03T12:10:31.265Z'
+                    _updatedAt: '2026-08-03T12:10:31.426Z'
+                    statsToken: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3b3Jrc3BhY2VJZCI6IiIsInVuaXF1ZUlkIjoiMmQzYWQ0ZmItZDUxNS00ZjA5LThmMDItMGYxODZjOGNjOTI5IiwicmVjb3JkSWQiOiI2YTcwODUzN2M4ZmMzYzY1YjE4MDhiYWYiLCJ0aW1lc3RhbXAiOiIyMDI2LTA4LTAzVDEyOjEwOjMxLjQwNzk5NzEyOFoiLCJpbmZvIjp7InRvdGFsVXNlcnMiOjAsImFjdGl2ZVVzZXJzIjowLCJ0b3RhbENvbm5lY3RlZFVzZXJzIjowLCJvbW5pQ2hhbm5lbENvbnZlcnNhdGlvbnMiOjAsInRvdGFsUm9vbXMiOjAsInRvdGFsTWVzc2FnZXMiOjAsInVwbG9hZHNUb3RhbFNpemUiOjAsIm1pY3Jvc2VydmljZUVuYWJsZWQiOnRydWUsImZpbGVTdG9yZVR5cGUiOiJHcmlkRlMifX0.JnBb7z--brY2k00kIkC_Rp502P8wdKVcC2kAxEKK0OBFJlAgLM4ezZ5m_xG2w1wX3wCTNKnrjO3D5Mi-bzYNmNNBcJQbujP2uUGWMnr42UUAbyPY9VWKCf4L3H9cgzB9WjJX94KiVlwLjnbqle9TE0wAubP-NR1lzZn06GrnD9bAFSdz2E5lI4s6qozfUW5z8ZmSgXs5MBSbhBQczUbmQkQoj2XjKs5Mkqow0qLeBsCrc0F2m_92YeO1S6StRGvLIVyce-qvm0DLT8hXhpoJyRRgLz_3JyOzOE6hfxcgWI43YUZ4o4n7QruSYDhSFnAjuAlZjHasBCKPfs9ht9vRtQ
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: error-not-allowed
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+  /api/v1/engagement-dashboard/users/new-users:
+    get:
+      tags:
+      - Users Engagement
+      summary: Get New Users
+      description: "<div style=\"text-align: center; margin: 1rem 0 1rem 0;\"><img src=\"https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg\" alt=\"Premium tag\" style=\"display: block; margin: auto;\"></div>\n\nRetrieve the metrics of newly registered users during a specific period.\n\nPermission required: `view-engagement-dashboard`\n\n### Changelog\n| Version      | Description | \n| ---------------- | ------------|\n|3.1.0            | Added       |\n\n### Example call\n\n```bash\ncurl -X GET 'https://<your-workspace-url>/api/v1/engagement-dashboard/users/new-users?start=2023-10-29T14:48:00.000Z&end=2023-11-05T14:48:00.000Z' \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\"\n```\n\n### Example success response\n\n```json\n{\n  \"days\": [\n    {\n      \"day\": \"2023-02-09T00:00:00.000Z\",\n      \"users\": 1\n    },\n    {\n      \"day\": \"2023-02-06T00:00:00.000Z\",\n      \"users\": 6\n    },\n    {\n      \"day\": \"2023-02-01T00:00:00.000Z\",\n      \"users\": 1\n    },\n    {\n      \"day\": \"2023-01-24T00:00:00.000Z\",\n      \"users\": 1\n    },\n    {\n      \"day\": \"2023-01-17T00:00:00.000Z\",\n      \"users\": 1\n    }\n  ],\n  \"period\": {\n    \"count\": 27,\n    \"variation\": 27\n  },\n  \"yesterday\": {\n    \"count\": 0,\n    \"variation\": 0\n  },\n  \"success\": true\n}\n```"
+      operationId: get-api-v1-engagement-dashboard-users-new-users
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The token of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The user ID of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      - name: start
+        in: query
+        description: The start date.
+        required: true
+        schema:
+          type: string
+        example: '2023-10-29T14:48:00.000Z'
+      - name: end
+        in: query
+        description: The end date.
+        required: true
+        schema:
+          type: string
+        example: '2023-11-05T14:48:00.000Z'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  days:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        day:
+                          type: string
+                        users:
+                          type: integer
+                  period:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      variation:
+                        type: integer
+                  yesterday:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      variation:
+                        type: integer
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    days:
+                    - day: '2023-02-09T00:00:00.000Z'
+                      users: 1
+                    - day: '2023-02-06T00:00:00.000Z'
+                      users: 6
+                    - day: '2023-02-01T00:00:00.000Z'
+                      users: 1
+                    - day: '2023-01-24T00:00:00.000Z'
+                      users: 1
+                    - day: '2023-01-17T00:00:00.000Z'
+                      users: 1
+                    period:
+                      count: 27
+                      variation: 27
+                    yesterday:
+                      count: 0
+                      variation: 0
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Missing key:
+                  value:
+                    success: false
+                    error: 'Match error: Missing key ''start'''
+                Example 2:
+                  value:
+                    success: false
+                    error: 'Match error: Failed Match.Where validation in field start'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: User does not have the permissions required for this action [error-unauthorized]
+  /api/v1/engagement-dashboard/users/active-users:
+    get:
+      tags:
+      - Users Engagement
+      summary: Get Active Users
+      description: "<div style=\"text-align: center; margin: 1rem 0 1rem 0;\"><img src=\"https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg\" alt=\"Premium tag\" style=\"display: block; margin: auto;\"></div>\n\nRetrieve the metrics of active users in the workspace during a specific period.\n\nPermission required: `view-engagement-dashboard` \n\n### Changelog\n| Version      | Description | \n| ---------------- | ------------|\n|3.1.0            | Added       |\n\n### Example call\n\n```bash\ncurl -X GET 'https://<your-workspace-url>/api/v1/engagement-dashboard/users/active-users?start=2023-10-29T14:48:00.000Z&end=2023-11-05T14:48:00.000Z' \\\n     -H \"X-User-Id: your-user-id\" \\\n     -H \"X-Auth-Token: your-auth-token\"\n```\n\n### Example success response\n\n```json\n{\n  \"month\": [\n    {\n      \"usersList\": [\n        \"rYhzFRd2QZjNwAAXX\"\n      ],\n      \"users\": 1,\n      \"day\": 5,\n      \"month\": 5,\n      \"year\": 2023\n    },\n    {\n      \"usersList\": [\n        \"rYhzFRd2QZjNwAAXX\"\n      ],\n      \"users\": 1,\n      \"day\": 4,\n      \"month\": 5,\n      \"year\": 2023\n    },\n    {\n      \"usersList\": [\n        \"rYhzFRd2QZjNwAAXX\"\n      ],\n      \"users\": 1,\n      \"day\": 3,\n      \"month\": 5,\n      \"year\": 2023\n    },\n    {\n      \"usersList\": [\n        \"rYhzFRd2QZjNwAAXX\"\n      ],\n      \"users\": 1,\n      \"day\": 2,\n      \"month\": 5,\n      \"year\": 2023\n    },\n    {\n      \"usersList\": [\n        \"rbAXPnMktTFbNpwtJ\",\n        \"9iN96PXnDK7XAYESA\"\n      ],\n      \"users\": 2,\n      \"day\": 17,\n      \"month\": 4,\n      \"year\": 2023\n    }\n  ],\n  \"success\": true\n}\n```"
+      operationId: get-api-v1-engagement-dashboard-users-active-users
+      parameters:
+      - name: X-User-Id
+        in: header
+        description: The user ID of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      - name: X-Auth-Token
+        in: header
+        description: The token of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: start
+        in: query
+        description: The start date.
+        required: true
+        schema:
+          type: string
+        example: '2023-10-29T14:48:00.000Z'
+      - name: end
+        in: query
+        description: The end date.
+        required: true
+        schema:
+          type: string
+        example: '2023-11-05T14:48:00.000Z'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  month:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        usersList:
+                          type: array
+                          items:
+                            type: string
+                        users:
+                          type: integer
+                        day:
+                          type: integer
+                        month:
+                          type: integer
+                        year:
+                          type: integer
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    month:
+                    - usersList:
+                      - rYhzFRd2QZjNwAAXX
+                      users: 1
+                      day: 5
+                      month: 5
+                      year: 2023
+                    - usersList:
+                      - rYhzFRd2QZjNwAAXX
+                      users: 1
+                      day: 4
+                      month: 5
+                      year: 2023
+                    - usersList:
+                      - rYhzFRd2QZjNwAAXX
+                      users: 1
+                      day: 3
+                      month: 5
+                      year: 2023
+                    - usersList:
+                      - rYhzFRd2QZjNwAAXX
+                      users: 1
+                      day: 2
+                      month: 5
+                      year: 2023
+                    - usersList:
+                      - rbAXPnMktTFbNpwtJ
+                      - 9iN96PXnDK7XAYESA
+                      users: 2
+                      day: 17
+                      month: 4
+                      year: 2023
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Missing key:
+                  value:
+                    success: false
+                    error: 'Match error: Missing key ''start'''
+                Example 2:
+                  value:
+                    success: false
+                    error: 'Match error: Failed Match.Where validation in field start'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+        '403':
+          description: Forbidden
+  /api/v1/engagement-dashboard/users/users-by-time-of-the-day-in-a-week:
+    get:
+      tags:
+      - Users Engagement
+      summary: Get User By Time of the Day
+      description: "<div style=\"text-align: center; margin: 1rem 0 1rem 0;\"><img src=\"https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg\" alt=\"Premium tag\" style=\"display: block; margin: auto;\"></div>\n\nRetrieve users by hours at a particular time of the day in a week.\n\nPermission required: `view-engagement-dashboard`  \n\n### Changelog\n| Version      | Description | \n| ---------------- | ------------|\n|3.1.0            | Added       |\n\n### Example call\n\n```bash\ncurl -X GET 'https://<your-workspace-url>/api/v1/engagement-dashboard/users/users-by-time-of-the-day-in-a-week?start=2023-10-29T14:48:00.000Z&end=2023-11-05T14:48:00.000Z' \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\"\n```\n\n### Example success response\n\n```json\n{\n  \"week\": [\n    {\n      \"users\": 1,\n      \"hour\": 23,\n      \"day\": 2,\n      \"month\": 5,\n      \"year\": 2023\n    },\n    {\n      \"users\": 1,\n      \"hour\": 22,\n      \"day\": 2,\n      \"month\": 5,\n      \"year\": 2023\n    },\n    {\n      \"users\": 1,\n      \"hour\": 21,\n      \"day\": 2,\n      \"month\": 5,\n      \"year\": 2023\n    },\n    {\n      \"users\": 1,\n      \"hour\": 20,\n      \"day\": 2,\n      \"month\": 5,\n      \"year\": 2023\n    },\n    {\n      \"users\": 1,\n      \"hour\": 19,\n      \"day\": 2,\n      \"month\": 5,\n      \"year\": 2023\n    },\n    {\n      \"users\": 1,\n      \"hour\": 18,\n      \"day\": 2,\n      \"month\": 5,\n      \"year\": 2023\n    },\n    {\n      \"users\": 1,\n      \"hour\": 17,\n      \"day\": 2,\n      \"month\": 5,\n      \"year\": 2023\n    },\n    {\n      \"users\": 1,\n      \"hour\": 16,\n      \"day\": 2,\n      \"month\": 5,\n      \"year\": 2023\n    },\n    {\n      \"users\": 1,\n      \"hour\": 15,\n      \"day\": 2,\n      \"month\": 5,\n      \"year\": 2023\n    },\n    {\n      \"users\": 1,\n      \"hour\": 14,\n      \"day\": 2,\n      \"month\": 5,\n      \"year\": 2023\n    },\n    {\n      \"users\": 1,\n      \"hour\": 1,\n      \"day\": 1,\n      \"month\": 5,\n      \"year\": 2023\n    }\n  ],\n  \"success\": true\n}\n```"
+      operationId: get-api-v1-engagement-dashboard-users-users-by-time-of-the-day-in-a-week
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The token of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The user ID of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      - name: start
+        in: query
+        description: The start date.
+        required: true
+        schema:
+          type: string
+        example: '2023-10-29T14:48:00.000Z'
+      - name: end
+        in: query
+        description: The end date.
+        required: true
+        schema:
+          type: string
+        example: '2023-11-05T14:48:00.000Z'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  week:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        users:
+                          type: integer
+                        hour:
+                          type: integer
+                        day:
+                          type: integer
+                        month:
+                          type: integer
+                        year:
+                          type: integer
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    week:
+                    - users: 1
+                      hour: 23
+                      day: 2
+                      month: 5
+                      year: 2023
+                    - users: 1
+                      hour: 22
+                      day: 2
+                      month: 5
+                      year: 2023
+                    - users: 1
+                      hour: 21
+                      day: 2
+                      month: 5
+                      year: 2023
+                    - users: 1
+                      hour: 20
+                      day: 2
+                      month: 5
+                      year: 2023
+                    - users: 1
+                      hour: 19
+                      day: 2
+                      month: 5
+                      year: 2023
+                    - users: 1
+                      hour: 18
+                      day: 2
+                      month: 5
+                      year: 2023
+                    - users: 1
+                      hour: 17
+                      day: 2
+                      month: 5
+                      year: 2023
+                    - users: 1
+                      hour: 16
+                      day: 2
+                      month: 5
+                      year: 2023
+                    - users: 1
+                      hour: 15
+                      day: 2
+                      month: 5
+                      year: 2023
+                    - users: 1
+                      hour: 14
+                      day: 2
+                      month: 5
+                      year: 2023
+                    - users: 1
+                      hour: 1
+                      day: 1
+                      month: 5
+                      year: 2023
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Missing key:
+                  value:
+                    success: false
+                    error: 'Match error: Missing key ''start'''
+                Example 2:
+                  value:
+                    success: false
+                    error: 'Match error: Failed Match.Where validation in field start'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: User does not have the permissions required for this action [error-unauthorized]
+  /api/v1/engagement-dashboard/users/chat-busier/hourly-data:
+    get:
+      tags:
+      - Users Engagement
+      summary: Get Hourly Data When Chat is Busier
+      description: "<div style=\"text-align: center; margin: 1rem 0 1rem 0;\"><img src=\"https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg\" alt=\"Premium tag\" style=\"display: block; margin: auto;\"></div>\n\nRetrieve hourly data when chat is busier.\n\nPermission required: `view-engagement-dashboard` \n\n### Changelog\n| Version      | Description | \n| ---------------- | ------------|\n|3.1.0            | Added       |\n\n### Example call\n\n```bash\ncurl -X GET 'https://<your-workspace-url>/api/v1/engagement-dashboard/users/chat-busier/hourly-data?start=2023-10-29T14:48:00.000Z' \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\"\n```\n\n### Example success response\n\n```json\n{\n  \"hours\": [\n    {\n      \"users\": 3,\n      \"hour\": 22\n    },\n    {\n      \"users\": 3,\n      \"hour\": 20\n    },\n    {\n      \"users\": 4,\n      \"hour\": 18\n    },\n    {\n      \"users\": 2,\n      \"hour\": 16\n    },\n    {\n      \"users\": 4,\n      \"hour\": 14\n    },\n    {\n      \"users\": 4,\n      \"hour\": 12\n    },\n    {\n      \"users\": 2,\n      \"hour\": 10\n    },\n    {\n      \"users\": 1,\n      \"hour\": 8\n    },\n    {\n      \"users\": 1,\n      \"hour\": 6\n    },\n    {\n      \"users\": 1,\n      \"hour\": 4\n    },\n    {\n      \"users\": 0,\n      \"hour\": 2\n    },\n    {\n      \"users\": 0,\n      \"hour\": 0\n    }\n  ],\n  \"success\": true\n}\n```"
+      operationId: get-api-v1-engagement-dashboard-users-chat-busier-hourly-data
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The token of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The user ID of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      - name: start
+        in: query
+        description: The start date.
+        required: true
+        schema:
+          type: string
+        example: '2023-10-29T14:48:00.000Z'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  hours:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        users:
+                          type: integer
+                        hour:
+                          type: integer
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    hours:
+                    - users: 3
+                      hour: 22
+                    - users: 3
+                      hour: 20
+                    - users: 4
+                      hour: 18
+                    - users: 2
+                      hour: 16
+                    - users: 4
+                      hour: 14
+                    - users: 4
+                      hour: 12
+                    - users: 2
+                      hour: 10
+                    - users: 1
+                      hour: 8
+                    - users: 1
+                      hour: 6
+                    - users: 1
+                      hour: 4
+                    - users: 0
+                      hour: 2
+                    - users: 0
+                      hour: 0
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Missing key:
+                  value:
+                    success: false
+                    error: 'Match error: Missing key ''start'''
+                Example 2:
+                  value:
+                    success: false
+                    error: 'Match error: Failed Match.Where validation in field start'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: User does not have the permissions required for this action [error-unauthorized]
+  /api/v1/engagement-dashboard/users/chat-busier/weekly-data:
+    get:
+      tags:
+      - Users Engagement
+      summary: Get Weekly Data When Chat is Busier
+      description: "<div style=\"text-align: center; margin: 1rem 0 1rem 0;\"><img src=\"https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg\" alt=\"Premium tag\" style=\"display: block; margin: auto;\"></div>\n\nRetrieves weekly data when chat is busier. \n\nPermission required: `view-engagement-dashboard` \n\n### Changelog\n| Version      | Description | \n| ---------------- | ------------|\n|3.1.0            | Added       |\n\n### Example call\n\n```bash\ncurl -X GET 'https://<your-workspace-url>/api/v1/engagement-dashboard/users/chat-busier/weekly-data?start=2023-10-29T14:48:00.000Z' \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\"\n```\n\n### Example success response\n\n```json\n{\n  \"days\": [\n    {\n      \"day\": \"2023-02-01T00:00:00.000Z\",\n      \"users\": 1\n    },\n    {\n      \"day\": \"2023-01-24T00:00:00.000Z\",\n      \"users\": 1\n    },\n    {\n      \"day\": \"2023-01-17T00:00:00.000Z\",\n      \"users\": 1\n    }\n  ],\n  \"period\": {\n    \"count\": 27,\n    \"variation\": 27\n  },\n  \"yesterday\": {\n    \"count\": 0,\n    \"variation\": 0\n  },\n  \"success\": true\n}\n```"
+      operationId: get-api-v1-engagement-dashboard-users-chat-busier-weekly-data
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The token of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The user ID of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      - name: start
+        in: query
+        description: The start date.
+        required: true
+        schema:
+          type: string
+        example: '2023-10-29T14:48:00.000Z'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  month:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        users:
+                          type: integer
+                        day:
+                          type: integer
+                        month:
+                          type: integer
+                        year:
+                          type: integer
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    days:
+                    - day: '2023-02-01T00:00:00.000Z'
+                      users: 1
+                    - day: '2023-01-24T00:00:00.000Z'
+                      users: 1
+                    - day: '2023-01-17T00:00:00.000Z'
+                      users: 1
+                    period:
+                      count: 27
+                      variation: 27
+                    yesterday:
+                      count: 0
+                      variation: 0
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Missing key:
+                  value:
+                    success: false
+                    error: 'Match error: Missing key ''start'''
+                Example 2:
+                  value:
+                    success: false
+                    error: 'Match error: Failed Match.Where validation in field start'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: User does not have the permissions required for this action [error-unauthorized]
+  /api/v1/engagement-dashboard/messages/messages-sent:
+    get:
+      tags:
+      - Messages Engagement
+      summary: Get Number of Sent Messages
+      description: "<div style=\"text-align: center; margin: 1rem 0 1rem 0;\"><img src=\"https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg\" alt=\"Premium tag\" style=\"display: block; margin: auto;\"></div>\n\nRetrieve the number of messages sent daily during a specific period.\n\nPermission required: `view-engagement-dashboard` \n\n### Changelog\n| Version      | Description | \n| ---------------- | ------------|\n|3.1.0            | Added       |\n\n### Example call\n\n```bash\ncurl -X GET 'https://<your-workspace-url>/api/v1/engagement-dashboard/messages/messages-sent?start=2023-10-29T14:48:00.000Z&end=2023-11-05T14:48:00.000Z' \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\"\n```\n\n### Example success response\n\n```json\n{\n  \"days\": [\n    {\n      \"day\": \"2023-05-22T00:00:00.000Z\",\n      \"messages\": 22\n    },\n    {\n      \"day\": \"2023-05-21T00:00:00.000Z\",\n      \"messages\": 5\n    }\n  ],\n  \"period\": {\n    \"count\": 760,\n    \"variation\": 716\n  },\n  \"yesterday\": {\n    \"count\": 101,\n    \"variation\": 82\n  },\n  \"success\": true\n}\n```"
+      operationId: get-api-v1-engagement-dashboard-messages-messages-sent
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The token of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The user ID of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      - name: start
+        in: query
+        description: The start date.
+        required: true
+        schema:
+          type: string
+        example: '2023-10-29T14:48:00.000Z'
+      - name: end
+        in: query
+        description: The end date.
+        required: true
+        schema:
+          type: string
+        example: '2023-11-05T14:48:00.000Z'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  days:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        day:
+                          type: string
+                        messages:
+                          type: integer
+                  period:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      variation:
+                        type: integer
+                  yesterday:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      variation:
+                        type: integer
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    days:
+                    - day: '2023-05-22T00:00:00.000Z'
+                      messages: 22
+                    - day: '2023-05-21T00:00:00.000Z'
+                      messages: 5
+                    period:
+                      count: 760
+                      variation: 716
+                    yesterday:
+                      count: 101
+                      variation: 82
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Missing key:
+                  value:
+                    success: false
+                    error: 'Match error: Missing key ''start'''
+                Example 2:
+                  value:
+                    success: false
+                    error: 'Match error: Failed Match.Where validation in field start'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: User does not have the permissions required for this action [error-unauthorized]
+  /api/v1/engagement-dashboard/messages/origin:
+    get:
+      tags:
+      - Messages Engagement
+      summary: Get Origin of Message Sent
+      description: "<div style=\"text-align: center; margin: 1rem 0 1rem 0;\"><img src=\"https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg\" alt=\"Premium tag\" style=\"display: block; margin: auto;\"></div>\n\nGet the origin of messages sent during a specific period. It highlights the number of messages sent in private channels, private chats, and public channels.\n\nPermission required: `view-engagement-dashboard` \n\n### Changelog\n| Version      | Description | \n| ---------------- | ------------|\n|3.1.0            | Added       |\n\n### Example call\n\n```bash\ncurl -X GET 'https://<your-workspace-url>/api/v1/engagement-dashboard/messages/origin?start=2023-10-29T14:48:00.000Z&end=2023-11-05T14:48:00.000Z' \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\"\n```\n\n### Example success response\n\n```json\n{\n  \"origins\": [\n    {\n      \"messages\": 7302,\n      \"t\": \"c\"\n    },\n    {\n      \"messages\": 1147,\n      \"t\": \"d\"\n    },\n    {\n      \"messages\": 122,\n      \"t\": \"p\"\n    }\n  ],\n  \"success\": true\n}\n```"
+      operationId: get-api-v1-engagement-dashboard-messages-origin
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The token of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The user ID of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      - name: start
+        in: query
+        description: The start date.
+        required: true
+        schema:
+          type: string
+        example: '2023-10-29T14:48:00.000Z'
+      - name: end
+        in: query
+        description: The end date.
+        required: true
+        schema:
+          type: string
+        example: '2023-11-05T14:48:00.000Z'
+      responses:
+        '200':
+          description: "`t` denotes the type of room where the messages are sent. The types of rooms can be any of the following:\n  - `d` represents Private Chats\n  - `c` represents Public Channels\n  - `p` represents Private Channels"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  origins:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        messages:
+                          type: integer
+                        t:
+                          type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    origins:
+                    - messages: 7302
+                      t: c
+                    - messages: 1147
+                      t: d
+                    - messages: 122
+                      t: p
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Missing key:
+                  value:
+                    success: false
+                    error: 'Match error: Missing key ''start'''
+                Example 2:
+                  value:
+                    success: false
+                    error: 'Match error: Failed Match.Where validation in field start'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: User does not have the permissions required for this action [error-unauthorized]
+  /api/v1/engagement-dashboard/messages/top-five-popular-channels:
+    get:
+      tags:
+      - Messages Engagement
+      summary: Get the Most Popular Channels
+      description: "<div style=\"text-align: center; margin: 1rem 0 1rem 0;\"><img src=\"https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg\" alt=\"Premium tag\" style=\"display: block; margin: auto;\"></div>\n\nRetrieves the top 5 popular channels in your workspace by the number of messages sent. It highlights the number of messages sent in private channels, private chats, and public channels. \n\nPermission required: `view-engagement-dashboard` \n\n### Changelog\n| Version      | Description | \n| ---------------- | ------------|\n|3.1.0            | Added       |\n\n### Example call\n\n```bash\ncurl -X GET 'https://<your-workspace-url>/api/v1/engagement-dashboard/messages/top-five-popular-channels?start=2023-10-29T14:48:00.000Z&end=2023-11-05T14:48:00.000Z' \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\"\n```\n\n### Example success response\n\n```json\n{\n  \"channels\": [\n    {\n      \"messages\": 727,\n      \"t\": \"d\",\n      \"usernames\": [\n        \"google-calendar.bot\",\n        \"pavi.kim\"\n      ]\n    },\n    {\n      \"messages\": 26,\n      \"t\": \"d\",\n      \"usernames\": [\n        \"fun.baek\",\n        \"google-calendar.bot\"\n      ]\n    },\n    {\n      \"messages\": 2,\n      \"t\": \"d\",\n      \"usernames\": [\n        \"test.test\",\n        \"rocket.cat\"\n      ]\n    },\n    {\n      \"messages\": 1,\n      \"t\": \"d\",\n      \"usernames\": [\n        \"ria.mit\",\n        \"rocket.cat\"\n      ]\n    },\n    {\n      \"messages\": 1,\n      \"t\": \"d\",\n      \"usernames\": [\n        \"janna.coelho\",\n        \"rocket.cat\"\n      ]\n    }\n  ],\n  \"success\": true\n}\n```"
+      operationId: get-api-v1-engagement-dashboard-messages-top-five-popular-channels
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The token of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The user ID of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      - name: start
+        in: query
+        description: The start date.
+        required: true
+        schema:
+          type: string
+        example: '2023-10-29T14:48:00.000Z'
+      - name: end
+        in: query
+        description: The end date.
+        required: true
+        schema:
+          type: string
+        example: '2023-11-05T14:48:00.000Z'
+      responses:
+        '200':
+          description: "`t` denotes the type of room where the messages are sent. The types of rooms can be any of the following:\n  - `d` represents Private Chats\n  - `c` represents Public Channels\n  - `p` represents Private Channels\""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  channels:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        messages:
+                          type: integer
+                        t:
+                          type: string
+                        name:
+                          type: string
+                        usernames:
+                          type: array
+                          items:
+                            type: object
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    channels:
+                    - messages: 727
+                      t: d
+                      usernames:
+                      - google-calendar.bot
+                      - pavi.kim
+                    - messages: 26
+                      t: d
+                      usernames:
+                      - fun.baek
+                      - google-calendar.bot
+                    - messages: 2
+                      t: d
+                      usernames:
+                      - test.test
+                      - rocket.cat
+                    - messages: 1
+                      t: d
+                      usernames:
+                      - ria.mit
+                      - rocket.cat
+                    - messages: 1
+                      t: d
+                      usernames:
+                      - janna.coelho
+                      - rocket.cat
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Missing key:
+                  value:
+                    success: false
+                    error: 'Match error: Missing key ''start'''
+                Example 2:
+                  value:
+                    success: false
+                    error: 'Match error: Failed Match.Where validation in field start'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: User does not have the permissions required for this action [error-unauthorized]
+  /api/v1/engagement-dashboard/channels/list:
+    get:
+      tags:
+      - Channels Engagement
+      summary: Get Channels Engagement
+      description: "<div style=\"text-align: center; margin: 1rem 0 1rem 0;\"><img src=\"https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg\" alt=\"Premium tag\" style=\"display: block; margin: auto;\"></div>\n\nRetrieve all active channels and the number of messages in each channel within a specific period.\n\nPermission required: `view-engagement-dashboard` \n\n### Changelog\n| Version      | Description | \n| ---------------- | ------------|\n|3.1.0            | Added       |\n\n### Example call\n\n```bash\ncurl -X GET 'https://<your-workspace-url>/api/v1/engagement-dashboard/channels/list?start=2023-10-29T14:48:00.000Z&end=2023-11-05T14:48:00.000Z&count=50&offset=1' \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\"\n```\n\n### Example success response\n\n```json\n{\n  \"channels\": [\n    {\n      \"room\": {\n        \"_id\": \"string\",\n        \"name\": \"string\",\n        \"ts\": \"string\",\n        \"t\": \"string\",\n        \"_updatedAt\": \"string\"\n      },\n      \"messages\": 0,\n      \"lastWeekMessages\": 0,\n      \"diffFromLastWeek\": 0\n    }\n  ],\n  \"total\": 0,\n  \"offset\": 0,\n  \"count\": 0,\n  \"success\": true\n}\n```"
+      operationId: get-api-v1-engagement-dashboard-channels-list
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The token of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The user ID of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      - name: start
+        in: query
+        description: The start date.
+        required: true
+        schema:
+          type: string
+        example: '2023-10-29T14:48:00.000Z'
+      - name: end
+        in: query
+        description: The end date.
+        required: true
+        schema:
+          type: string
+        example: '2023-11-05T14:48:00.000Z'
+      - name: count
+        in: query
+        required: false
+        schema:
+          type: integer
+        example: 50
+        description: The number of items to return. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: Number of items to "skip" in the query, i.e. requests return `count` items, skipping the first `offset` items. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  channels:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        room:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            name:
+                              type: string
+                            ts:
+                              type: string
+                            t:
+                              type: string
+                            _updatedAt:
+                              type: string
+                        messages:
+                          type: integer
+                        lastWeekMessages:
+                          type: integer
+                        diffFromLastWeek:
+                          type: integer
+                  total:
+                    type: integer
+                  offset:
+                    type: integer
+                  count:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    channels:
+                    - room:
+                        _id: string
+                        name: string
+                        ts: string
+                        t: string
+                        _updatedAt: string
+                      messages: 0
+                      lastWeekMessages: 0
+                      diffFromLastWeek: 0
+                    total: 0
+                    offset: 0
+                    count: 0
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Missing key:
+                  value:
+                    success: false
+                    error: 'Match error: Missing key ''start'''
+                Example 2:
+                  value:
+                    success: false
+                    error: 'Match error: Failed Match.Where validation in field start'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: User does not have the permissions required for this action [error-unauthorized]
+tags:
+- name: Channels Engagement
+- name: Messages Engagement
+- name: Statistics
+- name: Users Engagement
+components:
+  parameters:
+    start:
+      name: start
+      in: query
+      description: The start date.
+      required: true
+      schema:
+        type: string
+      example: '2023-10-29T14:48:00.000Z'
+    end:
+      name: end
+      in: query
+      description: The end date.
+      required: true
+      schema:
+        type: string
+      example: '2023-11-05T14:48:00.000Z'
+    Auth-Token:
+      name: X-Auth-Token
+      in: header
+      description: The token of the authenticated user.
+      required: true
+      schema:
+        type: string
+      example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+    UserId:
+      name: X-User-Id
+      in: header
+      description: The user ID of the authenticated user.
+      required: true
+      schema:
+        type: string
+      example: rbAXPnMktTFbNpwtJ
+    count:
+      name: count
+      in: query
+      required: false
+      schema:
+        type: integer
+      example: 50
+      description: The number of items to return. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.
+    offset:
+      name: offset
+      in: query
+      required: false
+      schema:
+        type: integer
+      description: Number of items to "skip" in the query, i.e. requests return `count` items, skipping the first `offset` items. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.
+    sort:
+      name: sort
+      in: query
+      required: false
+      schema: {}
+      description: 'List of fields to order by, and in which direction. JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending. For example, `{"value": -1, "_id": 1}`.  Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
+    fields:
+      name: fields
+      in: query
+      required: false
+      schema: {}
+      description: 'This parameter accepts a JSON object with properties that have a value of 1 or 0 to include or exclude them in the response. For example, to only retrieve the usernames of users: fields=`{ "username": 1 }`. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more.'
+    query:
+      name: query
+      in: query
+      required: false
+      schema: {}
+      description: 'This parameter allows you to use MongoDB query operators to search for specific data. For example, to query users with a name that contains the letter "g": query=`{ "name": { "$regex": "g" } }`. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more.'
+  schemas: null
+  responses:
+    authorizationError:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              message:
+                type: string
+          examples:
+            Authorization Error:
+              value:
+                status: error
+                message: You must be logged in to do this.
+    forbiddenError:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+              error:
+                type: string
+          examples:
+            Permission Error:
+              value:
+                success: false
+                error: User does not have the permissions required for this action [error-unauthorized]
+    keyError:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+              error:
+                type: string
+          examples:
+            Missing key:
+              value:
+                success: false
+                error: 'Match error: Missing key ''start'''
+            Example 2:
+              value:
+                success: false
+                error: 'Match error: Failed Match.Where validation in field start'
+    trueSuccess:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+          examples:
+            Example 1:
+              value:
+                success: true

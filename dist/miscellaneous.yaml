@@ -1,0 +1,3686 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Miscellaneous
+servers:
+- url: https://apiexplorer.support.rocket.chat
+paths:
+  /api/v1/email-inbox.list:
+    get:
+      tags:
+      - Email Inbox
+      summary: List Email Inbox
+      description: "Gets Omnichannel email inbox list.\n\nPermissions required:- `manage-email-inbox`\n\n### Change\n| Version      | Description |\n| ---------------- | ------------|\n|3.11.0-rc.0         | Added       |\n\n### Example call\n\n```bash\ncurl -X GET 'https://<your-workspace-url>/api/v1/email-inbox.list?offset=50&count=50&fields=example' \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\"\n```\n\n### Example success response\n\n```json\n{\n  \"emailInboxes\": [\n    {\n      \"_id\": \"60197e8ff82d6c83b96c53ff\",\n      \"active\": false,\n      \"name\": \"Rocket.Chat sample account\",\n      \"email\": \"info@rocket.chat\",\n      \"description\": \"\",\n      \"senderInfo\": \"\",\n      \"department\": \"GgYvrkAF63aeQmsh4\",\n      \"smtp\": {\n        \"server\": \"smtp.gmail.com\",\n        \"port\": 465,\n        \"username\": \"info@rocket.chat\",\n        \"password\": \"kkviepoenakbccwf\",\n        \"secure\": true\n      },\n      \"imap\": {\n        \"server\": \"imap.gmail.com\",\n        \"port\": 993,\n        \"username\": \"info@rocket.chat\",\n        \"password\": \"kkviepoenakbccwf\",\n        \"secure\": true\n      },\n      \"_createdAt\": \"2021-02-02T16:32:15.069Z\",\n      \"_updatedAt\": \"2021-09-06T17:43:49.257Z\",\n      \"_createdBy\": {\n        \"_id\": \"JxemcN9PDCdfzJeZr\",\n        \"username\": \"renato.becker\"\n      }\n    }\n  ],\n  \"count\": 1,\n  \"offset\": 0,\n  \"total\": 1,\n  \"success\": true\n}\n```"
+      operationId: get-api-v1-email-inbox.list
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      - name: offset
+        in: query
+        description: Number of items to "skip" in the query, i.e. requests return count items, skipping the first offset items. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.
+        required: false
+        schema:
+          type: integer
+        example: 50
+      - name: sort
+        in: query
+        description: 'List of fields to order by, and in which direction. This is a JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending. For example, {"value": -1, "_id": 1}. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
+        required: false
+        schema: {}
+      - name: count
+        in: query
+        description: The number of items to return.  Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.
+        required: false
+        schema:
+          type: integer
+        example: 50
+      - name: query
+        in: query
+        description: 'This parameter allows you to use MongoDB query operators to search for specific data. For example, to query users with a name that contains the letter "g": query=`{ "name": { "$regex": "g" } }`. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more.'
+        required: false
+        schema: {}
+      - name: fields
+        in: query
+        description: 'This parameter accepts a JSON object with properties that have a value of 1 or 0 to include or exclude them in the response. For example, to only retrieve the usernames of users: `fields={ "username": 1 }`. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more.'
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  emailInboxes:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        active:
+                          type: boolean
+                        name:
+                          type: string
+                        email:
+                          type: string
+                        description:
+                          type: string
+                        senderInfo:
+                          type: string
+                        department:
+                          type: string
+                        smtp:
+                          type: object
+                          properties:
+                            server:
+                              type: string
+                            port:
+                              type: integer
+                            username:
+                              type: string
+                            password:
+                              type: string
+                            secure:
+                              type: boolean
+                        imap:
+                          type: object
+                          properties:
+                            server:
+                              type: string
+                            port:
+                              type: integer
+                            username:
+                              type: string
+                            password:
+                              type: string
+                            secure:
+                              type: boolean
+                        _createdAt:
+                          type: string
+                        _updatedAt:
+                          type: string
+                        _createdBy:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    emailInboxes:
+                    - _id: 60197e8ff82d6c83b96c53ff
+                      active: false
+                      name: Rocket.Chat sample account
+                      email: info@rocket.chat
+                      description: ''
+                      senderInfo: ''
+                      department: GgYvrkAF63aeQmsh4
+                      smtp:
+                        server: smtp.gmail.com
+                        port: 465
+                        username: info@rocket.chat
+                        password: kkviepoenakbccwf
+                        secure: true
+                      imap:
+                        server: imap.gmail.com
+                        port: 993
+                        username: info@rocket.chat
+                        password: kkviepoenakbccwf
+                        secure: true
+                      _createdAt: '2021-02-02T16:32:15.069Z'
+                      _updatedAt: '2021-09-06T17:43:49.257Z'
+                      _createdBy:
+                        _id: JxemcN9PDCdfzJeZr
+                        username: renato.becker
+                    count: 1
+                    offset: 0
+                    total: 1
+                    success: true
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: User does not have the permissions required for this action [error-unauthorized]
+  /api/v1/email-inbox:
+    post:
+      tags:
+      - Email Inbox
+      summary: Set Email Inbox
+      description: "Configure the Omnichannel email inbox for your server.\n\nPermissions required:- `manage-email-inbox`\n### Changelog\n| Version      | Description |\n| ---------------- | ------------|\n|3.11.0-rc.0         | Added       |\n\n### Example call\n\n```bash\ncurl -X POST https://<your-workspace-url>/api/v1/email-inbox \\\n     -H \"Content-Type: application/json\" \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\" \\\n     -d '{\n  \"name\": \"new email\",\n  \"email\": \"mdyemaasil@rocket.chat\",\n  \"active\": false,\n  \"description\": \"This email has been set\",\n  \"senderInfo\": \"email sender\",\n  \"department\": \"awesome department\",\n  \"smtp\": {\n    \"password\": \"10fae4dc374fb87d\",\n    \"port\": 25,\n    \"secure\": true,\n    \"server\": \"smtp.mailtrap.io\",\n    \"username\": \"b5ef5safd6cb806c\"\n  },\n  \"imap\": {\n    \"password\": \"10fae4374sdfb87d\",\n    \"port\": 993,\n    \"secure\": true,\n    \"server\": \"imap.mailtrap.io\",\n    \"username\": \"b5ef5aafd6cb806c\"\n  }\n}'\n```\n\n### Example success response\n\n```json\n{\n  \"_id\": \"JdVkn_dkOlms_\",\n  \"success\": true\n}\n```"
+      operationId: post-api-v1-email-inbox
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                _id:
+                  type: string
+                  description: Email Id
+                name:
+                  type: string
+                  description: The name you wish to set for your email.
+                email:
+                  type: string
+                  description: The email to be used
+                active:
+                  type: boolean
+                  description: Set whether or not the email is active.
+                description:
+                  type: string
+                  description: The description for this entry.
+                senderInfo:
+                  type: string
+                  description: Sender info to be attached on outgoing emails.
+                department:
+                  type: string
+                  description: The department to which the email will be available.
+                smtp:
+                  type: object
+                  description: An object with your SMTP credentials to be used for outgoing emails.
+                  properties:
+                    password:
+                      type: string
+                    port:
+                      type: integer
+                    secure:
+                      type: boolean
+                    server:
+                      type: string
+                    username:
+                      type: string
+                imap:
+                  type: object
+                  description: An object having your IMAP credentials to be used for incomming emails.
+                  properties:
+                    password:
+                      type: string
+                    port:
+                      type: integer
+                    secure:
+                      type: boolean
+                    server:
+                      type: string
+                    username:
+                      type: string
+              required:
+              - name
+              - email
+              - active
+              - smtp
+              - imap
+            examples:
+              Example:
+                value:
+                  name: new email
+                  email: mdyemaasil@rocket.chat
+                  active: false
+                  description: This email has been set
+                  senderInfo: email sender
+                  department: awesome department
+                  smtp:
+                    password: 10fae4dc374fb87d
+                    port: 25
+                    secure: true
+                    server: smtp.mailtrap.io
+                    username: b5ef5safd6cb806c
+                  imap:
+                    password: 10fae4374sdfb87d
+                    port: 993
+                    secure: true
+                    server: imap.mailtrap.io
+                    username: b5ef5aafd6cb806c
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    _id: JdVkn_dkOlms_
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Duplicate:
+                  value:
+                    success: false
+                    error: 'E11000 duplicate key error index: rocketchat.rocketchat_email_inbox.$email_1 dup key: { : "mdyemail@rocket.chat" }'
+                Invalid Inbox:
+                  value:
+                    success: false
+                    error: error-invalid-email-inbox
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: User does not have the permissions required for this action [error-unauthorized]
+  /api/v1/email-inbox/{_id}:
+    get:
+      tags:
+      - Email Inbox
+      summary: Get Email Inbox by ID
+      description: "Gets Omnichannel email inbox by ID.\n\nPermissions required: `manage-email-inbox`\n### Changelog\n| Version      | Description |\n| ---------------- | ------------|\n|5.3.0       | Not Found Error Added       |\n|3.11.0-rc.0         | Added       |\n\n### Example call\n\n```bash\ncurl -X GET https://<your-workspace-url>/api/v1/email-inbox/{_id} \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\"\n```\n\n### Example success response\n\n```json\n{\n  \"_id\": \"60197e8ff82d6c83b96c53ff\",\n  \"active\": false,\n  \"name\": \"Rocket.Chat sample account\",\n  \"email\": \"info@rocket.chat\",\n  \"description\": \"\",\n  \"senderInfo\": \"\",\n  \"department\": \"GgYvrkAF63aeQmsh4\",\n  \"smtp\": {\n    \"server\": \"smtp.gmail.com\",\n    \"port\": 465,\n    \"username\": \"info@rocket.chat\",\n    \"password\": \"kkviepoenakbccwf\",\n    \"secure\": true\n  },\n  \"imap\": {\n    \"server\": \"imap.gmail.com\",\n    \"port\": 993,\n    \"username\": \"info@rocket.chat\",\n    \"password\": \"kkviepoenakbccwf\",\n    \"secure\": true\n  },\n  \"_createdAt\": \"2021-02-02T16:32:15.069Z\",\n  \"_updatedAt\": \"2021-09-06T17:43:49.257Z\",\n  \"_createdBy\": {\n    \"_id\": \"JxemcN9PDCdfzJeZr\",\n    \"username\": \"ren.be\"\n  },\n  \"success\": true\n}\n```"
+      operationId: get-api-v1-email-inbox-id
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      - name: _id
+        in: path
+        description: Enter the email inbox ID.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  active:
+                    type: boolean
+                  name:
+                    type: string
+                  email:
+                    type: string
+                  description:
+                    type: string
+                  senderInfo:
+                    type: string
+                  department:
+                    type: string
+                  smtp:
+                    type: object
+                    properties:
+                      server:
+                        type: string
+                      port:
+                        type: integer
+                      username:
+                        type: string
+                      password:
+                        type: string
+                      secure:
+                        type: boolean
+                  imap:
+                    type: object
+                    properties:
+                      server:
+                        type: string
+                      port:
+                        type: integer
+                      username:
+                        type: string
+                      password:
+                        type: string
+                      secure:
+                        type: boolean
+                  _createdAt:
+                    type: string
+                  _updatedAt:
+                    type: string
+                  _createdBy:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      username:
+                        type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    _id: 60197e8ff82d6c83b96c53ff
+                    active: false
+                    name: Rocket.Chat sample account
+                    email: info@rocket.chat
+                    description: ''
+                    senderInfo: ''
+                    department: GgYvrkAF63aeQmsh4
+                    smtp:
+                      server: smtp.gmail.com
+                      port: 465
+                      username: info@rocket.chat
+                      password: kkviepoenakbccwf
+                      secure: true
+                    imap:
+                      server: imap.gmail.com
+                      port: 993
+                      username: info@rocket.chat
+                      password: kkviepoenakbccwf
+                      secure: true
+                    _createdAt: '2021-02-02T16:32:15.069Z'
+                    _updatedAt: '2021-09-06T17:43:49.257Z'
+                    _createdBy:
+                      _id: JxemcN9PDCdfzJeZr
+                      username: ren.be
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Resource not found:
+                  value:
+                    success: false
+                    error: Resource not found
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: User does not have the permissions required for this action [error-unauthorized]
+    delete:
+      tags:
+      - Email Inbox
+      summary: Delete Email Inbox by ID
+      description: "Delete Omnichannel email inbox using ID.\n\nPermissions required: `manage-email-inbox`\n### Changelog\n| Version      | Description |\n| ---------------- | ------------|\n|3.11.0-rc.0         | Added       |\n\n### Example call\n\n```bash\ncurl -X DELETE https://<your-workspace-url>/api/v1/email-inbox/{_id} \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\"\n```\n\n### Example success response\n\n```json\n{\n  \"_id\": \"61717dd1066bc500096cb36d\",\n  \"success\": true\n}\n```"
+      operationId: delete-api-v1-email-inbox-_id
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      - name: _id
+        in: path
+        description: Enter the email inbox ID.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    _id: 61717dd1066bc500096cb36d
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Email not found:
+                  value:
+                    success: false
+                    error: Resource not found
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: User does not have the permissions required for this action [error-unauthorized]
+  /api/v1/email-inbox.search:
+    get:
+      tags:
+      - Email Inbox
+      summary: Search Email Inbox
+      description: "Searches Omnichannel email inbox by email address.\n\nPermissions required: `manage-email-inbox`\n\n### Changelog\n| Version      | Description |\n| ---------------- | ------------|\n|3.11.0-rc.0         | Added       |\n\n### Example call\n\n```bash\ncurl -X GET 'https://<your-workspace-url>/api/v1/email-inbox.search?email=info@rockt.chat' \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\"\n```\n\n### Example success response\n\n```json\n{\n  \"emailInbox\": {\n    \"_id\": \"60197e8ff82d6c83b96c53ff\",\n    \"active\": false,\n    \"name\": \"Rocket.Chat sample account\",\n    \"email\": \"info@rocket.chat\",\n    \"description\": \"\",\n    \"senderInfo\": \"\",\n    \"department\": \"GgYvrkAF63aeQmsh4\",\n    \"smtp\": {\n      \"server\": \"smtp.gmail.com\",\n      \"port\": 465,\n      \"username\": \"info@rocket.chat\",\n      \"password\": \"kkviepoenakbccwf\",\n      \"secure\": true\n    },\n    \"imap\": {\n      \"server\": \"imap.gmail.com\",\n      \"port\": 993,\n      \"username\": \"info@rocket.chat\",\n      \"password\": \"kkviepoenakbccwf\",\n      \"secure\": true\n    },\n    \"_createdAt\": \"2021-02-02T16:32:15.069Z\",\n    \"_updatedAt\": \"2021-09-06T17:43:49.257Z\",\n    \"_createdBy\": {\n      \"_id\": \"JxemcN9PDCdfzJeZr\",\n      \"username\": \"renato.becker\"\n    }\n  },\n  \"success\": true\n}\n```"
+      operationId: get-api-v1-email-inbox.search
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      - name: email
+        in: query
+        description: Enter the email inbox address.
+        required: true
+        schema:
+          type: string
+        example: info@rockt.chat
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  emailInbox:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      active:
+                        type: boolean
+                      name:
+                        type: string
+                      email:
+                        type: string
+                      description:
+                        type: string
+                      senderInfo:
+                        type: string
+                      department:
+                        type: string
+                      smtp:
+                        type: object
+                        properties:
+                          server:
+                            type: string
+                          port:
+                            type: integer
+                          username:
+                            type: string
+                          password:
+                            type: string
+                          secure:
+                            type: boolean
+                      imap:
+                        type: object
+                        properties:
+                          server:
+                            type: string
+                          port:
+                            type: integer
+                          username:
+                            type: string
+                          password:
+                            type: string
+                          secure:
+                            type: boolean
+                      _createdAt:
+                        type: string
+                      _updatedAt:
+                        type: string
+                      _createdBy:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          username:
+                            type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    emailInbox:
+                      _id: 60197e8ff82d6c83b96c53ff
+                      active: false
+                      name: Rocket.Chat sample account
+                      email: info@rocket.chat
+                      description: ''
+                      senderInfo: ''
+                      department: GgYvrkAF63aeQmsh4
+                      smtp:
+                        server: smtp.gmail.com
+                        port: 465
+                        username: info@rocket.chat
+                        password: kkviepoenakbccwf
+                        secure: true
+                      imap:
+                        server: imap.gmail.com
+                        port: 993
+                        username: info@rocket.chat
+                        password: kkviepoenakbccwf
+                        secure: true
+                      _createdAt: '2021-02-02T16:32:15.069Z'
+                      _updatedAt: '2021-09-06T17:43:49.257Z'
+                      _createdBy:
+                        _id: JxemcN9PDCdfzJeZr
+                        username: renato.becker
+                    success: true
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: User does not have the permissions required for this action [error-unauthorized]
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+  /api/v1/email-inbox.send-test/{_id}:
+    get:
+      tags:
+      - Email Inbox
+      summary: Send Test Email
+      description: "Send a test email to the Omnichannel inbox.\nPermissions required: `manage-email-inbox`\n\n### Changelog\n| Version      | Description |\n| ---------------- | ------------|\n|3.11.0-rc.0         | Added       |\n\n### Example call\n\n```bash\ncurl -X GET https://<your-workspace-url>/api/v1/email-inbox.send-test/{_id} \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\"\n```\n\n### Example success response\n\n```json\n{\n  \"_id\": \"60197e8ff82d6c83b96c53ff\",\n  \"success\": true\n}\n```"
+      operationId: get-api-v1-email-inbox.send-test-id
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      - name: _id
+        in: path
+        description: Enter the email inbox ID.
+        required: true
+        schema:
+          type: string
+        example: 60197e8ff82d6c83b96c53ff
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    _id: 60197e8ff82d6c83b96c53ff
+                    success: true
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: User does not have the permissions required for this action [error-unauthorized]
+  /api/v1/shield.svg:
+    get:
+      summary: Shield SVG
+      description: 'A simple method, requires no authentication, that returns the shield svg(badge) to add in your website. It must have `API_Enable_Shields` enabled.
+
+
+        ### Changelog
+
+        | Version      | Description |
+
+        | ---------------- | ------------|
+
+        |0.55.0        | Added       |
+
+
+        ### Example call
+
+
+        ```bash
+
+        curl -X GET ''https://<your-workspace-url>/api/v1/shield.svg?type=online&icon=false&channel=general&name=Rocket.Chat''
+
+        ```
+
+
+        ### Example success response
+
+
+        ```json
+
+        "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"141\" height=\"20\"> <linearGradient id=\"b\" x2=\"0\" y2=\"100%\"> <stop offset=\"0\" stop-color=\"#bbb\" stop-opacity=\".1\"/> <stop offset=\"1\" stop-opacity=\".1\"/> </linearGradient> <mask id=\"a\"> <rect width=\"141\" height=\"20\" rx=\"3\" fill=\"#fff\"/> </mask> <g mask=\"url(#a)\"> <path fill=\"#555\" d=\"M0 0h67v20H0z\"/> <path fill=\"#4c1\" d=\"M67 0h74v20H67z\"/> <path fill=\"url(#b)\" d=\"M0 0h141v20H0z\"/> </g> <image x=\"5\" y=\"3\" width=\"14\" height=\"14\" xlink:href=\"/assets/favicon.svg\"/> <g fill=\"#fff\" font-family=\"DejaVu Sans,Verdana,Geneva,sans-serif\" font-size=\"11\"> <text x=\"24\" y=\"15\" fill=\"#010101\" fill-opacity=\".3\">Rocket</text> <text x=\"24\" y=\"14\">Rocket</text> <text x=\"74\" y=\"15\" fill=\"#010101\" fill-opacity=\".3\">JOIN CHAT</text> <text x=\"74\" y=\"14\">JOIN CHAT</text> </g> </svg>"
+
+        ```'
+      operationId: get-api-v1-shield.svg
+      parameters:
+      - name: type
+        in: query
+        description: Can either be `online`, `user`, `channel`
+        schema:
+          type: string
+        example: online
+      - name: icon
+        in: query
+        schema:
+          type: string
+        example: 'false'
+      - name: channel
+        in: query
+        description: Name of the channel
+        required: true
+        schema:
+          type: string
+        example: general
+      - name: name
+        in: query
+        description: Name to show
+        required: true
+        schema:
+          type: string
+        example: Rocket.Chat
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: object
+              examples:
+                Example:
+                  value: <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="141" height="20"> <linearGradient id="b" x2="0" y2="100%"> <stop offset="0" stop-color="#bbb" stop-opacity=".1"/> <stop offset="1" stop-opacity=".1"/> </linearGradient> <mask id="a"> <rect width="141" height="20" rx="3" fill="#fff"/> </mask> <g mask="url(#a)"> <path fill="#555" d="M0 0h67v20H0z"/> <path fill="#4c1" d="M67 0h74v20H67z"/> <path fill="url(#b)" d="M0 0h141v20H0z"/> </g> <image x="5" y="3" width="14" height="14" xlink:href="/assets/favicon.svg"/> <g fill="#fff" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="11"> <text x="24" y="15" fill="#010101" fill-opacity=".3">Rocket</text> <text x="24" y="14">Rocket</text> <text x="74" y="15" fill="#010101" fill-opacity=".3">JOIN CHAT</text> <text x="74" y="14">JOIN CHAT</text> </g> </svg>
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: image/svg+xml;charset=utf-8
+              description: image/svg+xml;charset=utf-8
+  /api/v1/spotlight:
+    get:
+      summary: Spotlight
+      description: "Searches for users or rooms that are visible to the user. It will only return rooms that user didn't join yet.\n\nIf the  <a href=\"https://docs.rocket.chat/docs/accounts\" target=\"_blank\">`Allow Anonymous Read` setting</a> is enabled, anonymous callers can use this endpoint to resolve public channels through the navbar search.\n\n### Changelog\n| Version      | Description |\n| ---------------- | ------------|\n|8.6.0       | Added `usernames`, `type`, and `rid` query parameters, and allowed anonymous read when `Allow Anonymous Read` is enabled. |\n|0.64.0       | Added support to '#' and '@' searches, for channels and users respectively.       |\n|0.61.0      | Added       |\n\n### Example call\n\n```bash\ncurl -X GET 'https://<your-workspace-url>/api/v1/spotlight?query=john&usernames=rocket.cat,john.doe&type=users&rid=GENERAL' \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\"\n```\n\n### Example success response\n\n```json\n{\n  \"users\": [\n    {\n      \"_id\": \"rocket.cat\",\n      \"name\": \"Rocket.Cat\",\n      \"username\": \"rocket.cat\",\n      \"status\": \"online\",\n      \"avatarETag\": \"5BB9B5ny5DkKdrwkq\"\n    }\n  ],\n  \"rooms\": [],\n  \"success\": true\n}\n```"
+      operationId: get-api-v1-spotlight
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      - name: query
+        in: query
+        description: The term to be searched. Supports '#' for channels and '@' for users
+        required: true
+        schema:
+          type: string
+        example: john
+      - name: usernames
+        in: query
+        description: Comma-separated list of usernames to exclude from the user results.
+        required: false
+        schema:
+          type: string
+        example: rocket.cat,john.doe
+      - name: type
+        in: query
+        description: Restricts the search to a single result type. Accepts `users` or `rooms`.
+        required: false
+        schema:
+          type: string
+        example: users
+      - name: rid
+        in: query
+        description: The room ID to scope the user search to a specific room.
+        required: false
+        schema:
+          type: string
+        example: GENERAL
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        username:
+                          type: string
+                        status:
+                          type: string
+                        avatarETag:
+                          type: string
+                  rooms:
+                    type: array
+                    items:
+                      type: object
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    users:
+                    - _id: rocket.cat
+                      name: Rocket.Cat
+                      username: rocket.cat
+                      status: online
+                      avatarETag: 5BB9B5ny5DkKdrwkq
+                    rooms: []
+                    success: true
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+  /api/v1/smtp.check:
+    get:
+      summary: Check SMTP
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSMTPConfigured:
+                    type: boolean
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    isSMTPConfigured: true
+                    success: true
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+      operationId: get-api-v1-smtp.check
+      description: "Use this endpoint to verify whether or not SMTP has been configured in the workspace.\n\n### Example call\n\n```bash\ncurl -X GET https://<your-workspace-url>/api/v1/smtp.check \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\"\n```\n\n### Example success response\n\n```json\n{\n  \"isSMTPConfigured\": true,\n  \"success\": true\n}\n```"
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+  /api/v1/fingerprint:
+    post:
+      summary: Update Fingerprint
+      description: "Confirms how the workspace deployment should be handled after Rocket.Chat detects a change to its deployment fingerprint.\n\nOn startup, Rocket.Chat generates a deployment fingerprint based on the configured Site_Url and MongoDB connection string. If the generated fingerprint differs from the stored value, Rocket.Chat assumes the workspace may have been duplicated, migrated, or reconfigured.\n\nUse this endpoint to confirm how the deployment should be treated:\n\n- `new-workspace`: Treats the deployment as a new workspace. This clears the existing Rocket.Chat Cloud registration data and related credentials so the workspace can register again as a new instance. Use this option for cloned environments, staging instances created from production backups, or other duplicated deployments.\n\n- `updated-configuration`: Confirms that the deployment is the same workspace and that only its configuration has changed. This preserves the existing Rocket.Chat Cloud registration and is intended for legitimate migrations, infrastructure changes, or Site_Url updates.\n\nAfter processing either option, Rocket.Chat marks the deployment fingerprint as verified and dismisses the fingerprint verification prompt.\n\nPermission required: `manage-cloud`\n  \n### Changelog\n| Version | Description | \n| ------- | ----------- | \n| 8.6.0 | Added an authorization check. Callers without the `manage-cloud` permission now receive a `403` error instead of a successful response. |\n\n### Example call\n\n```bash\ncurl -X POST https://<your-workspace-url>/api/v1/fingerprint \\\n     -H \"Content-Type: application/json\" \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\" \\\n     -d '{\n  \"setDeploymentAs\": \"new-workspace\"\n}'\n```\n\n### Example success response\n\n```json\n{\n  \"success\": true\n}\n```"
+      operationId: post-api-v1-fingerprint
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                setDeploymentAs:
+                  type: string
+                  description: Specifies how Rocket.Chat should handle a detected deployment fingerprint change. Use `new-workspace` to reset the current workspace registration and register the deployment as a new workspace, or `updated-configuration` to preserve the existing workspace registration and confirm that only the deployment configuration has changed. Either `new-workspace` or `updated-configuration`.
+                  example: new-workspace
+              required:
+              - setDeploymentAs
+            examples:
+              Example:
+                value:
+                  setDeploymentAs: new-workspace
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Invalid Parameter:
+                  value:
+                    success: false
+                    error: Invalid body params
+                    errorType: error-invalid-body-params
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: User does not have the permissions required for this action [error-unauthorized]
+                    errorType: error-unauthorized
+  /api/v1/licenses.info:
+    get:
+      tags:
+      - Licenses
+      summary: Get Licenses
+      description: "Retrieves a list of all registered licenses and the details in the workspace.\n\nPermission required: `view-privileged-setting`.\n\nThe `licenses.isEnterprise` and `licenses.get` endpoints have been removed from 7.0. Use this endpoint instead.\n\n### Example call\n\n```bash\ncurl -X GET https://<your-workspace-url>/api/v1/licenses.info \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\"\n```\n\n### Example success response\n\n```json\n{\n  \"license\": {\n    \"license\": {\n      \"version\": \"3.0\",\n      \"information\": {\n        \"id\": \"6569155ab286e50001b78ec1\",\n        \"autoRenew\": true,\n        \"createdAt\": \"2024-03-17T00:51:43.529361607Z\",\n        \"visualExpiration\": \"2024-03-10T00:00:00Z\",\n        \"notifyAdminsAt\": \"2024-03-10T00:00:00Z\",\n        \"notifyUsersAt\": \"2024-03-10T00:00:00Z\",\n        \"trial\": true,\n        \"cancellable\": true,\n        \"offline\": false,\n        \"grantedBy\": {},\n        \"grantedTo\": {},\n        \"tags\": [\n          {\n            \"name\": \"Enterprise trial\",\n            \"color\": \"#F3BE08\"\n          }\n        ]\n      },\n      \"validation\": {\n        \"serverUrls\": [\n          {\n            \"value\": \"testspace.rocket.chat\",\n            \"type\": \"url\"\n          }\n        ],\n        \"cloudWorkspaceId\": \"64df890111e1f20001d201b4\",\n        \"serverUniqueId\": \"tgxSuzXmWe68S3kWR\",\n        \"validPeriods\": [\n          {\n            \"validUntil\": \"2024-03-24T00:00:00Z\",\n            \"invalidBehavior\": \"invalidate_license\"\n          }\n        ],\n        \"legalTextAgreement\": {\n          \"type\": \"required\",\n          \"acceptedVia\": \"cloud\"\n        },\n        \"statisticsReport\": {\n          \"required\": true,\n          \"allowedStaleInDays\": 2\n        }\n      },\n      \"grantedModules\": [\n        {\n          \"module\": \"auditing\"\n        },\n        {\n          \"module\": \"canned-responses\"\n        },\n        {\n          \"module\": \"ldap-enterprise\"\n        },\n        {\n          \"module\": \"livechat-enterprise\"\n        },\n        {\n          \"module\": \"voip-enterprise\"\n        },\n        {\n          \"module\": \"omnichannel-mobile-enterprise\"\n        },\n        {\n          \"module\": \"engagement-dashboard\"\n        },\n        {\n          \"module\": \"push-privacy\"\n        },\n        {\n          \"module\": \"scalability\"\n        },\n        {\n          \"module\": \"teams-mention\"\n        },\n        {\n          \"module\": \"saml-enterprise\"\n        },\n        {\n          \"module\": \"oauth-enterprise\"\n        },\n        {\n          \"module\": \"device-management\"\n        },\n        {\n          \"module\": \"federation\"\n        },\n        {\n          \"module\": \"videoconference-enterprise\"\n        },\n        {\n          \"module\": \"message-read-receipt\"\n        },\n        {\n          \"module\": \"outlook-calendar\"\n        },\n        {\n          \"module\": \"hide-watermark\"\n        },\n        {\n          \"module\": \"custom-roles\"\n        },\n        {\n          \"module\": \"accessibility-certification\"\n        }\n      ],\n      \"limits\": {\n        \"guestUsers\": [\n          {\n            \"max\": 235,\n            \"behavior\": \"start_fair_policy\"\n          },\n          {\n            \"max\": 235,\n            \"behavior\": \"prevent_action\"\n          }\n        ],\n        \"roomsPerGuest\": [\n          {\n            \"max\": 1,\n            \"behavior\": \"start_fair_policy\"\n          },\n          {\n            \"max\": 1,\n            \"behavior\": \"prevent_action\"\n          }\n        ],\n        \"monthlyActiveContacts\": [\n          {\n     \n  ... (truncated)\n```"
+      operationId: get-api-v1-licenses.info
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  license:
+                    type: object
+                    properties:
+                      license:
+                        type: object
+                        properties:
+                          version:
+                            type: string
+                          information:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              autoRenew:
+                                type: boolean
+                              createdAt:
+                                type: string
+                              visualExpiration:
+                                type: string
+                              notifyAdminsAt:
+                                type: string
+                              notifyUsersAt:
+                                type: string
+                              trial:
+                                type: boolean
+                              cancellable:
+                                type: boolean
+                              offline:
+                                type: boolean
+                              grantedBy:
+                                type: object
+                                properties: {}
+                              grantedTo:
+                                type: object
+                                properties: {}
+                              tags:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    name:
+                                      type: string
+                                    color:
+                                      type: string
+                          validation:
+                            type: object
+                            properties:
+                              serverUrls:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    value:
+                                      type: string
+                                    type:
+                                      type: string
+                              cloudWorkspaceId:
+                                type: string
+                              serverUniqueId:
+                                type: string
+                              validPeriods:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    validUntil:
+                                      type: string
+                                    invalidBehavior:
+                                      type: string
+                              legalTextAgreement:
+                                type: object
+                                properties:
+                                  type:
+                                    type: string
+                                  acceptedVia:
+                                    type: string
+                              statisticsReport:
+                                type: object
+                                properties:
+                                  required:
+                                    type: boolean
+                                  allowedStaleInDays:
+                                    type: integer
+                          grantedModules:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                module:
+                                  type: string
+                          limits:
+                            type: object
+                            properties:
+                              guestUsers:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    max:
+                                      type: integer
+                                    behavior:
+                                      type: string
+                              roomsPerGuest:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    max:
+                                      type: integer
+                                    behavior:
+                                      type: string
+                              monthlyActiveContacts:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    max:
+                                      type: integer
+                                    behavior:
+                                      type: string
+                          cloudMeta:
+                            type: object
+                            properties: {}
+                      activeModules:
+                        type: array
+                        items:
+                          type: string
+                      preventedActions:
+                        type: object
+                        properties:
+                          activeUsers:
+                            type: boolean
+                          guestUsers:
+                            type: boolean
+                          roomsPerGuest:
+                            type: boolean
+                          privateApps:
+                            type: boolean
+                          marketplaceApps:
+                            type: boolean
+                          monthlyActiveContacts:
+                            type: boolean
+                      limits:
+                        type: object
+                        properties:
+                          activeUsers:
+                            type: object
+                            properties:
+                              max:
+                                type: integer
+                          guestUsers:
+                            type: object
+                            properties:
+                              max:
+                                type: integer
+                          privateApps:
+                            type: object
+                            properties:
+                              max:
+                                type: integer
+                          marketplaceApps:
+                            type: object
+                            properties:
+                              max:
+                                type: integer
+                          monthlyActiveContacts:
+                            type: object
+                            properties:
+                              max:
+                                type: integer
+                      tags:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                            color:
+                              type: string
+                      trial:
+                        type: boolean
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    license:
+                      license:
+                        version: '3.0'
+                        information:
+                          id: 6569155ab286e50001b78ec1
+                          autoRenew: true
+                          createdAt: '2024-03-17T00:51:43.529361607Z'
+                          visualExpiration: '2024-03-10T00:00:00Z'
+                          notifyAdminsAt: '2024-03-10T00:00:00Z'
+                          notifyUsersAt: '2024-03-10T00:00:00Z'
+                          trial: true
+                          cancellable: true
+                          offline: false
+                          grantedBy: {}
+                          grantedTo: {}
+                          tags:
+                          - name: Enterprise trial
+                            color: '#F3BE08'
+                        validation:
+                          serverUrls:
+                          - value: testspace.rocket.chat
+                            type: url
+                          cloudWorkspaceId: 64df890111e1f20001d201b4
+                          serverUniqueId: tgxSuzXmWe68S3kWR
+                          validPeriods:
+                          - validUntil: '2024-03-24T00:00:00Z'
+                            invalidBehavior: invalidate_license
+                          legalTextAgreement:
+                            type: required
+                            acceptedVia: cloud
+                          statisticsReport:
+                            required: true
+                            allowedStaleInDays: 2
+                        grantedModules:
+                        - module: auditing
+                        - module: canned-responses
+                        - module: ldap-enterprise
+                        - module: livechat-enterprise
+                        - module: voip-enterprise
+                        - module: omnichannel-mobile-enterprise
+                        - module: engagement-dashboard
+                        - module: push-privacy
+                        - module: scalability
+                        - module: teams-mention
+                        - module: saml-enterprise
+                        - module: oauth-enterprise
+                        - module: device-management
+                        - module: federation
+                        - module: videoconference-enterprise
+                        - module: message-read-receipt
+                        - module: outlook-calendar
+                        - module: hide-watermark
+                        - module: custom-roles
+                        - module: accessibility-certification
+                        limits:
+                          guestUsers:
+                          - max: 235
+                            behavior: start_fair_policy
+                          - max: 235
+                            behavior: prevent_action
+                          roomsPerGuest:
+                          - max: 1
+                            behavior: start_fair_policy
+                          - max: 1
+                            behavior: prevent_action
+                          monthlyActiveContacts:
+                          - max: -1
+                            behavior: start_fair_policy
+                          - max: -1
+                            behavior: prevent_action
+                        cloudMeta: {}
+                      activeModules:
+                      - auditing
+                      - canned-responses
+                      - ldap-enterprise
+                      - livechat-enterprise
+                      - voip-enterprise
+                      - omnichannel-mobile-enterprise
+                      - engagement-dashboard
+                      - push-privacy
+                      - scalability
+                      - teams-mention
+                      - saml-enterprise
+                      - oauth-enterprise
+                      - device-management
+                      - federation
+                      - videoconference-enterprise
+                      - message-read-receipt
+                      - outlook-calendar
+                      - hide-watermark
+                      - custom-roles
+                      - accessibility-certification
+                      preventedActions:
+                        activeUsers: false
+                        guestUsers: false
+                        roomsPerGuest: false
+                        privateApps: false
+                        marketplaceApps: false
+                        monthlyActiveContacts: false
+                      limits:
+                        activeUsers:
+                          max: -1
+                        guestUsers:
+                          max: 235
+                        privateApps:
+                          max: -1
+                        marketplaceApps:
+                          max: -1
+                        monthlyActiveContacts:
+                          max: -1
+                      tags:
+                      - name: Enterprise trial
+                        color: '#F3BE08'
+                      trial: true
+                    success: true
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+  /api/v1/licenses.add:
+    post:
+      tags:
+      - Licenses
+      summary: Add License
+      description: "<div style=\"text-align: center; margin: 1rem 0 1rem 0;\"><img src=\"https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg\" alt=\"Premium tag\" style=\"display: block; margin: auto;\"></div>\n\nYou may want to <a href=\"https://docs.rocket.chat/docs/rocketchat-air-gapped-deployment\" target=\"_blank\">deploy your workspace in an air-gapped environment</a>. Since the server has no internet to communicate with the cloud, we provide a license for your subscribed plan that you can apply manually to upgrade your workspace.\n\nPermission required: `edit-privileged-setting`.\n### Changelog\n| Version      | Description |\n| ---------------- | ------------|\n|3.10.0         | Added       |\n\nA successful response only means the license provided follows the accepted format. Check your <a href=\"https://docs.rocket.chat/docs/subscription\" target=\"_blank\">workspace subscription</a> to confirm if the license is valid and was applied to your workspace. Alternatively, you can check <b><a href=\"https://developer.rocket.chat/apidocs/get-licenses-1\" target=\"_blank\">Get Licenses</a></b> endpoint.\n\n### Example call\n\n```bash\ncurl -X POST https://<your-workspace-url>/api/v1/licenses.add \\\n     -H \"Content-Type: application/json\" \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\" \\\n     -d '{\n  \"license\": \"VFJ0vHf3Jm9AR0minB342MLaHRlZdc3Du5nf0E5Sv0QJ4SUkEIaU2boCYaDsxQ2N1UL4uhLjCF9M7iCZ/yxafJjxbHvOu1D5rOfdgO4RKlAGE9tGHDidJR9crJyXVb16jPHHvLSkUFzb7HoIq/nUXxU8gEgT3uJ9u2+Dw5ukDLX3SG2AFq1hLoPSZqsP6g2AQo=\"\n}'\n```\n\n### Example success response\n\n```json\n{\n  \"success\": true\n}\n```"
+      operationId: post-api-v1-licenses.add
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                license:
+                  type: string
+            examples:
+              Example:
+                value:
+                  license: VFJ0vHf3Jm9AR0minB342MLaHRlZdc3Du5nf0E5Sv0QJ4SUkEIaU2boCYaDsxQ2N1UL4uhLjCF9M7iCZ/yxafJjxbHvOu1D5rOfdgO4RKlAGE9tGHDidJR9crJyXVb16jPHHvLSkUFzb7HoIq/nUXxU8gEgT3uJ9u2+Dw5ukDLX3SG2AFq1hLoPSZqsP6g2AQo=
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    success: true
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: User does not have the permissions required for this action [error-unauthorized]
+  /api/v1/licenses.validate:
+    post:
+      tags:
+      - Licenses
+      summary: Validate License
+      description: "<div style=\"text-align: center; margin: 1rem 0 1rem 0;\"><img src=\"https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg\" alt=\"Premium tag\" style=\"display: block; margin: auto;\"></div>\n\nValidates a Rocket.Chat license against the current workspace without applying it. Use this endpoint to preview a license before applying it with the <b><a href=\"https://developer.rocket.chat/apidocs/add-license\" target=\"_blank\">Add License</a></b> endpoint. It accepts both V2 and V3 (JWT) license formats.\n\nA valid license returns a success response. An invalid license returns a failure response with the validation behaviors that rejected it listed in the `reasons` array.\n\nPermission required: `edit-privileged-setting`.\n### Changelog\n| Version      | Description |\n| ---------------- | ------------|\n|8.7.0         | Added       |\n\n### Example call\n\n```bash\ncurl -X POST https://<your-workspace-url>/api/v1/licenses.validate \\\n     -H \"Content-Type: application/json\" \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\" \\\n     -d '{\n  \"license\": \"VFJ0vHf3Jm9AR0minB342MLaHRlZdc3Du5nf0E5Sv0QJ4SUkEIaU2boCYaDsxQ2N1UL4uhLjCF9M7iCZ/yxafJjxbHvOu1D5rOfdgO4RKlAGE9tGHDidJR9crJyXVb16jPHHvLSkUFzb7HoIq/nUXxU8gEgT3uJ9u2+Dw5ukDLX3SG2AFq1hLoPSZqsP6g2AQo=\"\n}'\n```\n\n### Example success response\n\n```json\n{\n  \"success\": true\n}\n```"
+      operationId: post-api-v1-licenses.validate
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                license:
+                  type: string
+                  description: The encrypted license string to validate.
+              required:
+              - license
+            examples:
+              Example:
+                value:
+                  license: VFJ0vHf3Jm9AR0minB342MLaHRlZdc3Du5nf0E5Sv0QJ4SUkEIaU2boCYaDsxQ2N1UL4uhLjCF9M7iCZ/yxafJjxbHvOu1D5rOfdgO4RKlAGE9tGHDidJR9crJyXVb16jPHHvLSkUFzb7HoIq/nUXxU8gEgT3uJ9u2+Dw5ukDLX3SG2AFq1hLoPSZqsP6g2AQo=
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  reasons:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        behavior:
+                          type: string
+                        reason:
+                          type: string
+                        modules:
+                          type: array
+                          items:
+                            type: string
+                        limit:
+                          type: string
+              examples:
+                Invalid License:
+                  value:
+                    success: false
+                    error: license-invalid
+                    reasons:
+                    - behavior: invalidate_license
+                      reason: url
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: User does not have the permissions required for this action [error-unauthorized]
+  /licenses.maxActiveUsers:
+    get:
+      tags:
+      - Licenses
+      summary: Get Maximum Active User
+      description: "<div style=\"text-align: center; margin: 1rem 0 1rem 0;\"><img src=\"https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg\" alt=\"Premium tag\" style=\"display: block; margin: auto;\"></div>\n\nRetrieves a list of the maximum active users.\n\n### Changelog\n| Version      | Description |\n| ---------------- | ------------|\n|4.0.0         | Added       |\n\n### Example call\n\n```bash\ncurl -X GET https://<your-workspace-url>/licenses.maxActiveUsers \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\"\n```\n\n### Example success response\n\n```json\n{\n  \"maxActiveUsers\": 25,\n  \"activeUsers\": 0,\n  \"success\": true\n}\n```"
+      operationId: get-licenses.maxActiveUsers
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  maxActiveUsers:
+                    type: integer
+                  activeUsers:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    maxActiveUsers: 25
+                    activeUsers: 0
+                    success: true
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+  /api/v1/commands.get:
+    get:
+      tags:
+      - Commands
+      summary: Get Slash Command
+      description: "Get details of a specific slash command.\n### Changelog\n| Version      | Description |\n| ---------------- | ------------|\n|0.60.2       | Added       |\n\n### Example call\n\n```bash\ncurl -X GET 'https://<your-workspace-url>/api/v1/commands.get?command=me' \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\"\n```\n\n### Example success response\n\n```json\n{\n  \"command\": {\n    \"command\": \"me\",\n    \"params\": \"your_message\",\n    \"description\": \"Displays_action_text\",\n    \"clientOnly\": false\n  },\n  \"success\": true\n}\n```"
+      operationId: get-api-v1-commands.get
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      - name: command
+        in: query
+        description: The name of the command.
+        required: true
+        schema:
+          type: string
+        example: me
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  command:
+                    type: object
+                    properties:
+                      command:
+                        type: string
+                      params:
+                        type: string
+                      description:
+                        type: string
+                      clientOnly:
+                        type: boolean
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    command:
+                      command: me
+                      params: your_message
+                      description: Displays_action_text
+                      clientOnly: false
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: The query param "command" must be provided.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+  /api/v1/commands.list:
+    get:
+      tags:
+      - Commands
+      summary: List Slash Commands
+      description: "Lists all available slash commands.\n### Changelog\n| Version      | Description |\n| ---------------- | ------------|\n|0.60.2      | Added       |\n\n### Example call\n\n```bash\ncurl -X GET 'https://<your-workspace-url>/api/v1/commands.list?count=50&offset=50&sort=example' \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\"\n```\n\n### Example success response\n\n```json\n{\n  \"commands\": [\n    {\n      \"command\": \"invite-all-from\",\n      \"clientOnly\": false\n    },\n    {\n      \"command\": \"slackbridge-import\",\n      \"clientOnly\": false\n    },\n    {\n      \"command\": \"gimme\",\n      \"params\": \"your_message_optional\",\n      \"description\": \"Slash_Gimme_Description\",\n      \"clientOnly\": false\n    },\n    {\n      \"command\": \"lennyface\",\n      \"params\": \"your_message_optional\",\n      \"description\": \"Slash_LennyFace_Description\",\n      \"clientOnly\": false\n    },\n    {\n      \"command\": \"shrug\",\n      \"params\": \"your_message_optional\",\n      \"description\": \"Slash_Shrug_Description\",\n      \"clientOnly\": false\n    },\n    {\n      \"command\": \"tableflip\",\n      \"params\": \"your_message_optional\",\n      \"description\": \"Slash_Tableflip_Description\",\n      \"clientOnly\": false\n    },\n    {\n      \"command\": \"unflip\",\n      \"params\": \"your_message_optional\",\n      \"description\": \"Slash_TableUnflip_Description\",\n      \"clientOnly\": false\n    },\n    {\n      \"command\": \"create\",\n      \"clientOnly\": false\n    },\n    {\n      \"command\": \"help\",\n      \"clientOnly\": false\n    },\n    {\n      \"command\": \"invite\",\n      \"clientOnly\": false\n    },\n    {\n      \"command\": \"invite-all-to\",\n      \"clientOnly\": false\n    },\n    {\n      \"command\": \"archive\",\n      \"clientOnly\": false\n    },\n    {\n      \"command\": \"join\",\n      \"clientOnly\": false\n    },\n    {\n      \"command\": \"kick\",\n      \"clientOnly\": false\n    },\n    {\n      \"command\": \"leave\",\n      \"clientOnly\": false\n    },\n    {\n      \"command\": \"part\",\n      \"clientOnly\": false\n    },\n    {\n      \"command\": \"me\",\n      \"params\": \"your_message\",\n      \"description\": \"Displays_action_text\",\n      \"clientOnly\": false\n    },\n    {\n      \"command\": \"msg\",\n      \"clientOnly\": false\n    },\n    {\n      \"command\": \"mute\",\n      \"clientOnly\": false\n    },\n    {\n      \"command\": \"unmute\",\n      \"clientOnly\": false\n    },\n    {\n      \"command\": \"topic\",\n      \"params\": \"Slash_Topic_Params\",\n      \"description\": \"Slash_Topic_Description\",\n      \"clientOnly\": false\n    },\n    {\n      \"command\": \"unarchive\",\n      \"clientOnly\": false\n    }\n  ],\n  \"offset\": 0,\n  \"count\": 22,\n  \"total\": 22,\n  \"success\": true\n}\n```"
+      operationId: get-api-v1-commands.list
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      - name: count
+        in: query
+        description: The number of items to return.  Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.
+        required: false
+        schema:
+          type: integer
+        example: 50
+      - name: offset
+        in: query
+        description: Number of items to "skip" in the query, i.e. requests return count items, skipping the first offset items. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.
+        required: false
+        schema:
+          type: integer
+        example: 50
+      - schema:
+          type: string
+        in: query
+        name: sort
+        description: "Sort the commands in ascending (`1`) or descending (`-1`) order. The value must be entered as a JSON string. The options are as follows:\n * `command`: Sort by command name. For example, `sort={\"command\":1}`\n * `description`: Sort by description. For example, `sort={\"description\":-1}`"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  commands:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        command:
+                          type: string
+                        clientOnly:
+                          type: boolean
+                  offset:
+                    type: integer
+                  count:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    commands:
+                    - command: invite-all-from
+                      clientOnly: false
+                    - command: slackbridge-import
+                      clientOnly: false
+                    - command: gimme
+                      params: your_message_optional
+                      description: Slash_Gimme_Description
+                      clientOnly: false
+                    - command: lennyface
+                      params: your_message_optional
+                      description: Slash_LennyFace_Description
+                      clientOnly: false
+                    - command: shrug
+                      params: your_message_optional
+                      description: Slash_Shrug_Description
+                      clientOnly: false
+                    - command: tableflip
+                      params: your_message_optional
+                      description: Slash_Tableflip_Description
+                      clientOnly: false
+                    - command: unflip
+                      params: your_message_optional
+                      description: Slash_TableUnflip_Description
+                      clientOnly: false
+                    - command: create
+                      clientOnly: false
+                    - command: help
+                      clientOnly: false
+                    - command: invite
+                      clientOnly: false
+                    - command: invite-all-to
+                      clientOnly: false
+                    - command: archive
+                      clientOnly: false
+                    - command: join
+                      clientOnly: false
+                    - command: kick
+                      clientOnly: false
+                    - command: leave
+                      clientOnly: false
+                    - command: part
+                      clientOnly: false
+                    - command: me
+                      params: your_message
+                      description: Displays_action_text
+                      clientOnly: false
+                    - command: msg
+                      clientOnly: false
+                    - command: mute
+                      clientOnly: false
+                    - command: unmute
+                      clientOnly: false
+                    - command: topic
+                      params: Slash_Topic_Params
+                      description: Slash_Topic_Description
+                      clientOnly: false
+                    - command: unarchive
+                      clientOnly: false
+                    offset: 0
+                    count: 22
+                    total: 22
+                    success: true
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+  /api/v1/commands.preview:
+    get:
+      tags:
+      - Commands
+      summary: Get Command's Preview Data
+      description: "Fetches the command's preview data or executes the preview item\n\n### Example call\n\n```bash\ncurl -X GET 'https://<your-workspace-url>/api/v1/commands.preview?command=unmute&roomId=ByehQjC44FwMeiLbX&params=@user123' \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\"\n```\n\n### Example success response\n\n```json\n{\n  \"success\": true\n}\n```"
+      operationId: get-api-v1-commands.preview
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      - name: command
+        in: query
+        description: The name of the command to be executed.
+        required: true
+        schema:
+          type: string
+        example: unmute
+      - name: roomId
+        in: query
+        description: The ID of the room.
+        required: true
+        schema:
+          type: string
+        example: ByehQjC44FwMeiLbX
+      - name: params
+        in: query
+        description: Parameters of the command if required. It is `undefined` by default.
+        schema:
+          type: string
+        example: '@user123'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: You must provide a command to get the previews from.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+    post:
+      tags:
+      - Commands
+      summary: Execute command's preview item
+      description: "### Changelog\n| Version      | Description |\n| ---------------- | ------------|\n|3.0.0      | Added `tmid` and `triggerId` fields       |\n|0.65.0      | Added|\n\n### Example call\n\n```bash\ncurl -X POST https://<your-workspace-url>/api/v1/commands.preview \\\n     -H \"Content-Type: application/json\" \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\" \\\n     -d '{\n  \"command\": \"unmute\",\n  \"roomId\": \"ByehQjC44FwMeiLbX\",\n  \"tmid\": \"Hsj2435g4bvrj4bjh\",\n  \"params\": \"@user123\",\n  \"triggerId\": \"awovufbukuefzuper\",\n  \"previewItem\": {\n    \"id\": \"nucobdipokaikazia\",\n    \"type\": \"image\",\n    \"value\": \"https://dev.null/gif\"\n  }\n}'\n```\n\n### Example success response\n\n```json\n{\n  \"success\": true\n}\n```"
+      operationId: post-api-v1-commands.preview
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                command:
+                  type: string
+                  description: The name of the command to be executed.
+                roomId:
+                  type: string
+                  description: The ID of the room.
+                tmid:
+                  type: string
+                  description: The ID of the thread to run the command.
+                params:
+                  type: string
+                  description: Parameters of the command if required. It is `undefined` by default.
+                triggerId:
+                  type: string
+                  description: The triggerId generated by the client that allows the command to interact with the UI
+                previewItem:
+                  type: object
+                  description: The data of the preview item to be executed by the command
+                  properties:
+                    id:
+                      type: string
+                      description: The ID of the selected preview item
+                    type:
+                      type: string
+                      description: The type of the selected preview item
+                    value:
+                      type: string
+                      description: The value of the selected preview item
+                  required:
+                  - id
+                  - type
+                  - value
+              required:
+              - command
+              - roomId
+              - tmid
+              - previewItem
+            examples:
+              Example:
+                value:
+                  command: unmute
+                  roomId: ByehQjC44FwMeiLbX
+                  tmid: Hsj2435g4bvrj4bjh
+                  params: '@user123'
+                  triggerId: awovufbukuefzuper
+                  previewItem:
+                    id: nucobdipokaikazia
+                    type: image
+                    value: https://dev.null/gif
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: You must provide a command to run the preview item on.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+  /api/v1/commands.run:
+    post:
+      tags:
+      - Commands
+      summary: Execute a Slash Command
+      description: "Execute a slash command in the specified room.\n### Changelog\n| Version      | Description |\n| ---------------- | ------------|\n|3.0.0      | Added `triggerId` property       |\n|2.0.0      | Added `tmid` property      |\n|0.60.2      | Added        |\n\n### Example call\n\n```bash\ncurl -X POST https://<your-workspace-url>/api/v1/commands.run \\\n     -H \"Content-Type: application/json\" \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\" \\\n     -d '{\n  \"command\": \"unmute\",\n  \"roomId\": \"ByehQjC44FwMeiLbX\",\n  \"params\": \"@user123\",\n  \"tmid\": \"Hsj2435g4bvrj4bjh\",\n  \"triggerId\": \"awovufbukuefzuper\"\n}'\n```\n\n### Example success response\n\n```json\n{\n  \"success\": true\n}\n```"
+      operationId: post-api-v1-commands.run
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                command:
+                  type: string
+                  description: The name of the command to be executed.
+                roomId:
+                  type: string
+                  description: The ID of the room.
+                params:
+                  type: string
+                  description: Parameters of the command if required. It is `undefined` by default
+                tmid:
+                  type: string
+                  description: The ID of the thread to run the command.
+                triggerId:
+                  type: string
+                  description: The triggerId generated by the client that allows the command to interact with the UI
+              required:
+              - command
+              - roomId
+            examples:
+              Success:
+                value:
+                  command: unmute
+                  roomId: ByehQjC44FwMeiLbX
+                  params: '@user123'
+                  tmid: Hsj2435g4bvrj4bjh
+                  triggerId: awovufbukuefzuper
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: You must provide a command to run.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+  /api/v1/mailer:
+    post:
+      tags:
+      - Mailer
+      summary: Send Mailer Endpoint
+      description: "Send emails to users from your workspace. Make sure that you have configured the <a href='https://docs.rocket.chat/docs/configure-email' target='_blank'>email settings</a> in the workspace.\n\n| Version      | Description |\n| ---------------- | ------------|\n|5.4.0      | Added      |\n\n### Example call\n\n```bash\ncurl -X POST https://<your-workspace-url>/api/v1/mailer \\\n     -H \"Content-Type: application/json\" \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\" \\\n     -d '{\n  \"from\": \"test.test@test.com\",\n  \"subject\": \"Welcome to the Test Newsletter\",\n  \"body\": \"Thank you for subscribing to the Test Newsletter. If this was not you feel free to unsubscribe by hitting the following button [unsubscribe]\",\n  \"dryrun\": \"true\"\n}'\n```\n\n### Example success response\n\n```json\n{\n  \"success\": true\n}\n```"
+      operationId: post-api-v1-mailer
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                from:
+                  type: string
+                  description: A valid email address to send mails from.
+                subject:
+                  type: string
+                  description: The subject of the email.
+                body:
+                  type: string
+                  description: The body of the email. You must use `[unsubscribe]` for the unsubscription link. You may use `[name]`, `[fname]`, `[lname]` for the user's full name, first name or last name, respectively. You may use `[email]` for the user's email.
+                dryrun:
+                  type: string
+                  description: A boolean value. If true, will only send one email to the same address as in the `From` parameter.
+              required:
+              - from
+              - subject
+            examples:
+              Example:
+                value:
+                  from: test.test@test.com
+                  subject: Welcome to the Test Newsletter
+                  body: Thank you for subscribing to the Test Newsletter. If this was not you feel free to unsubscribe by hitting the following button [unsubscribe]
+                  dryrun: 'true'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      function:
+                        type: string
+              examples:
+                Invalid From Address:
+                  value:
+                    success: false
+                    error: Invalid from address [error-invalid-from-address]
+                    errorType: error-invalid-from-address
+                    details:
+                      function: Mailer.sendMail
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+  /api/v1/mailer.unsubscribe:
+    post:
+      tags:
+      - Mailer
+      summary: Mailer Unsubscribe Endpoint
+      description: "Send emails to users from your workspace.\n\n### Changelog\n| Version      | Description |\n| ------------ | ------------|\n|5.4.0         | Added      |\n\n### Example call\n\n```bash\ncurl -X POST https://<your-workspace-url>/api/v1/mailer.unsubscribe \\\n     -H \"Content-Type: application/json\" \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\" \\\n     -d '{\n  \"_id\": \"c6Lsa9SFVFxJLR56H\",\n  \"createdAt\": \"1692284808957\"\n}'\n```\n\n### Example success response\n\n```json\n{\n  \"success\": true\n}\n```"
+      operationId: post-api-v1-mailer.unsubscribe
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                _id:
+                  type: string
+                  description: The user id of the user that created the mailer
+                createdAt:
+                  type: string
+                  description: The time the mailer was created
+              required:
+              - _id
+              - createdAt
+            examples:
+              Example:
+                value:
+                  _id: c6Lsa9SFVFxJLR56H
+                  createdAt: '1692284808957'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    success: true
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+  /api/v1/method.call/{method}:
+    parameters:
+    - name: method
+      in: path
+      required: true
+      description: The Metoer method
+      schema:
+        type: string
+        example: createChannel
+    - name: X-Auth-Token
+      in: header
+      description: The `authToken` of the authenticated user.
+      required: true
+      schema:
+        type: string
+      example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+    - name: X-User-Id
+      in: header
+      description: The `userId` of the authenticated user.
+      required: true
+      schema:
+        type: string
+      example: rbAXPnMktTFbNpwtJ
+    post:
+      summary: Execute a Meteor method call
+      tags: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Example:
+                  value:
+                    message: '{"msg":"result","id":"2","result":{"rid":"67937a74f7ca7be1b5fcf599","inserted":true,"_id":"67937a74f7ca7be1b5fcf599","_updatedAt":{"$date":1737718388248},"fname":"test-websocket","name":"test-websocket","t":"c","msgs":0,"usersCount":0,"u":{"_id":"P2dgWPPw5veigwcdK","username":"funke.olasupo","name":"Funke Olasupo"},"ts":{"$date":1737718388248},"ro":false,"default":false,"sysMes":true}}'
+                    success: true
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+      operationId: post-api-v1-method.call-method
+      description: "Execute a [realtime API method](https://developer.rocket.chat/apidocs/realtime-method-calls).\n\n### Example call\n\n```bash\ncurl -X POST https://<your-workspace-url>/api/v1/method.call/{method} \\\n     -H \"Content-Type: application/json\" \\\n     -d '{\n  \"message\": \"{\\\"msg\\\":\\\"method\\\",\\\"method\\\":\\\"createChannel\\\",\\\"id\\\":\\\"2\\\",\\\"params\\\":[\\\"test-websocket\\\",[\\\"doe.john\\\"],false]}\"\n}'\n```\n\n### Example success response\n\n```json\n{\n  \"message\": \"{\\\"msg\\\":\\\"result\\\",\\\"id\\\":\\\"2\\\",\\\"result\\\":{\\\"rid\\\":\\\"67937a74f7ca7be1b5fcf599\\\",\\\"inserted\\\":true,\\\"_id\\\":\\\"67937a74f7ca7be1b5fcf599\\\",\\\"_updatedAt\\\":{\\\"$date\\\":1737718388248},\\\"fname\\\":\\\"test-websocket\\\",\\\"name\\\":\\\"test-websocket\\\",\\\"t\\\":\\\"c\\\",\\\"msgs\\\":0,\\\"usersCount\\\":0,\\\"u\\\":{\\\"_id\\\":\\\"P2dgWPPw5veigwcdK\\\",\\\"username\\\":\\\"funke.olasupo\\\",\\\"name\\\":\\\"Funke Olasupo\\\"},\\\"ts\\\":{\\\"$date\\\":1737718388248},\\\"ro\\\":false,\\\"default\\\":false,\\\"sysMes\\\":true}}\",\n  \"success\": true\n}\n```"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - message
+              properties:
+                message:
+                  type: string
+                  description: The method call message.
+            examples:
+              Example:
+                value:
+                  message: '{"msg":"method","method":"createChannel","id":"2","params":["test-websocket",["doe.john"],false]}'
+  /api/v1/calendar-events.list:
+    get:
+      summary: Get List of Calendar Events
+      tags:
+      - Calendar Events
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties: {}
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    data:
+                    - _id: 690b02874e7e8bcf6985b27a
+                      uid: C38WSSzrGd2NCjzqJ
+                      startTime: '2025-03-26T07:17:00.000Z'
+                      endTime: '2025-03-26T07:18:00.000Z'
+                      subject: Subject8
+                      description: Description8
+                      meetingUrl: null
+                      reminderMinutesBeforeStart: 10
+                      reminderTime: '2025-03-26T07:07:00.000Z'
+                      notificationSent: false
+                      _updatedAt: '2025-11-05T07:53:43.420Z'
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: must have required property 'date' [invalid-params]
+                    errorType: invalid-params
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+      operationId: get-api-v1-calendar-events.list
+      description: "Use this endpoint to view the list of your calendar events for a specific date.\n\n### Example call\n\n```bash\ncurl -X GET 'https://<your-workspace-url>/api/v1/calendar-events.list?date=2025-01-01' \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\"\n```\n\n### Example success response\n\n```json\n{\n  \"data\": [\n    {\n      \"_id\": \"690b02874e7e8bcf6985b27a\",\n      \"uid\": \"C38WSSzrGd2NCjzqJ\",\n      \"startTime\": \"2025-03-26T07:17:00.000Z\",\n      \"endTime\": \"2025-03-26T07:18:00.000Z\",\n      \"subject\": \"Subject8\",\n      \"description\": \"Description8\",\n      \"meetingUrl\": null,\n      \"reminderMinutesBeforeStart\": 10,\n      \"reminderTime\": \"2025-03-26T07:07:00.000Z\",\n      \"notificationSent\": false,\n      \"_updatedAt\": \"2025-11-05T07:53:43.420Z\"\n    }\n  ],\n  \"success\": true\n}\n```"
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      - schema:
+          type: string
+          example: '2025-01-01'
+        in: query
+        name: date
+        description: Enter the date for which you want to view the calendar events. Use the format YYYY-MM-DD.
+        required: true
+  /api/v1/calendar-events.info:
+    get:
+      summary: Get Calendar Event Info
+      tags:
+      - Calendar Events
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      uid:
+                        type: string
+                      startTime:
+                        type: string
+                      endTime:
+                        type: string
+                      subject:
+                        type: string
+                      description:
+                        type: string
+                      meetingUrl:
+                        type: string
+                        nullable: true
+                      reminderMinutesBeforeStart:
+                        type: integer
+                      reminderTime:
+                        type: string
+                      notificationSent:
+                        type: boolean
+                      _updatedAt:
+                        type: string
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    event:
+                      _id: 690b02874e7e8bcf6985b27a
+                      uid: C38WSSzrGd2NCjzqJ
+                      startTime: '2025-03-26T07:17:00.000Z'
+                      endTime: '2025-03-26T07:18:00.000Z'
+                      subject: Subject8
+                      description: Description8
+                      meetingUrl: null
+                      reminderMinutesBeforeStart: 10
+                      reminderTime: '2025-03-26T07:07:00.000Z'
+                      notificationSent: false
+                      _updatedAt: '2025-11-05T07:53:43.420Z'
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: must have required property 'id' [invalid-params]
+                    errorType: invalid-params
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+      operationId: get-api-v1-calendar-events.info
+      description: "Use this endpoint to get information about a specific calendar event.\n\n### Example call\n\n```bash\ncurl -X GET 'https://<your-workspace-url>/api/v1/calendar-events.info?id=6909b8ea4e7e8bcf6985b1a8' \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\"\n```\n\n### Example success response\n\n```json\n{\n  \"event\": {\n    \"_id\": \"690b02874e7e8bcf6985b27a\",\n    \"uid\": \"C38WSSzrGd2NCjzqJ\",\n    \"startTime\": \"2025-03-26T07:17:00.000Z\",\n    \"endTime\": \"2025-03-26T07:18:00.000Z\",\n    \"subject\": \"Subject8\",\n    \"description\": \"Description8\",\n    \"meetingUrl\": null,\n    \"reminderMinutesBeforeStart\": 10,\n    \"reminderTime\": \"2025-03-26T07:07:00.000Z\",\n    \"notificationSent\": false,\n    \"_updatedAt\": \"2025-11-05T07:53:43.420Z\"\n  },\n  \"success\": true\n}\n```"
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      - schema:
+          type: string
+          example: 6909b8ea4e7e8bcf6985b1a8
+        in: query
+        name: id
+        description: Enter the event ID.
+        required: true
+  /api/v1/calendar-events.create:
+    post:
+      summary: Create Calendar Event
+      tags:
+      - Calendar Events
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    id: 690b08674e7e8bcf6985b2d5
+                    success: true
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+      operationId: post-api-v1-calendar-events.create
+      description: "Create a new calendar event.\n\n### Example call\n\n```bash\ncurl -X POST https://<your-workspace-url>/api/v1/calendar-events.create \\\n     -H \"Content-Type: application/json\" \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\" \\\n     -d '{\n  \"startTime\": \"2025-11-05T07:17:00.000Z\",\n  \"endTime\": \"2025-11-05T07:18:00.000Z\",\n  \"subject\": \"Subject8\",\n  \"description\": \"Description8\",\n  \"reminderMinutesBeforeStart\": 10\n}'\n```\n\n### Example success response\n\n```json\n{\n  \"id\": \"690b08674e7e8bcf6985b2d5\",\n  \"success\": true\n}\n```"
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - startTime
+              - subject
+              - description
+              properties:
+                startTime:
+                  type: string
+                  description: Enter the time at which the event starts.
+                  example: '2025-11-05T07:17:00.000Z'
+                endTime:
+                  type: string
+                  description: Enter the time at which the event ends.
+                  example: '2025-11-05T07:18:00.000Z'
+                subject:
+                  type: string
+                  description: Enter a subject for the event.
+                description:
+                  type: string
+                  description: Enter a description for the event.
+                reminderMinutesBeforeStart:
+                  type: integer
+                  description: Enter the number of minutes before the event that the reminder should be sent.
+                  example: 10
+                busy:
+                  type: boolean
+                  description: Enter whether or not you want to set your status as busy.
+                externalId:
+                  type: string
+                  example: NWwwcnU3NmM1NW03dDRtZGdkMWNjNDRmamsgcmFjaGFuYS52aXNhdmFkaXlhQHJvY2tldC5jaGF0
+                  description: If you want to use an external event from another calendar, enter the event ID (eid) of the external calendar event.
+            examples:
+              Example 1:
+                value:
+                  startTime: '2025-11-05T07:17:00.000Z'
+                  endTime: '2025-11-05T07:18:00.000Z'
+                  subject: Subject8
+                  description: Description8
+                  reminderMinutesBeforeStart: 10
+  /api/v1/calendar-events.update:
+    post:
+      summary: Update Calendar Event
+      tags:
+      - Calendar Events
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: must have required property 'eventId' [invalid-params]
+                    errorType: invalid-params
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+      operationId: post-api-v1-calendar-events.update
+      description: "Update an existing calendar event.\n\n### Example call\n\n```bash\ncurl -X POST https://<your-workspace-url>/api/v1/calendar-events.update \\\n     -H \"Content-Type: application/json\" \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\" \\\n     -d '{\n  \"eventId\": \"690b08674e7e8bcf6985b2d5\",\n  \"startTime\": \"2025-11-05T07:17:00.000Z\",\n  \"endTime\": \"2025-11-05T07:18:00.000Z\",\n  \"subject\": \"Subject8\",\n  \"description\": \"Description8\",\n  \"reminderMinutesBeforeStart\": 10\n}'\n```\n\n### Example success response\n\n```json\n{\n  \"success\": true\n}\n```"
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - eventId
+              - startTime
+              - subject
+              - description
+              properties:
+                eventId:
+                  type: string
+                  description: Enter the event ID that you want to update.
+                startTime:
+                  type: string
+                  description: Enter the time at which the event starts.
+                endTime:
+                  type: string
+                  description: Enter the time at which the event ends.
+                subject:
+                  type: string
+                  description: Enter a subject for the event.
+                description:
+                  type: string
+                  description: Enter a description for the event.
+                reminderMinutesBeforeStart:
+                  type: integer
+                  description: Enter the number of minutes before the event that the reminder should be sent.
+                busy:
+                  type: boolean
+                  description: Enter whether or not you want to set your status as busy.
+            examples:
+              Example 1:
+                value:
+                  eventId: 690b08674e7e8bcf6985b2d5
+                  startTime: '2025-11-05T07:17:00.000Z'
+                  endTime: '2025-11-05T07:18:00.000Z'
+                  subject: Subject8
+                  description: Description8
+                  reminderMinutesBeforeStart: 10
+  /api/v1/calendar-events.delete:
+    post:
+      summary: Delete Calendar Event
+      tags:
+      - Calendar Events
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: invalid-calendar-event
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+      operationId: post-api-v1-calendar-events.delete
+      description: "Delete a specific calendar event.\n\n### Example call\n\n```bash\ncurl -X POST https://<your-workspace-url>/api/v1/calendar-events.delete \\\n     -H \"Content-Type: application/json\" \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\" \\\n     -d '{\n  \"eventId\": \"6909b8ea4e7e8bcf6985b1a8\"\n}'\n```\n\n### Example success response\n\n```json\n{\n  \"success\": true\n}\n```"
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - eventId
+              properties:
+                eventId:
+                  type: string
+                  description: Enter the event ID that you want to delete.
+                  example: 6909b8ea4e7e8bcf6985b1a8
+            examples:
+              Example 1:
+                value:
+                  eventId: 6909b8ea4e7e8bcf6985b1a8
+  /api/v1/calendar-events.import:
+    post:
+      summary: Import Calendar Event
+      tags:
+      - Calendar Events
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    id: 690c2b2d4e7e8bcf6985b3d8
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: must have required property 'externalId' [invalid-params]
+                    errorType: invalid-params
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+      operationId: post-api-v1-calendar-events.import
+      description: "Use this endpoint to import an exteral calendar event.\n\n### Example call\n\n```bash\ncurl -X POST https://<your-workspace-url>/api/v1/calendar-events.import \\\n     -H \"Content-Type: application/json\" \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\" \\\n     -d '{\n  \"externalId\": \"NWwwcnU3NmM1NW03dDRtZGdkMWNjNDRmamsgcmFjaGFuYS52aXNhdmFkaXlhQHJvY2tldC5jaGF0\",\n  \"startTime\": \"2025-11-05T07:17:00.000Z\",\n  \"endTime\": \"2025-11-05T07:18:00.000Z\",\n  \"subject\": \"Subject8\",\n  \"description\": \"Description8\",\n  \"reminderMinutesBeforeStart\": 10,\n  \"busy\": true\n}'\n```\n\n### Example success response\n\n```json\n{\n  \"id\": \"690c2b2d4e7e8bcf6985b3d8\",\n  \"success\": true\n}\n```"
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - externalId
+              - startTime
+              - subject
+              - description
+              properties:
+                externalId:
+                  type: string
+                  description: Enter the event ID (eid) of the external calendar event.
+                startTime:
+                  type: string
+                  description: Enter the time at which the event begins.
+                endTime:
+                  type: string
+                  description: Enter the time at which the event ends.
+                subject:
+                  type: string
+                  description: Enter the event subject.
+                description:
+                  type: string
+                  description: Enter the event description.
+                reminderMinutesBeforeStart:
+                  type: integer
+                  description: Enter the number of minutes before the event that the reminder must be sent.
+                busy:
+                  type: boolean
+                  description: Enter whether or not you want to set your status as busy.
+            examples:
+              Example 1:
+                value:
+                  externalId: NWwwcnU3NmM1NW03dDRtZGdkMWNjNDRmamsgcmFjaGFuYS52aXNhdmFkaXlhQHJvY2tldC5jaGF0
+                  startTime: '2025-11-05T07:17:00.000Z'
+                  endTime: '2025-11-05T07:18:00.000Z'
+                  subject: Subject8
+                  description: Description8
+                  reminderMinutesBeforeStart: 10
+                  busy: true
+  /api/apps/public/{app-id}/incoming:
+    parameters:
+    - schema:
+        type: string
+      name: app-id
+      in: path
+      required: true
+      description: The app id. Navigate to App Info > Details > APIs > POST incoming to get the complete URL for this endpoint.
+    post:
+      summary: Close Chat or Perform Handover
+      tags:
+      - Rasa App
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+              examples:
+                Close chat:
+                  value:
+                    msg: ' Close chat request handled successfully'
+                Perform handover:
+                  value:
+                    msg: ' Perform Handover request handled successfully'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+      operationId: post-api-apps-public-app-id-incoming
+      description: "Close a chat session or perform handover. The appropriate endpoint URL including the `appId` for  closing chat or perfoming handover in your workspace is displayed under **App Info > Details > APIs > POST incoming** section of the Rasa app.\n\n### Changelog\n| Version      | Description |\n| ---------------- | ------------|\n|5.0.0     | Added       |\n\n### Example call\n\n```bash\ncurl -X POST https://<your-workspace-url>/api/apps/public/{app-id}/incoming \\\n     -H \"Content-Type: application/json\" \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\" \\\n     -d '{\n  \"action\": \"close-chat\",\n  \"sessionId\": \"2Sfq8wXw4fYPMf6r4\"\n}'\n```\n\n### Example success response\n\n```json\n{\n  \"msg\": \" Close chat request handled successfully\"\n}\n```"
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - action
+              - sessionId
+              properties:
+                action:
+                  type: string
+                  description: 'The action can either be `handover` or `close-chat`. '
+                sessionId:
+                  type: string
+                  description: The ID of the Rasa session.
+                actionData:
+                  type: object
+                  properties:
+                    targetDepartment:
+                      type: string
+                      description: The targeted department.
+            examples:
+              Example:
+                value:
+                  action: close-chat
+                  sessionId: 2Sfq8wXw4fYPMf6r4
+  /api/v1/video-conference/jitsi.update-timeout:
+    post:
+      summary: Update Jitsi Timeout
+      tags:
+      - Jitsi App
+      description: "### Changelog\n| Version      | Description |\n| ---------------- | ------------|\n|0.74.0        | Added       |\n\n### Example call\n\n```bash\ncurl -X POST https://<your-workspace-url>/api/v1/video-conference/jitsi.update-timeout \\\n     -H \"Content-Type: application/json\" \\\n     -H \"X-User-Id: your-user-id\" \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -d '{\n  \"roomId\": \"hyoM5JSQi94RwqPE7\"\n}'\n```\n\n### Example success response\n\n```json\n{\n  \"jitsiTimeout\": \"2019-01-16T13:17:11.951Z\",\n  \"success\": true\n}\n```"
+      operationId: post-api-v1-video-conference-jitsi.update-timeout
+      parameters:
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roomId:
+                  type: string
+                  description: The room Id of the room to update the jitsi timeout.
+              required:
+              - roomId
+            examples:
+              Example:
+                value:
+                  roomId: hyoM5JSQi94RwqPE7
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jitsiTimeout:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    jitsiTimeout: '2019-01-16T13:17:11.951Z'
+                    success: true
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+  /api/apps/public/{appId}/templateMessage:
+    post:
+      tags:
+      - WhatsApp
+      summary: Send a WhatsApp Template Message
+      description: "Use this endpoint to send WhatsApp template messages directly to specified contacts from your workspace.\n\n1. Click the **Marketplace** icon from the main menu. Select **Explore** from the drop-down menu.\n2. Locate your preferred <a href=\"https://docs.rocket.chat/docs/whatsapp-apps\" target=\"_blank\">WhatsApp App</a>.\n3. Go to *App Info > Details > APIs* and find the `POST templateMessage` section.\n4. Copy the `POST templateMessage` endpoint URL for your WhatsApp app from the provided curl example. This URL includes the required `appId`. Send a template message request using this URL as the endpoint.\n\nBefore sending template messages from Rocket.Chat through any <a href=\"https://docs.rocket.chat/docs/whatsapp-apps\" target=\"_blank\">WhatsApp App</a>, ensure that you have set up the templates in respective WhatsApp provider account. Refer to the official guide for details on <a href=\"https://developer.rocket.chat/docs/whatsapp-business-template-messages#set-up-template-messages-on-whatsapp\" target=\"_blank\">configuring template messages for each WhatsApp app</a>.\n\n### Example call\n\n```bash\ncurl -X POST https://<your-workspace-url>/api/apps/public/{appId}/templateMessage \\\n     -H \"Content-Type: application/json\" \\\n     -d '{\n  \"phoneNumbers\": [\n    \"2368106035555\"\n  ],\n  \"connectedWhatsAppNo\": \"104920685899299\",\n  \"template\": {\n    \"name\": \"ship\",\n    \"language\": {\n      \"code\": \"en\",\n      \"policy\": \"deterministic\"\n    },\n    \"components\": [\n      {\n        \"type\": \"body\",\n        \"parameters\": [\n          {\n            \"type\": \"text\",\n            \"text\": \"20\"\n          }\n        ]\n      }\n    ]\n  }\n}'\n```\n\n### Example success response\n\n```json\n{\n  \"success\": true\n}\n```"
+      operationId: post-api-apps-public-app_id-templateMessage
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: We strongly recommend including the + prefix for all phone numbers in the payload. While you can submit numbers without the leading + sign, we have encountered cases where WhatsApp will return an invalid response despite the number being in use.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phoneNumbers:
+                  type: array
+                  description: Recipient WhatsApp IDs where you want to send the template message. You can validate a WhatsApp id from <a href="https://developers.facebook.com/docs/whatsapp/on-premises/reference/contacts" target="_blank">here</a>.
+                  items:
+                    type: string
+                connectedWhatsAppNo:
+                  type: string
+                  description: The WhatsApp Number from which you want to send this template message. The WhatsApp number connected to your workspace via the app.
+                targetAgent:
+                  type: string
+                  description: Username of the agent you want to transfer the chat to when the WhatsApp user replies.
+                targetDepartment:
+                  type: string
+                  description: Department name or ID where you want to transfer the chat to when the WhatsApp user replies.
+                template:
+                  type: object
+                  description: 'Provide the details of the template message you want to send. The structure of the template object may differ depending on the template defined within your WhatsApp provider account. For further clarification, refer to the official guide on <a href="https://developer.rocket.chat/docs/whatsapp-business-template-messages#api-endpoint" target="_blank">sending template messages via API in Rocket.Chat</a>. The example template object provided here is based on the configuration outlined in the official guide for the <a href="https://developer.rocket.chat/docs/whatsapp-business-template-messages#whatsapp-cloud" target="_blank">WhatsApp Cloud App</a>.
+
+
+                    If your template message includes parameters, make sure to replace all of them with the appropriate information before sending. Failure to do so may lead to an error.'
+                  properties:
+                    namespace:
+                      type: string
+                    name:
+                      type: string
+                    language:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                        policy:
+                          type: string
+                    components:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          type:
+                            type: string
+                          parameters:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                type:
+                                  type: string
+                                text:
+                                  type: string
+              required:
+              - phoneNumbers
+              - connectedWhatsAppNo
+              - template
+            examples:
+              WhatsApp Cloud:
+                value:
+                  phoneNumbers:
+                  - '2368106035555'
+                  connectedWhatsAppNo: '104920685899299'
+                  template:
+                    name: ship
+                    language:
+                      code: en
+                      policy: deterministic
+                    components:
+                    - type: body
+                      parameters:
+                      - type: text
+                        text: '20'
+              WhatsApp 360Dialog (Cloud API):
+                value:
+                  phoneNumbers:
+                  - xxxxxxxxxxxxx
+                  connectedWhatsAppNo: 555195251xxx
+                  template:
+                    name: boarding_pass
+                    language:
+                      code: en
+                      policy: deterministic
+                    components:
+                    - type: header
+                      parameters:
+                      - type: text
+                        text: halo
+                    - type: body
+                      parameters:
+                      - type: text
+                        text: abc
+                      - type: text
+                        text: xyz
+              Whatsapp Sandbox:
+                value:
+                  phoneNumbers:
+                  - '50364357612'
+                  template:
+                    name: first_welcome_messsage
+                    language:
+                      code: en
+                    components:
+                    - type: body
+                      parameters:
+                      - type: text
+                        text: Your name goes here
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    success: true
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: User does not have the permissions required for this action [error-unauthorized]
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Too many phone numbers:
+                  value:
+                    success: false
+                    error: Too many phone numbers! Please make sure that phoneNumbers are <= 250
+                Agent Not Found:
+                  value:
+                    success: false
+                    error: No Agent found with username abc98
+                Department Not Found:
+                  value:
+                    success: false
+                    error: No Department found with id/Name SalesDepartment
+                Invalid WhatsApp Contact:
+                  value:
+                    success: false
+                    error: Connected WhatsApp Number (connectedWhatsAppNo) i.e. 565412001234 is not a valid WhatsApp contact. Contact Status is invalid
+                Invalid Connected WhatsApp Number:
+                  value:
+                    success: false
+                    error: 'Error! Connected WhatsApp Number (connectedWhatsAppNo) i.e. 565412001234 has not been registered yet on Rocket.Chat. Please goto #omnichannel-whatsapp-setup channel and connect this WhatsApp number first there before sending this request again.'
+tags:
+- name: Commands
+- name: Email Inbox
+- name: Licenses
+- name: Mailer
+- name: Calendar Events
+- name: WhatsApp
+- name: Rasa App
+- name: Jitsi App
+components:
+  parameters:
+    offset:
+      name: offset
+      in: query
+      description: Number of items to "skip" in the query, i.e. requests return count items, skipping the first offset items. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.
+      required: false
+      schema:
+        type: integer
+      example: 50
+    count:
+      name: count
+      in: query
+      description: The number of items to return.  Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.
+      required: false
+      schema:
+        type: integer
+      example: 50
+    sort:
+      name: sort
+      in: query
+      description: 'List of fields to order by, and in which direction. This is a JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending. For example, {"value": -1, "_id": 1}. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
+      required: false
+      schema: {}
+    query:
+      name: query
+      in: query
+      description: 'This parameter allows you to use MongoDB query operators to search for specific data. For example, to query users with a name that contains the letter "g": query=`{ "name": { "$regex": "g" } }`. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more.'
+      required: false
+      schema: {}
+    fields:
+      name: fields
+      in: query
+      description: 'This parameter accepts a JSON object with properties that have a value of 1 or 0 to include or exclude them in the response. For example, to only retrieve the usernames of users: `fields={ "username": 1 }`. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more.'
+      required: false
+      schema:
+        type: string
+    Auth-Token:
+      name: X-Auth-Token
+      in: header
+      description: The `authToken` of the authenticated user.
+      required: true
+      schema:
+        type: string
+      example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+    UserId:
+      name: X-User-Id
+      in: header
+      description: The `userId` of the authenticated user.
+      required: true
+      schema:
+        type: string
+      example: rbAXPnMktTFbNpwtJ
+  responses:
+    trueSuccess:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+          examples:
+            Success:
+              value:
+                success: true
+    authorizationError:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              message:
+                type: string
+          examples:
+            Authorization Error:
+              value:
+                status: error
+                message: You must be logged in to do this.
+    forbiddenError:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+              error:
+                type: string
+          examples:
+            Permission Error:
+              value:
+                success: false
+                error: User does not have the permissions required for this action [error-unauthorized]

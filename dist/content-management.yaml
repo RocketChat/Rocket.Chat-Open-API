@@ -1,0 +1,1895 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Content Management
+servers:
+- url: https://apiexplorer.support.rocket.chat
+paths:
+  /api/v1/emoji-custom.all:
+    get:
+      tags:
+      - Custom Emoji
+      summary: List All Custom Emojis
+      description: "List all custom emojis.\n\n\n### Changelog\n| Version      | Description | \n| ---------------- | ------------|\n|7.11.0            | Added the `name` query parameter       |\n|0.63.0            | Added       |\n\n### Example call\n\n```bash\ncurl -X GET 'https://<your-workspace-url>/api/v1/emoji-custom.all?name=emoji-one&offset=50&count=50' \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\"\n```\n\n### Example success response\n\n```json\n{\n  \"emojis\": [\n    {\n      \"_id\": \"6542e83aa2f73c7460e18efb\",\n      \"name\": \"happy\",\n      \"aliases\": [\n        \"happy-gang\"\n      ],\n      \"extension\": \"png\",\n      \"_updatedAt\": \"2023-11-02T00:07:22.433Z\"\n    }\n  ],\n  \"count\": 1,\n  \"offset\": 0,\n  \"total\": 1,\n  \"success\": true\n}\n```"
+      operationId: get-api-v1-emoji-custom.all
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      - schema:
+          type: string
+          example: emoji-one
+        in: query
+        name: name
+        description: Enter the emoji name you want to find. This parameter is optional.
+      - name: offset
+        in: query
+        description: Number of items to "skip" in the query, i.e. requests return count items, skipping the first offset items.  Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#paginations) to learn more.
+        required: false
+        schema:
+          type: integer
+        example: 50
+      - name: count
+        in: query
+        description: The number of items to return. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.
+        required: false
+        schema:
+          type: integer
+        example: 50
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  emojis:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        aliases:
+                          type: array
+                          items:
+                            type: string
+                        extension:
+                          type: string
+                        _updatedAt:
+                          type: string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Example:
+                  value:
+                    emojis:
+                    - _id: 6542e83aa2f73c7460e18efb
+                      name: happy
+                      aliases:
+                      - happy-gang
+                      extension: png
+                      _updatedAt: '2023-11-02T00:07:22.433Z'
+                    count: 1
+                    offset: 0
+                    total: 1
+                    success: true
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+  /api/v1/emoji-custom.create:
+    post:
+      tags:
+      - Custom Emoji
+      summary: Create an Emoji
+      description: "Upload a custom emoji to the workspace. Make sure that you have configured the storage system. For details, refer to the [Manage Custom Sounds and Emojis](https://docs.rocket.chat/docs/manage-custom-sounds-and-emojis) document.\n\nPermission required: `manage-emoji`\n\n### Changelog\n| Version      | Description | \n| ---------------- | ------------|\n|0.74.0            | Added       |\n\n### Example call\n\n```bash\ncurl -X POST https://<your-workspace-url>/api/v1/emoji-custom.create \\\n     -H \"Content-Type: application/json\" \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\" \\\n     -d '{\n  \"emoji\": \"example\",\n  \"name\": \"example\"\n}'\n```\n\n### Example success response\n\n```json\n{\n  \"success\": true\n}\n```"
+      operationId: post-api-v1-emoji-custom.create
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+              - emoji
+              - name
+              properties:
+                emoji:
+                  type: string
+                  description: The image file to use as the new custom emoji.
+                  format: binary
+                name:
+                  type: string
+                  description: The name of the new custom emoji.
+                aliases:
+                  type: string
+                  description: The alias of the new custom emoji. You can enter more than one alias as comma-separated values.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: Missing Content-Type
+                Example 2:
+                  value:
+                    success: false
+                    error: '[No file uploaded]'
+                    errorType: No file uploaded
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+  /api/v1/emoji-custom.delete:
+    post:
+      tags:
+      - Custom Emoji
+      summary: Delete a Custom Emoji
+      description: "Delete a custom emoji. Permission required: `manage-emoji`\n\n### Changelog\n| Version      | Description | \n| ---------------- | ------------|\n|0.74.0            | Added       |\n\n### Example call\n\n```bash\ncurl -X POST https://<your-workspace-url>/api/v1/emoji-custom.delete \\\n     -H \"Content-Type: application/json\" \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\" \\\n     -d '{\n  \"emojiId\": \"6542e83aa2f73c7460e18efb\"\n}'\n```\n\n### Example success response\n\n```json\n{\n  \"success\": true\n}\n```"
+      operationId: post-api-v1-emoji-custom.delete
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - emojiId
+              properties:
+                emojiId:
+                  type: string
+                  description: Enter the emoji ID to delete.
+            examples:
+              Example:
+                value:
+                  emojiId: 6542e83aa2f73c7460e18efb
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: The "emojiId" params is required!
+                Example 2:
+                  value:
+                    success: false
+                    error: Invalid emoji [Custom_Emoji_Error_Invalid_Emoji]
+                    errorType: Custom_Emoji_Error_Invalid_Emoji
+                    details:
+                      method: deleteEmojiCustom
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+  /api/v1/emoji-custom.list:
+    get:
+      tags:
+      - Custom Emoji
+      summary: Get Updated List of Custom Emojis
+      description: "Get a list of updated and removed emojis.\n\n### Changelog\n| Version      | Description | \n| ---------------- | ------------|\n|7.0.0            | Added  `_id` and  `_updatedAt` query parameter     |\n|0.75.0            | Added       |\n\n### Example call\n\n```bash\ncurl -X GET 'https://<your-workspace-url>/api/v1/emoji-custom.list?updatedSince=2017-11-25T15:08:17.248Z&_updatedAt=2024-11-02T06:40:43.751Z&_id=6725ca0a101755229a8cb3bf' \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\"\n```\n\n### Example success response\n\n```json\n{\n  \"emojis\": {\n    \"update\": [\n      {\n        \"_id\": \"S5XvYppoLrLd9JvQm\",\n        \"name\": \"teste\",\n        \"aliases\": [],\n        \"extension\": \"jpg\",\n        \"_updatedAt\": \"2019-02-18T16:48:35.119Z\"\n      }\n    ],\n    \"remove\": [\n      {\n        \"_id\": \"2dbVBG434dnsdh23\",\n        \"name\": \"teste3\",\n        \"aliases\": [],\n        \"extension\": \"jpg\",\n        \"_updatedAt\": \"2019-02-18T16:48:35.119Z\"\n      }\n    ]\n  },\n  \"success\": true\n}\n```"
+      operationId: get-api-v1-emoji-custom.list
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      - name: updatedSince
+        in: query
+        description: 'Date since the emojis were updated. Format: ISO string. When you provide the `updatedSince` query parameter in the URL then the `update` and `remove` in the response will contain only those updated and removed since this date and time.'
+        schema:
+          type: string
+        example: '2017-11-25T15:08:17.248Z'
+      - name: _updatedAt
+        in: query
+        description: ''
+        schema:
+          type: string
+        example: '2024-11-02T06:40:43.751Z'
+      - name: _id
+        in: query
+        description: Filter list by custom emoji id.
+        schema:
+          type: string
+        example: 6725ca0a101755229a8cb3bf
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  emojis:
+                    type: object
+                    properties:
+                      update:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            name:
+                              type: string
+                            aliases:
+                              type: array
+                              items:
+                                type: object
+                            extension:
+                              type: string
+                            _updatedAt:
+                              type: string
+                      remove:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            name:
+                              type: string
+                            aliases:
+                              type: array
+                              items:
+                                type: object
+                            extension:
+                              type: string
+                            _updatedAt:
+                              type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    emojis:
+                      update:
+                      - _id: S5XvYppoLrLd9JvQm
+                        name: teste
+                        aliases: []
+                        extension: jpg
+                        _updatedAt: '2019-02-18T16:48:35.119Z'
+                      remove:
+                      - _id: 2dbVBG434dnsdh23
+                        name: teste3
+                        aliases: []
+                        extension: jpg
+                        _updatedAt: '2019-02-18T16:48:35.119Z'
+                    success: true
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+  /api/v1/emoji-custom.update:
+    post:
+      tags:
+      - Custom Emoji
+      summary: Update a Custom Emoji
+      description: "Update a custom emoji. Permission required: `manage-emoji`\n\n### Changelog\n| Version      | Description | \n| ---------------- | ------------|\n|0.74.0            | Added       |\n\n### Example call\n\n```bash\ncurl -X POST https://<your-workspace-url>/api/v1/emoji-custom.update \\\n     -H \"Content-Type: application/json\" \\\n     -H \"X-User-Id: your-user-id\" \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -d '{\n  \"name\": \"my-custom-emoji\",\n  \"_id\": \"AG7DSB2H32YHS\",\n  \"aliases\": \"emoji-alias\"\n}'\n```\n\n### Example success response\n\n```json\n{\n  \"success\": true\n}\n```"
+      operationId: post-api-v1-emoji-custom.update
+      parameters:
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      requestBody:
+        description: ''
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+              - name
+              - _id
+              properties:
+                emoji:
+                  type: string
+                  description: Upload the emoji file that you want to update as form-data.
+                name:
+                  type: string
+                  description: Enter the name of the emoji that you want to update.
+                  example: my-custom-emoji
+                _id:
+                  type: string
+                  description: Enter the emoji ID to be updated.
+                  example: AG7DSB2H32YHS
+                aliases:
+                  type: string
+                  description: The alias of the custom emoji. You can enter more than one alias as comma-separated values.
+                  example: emoji-alias
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: '[The required "_id" query param is missing.]'
+                    errorType: The required "_id" query param is missing.
+                Example 2:
+                  value:
+                    success: false
+                    error: '[Emoji not found.]'
+                    errorType: Emoji not found.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+  /api/v1/custom-sounds.list:
+    get:
+      tags:
+      - Custom Sounds
+      summary: List Custom Sounds
+      description: "List all custom sounds. \n\n### Changelog\n| Version      | Description | \n| ---------------- | ------------|\n| 2.4.0            | Added       |\n| 2.4.0            | Added `name` query parameter for filtering.      |\n\n### Example call\n\n```bash\ncurl -X GET 'https://<your-workspace-url>/api/v1/custom-sounds.list?offset=50&count=50&name=drill' \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\"\n```\n\n### Example success response\n\n```json\n{\n  \"sounds\": [\n    {\n      \"_id\": \"65462caea2f73c7460e18f83\",\n      \"name\": \"doremi\",\n      \"extension\": \"mp3\",\n      \"_updatedAt\": \"2023-11-04T11:36:14.171Z\"\n    }\n  ],\n  \"count\": 1,\n  \"offset\": 0,\n  \"total\": 1,\n  \"success\": true\n}\n```"
+      operationId: get-api-v1-custom-sounds.list
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      - name: offset
+        in: query
+        description: Number of items to "skip" in the query, i.e. requests return count items, skipping the first offset items.  Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#paginations) to learn more.
+        required: false
+        schema:
+          type: integer
+        example: 50
+      - name: count
+        in: query
+        description: The number of items to return. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.
+        required: false
+        schema:
+          type: integer
+        example: 50
+      - name: query
+        in: query
+        description: 'This parameter allows you to use MongoDB query operators to search for specific data. For example, to query users with a name that contains the letter "g": query={ "name": { "$regex": "g" } }. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more.'
+        required: false
+        schema: {}
+      - name: name
+        in: query
+        description: Filter list by the name of the custom sound.
+        schema:
+          type: string
+        example: drill
+      - schema: {}
+        in: query
+        name: sort
+        description: "Sort the results in ascending (`1`) or descending (`-1`) order. The options are:\n * `name`: Sort the results by name. For example, `sort={\"name\": 1}` (default) or `sort={\"name\": -1}`.\n * `_id`: Sort by ID. For example, `sort={\"_id\": 1}` or `sort={\"_id\": -1}`."
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sounds:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        extension:
+                          type: string
+                        _updatedAt:
+                          type: string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    sounds:
+                    - _id: 65462caea2f73c7460e18f83
+                      name: doremi
+                      extension: mp3
+                      _updatedAt: '2023-11-04T11:36:14.171Z'
+                    count: 1
+                    offset: 0
+                    total: 1
+                    success: true
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+  /api/v1/custom-sounds.create:
+    post:
+      tags:
+      - Custom Sounds
+      summary: Create Custom Sound
+      description: "Upload a new custom sound to the workspace.\n\n- The request must be sent as `multipart/form-data` and contain the audio file in the `sound` field and the display name in the `name` field.\n\n- The file size must not exceed `5 MB` (5242880 bytes), and the file MIME type must be one of `audio/mpeg`, `audio/mp3`, `audio/wav`, or `audio/x-wav`.\n\nThis endpoint replaces the deprecated DDP methods `insertOrUpdateSound` and `uploadCustomSound`, which will be removed in `9.0.0`.\n\nPermission required: `manage-sounds`\n\n### Changelog\n| Version | Description |\n| ------- | ----------- |\n| 8.5.0   | Added       |\n\n### Example call\n\n```bash\ncurl -X POST https://<your-workspace-url>/api/v1/custom-sounds.create \\\n     -H \"Content-Type: application/json\" \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\" \\\n     -d '{\n  \"name\": \"doremi\"\n}'\n```\n\n### Example success response\n\n```json\n{\n  \"sound\": {\n    \"_id\": \"65462caea2f73c7460e18f83\"\n  },\n  \"success\": true\n}\n```"
+      operationId: post-api-v1-custom-sounds.create
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                sound:
+                  type: string
+                  format: binary
+                  description: The audio file to upload. Allowed MIME types are `audio/mpeg`, `audio/mp3`, `audio/wav`, and `audio/x-wav`. Maximum size is `5 MB` (5242880 bytes).
+                name:
+                  type: string
+                  description: The display name of the custom sound. Must be at least one character long and must not contain colons, whitespace, or the characters `,`, `>`, `<`, `&`, `"`, `'`, `/`, `\`, `(`, or `)`.
+                  example: doremi
+              required:
+              - sound
+              - name
+            examples:
+              Example:
+                value:
+                  name: doremi
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sound:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    sound:
+                      _id: 65462caea2f73c7460e18f83
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                MIME type not allowed:
+                  value:
+                    success: false
+                    error: MIME type not allowed
+                File too large:
+                  value:
+                    success: false
+                    error: '[error-file-too-large]'
+                Name already in use:
+                  value:
+                    success: false
+                    error: The custom sound name is already in use [Custom_Sound_Error_Name_Already_In_Use]
+                Invalid name:
+                  value:
+                    success: false
+                    error: <script> is not a valid name
+                Missing required field:
+                  value:
+                    success: false
+                    error: must have required property 'name' [invalid-params]
+                    errorType: invalid-params
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: User does not have the permissions required for this action [error-unauthorized]
+                    errorType: error-unauthorized
+  /api/v1/custom-sounds.update:
+    post:
+      tags:
+      - Custom Sounds
+      summary: Update Custom Sound
+      description: "Update an existing custom sound.\n\n- The request must be sent as `multipart/form-data`. The `_id` and `name` fields are required; the `sound` file field is optional and only required when replacing the audio file.\n\n- When a new file is provided, the file size must not exceed `5 MB` (5242880 bytes), and the file MIME type must be one of `audio/mpeg`, `audio/mp3`, `audio/wav`, or `audio/x-wav`.\n\nThis endpoint replaces the deprecated DDP methods `insertOrUpdateSound` and `uploadCustomSound`, which will be removed in `9.0.0`.\n\nPermission required: `manage-sounds`\n\n### Changelog\n| Version | Description |\n| ------- | ----------- |\n| 8.5.0   | Added       |\n\n### Example call\n\n```bash\ncurl -X POST https://<your-workspace-url>/api/v1/custom-sounds.update \\\n     -H \"Content-Type: application/json\" \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\" \\\n     -d '{\n  \"_id\": \"65462caea2f73c7460e18f83\",\n  \"name\": \"doremi-v2\"\n}'\n```\n\n### Example success response\n\n```json\n{\n  \"success\": true\n}\n```"
+      operationId: post-api-v1-custom-sounds.update
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                _id:
+                  type: string
+                  description: The ID of the custom sound to update.
+                  example: 65462caea2f73c7460e18f83
+                name:
+                  type: string
+                  description: The updated display name of the custom sound. Must be at least one character long and must not contain colons, whitespace, or the characters `,`, `>`, `<`, `&`, `"`, `'`, `/`, `\`, `(`, or `)`.
+                  example: doremi-v2
+                sound:
+                  type: string
+                  format: binary
+                  description: Optional. A new audio file to replace the existing one. If omitted, the current file is kept. Allowed MIME types are `audio/mpeg`, `audio/mp3`, `audio/wav`, and `audio/x-wav`. Maximum size is `5 MB` (5242880 bytes).
+              required:
+              - _id
+              - name
+            examples:
+              Example:
+                value:
+                  _id: 65462caea2f73c7460e18f83
+                  name: doremi-v2
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Sound not found:
+                  value:
+                    success: false
+                    error: Custom Sound not found.
+                MIME type not allowed:
+                  value:
+                    success: false
+                    error: MIME type not allowed
+                File too large:
+                  value:
+                    success: false
+                    error: '[error-file-too-large]'
+                Name already in use:
+                  value:
+                    success: false
+                    error: The custom sound name is already in use [Custom_Sound_Error_Name_Already_In_Use]
+                Invalid name:
+                  value:
+                    success: false
+                    error: <script> is not a valid name
+                Missing required field:
+                  value:
+                    success: false
+                    error: must have required property '_id' [invalid-params]
+                    errorType: invalid-params
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: User does not have the permissions required for this action [error-unauthorized]
+                    errorType: error-unauthorized
+  /api/v1/custom-user-status.list:
+    get:
+      tags:
+      - Custom User Status
+      summary: List Custom User Status
+      description: "Lists all available custom user's status.\n\n### Changelog\n| Version      | Description | \n| ---------------- | ------------|\n|7.0.0           | Added `name` and `_id` query parameters for filtering.      |\n|2.4.0            | Added       |\n\n### Example call\n\n```bash\ncurl -X GET 'https://<your-workspace-url>/api/v1/custom-user-status.list?name=lunch&_id=6731e2ce3b74d3c57d334d0f&count=50&offset=50' \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\"\n```\n\n### Example success response\n\n```json\n{\n  \"statuses\": [\n    {\n      \"_id\": \"63f61be0b000b6b6d86704c8\",\n      \"name\": \"brb\",\n      \"statusType\": \"away\",\n      \"_updatedAt\": \"2023-02-22T13:42:56.811Z\"\n    }\n  ],\n  \"count\": 1,\n  \"offset\": 0,\n  \"total\": 1,\n  \"success\": true\n}\n```"
+      operationId: get-api-v1-custom-user-status.list
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      - name: name
+        in: query
+        description: Filter list by the name of the custom status.
+        schema:
+          type: string
+        example: lunch
+      - name: _id
+        in: query
+        description: Filter list by the _id of the custom status.
+        schema:
+          type: string
+        example: 6731e2ce3b74d3c57d334d0f
+      - name: count
+        in: query
+        description: The number of items to return. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.
+        required: false
+        schema:
+          type: integer
+        example: 50
+      - name: offset
+        in: query
+        description: Number of items to "skip" in the query, i.e. requests return count items, skipping the first offset items.  Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#paginations) to learn more.
+        required: false
+        schema:
+          type: integer
+        example: 50
+      - schema: {}
+        in: query
+        name: sort
+        description: "Sort the order of custom user status in ascending (`1`) or descending (`-1`) order. The options are:\n * `name`: Sort by name. For example, `sort={\"name\": 1}` (default) or `sort={\"name\": -1}`.\n * `statusType`: Sort by status type. For example, `sort={\"statusType\": 1}` or sort=`{\"statusType\": -1}`.\n * You can also sort using both parameters. For example, `sort={\"name\": 1, \"statusType\": -1}`."
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statuses:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        statusType:
+                          type: string
+                        _updatedAt:
+                          type: string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    statuses:
+                    - _id: 63f61be0b000b6b6d86704c8
+                      name: brb
+                      statusType: away
+                      _updatedAt: '2023-02-22T13:42:56.811Z'
+                    count: 1
+                    offset: 0
+                    total: 1
+                    success: true
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+  /api/v1/custom-user-status.create:
+    post:
+      tags:
+      - Custom User Status
+      summary: Create Custom Status
+      description: "Create a custom user status. Permission required: `manage-user-status`\n\n### Changelog\n| Version      | Description | \n| ---------------- | ------------|\n|2.4.0            | Added       |\n\n### Example call\n\n```bash\ncurl -X POST https://<your-workspace-url>/api/v1/custom-user-status.create \\\n     -H \"Content-Type: application/json\" \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\" \\\n     -d '{\n  \"name\": \"caught up\",\n  \"statusType\": \"busy\"\n}'\n```\n\n### Example success response\n\n```json\n{\n  \"customUserStatus\": {\n    \"_id\": \"65462e97a2f73c7460e18f84\",\n    \"name\": \"caught up\",\n    \"statusType\": \"busy\",\n    \"_updatedAt\": \"2023-11-04T11:44:23.366Z\"\n  },\n  \"success\": true\n}\n```"
+      operationId: post-api-v1-custom-user-status.create
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the custom status.
+                statusType:
+                  type: string
+                  description: 'The `statusType` of the custom status. Valid status type includes: `Online`, `Busy`, `Away`, `Offline`.'
+              required:
+              - name
+              - statusType
+            examples:
+              Example:
+                value:
+                  name: caught up
+                  statusType: busy
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  customUserStatus:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      name:
+                        type: string
+                      statusType:
+                        type: string
+                      _updatedAt:
+                        type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    customUserStatus:
+                      _id: 65462e97a2f73c7460e18f84
+                      name: caught up
+                      statusType: busy
+                      _updatedAt: '2023-11-04T11:44:23.366Z'
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+              examples:
+                Missing Name Param:
+                  value:
+                    success: false
+                    error: The field Name is required [error-the-field-is-required]
+                    errorType: error-the-field-is-required
+                    details:
+                      method: insertOrUpdateUserStatus
+                      field: Name
+                Status name already in use:
+                  value:
+                    success: false
+                    error: The custom user status name is already in use [Custom_User_Status_Error_Name_Already_In_Use]
+                    errorType: Custom_User_Status_Error_Name_Already_In_Use
+                    details:
+                      method: insertOrUpdateUserStatus
+                Invalid Status Type:
+                  value:
+                    success: false
+                    error: Offline is not a valid status type [error-input-is-not-a-valid-field]
+                    errorType: error-input-is-not-a-valid-field
+                    details:
+                      method: insertOrUpdateUserStatus
+                      input: Offline
+                      field: StatusType
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+  /api/v1/custom-user-status.update:
+    post:
+      tags:
+      - Custom User Status
+      summary: Update Custom Status
+      description: "Update a custom status. Permission required: `manage-user-status`\n\n### Changelog\n| Version      | Description | \n| ---------------- | ------------|\n|2.4.0            | Added       |\n\n### Example call\n\n```bash\ncurl -X POST https://<your-workspace-url>/api/v1/custom-user-status.update \\\n     -H \"Content-Type: application/json\" \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\" \\\n     -d '{\n  \"_id\": \"65462e97a2f73c7460e18f84\",\n  \"name\": \"caught up again\",\n  \"statusType\": \"busy\"\n}'\n```\n\n### Example success response\n\n```json\n{\n  \"customUserStatus\": {\n    \"_id\": \"65462e97a2f73c7460e18f84\",\n    \"name\": \"caught up again\",\n    \"statusType\": \"busy\",\n    \"_updatedAt\": \"2023-11-04T11:51:28.353Z\"\n  },\n  \"success\": true\n}\n```"
+      operationId: post-api-v1-custom-user-status.update
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                _id:
+                  type: string
+                  description: The `_id` of the custom status.
+                name:
+                  type: string
+                  description: The updated name of the custom status.
+                statusType:
+                  type: string
+                  description: The updated `statusType` of the custom status
+              required:
+              - _id
+              - name
+              - statusType
+            examples:
+              Example:
+                value:
+                  _id: 65462e97a2f73c7460e18f84
+                  name: caught up again
+                  statusType: busy
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  customUserStatus:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      name:
+                        type: string
+                      statusType:
+                        type: string
+                      _updatedAt:
+                        type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    customUserStatus:
+                      _id: 65462e97a2f73c7460e18f84
+                      name: caught up again
+                      statusType: busy
+                      _updatedAt: '2023-11-04T11:51:28.353Z'
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                User status not found:
+                  value:
+                    success: false
+                    error: No custom user status found with the id of "SeZHHb77QXWRbnDh".
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+  /api/v1/custom-user-status.delete:
+    post:
+      tags:
+      - Custom User Status
+      summary: Delete Custom User Status
+      description: "Delete a custom user status. Permission required: `manage-user-status`\n\n### Changelog\n| Version      | Description | \n| ---------------- | ------------|\n|2.4.0            | Added       |\n\n### Example call\n\n```bash\ncurl -X POST https://<your-workspace-url>/api/v1/custom-user-status.delete \\\n     -H \"Content-Type: application/json\" \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\" \\\n     -d '{\n  \"customUserStatusId\": \"65462e97a2f73c7460e18f84\"\n}'\n```\n\n### Example success response\n\n```json\n{\n  \"success\": true\n}\n```"
+      operationId: post-api-v1-custom-user-status.delete
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customUserStatusId:
+                  type: string
+                  description: The `_id` of the custom status
+              required:
+              - customUserStatusId
+            examples:
+              Example:
+                value:
+                  customUserStatusId: 65462e97a2f73c7460e18f84
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                'User status Id is required:':
+                  value:
+                    success: false
+                    error: The "customUserStatusId" params is required!
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+  /api/v1/assets.setAsset:
+    post:
+      tags:
+      - Assets
+      summary: Set Asset
+      description: "Upload an <a href=\"https://docs.rocket.chat/docs/assets\" target=\"_blank\"> asset</a> by name. Permissions required: `manage-assets`. Make sure that the workspace's <a href='https://docs.rocket.chat/docs/file-upload' target='_blank'>file upload settings</a> are configured as required. The allowed file size and type depend on the file upload settings.\n\n### Changelog\n| Version      | Description | \n| ---------------- | ------------|\n|0.69.0           | Added       |\n\n### Example call\n\n```bash\ncurl -X POST https://<your-workspace-url>/api/v1/assets.setAsset \\\n     -H \"Content-Type: application/json\" \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\" \\\n     -d '{\n  \"asset\": \"example\",\n  \"assetName\": \"example\"\n}'\n```\n\n### Example success response\n\n```json\n{\n  \"success\": true\n}\n```"
+      operationId: post-api-v1-assets.setAsset
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      requestBody:
+        description: ''
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+              - asset
+              - assetName
+              properties:
+                asset:
+                  type: string
+                  description: Upload the file as form-data.
+                assetName:
+                  type: string
+                  description: 'Type of asset to upload. The value can be one of the following:
+
+                    * `logo`
+
+                    * `background`
+
+                    * `favicon_ico`
+
+                    * `favicon`
+
+                    * `favicon_16`
+
+                    * `favicon_32`
+
+                    * `favicon_192`
+
+                    * `favicon_512`
+
+                    * `touchicon_180`
+
+                    * `touchicon_180_pre`
+
+                    * `tile_70`
+
+                    * `tile_144`
+
+                    * `tile_150`
+
+                    * `tile_310_square`
+
+                    * `tile_310_wide`
+
+                    * `safari_pinned`'
+                refreshAllClients:
+                  type: boolean
+                  description: Set to true if all clients must be refreshed to immediately apply the changes.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                No asset name:
+                  value:
+                    success: false
+                    error: Invalid asset
+                Example 1:
+                  value:
+                    success: false
+                    error: '[No file uploaded]'
+                    errorType: No file uploaded
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+  /api/v1/assets.unsetAsset:
+    post:
+      tags:
+      - Assets
+      summary: Unset Asset
+      description: "Remove an asset by name. Permissions required: `manage-assets` .\n\n### Changelog\n| Version      | Description | \n| ---------------- | ------------|\n|0.69.0           | Added       |\n\n### Example call\n\n```bash\ncurl -X POST https://<your-workspace-url>/api/v1/assets.unsetAsset \\\n     -H \"Content-Type: application/json\" \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\" \\\n     -d '{\n  \"assetName\": \"logo\",\n  \"refreshAllClients\": true\n}'\n```\n\n### Example success response\n\n```json\n{\n  \"success\": true\n}\n```"
+      operationId: post-api-v1-assets.unsetAsset
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                assetName:
+                  type: string
+                  description: 'Type of asset to remove. The value can be one of the following:
+
+                    * `logo`
+
+                    * `background`
+
+                    * `favicon_ico`
+
+                    * `favicon`
+
+                    * `favicon_16`
+
+                    * `favicon_32`
+
+                    * `favicon_192`
+
+                    * `favicon_512`
+
+                    * `touchicon_180`
+
+                    * `touchicon_180_pre`
+
+                    * `tile_70`
+
+                    * `tile_144`
+
+                    * `tile_150`
+
+                    * `tile_310_square`
+
+                    * `tile_310_wide`
+
+                    * `safari_pinned`'
+                refreshAllClients:
+                  type: boolean
+                  description: Set to true if all clients must be refreshed to immediately apply the changes.
+              required:
+              - assetName
+            examples:
+              Example:
+                value:
+                  assetName: logo
+                  refreshAllClients: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: must have required property 'assetName' [invalid-params]
+                    errorType: invalid-params
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+  /api/v1/custom-sounds.delete:
+    post:
+      tags:
+      - Custom Sounds
+      summary: Delete Custom Sound
+      description: "Delete a custom sound from the workspace by its `_id`. This also removes the associated audio file from storage. This endpoint replaces the deprecated DDP method `deleteCustomSound`, which now logs a deprecation warning and is scheduled for removal in `9.0.0`.\n\nPermission required: `manage-sounds`\n\n### Changelog\n| Version | Description |\n| ------- | ----------- |\n| 8.6.0   | Added       |\n\n### Example call\n\n```bash\ncurl -X POST https://<your-workspace-url>/api/v1/custom-sounds.delete \\\n     -H \"Content-Type: application/json\" \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\" \\\n     -d '{\n  \"_id\": \"65462caea2f73c7460e18f83\"\n}'\n```\n\n### Example success response\n\n```json\n{\n  \"success\": true\n}\n```"
+      operationId: post-api-v1-custom-sounds.delete
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                _id:
+                  type: string
+                  description: The ID of the custom sound to delete. Must be at least one character long.
+                  example: 65462caea2f73c7460e18f83
+              required:
+              - _id
+            examples:
+              Example:
+                value:
+                  _id: 65462caea2f73c7460e18f83
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                Success:
+                  value:
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Invalid sound:
+                  value:
+                    success: false
+                    error: Custom_Sound_Error_Invalid_Sound
+                Missing required field:
+                  value:
+                    success: false
+                    error: must have required property '_id' [invalid-params]
+                    errorType: invalid-params
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Authorization Error:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: User does not have the permissions required for this action [error-unauthorized]
+                    errorType: error-unauthorized
+  /api/v1/custom-sounds.getOne:
+    get:
+      summary: Get Custom Sound
+      tags:
+      - Custom Sounds
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  sound:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      name:
+                        type: string
+                      extension:
+                        type: string
+                      _updatedAt:
+                        type: string
+              examples:
+                Request succeeded; returns the sound metadata.:
+                  value:
+                    success: true
+                    sound:
+                      _id: 65462caea2f73c7460e18f83
+                      name: doremi
+                      extension: mp3
+                      _updatedAt: '2023-11-04T11:36:14.171Z'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Invalid or missing _id:
+                  value:
+                    success: false
+                    error: '[The required "_id" query param is missing.]'
+                    errorType: The required "_id" query param is missing.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Sound not found:
+                  value:
+                    success: false
+                    error: Custom Sound not found.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Unauthorized login attempt:
+                  value:
+                    status: error
+                    message: You must be logged in to do this.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                No permission:
+                  value:
+                    success: false
+                    error: User does not have the permissions required for this action [error-unauthorized]
+      operationId: get-api-v1-custom-sounds.getOne
+      description: "- Returns one custom sound record for the workspace. You must pass the sound’s `_id` as a query parameter.\n\n- Authentication is required. The response includes the sound’s metadata (`name`, `extension`, `_updatedAt`), not the binary file.\n\n### Changelog\n\n| Version | Description |\n| ------- | ----------- |\n| 8.3.0   | Added       |\n\n### Example call\n\n```bash\ncurl -X GET 'https://<your-workspace-url>/api/v1/custom-sounds.getOne?_id=65462caea2f73c7460e18f83' \\\n     -H \"X-Auth-Token: your-auth-token\" \\\n     -H \"X-User-Id: your-user-id\"\n```\n\n### Example success response\n\n```json\n{\n  \"success\": true,\n  \"sound\": {\n    \"_id\": \"65462caea2f73c7460e18f83\",\n    \"name\": \"doremi\",\n    \"extension\": \"mp3\",\n    \"_updatedAt\": \"2023-11-04T11:36:14.171Z\"\n  }\n}\n```"
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        description: The `authToken` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+      - name: X-User-Id
+        in: header
+        description: The `userId` of the authenticated user.
+        required: true
+        schema:
+          type: string
+        example: rbAXPnMktTFbNpwtJ
+      - schema:
+          type: string
+        in: query
+        name: _id
+        required: true
+        description: ID of the custom sound
+        example: 65462caea2f73c7460e18f83
+tags:
+- name: Assets
+- name: Custom Emoji
+- name: Custom Sounds
+- name: Custom User Status
+components:
+  parameters:
+    offset:
+      name: offset
+      in: query
+      description: Number of items to "skip" in the query, i.e. requests return count items, skipping the first offset items.  Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#paginations) to learn more.
+      required: false
+      schema:
+        type: integer
+      example: 50
+    count:
+      name: count
+      in: query
+      description: The number of items to return. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.
+      required: false
+      schema:
+        type: integer
+      example: 50
+    sort:
+      name: sort
+      in: query
+      description: 'List of fields to order by, and in which direction. This is a JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending. For example, {"value": -1, "_id": 1}. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
+      required: false
+      schema: {}
+    query:
+      name: query
+      in: query
+      description: 'This parameter allows you to use MongoDB query operators to search for specific data. For example, to query users with a name that contains the letter "g": query={ "name": { "$regex": "g" } }. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more.'
+      required: false
+      schema: {}
+    fields:
+      name: fields
+      in: query
+      description: 'This parameter accepts a JSON object with properties that have a value of 1 or 0 to include or exclude them in the response. For example, to only retrieve the usernames of users: fields={ "username": 1 }. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more.'
+      required: false
+      schema:
+        type: string
+    Auth-Token:
+      name: X-Auth-Token
+      in: header
+      description: The `authToken` of the authenticated user.
+      required: true
+      schema:
+        type: string
+      example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+    UserId:
+      name: X-User-Id
+      in: header
+      description: The `userId` of the authenticated user.
+      required: true
+      schema:
+        type: string
+      example: rbAXPnMktTFbNpwtJ
+  responses:
+    trueSuccess:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+          examples:
+            Success:
+              value:
+                success: true
+    authorizationError:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              message:
+                type: string
+          examples:
+            Authorization Error:
+              value:
+                status: error
+                message: You must be logged in to do this.
