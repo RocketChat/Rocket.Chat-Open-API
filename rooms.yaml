@@ -5923,65 +5923,6 @@ paths:
           $ref: '#/components/responses/trueSuccess'
         '401':
           $ref: '#/components/responses/authorizationError'
-  '/api/v1/rooms.media/{rid}':
-    post:
-      summary: Upload Media Files to a Room
-      tags:
-        - Rooms
-      responses:
-        '200':
-          description: OK
-          headers: { }
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  file:
-                    type: object
-                    properties:
-                      _id:
-                        type: string
-                      url:
-                        type: string
-                  success:
-                    type: boolean
-              examples:
-                Example:
-                  value:
-                    file:
-                      _id: 67109d6c25682c7469486008
-                      url: /file-upload/67109d6c25682c7469486008/Screenshot%202024-10-15%20at%2010.17.39.png
-                    success: true
-      operationId: post-api-v1-rooms.media
-      description: |-
-       To upload media files to a room, follow these steps:
-        1. Call this endpoint first. This endpoint uploads the file to the database and returns a file object with the file ID and URL data. Save the file ID, we will need this to send the file in the next step.
-        2. To send the file to a room, use the <a href='https://developer.rocket.chat/apidocs/check-uploaded-file' target='_blank'>Confirm Uploaded File</a> endpoint.
-      parameters:
-        - $ref: '#/components/parameters/Auth-Token'
-        - $ref: '#/components/parameters/UserId'
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              required:
-                - file
-              properties:
-                file:
-                  type: string
-                  format: binary
-                  description: The file to upload.
-    parameters:
-      - schema:
-          type: string
-          example: 674eca3e43725ce31dd9a2e8
-        name: rid
-        in: path
-        required: true
-        description: The room ID.
-
   /api/v1/rooms.autocomplete.availableForTeams:
     get:
       tags:
@@ -14065,6 +14006,74 @@ paths:
           name: selector
           description: The search term to be completed. It only applies to the room name.
           required: true
+  '/api/v1/rooms.media/{rid}':
+    post:
+      summary: Upload Media Files to a Room
+      tags:
+        - Rooms
+      responses:
+        '200':
+          description: OK
+          headers: { }
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  file:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      url:
+                        type: string
+                  success:
+                    type: boolean
+              examples:
+                Example:
+                  value:
+                    file:
+                      _id: 67109d6c25682c7469486008
+                      url: /file-upload/67109d6c25682c7469486008/Screenshot%202024-10-15%20at%2010.17.39.png
+                    success: true
+      operationId: post-api-v1-rooms.media
+      description: |-
+       Only users who have access to send messages in a room can upload files there. 
+
+       You can't upload any file that exceeds the configured [Maximum File Upload Size](https://docs.rocket.chat/docs/file-upload#general-file-upload-settings1).
+       
+       To upload media files to a room, follow these steps:
+        1. Call this endpoint first. This endpoint uploads the file to the database and returns a file object with the file ID and URL data. Save the file ID, you will need this to send the file in the next step.
+        2. To send the file to a room, use the <a href='https://developer.rocket.chat/apidocs/check-uploaded-file' target='_blank'>Confirm Uploaded File</a> endpoint.
+
+        The upload is temporary and expires 24 hours after this call. If you don't confirm it within that window, it is discarded and never appears in the room. 
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: The file to upload.
+                content: 
+                  type: string 
+                  description: A JSON-encoded object containing additional metadata for the uploaded file.                  
+    parameters:
+      - schema:
+          type: string
+          example: 674eca3e43725ce31dd9a2e8
+        name: rid
+        in: path
+        required: true
+        description: The ID of the room where the file will be uploaded.
+
   '/api/v1/rooms.mediaConfirm/{rid}/{fileId}':
     parameters:
       - schema:
@@ -14073,14 +14082,14 @@ paths:
         name: rid
         in: path
         required: true
-        description: Enter the room ID where you want to check the uploaded file.
+        description: The ID of the room where the file will be sent.
       - schema:
           type: string
           example: 69424442ddfe6ceaf280f93f
         name: fileId
         in: path
         required: true
-        description: Enter the file ID you get from the <a href='https://developer.rocket.chat/apidocs/upload-media-files-to-a-room' target='_blank'>Upload Files to a Room</a> endpoint.
+        description: The file ID you get from the <a href='https://developer.rocket.chat/apidocs/upload-media-files-to-a-room' target='_blank'>Upload Files to a Room</a> endpoint.
     post:
       summary: Confirm Uploaded File
       tags:
@@ -14244,7 +14253,10 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: post-api-v1-rooms.mediaConfirm-rid-fileId
-      description: Use this endpoint to send a specific file to a room. You can use this endpoint only after calling the <a href='https://developer.rocket.chat/apidocs/upload-media-files-to-a-room' target='_blank'>Upload Media Files to a Room</a> endpoint and getting the file ID.
+      description: |-
+        Use this endpoint to send an uploaded file to a room. You can use this endpoint only after calling the <a href='https://developer.rocket.chat/apidocs/upload-media-files-to-a-room' target='_blank'>Upload Media Files to a Room</a> endpoint and getting the file ID.
+ 
+        Call it within 24 hours of the upload, using the same user account and room that uploaded the file. Otherwise, the request fails with `invalid-file`.
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
@@ -14256,8 +14268,15 @@ paths:
               properties:
                 description:
                   type: string
-                  description: Enter a file description.
+                  description: Enter a file description. 
                   example: file description
+                fileName:
+                  type: string
+                  description: Overrides the file name stored during upload.
+                  example: renamed-file.jpg
+                fileContent:
+                  type: object
+                  description: Overrides the file content stored during upload.
                 emoji:
                   type: string
                   description: The emoji you enter will be displayed as the avatar when the message is sent.
@@ -14286,7 +14305,7 @@ paths:
                   description: Enter custom fields if you have defined them in the <a href='https://docs.rocket.chat/docs/message' target='_blank'>Message</a> settings.
                   example: '{\"priority\": \"low\"}'
             examples:
-              Example 1:
+              Example:
                 value:
                   alias: test
                   avatar: 'https://picsum.photos/200'
