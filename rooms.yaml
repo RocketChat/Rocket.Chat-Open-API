@@ -14044,7 +14044,7 @@ paths:
        
        To upload media files to a room, follow these steps:
         1. Call this endpoint first. This endpoint uploads the file to the database and returns a file object with the file ID and URL data. Save the file ID, you will need this to send the file in the next step.
-        2. To send the file to a room, use the <a href='https://developer.rocket.chat/apidocs/check-uploaded-file' target='_blank'>Confirm Uploaded File</a> endpoint.
+        2. To send the file to a room, use the <a href='https://developer.rocket.chat/apidocs/check-uploaded-file' target='_blank'>Send Uploaded File to a Room</a> endpoint.
 
         The upload is temporary and expires 24 hours after this call. If you don't confirm it within that window, it is discarded and never appears in the room. 
       parameters:
@@ -14091,7 +14091,7 @@ paths:
         required: true
         description: The file ID you get from the <a href='https://developer.rocket.chat/apidocs/upload-media-files-to-a-room' target='_blank'>Upload Files to a Room</a> endpoint.
     post:
-      summary: Confirm Uploaded File
+      summary: Send Uploaded File to a Room
       tags:
         - Rooms
       responses:
