@@ -13,6 +13,7 @@ info:
 #      * **Federation**: Add and manage [federated](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/federation) servers.
 #      * **Moderation**: View and manage [reported messages](https://docs.rocket.chat/use-rocket.chat/workspace-administration/moderation).
 #      * **Device management**: Manage [user sessions](https://docs.rocket.chat/use-rocket.chat/user-management/device-manager) on the workspace.
+#      * **Audit**: List audit log entries and audit messages on workspaces licensed for auditing.
 servers:
   - url: https://apiexplorer.support.rocket.chat
 paths:
@@ -88,6 +89,8 @@ paths:
             * `createdAt`: Sort by creation date. `sort={"createdAt": 1}` or `sort={"createdAt": -1}`
             * `_id`: Sort by setting ID. `sort={"_id": 1}` or `sort={"_id": -1}`
   /api/v1/settings.oauth:
+    # TODO(security-review): this endpoint is served without authentication (authRequired: false) and, from 8.8.0 (PR 41788), returns the stored SAML service document with only `secret` projected out, so `entryPoint`, `idpSLORedirectURL`, `issuer`, `userDataFieldMap` and `template` reach unauthenticated callers. Confirm with security whether this exposure is intended before publishing.
+    # TODO(verify): confirm the full SAML field list returned by the response and the wire types of `userDataFieldMap` and `template` (documented here as strings) against a live 8.8.0 workspace.
     get:
       summary: Get OAuth Settings
       operationId: get-api-v1-settings.oauth
@@ -140,6 +143,16 @@ paths:
                           type: string
                         mergeUsers:
                           type: boolean
+                        entryPoint:
+                          type: string
+                        idpSLORedirectURL:
+                          type: string
+                        issuer:
+                          type: string
+                        userDataFieldMap:
+                          type: string
+                        template:
+                          type: string
                   success:
                     type: boolean
               examples:
@@ -177,14 +190,24 @@ paths:
                         identityTokenSentVia: default
                         usernameField: dfsgdfgdfgdfgsd
                         mergeUsers: true
+                      - _id: 8kEcbW7Yz3zJnHgqL
+                        service: saml
+                        entryPoint: 'https://idp.example.com/sso/saml'
+                        idpSLORedirectURL: 'https://idp.example.com/slo/saml'
+                        issuer: 'https://chat.example.com/_saml/metadata/test-provider'
+                        userDataFieldMap: '{"username":"username","email":"email","name":"cn"}'
+                        template: ''
                     success: true
       tags:
         - Settings
       description: |-
         List all the <a href="https://docs.rocket.chat/docs/oauth" target="_blank"> OAuth services</a>. enabled in the workspace.
+
+        A SAML service is returned with the configuration fields stored in its service document: `entryPoint`, `idpSLORedirectURL`, `issuer`, `userDataFieldMap` and `template`. The service `secret` is not returned.
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |8.8.0            | SAML services return their stored configuration fields       |
         |0.64.0            | Renamed field `appId` to `clientId` and added flag `custom` to indicate whether the OAuth service is customized and fix `id` inconsistence (set all cases to `_id`)       |
         |0.63.0            | Added       |
       parameters: []
@@ -421,6 +444,103 @@ paths:
                   description: The name of the custom OAuth method that you want to add.
               required:
                 - name
+  /api/v1/settings.removeCustomOAuth:
+    # TODO(verify): the 8.8.0 changeset does not state the success payload. Documented here as `{ "success": true }`, matching `settings.addCustomOAuth`. Confirm against a live 8.8.0 workspace.
+    parameters: []
+    post:
+      description: |-
+        Remove a <a href=" https://docs.rocket.chat/docs/oauth#add-custom-oauth" target="_blank">custom OAuth integration</a> from your workspace. All the `Accounts_OAuth_Custom-<Name>-*` settings of the named service are deleted. This endpoint requires 2FA.
+
+        It replaces the deprecated `removeOAuthService` real-time method, which remains available until 9.0.0.
+
+        Permission required: `add-oauth-service`.
+
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |8.8.0            | Added       |
+      summary: Remove Custom OAuth
+      operationId: post-api-v1-settings.removeCustomOAuth
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Missing name param:
+                  value:
+                    success: false
+                    error: 'The parameter "name" is required [error-name-param-not-provided]'
+                    errorType: error-name-param-not-provided
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      tags:
+        - Settings
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/x-2fa-code'
+        - $ref: '#/components/parameters/X-2fa-method'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the custom OAuth service that you want to remove.
+                  example: myProvider
+              required:
+                - name
+            examples:
+              Example:
+                value:
+                  name: myProvider
+  /api/v1/settings.refreshOAuthServices:
+    # TODO(verify): the 8.8.0 changeset does not state the success payload. Documented here as `{ "success": true }`. Confirm against a live 8.8.0 workspace.
+    parameters: []
+    post:
+      description: |-
+        Reload the workspace <a href=" https://docs.rocket.chat/docs/oauth" target="_blank">OAuth service</a> configurations from the current settings. Use it after adding or removing a custom OAuth service so that the login services are rebuilt. This endpoint takes no body and requires 2FA.
+
+        It replaces the deprecated `refreshOAuthService` real-time method, which remains available until 9.0.0.
+
+        Permission required: `add-oauth-service`.
+
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |8.8.0            | Added       |
+      summary: Refresh OAuth Services
+      operationId: post-api-v1-settings.refreshOAuthServices
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+      tags:
+        - Settings
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - $ref: '#/components/parameters/x-2fa-code'
+        - $ref: '#/components/parameters/X-2fa-method'
   '/api/v1/settings/{_id}':
     parameters:
       - schema:
@@ -4999,6 +5119,364 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
+  /api/v1/audit.auditions:
+    # TODO(verify): the 8.8.0 changeset types the response as `IAuditLog[]` without listing the item fields, and does not state whether `startDate` and `endDate` are mandatory. Fill in the item schema, the example and the required flags from a live 8.8.0 response before publishing.
+    parameters: []
+    get:
+      tags:
+        - Audit
+      summary: List Auditions
+      description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+
+        List the audit log entries recorded in a period. It requires a license that includes the `auditing` module. Dates are sent and returned as ISO strings. Rate limiting: 10 requests per 60000ms.
+
+        This endpoint replaces the deprecated `auditGetAuditions` real-time method, which remains available until 9.0.0.
+
+        Permission required: `can-audit-log`.
+
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |8.8.0            | Added       |
+      operationId: get-api-v1-audit.auditions
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - name: startDate
+          in: query
+          required: true
+          description: The beginning of the period to list, as an ISO date string.
+          schema:
+            type: string
+          example: '2026-08-01T00:00:00.000Z'
+        - name: endDate
+          in: query
+          required: true
+          description: The end of the period to list, as an ISO date string.
+          schema:
+            type: string
+          example: '2026-08-20T23:59:59.999Z'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  auditions:
+                    type: array
+                    description: The audit log entries recorded in the requested period.
+                    items:
+                      type: object
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    auditions: []
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+  /api/v1/audit.messages:
+    # TODO(verify): the 8.8.0 changeset lists the body fields without their types. Confirm whether `users` holds usernames or user IDs, the allowed values of `type`, and whether `visitor` and `agent` are IDs. The response is typed `IMessage[]`; confirm the returned message fields.
+    parameters: []
+    post:
+      tags:
+        - Audit
+      summary: Audit Messages
+      description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+
+        Search messages for an audit and record the search as an audit log entry. It requires a license that includes the `auditing` module. Dates are sent as ISO strings. Rate limiting: 10 requests per 60000ms.
+
+        This endpoint replaces the deprecated `auditGetMessages` real-time method, which remains available until 9.0.0.
+
+        Permission required: `can-audit`.
+
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |8.8.0            | Added       |
+      operationId: post-api-v1-audit.messages
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rid:
+                  type: string
+                  description: The ID of the room to search in. Optional.
+                  example: GENERAL
+                startDate:
+                  type: string
+                  description: The beginning of the period to search, as an ISO date string.
+                  example: '2026-08-01T00:00:00.000Z'
+                endDate:
+                  type: string
+                  description: The end of the period to search, as an ISO date string.
+                  example: '2026-08-20T23:59:59.999Z'
+                users:
+                  type: array
+                  description: The users whose messages are audited.
+                  items:
+                    type: string
+                  example:
+                    - dana.reyes
+                msg:
+                  type: string
+                  description: The text to search for in the messages.
+                  example: incident report
+                type:
+                  type: string
+                  description: The type of audit performed.
+                  example: u
+                visitor:
+                  type: string
+                  description: The Omnichannel visitor to audit. Optional.
+                  example: 8f4c2d1e9a7b6c5d3e2f1a0b
+                agent:
+                  type: string
+                  description: The Omnichannel agent to audit. Optional.
+                  example: rbAXPnMktTFbNpwtJ
+              required:
+                - startDate
+                - endDate
+                - users
+                - msg
+                - type
+            examples:
+              Example:
+                value:
+                  rid: GENERAL
+                  startDate: '2026-08-01T00:00:00.000Z'
+                  endDate: '2026-08-20T23:59:59.999Z'
+                  users:
+                    - dana.reyes
+                  msg: incident report
+                  type: u
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    type: array
+                    description: The messages matching the audit search.
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        rid:
+                          type: string
+                        msg:
+                          type: string
+                        ts:
+                          type: string
+                        u:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                            name:
+                              type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    messages:
+                      - _id: 7aDSXtjMA3KPLxLjt
+                        rid: GENERAL
+                        msg: Please share the incident report
+                        ts: '2026-08-12T09:14:03.412Z'
+                        u:
+                          _id: rbAXPnMktTFbNpwtJ
+                          username: dana.reyes
+                          name: Dana Reyes
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: Invalid body params
+                    errorType: error-invalid-body-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+  /api/v1/audit.omnichannelMessages:
+    # TODO(verify): the 8.8.0 changeset lists the body fields without their types. Confirm whether `users` holds usernames or user IDs, the allowed values of `type`, and whether `visitor` and `agent` are IDs. The response is typed `IMessage[]`; confirm the returned message fields.
+    parameters: []
+    post:
+      tags:
+        - Audit
+      summary: Audit Omnichannel Messages
+      description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+
+        Search <a href="https://docs.rocket.chat/docs/omnichannel" target="_blank">Omnichannel</a> messages for an audit and record the search as an audit log entry. It requires a license that includes the `auditing` module. Dates are sent as ISO strings. Rate limiting: 10 requests per 60000ms.
+
+        This endpoint replaces the deprecated `auditGetOmnichannelMessages` real-time method, which remains available until 9.0.0.
+
+        Permission required: `can-audit`.
+
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |8.8.0            | Added       |
+      operationId: post-api-v1-audit.omnichannelMessages
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                startDate:
+                  type: string
+                  description: The beginning of the period to search, as an ISO date string.
+                  example: '2026-08-01T00:00:00.000Z'
+                endDate:
+                  type: string
+                  description: The end of the period to search, as an ISO date string.
+                  example: '2026-08-20T23:59:59.999Z'
+                users:
+                  type: array
+                  description: The users whose messages are audited.
+                  items:
+                    type: string
+                  example:
+                    - dana.reyes
+                msg:
+                  type: string
+                  description: The text to search for in the messages.
+                  example: refund
+                type:
+                  type: string
+                  description: The type of audit performed.
+                  example: u
+                visitor:
+                  type: string
+                  description: The Omnichannel visitor to audit. Optional.
+                  example: 8f4c2d1e9a7b6c5d3e2f1a0b
+                agent:
+                  type: string
+                  description: The Omnichannel agent to audit. Optional.
+                  example: rbAXPnMktTFbNpwtJ
+              required:
+                - startDate
+                - endDate
+                - users
+                - msg
+                - type
+            examples:
+              Example:
+                value:
+                  startDate: '2026-08-01T00:00:00.000Z'
+                  endDate: '2026-08-20T23:59:59.999Z'
+                  users:
+                    - dana.reyes
+                  msg: refund
+                  type: u
+                  visitor: 8f4c2d1e9a7b6c5d3e2f1a0b
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    type: array
+                    description: The Omnichannel messages matching the audit search.
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        rid:
+                          type: string
+                        msg:
+                          type: string
+                        ts:
+                          type: string
+                        u:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                            name:
+                              type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    messages:
+                      - _id: 5RQ4SBL3NuZKsqxaF
+                        rid: pMtJcZDsvKLnGKQ2C
+                        msg: I would like to request a refund
+                        ts: '2026-08-14T16:02:51.006Z'
+                        u:
+                          _id: 8f4c2d1e9a7b6c5d3e2f1a0b
+                          username: guest-482
+                          name: Alex Doe
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: Invalid body params
+                    errorType: error-invalid-body-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
 tags:
   - name: Settings
   - name: Cloud
@@ -5013,6 +5491,7 @@ tags:
   - name: Password policy
   - name: Video Conference
   - name: Media Calls
+  - name: Audit
 components:
   parameters:
     X-User-Id:

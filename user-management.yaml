@@ -8,6 +8,7 @@ info:
 #      * **Permissions**: Manage user [permissions](https://docs.rocket.chat/use-rocket.chat/workspace-administration/permissions) and access.
 #      * **Roles**: Assign and manage user [roles](https://docs.rocket.chat/use-rocket.chat/workspace-administration/permissions#roles).
 #      * **LDAP**: Test and sync [LDAP](https://docs.rocket.chat/use-rocket.chat/authentication/ldap) connection.
+#      * **SAML**: Parse [SAML](https://docs.rocket.chat/use-rocket.chat/authentication/saml) identity provider metadata.
 servers:
   - url: https://apiexplorer.support.rocket.chat
 paths:
@@ -3631,6 +3632,7 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/users.setPreferences:
+    # TODO(verify): PR 41747 (status visibility, 8.8.0) changed packages/rest-typings/src/v1/users/UsersSetPreferenceParamsPOST.ts, so this request body gained at least one field for the status visibility list. The 8.8.0 changeset does not name the field or its type, so nothing was documented here. Confirm the field name, type and accepted values (user IDs or usernames) against that file, then patch the request body, the `user.settings.preferences` response object and the changelog table.
     post:
       summary: Set User Preferences
       operationId: post-api-v1-users.setPreferences
@@ -5896,11 +5898,99 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
+  /api/v1/saml.parseMetadata:
+    # TODO(verify): PR 41481 adds this route (apps/meteor/server/api/v1/saml.ts, packages/rest-typings/src/v1/saml.ts) but the changeset does not publish its wire contract. Confirm against packages/rest-typings/src/v1/saml.ts: (1) the request body field name for the metadata URL, documented here as `url`; (2) whether the parsed values are returned flat as documented here or wrapped in an object; (3) the exact response key names (`certificate`, `entryPoint`, `idpSLORedirectURL`, `identifierFormat`); (4) the permission the route enforces, documented here as `manage-settings`.
+    parameters: []
+    post:
+      tags:
+        - SAML
+      summary: Parse SAML IdP Metadata
+      description: |-
+        Fetches the <a href="https://docs.rocket.chat/use-rocket.chat/authentication/saml" target="_blank">SAML</a> metadata document of an identity provider from a URL and returns the values parsed from it, so they can be reviewed before the SAML settings are saved. The admin area uses it for the **Import IdP metadata** action on **Administration** > **Workspace** > **Settings** > **SAML**.
+
+        The endpoint only parses the metadata. It does not persist any setting.
+
+        The `identifierFormat` value is only returned on workspaces with a Premium plan.
+
+        Permission required: `manage-settings`.
+
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |8.8.0            | Added       |
+      operationId: post-api-v1-saml.parseMetadata
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  description: The URL of the identity provider metadata document.
+                  example: 'https://idp.example.com/metadata'
+              required:
+                - url
+            examples:
+              Example:
+                value:
+                  url: 'https://idp.example.com/metadata'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  certificate:
+                    type: string
+                  entryPoint:
+                    type: string
+                  idpSLORedirectURL:
+                    type: string
+                  identifierFormat:
+                    type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    certificate: MIIDdzCCAl+gAwIBAgIEXAMPLEONLY
+                    entryPoint: 'https://idp.example.com/sso/saml'
+                    idpSLORedirectURL: 'https://idp.example.com/slo/saml'
+                    identifierFormat: 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent'
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: Invalid body params
+                    errorType: error-invalid-body-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
 tags:
   - name: LDAP
   - name: Permissions
   - name: Roles
   - name: Users
+  - name: SAML
 components:
   parameters:
     Auth-Token:

@@ -5105,13 +5105,23 @@ paths:
         At least one of the following permissions is required:
           * `view-livechat-departments`
           * `view-l-room`
+
+        The `conditions` key of the `selector` parameter is deprecated. A request that still sends it returns the same results but records a deprecation warning in the workspace logs.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ------------|
+        | 8.8.0   | Deprecated the `conditions` key of the `selector` parameter |
       operationId: get-api-v1-livechat-department.autocomplete
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
+        # TODO(verify): confirm which selector fields replace the deprecated `conditions` filters, and the version that removes `conditions`.
         - name: selector
           in: query
-          description: Enter the exceptions or the conditions that you want to search for.
+          description: |-
+            Enter the exceptions or the conditions that you want to search for.
+            The `conditions` key is deprecated as of 8.8.0 and logs a deprecation warning when it is not empty.
           required: true
           schema:
             type: string
@@ -14199,14 +14209,25 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: get-api-v1-livechat-visitors.autocomplete
-      description: Autocomplete a visitor's name.
+      description: |-
+        Autocomplete a visitor's name.
+
+        The `conditions` key of the `selector` parameter is deprecated. A request that still sends it returns the same results but records a deprecation warning in the workspace logs.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ------------|
+        | 8.8.0   | Deprecated the `conditions` key of the `selector` parameter |
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
+        # TODO(verify): confirm which selector fields replace the deprecated `conditions` filters, and the version that removes `conditions`.
         - schema: {}
           in: query
           name: selector
-          description: 'Enter the exceptions or the conditions that you want to search for. For example, { "exceptions" : [], "conditions" : {"username": "guest-5"}}'
+          description: |-
+            Enter the exceptions or the conditions that you want to search for. For example, { "exceptions" : [], "conditions" : {"username": "guest-5"}}
+            The `conditions` key is deprecated as of 8.8.0 and logs a deprecation warning when it is not empty.
           required: true
   /api/v1/livechat/visitors.status:
     parameters: []

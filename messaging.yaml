@@ -1773,10 +1773,14 @@ paths:
       description: |-
         Get <a href='https://docs.rocket.chat/docs/threads' target='_blank'>thread</a> messages.
 
+        Use `aroundId` to centre the returned page on a specific reply instead of paging from the start of the thread. The result excludes hidden message-history records kept by workspaces that store edit history, so the `total` and the returned rows count only the thread's visible messages.
+
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ------------ | ------------|
+        | 8.8.0        | Added `aroundId` parameter |
+        | 8.8.0        | Hidden message-history records excluded from results and `total` |
         | 1.2.0        | Remove `tlm` field which is not supported |
         | 1.1.0        | Update example results - original message in thread is not returned |
         | 1.0.0        | Added       |
@@ -1796,6 +1800,15 @@ paths:
           schema:
             type: string
           example: 7aDSXtjMA3KPLxLjt
+        # TODO(verify): confirm how aroundId interacts with offset (whether offset is ignored when aroundId is sent) and the error returned when the message ID does not belong to the thread.
+        - name: aroundId
+          in: query
+          description: |-
+            The ID of a reply in the thread to centre the returned page on. Use it to load the replies surrounding a specific message instead of paging from the start of the thread.
+          required: false
+          schema:
+            type: string
+          example: GfhiiJjcjKFyYMuMY
       responses:
         '200':
           description: OK
@@ -1915,6 +1928,66 @@ paths:
                     success: false
                     error: 'Invalid Message [error-invalid-message]'
                     errorType: error-invalid-message
+  /api/v1/chat.readThread:
+    post:
+      tags:
+        - Chat
+      summary: Read Thread
+      description: |-
+        Mark a single <a href='https://docs.rocket.chat/docs/threads' target='_blank'>thread</a> as read for the authenticated user. It clears the thread from the unread list of the user's subscription and runs the `beforeReadMessages` and `afterReadMessages` callbacks.
+
+        This endpoint replaces the `readThreads` realtime method. The realtime method stays available and logs a deprecation warning until version 9.0.0. Use this endpoint instead of `subscriptions.read`, which operates on the whole room and cannot address a single thread.
+
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        | 8.8.0            | Added       |
+      operationId: post-api-v1-chat.readThread
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tmid:
+                  type: string
+                  description: The ID of the thread's main message.
+              required:
+                - tmid
+            examples:
+              Example 1:
+                value:
+                  tmid: 7aDSXtjMA3KPLxLjt
+      responses:
+        # TODO(verify): confirm the 200 payload is `{ "success": true }` only, and whether a permission or room-membership check applies.
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        # TODO(verify): confirm the exact error and errorType returned for a missing tmid and for a tmid that is not a thread's main message.
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: '[The required "tmid" body param is missing.]'
+                    errorType: The required "tmid" body param is missing.
   /api/v1/chat.ignoreUser:
     get:
       tags:
@@ -3433,9 +3506,12 @@ paths:
       summary: Sync Messages
       description: |-
         List the messages in a room along with any data updates from a specified date.
+
+        Use `fromTs` together with `lastUpdate` to bound the sync window to a start date, which makes this endpoint a replacement for the deprecated `loadMissedMessages` realtime method. A request that sends `fromTs` with the `next` or `previous` cursor pagination parameters is rejected instead of ignoring `fromTs`.
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ------------ | ------------|
+        | 8.8.0        | Added `fromTs` parameter to bound the sync window |
         | 1.0.0        | Added       |
       operationId: get-api-v1-chat.syncMessages
       parameters:
@@ -3452,6 +3528,13 @@ paths:
           schema:
             type: string
           example: 2019-04-16T18:30:46.669Z
+        # TODO(verify): confirm the accepted format of fromTs (ISO string or epoch milliseconds) and the exact error/errorType returned when fromTs is sent without lastUpdate or together with next/previous.
+        - name: fromTs
+          in: query
+          description: 'The start of the sync window as an ISO string. Optional. Use it together with `lastUpdate` to return only the messages updated between `fromTs` and `lastUpdate`. You cannot use this parameter with the `next` or `previous` parameter.'
+          schema:
+            type: string
+          example: 2019-04-15T18:30:46.669Z
         - schema:
             type: number
             example: 14182940000
