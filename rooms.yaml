@@ -4745,6 +4745,91 @@ paths:
           $ref: '#/components/responses/trueSuccess'
         '401':
           $ref: '#/components/responses/authorizationError'
+  /api/v1/rooms.saveDraft:
+    post:
+      tags:
+        - Rooms
+      summary: Save Room Draft
+      description: |-
+        Save or clear the authenticated user's message draft for a room or an existing thread. The user must have a subscription to the room.
+
+        To save a room draft, omit `tmid`. To save a thread draft, provide the ID of the thread's main message in `tmid`. Send an empty `draft` to clear the corresponding room or thread draft. The draft cannot exceed the workspace's `Message_MaxAllowedSize` setting.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.8.0   | Added the optional `tmid` parameter to save thread drafts |
+        | 8.5.0   | Added |
+      operationId: post-api-v1-rooms.saveDraft
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rid:
+                  type: string
+                  minLength: 1
+                  description: The room ID.
+                draft:
+                  type: string
+                  description: The draft text. Send an empty string to clear the draft.
+                tmid:
+                  type: string
+                  minLength: 1
+                  pattern: '^[^.$]+$'
+                  description: The ID of the thread's main message. Omit this parameter to save or clear the main room draft.
+              required:
+                - rid
+                - draft
+              additionalProperties: false
+            examples:
+              Save room draft:
+                value:
+                  rid: GENERAL
+                  draft: Remember to share the report
+              Save thread draft:
+                value:
+                  rid: GENERAL
+                  draft: I will check this and reply
+                  tmid: 7aDSXtjMA3KPLxLjt
+              Clear thread draft:
+                value:
+                  rid: GENERAL
+                  draft: ''
+                  tmid: 7aDSXtjMA3KPLxLjt
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Invalid subscription:
+                  value:
+                    success: false
+                    error: 'Invalid subscription [error-invalid-subscription]'
+                    errorType: error-invalid-subscription
+                Draft exceeds maximum size:
+                  value:
+                    success: false
+                    error: error-message-size-exceeded
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/rooms.adminRooms:
     get:
       tags:
@@ -16357,6 +16442,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |8.8.0             | Added the `threadDrafts` field |
         |0.60.0            | Added       |
       operationId: get-api-v1-subscriptions.get
       parameters:
@@ -16421,6 +16507,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |8.8.0             | Added the `threadDrafts` field |
         |0.63.0            | Added       |
       operationId: get-api-v1-subscriptions.getOne
       parameters:
@@ -16463,6 +16550,9 @@ paths:
                         username: funke
                       _updatedAt: '2024-07-02T18:07:35.267Z'
                       ls: '2024-05-30T16:47:36.993Z'
+                      draft: Remember to share the report
+                      threadDrafts:
+                        7aDSXtjMA3KPLxLjt: I will check this and reply
                     success: true
               examples:
                 Success Example:
@@ -16745,6 +16835,14 @@ components:
           type: string
         E2EKey:
           type: string
+        draft:
+          type: string
+          description: The unfinished message draft for the room.
+        threadDrafts:
+          type: object
+          description: The unfinished thread reply drafts, keyed by the ID of each thread's main message.
+          additionalProperties:
+            type: string
   parameters:
     Optional-RoomId:
       name: roomId
