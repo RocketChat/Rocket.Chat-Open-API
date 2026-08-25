@@ -6790,11 +6790,14 @@ paths:
       summary: Create Discussion
       description: |-
         Creates a new discussion for the room. It requires at least one of the following permissions: `start-discussion` OR `start-discussion-other-user`, AND must be with the following setting enabled: `Discussion_enabled`.
+
+        When **Force end-to-end encryption on private rooms** is enabled, you cannot create a discussion under an unencrypted private room. Make the parent room public or enable encryption on it before creating the discussion.
         
         ### Changelog
-        | Version | Description |
-        | ------- | ----------- |
-        | 1.0.0   | Added       |
+        | Version | Description                                                                                   |
+        | ------- | --------------------------------------------------------------------------------------------- |
+        | 8.8.0   | Added forced encryption checks for private-room discussions.                                      |
+        | 1.0.0   | Added                                                                                         |
       operationId: post-api-v1-rooms.createDiscussion
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -6900,6 +6903,25 @@ paths:
                       _updatedAt: '2019-04-03T01:35:32.280Z'
                       _id: cgk88DHLHexwMaFWh
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Private room encryption is enforced:
+                  value:
+                    success: false
+                    error: 'Workspace policy requires all private rooms to be encrypted. To create this discussion, make the parent channel public or enable encryption on it. [error-encrypted-private-rooms-enforced-discussion]'
+                    errorType: error-encrypted-private-rooms-enforced-discussion
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/rooms.images:
@@ -10252,10 +10274,11 @@ paths:
         * `create-team-group`: This permission is required if you want to create a private channel from an existing team.
         
         ### Changelog
-        | Version | Description               |
-        | ------- | ------------------------- |
-        | 6.4.1   | Added `excludeSelf` param |
-        | 0.35.0  | Added                     |
+        | Version | Description                                                                                 |
+        | ------- | ------------------------------------------------------------------------------------------- |
+        | 8.8.0   | Added support for enforcing end-to-end encryption when creating private rooms.             |
+        | 6.4.1   | Added `excludeSelf` param                                                                   |
+        | 0.35.0  | Added                                                                                       |
       operationId: post-api-v1-groups.create
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -10300,7 +10323,7 @@ paths:
                       description: Whether the group should be a broadcast group. False by default.
                     encrypted:
                       type: boolean
-                      description: Whether the group should be encrypted. False by default.
+                      description: Whether the private room should use end-to-end encryption. When **Force end-to-end encryption on private rooms** is enabled, omit this field or set it to `true`. Setting it to `false` returns the `error-encrypted-private-rooms-enforced` error. Federated private rooms are exempt from this policy.
                     teamId:
                       type: string
                       description: Enter the team ID for which you want to create a group. You will get an error if the team does not exist.
@@ -10318,7 +10341,7 @@ paths:
                     type: default
                   extraData:
                     broadcast: true
-                    encrypted: false
+                    encrypted: true
                     teamId: 658441562dd9f928ad9951aa
       responses:
         '200':
@@ -10383,11 +10406,18 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
               examples:
-                Example 1:
+                Name is required:
                   value:
                     success: false
                     error: Body param "name" is required
+                Private room encryption is enforced:
+                  value:
+                    success: false
+                    error: 'Workspace policy requires all private rooms to be encrypted. [error-encrypted-private-rooms-enforced]'
+                    errorType: error-encrypted-private-rooms-enforced
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.delete:
