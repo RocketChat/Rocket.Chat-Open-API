@@ -1773,10 +1773,12 @@ paths:
       description: |-
         Get <a href='https://docs.rocket.chat/docs/threads' target='_blank'>thread</a> messages.
 
+        Use `aroundId` to load the replies surrounding a specific message. When you provide `aroundId`, the server calculates the page offset around that message instead of using the requested `offset`, and returns the calculated value in the response. Hidden message-history records are excluded from the returned messages and pagination totals.
 
         ### Changelog
         | Version      | Description | 
         | ------------ | ------------|
+        | 8.8.0        | Added the `aroundId` parameter and excluded hidden message-history records from results and pagination totals |
         | 1.2.0        | Remove `tlm` field which is not supported |
         | 1.1.0        | Update example results - original message in thread is not returned |
         | 1.0.0        | Added       |
@@ -1796,6 +1798,14 @@ paths:
           schema:
             type: string
           example: 7aDSXtjMA3KPLxLjt
+        - name: aroundId
+          in: query
+          description: |-
+            The ID of the thread's main message or one of its replies. The endpoint returns a page of replies surrounding this message. When you provide this parameter, the server calculates the page offset and ignores the requested `offset` value. The message must belong to the thread specified by `tmid`.
+          required: false
+          schema:
+            type: string
+          example: GfhiiJjcjKFyYMuMY
       responses:
         '200':
           description: OK
@@ -1848,10 +1858,13 @@ paths:
                           type: string
                   count:
                     type: integer
+                    description: The number of visible replies returned in this response.
                   offset:
                     type: integer
+                    description: The starting offset of the returned page. When you provide `aroundId`, this is the offset calculated by the server.
                   total:
                     type: integer
+                    description: The total number of visible replies in the thread. Hidden message-history records are excluded.
                   success:
                     type: boolean
               examples:
@@ -1914,6 +1927,11 @@ paths:
                   value:
                     success: false
                     error: 'Invalid Message [error-invalid-message]'
+                    errorType: error-invalid-message
+                Invalid aroundId:
+                  value:
+                    success: false
+                    error: 'The provided "aroundId" does not belong to the thread [error-invalid-message]'
                     errorType: error-invalid-message
   /api/v1/chat.ignoreUser:
     get:
