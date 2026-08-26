@@ -1199,6 +1199,411 @@ paths:
                       method: password
                       codeGenerated: false
                       availableMethods: []
+  /api/v1/users.enableTotp:
+    post:
+      tags:
+        - Two-Factor Authentication
+      summary: Enable TOTP 2FA
+      description: |-
+        Starts the TOTP enrollment for your own account and returns the shared `secret` and the `url` to render as a QR code in an authenticator app. Call `users.validateTotp` with a code from the app to finish the enrollment.
+
+        This endpoint requires two-factor verification, so the account owner confirms their identity with an existing second factor before a new authenticator is registered. Requests are limited to five per minute.
+
+        This endpoint replaces the deprecated `2fa:enable` real-time method, which remains available until 9.0.0.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.8.0   | Added       |
+      operationId: post-api-v1-users.enableTotp
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - name: X-2fa-Code
+          in: header
+          description: 'The 2FA code. '
+          required: true
+          schema:
+            type: string
+        - schema:
+            type: string
+          in: header
+          name: X-2fa-method
+          description: 'The 2FA method. It can be `email`, `totp`, or `password`.'
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  secret:
+                    type: string
+                  url:
+                    type: string
+                  success:
+                    type: boolean
+                required:
+                  - secret
+                  - url
+                  - success
+                additionalProperties: false
+              examples:
+                Success Example:
+                  value:
+                    secret: KZ3EAT7RJVHUYQ2C
+                    url: 'otpauth://totp/Rocket.Chat:dana.reyes?secret=KZ3EAT7RJVHUYQ2C&issuer=Rocket.Chat'
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+                      codeGenerated:
+                        type: boolean
+                      availableMethods:
+                        type: array
+                        items:
+                          type: object
+              examples:
+                TOTP Required:
+                  value:
+                    success: false
+                    error: 'TOTP Required [totp-required]'
+                    errorType: totp-required
+                    details:
+                      method: password
+                      codeGenerated: false
+                      availableMethods: []
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  /api/v1/users.validateTotp:
+    post:
+      tags:
+        - Two-Factor Authentication
+      summary: Validate TOTP Code
+      description: |-
+        Finishes the TOTP enrollment started with `users.enableTotp` by validating a code from the authenticator app, and returns the backup `codes` for the account. The other login tokens of the account are rotated, except personal access tokens.
+
+        This endpoint requires two-factor verification. Requests are limited to five per minute.
+
+        This endpoint replaces the deprecated `2fa:validateTempToken` real-time method, which remains available until 9.0.0.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.8.0   | Added       |
+      operationId: post-api-v1-users.validateTotp
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - name: X-2fa-Code
+          in: header
+          description: 'The 2FA code. '
+          required: true
+          schema:
+            type: string
+        - schema:
+            type: string
+          in: header
+          name: X-2fa-method
+          description: 'The 2FA method. It can be `email`, `totp`, or `password`.'
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  description: The code shown by the authenticator app for the account.
+                  example: '482913'
+              required:
+                - code
+              additionalProperties: false
+            examples:
+              Example 1:
+                value:
+                  code: '482913'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  codes:
+                    type: array
+                    description: The backup codes of the account.
+                    items:
+                      type: string
+                  success:
+                    type: boolean
+                required:
+                  - codes
+                  - success
+                additionalProperties: false
+              examples:
+                Success Example:
+                  value:
+                    codes:
+                      - 3f7a1c9d
+                      - 90b2e4a6
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Invalid code:
+                  value:
+                    success: false
+                    error: '[invalid-totp]'
+                    errorType: invalid-totp
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  /api/v1/users.disableTotp:
+    post:
+      tags:
+        - Two-Factor Authentication
+      summary: Disable TOTP 2FA
+      description: |-
+        Disables the authenticator app (TOTP) two-factor authentication of your own account. The code from the authenticator app is required in the body. Requests are limited to five per minute.
+
+        This endpoint replaces the deprecated `2fa:disable` real-time method, which remains available until 9.0.0.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.8.0   | Added       |
+      operationId: post-api-v1-users.disableTotp
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  description: The code shown by the authenticator app for the account.
+                  example: '482913'
+              required:
+                - code
+              additionalProperties: false
+            examples:
+              Example 1:
+                value:
+                  code: '482913'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  disabled:
+                    type: boolean
+                  success:
+                    type: boolean
+                required:
+                  - disabled
+                  - success
+                additionalProperties: false
+              examples:
+                Success Example:
+                  value:
+                    disabled: true
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  /api/v1/users.regenerateTotpCodes:
+    post:
+      tags:
+        - Two-Factor Authentication
+      summary: Regenerate TOTP Backup Codes
+      description: |-
+        Generates a new set of backup codes for the authenticator app (TOTP) two-factor authentication of your own account and returns them. The previous backup codes stop working. The code from the authenticator app is required in the body. Requests are limited to five per minute.
+
+        This endpoint replaces the deprecated `2fa:regenerateCodes` real-time method, which remains available until 9.0.0.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.8.0   | Added       |
+      operationId: post-api-v1-users.regenerateTotpCodes
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  description: The code shown by the authenticator app for the account.
+                  example: '482913'
+              required:
+                - code
+              additionalProperties: false
+            examples:
+              Example 1:
+                value:
+                  code: '482913'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  codes:
+                    type: array
+                    description: The new backup codes of the account.
+                    items:
+                      type: string
+                  success:
+                    type: boolean
+                required:
+                  - codes
+                  - success
+                additionalProperties: false
+              examples:
+                Success Example:
+                  value:
+                    codes:
+                      - 5c1d8b02
+                      - e74a2f61
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Invalid code:
+                  value:
+                    success: false
+                    error: '[invalid-totp]'
+                    errorType: invalid-totp
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  /api/v1/users.totpCodesRemaining:
+    get:
+      tags:
+        - Two-Factor Authentication
+      summary: Get Remaining TOTP Codes
+      description: |-
+        Returns how many backup codes are left for the authenticator app (TOTP) two-factor authentication of your own account. Requests are limited to five per minute.
+
+        This endpoint replaces the deprecated `2fa:checkCodesRemaining` real-time method, which remains available until 9.0.0.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.8.0   | Added       |
+      operationId: get-api-v1-users.totpCodesRemaining
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  remaining:
+                    type: number
+                  success:
+                    type: boolean
+                required:
+                  - remaining
+                  - success
+                additionalProperties: false
+              examples:
+                Success Example:
+                  value:
+                    remaining: 8
+                    success: true
+        '400':
+          description: TOTP two-factor authentication is not enabled for the user.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                TOTP not enabled:
+                  value:
+                    success: false
+                    error: '[invalid-totp]'
+                    errorType: invalid-totp
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/twoFactorChallenges.sendEmailCode:
     post:
       tags:
