@@ -5096,21 +5096,29 @@ paths:
     get:
       summary: Autocomplete Department
       description: |-
-        Autocomplete the department name.
+        Search for departments by name.
+
         At least one of the following permissions is required:
           * `view-livechat-departments`
           * `view-l-room`
+
+        The `conditions` field in the `selector` parameter is deprecated and will be removed in Rocket.Chat 9.0.0. In 8.8, requests containing a non-empty `conditions` object continue to work, but the response includes deprecation headers and the server records a warning.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.8.0   | Deprecated the `conditions` field in the `selector` parameter. |
       operationId: get-api-v1-livechat-department.autocomplete
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
         - name: selector
           in: query
-          description: Enter the exceptions or the conditions that you want to search for.
+          description: A JSON string containing the search `term` and an optional array of department IDs to exclude in `exceptions`. The `conditions` field is deprecated and will be removed in Rocket.Chat 9.0.0.
           required: true
           schema:
             type: string
-          example: '{"exceptions" : ["${dep1._id}"], "conditions": {"enabled": true}, "term":"test"}'
+          example: '{"exceptions":["departmentId"],"term":"test"}'
         - name: onlyMyDepartments
           in: query
           description: Only displays the departments that you are assigned to. The value can be boolean `true` or `false`
@@ -5124,6 +5132,21 @@ paths:
       responses:
         '200':
           description: OK
+          headers:
+            x-deprecation-type:
+              description: Returned as `parameter-deprecation` when the request contains a non-empty `selector.conditions` object.
+              schema:
+                type: string
+                example: parameter-deprecation
+            x-deprecation-message:
+              description: Describes the deprecated parameter and its removal version. Returned when the request contains a non-empty `selector.conditions` object.
+              schema:
+                type: string
+            x-deprecation-version:
+              description: The Rocket.Chat version in which the deprecated parameter will be removed. Returned when the request contains a non-empty `selector.conditions` object.
+              schema:
+                type: string
+                example: 9.0.0
           content:
             application/json:
               schema:
@@ -14140,9 +14163,35 @@ paths:
       summary: Autocomplete Visitors
       tags:
         - Omnichannel Visitors
+      description: |-
+        Search for visitors by name.
+
+        Permission required: `view-l-room`
+
+        The `conditions` field in the `selector` parameter is deprecated and will be removed in Rocket.Chat 9.0.0. In 8.8, requests containing a non-empty `conditions` object continue to work, but the response includes deprecation headers and the server records a warning.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.8.0   | Deprecated the `conditions` field in the `selector` parameter. |
       responses:
         '200':
-          description: ''
+          description: OK
+          headers:
+            x-deprecation-type:
+              description: Returned as `parameter-deprecation` when the request contains a non-empty `selector.conditions` object.
+              schema:
+                type: string
+                example: parameter-deprecation
+            x-deprecation-message:
+              description: Describes the deprecated parameter and its removal version. Returned when the request contains a non-empty `selector.conditions` object.
+              schema:
+                type: string
+            x-deprecation-version:
+              description: The Rocket.Chat version in which the deprecated parameter will be removed. Returned when the request contains a non-empty `selector.conditions` object.
+              schema:
+                type: string
+                example: 9.0.0
           content:
             application/json:
               schema:
@@ -14194,15 +14243,16 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: get-api-v1-livechat-visitors.autocomplete
-      description: Autocomplete a visitor's name.
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
-        - schema: {}
+        - name: selector
           in: query
-          name: selector
-          description: 'Enter the exceptions or the conditions that you want to search for. For example, { "exceptions" : [], "conditions" : {"username": "guest-5"}}'
+          description: A JSON string containing the search `term` and an optional array of visitor IDs to exclude in `exceptions`. The `conditions` field is deprecated and will be removed in Rocket.Chat 9.0.0.
           required: true
+          schema:
+            type: string
+          example: '{"exceptions":[],"term":"Jane"}'
   /api/v1/livechat/visitors.status:
     parameters: []
     post:
