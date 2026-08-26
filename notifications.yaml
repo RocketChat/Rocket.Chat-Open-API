@@ -598,17 +598,45 @@ paths:
                 properties:
                   tokensCount:
                     type: integer
+                    description: The number of devices to which the test notification was sent.
+                  message:
+                    type: string
+                    description: The translation key for the test result message.
+                  params:
+                    type: array
+                    description: Values used to format the translated result message.
+                    items:
+                      type: integer
                   success:
                     type: boolean
+                required:
+                  - tokensCount
+                  - message
+                  - params
+                  - success
               examples:
                 Example 1:
                   value:
                     tokensCount: 1
+                    message: Your_push_was_sent_to_s_devices
+                    params:
+                      - 1
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: post-api-v1-push.test
-      description: "Use this endpoint to test the push notifications configuration. Permission required: `test-push-notifications`.\r\nBy default, one request is allowed every 1000 milliseconds. To test successfully, make sure that you have logged into the workspace on the Rocket.Chat mobile app."
+      description: |-
+        Use this endpoint to test the push notifications configuration. The response indicates how many registered devices received the test notification.
+
+        To test successfully, make sure that you have logged into the workspace on the Rocket.Chat mobile app. By default, one request is allowed every 1000 milliseconds.
+
+        **Permission required**:
+        - `test-push-notifications`
+
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |8.8.0            | Added the `message` and `params` response fields. |
       parameters:
         - $ref: '#/components/parameters/X-Auth-Token'
         - $ref: '#/components/parameters/X-User-Id'

@@ -1933,6 +1933,83 @@ paths:
                     success: false
                     error: 'The provided "aroundId" does not belong to the thread [error-invalid-message]'
                     errorType: error-invalid-message
+  /api/v1/chat.readThread:
+    post:
+      tags:
+        - Chat
+      summary: Mark Thread as Read
+      description: |-
+        Marks a single thread as read for the authenticated user and removes it from the unread thread list in the user's subscription.
+
+        Use this endpoint when you need to mark one thread as read. The `subscriptions.read` endpoint operates on an entire room and cannot identify a single thread.
+
+        This endpoint replaces the deprecated `readThreads` realtime method, which remains available until Rocket.Chat 9.0.0.
+
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |8.8.0            | Added       |
+      operationId: post-api-v1-chat.readThread
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tmid:
+                  type: string
+                  minLength: 1
+                  description: The ID of the thread's main message.
+              required:
+                - tmid
+              additionalProperties: false
+            examples:
+              Example:
+                value:
+                  tmid: 7aDSXtjMA3KPLxLjt
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: The request is invalid, threads are disabled, the message or room does not exist, or the user cannot access the room.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Threads disabled:
+                  value:
+                    success: false
+                    error: Threads Disabled [error-not-allowed]
+                    errorType: error-not-allowed
+                Invalid message:
+                  value:
+                    success: false
+                    error: Invalid Message [error-invalid-message]
+                    errorType: error-invalid-message
+                Room not found:
+                  value:
+                    success: false
+                    error: This room does not exist [error-room-does-not-exist]
+                    errorType: error-room-does-not-exist
+                Room access denied:
+                  value:
+                    success: false
+                    error: Not Allowed [error-not-allowed]
+                    errorType: error-not-allowed
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/chat.ignoreUser:
     get:
       tags:
