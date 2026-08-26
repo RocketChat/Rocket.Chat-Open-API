@@ -5896,11 +5896,152 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
+  /api/v1/saml.parseMetadata:
+    post:
+      tags:
+        - SAML
+      summary: Parse SAML IdP Metadata
+      description: |-
+        Fetches and parses a SAML identity provider (IdP) metadata document from a URL. It returns the IdP certificate, sign-in URL, sign-out URL, and identifier format when those values are available in the metadata.
+
+        The **Import IdP metadata** button at the top of **Manage** > **Workspace** > **Settings** > **SAML** uses this endpoint to prefill the corresponding SAML settings. The imported values can be reviewed and edited before they are saved. This endpoint does not save or change any workspace settings.
+
+        The metadata request is subject to SSRF protection and the workspace's SSRF allowlist. It has a 20-second timeout and a 1 MB response-size limit.
+
+        **Permission required**:
+        - `test-admin-options`
+
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |8.8.0            | Added       |
+      operationId: post-api-v1-saml.parseMetadata
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  minLength: 1
+                  description: The URL of the SAML IdP metadata document.
+                  example: 'https://idp.example.com/metadata'
+              required:
+                - url
+              additionalProperties: false
+            examples:
+              Example:
+                value:
+                  url: 'https://idp.example.com/metadata'
+      responses:
+        '200':
+          description: The metadata was parsed successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  entryPoint:
+                    type: string
+                    description: The IdP URL where Rocket.Chat sends SAML sign-in requests.
+                  idpSLORedirectURL:
+                    type: string
+                    description: The IdP URL where Rocket.Chat sends SAML sign-out requests.
+                  cert:
+                    type: string
+                    description: The IdP signing certificate in PEM format.
+                  identifierFormat:
+                    type: string
+                    description: The first SAML NameID format found in the metadata. The SAML settings page applies this value when the Enterprise-only Identifier Format setting is available.
+                  warnings:
+                    type: array
+                    description: Warnings about missing or multiple usable values in the metadata.
+                    items:
+                      type: string
+                  success:
+                    type: boolean
+                    enum:
+                      - true
+                required:
+                  - warnings
+                  - success
+                additionalProperties: false
+              examples:
+                Success:
+                  value:
+                    entryPoint: 'https://idp.example.com/sso/saml'
+                    idpSLORedirectURL: 'https://idp.example.com/slo/saml'
+                    cert: |-
+                      -----BEGIN CERTIFICATE-----
+                      MIIDdzCCAl+gAwIBAgIEXAMPLEONLY
+                      -----END CERTIFICATE-----
+                    identifierFormat: 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent'
+                    warnings: []
+                    success: true
+        '400':
+          description: The request is invalid, the metadata cannot be fetched or parsed, or the URL is blocked.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    enum:
+                      - false
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                required:
+                  - success
+                  - error
+              examples:
+                URL blocked:
+                  value:
+                    success: false
+                    error: SAML_Metadata_url_blocked
+                Fetch failed:
+                  value:
+                    success: false
+                    error: SAML_Metadata_fetch_failed
+                Metadata too large:
+                  value:
+                    success: false
+                    error: SAML_Metadata_too_large
+                Invalid metadata:
+                  value:
+                    success: false
+                    error: SAML_Metadata_invalid
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: 'User does not have the permissions required for this action [error-unauthorized]'
 tags:
   - name: LDAP
   - name: Permissions
   - name: Roles
   - name: Users
+  - name: SAML
 components:
   parameters:
     Auth-Token:
