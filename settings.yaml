@@ -140,8 +140,88 @@ paths:
                           type: string
                         mergeUsers:
                           type: boolean
+                        hideButtonOnMobile:
+                          type: boolean
+                          description: Whether mobile clients should hide the service's login button. For SAML, this is `true` when `Accounts_OAuth_Use_Modern_Flow` is enabled and `false` otherwise.
+                        clientConfig:
+                          type: object
+                          description: Client configuration for the login service.
+                          properties:
+                            provider:
+                              type: string
+                              description: The configured SAML provider name.
+                        entryPoint:
+                          type: string
+                          description: The URL where Rocket.Chat sends SAML authentication requests.
+                        idpSLORedirectURL:
+                          type: string
+                          description: The identity provider URL where Rocket.Chat sends SAML logout requests.
+                        usernameNormalize:
+                          type: string
+                          enum: [None, Lowercase]
+                        immutableProperty:
+                          type: string
+                          enum: [Username, EMail]
+                        generateUsername:
+                          type: boolean
+                        debug:
+                          type: boolean
+                        nameOverwrite:
+                          type: boolean
+                        mailOverwrite:
+                          type: boolean
+                        issuer:
+                          type: string
+                          description: The SAML service provider issuer.
+                        logoutBehaviour:
+                          type: string
+                          enum: [SAML, Local]
+                        defaultUserRole:
+                          type: string
+                        signatureValidationType:
+                          type: string
+                          enum: [All, Response, Assertion, Either, None]
+                        validateLogoutRequestSignature:
+                          type: boolean
+                        validateLogoutResponseSignature:
+                          type: boolean
+                        userDataFieldMap:
+                          type: string
+                          description: A JSON string that maps SAML user fields to Rocket.Chat user fields.
+                        allowedClockDrift:
+                          type: number
+                        channelsAttributeUpdate:
+                          type: boolean
+                        includePrivateChannelsInUpdate:
+                          type: boolean
+                        customAuthnContext:
+                          type: string
+                        authnContextComparison:
+                          type: string
+                          enum: [better, exact, maximum, minimum]
+                        identifierFormat:
+                          type: string
+                        nameIDPolicyTemplate:
+                          type: string
+                        authnContextTemplate:
+                          type: string
+                        authRequestTemplate:
+                          type: string
+                        logoutResponseTemplate:
+                          type: string
+                        logoutRequestTemplate:
+                          type: string
+                        metadataCertificateTemplate:
+                          type: string
+                        metadataTemplate:
+                          type: string
                   success:
                     type: boolean
+                    enum: [true]
+                required:
+                  - services
+                  - success
+                additionalProperties: false
               examples:
                 Success Example:
                   value:
@@ -177,14 +257,30 @@ paths:
                         identityTokenSentVia: default
                         usernameField: dfsgdfgdfgdfgsd
                         mergeUsers: true
+                      - _id: 8kEcbW7Yz3zJnHgqL
+                        service: saml
+                        buttonLabelText: Sign in with SAML
+                        buttonColor: '#13679A'
+                        buttonLabelColor: '#FFFFFF'
+                        clientConfig:
+                          provider: my-saml-provider
+                        entryPoint: 'https://idp.example.com/sso/saml'
+                        idpSLORedirectURL: 'https://idp.example.com/slo/saml'
+                        issuer: 'https://chat.example.com/_saml/metadata/my-saml-provider'
+                        userDataFieldMap: '{"username":"username","email":"email","name":"cn"}'
+                        hideButtonOnMobile: true
                     success: true
       tags:
         - Settings
       description: |-
-        List all the <a href="https://docs.rocket.chat/docs/oauth" target="_blank"> OAuth services</a>. enabled in the workspace.
+        Lists the <a href="https://docs.rocket.chat/docs/oauth" target="_blank">login service</a> configurations available to login clients. This public endpoint does not require authentication.
+
+        For SAML, the response contains the stored service configuration but excludes the `secret` object. Starting in 8.8.0, `hideButtonOnMobile` follows `Accounts_OAuth_Use_Modern_Flow`. When this setting is enabled, mobile and desktop apps can open SAML authentication in the system browser and receive the credential through the `rocketchat://auth` link.
+
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |8.8.0            | Updated `hideButtonOnMobile` for the SAML system-browser login flow. |
         |0.64.0            | Renamed field `appId` to `clientId` and added flag `custom` to indicate whether the OAuth service is customized and fix `id` inconsistence (set all cases to `_id`)       |
         |0.63.0            | Added       |
       parameters: []
