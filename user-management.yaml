@@ -2200,13 +2200,16 @@ paths:
         - Users
       summary: Get User's Info
       description: |-
-        - Retrieves information about a user. The result is limited only to what you have access to view.
-        - This endpoint supports lookup by `userId`, `username`, `importId`, `email`, or `freeSwitchExtension`. Provide exactly one of these parameters per request.
-        - From version `7.0.0`, this endpoint no longer supports the `fields` parameter, even when the `ALLOW_UNSAFE_QUERY_AND_FIELDS_API_PARAMS: true` environment variable is set. Instead, use the `includeUserRooms` parameter.
+        Retrieves information about a user, limited to the details the caller is allowed to view. Look up the user by `userId`, `username`, `importId`, `email`, or `freeSwitchExtension`. Provide exactly one of these parameters per request.
+
+        Starting in version 7.0.0, this endpoint no longer supports the `fields` parameter, even when the `ALLOW_UNSAFE_QUERY_AND_FIELDS_API_PARAMS` environment variable is set to `true`. Use `includeUserRooms` instead.
+
+        When the Premium **User status hiding** feature is enabled and the requested user has hidden their status from the caller, the response shows the user as `offline` and omits `statusText`, `statusSource`, `statusExpiresAt`, `statusDefault`, and `statusConnection`. This restriction also applies to administrators. Users always see their own status.
 
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |8.8.0             | Added status visibility filtering |
         |8.5.0             | Added `freeSwitchExtension` query parameter for user lookup |
         |8.4.0             | Added `email` query parameter for user lookup |
         |7.0.0             | Removed the `fields` query parameter       |
@@ -2423,18 +2426,20 @@ paths:
         - Users
       summary: Get Users List
       description: |-
-        - Gets all of the users in the system and their information. The result is limited to what the request sender has permission to view.
-        - This endpoint supports filtering users using the `query` parameter. It can be used to locate a user record and retrieve the corresponding `userId` for use with the `users.info` endpoint.
-        - The `query` parameter is considered unsafe and is deprecated. Its support is expected to be removed in a future major version. There is currently no direct replacement for email-based user lookup.
+        Retrieves workspace users and the information the caller is allowed to view.
+        Use `query` to locate a user and obtain their `userId` for the `users.info` endpoint. The `query` parameter is considered unsafe and is deprecated. Its support is expected to be removed in a future major version, and there is currently no direct replacement for email-based lookup.
 
-        **Permissons required**:
-        - `view-d-room`: Required to view direct messages
-        - `view-full-other-user-info`: Required to view complete user information (e.g., account creation date, last login)
-        - `view-outside-room`: (Only required if the setting `Apply_permission_view-outside-room` is enabled on under **Settings** > **General** > **Rest API**). Required to view rooms that the user is not a member of.
+        When the Premium **User status hiding** feature is enabled, users who have hidden their status from the caller appear as `offline`, and their detailed status fields are omitted. If `query` filters on a status field, those users are excluded from the filtered results.
+
+        **Permissions required**:
+        - `view-d-room`: View direct messages.
+        - `view-full-other-user-info`: View complete user details, such as account creation and last login.
+        - `view-outside-room`: View users outside the caller's rooms when `Apply_permission_view-outside-room` is enabled under **Settings** > **General** > **REST API**.
 
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |8.8.0             | Added status visibility filtering |
         |8.4.0             | Added `email` query parameter for filtering |
         |0.49.0            | `Count` and `offset` query parameters supported.       |
         |0.35.0            | Added       |
@@ -3247,17 +3252,18 @@ paths:
           in: query
           name: ids
           description: |-
-            The user IDs whose presence you want. Provide one or more IDs using any of these formats:
-            * `?ids=userId1` — single ID
-            * `?ids=userId1,userId2` — comma-separated string
-            * `?ids=userId1&ids=userId2` — repeated query parameter
+            The IDs of the users whose presence you want. Provide one ID as `?ids=userId1`, multiple comma-separated IDs as `?ids=userId1,userId2`, or repeat the parameter as `?ids=userId1&ids=userId2`.
       description: |-
         Get presence of multiple workspace users. You can filter by date and user IDs.
+
         If the `Presence_broadcast_disabled` setting is true, the endpoint returns an empty array. You can find this setting under **Manage** > **Workspace** > **Settings** > **Troubleshoot**.
+
+        When the Premium **User status hiding** feature is enabled, users who have hidden their status from the caller are omitted from the response. This applies to full results and requests filtered by `from` or `ids`.
 
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |8.8.0            | Added status visibility filtering. |
         |8.6.0            | Added `statusSource` and `statusExpiresAt` to returned user objects. |
         |8.5.0            | Restored comma-separated `ids` query parameter support.       |
         |1.1.0            | Added       |
@@ -3693,6 +3699,11 @@ paths:
                                 type: boolean
                               sidebarSortby:
                                 type: string
+                              statusVisibilityDenied:
+                                type: array
+                                description: The usernames of users who cannot see the authenticated user's presence and status message. Returned only to the authenticated user when the feature is enabled and the list is not empty.
+                                items:
+                                  type: string
                               showMessageInMainThread:
                                 type: boolean
                               sidebarShowFavorites:
@@ -3734,42 +3745,15 @@ paths:
               examples:
                 Success Example:
                   value:
-                    preferences:
-                      enableAutoAway: true
-                      idleTimeLimit: 300
-                      desktopNotificationRequireInteraction: false
-                      desktopNotifications: default
-                      pushNotifications: all
-                      unreadAlert: false
-                      useEmojis: true
-                      convertAsciiEmoji: true
-                      autoImageLoad: true
-                      saveMobileBandwidth: true
-                      collapseMediaByDefault: false
-                      hideUsernames: false
-                      hideRoles: false
-                      hideFlexTab: false
-                      displayAvatars: true
-                      sidebarGroupByType: true
-                      sidebarViewMode: condensed
-                      sidebarDisplayAvatar: true
-                      sidebarShowUnread: true
-                      sidebarSortby: activity
-                      showMessageInMainThread: false
-                      sidebarShowFavorites: true
-                      sendOnEnter: normal
-                      messageViewMode: 0
-                      emailNotificationMode: mentions
-                      newRoomNotification: door
-                      newMessageNotification: chime
-                      muteFocusedConversations: true
-                      notificationsSoundVolume: 100
-                      enableMessageParserEarlyAdoption: false
-                      mobileNotifications: default
-                      desktopNotificationDuration: 0
-                      dontAskAgainList: []
-                      highlights: []
-                      language: en
+                    user:
+                      _id: rbAXPnMktTFbNpwtJ
+                      settings:
+                        preferences:
+                          statusVisibilityDenied:
+                            - bob
+                            - rocket.cat
+                          language: en
+                    success: true
         '400':
           description: Bad Request
           content:
@@ -3793,9 +3777,13 @@ paths:
           $ref: '#/components/responses/authorizationError'
       description: |-
         Set preferences for your account. If you want to edit another user's preferences, you need the permission `edit-other-user-info`.
+
+        Use `statusVisibilityDenied` to specify the usernames of people who cannot see your presence and status message. Send an empty array to clear the list. Status hiding takes effect only when the Premium **User status hiding** setting (`Accounts_StatusVisibility_Enabled`) is enabled. You can change only your own list; if `userId` identifies another user, this preference is ignored.
+
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |8.8.0            | Added the `statusVisibilityDenied` preference. |
         |8.6.0            | Added `utcOffset` property.       |
         |2.3.0            | Added `desktopNotificationRequireInteraction` property.       |
       parameters:
@@ -3931,6 +3919,11 @@ paths:
                     sidebarShowUnread:
                       type: boolean
                       description: A boolean value that indicates whether the user has enabled the option to show unread messages in the sidebar.
+                    statusVisibilityDenied:
+                      type: array
+                      description: The usernames of users who cannot see your presence and status message. Send an empty array to clear the list.
+                      items:
+                        type: string
                     sidebarSortby:
                       type: string
                       description: |-
@@ -4037,6 +4030,9 @@ paths:
                     idleTimeLimit: 300
                     sidebarShowFavorites: true
                     sidebarShowUnread: true
+                    statusVisibilityDenied:
+                      - bob
+                      - rocket.cat
                     sidebarSortby: string
                     sidebarViewMode: string
                     sidebarDisplayAvatar: true
@@ -5725,14 +5721,18 @@ paths:
         - Users
       summary: List Users by Status
       description: |-
-        Returns a list of filtered users based on activation status, first-time log-in, and type of users to be returned. 
-        <br> **Permissions required**: 
-        - `view-d-room`: Required to view direct message 
-        - `view-outside-room`: (Only required if the setting `Apply_permission_view-outside-room` is enabled on under **Settings** > **General** > **Rest API**). Required to view rooms outside of which the request sender is a member of
+        Returns users filtered by activation status, whether they have logged in, user type, role, search term, or inactive reason.
+
+        When the Premium **User status hiding** feature is enabled, users who have hidden their status from the caller remain in the response but appear as `offline`, and their detailed status fields are omitted.
+
+        **Permissions required**:
+        - `view-d-room`: View direct messages.
+        - `view-outside-room`: View users outside the caller's rooms when `Apply_permission_view-outside-room` is enabled under **Settings** > **General** > **REST API**.
 
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |8.8.0            | Added status visibility filtering. |
         |6.8.0            | Added       |
       operationId: get-api-v1-users.listByStatus
       parameters:
