@@ -1258,7 +1258,25 @@ paths:
           $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/forbiddenError'
-
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Missing Parameter:
+                  value:
+                    success: false
+                    errorType: invalid-params
+                    error: "must have required property 'license'"
   /api/v1/licenses.validate:
     post:
       tags:
