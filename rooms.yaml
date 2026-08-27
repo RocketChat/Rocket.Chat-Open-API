@@ -11740,7 +11740,7 @@ paths:
                       must have required property 'roomId'
                        must have required property 'roomName'
                        must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.moderators:
@@ -13192,8 +13192,8 @@ paths:
                     error: |-
                       must have required property 'roomId'
                        must have required property 'roomName'
-                       must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params  
+                       must match exactly one schema in oneOf 
+                    errorType: error-invalid-params  
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.setEncrypted:
