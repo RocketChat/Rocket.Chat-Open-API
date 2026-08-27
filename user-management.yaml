@@ -429,7 +429,7 @@ paths:
               required:
                 - name
             examples:
-              Example 1:
+              Example:
                 value:
                   name: Test Role
                   scope: Users
@@ -488,21 +488,19 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                Missing Parameter:
                   value:
                     success: false
-                    error: >-
-                      The role properties are invalid.
-                      [error-invalid-role-properties]
-                    errorType: error-invalid-role-properties
-                Example 2:
+                    errorType: invalid-params
+                    error: "must have required property 'name'"
+                Role Already Exists:
                   value:
                     success: false
                     error: >-
                       Role name already exists
                       [error-duplicate-role-names-not-allowed]
                     errorType: error-duplicate-role-names-not-allowed
-                Example 3:
+                Access Permission not Allowed:
                   value:
                     success: false
                     error: >-
@@ -565,7 +563,7 @@ paths:
                 - roleId
                 - name
             examples:
-              Example 1:
+              Example:
                 value:
                   roleId: 646c431fa8c3a3ba32d0e1c4
                   name: Test Role
@@ -625,14 +623,12 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                Missing Parameter:
                   value:
                     success: false
-                    error: >-
-                      The role properties are invalid.
-                      [error-invalid-role-properties]
-                    errorType: error-invalid-role-properties
-                Example 2:
+                    errorType: invalid-params
+                    error: "must have required property 'name'"
+                Access Permission not Allowed:
                   value:
                     success: false
                     error: >-
