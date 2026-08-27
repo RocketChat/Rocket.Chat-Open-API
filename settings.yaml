@@ -4001,6 +4001,11 @@ paths:
                   value:
                     success: false
                     error: Session not found
+                Missing required parameter:
+                  value:
+                    success: false
+                    errorType: error-invalid-params
+                    error: must have required property 'sessionId'            
         '401':
           $ref: '#/components/responses/authorizationError'
       description: |-
@@ -4122,6 +4127,11 @@ paths:
                       method: password
                       codeGenerated: false
                       availableMethods: []
+                Missing required parameter:
+                  value:
+                    success: false
+                    errorType: error-invalid-params
+                    error: must have required property 'sessionId'      
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
