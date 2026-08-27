@@ -4007,7 +4007,7 @@ paths:
                 Session not found:
                   value:
                     success: false
-                    error: Session not found    
+                    error: Session not found
         '401':
           $ref: '#/components/responses/authorizationError'
       description: |-
@@ -4125,16 +4125,16 @@ paths:
                 Session not found:
                   value:
                     success: false
-                    error: Session not found   
+                    error: Session not found
                 TOTP Error:
-                   value:
+                  value:
                     success: false
                     error: 'TOTP Required [totp-required]'
                     errorType: totp-required
                     details:
                       method: password
                       codeGenerated: false
-                      availableMethods: []           
+                      availableMethods: []
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
