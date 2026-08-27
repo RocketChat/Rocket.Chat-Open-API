@@ -3996,7 +3996,14 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
               examples:
+                Missing Parameter:
+                  value:
+                    success: false
+                    errorType: error-invalid-params
+                    error: "must have required property 'sessionId'"
                 Session not found:
                   value:
                     success: false
@@ -4025,7 +4032,6 @@ paths:
           description: The session ID.
           required: true
   /api/v1/sessions/info.admin:
-    parameters: []
     get:
       summary: Get Session Information
       operationId: get-api-v1-sessions-info.admin
@@ -4108,7 +4114,14 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
               examples:
+                Missing Parameter:
+                  value:
+                    success: false
+                    errorType: error-invalid-params
+                    error: "must have required property 'sessionId'"
                 Session not found:
                   value:
                     success: false
