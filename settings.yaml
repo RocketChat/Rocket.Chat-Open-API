@@ -3996,11 +3996,18 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
               examples:
+                Missing Parameter:
+                  value:
+                    success: false
+                    errorType: error-invalid-params
+                    error: "must have required property 'sessionId'"
                 Session not found:
                   value:
                     success: false
-                    error: Session not found
+                    error: Session not found    
         '401':
           $ref: '#/components/responses/authorizationError'
       description: |-
@@ -4025,7 +4032,6 @@ paths:
           description: The session ID.
           required: true
   /api/v1/sessions/info.admin:
-    parameters: []
     get:
       summary: Get Session Information
       operationId: get-api-v1-sessions-info.admin
@@ -4108,20 +4114,27 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
               examples:
+                Missing Parameter:
+                  value:
+                    success: false
+                    errorType: error-invalid-params
+                    error: "must have required property 'sessionId'"
                 Session not found:
                   value:
                     success: false
-                    error: Session not found
+                    error: Session not found   
                 TOTP Error:
-                  value:
+                   value:
                     success: false
                     error: 'TOTP Required [totp-required]'
                     errorType: totp-required
                     details:
                       method: password
                       codeGenerated: false
-                      availableMethods: []
+                      availableMethods: []           
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
