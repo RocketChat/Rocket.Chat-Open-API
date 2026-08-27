@@ -58,12 +58,25 @@ paths:
                 extraData:
                   type: object
                   description: |-
-                    Enter the following details for the object:
-                    - `broadcast`: Whether the channel should be a broadcast room.
-                    - `encrypted`: Whether the channel should be encrypted.
-                    - `teamId`: Enter an existing team ID for this channel. You need the `create-team-channel` permission to add a team to a channel.
-                    
-                    For more information, see <a href='https://docs.rocket.chat/use-rocket.chat/user-guides/rooms/channels#channel-privacy-and-encryption' target='_blank'>Channels</a>
+                    Additional channel settings applied at creation.
+                    For more information, see <a href='https://docs.rocket.chat/use-rocket.chat/user-guides/rooms/channels#channel-privacy-and-encryption' target='_blank'>Channels</a>.
+                  additionalProperties: false
+                  properties:
+                    broadcast:
+                      type: boolean
+                      description: Whether the channel should be a broadcast room.
+                    encrypted:
+                      type: boolean
+                      description: Whether the channel should be encrypted.
+                    teamId:
+                      type: string
+                      description: An existing team ID to associate with this channel. Requires the `create-team-channel` permission.
+                    topic:
+                      type: string
+                      description: The topic of the channel.
+                    federated:
+                      type: boolean
+                      description: Whether the channel should be federated (Matrix federation).
               required:
                 - name
             examples:
@@ -2542,9 +2555,9 @@ paths:
           example: 'dud0wu900'
         - name: pinned
           in: query
-          description: Filter pinned messages.
+          description: Filter pinned messages. 
           schema:
-            type: boolean
+            type: string
           example: 'true'
       responses:
         '200':
