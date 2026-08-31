@@ -523,6 +523,7 @@ paths:
                 name:
                   type: string
                   description: The name of the custom OAuth method that you want to add.
+                  example: MyCustomOAuth
               required:
                 - name
   /api/v1/settings.removeCustomOAuth:
@@ -684,15 +685,19 @@ paths:
                 value:
                   type: string
                   description: The value to update the setting.
+                  example: My Workspace
                 color:
                   type: string
                   description: The color code to update the setting.
+                  example: '#04436A'
                 editor:
                   type: string
                   description: 'The editor key, with color value. Required, if color was set.'
+                  example: color
                 execute:
                   type: boolean
                   description: To trigger a action-button.
+                  example: true
               required:
                 - value
     get:
@@ -2550,6 +2555,7 @@ paths:
                 serverName:
                   type: string
                   description: The public server name that you want to remove.
+                  example: my-server.rocket.chat
               required:
                 - serverName
   /api/v1/federation/searchPublicRooms:
@@ -3136,9 +3142,11 @@ paths:
                 userId:
                   type: string
                   description: The ID of the user whose reports to dismiss. This parameter is required if `msgId` is not provided.
+                  example: BsNr28znDkG8aeo7W
                 msgId:
                   type: string
                   description: The ID of the message which reports to dismiss. This parameter is required if `userId` is not provided.
+                  example: 7aDSXtjMA3KPWxdt2
       tags:
         - Moderation
   /api/v1/moderation.user.deleteReportedMessages:
@@ -3170,6 +3178,7 @@ paths:
                 userId:
                   type: string
                   description: The ID of the user whose reports to dismiss.
+                  example: BsNr28znDkG8aeo7W
               required:
                 - userId
       tags:
@@ -4320,6 +4329,7 @@ paths:
                 sessionId:
                   type: string
                   description: The session ID.
+                  example: tTouumJMrHMjnedWf
               required:
                 - sessionId
   /api/v1/pw.getPolicy:

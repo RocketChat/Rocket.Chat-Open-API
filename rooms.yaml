@@ -15726,10 +15726,14 @@ paths:
               properties:
                 key:
                   type: string
+                  example: my_department
                 values:
                   type: array
                   items:
                     type: string
+                  example:
+                    - eng
+                    - sales
     get:
       summary: Get ABAC attribute definition by ID
       tags:

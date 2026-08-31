@@ -114,9 +114,11 @@ paths:
                 name:
                   type: string
                   description: The name of the new custom emoji.
+                  example: grinning_cat
                 aliases:
                   type: string
                   description: The alias of the new custom emoji. You can enter more than one alias as comma-separated values.
+                  example: 'happy_cat,smiley_cat'
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
@@ -1067,9 +1069,11 @@ paths:
                     * `tile_310_square`
                     * `tile_310_wide`
                     * `safari_pinned`
+                  example: logo
                 refreshAllClients:
                   type: boolean
                   description: Set to true if all clients must be refreshed to immediately apply the changes.
+                  example: true
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'

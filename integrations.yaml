@@ -1284,6 +1284,10 @@ paths:
                 properties:
                   success:
                     type: boolean
+              examples:
+                Success Example:
+                  value:
+                    success: true
         '401':
           $ref: '#/components/responses/authorizationError'
         '400':
@@ -1757,6 +1761,7 @@ paths:
                 appId:
                   type: string
                   description: The OAuth app ID that you want to delete.
+                  example: F7cWZ6mtSyxbCe3RJ
               required:
                 - appId
       responses:

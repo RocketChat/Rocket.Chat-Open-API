@@ -3322,6 +3322,11 @@ paths:
                     type: array
                     items:
                       type: object
+              examples:
+                Example:
+                  value:
+                    success: true
+                    deletedRooms: []
         '400':
           description: Bad Request
           content:
@@ -5236,6 +5241,7 @@ paths:
                 userId:
                   type: string
                   description: Enter the user ID to be logged out.
+                  example: BsNr28znDkG8aeo7W
   /api/v1/ldap.syncNow:
     post:
       tags:
