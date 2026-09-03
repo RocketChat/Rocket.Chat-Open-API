@@ -592,7 +592,7 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
   '/api/v1/email-inbox.send-test/{_id}':
-    get:
+    post:
       tags:
         - Email Inbox
       summary: Send Test Email
@@ -604,7 +604,7 @@ paths:
         | Version      | Description |
         | ---------------- | ------------|
         |3.11.0-rc.0         | Added       |
-      operationId: get-api-v1-email-inbox.send-test-id
+      operationId: post-api-v1-email-inbox.send-test-id
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
