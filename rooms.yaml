@@ -14659,7 +14659,7 @@ paths:
         before they can join via an invite token.
 
         ### Changelog
-        | Version | Change |
+        | Version | Description |
         |---------|--------|
         | 8.4.0   | Added ban check — banned users can no longer join via invite token |
       operationId: post-useInviteToken
@@ -16371,7 +16371,7 @@ paths:
         Permissions required: `abac-management` and `manage-abac-admin-settings`.
 
         ### Changelog
-        | Version | Change |
+        | Version | Description |
         |---------|--------|
         | 8.0.0   | Added |
         | 8.5.0   | Added the `manage-abac-admin-settings` granular permission requirement. |

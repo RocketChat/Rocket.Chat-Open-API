@@ -4052,7 +4052,7 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Enterprise" style="display: block; margin: auto"></div>
 
-        Set the priority of an Omnichannel room.<br>
+        Set the priority of an Omnichannel room.
 
         Permission required: `view-l-room`
 
@@ -4118,7 +4118,7 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Enterprise" style="display: block; margin: auto"></div>
 
-        Remove the priority set to an Omnichannel room.<br>
+        Remove the priority set to an Omnichannel room.
 
         Permission required: `view-l-room`
 
@@ -7222,7 +7222,7 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Enterprise" style="display: block; margin: auto;"></div>
 
-        <a href="https://docs.rocket.chat/docs/omnichannel-conversations#conversation-transcript" target="_blank">Request a PDF transcript</a> for an Omnichannel conversation. The conversation must be closed before it can be exported. <br>
+        <a href="https://docs.rocket.chat/docs/omnichannel-conversations#conversation-transcript" target="_blank">Request a PDF transcript</a> for an Omnichannel conversation. The conversation must be closed before it can be exported.
 
         Permission required: `request-pdf-transcript`.
         Omnichannel <a href="https://docs.rocket.chat/docs/managers" target="_blank">managers</a> and <a href="https://docs.rocket.chat/docs/agents" target="_blank">agents</a> have this permission by default.
@@ -12082,7 +12082,8 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Enterprise" style="display: block; margin: auto;"></div>
 
-        Get details of a specific unit. <br>
+        Get details of a specific unit.
+
         Permission required: `manage-livechat-units`
       tags:
         - Omnichannel Units
@@ -12148,7 +12149,8 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Enterprise" style="display: block; margin: auto;"></div>
 
-        Get the list of monitors associated with a specific unit. <br>
+        Get the list of monitors associated with a specific unit.
+
         Permission required: `manage-livechat-units`
       tags:
         - Omnichannel Units
@@ -12416,7 +12418,7 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Enterprise" style="display: block; margin: auto;"></div>
 
-        View the metrics of omnichannel conversations in your workspace during a selected time range based on their status: **Open**, **Queued**, **On Hold**, or **Closed**.<br>
+        View the metrics of omnichannel conversations in your workspace during a selected time range based on their status: **Open**, **Queued**, **On Hold**, or **Closed**.
 
         Permission required: `view-livechat-reports`
 
@@ -12480,7 +12482,7 @@ paths:
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Enterprise" style="display: block; margin: auto;"></div>
 
 
-        View the metrics of omnichannel conversations in your workspace during a selected time range based on their departments. <br>
+        View the metrics of omnichannel conversations in your workspace during a selected time range based on their departments.
 
         Permission required: `view-livechat-reports`
 
@@ -12545,7 +12547,7 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Enterprise" style="display: block; margin: auto;"></div>
 
-        View the metrics of omnichannel conversations in your workspace during a selected time range based on their tags. <br>
+        View the metrics of omnichannel conversations in your workspace during a selected time range based on their tags.
 
         Permission required: `view-livechat-reports`
 
@@ -12612,7 +12614,7 @@ paths:
 
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Enterprise" style="display: block; margin: auto;"></div>
 
-        View the metrics of omnichannel conversations in your workspace during a selected time range based on the agents in your workspace. <br>
+        View the metrics of omnichannel conversations in your workspace during a selected time range based on the agents in your workspace.
 
         Permission required: `view-livechat-reports`
 
@@ -12931,7 +12933,8 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Enterprise" style="display: block; margin: auto;"></div>
 
-        Get details of a specific SLA policy. <br>
+        Get details of a specific SLA policy.
+
         At least one of the following permissions is required:
           * `manage-livechat-sla`
           * `view-l-room`
@@ -12990,7 +12993,8 @@ paths:
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Enterprise" style="display: block; margin: auto;"></div>
 
 
-        Update an existing SLA policy. <br>
+        Update an existing SLA policy.
+
         Permission required: `manage-livechat-sla`
 
         ### Changelog
@@ -14571,7 +14575,7 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Enterprise" style="display: block; margin: auto;"></div>
 
-        Get a list of all canned responses in the workspace that belong to the current user scope. <br>
+        Get a list of all canned responses in the workspace that belong to the current user scope.
 
         Permission required: `view-canned-responses`
 
@@ -14666,7 +14670,7 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Enterprise" style="display: block; margin: auto;"></div>
 
-        Get a specific canned response. <br>
+        Get a specific canned response.
 
         Permission required: `view-canned-responses`
 
@@ -14756,7 +14760,7 @@ paths:
        Use this endpoint to delete a canned response. Permission required: `remove-canned-responses`
        
        ### Changelog
-       | Version      | Description 
+       | Version      | Description |
        | ---------------- | ------------|
        |7.12.0            | Added       |
       parameters:
