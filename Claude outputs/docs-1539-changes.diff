@@ -1,0 +1,223 @@
+--- /mnt/user-data/uploads/Rocket.Chat-Open-API/messaging.yaml	2026-09-08 19:37:16.270256865 +0000
++++ patched-1539/messaging.yaml	2026-09-08 19:38:34.530255075 +0000
+@@ -2743,7 +2743,7 @@
+         - Chat
+       summary: Send Message
+       description: |- 
+-        The difference between `chat.postMessage` and `chat.sendMessage` is that `chat.sendMessage` allows for passing a value for `_id` and the other one doesn't. Also, `chat.sendMessage` only sends it to one channel whereas the other one allows for sending to more than one channel at a time.<br />
++        The difference between `chat.postMessage` and `chat.sendMessage` is that `chat.sendMessage` allows for passing a value for `_id` and the other one doesn't. Also, `chat.sendMessage` only sends it to one channel whereas the other one allows for sending to more than one channel at a time.
+         
+         **Note**: You can only send alias and avatar properties if your user has the `message-impersonate permission`. We implemented this rule to avoid users impersonating other users. By default, only the bot role has this permission, but that can be changed in **Manage** -> **Permissions** -> **message-impersonate**.
+         
+--- /mnt/user-data/uploads/Rocket.Chat-Open-API/omnichannel.yaml	2026-09-08 19:37:17.274256842 +0000
++++ patched-1539/omnichannel.yaml	2026-09-08 19:38:34.543745640 +0000
+@@ -4052,7 +4052,7 @@
+       description: |-
+         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Enterprise" style="display: block; margin: auto"></div>
+ 
+-        Set the priority of an Omnichannel room.<br>
++        Set the priority of an Omnichannel room.
+ 
+         Permission required: `view-l-room`
+ 
+@@ -4118,7 +4118,7 @@
+       description: |-
+         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Enterprise" style="display: block; margin: auto"></div>
+ 
+-        Remove the priority set to an Omnichannel room.<br>
++        Remove the priority set to an Omnichannel room.
+ 
+         Permission required: `view-l-room`
+ 
+@@ -7222,7 +7222,7 @@
+       description: |-
+         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Enterprise" style="display: block; margin: auto;"></div>
+ 
+-        <a href="https://docs.rocket.chat/docs/omnichannel-conversations#conversation-transcript" target="_blank">Request a PDF transcript</a> for an Omnichannel conversation. The conversation must be closed before it can be exported. <br>
++        <a href="https://docs.rocket.chat/docs/omnichannel-conversations#conversation-transcript" target="_blank">Request a PDF transcript</a> for an Omnichannel conversation. The conversation must be closed before it can be exported.
+ 
+         Permission required: `request-pdf-transcript`.
+         Omnichannel <a href="https://docs.rocket.chat/docs/managers" target="_blank">managers</a> and <a href="https://docs.rocket.chat/docs/agents" target="_blank">agents</a> have this permission by default.
+@@ -12082,7 +12082,8 @@
+       description: |-
+         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Enterprise" style="display: block; margin: auto;"></div>
+ 
+-        Get details of a specific unit. <br>
++        Get details of a specific unit.
++
+         Permission required: `manage-livechat-units`
+       tags:
+         - Omnichannel Units
+@@ -12148,7 +12149,8 @@
+       description: |-
+         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Enterprise" style="display: block; margin: auto;"></div>
+ 
+-        Get the list of monitors associated with a specific unit. <br>
++        Get the list of monitors associated with a specific unit.
++
+         Permission required: `manage-livechat-units`
+       tags:
+         - Omnichannel Units
+@@ -12416,7 +12418,7 @@
+       description: |-
+         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Enterprise" style="display: block; margin: auto;"></div>
+ 
+-        View the metrics of omnichannel conversations in your workspace during a selected time range based on their status: **Open**, **Queued**, **On Hold**, or **Closed**.<br>
++        View the metrics of omnichannel conversations in your workspace during a selected time range based on their status: **Open**, **Queued**, **On Hold**, or **Closed**.
+ 
+         Permission required: `view-livechat-reports`
+ 
+@@ -12480,7 +12482,7 @@
+         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Enterprise" style="display: block; margin: auto;"></div>
+ 
+ 
+-        View the metrics of omnichannel conversations in your workspace during a selected time range based on their departments. <br>
++        View the metrics of omnichannel conversations in your workspace during a selected time range based on their departments.
+ 
+         Permission required: `view-livechat-reports`
+ 
+@@ -12545,7 +12547,7 @@
+       description: |-
+         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Enterprise" style="display: block; margin: auto;"></div>
+ 
+-        View the metrics of omnichannel conversations in your workspace during a selected time range based on their tags. <br>
++        View the metrics of omnichannel conversations in your workspace during a selected time range based on their tags.
+ 
+         Permission required: `view-livechat-reports`
+ 
+@@ -12612,7 +12614,7 @@
+ 
+         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Enterprise" style="display: block; margin: auto;"></div>
+ 
+-        View the metrics of omnichannel conversations in your workspace during a selected time range based on the agents in your workspace. <br>
++        View the metrics of omnichannel conversations in your workspace during a selected time range based on the agents in your workspace.
+ 
+         Permission required: `view-livechat-reports`
+ 
+@@ -12931,7 +12933,8 @@
+       description: |-
+         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Enterprise" style="display: block; margin: auto;"></div>
+ 
+-        Get details of a specific SLA policy. <br>
++        Get details of a specific SLA policy.
++
+         At least one of the following permissions is required:
+           * `manage-livechat-sla`
+           * `view-l-room`
+@@ -12990,7 +12993,8 @@
+         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Enterprise" style="display: block; margin: auto;"></div>
+ 
+ 
+-        Update an existing SLA policy. <br>
++        Update an existing SLA policy.
++
+         Permission required: `manage-livechat-sla`
+ 
+         ### Changelog
+@@ -14571,7 +14575,7 @@
+       description: |-
+         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Enterprise" style="display: block; margin: auto;"></div>
+ 
+-        Get a list of all canned responses in the workspace that belong to the current user scope. <br>
++        Get a list of all canned responses in the workspace that belong to the current user scope.
+ 
+         Permission required: `view-canned-responses`
+ 
+@@ -14666,7 +14670,7 @@
+       description: |-
+         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Enterprise" style="display: block; margin: auto;"></div>
+ 
+-        Get a specific canned response. <br>
++        Get a specific canned response.
+ 
+         Permission required: `view-canned-responses`
+ 
+@@ -14756,7 +14760,7 @@
+        Use this endpoint to delete a canned response. Permission required: `remove-canned-responses`
+        
+        ### Changelog
+-       | Version      | Description 
++       | Version      | Description |
+        | ---------------- | ------------|
+        |7.12.0            | Added       |
+       parameters:
+--- /mnt/user-data/uploads/Rocket.Chat-Open-API/rooms.yaml	2026-09-08 19:37:17.974256826 +0000
++++ patched-1539/rooms.yaml	2026-09-08 19:38:34.554255075 +0000
+@@ -14659,7 +14659,7 @@
+         before they can join via an invite token.
+ 
+         ### Changelog
+-        | Version | Change |
++        | Version | Description |
+         |---------|--------|
+         | 8.4.0   | Added ban check — banned users can no longer join via invite token |
+       operationId: post-useInviteToken
+@@ -16371,7 +16371,7 @@
+         Permissions required: `abac-management` and `manage-abac-admin-settings`.
+ 
+         ### Changelog
+-        | Version | Change |
++        | Version | Description |
+         |---------|--------|
+         | 8.0.0   | Added |
+         | 8.5.0   | Added the `manage-abac-admin-settings` granular permission requirement. |
+--- /mnt/user-data/uploads/Rocket.Chat-Open-API/user-management.yaml	2026-09-08 19:37:19.090256801 +0000
++++ patched-1539/user-management.yaml	2026-09-08 19:38:34.562255074 +0000
+@@ -520,7 +520,7 @@
+       description: |-
+         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+         
+-        Update a role in the workspace. <br>
++        Update a role in the workspace.
+         
+         Permission required: `access-permissions`
+                 
+@@ -646,7 +646,8 @@
+         - Roles
+       summary: Assign Role to User
+       description: |-
+-        Assign a role to a user. Optionally, you can set this role to a user for a specific room. <br>
++        Assign a role to a user. Optionally, you can set this role to a user for a specific room.
++
+         **Permissions required**:
+         - `access-permissions`: Required to modify permissions for various roles
+         - `assign-admin-role`: Permission to assign the admin role to other users
+@@ -1260,7 +1261,8 @@
+       summary: Create User
+       description: |-
+         Create a new user in your workspace. This endpoint is typically used by admins to create user accounts in the workspace.
+-        <br>Permissions required:
++
++        Permissions required:
+         - `create-user`: Permission to create users
+         - `edit-other-user-active-status`: Permission to enable or disable other accounts
+ 
+@@ -1580,7 +1582,8 @@
+         - Users
+       summary: Update User Details
+       description: |-
+-        Use this endpoint to update the details of an existing user. This endpoint requires 2FA.<br>
++        Use this endpoint to update the details of an existing user. This endpoint requires 2FA.
++
+         **Permissions required**:
+         - `edit-other-user-password`: Permission to modify other user's passwords
+         - `edit-other-user-info_description`: Permission to change other user's name, username or email address
+@@ -4080,7 +4083,8 @@
+                     success: false
+                     error: The 'email' param is required
+       description: |-
+-        Send an email to reset your password. Ensure that you have completed the configuration of the email; otherwise, your users will not receive the mail normally. Access this from **Manage** > **Workspace** > **Settings** > **Email**. <br>
++        Send an email to reset your password. Ensure that you have completed the configuration of the email; otherwise, your users will not receive the mail normally. Access this from **Manage** > **Workspace** > **Settings** > **Email**.
++
+         To use this endpoint, the `PasswordReset` setting must be enabled in **Settings** > **Accounts** > **Registration** > **Password Reset**.
+         
+         ### Changelog
+@@ -5250,7 +5254,7 @@
+       description: |-
+         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+         
+-        Syncs your <a href="https://docs.rocket.chat/use-rocket.chat/authentication/ldap" target="_blank">LDAP data</a> based on the <a href="https://docs.rocket.chat/use-rocket.chat/authentication/ldap/ldap-data-sync-settings" target="_blank">data sync configurations</a>. This endpoints requires 2FA. <br>
++        Syncs your <a href="https://docs.rocket.chat/use-rocket.chat/authentication/ldap" target="_blank">LDAP data</a> based on the <a href="https://docs.rocket.chat/use-rocket.chat/authentication/ldap/ldap-data-sync-settings" target="_blank">data sync configurations</a>. This endpoints requires 2FA.
+         
+         Make sure LDAP is enabled in **Settings** > **LDAP** > **Enable** before using this endpoint.
+ 
