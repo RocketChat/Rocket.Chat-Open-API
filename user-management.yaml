@@ -520,7 +520,7 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         
-        Update a role in the workspace. <br>
+        Update a role in the workspace.
         
         Permission required: `access-permissions`
                 
@@ -646,7 +646,8 @@ paths:
         - Roles
       summary: Assign Role to User
       description: |-
-        Assign a role to a user. Optionally, you can set this role to a user for a specific room. <br>
+        Assign a role to a user. Optionally, you can set this role to a user for a specific room.
+
         **Permissions required**:
         - `access-permissions`: Required to modify permissions for various roles
         - `assign-admin-role`: Permission to assign the admin role to other users
@@ -1260,7 +1261,8 @@ paths:
       summary: Create User
       description: |-
         Create a new user in your workspace. This endpoint is typically used by admins to create user accounts in the workspace.
-        <br>Permissions required:
+
+        Permissions required:
         - `create-user`: Permission to create users
         - `edit-other-user-active-status`: Permission to enable or disable other accounts
 
@@ -1580,7 +1582,8 @@ paths:
         - Users
       summary: Update User Details
       description: |-
-        Use this endpoint to update the details of an existing user. This endpoint requires 2FA.<br>
+        Use this endpoint to update the details of an existing user. This endpoint requires 2FA.
+
         **Permissions required**:
         - `edit-other-user-password`: Permission to modify other user's passwords
         - `edit-other-user-info_description`: Permission to change other user's name, username or email address
@@ -4080,7 +4083,8 @@ paths:
                     success: false
                     error: The 'email' param is required
       description: |-
-        Send an email to reset your password. Ensure that you have completed the configuration of the email; otherwise, your users will not receive the mail normally. Access this from **Manage** > **Workspace** > **Settings** > **Email**. <br>
+        Send an email to reset your password. Ensure that you have completed the configuration of the email; otherwise, your users will not receive the mail normally. Access this from **Manage** > **Workspace** > **Settings** > **Email**.
+
         To use this endpoint, the `PasswordReset` setting must be enabled in **Settings** > **Accounts** > **Registration** > **Password Reset**.
         
         ### Changelog
@@ -5250,7 +5254,7 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         
-        Syncs your <a href="https://docs.rocket.chat/use-rocket.chat/authentication/ldap" target="_blank">LDAP data</a> based on the <a href="https://docs.rocket.chat/use-rocket.chat/authentication/ldap/ldap-data-sync-settings" target="_blank">data sync configurations</a>. This endpoints requires 2FA. <br>
+        Syncs your <a href="https://docs.rocket.chat/use-rocket.chat/authentication/ldap" target="_blank">LDAP data</a> based on the <a href="https://docs.rocket.chat/use-rocket.chat/authentication/ldap/ldap-data-sync-settings" target="_blank">data sync configurations</a>. This endpoints requires 2FA.
         
         Make sure LDAP is enabled in **Settings** > **LDAP** > **Enable** before using this endpoint.
 
