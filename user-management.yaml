@@ -1646,7 +1646,13 @@ paths:
                       description: The username for the user.
                     active:
                       type: boolean
-                      description: 'Whether the user is active, which determines if they can login or not.'
+                      description: >-
+                        Whether the user is active, which determines if they can
+                        log in. Setting this to `false` deactivates the user. If
+                        the user is the last owner of any room, or the only
+                        member of a private room, the request fails with
+                        `user-last-owner` unless `confirmRelinquish` is also
+                        `true`. See `confirmRelinquish`.
                       default: true
                     roles:
                       type: array
@@ -1677,6 +1683,25 @@ paths:
                         Any custom fields the user should have on their account.
                         To save custom fields, you must first define the custom fields in the admin panel (Manage > Workspace > Settings > Accounts > Registration > Custom Fields). For details on how to configure this field, see [Custom Fields](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/accounts/custom-fields).
                         For information on how to view the custom fields, see the [Get Users List](https://developer.rocket.chat/reference/api/rest-api/endpoints/user-management/users-endpoints/get-users-list) endpoint.
+                confirmRelinquish:
+                  type: boolean
+                  default: false
+                  description: >-
+                    Top-level body parameter (not inside `data`). Only used when
+                    `data.active` is `false`. Set to `true` to deactivate the
+                    user even if they are the last owner of a room, or the only
+                    member of a private room.
+
+                    If the room has other active members, the member who joined
+                    earliest becomes the new owner. If the user is the only
+                    member of a private room, or no other active member can take
+                    ownership, that room is deleted, together with every
+                    discussion that belongs to it. Public channels are not
+                    deleted.
+
+                    If omitted or `false` and the user is the last owner of any
+                    room, the request fails with `user-last-owner` and the
+                    user's active status is not changed.
               required:
                 - userId
                 - data
@@ -1786,6 +1811,14 @@ paths:
                         type: string
                       action:
                         type: string
+                      shouldBeRemoved:
+                        type: array
+                        items:
+                          type: string
+                      shouldChangeOwner:
+                        type: array
+                        items:
+                          type: string
               examples:
                 Example 1:
                   value:
@@ -1795,6 +1828,15 @@ paths:
                     details:
                       method: insertOrUpdateUser
                       action: Editing_user
+                user-last-owner:
+                  value:
+                    success: false
+                    error: '[user-last-owner]'
+                    errorType: user-last-owner
+                    details:
+                      shouldBeRemoved:
+                        - cascade-test-group
+                      shouldChangeOwner: []
         '401':
           $ref: '#/components/responses/authorizationError'
 
@@ -2958,6 +3000,17 @@ paths:
                     type: string
                   errorType:
                     type: string
+                  details:
+                    type: object
+                    properties:
+                      shouldBeRemoved:
+                        type: array
+                        items:
+                          type: string
+                      shouldChangeOwner:
+                        type: array
+                        items:
+                          type: string
               examples:
                 Example 1:
                   value:
@@ -2966,6 +3019,15 @@ paths:
                       must have required property 'activeStatus'
                       [invalid-params]
                     errorType: invalid-params
+                user-last-owner:
+                  value:
+                    success: false
+                    error: '[user-last-owner]'
+                    errorType: user-last-owner
+                    details:
+                      shouldBeRemoved:
+                        - cascade-test-group
+                      shouldChangeOwner: []
         '401':
           $ref: '#/components/responses/authorizationError'
       description: |-
@@ -3008,18 +3070,21 @@ paths:
                   type: boolean
                   default: false
                   description: >-
-                    Allows the user to be deactivated even if it is the last
-                    owner of a room. If `activeStatus=false` &
-                    `confirmRelinquish=true` and the user is the last remaining
-                    owner of a room, the oldest member of that room will be
-                    chosen as the new owner.
+                    Only used when `activeStatus` is `false`. Set to `true` to
+                    deactivate the user even if they are the last owner of a
+                    room, or the only member of a private room. If omitted or
+                    `false` and the user is the last owner of any room, the
+                    request fails with `user-last-owner`.
               required:
                 - activeStatus
                 - userId
-        description: >-
-          If `activeStatus=false` & `confirmRelinquish=true` and the user is the
-          last remaining owner of a room, the oldest member of that room will be
-          chosen as the new owner.
+        description: |-
+          When deactivating a user (`activeStatus=false`) and `confirmRelinquish=true`:
+
+          * If the user is the last owner of a room that has other active members, the member who joined earliest becomes the new owner.
+          * If the user is the only member of a private room, or no other active member can take ownership, that room is deleted, together with every discussion that belongs to it, regardless of who is a member of those discussions. Public channels are not deleted.
+
+          When `confirmRelinquish` is omitted or `false` and the user is the last owner of any room, or the only member of a private room, the request fails with `user-last-owner` and no change is made. `details.shouldBeRemoved` names the rooms that would be deleted. `details.shouldChangeOwner` names the rooms that would get a new owner. Child discussions that the user is not subscribed to are not listed; any room in `shouldBeRemoved` also takes its discussions with it.
       tags:
         - Users
   /api/v1/users.deactivateIdle:
