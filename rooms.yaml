@@ -5049,6 +5049,242 @@ paths:
           $ref: '#/components/responses/trueSuccess'
         '401':
           $ref: '#/components/responses/authorizationError'
+  /api/v1/rooms.history:
+    get:
+      tags:
+        - Rooms
+      summary: Get Room History
+      description: |-
+        Returns the message history of a room of any type, with cursor-based pagination. Messages are returned newest first. Hidden system messages are excluded.
+
+        Use the returned `cursor` to move through the history. Pass `cursor.previous` as the `previous` parameter to load older messages, or `cursor.next` as the `next` parameter to load newer messages. A `null` cursor value means there are no more messages in that direction. Use `aroundId` instead to load a window of messages centered on a specific message, for example when jumping to a quoted message or a search result. You can provide only one of `next`, `previous`, and `aroundId` in a request.
+
+        You must have access to the room. To read a public channel without being a member, you need the `preview-c-room` permission. When the **Allow Anonymous Read** (`Accounts_AllowAnonymousRead`) setting is enabled, public channels can be read without authentication.
+
+        This endpoint replaces the deprecated `loadHistory`, `loadNextMessages`, and `loadSurroundingMessages` Realtime API methods, which remain available until 9.0.0.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.9.0   | Added       |
+      operationId: get-api-v1-rooms.history
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: The `authToken` of the authenticated user. Optional when `Accounts_AllowAnonymousRead` is enabled and the room is a public channel.
+          required: false
+          schema:
+            type: string
+          example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
+        - name: X-User-Id
+          in: header
+          description: The `userId` of the authenticated user. Optional when `Accounts_AllowAnonymousRead` is enabled and the room is a public channel.
+          required: false
+          schema:
+            type: string
+          example: rbAXPnMktTFbNpwtJ
+        - name: roomId
+          in: query
+          description: The room ID.
+          required: true
+          schema:
+            type: string
+          example: 6GFJ3tbmHiyHbahmC
+        - name: count
+          in: query
+          description: The number of messages to return. The default is 20. The value is capped by the **Max Record Amount** (`API_Upper_Count_Limit`) setting.
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 20
+          example: 20
+        - name: previous
+          in: query
+          description: The `cursor.previous` value from a previous response. Returns the messages older than that position. Cannot be combined with `next` or `aroundId`.
+          required: false
+          schema:
+            type: string
+          example: '1790157600000'
+        - name: next
+          in: query
+          description: The `cursor.next` value from a previous response. Returns the messages newer than that position. Cannot be combined with `previous` or `aroundId`.
+          required: false
+          schema:
+            type: string
+          example: '1790157900000'
+        - name: aroundId
+          in: query
+          description: The ID of a message in the room. Returns a window of up to `count` messages centered on this message, including the message itself. Cannot be combined with `next` or `previous`.
+          required: false
+          schema:
+            type: string
+          example: Xq8sLpW3nZr2TmKeA
+        - name: lastSeen
+          in: query
+          description: An ISO 8601 date-time for the user's last-read position. It does not limit the returned messages. When the oldest returned message is newer than this value, the response includes `firstUnread` and `unreadNotLoaded`.
+          required: false
+          schema:
+            type: string
+            format: date-time
+          example: '2026-09-23T09:00:00.000Z'
+        - name: showThreadMessages
+          in: query
+          description: Whether to include thread replies that were not also sent to the room. The default is `true`.
+          required: false
+          schema:
+            type: boolean
+            default: true
+          example: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    type: array
+                    description: The messages, ordered newest first.
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        rid:
+                          type: string
+                        msg:
+                          type: string
+                        ts:
+                          type: string
+                        u:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                            name:
+                              type: string
+                        _updatedAt:
+                          type: string
+                        mentions:
+                          type: array
+                          items:
+                            type: object
+                        channels:
+                          type: array
+                          items:
+                            type: object
+                  cursor:
+                    type: object
+                    properties:
+                      next:
+                        type: string
+                        nullable: true
+                        description: The cursor for newer messages, or `null` if there are none.
+                      previous:
+                        type: string
+                        nullable: true
+                        description: The cursor for older messages, or `null` if there are none.
+                  firstUnread:
+                    type: object
+                    description: The oldest unread message that was not loaded in this response. Returned only when `lastSeen` is provided and unread messages exist beyond the returned messages.
+                  unreadNotLoaded:
+                    type: integer
+                    description: The number of unread messages newer than `lastSeen` that were not loaded in this response.
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    messages:
+                      - _id: Xq8sLpW3nZr2TmKeA
+                        rid: 6GFJ3tbmHiyHbahmC
+                        msg: The release checklist is ready for review.
+                        ts: '2026-09-23T10:05:00.000Z'
+                        u:
+                          _id: rbAXPnMktTFbNpwtJ
+                          username: dana.reyes
+                          name: Dana Reyes
+                        _updatedAt: '2026-09-23T10:05:00.000Z'
+                        mentions: []
+                        channels: []
+                      - _id: Bv5nTq7RkWz3YpLcD
+                        rid: 6GFJ3tbmHiyHbahmC
+                        msg: Thanks, I will take a look this afternoon.
+                        ts: '2026-09-23T10:00:00.000Z'
+                        u:
+                          _id: kP3wQz8LmNvT5rXyB
+                          username: sam.okafor
+                          name: Sam Okafor
+                        _updatedAt: '2026-09-23T10:00:00.000Z'
+                        mentions: []
+                        channels: []
+                    cursor:
+                      next: null
+                      previous: '1790157600000'
+                    unreadNotLoaded: 0
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Cursor Conflict:
+                  value:
+                    success: false
+                    error: 'Only one of "next", "previous" and "aroundId" can be provided [error-cursor-conflict]'
+                    errorType: error-cursor-conflict
+                Invalid Cursor:
+                  value:
+                    success: false
+                    error: 'Invalid pagination cursor [error-invalid-cursor]'
+                    errorType: error-invalid-cursor
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden. You cannot access the room, or the room is a public channel that you have not joined and you do not have the `preview-c-room` permission.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: unauthorized
+        '404':
+          description: Not Found. The room does not exist, or the message in `aroundId` is not a visible message in the room.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Not Found:
+                  value:
+                    success: false
+                    error: Resource not found
   /api/v1/rooms.info:
     get:
       tags:
@@ -8210,6 +8446,13 @@ paths:
         Removes a team. 
         
         Permission required: `delete-team`
+
+        The deletion completes even if the team's main room no longer exists, for example after an interrupted deletion. In that case, the main room is skipped, the team is removed, and the team name becomes available again. You can retry an interrupted deletion with this endpoint.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.9.0   | Deleting a team now succeeds when the team's main room no longer exists. |
       operationId: post-api-v1-teams.delete
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -13532,10 +13775,13 @@ paths:
       summary: Directory
       description: |-
         Search workspace directory for users, channels and teams. 
+
+        Requests are limited to 100 every 100 seconds per client IP address.
         
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 8.9.0   | Changed the rate limit to 100 requests every 100 seconds. |
         | 7.0.0   | Added `type`, `workspace` and `text` query parameters |
         | 1.0.0   | Added workspace query param |
         | 0.65.0  | Added Pagination fields: count, total, offset |

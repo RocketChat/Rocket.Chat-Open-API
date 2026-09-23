@@ -737,6 +737,104 @@ paths:
       parameters:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/X-Auth-Token'
+  /api/v1/setupWizard.parameters:
+    get:
+      tags:
+        - Settings
+      summary: Get Setup Wizard Parameters
+      description: |-
+        Returns the settings used by the setup wizard and whether the workspace is already registered with Rocket.Chat Cloud.
+
+        This endpoint does not require authentication, because the setup wizard runs before the first administrator account exists. After the setup wizard is completed, the endpoint returns a `403` response. Requests are limited to 20 per minute per client IP address.
+
+        This endpoint replaces the deprecated `getSetupWizardParameters` Realtime API method, which remains available until 9.0.0.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.9.0   | Added       |
+      operationId: get-api-v1-setupWizard.parameters
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  settings:
+                    type: array
+                    description: The settings shown in the setup wizard.
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        type:
+                          type: string
+                        value: {}
+                        values:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              key:
+                                type: string
+                              i18nLabel:
+                                type: string
+                        wizard:
+                          type: object
+                          properties:
+                            step:
+                              type: integer
+                            order:
+                              type: integer
+                  serverAlreadyRegistered:
+                    type: boolean
+                    description: Whether the workspace is already registered with Rocket.Chat Cloud.
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    settings:
+                      - _id: Organization_Name
+                        type: string
+                        value: ''
+                        wizard:
+                          step: 2
+                          order: 1
+                      - _id: Organization_Type
+                        type: select
+                        value: ''
+                        values:
+                          - key: community
+                            i18nLabel: Community
+                          - key: government
+                            i18nLabel: Government
+                          - key: nonprofit
+                            i18nLabel: Nonprofit
+                        wizard:
+                          step: 2
+                          order: 0
+                    serverAlreadyRegistered: false
+                    success: true
+        '403':
+          description: Forbidden. The setup wizard is already completed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: unauthorized
   /api/v1/service.configurations:
     parameters: []
     get:
@@ -947,6 +1045,48 @@ paths:
       parameters:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/X-Auth-Token'
+  /api/v1/cloud.workspaceRegisterData:
+    get:
+      tags:
+        - Cloud
+      summary: Get Workspace Registration Data
+      description: |-
+        Returns the workspace registration payload used to register the workspace with Rocket.Chat Cloud offline. The `registerData` value is a base64-encoded JSON string.
+
+        Permission required: `manage-cloud`.
+
+        This endpoint replaces the deprecated `cloud:getWorkspaceRegisterData` Realtime API method, which remains available until 9.0.0.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.9.0   | Added       |
+      operationId: get-api-v1-cloud.workspaceRegisterData
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  registerData:
+                    type: string
+                    description: The base64-encoded workspace registration payload.
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    registerData: eyJ1bmlxdWVJZCI6Ilp4N3FXbTNLcDlSdlQ0eUxiIiwid29ya3NwYWNlSWQiOiIiLCJhZGRyZXNzIjoiaHR0cHM6Ly9jaGF0LmV4YW1wbGUuY29tIn0=
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
   /api/v1/dns.resolve.txt:
     parameters: []
     post:
@@ -4635,6 +4775,31 @@ paths:
                           type: string
                         ts:
                           type: string
+                          description: When the user became a member of the conference.
+                        joined:
+                          type: boolean
+                          description: Whether the member joined the call.
+                        joinedAt:
+                          type: string
+                        declined:
+                          type: boolean
+                          description: Whether the member declined the call. A member can decline and join later.
+                        declinedAt:
+                          type: string
+                        leftAt:
+                          type: string
+                          description: When the member last left the call. Cleared if the member rejoins.
+                        leftReason:
+                          type: string
+                          enum:
+                            - reported
+                            - timeout
+                          description: How the departure was recorded. `reported` means the member's client reported it; `timeout` means the member's presence heartbeat stopped.
+                        lastSeenAt:
+                          type: string
+                        ringingAt:
+                          type: string
+                          description: When the member was last rung.
                   messages:
                     type: object
                     properties:
@@ -4676,6 +4841,32 @@ paths:
                         type: boolean
                       title:
                         type: boolean
+                      persistentChat:
+                        type: boolean
+                      embedded:
+                        type: boolean
+                        description: Whether the provider renders the call embedded in Rocket.Chat instead of opening an external URL.
+                  chatAccess:
+                    type: object
+                    description: Where the call chat is and which conference members cannot read it.
+                    properties:
+                      rid:
+                        type: string
+                        description: The ID of the room that holds the call chat, either the conference's room or its discussion.
+                      name:
+                        type: string
+                        description: The display name of that room.
+                      type:
+                        type: string
+                        description: The room type.
+                      membersWithoutAccess:
+                        type: array
+                        description: The user IDs of conference members who cannot read the call chat.
+                        items:
+                          type: string
+                      canInvite:
+                        type: boolean
+                        description: Whether the room can take new members. When `false`, use the `discussion` mode of `video-conference.share-chat`.
                   success:
                     type: boolean
               examples:
@@ -4708,6 +4899,12 @@ paths:
                       mic: false
                       cam: false
                       title: false
+                    chatAccess:
+                      rid: 68c8071650223764573dd2dc
+                      name: testdiscussion
+                      type: c
+                      membersWithoutAccess: []
+                      canInvite: true
                     success: true
         '400':
           description: Bad Request
@@ -4731,7 +4928,15 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: get-api-v1-video-conference.info
-      description: 'Get details about a specific video conference. Rate limiting: 15 requests per 3000ms.'
+      description: |-
+        Get details about a specific video conference. Rate limiting: 15 requests per 3000ms.
+
+        You must be a member of the conference or have access to the conference's room or discussion. The `chatAccess` object lists the members who cannot read the call chat; use `video-conference.share-chat` to give them access.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.9.0   | Added the `chatAccess` response field and member status fields in `users`, and allowed conference members to read the details without room access. |
       parameters:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/X-Auth-Token'
@@ -4882,8 +5087,15 @@ paths:
                 properties:
                   url:
                     type: string
+                    description: The URL to open the call. Empty for providers that render the call embedded in Rocket.Chat.
                   providerName:
                     type: string
+                  callId:
+                    type: string
+                    description: The video conference call ID.
+                  rid:
+                    type: string
+                    description: The ID of the room the call belongs to.
                   success:
                     type: boolean
               examples:
@@ -4891,6 +5103,8 @@ paths:
                   value:
                     url: 'http://g.co/meet/RocketChat_697887e3c8b0533020781a4a'
                     providerName: googlemeet
+                    callId: 697887e3c8b0533020781a4a
+                    rid: 68c8071650223764573dd2dc
                     success: true
         '400':
           description: Bad Request
@@ -4914,7 +5128,15 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: post-api-v1-video-conference.join
-      description: 'Join a specific video conference. Rate limiting: 2 requests per 5000ms. This endpoint also allows anonymous access for guest users.'
+      description: |-
+        Join a specific video conference. Rate limiting: 2 requests per 5000ms. This endpoint also allows anonymous access for guest users.
+
+        Members of the conference can join it even without access to the conference's room. For providers that render the call embedded in Rocket.Chat, `url` is returned empty.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.9.0   | Added the `callId` and `rid` response fields, allowed conference members to join without room access, and returned an empty `url` for embedded providers. |
       requestBody:
         content:
           application/json:
@@ -4997,6 +5219,721 @@ paths:
                   type: string
                   example: 697887e3c8b0533020781a4a
                   description: Enter the call ID that you want to cancel.
+  /api/v1/video-conference.decline:
+    post:
+      tags:
+        - Video Conference
+      summary: Decline a Video Conference
+      description: |-
+        Records that you declined the call. Only your own membership is updated; the call keeps running for everyone else, and you can still join it later.
+
+        You must be a member of the conference or have access to the conference's room or discussion. Requests are limited to 10 per minute per client IP address.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.9.0   | Added       |
+      operationId: post-api-v1-video-conference.decline
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - callId
+              additionalProperties: false
+              properties:
+                callId:
+                  type: string
+                  description: The video conference call ID.
+                  example: 697887e3c8b0533020781a4a
+            examples:
+              Example:
+                value:
+                  callId: 697887e3c8b0533020781a4a
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Missing Parameter:
+                  value:
+                    success: false
+                    error: 'must have required property ''callId'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '404':
+          description: Not Found. The call does not exist, or you are neither a member of the conference nor able to access its room.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Not Found:
+                  value:
+                    success: false
+                    error: Resource not found
+  /api/v1/video-conference.leave:
+    post:
+      tags:
+        - Video Conference
+      summary: Leave a Video Conference
+      description: |-
+        Records that you left the call. The conference ends when no participant is left in it.
+
+        You must be a member of the conference or have access to the conference's room or discussion. Requests are limited to 20 per minute per client IP address.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.9.0   | Added       |
+      operationId: post-api-v1-video-conference.leave
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - callId
+              additionalProperties: false
+              properties:
+                callId:
+                  type: string
+                  description: The video conference call ID.
+                  example: 697887e3c8b0533020781a4a
+            examples:
+              Example:
+                value:
+                  callId: 697887e3c8b0533020781a4a
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Missing Parameter:
+                  value:
+                    success: false
+                    error: 'must have required property ''callId'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '404':
+          description: Not Found. The call does not exist, or you are neither a member of the conference nor able to access its room.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Not Found:
+                  value:
+                    success: false
+                    error: Resource not found
+  /api/v1/video-conference.heartbeat:
+    post:
+      tags:
+        - Video Conference
+      summary: Renew Video Conference Presence
+      description: |-
+        Confirms that you are still in the call. The call window sends this request periodically. When these requests stop, for example because the client closed unexpectedly, the server records you as having left the call.
+
+        You must be a member of the conference or have access to the conference's room or discussion. Requests are limited to 20 per minute per client IP address.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.9.0   | Added       |
+      operationId: post-api-v1-video-conference.heartbeat
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - callId
+              additionalProperties: false
+              properties:
+                callId:
+                  type: string
+                  description: The video conference call ID.
+                  example: 697887e3c8b0533020781a4a
+            examples:
+              Example:
+                value:
+                  callId: 697887e3c8b0533020781a4a
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Missing Parameter:
+                  value:
+                    success: false
+                    error: 'must have required property ''callId'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '404':
+          description: Not Found. The call does not exist, or you are neither a member of the conference nor able to access its room.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Not Found:
+                  value:
+                    success: false
+                    error: Resource not found
+  /api/v1/video-conference.ring:
+    post:
+      tags:
+        - Video Conference
+      summary: Ring a Video Conference Member
+      description: |-
+        Rings a conference member who is not in the call. The response field `rang` is `false` when no ring was sent, for example because the member is already in the call, is already being rung, or the call has ended.
+
+        You must be a member of the conference or have access to the conference's room or discussion. Requests are limited to 5 per minute per client IP address.
+
+        Permission required: `videoconf-ring-users`
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.9.0   | Added       |
+      operationId: post-api-v1-video-conference.ring
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - callId
+                - userId
+              additionalProperties: false
+              properties:
+                callId:
+                  type: string
+                  description: The video conference call ID.
+                  example: 697887e3c8b0533020781a4a
+                userId:
+                  type: string
+                  description: The user ID (not the username) of the conference member to ring.
+                  example: kP3wQz8LmNvT5rXyB
+            examples:
+              Example:
+                value:
+                  callId: 697887e3c8b0533020781a4a
+                  userId: kP3wQz8LmNvT5rXyB
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rang:
+                    type: boolean
+                    description: Whether the member was rung.
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    rang: true
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Missing Parameter:
+                  value:
+                    success: false
+                    error: 'must have required property ''callId'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
+        '404':
+          description: Not Found. The call does not exist, or you are neither a member of the conference nor able to access its room.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Not Found:
+                  value:
+                    success: false
+                    error: Resource not found
+  /api/v1/video-conference.add-participants:
+    post:
+      tags:
+        - Video Conference
+      summary: Add Video Conference Participants
+      description: |-
+        Adds users as members of the conference. Membership allows a user to join the call, but does not add them to the conference's room, so they might not be able to read the call chat. Use `video-conference.info` to check `chatAccess`, and `video-conference.share-chat` to give members access to the chat.
+
+        The response lists the user IDs of the members that were added. Users who are already members, usernames that do not exist, and calls that have ended result in no additions.
+
+        You must be a member of the conference or have access to the conference's room or discussion. Requests are limited to 5 per minute per client IP address.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.9.0   | Added       |
+      operationId: post-api-v1-video-conference.add-participants
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - callId
+                - users
+              additionalProperties: false
+              properties:
+                callId:
+                  type: string
+                  description: The video conference call ID.
+                  example: 697887e3c8b0533020781a4a
+                users:
+                  type: array
+                  description: The usernames (not user IDs) of the people to add. Enter between 1 and 10 usernames.
+                  example:
+                    - sam.okafor
+                    - lee.chen
+                  minItems: 1
+                  maxItems: 10
+                  items:
+                    type: string
+                ring:
+                  type: boolean
+                  default: false
+                  description: Whether to ring the people being added. Defaults to `false`. Ringing also requires the `videoconf-ring-users` permission; without it, the users are added without being rung.
+            examples:
+              Example:
+                value:
+                  callId: 697887e3c8b0533020781a4a
+                  users:
+                    - sam.okafor
+                    - lee.chen
+                  ring: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  added:
+                    type: array
+                    description: The user IDs of the members that were added.
+                    items:
+                      type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    added:
+                      - kP3wQz8LmNvT5rXyB
+                      - Hn4tYw9QeVb2LsJxR
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Missing Parameter:
+                  value:
+                    success: false
+                    error: 'must have required property ''callId'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '404':
+          description: Not Found. The call does not exist, or you are neither a member of the conference nor able to access its room.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Not Found:
+                  value:
+                    success: false
+                    error: Resource not found
+  /api/v1/video-conference.rename:
+    post:
+      tags:
+        - Video Conference
+      summary: Rename a Video Conference
+      description: |-
+        Changes the title of an ongoing group video conference. Only the user who started the call can rename it. Otherwise, the request fails with `error-not-allowed`. Calls that have ended and direct calls cannot be renamed and return `error-invalid-video-conf`.
+
+        You must be a member of the conference or have access to the conference's room or discussion. Requests are limited to 10 per minute per client IP address.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.9.0   | Added       |
+      operationId: post-api-v1-video-conference.rename
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - callId
+                - title
+              additionalProperties: false
+              properties:
+                callId:
+                  type: string
+                  description: The video conference call ID.
+                  example: 697887e3c8b0533020781a4a
+                title:
+                  type: string
+                  minLength: 1
+                  maxLength: 200
+                  description: The new conference title. Leading and trailing spaces are removed.
+                  example: Sprint planning
+            examples:
+              Example:
+                value:
+                  callId: 697887e3c8b0533020781a4a
+                  title: Sprint planning
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Missing Parameter:
+                  value:
+                    success: false
+                    error: 'must have required property ''callId'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '404':
+          description: Not Found. The call does not exist, or you are neither a member of the conference nor able to access its room.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Not Found:
+                  value:
+                    success: false
+                    error: Resource not found
+  /api/v1/video-conference.share-chat:
+    post:
+      tags:
+        - Video Conference
+      summary: Share Video Conference Chat
+      description: |-
+        Gives the conference members who cannot read the call chat access to it, and returns the ID of the room that holds the chat afterwards. If every member already has access, the current chat room ID is returned and nothing changes. When the selected `mode` is not allowed, the request fails with `error-not-allowed`.
+
+        You must be a member of the conference or have access to the conference's room or discussion. Requests are limited to 5 per minute per client IP address.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.9.0   | Added       |
+      operationId: post-api-v1-video-conference.share-chat
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - callId
+                - mode
+              additionalProperties: false
+              properties:
+                callId:
+                  type: string
+                  description: The video conference call ID.
+                  example: 697887e3c8b0533020781a4a
+                mode:
+                  type: string
+                  enum:
+                    - invite
+                    - discussion
+                  description: |-
+                    How to give members access to the call chat:
+                    * `invite`: Add the members without access to the room that holds the chat. Not available for rooms that cannot take new members, such as direct messages.
+                    * `discussion`: Move the chat to a new discussion that includes the conference members. Requires discussions to be enabled and the `start-discussion` or `start-discussion-other-user` permission.
+                  example: discussion
+            examples:
+              Example:
+                value:
+                  callId: 697887e3c8b0533020781a4a
+                  mode: discussion
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rid:
+                    type: string
+                    description: The ID of the room that holds the call chat.
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    rid: 7Tb3XkPq9WmRzL2cN
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Missing Parameter:
+                  value:
+                    success: false
+                    error: 'must have required property ''callId'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '404':
+          description: Not Found. The call does not exist, or you are neither a member of the conference nor able to access its room.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Not Found:
+                  value:
+                    success: false
+                    error: Resource not found
+  /api/v1/video-conference.joinable:
+    get:
+      tags:
+        - Video Conference
+      summary: Get Joinable Video Conferences
+      description: |-
+        Lists the video conferences running now that you can join, including calls you are already in and calls that are ringing for you. Empty calls are not listed. Requests are limited to 30 per minute per client IP address.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.9.0   | Added       |
+      operationId: get-api-v1-video-conference.joinable
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  calls:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        callId:
+                          type: string
+                        name:
+                          type: string
+                          description: The conference title, or the room name if the conference has no title.
+                        createdAt:
+                          type: string
+                        usersCount:
+                          type: integer
+                          description: The number of people in the call now.
+                        participants:
+                          type: array
+                          description: Some of the people in the call. The list is capped by the server; use `usersCount` for the total.
+                          items:
+                            type: object
+                            properties:
+                              _id:
+                                type: string
+                              username:
+                                type: string
+                              name:
+                                type: string
+                        joined:
+                          type: boolean
+                          description: Whether you are in the call.
+                        declined:
+                          type: boolean
+                          description: Whether you declined the call.
+                        ringingAt:
+                          type: string
+                          description: When you were last rung for this call.
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    calls:
+                      - callId: 697887e3c8b0533020781a4a
+                        name: Sprint planning
+                        createdAt: '2026-09-23T10:00:00.000Z'
+                        usersCount: 2
+                        participants:
+                          - _id: rbAXPnMktTFbNpwtJ
+                            username: dana.reyes
+                            name: Dana Reyes
+                          - _id: kP3wQz8LmNvT5rXyB
+                            username: sam.okafor
+                            name: Sam Okafor
+                        joined: false
+                        declined: false
+                        ringingAt: '2026-09-23T10:00:02.000Z'
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /media-calls.state:
     get:
       tags:
@@ -5225,6 +6162,207 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
+  /api/v1/media-calls.info:
+    get:
+      tags:
+        - Media Calls
+      summary: Get Media Call Details
+      description: |-
+        Returns the stored record of a media call, including calls that have ended. For external (SIP) calls, the record includes the `sipCallId` value. Only participants of the call can retrieve it; for anyone else, the endpoint returns a `404` response.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.9.0   | Added       |
+      operationId: get-api-v1-media-calls.info
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - name: callId
+          in: query
+          description: The media call ID.
+          required: true
+          schema:
+            type: string
+          example: 9f44ec94-2046-4fac-976b-fa8b0e022b08
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  call:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                        description: The media call ID.
+                      service:
+                        type: string
+                        enum:
+                          - webrtc
+                      kind:
+                        type: string
+                        enum:
+                          - direct
+                      state:
+                        type: string
+                        enum:
+                          - none
+                          - ringing
+                          - accepted
+                          - active
+                          - hangup
+                      createdBy:
+                        type: object
+                        description: The actor who created the call.
+                      createdAt:
+                        type: string
+                        format: date-time
+                      caller:
+                        type: object
+                        description: The party that started the call. `type` is `user` or `sip`.
+                        properties:
+                          type:
+                            type: string
+                          id:
+                            type: string
+                          contractId:
+                            type: string
+                          displayName:
+                            type: string
+                          username:
+                            type: string
+                          sipExtension:
+                            type: string
+                      callee:
+                        type: object
+                        description: The party being called. `type` is `user` or `sip`.
+                        properties:
+                          type:
+                            type: string
+                          id:
+                            type: string
+                          contractId:
+                            type: string
+                          displayName:
+                            type: string
+                          username:
+                            type: string
+                          sipExtension:
+                            type: string
+                      ended:
+                        type: boolean
+                      endedBy:
+                        type: object
+                      endedAt:
+                        type: string
+                        format: date-time
+                      hangupReason:
+                        type: string
+                      expiresAt:
+                        type: string
+                        format: date-time
+                      acceptedAt:
+                        type: string
+                        format: date-time
+                      activatedAt:
+                        type: string
+                        format: date-time
+                      uids:
+                        type: array
+                        description: The user IDs of the call participants.
+                        items:
+                          type: string
+                      features:
+                        type: array
+                        items:
+                          type: string
+                      sipCallId:
+                        type: string
+                        description: The SIP Call-ID of an external call. Present only for calls that went through SIP.
+                      _updatedAt:
+                        type: string
+                        format: date-time
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    call:
+                      _id: 9f44ec94-2046-4fac-976b-fa8b0e022b08
+                      service: webrtc
+                      kind: direct
+                      state: hangup
+                      createdBy:
+                        type: user
+                        id: aEGCdnFoBFCFNdiyX
+                        contractId: 7b96e74d-1e01-412a-8bcb-145db1bc9ac4
+                      createdAt: '2026-09-23T13:30:53.165Z'
+                      caller:
+                        type: user
+                        id: aEGCdnFoBFCFNdiyX
+                        contractId: 7b96e74d-1e01-412a-8bcb-145db1bc9ac4
+                        displayName: Dana Reyes
+                        username: dana.reyes
+                      callee:
+                        type: sip
+                        id: '+15550100123'
+                        displayName: Acme Support
+                      ended: true
+                      endedBy:
+                        type: user
+                        id: aEGCdnFoBFCFNdiyX
+                      endedAt: '2026-09-23T13:35:10.402Z'
+                      expiresAt: '2026-09-23T13:36:10.402Z'
+                      acceptedAt: '2026-09-23T13:31:02.118Z'
+                      activatedAt: '2026-09-23T13:31:03.540Z'
+                      uids:
+                        - aEGCdnFoBFCFNdiyX
+                      features:
+                        - audio
+                      sipCallId: 3c4f8a1e-92b7-4d6e@sip.example.com
+                      _updatedAt: '2026-09-23T13:35:10.402Z'
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Missing Parameter:
+                  value:
+                    success: false
+                    error: 'must have required property ''callId'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '404':
+          description: Not Found. The call does not exist, or you are not a participant.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Not Found:
+                  value:
+                    success: false
+                    error: Resource not found
   /api/v1/audit.auditions:
     parameters: []
     get:
