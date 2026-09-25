@@ -500,9 +500,12 @@ paths:
       description: |-
         Follow a message to receive notifications.
 
+        Requests are limited to 5 every 5 seconds per client IP address.
+
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        | 8.9.0            | Changed the rate limit to 5 requests every 5 seconds. |
         | 1.0.0            | Added       |
       operationId: post-api-v1-chat.followMessage
       parameters:
@@ -563,9 +566,12 @@ paths:
       description: |-
         Unfollow a message.
 
+        Requests are limited to 5 every 5 seconds per client IP address.
+
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        | 8.9.0            | Changed the rate limit to 5 requests every 5 seconds. |
         | 1.0.0            | Added       |
       operationId: post-api-v1-chat.unfollowMessage
       parameters:
@@ -1639,6 +1645,175 @@ paths:
                     success: false
                     error: 'Not allowed [error-not-allowed]'
                     errorType: error-not-allowed
+  /api/v1/chat.getMessages:
+    post:
+      tags:
+        - Chat
+      summary: Get Multiple Messages
+      description: |-
+        Fetches up to 100 messages by ID in a single request. The messages can belong to different rooms. IDs that do not match a visible message are skipped.
+
+        You must have access to every room the requested messages belong to. If any message belongs to a room you cannot access, the whole request fails with a `403` response.
+
+        This endpoint replaces the deprecated `getMessages` Realtime API method, which remains available until 9.0.0.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.9.0   | Added       |
+      operationId: post-api-v1-chat.getMessages
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - messageIds
+              additionalProperties: false
+              properties:
+                messageIds:
+                  type: array
+                  description: The IDs of the messages to fetch. Enter between 1 and 100 IDs.
+                  example:
+                    - Xq8sLpW3nZr2TmKeA
+                    - Bv5nTq7RkWz3YpLcD
+                  minItems: 1
+                  maxItems: 100
+                  items:
+                    type: string
+                    minLength: 1
+            examples:
+              Example:
+                value:
+                  messageIds:
+                    - Xq8sLpW3nZr2TmKeA
+                    - Bv5nTq7RkWz3YpLcD
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        rid:
+                          type: string
+                        msg:
+                          type: string
+                        ts:
+                          type: string
+                        u:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            username:
+                              type: string
+                            name:
+                              type: string
+                        _updatedAt:
+                          type: string
+                        mentions:
+                          type: array
+                          items:
+                            type: object
+                        channels:
+                          type: array
+                          items:
+                            type: object
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    messages:
+                      - _id: Xq8sLpW3nZr2TmKeA
+                        rid: 6GFJ3tbmHiyHbahmC
+                        msg: The release checklist is ready for review.
+                        ts: '2026-09-23T10:05:00.000Z'
+                        u:
+                          _id: rbAXPnMktTFbNpwtJ
+                          username: dana.reyes
+                          name: Dana Reyes
+                        _updatedAt: '2026-09-23T10:05:00.000Z'
+                        mentions: []
+                        channels: []
+                      - _id: Bv5nTq7RkWz3YpLcD
+                        rid: GENERAL
+                        msg: Standup moved to 10:30 today.
+                        ts: '2026-09-22T08:15:00.000Z'
+                        u:
+                          _id: kP3wQz8LmNvT5rXyB
+                          username: sam.okafor
+                          name: Sam Okafor
+                        _updatedAt: '2026-09-22T08:15:00.000Z'
+                        mentions: []
+                        channels: []
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Missing Parameter:
+                  value:
+                    success: false
+                    error: 'must have required property ''messageIds'' [invalid-params]'
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden. At least one of the messages belongs to a room you cannot access.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: unauthorized
+        '404':
+          description: Not Found. None of the IDs match a visible message.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Not Found:
+                  value:
+                    success: false
+                    error: Resource not found
   /api/v1/chat.getStarredMessages:
     get:
       tags:
@@ -5578,6 +5753,65 @@ paths:
                     error: 'Body param "roomId" is required [error-room-param-not-provided]'
                     errorType: error-room-param-not-provided
                     
+  /api/v1/autotranslate.getProviderUiMetadata:
+    get:
+      tags:
+        - Auto-Translate
+      summary: Get Translation Providers
+      description: |-
+        Lists the auto-translate providers registered in the workspace, with the display name of each provider. The `providers` object is keyed by provider name.
+
+        This endpoint replaces the deprecated `autoTranslate.getProviderUiMetadata` Realtime API method, which remains available until 9.0.0.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.9.0   | Added       |
+      operationId: get-api-v1-autotranslate.getProviderUiMetadata
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  providers:
+                    type: object
+                    description: The registered providers, keyed by provider name.
+                    additionalProperties:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: The provider name.
+                        displayName:
+                          type: string
+                          description: The provider name to display in the UI.
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    providers:
+                      google-translate:
+                        name: google-translate
+                        displayName: Google
+                      deepl-translate:
+                        name: deepl-translate
+                        displayName: DeepL
+                      microsoft-translate:
+                        name: microsoft-translate
+                        displayName: Microsoft
+                      libre-translate:
+                        name: libre-translate
+                        displayName: LibreTranslate
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/autotranslate.getSupportedLanguages:
     get:
       tags:

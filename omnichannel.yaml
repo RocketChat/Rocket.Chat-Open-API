@@ -21,11 +21,16 @@ paths:
       summary: Register New Agent or Manager
       description: |-
         Register a new <a href='https://docs.rocket.chat/use-rocket.chat/omnichannel/agents' target='_blank'>agent</a> or <a href='https://docs.rocket.chat/use-rocket.chat/omnichannel/managers' target='_blank'>manager</a>.
-        Permission required: `view-livechat-manager`
+        Permission required:
+        * If the `type` is `agent`: `manage-livechat-agents`.
+        * If the `type` is `manager`: `manage-livechat-managers`.
+
+        Requests without the required permission return a `403` response.
 
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
+        |8.9.0         | Required `manage-livechat-agents` for agents and `manage-livechat-managers` for managers. |
         |0.42.0        | Added       |
       operationId: 'post-api-v1-livechat-users-:type'
       parameters:
@@ -100,7 +105,21 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
-          $ref: '#/components/responses/permissionError'
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: unauthorized
       tags:
         - Omnichannel Users
     get:
@@ -334,11 +353,16 @@ paths:
       summary: Remove Agent or Manager
       description: |-
         Remove a user as an agent or a manager.
-        Permission required: `view-livechat-manager`
+        Permission required:
+        * If the `type` is `agent`: `manage-livechat-agents`.
+        * If the `type` is `manager`: `manage-livechat-managers`.
+
+        Requests without the required permission return a `403` response.
 
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |8.9.0             | Required `manage-livechat-agents` for agents and `manage-livechat-managers` for managers. |
         |0.42.0            | Added       |
       operationId: delete-api-v1-livechat-users-type-_id
       parameters:
@@ -363,7 +387,21 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
-          $ref: '#/components/responses/permissionError'
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: unauthorized
       tags:
         - Omnichannel Users
   '/api/v1/livechat/agent.info/{rid}/{token}':
@@ -675,6 +713,94 @@ paths:
           $ref: '#/components/responses/permissionError'
       tags:
         - Omnichannel Contacts
+    get:
+      summary: Get Omnichannel Contact
+      description: |-
+        > **Note:** This endpoint will be replaced. Refer to the [new API documentation](https://developer.rocket.chat/apidocs/get-omnichannel-contact) for updated usage and features.
+
+        Get an Omnichannel contact by ID.
+        Permission required: `view-l-room`.
+
+        The response does not include the contact's visitor `token`.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.9.0   | Removed the visitor `token` from the response. |
+      operationId: get-api-v1-omnichannel-contact
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserId'
+        - name: contactId
+          in: query
+          required: true
+          description: The contact ID.
+          schema:
+            type: string
+          example: 62fbed6d337291dc9a68ff89
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  contact:
+                    type: object
+                    nullable: true
+                    properties:
+                      _id:
+                        type: string
+                      username:
+                        type: string
+                      status:
+                        type: string
+                      ts:
+                        type: string
+                      _updatedAt:
+                        type: string
+                      department:
+                        type: string
+                      name:
+                        type: string
+                      visitorEmails:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            address:
+                              type: string
+                      phone:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            phoneNumber:
+                              type: string
+                      livechatData:
+                        type: object
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    contact:
+                      _id: 62fbed6d337291dc9a68ff89
+                      username: guest-16
+                      status: online
+                      ts: '2022-08-16T19:18:05.380Z'
+                      _updatedAt: '2022-08-23T17:58:37.254Z'
+                      name: Kev
+                      visitorEmails:
+                        - address: email@rocket.chat
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/permissionError'
+      tags:
+        - Omnichannel Contacts
   /api/v1/omnichannel/contact.search:
     get:
       summary: Search Contacts
@@ -691,6 +817,13 @@ paths:
         --header 'X-Auth-Token: b5BKhblglC5OU0AfB_Tl9dKmOb0zXUvWK-nhNT_aE8V' \
         --header 'X-User-Id: CkCPNcvsvCDfmWLqC'
         ```
+
+        The response does not include the contact's visitor `token`.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.9.0   | Removed the visitor `token` from the response. |
       operationId: get-api-v1-contact.search
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -737,8 +870,6 @@ paths:
                         type: string
                       name:
                         type: string
-                      token:
-                        type: string
                       visitorEmails:
                         type: array
                         items:
@@ -771,7 +902,6 @@ paths:
                       _updatedAt: '2022-08-23T17:58:37.254Z'
                       department: MgzoccgEFHZ856i97
                       name: Kev
-                      token: 969X86icKLRduGAKK
                       visitorEmails:
                         - address: email@rocket.chat
                       lastChat:
@@ -781,9 +911,25 @@ paths:
                         hobby: gaming
                     success: true
         '400':
-          $ref: '#/components/responses/permissionError'
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/permissionError'
       tags:
         - Omnichannel Contacts
   /api/v1/omnichannel/contacts:
@@ -13859,8 +14005,6 @@ paths:
                               type: string
                             username:
                               type: string
-                            token:
-                              type: string
                             status:
                               type: string
                             lastMessageTs:
@@ -13883,8 +14027,6 @@ paths:
                             rid:
                               type: string
                             msg:
-                              type: string
-                            token:
                               type: string
                             alias:
                               type: string
@@ -13993,7 +14135,6 @@ paths:
                         v:
                           _id: QyBAKC5Wc8tcv6cco
                           username: guest-537
-                          token: 8s7e9ony6ctl27e1qf8kue
                           status: online
                           lastMessageTs: '2021-07-22T17:17:04.937Z'
                         cl: false
@@ -14005,7 +14146,6 @@ paths:
                           _id: YfrxZ6gmaYLpPTxFP
                           rid: hhMKhHnnbY79mGs9K
                           msg: hi
-                          token: 8s7e9ony6ctl27e1qf8kue
                           alias: Maria
                           ts: '2021-07-22T17:17:04.937Z'
                           u:
@@ -14045,6 +14185,13 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: get-api-v1-livechat-visitors.chatHistory-room-roomId-visitor-visitorId
+      description: |-
+        Get the chat history of a Livechat visitor. The response does not include the visitor `token` in the `v` and `lastMessage` objects.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.9.0   | Removed the visitor `token` from `v` and `lastMessage`. |
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
@@ -14097,8 +14244,6 @@ paths:
                               type: string
                             username:
                               type: string
-                            token:
-                              type: string
                             status:
                               type: string
                             lastMessageTs:
@@ -14122,7 +14267,6 @@ paths:
                         v:
                           _id: QyBAKC5Wc8tcv6cco
                           username: guest-537
-                          token: 8s7e9ony6ctl27e1qf8kue
                           status: online
                           lastMessageTs: '2021-07-22T17:17:04.937Z'
                     count: 1
@@ -14132,7 +14276,15 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: get-api-v1-livechat-visitors.searchChats-room-roomId-visitor-visitorId
-      description: Get the Livechat information of a visitor. This endpoint returns only those chats that are served and closed.
+      description: |-
+        Get the Livechat chats for a visitor. Set `closedChatsOnly` to `true` to return closed chats, and `servedChatsOnly` to `true` to return chats joined by an agent.
+
+        The response omits the visitor `token` from `v` and from `closingMessage`.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.9.0   | Removed the visitor `token` from `v` and `closingMessage`. |
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'

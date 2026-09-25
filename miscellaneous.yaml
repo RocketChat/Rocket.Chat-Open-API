@@ -698,9 +698,12 @@ paths:
 
         If the  <a href="https://docs.rocket.chat/docs/accounts" target="_blank">`Allow Anonymous Read` setting</a> is enabled, anonymous callers can use this endpoint to resolve public channels through the navbar search.
 
+        Requests are limited to 100 every 100 seconds per client IP address.
+
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |8.9.0       | Changed the rate limit to 100 requests every 100 seconds. |
         |8.6.0       | Added `usernames`, `type`, and `rid` query parameters, and allowed anonymous read when `Allow Anonymous Read` is enabled. |
         |0.64.0       | Added support to '#' and '@' searches, for channels and users respectively.       |
         |0.61.0      | Added       |
