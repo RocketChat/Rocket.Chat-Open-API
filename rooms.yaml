@@ -8452,7 +8452,8 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
-        | 8.9.0   | Deleting a team now succeeds when the team's main room no longer exists. |
+        | 8.9.0   | Succeeds when the main room is missing. |
+        | 3.13.0  | Added |
       operationId: post-api-v1-teams.delete
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
