@@ -4936,7 +4936,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
-        | 8.9.0   | Added the `chatAccess` response field and member status fields in `users`, and allowed conference members to read the details without room access. |
+        | 8.9.0   | Added `chatAccess` and member status fields in `users`. |
       parameters:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/X-Auth-Token'
@@ -5136,7 +5136,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
-        | 8.9.0   | Added the `callId` and `rid` response fields, allowed conference members to join without room access, and returned an empty `url` for embedded providers. |
+        | 8.9.0   | Added `callId` and `rid`, and an empty `url` for embedded providers. |
       requestBody:
         content:
           application/json:
