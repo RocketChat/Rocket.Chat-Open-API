@@ -5934,16 +5934,18 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
-  /media-calls.state:
+  /api/v1/media-calls.state:
     get:
       tags:
         - Media Calls
       summary: Get Current Media Call State
       description: |
-        Returns every media call the authenticated user is part of and that has
-        not yet ended. Each entry reflects the call's latest
-        server-side state — `ringing`, `active`, etc. It also includes the
-        caller, callee, supported features, and lifecycle timestamps.
+        Returns ongoing media calls the authenticated user is part of. It shows call's latest server-side state — `ringing`, `active`, etc.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 8.4.0   | Added       |
       operationId: post-api-v1-get-media-calls.state
       parameters:
         - $ref: '#/components/parameters/X-User-Id'
@@ -6168,7 +6170,7 @@ paths:
         - Media Calls
       summary: Get Media Call Details
       description: |-
-        Returns the stored record of a media call, including calls that have ended. For external (SIP) calls, the record includes the `sipCallId` value. Only participants of the call can retrieve it; for anyone else, the endpoint returns a `404` response.
+        Returns the stored record for a media call, including ended calls. The record includes the sipCallId for external (SIP) calls. Only participants of the call can access the record.
 
         ### Changelog
         | Version | Description |
