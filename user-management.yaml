@@ -3760,6 +3760,22 @@ paths:
                                 type: boolean
                               sidebarGroupByType:
                                 type: boolean
+                              sidebarCategories:
+                                type: array
+                                description: The sidebar categories saved for the user, including system groups and custom categories, in display order.
+                                items:
+                                  type: object
+                                  properties:
+                                    _id:
+                                      type: string
+                                    name:
+                                      type: string
+                                    default:
+                                      type: boolean
+                                    showUnreads:
+                                      type: boolean
+                                    keepUnreadsOnTop:
+                                      type: boolean
                               sidebarViewMode:
                                 type: string
                               sidebarDisplayAvatar:
@@ -3852,6 +3868,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |8.9.0            | Added the `sidebarCategories` preference. |
         |8.8.0            | Added the `statusVisibilityDenied` preference. |
         |8.6.0            | Added `utcOffset` property.       |
         |2.3.0            | Added `desktopNotificationRequireInteraction` property.       |
@@ -4012,6 +4029,47 @@ paths:
                     sidebarGroupByType:
                       type: boolean
                       description: A boolean value that indicates whether the user has enabled the option to show the grouped values in the sidebar.
+                    sidebarCategories:
+                      type: array
+                      description: |-
+                        The full, ordered list of sidebar categories for the user. The array replaces the stored list, so include every category you want to keep. Each entry is either a system group (such as `Favorites` or `Channels`) marked with `default: true`, or a custom category created by the user.
+
+                        Custom category names are trimmed and must contain 1 to 30 characters, and `_id` values must be unique in the array. Otherwise, the request fails with `error-invalid-param`. Custom categories are available in Commercial, Government, and Defense plans.
+                      items:
+                        type: object
+                        required:
+                          - _id
+                          - name
+                        additionalProperties: false
+                        properties:
+                          _id:
+                            type: string
+                            description: The category ID. For system groups, this is the group key, for example `Favorites`, `Channels`, `Direct_Messages`, `Discussions`, or `Teams`.
+                          name:
+                            type: string
+                            minLength: 1
+                            maxLength: 30
+                            description: The category name.
+                          default:
+                            type: boolean
+                            description: Whether the entry is a system group rather than a custom category.
+                          showUnreads:
+                            type: boolean
+                            description: Whether to show unread rooms in the category.
+                          keepUnreadsOnTop:
+                            type: boolean
+                            description: Whether to keep unread rooms at the top of the category.
+                      example:
+                        - _id: Favorites
+                          name: Favorites
+                          default: true
+                        - _id: qT7bXk2mZ9wLpR4sD
+                          name: Project Apollo
+                          showUnreads: true
+                          keepUnreadsOnTop: false
+                        - _id: Channels
+                          name: Channels
+                          default: true
                     dontAskAgainList:
                       type: array
                       description: |-
@@ -4106,6 +4164,17 @@ paths:
                     sidebarViewMode: string
                     sidebarDisplayAvatar: true
                     sidebarGroupByType: true
+                    sidebarCategories:
+                      - _id: Favorites
+                        name: Favorites
+                        default: true
+                      - _id: qT7bXk2mZ9wLpR4sD
+                        name: Project Apollo
+                        showUnreads: true
+                        keepUnreadsOnTop: false
+                      - _id: Channels
+                        name: Channels
+                        default: true
                     dontAskAgainList:
                       - {}
                     notifyCalendarEvents: false
