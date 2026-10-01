@@ -13771,13 +13771,11 @@ paths:
       summary: Directory
       description: |-
         Search workspace directory for users, channels and teams. 
-
-        Requests are limited to 100 every 100 seconds per client IP address.
         
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
-        | 8.9.0   | Changed the rate limit to 100 requests every 100 seconds. |
+        | 8.9.0   | Changed the rate limit to 100 requests every 100 seconds per client IP addres. |
         | 7.0.0   | Added `type`, `workspace` and `text` query parameters |
         | 1.0.0   | Added workspace query param |
         | 0.65.0  | Added Pagination fields: count, total, offset |
