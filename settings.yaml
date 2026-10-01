@@ -745,10 +745,11 @@ paths:
       description: |-
         Returns the settings used by the setup wizard and whether the workspace is already registered with Rocket.Chat Cloud.
 
-        This endpoint does not require authentication, because the setup wizard runs before the first administrator account exists. After the setup wizard is completed, the endpoint returns a `403` response. Requests are limited to 20 per minute per client IP address.
+        This endpoint does not require authentication, because the setup wizard runs before the first administrator account exists. 
+        If the setup wizard is completed, the endpoint returns a `403` response. 
 
-        This endpoint replaces the deprecated `getSetupWizardParameters` Realtime API method, which remains available until 9.0.0.
-
+        This endpoint replaces the deprecated `getSetupWizardParameters` Realtime API method.
+        
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
@@ -4936,7 +4937,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
-        | 8.9.0   | Added `chatAccess` and member status fields in `users`. |
+        | 8.9.0   | Added the `chatAccess` response field and member status fields in `users`, and allowed conference members to read the details without room access. |
       parameters:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/X-Auth-Token'
@@ -5136,7 +5137,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
-        | 8.9.0   | Added `callId` and `rid`, and an empty `url` for embedded providers. |
+        | 8.9.0   | Added the `callId` and `rid` response fields, allowed conference members to join without room access, and returned an empty `url` for embedded providers. |
       requestBody:
         content:
           application/json:
@@ -5934,18 +5935,16 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
-  /api/v1/media-calls.state:
+  /media-calls.state:
     get:
       tags:
         - Media Calls
       summary: Get Current Media Call State
       description: |
-        Returns ongoing media calls the authenticated user is part of. It shows call's latest server-side state — `ringing`, `active`, etc.
-
-        ### Changelog
-        | Version | Description |
-        | ------- | ----------- |
-        | 8.4.0   | Added       |
+        Returns every media call the authenticated user is part of and that has
+        not yet ended. Each entry reflects the call's latest
+        server-side state — `ringing`, `active`, etc. It also includes the
+        caller, callee, supported features, and lifecycle timestamps.
       operationId: post-api-v1-get-media-calls.state
       parameters:
         - $ref: '#/components/parameters/X-User-Id'
@@ -6170,7 +6169,7 @@ paths:
         - Media Calls
       summary: Get Media Call Details
       description: |-
-        Returns the stored record for a media call, including ended calls. The record includes the sipCallId for external (SIP) calls. Only participants of the call can access the record.
+        Returns the stored record of a media call, including calls that have ended. For external (SIP) calls, the record includes the `sipCallId` value. Only participants of the call can retrieve it; for anyone else, the endpoint returns a `404` response.
 
         ### Changelog
         | Version | Description |
