@@ -1649,13 +1649,12 @@ paths:
     post:
       tags:
         - Chat
-      summary: Get Multiple Messages
+      summary: Get Multiple Messages From Different Rooms
       description: |-
-        Fetches up to 100 messages by ID in a single request. The messages can belong to different rooms. IDs that do not match a visible message are skipped.
+        Fetches up to 100 messages by ID in a single request. The messages can belong to different rooms. IDs that do not match a visible message are skipped. You must have access to every room containing the requested messages.
+        
+        This endpoint replaces the deprecated `getMessages` Realtime API method, which will be removed in 9.0.0.
 
-        You must have access to every room the requested messages belong to. If any message belongs to a room you cannot access, the whole request fails with a `403` response.
-
-        This endpoint replaces the deprecated `getMessages` Realtime API method, which remains available until 9.0.0.
 
         ### Changelog
         | Version | Description |
@@ -1677,7 +1676,7 @@ paths:
               properties:
                 messageIds:
                   type: array
-                  description: The IDs of the messages to fetch. Enter between 1 and 100 IDs.
+                  description: The IDs of the messages to fetch.
                   example:
                     - Xq8sLpW3nZr2TmKeA
                     - Bv5nTq7RkWz3YpLcD
