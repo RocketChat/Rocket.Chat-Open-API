@@ -500,12 +500,10 @@ paths:
       description: |-
         Follow a message to receive notifications.
 
-        Requests are limited to 5 every 5 seconds per client IP address.
-
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
-        | 8.9.0            | Changed the rate limit to 5 requests every 5 seconds. |
+        | 8.9.0            | Changed the rate limit to 5 requests every 5 seconds per client IP address. |
         | 1.0.0            | Added       |
       operationId: post-api-v1-chat.followMessage
       parameters:
@@ -566,12 +564,10 @@ paths:
       description: |-
         Unfollow a message.
 
-        Requests are limited to 5 every 5 seconds per client IP address.
-
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
-        | 8.9.0            | Changed the rate limit to 5 requests every 5 seconds. |
+        | 8.9.0            | Changed the rate limit to 5 requests every 5 seconds per client IP address. |
         | 1.0.0            | Added       |
       operationId: post-api-v1-chat.unfollowMessage
       parameters:
