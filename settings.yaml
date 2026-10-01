@@ -745,9 +745,10 @@ paths:
       description: |-
         Returns the settings used by the setup wizard and whether the workspace is already registered with Rocket.Chat Cloud.
 
-        This endpoint does not require authentication, because the setup wizard runs before the first administrator account exists. After the setup wizard is completed, the endpoint returns a `403` response. Requests are limited to 20 per minute per client IP address.
+        This endpoint does not require authentication, because the setup wizard runs before the first administrator account exists. 
+        If the setup wizard is completed, the endpoint returns a `403` response. 
 
-        This endpoint replaces the deprecated `getSetupWizardParameters` Realtime API method, which remains available until 9.0.0.
+        This endpoint replaces the deprecated `getSetupWizardParameters` Realtime API method.
 
         ### Changelog
         | Version | Description |
