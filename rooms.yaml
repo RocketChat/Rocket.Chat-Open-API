@@ -5055,44 +5055,34 @@ paths:
         - Rooms
       summary: Get Room History
       description: |-
-        Returns the message history of a room of any type, with cursor-based pagination. Messages are returned newest first. Hidden system messages are excluded.
-
-        Use the returned `cursor` to move through the history. Pass `cursor.previous` as the `previous` parameter to load older messages, or `cursor.next` as the `next` parameter to load newer messages. A `null` cursor value means there are no more messages in that direction. Use `aroundId` instead to load a window of messages centered on a specific message, for example when jumping to a quoted message or a search result. You can provide only one of `next`, `previous`, and `aroundId` in a request.
-
-        You must have access to the room. To read a public channel without being a member, you need the `preview-c-room` permission. When the **Allow Anonymous Read** (`Accounts_AllowAnonymousRead`) setting is enabled, public channels can be read without authentication.
-
+        Returns the message history of a room of any type, with cursor-based pagination. Hidden system messages are excluded.
+ 
+        When the **Allow Anonymous Read** (`Accounts_AllowAnonymousRead`) setting is enabled, public channels can be read without authentication.
+ 
         This endpoint replaces the deprecated `loadHistory`, `loadNextMessages`, and `loadSurroundingMessages` Realtime API methods, which remain available until 9.0.0.
-
+ 
+        Permission required: `preview-c-room` (only to read a public channel you have not joined)
+ 
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
         | 8.9.0   | Added       |
       operationId: get-api-v1-rooms.history
       parameters:
-        - name: X-Auth-Token
-          in: header
-          description: The `authToken` of the authenticated user. Optional when `Accounts_AllowAnonymousRead` is enabled and the room is a public channel.
-          required: false
-          schema:
-            type: string
-          example: RScctEHSmLGZGywfIhWyRpyofhKOiMoUIpimhvheU3f
-        - name: X-User-Id
-          in: header
-          description: The `userId` of the authenticated user. Optional when `Accounts_AllowAnonymousRead` is enabled and the room is a public channel.
-          required: false
-          schema:
-            type: string
-          example: rbAXPnMktTFbNpwtJ
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
         - name: roomId
           in: query
-          description: The room ID.
+          description: |-
+            The room ID. You must have access to the room.
           required: true
           schema:
             type: string
           example: 6GFJ3tbmHiyHbahmC
         - name: count
           in: query
-          description: The number of messages to return. The default is 20. The value is capped by the **Max Record Amount** (`API_Upper_Count_Limit`) setting.
+          description: |-
+            The number of messages to return. The default is 20. The value is capped by the **Max Record Amount** (`API_Upper_Count_Limit`) setting.
           required: false
           schema:
             type: integer
@@ -5101,28 +5091,32 @@ paths:
           example: 20
         - name: previous
           in: query
-          description: The `cursor.previous` value from a previous response. Returns the messages older than that position. Cannot be combined with `next` or `aroundId`.
+          description: |-
+            The `cursor.previous` value from a previous response. Returns the messages older than that position. If `cursor.previous` is `null`, there are no older messages. Cannot be combined with `next` or `aroundId`.
           required: false
           schema:
             type: string
           example: '1790157600000'
         - name: next
           in: query
-          description: The `cursor.next` value from a previous response. Returns the messages newer than that position. Cannot be combined with `previous` or `aroundId`.
+          description: |-
+            The `cursor.next` value from a previous response. Returns the messages newer than that position. If `cursor.next` is `null`, there are no newer messages. Cannot be combined with `previous` or `aroundId`.
           required: false
           schema:
             type: string
           example: '1790157900000'
         - name: aroundId
           in: query
-          description: The ID of a message in the room. Returns a window of up to `count` messages centered on this message, including the message itself. Cannot be combined with `next` or `previous`.
+          description: |-
+            The ID of a message in the room. It loads messages centered around that message, including the message itself. Use it to jump to a specific message, such as a quoted message or a search result. Cannot be combined with `next` or `previous`.
           required: false
           schema:
             type: string
           example: Xq8sLpW3nZr2TmKeA
         - name: lastSeen
           in: query
-          description: An ISO 8601 date-time for the user's last-read position. It does not limit the returned messages. When the oldest returned message is newer than this value, the response includes `firstUnread` and `unreadNotLoaded`.
+          description: |-
+            An ISO 8601 date-time for the user's last-read position. It does not limit the returned messages. When the oldest returned message is newer than this value, the response includes `firstUnread` and `unreadNotLoaded`.
           required: false
           schema:
             type: string
@@ -5130,7 +5124,8 @@ paths:
           example: '2026-09-23T09:00:00.000Z'
         - name: showThreadMessages
           in: query
-          description: Whether to include thread replies that were not also sent to the room. The default is `true`.
+          description: |-
+            Whether to include thread replies that were not also sent to the room. The default is `true`.
           required: false
           schema:
             type: boolean
