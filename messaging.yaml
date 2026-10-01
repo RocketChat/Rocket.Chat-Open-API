@@ -5758,9 +5758,9 @@ paths:
         - Auto-Translate
       summary: Get Translation Providers
       description: |-
-        Lists the auto-translate providers registered in the workspace, with the display name of each provider. The `providers` object is keyed by provider name.
+        Lists the auto-translate providers registered in the workspace.
 
-        This endpoint replaces the deprecated `autoTranslate.getProviderUiMetadata` Realtime API method, which remains available until 9.0.0.
+        This endpoint replaces the deprecated `autoTranslate.getProviderUiMetadata` Realtime API method.
 
         ### Changelog
         | Version | Description |
