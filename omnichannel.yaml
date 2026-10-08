@@ -14409,10 +14409,14 @@ paths:
           schema:
             type: string
           example: '{"exceptions":[],"term":"Jane"}'
-  /api/v1/livechat/visitors.status:
+  /api/v1/livechat/visitor.status:
     parameters: []
     post:
       summary: Set Visitor's Status
+      description: |-
+        Set the status of an Omnichannel visitor. Identify the visitor with their visitor token.
+
+        This endpoint doesn't require authentication. If no visitor matches the token, the endpoint returns a `400` error with `errorType: invalid-token`.
       operationId: post-api-v1-livechat-visitors.status
       responses:
         '200':
@@ -14445,6 +14449,8 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
               examples:
                 Example 1:
                   value:
@@ -14454,6 +14460,11 @@ paths:
                   value:
                     success: false
                     error: 'Match error: Missing key ''status'''
+                Invalid Visitor Token:
+                  value:
+                    success: false
+                    error: '[invalid-token]'
+                    errorType: invalid-token
       requestBody:
         content:
           application/json:
@@ -15690,7 +15701,7 @@ paths:
                   host: 'null'
       tags:
         - Livechat Messages
-  '/api/v1/livechat/messages/{rid}':
+  '/api/v1/livechat/{rid}/messages':
     get:
       summary: Get Livechat Messages
       tags:
@@ -15936,8 +15947,17 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: 'get-api-v1-livechat-:rid-messages'
-      description: 'View the messages of a specific Livechat room. Permission required: `view-l-room`'
+      description: |-
+        View the messages of a specific Livechat room.
+
+        Permission required: `view-l-room`
       parameters:
+        - name: rid
+          in: path
+          description: The room ID.
+          required: true
+          schema:
+            type: string
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/offset'
