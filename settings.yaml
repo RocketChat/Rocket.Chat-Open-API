@@ -1466,6 +1466,434 @@ paths:
           $ref: '#/components/responses/trueSuccess'
         '401':
           $ref: '#/components/responses/authorizationError'
+  /api/v1/e2e.acceptSuggestedGroupKey:
+    post:
+      summary: Accept Suggested Group Key
+      operationId: post-api-v1-e2e.acceptSuggestedGroupKey
+      description: |-
+        Accepts the E2E group key that another room member suggested for the authenticated user in an encrypted room. The suggested key becomes the user's room key, and the user is removed from the room's queue of users waiting for a key. If the user has no previous room keys, the suggested previous room keys are also saved.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ------------|
+        | 6.0.0   | Added       |
+      tags:
+        - E2E
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rid:
+                  type: string
+                  description: The room ID.
+                  example: wCiXndNp5NqNY3uCc
+              required:
+                - rid
+            examples:
+              Example:
+                value:
+                  rid: wCiXndNp5NqNY3uCc
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+              examples:
+                Invalid Params:
+                  value:
+                    success: false
+                    error: 'must have required property ''rid'''
+                    errorType: invalid-params
+                Subscription Not Found:
+                  value:
+                    success: false
+                    error: 'Subscription not found [error-subscription-not-found]'
+                    errorType: error-subscription-not-found
+                    details:
+                      method: e2e.acceptSuggestedGroupKey
+                No Suggested Key:
+                  value:
+                    success: false
+                    error: 'No suggested key available [error-no-suggested-key-available]'
+                    errorType: error-no-suggested-key-available
+                    details:
+                      method: e2e.acceptSuggestedGroupKey
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  /api/v1/e2e.rejectSuggestedGroupKey:
+    post:
+      summary: Reject Suggested Group Key
+      operationId: post-api-v1-e2e.rejectSuggestedGroupKey
+      description: |-
+        Rejects the E2E group key that another room member suggested for the authenticated user in an encrypted room. The suggested key and suggested previous room keys are discarded, and the user is added back to the room's queue of users waiting for a key.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ------------|
+        | 6.0.0   | Added       |
+      tags:
+        - E2E
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rid:
+                  type: string
+                  description: The room ID.
+                  example: wCiXndNp5NqNY3uCc
+              required:
+                - rid
+            examples:
+              Example:
+                value:
+                  rid: wCiXndNp5NqNY3uCc
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+              examples:
+                Invalid Params:
+                  value:
+                    success: false
+                    error: 'must have required property ''rid'''
+                    errorType: invalid-params
+                Subscription Not Found:
+                  value:
+                    success: false
+                    error: 'Subscription not found [error-subscription-not-found]'
+                    errorType: error-subscription-not-found
+                    details:
+                      method: e2e.rejectSuggestedGroupKey
+                No Suggested Key:
+                  value:
+                    success: false
+                    error: 'No suggested key available [error-no-suggested-key-available]'
+                    errorType: error-no-suggested-key-available
+                    details:
+                      method: e2e.rejectSuggestedGroupKey
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  /api/v1/e2e.fetchUsersWaitingForGroupKey:
+    get:
+      summary: Get Users Waiting for Group Key
+      operationId: get-api-v1-e2e.fetchUsersWaitingForGroupKey
+      description: |-
+        Retrieves, for each of the specified encrypted rooms, the members who are waiting for the room's E2E key and have an E2E public key. Members who already have a room key or a suggested key are not returned, and the authenticated user is excluded. Up to 50 users are returned per room, and rooms with no waiting users are left out of the response.
+
+        If E2E encryption is disabled in the workspace, `usersWaitingForE2EKeys` is an empty object.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ------------|
+        | 6.10.0  | Added       |
+      tags:
+        - E2E
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+        - name: roomIds
+          in: query
+          required: true
+          description: The IDs of the rooms to check. To check several rooms, repeat the parameter, for example `roomIds=wCiXndNp5NqNY3uCc&roomIds=GENERAL`.
+          schema:
+            type: array
+            items:
+              type: string
+          example:
+            - wCiXndNp5NqNY3uCc
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  usersWaitingForE2EKeys:
+                    type: object
+                    description: An object keyed by room ID. Each value lists the users waiting for that room's key.
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          public_key:
+                            type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    usersWaitingForE2EKeys:
+                      wCiXndNp5NqNY3uCc:
+                        - _id: XycfA5CetCPuEjqxw
+                          public_key: '{"alg":"RSA-OAEP-256","e":"AQAB","ext":true,"key_ops":["encrypt"],"kty":"RSA","n":"oMO9ydjRxD3JzcAgMvyBZAc_pIOBIxOLVUChZ8mB3JNtLREC751hHT"}'
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Invalid Params:
+                  value:
+                    success: false
+                    error: 'must have required property ''roomIds'''
+                    errorType: error-invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  /api/v1/e2e.provideUsersSuggestedGroupKeys:
+    post:
+      summary: Provide Suggested Group Keys to Users
+      operationId: post-api-v1-e2e.provideUsersSuggestedGroupKeys
+      description: |-
+        Suggests E2E group keys to members of encrypted rooms who are waiting for a key. For each room, list the users and the room key encrypted with each user's public key. Each user then accepts or rejects the suggested key. The users are removed from the room's queue of users waiting for a key.
+
+        Rooms that the authenticated user can't access are skipped, and users who aren't members of a room are ignored. If E2E encryption is disabled in the workspace, the request succeeds without making any changes.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ------------|
+        | 6.10.0  | Added       |
+      tags:
+        - E2E
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                usersSuggestedGroupKeys:
+                  type: object
+                  description: An object keyed by room ID. Each value is an array of the users to suggest a key to in that room.
+                  additionalProperties:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                          description: The ID of the user to suggest the key to.
+                          example: XycfA5CetCPuEjqxw
+                        key:
+                          type: string
+                          description: The room key, encrypted with the user's E2E public key.
+                          example: 8ee4c64e1012bm9lbmNyeXB0ZWQta2V5
+                        oldKeys:
+                          type: array
+                          description: Optional. The room's previous keys, encrypted for the user, so the user can read older messages.
+                          items:
+                            type: object
+                            properties:
+                              e2eKeyId:
+                                type: string
+                                description: The ID of the previous room key.
+                                example: 3f2a9c1b7d4e
+                              ts:
+                                type: string
+                                description: The date and time the key was replaced, as an ISO 8601 string.
+                                example: '2026-01-15T10:30:00.000Z'
+                              E2EKey:
+                                type: string
+                                description: The previous room key, encrypted with the user's E2E public key.
+                                example: 3f2a9c1b7d4eb2xkLWVuY3J5cHRlZC1rZXk
+                      required:
+                        - _id
+                        - key
+              required:
+                - usersSuggestedGroupKeys
+            examples:
+              Example:
+                value:
+                  usersSuggestedGroupKeys:
+                    wCiXndNp5NqNY3uCc:
+                      - _id: XycfA5CetCPuEjqxw
+                        key: 8ee4c64e1012bm9lbmNyeXB0ZWQta2V5
+                        oldKeys:
+                          - e2eKeyId: 3f2a9c1b7d4e
+                            ts: '2026-01-15T10:30:00.000Z'
+                            E2EKey: 3f2a9c1b7d4eb2xkLWVuY3J5cHRlZC1rZXk
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Invalid Params:
+                  value:
+                    success: false
+                    error: 'must have required property ''usersSuggestedGroupKeys'''
+                    errorType: invalid-params
+        '401':
+          $ref: '#/components/responses/authorizationError'
+  /api/v1/e2e.resetRoomKey:
+    post:
+      summary: Reset Room E2E Key
+      operationId: post-api-v1-e2e.resetRoomKey
+      description: |-
+        Resets the E2E key of an encrypted room. For every member who has a key for the room, the current key is moved to their previous room keys, and the latest 10 previous keys are kept. Members other than the authenticated user are added to the room's queue of users waiting for the new key, up to 50 members. The new key is set for the authenticated user.
+
+        The authenticated user must have E2E keys, and the room must already be encrypted. Only one reset can run for a room at a time.
+
+        Permission required: `toggle-room-e2e-encryption`
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ------------|
+        | 8.3.0   | The `403` response returns `error-not-allowed` instead of `unauthorized` |
+        | 7.0.0   | Added       |
+      tags:
+        - E2E
+      parameters:
+        - $ref: '#/components/parameters/X-User-Id'
+        - $ref: '#/components/parameters/X-Auth-Token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rid:
+                  type: string
+                  description: The room ID.
+                  example: wCiXndNp5NqNY3uCc
+                e2eKey:
+                  type: string
+                  description: The new room key, encrypted with the authenticated user's E2E public key.
+                  example: 9b7c2e4f1a6dbmV3LWVuY3J5cHRlZC1rZXk
+                e2eKeyId:
+                  type: string
+                  description: The ID of the new room key.
+                  example: 9b7c2e4f1a6d
+              required:
+                - rid
+                - e2eKey
+                - e2eKeyId
+            examples:
+              Example:
+                value:
+                  rid: wCiXndNp5NqNY3uCc
+                  e2eKey: 9b7c2e4f1a6dbmV3LWVuY3J5cHRlZC1rZXk
+                  e2eKeyId: 9b7c2e4f1a6d
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Invalid Params:
+                  value:
+                    success: false
+                    error: 'must have required property ''e2eKeyId'''
+                    errorType: invalid-params
+                Reset in Progress:
+                  value:
+                    success: false
+                    error: error-e2e-key-reset-in-progress
+                No Room Access:
+                  value:
+                    success: false
+                    error: error-not-allowed
+                Reset Failed:
+                  value:
+                    success: false
+                    error: error-e2e-key-reset-failed
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: error-not-allowed
   /api/v1/uploadImportFile:
     parameters: []
     post:
