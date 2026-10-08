@@ -14414,9 +14414,7 @@ paths:
     post:
       summary: Set Visitor's Status
       description: |-
-        Set the status of an Omnichannel visitor. Identify the visitor with their visitor token.
-
-        This endpoint doesn't require authentication. If no visitor matches the token, the endpoint returns a `400` error with `errorType: invalid-token`.
+        Set the status of an Omnichannel visitor. 
       operationId: post-api-v1-livechat-visitors.status
       responses:
         '200':
@@ -14452,11 +14450,11 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                Missing Token:
                   value:
                     success: false
                     error: 'Match error: Missing key ''token'''
-                Example 2:
+                Missing Status:
                   value:
                     success: false
                     error: 'Match error: Missing key ''status'''
@@ -14481,7 +14479,7 @@ paths:
                 - token
                 - status
             examples:
-              Example 1:
+              Example:
                 value:
                   token: 54fc5544030bcecda0533
                   status: busy
