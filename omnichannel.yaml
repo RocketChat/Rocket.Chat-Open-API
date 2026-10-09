@@ -6355,7 +6355,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
-  '/api/v1/livechat/department/archive/{_id}':
+  '/api/v1/livechat/department/{_id}/archive':
     parameters:
       - schema:
           type: string
@@ -6373,12 +6373,17 @@ paths:
           $ref: '#/components/responses/trueSuccess'
         '401':
           $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/permissionError'
       operationId: post-api-v1-livechat-department-archive-_id
-      description: 'Use this endpoint to archive a department. If a department is no longer needed but you want to retain it for future use, you can archive it. Permission required: `manage-livechat-departments`'
+      description: |-
+        Use this endpoint to archive a department. If a department is no longer needed but you want to retain it for future use, you can archive it.
+
+        Permission required: `manage-livechat-departments`
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
-  '/api/v1/livechat/department/unarchive/{_id}':
+  '/api/v1/livechat/department/{_id}/unarchive':
     parameters:
       - schema:
           type: string
@@ -6394,10 +6399,15 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-        '400':
+        '401':
           $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/permissionError'
       operationId: post-api-v1-livechat-department-unarchive-_id
-      description: 'Use this endpoint to unarchive a department and add it back to the list of active departments. Permission required: `manage-livechat-departments`'
+      description: |-
+        Use this endpoint to unarchive a department and add it back to the list of active departments.
+
+        Permission required: `manage-livechat-departments`
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
