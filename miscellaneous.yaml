@@ -596,14 +596,14 @@ paths:
       tags:
         - Email Inbox
       summary: Send Test Email
-      description: |- 
+      description: |-
         Send a test email to the Omnichannel inbox.
-        Permissions required: `manage-email-inbox`
+        Permission required: `manage-email-inbox`
         
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
-        |3.11.0-rc.0         | Added       |
+        |3.11.0         | Added       |
       operationId: post-api-v1-email-inbox.send-test-id
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
