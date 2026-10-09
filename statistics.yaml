@@ -2915,6 +2915,106 @@ paths:
                     error: error-not-allowed
         '401':
           $ref: '#/components/responses/authorizationError'
+  /api/v1/statistics.telemetry:
+    post:
+      tags:
+        - Statistics
+      summary: Send Telemetry Events
+      description: |-
+        Send one or more telemetry events to the workspace. Each event increases a usage counter that is stored as a workspace setting.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 4.6.0   | Added       |
+      operationId: post-api-v1-statistics.telemetry
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                params:
+                  type: array
+                  description: |-
+                    The list of telemetry events to send. Each event is an object with these fields:
+                    * `eventName` (required): The event type. Either `slashCommandsStats` or `updateCounter`.
+                    * `timestamp` (optional): The time of the event, as a Unix timestamp in milliseconds.
+                    * `command`: The slash command that was run, without the leading slash. Use with `slashCommandsStats`. Only `jitsi` is counted; it increases the `Jitsi_Start_SlashCommands_Count` setting by 1. Other commands are accepted and ignored.
+                    * `settingsId`: The ID of the counter setting to increase by 1. Use with `updateCounter`.
+                  items:
+                    type: object
+                    properties:
+                      eventName:
+                        type: string
+                        enum:
+                          - slashCommandsStats
+                          - updateCounter
+                        example: slashCommandsStats
+                      timestamp:
+                        type: number
+                        example: 1759920000000
+                      command:
+                        type: string
+                        example: jitsi
+                      settingsId:
+                        type: string
+                        example: Jitsi_Start_SlashCommands_Count
+                    required:
+                      - eventName
+                  example:
+                    - eventName: slashCommandsStats
+                      command: jitsi
+              required:
+                - params
+            examples:
+              Slash Command Event:
+                value:
+                  params:
+                    - eventName: slashCommandsStats
+                      timestamp: 1759920000000
+                      command: jitsi
+              Settings Counter Event:
+                value:
+                  params:
+                    - eventName: updateCounter
+                      settingsId: Jitsi_Start_SlashCommands_Count
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Missing params:
+                  value:
+                    success: false
+                    error: must have required property 'params'
+                    errorType: invalid-params
+                Missing eventName:
+                  value:
+                    success: false
+                    error: must have required property 'eventName'
+                    errorType: invalid-params
+                Unknown Event:
+                  value:
+                    success: false
+                    error: event not found
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/engagement-dashboard/users/new-users:
     get:
       tags:

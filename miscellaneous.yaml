@@ -1911,57 +1911,6 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
 
-  '/api/v1/method.call/{method}':
-    parameters:
-      - name: method
-        in: path
-        required: true
-        description: The Metoer method
-        schema:
-          type: string
-          example: createChannel
-      - $ref: '#/components/parameters/Auth-Token'
-      - $ref: '#/components/parameters/UserId'
-    post:
-      summary: Execute a Meteor method call
-      tags: []
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                  success:
-                    type: boolean
-              examples:
-                Example:
-                  value:
-                    message: '{"msg":"result","id":"2","result":{"rid":"67937a74f7ca7be1b5fcf599","inserted":true,"_id":"67937a74f7ca7be1b5fcf599","_updatedAt":{"$date":1737718388248},"fname":"test-websocket","name":"test-websocket","t":"c","msgs":0,"usersCount":0,"u":{"_id":"P2dgWPPw5veigwcdK","username":"funke.olasupo","name":"Funke Olasupo"},"ts":{"$date":1737718388248},"ro":false,"default":false,"sysMes":true}}'
-                    success: true
-        '401':
-          $ref: '#/components/responses/authorizationError'
-      operationId: post-api-v1-method.call-method
-      description: 'Execute a [realtime API method](https://developer.rocket.chat/apidocs/realtime-method-calls).'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - message
-              properties:
-                message:
-                  type: string
-                  description: The method call message.
-            examples:
-              Example:
-                value:
-                  message: '{"msg":"method","method":"createChannel","id":"2","params":["test-websocket",["doe.john"],false]}'
-
   /api/v1/calendar-events.list:
     get:
       summary: Get List of Calendar Events
