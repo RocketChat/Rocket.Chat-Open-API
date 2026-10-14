@@ -2923,6 +2923,8 @@ paths:
       description: |-
         Send one or more telemetry events to the workspace. Each event increases a usage counter that is stored as a workspace setting.
 
+        The workspace processes the events in the order you send them. If an event has an unknown `eventName`, the request fails with `event not found`, but the events before it in the list are still processed.
+
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
@@ -2939,30 +2941,31 @@ paths:
               properties:
                 params:
                   type: array
-                  description: |-
-                    The list of telemetry events to send. Each event is an object with these fields:
-                    * `eventName` (required): The event type. Either `slashCommandsStats` or `updateCounter`.
-                    * `timestamp` (optional): The time of the event, as a Unix timestamp in milliseconds.
-                    * `command`: The slash command that was run, without the leading slash. Use with `slashCommandsStats`. Only `jitsi` is counted; it increases the `Jitsi_Start_SlashCommands_Count` setting by 1. Other commands are accepted and ignored.
-                    * `settingsId`: The ID of the counter setting to increase by 1. Use with `updateCounter`.
+                  description: The list of telemetry events to send. Each event is an object.
                   items:
                     type: object
                     properties:
                       eventName:
                         type: string
+                        description: The event type. Either `slashCommandsStats` or `updateCounter`.
                         enum:
                           - slashCommandsStats
                           - updateCounter
                         example: slashCommandsStats
                       timestamp:
                         type: number
+                        description: The time the event happened, as a Unix timestamp in milliseconds.
                         example: 1759920000000
                       command:
                         type: string
+                        description: |-
+                          The slash command that was run, without the leading `/`. Use with the `slashCommandsStats` event.
+                          The `jitsi` command increases the `Jitsi_Start_SlashCommands_Count` setting by 1. Other commands return a success response but don't change any counter.
                         example: jitsi
                       settingsId:
                         type: string
-                        example: Jitsi_Start_SlashCommands_Count
+                        description: The ID of the counter setting to increase by 1. Use with the `updateCounter` event.
+                        example: Engagement_Dashboard_Load_Count
                     required:
                       - eventName
                   example:
@@ -2981,7 +2984,7 @@ paths:
                 value:
                   params:
                     - eventName: updateCounter
-                      settingsId: Jitsi_Start_SlashCommands_Count
+                      settingsId: Engagement_Dashboard_Load_Count
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
@@ -2999,15 +3002,30 @@ paths:
                   errorType:
                     type: string
               examples:
-                Missing params:
+                Missing Params:
                   value:
                     success: false
                     error: must have required property 'params'
                     errorType: invalid-params
-                Missing eventName:
+                Invalid Params Type:
+                  value:
+                    success: false
+                    error: must be array
+                    errorType: invalid-params
+                Missing Event Name:
                   value:
                     success: false
                     error: must have required property 'eventName'
+                    errorType: invalid-params
+                Invalid Timestamp Type:
+                  value:
+                    success: false
+                    error: must be number
+                    errorType: invalid-params
+                Unknown Body Property:
+                  value:
+                    success: false
+                    error: must NOT have additional properties
                     errorType: invalid-params
                 Unknown Event:
                   value:

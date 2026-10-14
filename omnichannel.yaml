@@ -6371,6 +6371,22 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Department Not Found:
+                  value:
+                    success: false
+                    error: department-not-found
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -6378,6 +6394,8 @@ paths:
       operationId: post-api-v1-livechat-department-archive-_id
       description: |-
         Use this endpoint to archive a department. If a department is no longer needed but you want to retain it for future use, you can archive it.
+
+        Archiving a department also disables it and removes it from the list of departments. To view archived departments, use the <a href='https://developer.rocket.chat/apidocs/get-archived-departments' target='_blank'>Get Archived Departments</a> endpoint.
 
         Permission required: `manage-livechat-departments`
       parameters:
@@ -6399,13 +6417,32 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Department Not Found:
+                  value:
+                    success: false
+                    error: '[department-not-found]'
+                    errorType: department-not-found
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
           $ref: '#/components/responses/permissionError'
       operationId: post-api-v1-livechat-department-unarchive-_id
       description: |-
-        Use this endpoint to unarchive a department and add it back to the list of active departments.
+        Use this endpoint to unarchive a department. The department returns to the list of departments, but it stays disabled because archiving a department also disables it. To enable the department again, use the <a href='https://developer.rocket.chat/apidocs/update-department' target='_blank'>Update Department</a> endpoint and set `enabled` to `true`.
 
         Permission required: `manage-livechat-departments`
       parameters:
@@ -14424,7 +14461,12 @@ paths:
     post:
       summary: Set Visitor's Status
       description: |-
-        Set the status of an Omnichannel visitor. 
+        Update an Omnichannel visitor's status in their conversations. The new status appears on all of the visitor's conversations, including conversations waiting in the queue. The status saved on the visitor's record doesn't change.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 0.74.0  | Added       |
       operationId: post-api-v1-livechat-visitors.status
       responses:
         '200':
@@ -14473,6 +14515,14 @@ paths:
                     success: false
                     error: '[invalid-token]'
                     errorType: invalid-token
+                Invalid Field Type:
+                  value:
+                    success: false
+                    error: 'Match error: Expected string, got number in field token'
+                Unknown Body Property:
+                  value:
+                    success: false
+                    error: 'Match error: Unknown key in field department'
       requestBody:
         content:
           application/json:
@@ -14482,9 +14532,11 @@ paths:
                 token:
                   type: string
                   description: The visitor token.
+                  example: 54fc5544030bcecda0533
                 status:
                   type: string
-                  description: The visitor status.
+                  description: The visitor's new status. Use `online`, `away`, `busy`, or `offline`.
+                  example: busy
               required:
                 - token
                 - status
