@@ -2915,6 +2915,124 @@ paths:
                     error: error-not-allowed
         '401':
           $ref: '#/components/responses/authorizationError'
+  /api/v1/statistics.telemetry:
+    post:
+      tags:
+        - Statistics
+      summary: Send Telemetry Events
+      description: |-
+        Send one or more telemetry events to the workspace. Each event increases a usage counter that is stored as a workspace setting.
+
+        The workspace processes the events in the order you send them. If an event has an unknown `eventName`, the request fails with `event not found`, but the events before it in the list are still processed.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 4.6.0   | Added       |
+      operationId: post-api-v1-statistics.telemetry
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                params:
+                  type: array
+                  description: The list of telemetry events to send. Each event is an object.
+                  items:
+                    type: object
+                    properties:
+                      eventName:
+                        type: string
+                        description: The event type. Either `slashCommandsStats` or `updateCounter`.
+                        enum:
+                          - slashCommandsStats
+                          - updateCounter
+                        example: slashCommandsStats
+                      timestamp:
+                        type: number
+                        description: The time the event happened, as a Unix timestamp in milliseconds.
+                        example: 1759920000000
+                      command:
+                        type: string
+                        description: |-
+                          The slash command that was run, without the leading `/`. Use with the `slashCommandsStats` event.
+                          The `jitsi` command increases the `Jitsi_Start_SlashCommands_Count` setting by 1. Other commands return a success response but don't change any counter.
+                        example: jitsi
+                      settingsId:
+                        type: string
+                        description: The ID of the counter setting to increase by 1. Use with the `updateCounter` event.
+                        example: Engagement_Dashboard_Load_Count
+                    required:
+                      - eventName
+                  example:
+                    - eventName: slashCommandsStats
+                      command: jitsi
+              required:
+                - params
+            examples:
+              Slash Command Event:
+                value:
+                  params:
+                    - eventName: slashCommandsStats
+                      timestamp: 1759920000000
+                      command: jitsi
+              Settings Counter Event:
+                value:
+                  params:
+                    - eventName: updateCounter
+                      settingsId: Engagement_Dashboard_Load_Count
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Missing Params:
+                  value:
+                    success: false
+                    error: must have required property 'params'
+                    errorType: invalid-params
+                Invalid Params Type:
+                  value:
+                    success: false
+                    error: must be array
+                    errorType: invalid-params
+                Missing Event Name:
+                  value:
+                    success: false
+                    error: must have required property 'eventName'
+                    errorType: invalid-params
+                Invalid Timestamp Type:
+                  value:
+                    success: false
+                    error: must be number
+                    errorType: invalid-params
+                Unknown Body Property:
+                  value:
+                    success: false
+                    error: must NOT have additional properties
+                    errorType: invalid-params
+                Unknown Event:
+                  value:
+                    success: false
+                    error: event not found
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/engagement-dashboard/users/new-users:
     get:
       tags:
@@ -3729,7 +3847,7 @@ components:
       required: false
       schema: {}
       description: 'This parameter allows you to use MongoDB query operators to search for specific data. For example, to query users with a name that contains the letter "g": query=`{ "name": { "$regex": "g" } }`. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more.'
-  schemas:
+  schemas: {}
   responses:
     authorizationError:
       description: Unauthorized

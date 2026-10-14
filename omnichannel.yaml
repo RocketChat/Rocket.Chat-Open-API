@@ -6355,7 +6355,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
-  '/api/v1/livechat/department/archive/{_id}':
+  '/api/v1/livechat/department/{_id}/archive':
     parameters:
       - schema:
           type: string
@@ -6371,14 +6371,37 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Department Not Found:
+                  value:
+                    success: false
+                    error: department-not-found
         '401':
           $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/permissionError'
       operationId: post-api-v1-livechat-department-archive-_id
-      description: 'Use this endpoint to archive a department. If a department is no longer needed but you want to retain it for future use, you can archive it. Permission required: `manage-livechat-departments`'
+      description: |-
+        Use this endpoint to archive a department. If a department is no longer needed but you want to retain it for future use, you can archive it.
+
+        Archiving a department also disables it and removes it from the list of departments. To view archived departments, use the <a href='https://developer.rocket.chat/apidocs/get-archived-departments' target='_blank'>Get Archived Departments</a> endpoint.
+
+        Permission required: `manage-livechat-departments`
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
-  '/api/v1/livechat/department/unarchive/{_id}':
+  '/api/v1/livechat/department/{_id}/unarchive':
     parameters:
       - schema:
           type: string
@@ -6395,9 +6418,33 @@ paths:
         '200':
           $ref: '#/components/responses/trueSuccess'
         '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Department Not Found:
+                  value:
+                    success: false
+                    error: '[department-not-found]'
+                    errorType: department-not-found
+        '401':
           $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/permissionError'
       operationId: post-api-v1-livechat-department-unarchive-_id
-      description: 'Use this endpoint to unarchive a department and add it back to the list of active departments. Permission required: `manage-livechat-departments`'
+      description: |-
+        Use this endpoint to unarchive a department. The department returns to the list of departments, but it stays disabled because archiving a department also disables it. To enable the department again, use the <a href='https://developer.rocket.chat/apidocs/update-department' target='_blank'>Update Department</a> endpoint and set `enabled` to `true`.
+
+        Permission required: `manage-livechat-departments`
       parameters:
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
@@ -14409,10 +14456,17 @@ paths:
           schema:
             type: string
           example: '{"exceptions":[],"term":"Jane"}'
-  /api/v1/livechat/visitors.status:
+  /api/v1/livechat/visitor.status:
     parameters: []
     post:
       summary: Set Visitor's Status
+      description: |-
+        Update an Omnichannel visitor's status in their conversations. The new status appears on all of the visitor's conversations, including conversations waiting in the queue. The status saved on the visitor's record doesn't change.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 0.74.0  | Added       |
       operationId: post-api-v1-livechat-visitors.status
       responses:
         '200':
@@ -14445,15 +14499,30 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
               examples:
-                Example 1:
+                Missing Token:
                   value:
                     success: false
                     error: 'Match error: Missing key ''token'''
-                Example 2:
+                Missing Status:
                   value:
                     success: false
                     error: 'Match error: Missing key ''status'''
+                Invalid Visitor Token:
+                  value:
+                    success: false
+                    error: '[invalid-token]'
+                    errorType: invalid-token
+                Invalid Field Type:
+                  value:
+                    success: false
+                    error: 'Match error: Expected string, got number in field token'
+                Unknown Body Property:
+                  value:
+                    success: false
+                    error: 'Match error: Unknown key in field department'
       requestBody:
         content:
           application/json:
@@ -14463,14 +14532,16 @@ paths:
                 token:
                   type: string
                   description: The visitor token.
+                  example: 54fc5544030bcecda0533
                 status:
                   type: string
-                  description: The visitor status.
+                  description: The visitor's new status. Use `online`, `away`, `busy`, or `offline`.
+                  example: busy
               required:
                 - token
                 - status
             examples:
-              Example 1:
+              Example:
                 value:
                   token: 54fc5544030bcecda0533
                   status: busy
@@ -15536,8 +15607,6 @@ paths:
                           items:
                             type: object
                             properties: {}
-                  unreadNotLoaded:
-                    type: integer
                   success:
                     type: boolean
               examples:
@@ -15562,7 +15631,6 @@ paths:
                           _id: YgEoq2djbGdjjZnsL
                           username: guest-4
                         urls: []
-                    unreadNotLoaded: 0
                     success: true
         '400':
           description: Bad Request
@@ -15605,6 +15673,7 @@ paths:
           example: '2018-09-14T14:31:33.201Z'
           in: query
           name: end
+          description: Returns only messages sent before this timestamp.
         - schema:
             type: number
           example: 25
@@ -15690,7 +15759,7 @@ paths:
                   host: 'null'
       tags:
         - Livechat Messages
-  '/api/v1/livechat/messages/{rid}':
+  '/api/v1/livechat/{rid}/messages':
     get:
       summary: Get Livechat Messages
       tags:
@@ -15936,8 +16005,17 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: 'get-api-v1-livechat-:rid-messages'
-      description: 'View the messages of a specific Livechat room. Permission required: `view-l-room`'
+      description: |-
+        View the messages of a specific Livechat room.
+
+        Permission required: `view-l-room`
       parameters:
+        - name: rid
+          in: path
+          description: The room ID.
+          required: true
+          schema:
+            type: string
         - $ref: '#/components/parameters/AuthToken'
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/offset'
