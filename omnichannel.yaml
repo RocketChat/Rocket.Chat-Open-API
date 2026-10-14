@@ -15673,6 +15673,7 @@ paths:
           example: '2018-09-14T14:31:33.201Z'
           in: query
           name: end
+          description: Returns only messages sent before this timestamp.
         - schema:
             type: number
           example: 25
