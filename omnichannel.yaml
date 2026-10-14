@@ -15607,8 +15607,6 @@ paths:
                           items:
                             type: object
                             properties: {}
-                  unreadNotLoaded:
-                    type: integer
                   success:
                     type: boolean
               examples:
@@ -15633,7 +15631,6 @@ paths:
                           _id: YgEoq2djbGdjjZnsL
                           username: guest-4
                         urls: []
-                    unreadNotLoaded: 0
                     success: true
         '400':
           description: Bad Request

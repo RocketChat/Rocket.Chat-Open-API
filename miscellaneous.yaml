@@ -597,7 +597,12 @@ paths:
         - Email Inbox
       summary: Send Test Email
       description: |-
-        Send a test email to the Omnichannel inbox.
+        Send a test email from an Omnichannel email inbox to check its configuration. The workspace sends the email through the inbox's SMTP server to the verified email address of the authenticated user.
+
+        The authenticated user must have a verified email address.
+
+        A successful response means the workspace queued the email. It doesn't confirm that the email was delivered.
+
         Permission required: `manage-email-inbox`
         
         ### Changelog
