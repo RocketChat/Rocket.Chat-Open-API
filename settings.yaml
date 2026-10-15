@@ -477,6 +477,8 @@ paths:
       description: |-
         Add a <a href="https://docs.rocket.chat/docs/oauth#add-custom-oauth" target="_blank">custom OAuth integration</a> to your workspace. Two-factor authentication is required.
 
+        In Rocket.Chat 9.0.0, custom OAuth will be available only on paid plans (Commercial, Government, and Defense). On other plans, this endpoint will reject the request. See <a href="https://docs.rocket.chat/docs/our-plans" target="_blank">Our Plans</a> for details.
+
         **Permission required**:
         - `add-oauth-service`
       summary: Add Custom OAuth

@@ -232,7 +232,10 @@ paths:
       tags:
         - Authentication
       summary: Login with Facebook
+      deprecated: true
       description: |-
+        This endpoint will be removed in Rocket.Chat 9.0.0.
+
         ### Changelog
         | Version      | Description | 
          | ---------------- | ------------|
@@ -385,7 +388,10 @@ paths:
       tags:
         - Authentication
       summary: Login with Twitter
+      deprecated: true
       description: |-
+        This endpoint will be removed in Rocket.Chat 9.0.0.
+
         ### Changelog
         | Version      | Description | 
          | ---------------- | ------------|
