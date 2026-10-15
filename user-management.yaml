@@ -1669,7 +1669,8 @@ paths:
                       description: Whether the user should get a welcome email.
                     freeSwitchExtension:
                       type: string
-                      description: The voice call extension.
+                      deprecated: true
+                      description: The voice call extension. In Rocket.Chat 9.0.0, this field will be renamed to `sipExtension`.
                     verified:
                       type: boolean
                       description: Whether the user's email address should be verified.
@@ -2247,6 +2248,8 @@ paths:
 
         When the Premium **User status hiding** feature is enabled and the requested user has hidden their status from the caller, the response shows the user as `offline` and omits `statusText`, `statusSource`, `statusExpiresAt`, `statusDefault`, and `statusConnection`. This restriction also applies to administrators. Users always see their own status.
 
+        In Rocket.Chat 9.0.0, the `freeSwitchExtension` parameter will be renamed to `sipExtension`.
+
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -2295,7 +2298,8 @@ paths:
         - name: freeSwitchExtension
           in: query
           required: false
-          description: 'The FreeSwitch voice call extension assigned to the user. Alternatively, you can use `userId`, `username`, `importId`, or `email` to retrieve user information.'
+          deprecated: true
+          description: 'The FreeSwitch voice call extension assigned to the user. Alternatively, you can use `userId`, `username`, `importId`, or `email` to retrieve user information. In Rocket.Chat 9.0.0, this parameter will be renamed to `sipExtension`.'
           schema:
             type: string
           example: '1234'
@@ -2347,6 +2351,8 @@ paths:
                         type: integer
                       freeSwitchExtension:
                         type: string
+                        deprecated: true
+                        description: The voice call extension. In Rocket.Chat 9.0.0, this field will be renamed to `sipExtension`.
                       canViewAllInfo:
                         type: boolean
                   success:
@@ -4321,7 +4327,10 @@ paths:
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: get-api-v1-users.getAvatarSuggestion
-      description: Use this endpoint to get suggestions for your workspace avatar image. The endpoint may return an empty string if no images associated with your email ID are found.
+      description: |-
+        Use this endpoint to get suggestions for your workspace avatar image. The endpoint may return an empty string if no images associated with your email ID are found.
+
+        Gravatar suggestions are deprecated since Rocket.Chat 8.9.0 and will be removed in Rocket.Chat 9.0.0. After that, the response will only include avatars from OAuth services.
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
