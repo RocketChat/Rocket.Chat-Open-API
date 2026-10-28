@@ -1270,6 +1270,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |9.0.0            | Added `sipExtension` (was `freeSwitchExtension`).       |
         |0.48.0            | `role` property is now `roles` which is an array of strings for the roles to create the user with.       |
         |0.45.0            | Users created via this now join the default channels.       |
         |0.40.0            | Added       |
@@ -1352,6 +1353,9 @@ paths:
                   description: Should the user get a welcome email? It is set to `true` by default.
                   example: false
                   default: false
+                sipExtension:
+                  type: string
+                  description: The user's SIP extension (formerly `freeSwitchExtension`).
                 verified:
                   type: boolean
                   description: Should the user's email address be verified when created? It is set to `false` by default.
@@ -1592,6 +1596,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |9.0.0            | Renamed `freeSwitchExtension` to `sipExtension`.       |
         |7.0.0             | Removed upsert behaviour and stopped allowing `joinDefaultChannels` param|
         |0.48.0            | Renamed to `users.update`       |
         |0.35.0            | Added       |
@@ -1667,10 +1672,9 @@ paths:
                       type: boolean
                       default: false
                       description: Whether the user should get a welcome email.
-                    freeSwitchExtension:
+                    sipExtension:
                       type: string
-                      deprecated: true
-                      description: The voice call extension. In Rocket.Chat 9.0.0, this field will be renamed to `sipExtension`.
+                      description: The user's SIP extension (formerly `freeSwitchExtension`).
                     verified:
                       type: boolean
                       description: Whether the user's email address should be verified.
@@ -2242,17 +2246,17 @@ paths:
         - Users
       summary: Get User's Info
       description: |-
-        Retrieves information about a user, limited to the details the caller is allowed to view. Look up the user by `userId`, `username`, `importId`, `email`, or `freeSwitchExtension`. Provide exactly one of these parameters per request.
+        Retrieves information about a user, limited to the details the caller is allowed to view. Look up the user by `userId`, `username`, `importId`, `email`, or `sipExtension`. Provide exactly one of these parameters per request.
 
-        Starting in version 7.0.0, this endpoint no longer supports the `fields` parameter, even when the `ALLOW_UNSAFE_QUERY_AND_FIELDS_API_PARAMS` environment variable is set to `true`. Use `includeUserRooms` instead.
+        This endpoint doesn't support the `fields` parameter. Use `includeUserRooms` instead.
 
         When the Premium **User status hiding** feature is enabled and the requested user has hidden their status from the caller, the response shows the user as `offline` and omits `statusText`, `statusSource`, `statusExpiresAt`, `statusDefault`, and `statusConnection`. This restriction also applies to administrators. Users always see their own status.
 
-        In Rocket.Chat 9.0.0, the `freeSwitchExtension` parameter will be renamed to `sipExtension`.
 
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |9.0.0            | Renamed `freeSwitchExtension` to `sipExtension`.       |
         |8.8.0             | Added status visibility filtering |
         |8.5.0             | Added `freeSwitchExtension` query parameter for user lookup |
         |8.4.0             | Added `email` query parameter for user lookup |
@@ -2268,7 +2272,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: userId
           in: query
-          description: 'The `userId` of the user. Alternatively, you can use `username`, `importId`, `email`, or `freeSwitchExtension` to retrieve user information.'
+          description: 'The `userId` of the user. Alternatively, you can use `username`, `importId`, `email`, or `sipExtension` to retrieve user information.'
           required: false
           schema:
             type: string
@@ -2277,12 +2281,12 @@ paths:
             type: string
           in: query
           name: username
-          description: 'The username of the user. Alternatively, you can use `userId`, `importId`, `email`, or `freeSwitchExtension` to retrieve user information.'
+          description: 'The username of the user. Alternatively, you can use `userId`, `importId`, `email`, or `sipExtension` to retrieve user information.'
         - schema:
             type: string
           in: query
           name: importId
-          description: 'The import ID of the user. Alternatively, you can use `userId`, `username`, `email`, or `freeSwitchExtension` to retrieve user information.'
+          description: 'The import ID of the user. Alternatively, you can use `userId`, `username`, `email`, or `sipExtension` to retrieve user information.'
         - schema:
             type: string
           in: query
@@ -2291,15 +2295,14 @@ paths:
         - name: email
           in: query
           required: false
-          description: Filter the results by entering the user's email. Alternatively, you can use `userId`, `username`, `importId`, or `freeSwitchExtension` to retrieve user information.
+          description: Filter the results by entering the user's email. Alternatively, you can use `userId`, `username`, `importId`, or `sipExtension` to retrieve user information.
           schema:
             type: string
           example: john@example.com
-        - name: freeSwitchExtension
+        - name: sipExtension
           in: query
           required: false
-          deprecated: true
-          description: 'The FreeSwitch voice call extension assigned to the user. Alternatively, you can use `userId`, `username`, `importId`, or `email` to retrieve user information. In Rocket.Chat 9.0.0, this parameter will be renamed to `sipExtension`.'
+          description: 'The SIP extension assigned to the user (formerly `freeSwitchExtension`). Alternatively, you can use `userId`, `username`, `importId`, or `email` to retrieve user information.'
           schema:
             type: string
           example: '1234'
@@ -2349,10 +2352,9 @@ paths:
                         type: string
                       utcOffset:
                         type: integer
-                      freeSwitchExtension:
+                      sipExtension:
                         type: string
-                        deprecated: true
-                        description: The voice call extension. In Rocket.Chat 9.0.0, this field will be renamed to `sipExtension`.
+                        description: The user's SIP extension (formerly `freeSwitchExtension`).
                       canViewAllInfo:
                         type: boolean
                   success:
@@ -2394,7 +2396,7 @@ paths:
                       statusText: ''
                       avatarETag: GFoEi6wv3uAxnzDcD
                       nickname: tesuser2
-                      freeSwitchExtension: '1234'
+                      sipExtension: '1234'
                       canViewAllInfo: true
                       rooms:
                         - _id: 651667dda2f73c7460e18cce
@@ -2474,9 +2476,9 @@ paths:
       summary: Get Users List
       description: |-
         Retrieves workspace users and the information the caller is allowed to view.
-        Use `query` to locate a user and obtain their `userId` for the `users.info` endpoint. The `query` parameter is considered unsafe and is deprecated. Its support is expected to be removed in a future major version, and there is currently no direct replacement for email-based lookup.
+        Use the `email` query parameter to filter the list, or use `users.info` to look up a single user.
 
-        When the Premium **User status hiding** feature is enabled, users who have hidden their status from the caller appear as `offline`, and their detailed status fields are omitted. If `query` filters on a status field, those users are excluded from the filtered results.
+        When the Premium **User status hiding** feature is enabled, users who have hidden their status from the caller appear as `offline`, and their detailed status fields are omitted.
 
         **Permissions required**:
         - `view-d-room`: View direct messages.
@@ -2486,6 +2488,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |9.0.0            | Removed the `fields` and `query` parameters.       |
         |8.8.0             | Added status visibility filtering |
         |8.4.0             | Added `email` query parameter for filtering |
         |0.49.0            | `Count` and `offset` query parameters supported.       |
@@ -2494,8 +2497,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
-        - $ref: '#/components/parameters/query'
-        - $ref: '#/components/parameters/fields'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - schema:
@@ -2685,7 +2686,7 @@ paths:
                   type: string
                   description: >-
                     Optional. The name of the OAuth/external service the avatar
-                    originates from (e.g. `google`, `facebook`, `gravatar`).
+                    originates from (e.g. `google`, `github`, `url`).
                     Stored as `avatarOrigin`. 
                   example: 'google'
                 userId:
@@ -4301,7 +4302,7 @@ paths:
                   suggestions:
                     type: object
                     properties:
-                      gravatar:
+                      google:
                         type: object
                         properties:
                           service:
@@ -4318,19 +4319,22 @@ paths:
                 Example 1:
                   value:
                     suggestions:
-                      gravatar:
-                        service: gravatar
-                        url: 'https://s.gravatar.com/avatar/6da0187ff0de738a86a62b0e9e34ffbf?default=404&size=200'
-                        blob: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAgAElEQVR42my9y49k2ZHm9zM75153j8jIjMysyqxKVrGKZJNsstjvbrTUg1bPQAIaGgkYCCMtpIWglTba6g+YP0CA/gBBO61moYUEYQRpMNBooWlyptmcLrJZZFXWu/L9iqe733uOmRZ27nWP4hSQiKjMCPfr955j9tn3fWZHfvCX/8iTLhA6/vCHP+TenWOuHR5Rxy0'
+                      google:
+                        service: google
+                        url: 'https://lh3.googleusercontent.com/a/example'
+                        blob: 'data:image/png;base64,...'
                         contentType: image/png
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: get-api-v1-users.getAvatarSuggestion
       description: |-
-        Use this endpoint to get suggestions for your workspace avatar image. The endpoint may return an empty string if no images associated with your email ID are found.
+        Use this endpoint to get avatar suggestions for the user from their connected OAuth services. The response is empty if no suggestions are found.
 
-        Gravatar suggestions are deprecated since Rocket.Chat 8.9.0 and will be removed in Rocket.Chat 9.0.0. After that, the response will only include avatars from OAuth services.
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        |9.0.0            | Removed Gravatar suggestions.       |
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
@@ -5397,15 +5401,18 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         
-        Syncs your <a href="https://docs.rocket.chat/use-rocket.chat/authentication/ldap" target="_blank">LDAP data</a> based on the <a href="https://docs.rocket.chat/use-rocket.chat/authentication/ldap/ldap-data-sync-settings" target="_blank">data sync configurations</a>. This endpoints requires 2FA.
+        Syncs your <a href="https://docs.rocket.chat/docs/ldap" target="_blank">LDAP data</a> based on the <a href="https://docs.rocket.chat/docs/ldap-data-sync-settings" target="_blank">data sync configurations</a>. This endpoint requires 2FA.
         
-        Make sure LDAP is enabled in **Settings** > **LDAP** > **Enable** before using this endpoint.
+        Make sure LDAP is enabled in **Manage** → **Workspace** → **Settings** → **LDAP** → **Enable** before using this endpoint.
 
         Permission required: `sync-auth-services-users`.
+
+        From Rocket.Chat 9.0.0, LDAP is available on Starter workspaces and on all premium plans (Commercial, Government, and Defense). It is not available on Community workspaces, where this endpoint returns `error-action-not-allowed`. See <a href="https://docs.rocket.chat/docs/our-plans" target="_blank">Our Plans</a> for details.
         
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |9.0.0            | Added premium plan availability details.       |
         |5.2.0            | Include `syncAvatars`       |
         |4.0.0            | Added       |
       operationId: post-api-v1-ldap.syncNow
@@ -5474,6 +5481,11 @@ paths:
                   value:
                     success: false
                     error: error-not-authorized
+                Not available on Community workspaces:
+                  value:
+                    success: false
+                    error: 'This is an enterprise feature [error-action-not-allowed]'
+                    errorType: error-action-not-allowed
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/ldap.testConnection:
@@ -5482,10 +5494,19 @@ paths:
         - LDAP
       summary: Test LDAP Connection
       description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+
         Test if Rocket.Chat can connect to the specified LDAP server using the port and host provided in the Rocket.Chat settings.
-        Make sure LDAP is enabled in **Settings** > **LDAP** > **Enable** before using this endpoint.
+        Make sure LDAP is enabled in **Manage** → **Workspace** → **Settings** → **LDAP** → **Enable** before using this endpoint.
 
         Permission required: `test-admin-options`
+
+        From Rocket.Chat 9.0.0, LDAP is available on Starter workspaces and on all premium plans (Commercial, Government, and Defense). It is not available on Community workspaces, where this endpoint returns `error-action-not-allowed`. See <a href="https://docs.rocket.chat/docs/our-plans" target="_blank">Our Plans</a> for details.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        |9.0.0            | Added premium plan availability details.       |
       operationId: post-api-v1-ldap.testConnection
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -5507,6 +5528,25 @@ paths:
                   value:
                     message: Connection_success
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Not available on Community workspaces:
+                  value:
+                    success: false
+                    error: 'This is an enterprise feature [error-action-not-allowed]'
+                    errorType: error-action-not-allowed
         '401':
           $ref: '#/components/responses/authorizationError'
     parameters: []
@@ -5516,10 +5556,19 @@ paths:
         - LDAP
       summary: Test LDAP User Search
       description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+
         Test if a given username can be found in the LDAP server using the authentication and filter <a href='https://docs.rocket.chat/docs/configure-ldap-connection' target='_blank'>settings</a> provided to Rocket.Chat.
-        Make sure LDAP is enabled in **Settings** > **LDAP** > **Enable** before using this endpoint.
+        Make sure LDAP is enabled in **Manage** → **Workspace** → **Settings** → **LDAP** → **Enable** before using this endpoint.
         
         Permission required: `test-admin-options`
+
+        From Rocket.Chat 9.0.0, LDAP is available on Starter workspaces and on all premium plans (Commercial, Government, and Defense). It is not available on Community workspaces, where this endpoint returns `error-action-not-allowed`. See <a href="https://docs.rocket.chat/docs/our-plans" target="_blank">Our Plans</a> for details.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        |9.0.0            | Added premium plan availability details.       |
       operationId: post-api-v1-ldap.testSearch
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -5553,11 +5602,18 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
               examples:
                 Example 1:
                   value:
                     success: false
                     error: 'Match error: Missing key ''username'''
+                Not available on Community workspaces:
+                  value:
+                    success: false
+                    error: 'This is an enterprise feature [error-action-not-allowed]'
+                    errorType: error-action-not-allowed
         '401':
           $ref: '#/components/responses/authorizationError'
       requestBody:
@@ -6051,18 +6107,23 @@ paths:
         - SAML
       summary: Parse SAML IdP Metadata
       description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+
         Fetches and parses a SAML identity provider (IdP) metadata document from a URL. It returns the IdP certificate, sign-in URL, sign-out URL, and identifier format when those values are available in the metadata.
 
-        The **Import IdP metadata** button at the top of **Manage** > **Workspace** > **Settings** > **SAML** uses this endpoint to prefill the corresponding SAML settings. The imported values can be reviewed and edited before they are saved. This endpoint does not save or change any workspace settings.
+        The **Import IdP metadata** button at the top of **Manage** → **Workspace** → **Settings** → **SAML** uses this endpoint to prefill the corresponding SAML settings. The imported values can be reviewed and edited before they are saved. This endpoint does not save or change any workspace settings.
 
         The metadata request is subject to SSRF protection and the workspace's SSRF allowlist. It has a 20-second timeout and a 1 MB response-size limit.
 
         **Permission required**:
         - `test-admin-options`
 
+        From Rocket.Chat 9.0.0, SAML is available on Starter workspaces and on all premium plans (Commercial, Government, and Defense). It is not available on Community workspaces, where this endpoint returns `error-action-not-allowed`. See <a href="https://docs.rocket.chat/docs/our-plans" target="_blank">Our Plans</a> for details.
+
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |9.0.0            | Added premium plan availability details.       |
         |8.8.0            | Added       |
       operationId: post-api-v1-saml.parseMetadata
       parameters:
@@ -6167,6 +6228,11 @@ paths:
                   value:
                     success: false
                     error: SAML_Metadata_invalid
+                Not available on Community workspaces:
+                  value:
+                    success: false
+                    error: 'This is an enterprise feature [error-action-not-allowed]'
+                    errorType: error-action-not-allowed
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -6224,24 +6290,6 @@ components:
       schema:
         type: string
       description: 'Enter the method with which you get the 2FA code. It can be `email`, `totp`, or `password`. This parameter is required if 2FA is enabled in your workspace.'
-    query:
-      name: query
-      in: query
-      required: false
-      schema: {}
-      description: >-
-        This parameter allows you to use [MongoDB
-        query](https://www.mongodb.com/docs/manual/reference/operator/query/)
-        operators to search for specific data. For example, to query users with
-        a name that contains the letter "g": query=`{ "name": { "$regex": "g" }
-        }`. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more. 
-      allowEmptyValue: false
-    fields:
-      name: fields
-      in: query
-      required: false
-      schema: {}
-      description: ' This parameter accepts a JSON object with properties that have a value of 1 or 0 to include or exclude them in the response. For example, to only retrieve the usernames of users: fields=`{ "username": 1 }`. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more.'
     offset:
       name: offset
       in: query
