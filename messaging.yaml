@@ -758,6 +758,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |9.0.0   | Removed the `fields` and `query` parameters.       |
         |1.0.0             | Added       |
       operationId: get-chat.getThreadsList
       parameters:
@@ -766,8 +767,6 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/query'
-        - $ref: '#/components/parameters/fields'
         - name: rid
           in: query
           description: The room ID.
@@ -1649,7 +1648,7 @@ paths:
       description: |-
         Fetches up to 100 messages by ID in a single request. The messages can belong to different rooms. IDs that do not match a visible message are skipped. You must have access to every room containing the requested messages.
         
-        This endpoint replaces the deprecated `getMessages` Realtime API method, which will be removed in 9.0.0.
+        This endpoint replaces the `getMessages` Realtime API method, which was removed in 9.0.0.
 
 
         ### Changelog
@@ -1948,6 +1947,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ------------ | ------------|
+        |9.0.0   | Removed the `fields` and `query` parameters.       |
         | 8.8.0        | Added the `aroundId` parameter and excluded hidden message-history records from results and pagination totals |
         | 1.2.0        | Remove `tlm` field which is not supported |
         | 1.1.0        | Update example results - original message in thread is not returned |
@@ -1959,8 +1959,6 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/query'
-        - $ref: '#/components/parameters/fields'
         - name: tmid
           in: query
           description: The thread message ID.
@@ -2113,7 +2111,7 @@ paths:
 
         Use this endpoint when you need to mark one thread as read. The `subscriptions.read` endpoint operates on an entire room and cannot identify a single thread.
 
-        This endpoint replaces the deprecated `readThreads` realtime method, which remains available until Rocket.Chat 9.0.0.
+        This endpoint replaces the `readThreads` realtime method, which was removed in 9.0.0.
 
         ### Changelog
         | Version      | Description |
@@ -3357,13 +3355,12 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ------------ | ------------|
+        |9.0.0   | Removed the `fields` and `query` parameters.       |
         | 1.0.0        | Added       |
       operationId: get-api-v1-chat.syncThreadsList
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
-        - $ref: '#/components/parameters/fields'
-        - $ref: '#/components/parameters/query'
         - $ref: '#/components/parameters/sort'
         - name: rid
           in: query
@@ -3572,6 +3569,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ------------ | ------------|
+        |9.0.0   | Removed the `fields` and `query` parameters.       |
         | 1.0.0        | Added       |
       operationId: get-api-v1-chat.syncThreadMessages
       parameters:
@@ -3580,8 +3578,6 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/query'
-        - $ref: '#/components/parameters/fields'
         - name: updatedSince
           in: query
           description: Date as an ISO string. When you provide the `updatedSince` query parameter, the `update` and `remove` parameters in the response will contain only those updated and removed since this date and time.
@@ -3699,7 +3695,7 @@ paths:
       description: |-
         List updated and deleted messages in a room. Use `lastUpdate` to retrieve changes made after a specific date. To limit the results to messages originally sent at or after a specific date, use `fromTs` together with `lastUpdate`.
 
-        You can also paginate updated or deleted messages with the `next`, `previous`, and `type` parameters. This endpoint replaces the deprecated `loadMissedMessages` method, which is scheduled for removal in Rocket.Chat 9.0.0.
+        You can also paginate updated or deleted messages with the `next`, `previous`, and `type` parameters. This endpoint replaces the `loadMissedMessages` method, which was removed in 9.0.0.
         ### Changelog
         | Version      | Description | 
         | ------------ | ------------|
@@ -4410,6 +4406,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |9.0.0   | Removed the `fields` and `query` parameters.       |
         |0.64.0            | Change `userId` to `user` object in response|
         |0.59.0            | Added       |
       operationId: get-api-v1-im.files
@@ -4419,8 +4416,6 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/query'
-        - $ref: '#/components/parameters/fields'
         - $ref: '#/components/parameters/filterTypeGroup'
         - $ref: '#/components/parameters/filterName'
         - name: roomId
@@ -4507,12 +4502,12 @@ paths:
                         _updatedAt: '2023-11-01T23:46:29.216Z'
                         complete: true
                         etag: 7qDc9jBurptfmrAxr
-                        path: '/ufs/GridFS:Uploads/6542e355a2f73c7460e18ef6/2023-11-01_21-13-38.snagx'
+                        path: '/file-upload/6542e355a2f73c7460e18ef6/2023-11-01_21-13-38.snagx'
                         progress: 1
                         token: eAD959d9A8
                         uploadedAt: '2023-11-01T23:46:29.196Z'
                         uploading: false
-                        url: 'http://localhost:3000//ufs/GridFS:Uploads/6542e355a2f73c7460e18ef6/2023-11-01_21-13-38.snagx'
+                        url: 'http://localhost:3000/file-upload/6542e355a2f73c7460e18ef6/2023-11-01_21-13-38.snagx'
                         typeGroup: application
                         user:
                           _id: 5fRTXMt7DMJbpPJfh
@@ -4690,6 +4685,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ------------ | ------------|
+        |9.0.0   | Removed the `fields` and `query` parameters.       |
         |0.49.0        | Added       |
       operationId: get-api-v1-im.list.everyone
       parameters:
@@ -4698,8 +4694,6 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/query'
-        - $ref: '#/components/parameters/fields'
       responses:
         '200':
           description: OK
@@ -5165,6 +5159,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |9.0.0   | Removed the `query` parameter.       |
         |0.59.0             | Added       |
       operationId: get-api-v1-im.members
       parameters:
@@ -5173,7 +5168,6 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/query'
         - name: roomId
           in: query
           description: The room ID of the DM. It is required if `username` is not provided.
@@ -5278,6 +5272,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |9.0.0   | Removed the `fields` and `query` parameters.       |
         | 7.0.0  | Added `mentionIds`, `starredIds`, `pinned` query parameters.|         
         |0.59.0            | Added       |
       operationId: get-api-v1-im.messages
@@ -5286,8 +5281,6 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/fields'
-        - $ref: '#/components/parameters/query'
         - name: roomId
           in: query
           description: The room ID of the DM. It is required if `username` is not provided.
@@ -5487,10 +5480,12 @@ paths:
         Retrieves the messages from any direct message in the server.  For this method to work, navigate to  **Manage > Workspace > Settings > General > REST API > Enable Direct Message History Endpoint** and enable it. 
         
         Permission required: `view-room-administration`.
-        ### Change Log
-        | Version | Description             |
-        | ------- | ----------------------- |
-        | 0.50.0  | Added                   |
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        |9.0.0   | Removed the `fields` and `query` parameters.       |
+        |0.50.0  | Added                   |
       operationId: get-api-v1-im.messages.others
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -5499,8 +5494,6 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/query'
-        - $ref: '#/components/parameters/fields'
       responses:
         '200':
           description: OK
@@ -6188,19 +6181,6 @@ components:
       description: 'List of fields to order by, and in which direction. This is a JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending. For example, `{ "value": -1, "_id": 1 }`. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
       required: false
       schema: {}
-    query:
-      name: query
-      in: query
-      description: 'This parameter allows you to use MongoDB query operators to search for specific data. For example, to query users with a name that contains the letter "g": query=`{ "name": { "$regex": "g" }}`. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more.'
-      required: false
-      schema: {}
-    fields:
-      name: fields
-      in: query
-      description: 'This parameter accepts a JSON object with properties that have a value of 1 or 0 to include or exclude them in the response. For example, to only retrieve the usernames of users: fields=`{ "username": 1 }`. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more.'
-      required: false
-      schema:
-        type: string
     filterName:
       name: name
       in: query
