@@ -5,7 +5,6 @@ info:
 # description: |-
 #    The following endpoints provide integration support for your Rocket.Chat workspaces:
 #    * **Integration**: Create and manage [integrations](https://docs.rocket.chat/use-rocket.chat/workspace-administration/integrations).
-#    * **WebDAV**: Manage [WebDAV](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/webdav-integration) server accounts.
 #    * **OAuth Apps**: Create and manage OAuth apps to authenticate users.
 servers:
   - url: https://apiexplorer.support.rocket.chat
@@ -16,7 +15,9 @@ paths:
         - Integration
       summary: Create Integration
       description: |- 
-        Use this endpoint to create an incoming or outgoing integration. For details, you can refer to the <a href='https://docs.rocket.chat/docs/integrations' target='_blank'>Integrations user guide</a>.
+        Use this endpoint to create an incoming or outgoing integration. For details, see <a href='https://docs.rocket.chat/docs/integrations' target='_blank'>Integrations</a>.
+        
+        From Rocket.Chat 9.0.0, scripts are stored and run as written, without Babel. Existing scripts keep their transpiled version until they're edited and saved on Rocket.Chat 9.0.0 or later. See <a href='https://docs.rocket.chat/docs/integrations#script-compatibility' target='_blank'>Script compatibility</a> for the script patterns that must be updated.
         
         Permissions required to create incoming integrations:
         * `manage-incoming-integrations`
@@ -28,6 +29,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |9.0.0            | Removed `skipTranspile`.       |
         |8.4.0            | Added `skipTranspile` field to opt-out of Babel transpilation |
         |1.1.0            | Separate permissions in incoming and outgoing.       |
         |0.49.0            | Added       |
@@ -105,18 +107,6 @@ paths:
                   description: |-
                     This is an outgoing integration parameter.
                     If your integration requires a special token from the server (API key), use this parameter.
-                skipTranspile:
-                  type: boolean
-                  description: |-
-                   From 8.4.0, the optional `skipTranspile` field is available to opt out of Babel transpilation for the integration script.
-                   From 9.0.0, Babel will no longer be used for webhook integration script compilation. This is a breaking change for scripts that rely on sloppy-mode behavior. Admins must review the existing integrations. 
-                   
-                   This parameter lets you test each integration so you can fix any scripts that break and reliably upgrade to 9.0.0 with `scriptTranspile: false` set on every integration.
-
-                   When `skipTranspile` is true, the script is stored as-is without Babel processing, matching the 9.0.0 default. Defaults to false for backward compatibility. Refer to the <a href='https://docs.rocket.chat/docs/integrations#script-compatibility' target='_blank'>Script compatibility</a> section in the Integrations user guide for more details.
-
-                   Note: This parameter is deprecated and will be removed in the 9.0.0 version.
-                  default: false
               required:
                 - type
                 - username
@@ -415,6 +405,7 @@ paths:
         ### Changelog
         |Version      | Description | 
         | ---------------- | ------------|
+        |9.0.0            | Removed the `fields` and `query` parameters.       |
         |1.1.0            | Separate permissions in incoming and outgoing.       |
         |0.53.0            | Added       |
       operationId: get-api-v1-integrations-history
@@ -431,8 +422,6 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/query'
-        - $ref: '#/components/parameters/fields'
       responses:
         '200':
           description: ''
@@ -672,6 +661,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |9.0.0            | Removed the `fields` and `query` parameters.       |
         |7.0.0            | Added `name` and `type` query parameters for filtering.       |
         |1.1.0            | Separate permissions in incoming and outgoing.       |
         |0.49.0            | Added       |
@@ -681,8 +671,6 @@ paths:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/query'
-        - $ref: '#/components/parameters/fields'
         - name: name
           in: query
           description: |-
@@ -839,6 +827,8 @@ paths:
       description: |-
         Update an existing integration.
         
+        From Rocket.Chat 9.0.0, scripts are stored and run as written, without Babel. Existing scripts keep their transpiled version until they're edited and saved on Rocket.Chat 9.0.0 or later. See <a href='https://docs.rocket.chat/docs/integrations#script-compatibility' target='_blank'>Script compatibility</a> for the script patterns that must be updated.
+        
         Permissions required:
         * `manage-incoming-integrations`
         * `manage-own-incoming-integrations`
@@ -848,6 +838,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |9.0.0            | Removed `skipTranspile`.       |
         |8.4.0   | Added `skipTranspile` field to opt-out of Babel transpilation |
         |3.4.0            | Added       |
       operationId: put-api-v1-integrations.update
@@ -915,18 +906,6 @@ paths:
                 target_url:
                   type: string
                   description: The target url to set.
-                skipTranspile:
-                  type: boolean
-                  description: |-
-                   From 8.4.0, the optional `skipTranspile` field is available to opt out of Babel transpilation for the integration script.
-                   From 9.0.0, Babel will no longer be used for webhook integration script compilation. This is a breaking change for scripts that rely on sloppy-mode behavior. Admins must review the existing integrations. 
-                   
-                   This parameter lets you test each integration so you can fix any scripts that break and reliably upgrade to 9.0.0 with `scriptTranspile: false` set on every integration.
-
-                   When `skipTranspile` is true, the script is stored as-is without Babel processing, matching the 9.0.0 default. Defaults to false for backward compatibility. Refer to the <a href='https://docs.rocket.chat/docs/integrations#script-compatibility' target='_blank'>Script compatibility</a> section in the Integrations user guide for more details.
-
-                   Note: This parameter is deprecated and will be removed in the 9.0.0 version.
-                  default: false
               required:
                 - type
                 - name
@@ -1199,116 +1178,6 @@ paths:
                   value:
                     success: false
                     error: No integration found.
-  /api/v1/webdav.getMyAccounts:
-    get:
-      tags:
-        - WebDAV
-      summary: Get WebDAV Accounts
-      description: |-
-          Retrieves the user's <a href="https://docs.rocket.chat/docs/webdav-integration" target="_blank">WebDAV</a> accounts.
-          
-          ### Changelog
-          | Version      | Description | 
-          | ---------------- | ------------|
-          |2.4.0            | Added       |
-      operationId: get-api-v1-webdav.getMyAccounts
-      parameters:
-        - $ref: '#/components/parameters/X-Auth-Token'
-        - $ref: '#/components/parameters/X-User-Id'
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  accounts:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        _id:
-                          type: string
-                        server_url:
-                          type: string
-                        username:
-                          type: string
-                        name:
-                          type: string
-                  success:
-                    type: boolean
-              examples:
-                Success Example:
-                  value:
-                    accounts:
-                      - _id: P3Gru7ocFCd4vpKEs
-                        server_url: 'http://localhost:8080/remote.php/webdav/'
-                        username: admin
-                        name: Webdav account
-                    success: true
-        '401':
-          $ref: '#/components/responses/authorizationError'
-  /api/v1/webdav.removeWebdavAccount:
-    post:
-      tags:
-        - WebDAV
-      summary: Remove WebDAV Account
-      description: Remove a specific WebDAV account.
-      operationId: post-api-v1-webdav.removeWebdavAccount
-      parameters:
-        - $ref: '#/components/parameters/X-Auth-Token'
-        - $ref: '#/components/parameters/X-User-Id'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                accountId:
-                  type: string
-                  description: The WebDAV account ID that you want to remove.
-              required:
-                - accountId
-            examples:
-              Example 1:
-                value:
-                  accountId: P3Gru7ocFCd4vpKEs
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-              examples:
-                Success Example:
-                  value:
-                    success: true
-        '401':
-          $ref: '#/components/responses/authorizationError'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  error:
-                    type: string
-                  errorType:
-                    type: string
-              examples:
-                Example 1:
-                  value:
-                    success: false
-                    error: 'must have required property ''accountId'' [invalid-params]'
-                    errorType: invalid-params
   /api/v1/oauth-apps.create:
     post:
       tags:
@@ -1809,7 +1678,6 @@ paths:
 tags:
   - name: Integration
   - name: OAuth Apps
-  - name: WebDAV
 components:
   parameters:
     offset:
@@ -1834,19 +1702,6 @@ components:
       description: 'List of fields to order by, and in which direction. This is a JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending. For example, `{"value": -1, "_id": 1}`. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
       required: false
       schema: {}
-    query:
-      name: query
-      in: query
-      description: 'This parameter allows you to use MongoDB query operators to search for specific data. For example, to query users with a name that contains the letter "g": query=`{ "name": { "$regex": "g" } }`. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more.'
-      required: false
-      schema: {}
-    fields:
-      name: fields
-      in: query
-      description: 'This parameter accepts a JSON object with properties that have a value of 1 or 0 to include or exclude them in the response. For example, to only retrieve the usernames of users: fields=`{ "username": 1 }`. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more.'
-      required: false
-      schema:
-        type: string
     X-Auth-Token:
       name: X-Auth-Token
       in: header
