@@ -515,6 +515,7 @@ paths:
         ### Changelog
         | Version | Description               |
         | ------- | ------------------------- |
+        |9.0.0   | Removed the `fields` and `query` parameters.       |
         | 1.2.0   | Added                     |
       operationId: get-api-v1-channels.anonymousread
       parameters:
@@ -523,8 +524,6 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/query'
-        - $ref: '#/components/parameters/fields'
       responses:
         '200':
           description: OK
@@ -946,6 +945,7 @@ paths:
         ### Changelog
         | Version | Description               |
         | ------- | ------------------------- |
+        |9.0.0   | Removed the `fields` and `query` parameters.       |
         | 0.64.0 | Change userId to user object in response                    |
         | 0.59.0  | Added                  |
       operationId: get-api-v1-channels.files
@@ -954,8 +954,6 @@ paths:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/Optional-RoomId'
         - $ref: '#/components/parameters/Optional-RoomName'
-        - $ref: '#/components/parameters/fields'
-        - $ref: '#/components/parameters/query'
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/offset'
@@ -1056,12 +1054,12 @@ paths:
                             height: 1080
                         complete: true
                         etag: 2Q2D8hSxCdhQLzcpx
-                        path: '/ufs/GridFS:Uploads/651227bea2f73c7460e18c63/Screenshot%20(317).png'
+                        path: '/file-upload/651227bea2f73c7460e18c63/Screenshot%20(317).png'
                         progress: 1
                         token: da2aCAf88a
                         uploadedAt: '2023-09-26T00:37:18.168Z'
                         uploading: false
-                        url: 'http://localhost:3000/ufs/GridFS:Uploads/651227bea2f73c7460e18c63/Screenshot%20(317).png'
+                        url: 'http://localhost:3000/file-upload/651227bea2f73c7460e18c63/Screenshot%20(317).png'
                         typeGroup: image
                         user:
                           _id: rbAXPnMktTFbNpwtJ
@@ -1077,12 +1075,12 @@ paths:
                         _updatedAt: '2023-07-17T18:35:18.242Z'
                         complete: true
                         etag: JYaAzzFQSnxYQ7rWW
-                        path: '/ufs/GridFS:Uploads/64b589e6aa5ad4273bfc4db6/eicar.zip'
+                        path: '/file-upload/64b589e6aa5ad4273bfc4db6/eicar.zip'
                         progress: 1
                         token: 7a1A38Cb5a
                         uploadedAt: '2023-07-17T18:35:18.216Z'
                         uploading: false
-                        url: 'http://localhost:3000/ufs/GridFS:Uploads/64b589e6aa5ad4273bfc4db6/eicar.zip'
+                        url: 'http://localhost:3000/file-upload/64b589e6aa5ad4273bfc4db6/eicar.zip'
                         typeGroup: application
                         user:
                           _id: rbAXPnMktTFbNpwtJ
@@ -2023,6 +2021,7 @@ paths:
         ### Changelog
         | Version | Description                                  |
         | ------- | -------------------------------------------- |
+        |9.0.0   | Removed the `fields` and `query` parameters.       |
         | 0.62.0  | Add `query` parameter support.               |
         | 0.49.0  | Count and offset query parameters supported. |
         | 0.48.0  | Added                                        |
@@ -2033,8 +2032,6 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/query'
-        - $ref: '#/components/parameters/fields'
       responses:
         '200':
           description: OK
@@ -2207,6 +2204,7 @@ paths:
         ### Changelog
         | Version | Description                                  |
         | ------- | -------------------------------------------- |
+        |9.0.0   | Removed the `fields` and `query` parameters.       |
         | 0.49.0  | Count and offset query parameters supported. |
         | 0.48.0  | Added                                        |
       operationId: get-api-v1-channels.list
@@ -2215,8 +2213,6 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/query'
-        - $ref: '#/components/parameters/fields'
         - schema:
             type: string
           in: query
@@ -4420,6 +4416,7 @@ paths:
         ### Changelog
         | Version | Description                                     |
         | ------- | -------------------------------------------------- |
+        |9.0.0   | Removed the `fields` and `query` parameters.       |
         | 1.1.0   | Separate permissions in `incoming` and `outgoing`. |
         | 0.49.0  | Added                                              |
       operationId: get-api-v1-channels.getIntegrations
@@ -4429,8 +4426,6 @@ paths:
         - $ref: '#/components/parameters/RoomId'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/fields'
-        - $ref: '#/components/parameters/query'
         - $ref: '#/components/parameters/count'
       responses:
         '200':
@@ -5059,7 +5054,7 @@ paths:
  
         When the **Allow Anonymous Read** (`Accounts_AllowAnonymousRead`) setting is enabled, public channels can be read without authentication.
  
-        This endpoint replaces the deprecated `loadHistory`, `loadNextMessages`, and `loadSurroundingMessages` Realtime API methods, which remain available until 9.0.0.
+        This endpoint replaces the `loadHistory`, `loadNextMessages`, and `loadSurroundingMessages` Realtime API methods, which were removed in 9.0.0.
  
         Permission required: `preview-c-room` (only to read a public channel you have not joined)
  
@@ -5291,6 +5286,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        |9.0.0   | Removed the `fields` parameter.       |
         |0.72.0   | Added       |
       operationId: get-api-v1-rooms.info
       parameters:
@@ -5298,7 +5294,6 @@ paths:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/Optional-RoomId'
         - $ref: '#/components/parameters/Optional-RoomName'
-        - $ref: '#/components/parameters/fields'
       responses:
         '200':
           description: |-
@@ -5480,6 +5475,7 @@ paths:
         ### Changelog
         | Version | Description   |
         | ------- | --------------|
+        |9.0.0   | Removed the `fields` and `query` parameters.       |
         | 1.0.0   | Added         |
       operationId: get-api-v1-rooms.getDiscussions
       parameters:
@@ -5487,9 +5483,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/Optional-RoomName'
         - $ref: '#/components/parameters/Optional-RoomId'
-        - $ref: '#/components/parameters/query'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/fields'
         - $ref: '#/components/parameters/offset'
         - schema:
             type: string
@@ -7366,12 +7360,12 @@ paths:
                             height: 884
                         complete: true
                         etag: yvaG9cjz6YRRdMg4L
-                        path: '/ufs/GridFS:Uploads/666fdecb4ac1a8e6404ededd/oauth-screen.png'
+                        path: '/file-upload/666fdecb4ac1a8e6404ededd/oauth-screen.png'
                         progress: 1
                         token: 1888eA0A0B
                         uploadedAt: '2024-06-17T06:59:23.602Z'
                         uploading: false
-                        url: 'https://pro.writing-demo.dev.rocket.chat/ufs/GridFS:Uploads/666fdecb4ac1a8e6404ededd/oauth-screen.png'
+                        url: 'https://pro.writing-demo.dev.rocket.chat/file-upload/666fdecb4ac1a8e6404ededd/oauth-screen.png'
                         typeGroup: image
                       - _id: 666fddea4ac1a8e6404eded7
                         name: 11.jpg
@@ -7388,12 +7382,12 @@ paths:
                             height: 932
                         complete: true
                         etag: 3jZf7SJZFCPpf9JK8
-                        path: '/ufs/GridFS:Uploads/666fddea4ac1a8e6404eded7/11.jpg'
+                        path: '/file-upload/666fddea4ac1a8e6404eded7/11.jpg'
                         progress: 1
                         token: 498bb849C8
                         uploadedAt: '2024-06-17T06:55:38.029Z'
                         uploading: false
-                        url: 'https://pro.writing-demo.dev.rocket.chat/ufs/GridFS:Uploads/666fddea4ac1a8e6404eded7/11.jpg'
+                        url: 'https://pro.writing-demo.dev.rocket.chat/file-upload/666fddea4ac1a8e6404eded7/11.jpg'
                         typeGroup: image
                     count: 50
                     offset: 0
@@ -7928,7 +7922,13 @@ paths:
       tags:
         - Teams
       summary: Get List of Teams
-      description: Lists the public and private teams the request sender is part of.
+      description: |-
+        Lists the public and private teams the request sender is part of.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        |9.0.0   | Removed the `query` parameter.       |
       operationId: get-api-v1-teams.list
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -7936,7 +7936,6 @@ paths:
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/query'
       responses:
         '200':
           description: |-
@@ -9908,6 +9907,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        |9.0.0   | Removed the `fields` and `query` parameters.       |
         | 1.1.0  | Separate permissions in incoming and outgoing. |
         | 0.49.0 | Added                                          |
       operationId: get-api-v1-groups.getIntegrations
@@ -9927,8 +9927,6 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/query'
-        - $ref: '#/components/parameters/fields'
       responses:
         '200':
           description: OK
@@ -11511,6 +11509,7 @@ paths:
         ### Changelog
         | Version | Description                    |
         | ------- | ------------------------------ |
+        |9.0.0   | Removed the `fields` and `query` parameters.       |
         | 0.62.0  | Add 'query' parameter support. |
         | 0.59.0  | Added                          |
       operationId: get-api-v1-groups.listAll
@@ -11520,8 +11519,6 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/query'
-        - $ref: '#/components/parameters/fields'
       responses:
         '200':
           description: OK
@@ -11821,6 +11818,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        |9.0.0   | Removed the `fields` parameter.       |
         | 7.0.0  | Added `mentionIds`, `starredIds`, `pinned` query parameters.|
         | 0.59.0  | Added       |
 
@@ -11830,7 +11828,6 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/Optional-RoomId'
         - $ref: '#/components/parameters/Optional-RoomName'
-        - $ref: '#/components/parameters/fields'
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
@@ -13300,6 +13297,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        |9.0.0   | Removed the `fields` and `query` parameters.       |
         | 0.64.0  | Change userId to user object in response       |
         | 0.59.0  | Added                                          |
       operationId: get-api-v1-groups.files
@@ -13311,8 +13309,6 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/query'
-        - $ref: '#/components/parameters/fields'
         - $ref: '#/components/parameters/filterTypeGroup'
         - $ref: '#/components/parameters/filterName'
       responses:
@@ -13403,10 +13399,10 @@ paths:
                         _updatedAt: '2018-03-08T14:47:37.003Z'
                         instanceId: uZG54xuoKauKHykbQ
                         etag: jPaviS9qG22xC5sDC
-                        path: '/ufs/GridFS:Uploads/S78TNnvaWGwdYRaCD/images.jpeg'
+                        path: '/file-upload/S78TNnvaWGwdYRaCD/images.jpeg'
                         token: 28cAb868d9
                         uploadedAt: '2018-03-08T14:47:37.295Z'
-                        url: '/ufs/GridFS:Uploads/S78TNnvaWGwdYRaCD/images.jpeg'
+                        url: '/file-upload/S78TNnvaWGwdYRaCD/images.jpeg'
                     count: 1
                     offset: 0
                     total: 1
@@ -13775,6 +13771,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        |9.0.0   | Removed the `fields` parameter.       |
         | 8.9.0   | Changed the rate limit to 100 requests every 100 seconds per client IP addres. |
         | 7.0.0   | Added `type`, `workspace` and `text` query parameters |
         | 1.0.0   | Added workspace query param |
@@ -13813,7 +13810,6 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/fields'
       responses:
         '200':
           description: OK
@@ -17161,19 +17157,6 @@ components:
       description: 'List of fields to order by, and in which direction. This is a JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending. For example, {"value": -1, "_id": 1}. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
       required: false
       schema: { }
-    query:
-      name: query
-      in: query
-      description: 'This parameter allows you to use MongoDB query operators to search for specific data. For example, to query users with a name that contains the letter "g": `query={ "name": { "$regex": "g" } }`. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more.'
-      required: false
-      schema: { }
-    fields:
-      name: fields
-      in: query
-      description: 'This parameter accepts a JSON object with properties that have a value of 1 or 0 to include or exclude them in the response. For example, to only retrieve the usernames of users: `fields={ "username": 1 }`. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more.'
-      required: false
-      schema:
-        type: string
     Auth-Token:
       name: X-Auth-Token
       in: header
