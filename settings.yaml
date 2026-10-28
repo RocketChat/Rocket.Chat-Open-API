@@ -10,7 +10,6 @@ info:
 #      * **E2E**: Create and manage [E2E](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/e2e-encryption) keys.
 #      * **Import** and **Bulk user import**: Import users, rooms, and other details to your workspace.
 #      * **Instances**: View details of your instances.
-#      * **Federation**: Add and manage [federated](https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/federation) servers.
 #      * **Moderation**: View and manage [reported messages](https://docs.rocket.chat/use-rocket.chat/workspace-administration/moderation).
 #      * **Device management**: Manage [user sessions](https://docs.rocket.chat/use-rocket.chat/user-management/device-manager) on the workspace.
 servers:
@@ -51,13 +50,11 @@ paths:
                 Success Example:
                   value:
                     settings:
-                      - _id: API_Drupal_URL
-                        value: ''
                       - _id: API_Embed
                         value: true
-                    count: 2
+                    count: 1
                     offset: 0
-                    total: 2
+                    total: 1
                     success: true
       tags:
         - Settings
@@ -67,12 +64,12 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |9.0.0            | Removed the `fields` parameter.       |
         |7.0.0            | Added the `_id` query parameter for filtering.|
         |7.0.0            | Removed the `query` parameter.      |
       parameters:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/fields'
         - name: _id
           in: query
           description: 'Filter by the `_id` of the settings.'
@@ -142,7 +139,7 @@ paths:
                           type: boolean
                         hideButtonOnMobile:
                           type: boolean
-                          description: Whether mobile clients should hide the service's login button. For SAML, this is `true` when `Accounts_OAuth_Use_Modern_Flow` is enabled and `false` otherwise.
+                          description: Whether mobile clients should hide the service's login button. For SAML, this is always `true`.
                         clientConfig:
                           type: object
                           description: Client configuration for the login service.
@@ -227,14 +224,7 @@ paths:
                   value:
                     services:
                       - _id: iJeY7x4wxnh2p3pLr
-                        name: facebook
-                        clientId: test
-                        buttonLabelText: test
-                        buttonColor: '#13679A'
-                        buttonLabelColor: '#FFFFFF'
-                        custom: false
-                      - _id: iJeY7x4wxnh2p3pLr
-                        name: twitter
+                        name: github
                         clientId: test
                         buttonLabelText: ''
                         buttonColor: ''
@@ -275,7 +265,7 @@ paths:
       description: |-
         Lists the <a href="https://docs.rocket.chat/docs/oauth" target="_blank">login service</a> configurations available to login clients. This public endpoint does not require authentication.
 
-        For SAML, the response contains the stored service configuration but excludes the `secret` object. Starting in 8.8.0, `hideButtonOnMobile` follows `Accounts_OAuth_Use_Modern_Flow`. When this setting is enabled, mobile and desktop apps can open SAML authentication in the system browser and receive the credential through the `rocketchat://auth` link.
+        For SAML, the response contains the stored service configuration but excludes the `secret` object. `hideButtonOnMobile` is `true` for SAML: mobile and desktop apps can open SAML authentication in the system browser and receive the credential through the `rocketchat://auth` link.
 
         ### Changelog
         | Version      | Description |
@@ -475,12 +465,19 @@ paths:
     parameters: []
     post:
       description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+
         Add a <a href="https://docs.rocket.chat/docs/oauth#add-custom-oauth" target="_blank">custom OAuth integration</a> to your workspace. Two-factor authentication is required.
 
-        In Rocket.Chat 9.0.0, custom OAuth will be available only on paid plans (Commercial, Government, and Defense). On other plans, this endpoint will reject the request. See <a href="https://docs.rocket.chat/docs/our-plans" target="_blank">Our Plans</a> for details.
+        From Rocket.Chat 9.0.0, Custom OAuth is available on Starter workspaces and on all premium plans (Commercial, Government, and Defense). It is not available on Community workspaces, where this endpoint returns `error-action-not-allowed`. See <a href="https://docs.rocket.chat/docs/our-plans" target="_blank">Our Plans</a> for details.
 
         **Permission required**:
         - `add-oauth-service`
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        |9.0.0            | Added premium plan availability details.       |
       summary: Add Custom OAuth
       operationId: post-api-v1-settings.addCustomOAuth
       responses:
@@ -505,6 +502,11 @@ paths:
                     success: false
                     error: 'The parameter "name" is required [error-name-param-not-provided]'
                     errorType: error-name-param-not-provided
+                Not available on Community workspaces:
+                  value:
+                    success: false
+                    error: 'This is an enterprise feature [error-action-not-allowed]'
+                    errorType: error-action-not-allowed
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -534,7 +536,7 @@ paths:
       description: |-
         Remove a <a href=" https://docs.rocket.chat/docs/oauth#add-custom-oauth" target="_blank">custom OAuth integration</a> from your workspace. All the `Accounts_OAuth_Custom-<Name>-*` settings of the named service are deleted. This endpoint requires 2FA.
 
-        It replaces the deprecated `removeOAuthService` real-time method, which remains available until 9.0.0.
+        It replaces the `removeOAuthService` real-time method, which was removed in 9.0.0.
 
         **Permission required**:
         - `add-oauth-service`
@@ -602,7 +604,7 @@ paths:
       description: |-
         Reload the workspace <a href=" https://docs.rocket.chat/docs/oauth" target="_blank">OAuth service</a> configurations from the current settings. Use it after adding or removing a custom OAuth service so that the login services are rebuilt. This endpoint takes no body and requires 2FA.
 
-        It replaces the deprecated `refreshOAuthService` real-time method, which remains available until 9.0.0.
+        It replaces the `refreshOAuthService` real-time method, which was removed in 9.0.0.
 
         **Permission required**:
         - `add-oauth-service`
@@ -1058,7 +1060,7 @@ paths:
 
         Permission required: `manage-cloud`.
 
-        This endpoint replaces the deprecated `cloud:getWorkspaceRegisterData` Realtime API method, which remains available until 9.0.0.
+        This endpoint replaces the `cloud:getWorkspaceRegisterData` Realtime API method, which was removed in 9.0.0.
 
         ### Changelog
         | Version | Description |
@@ -2970,296 +2972,6 @@ paths:
         - $ref: '#/components/parameters/X-User-Id'
         - $ref: '#/components/parameters/X-Auth-Token'
       description: 'Get the instances running for the workspace. Permission required: `view-statistics`'
-  /api/v1/federation/addServerByUser:
-    parameters: []
-    post:
-      summary: Add Federated Server
-      operationId: post-api-v1-federation-addServerByUser
-      responses:
-        '200':
-          $ref: '#/components/responses/trueSuccess'
-        '401':
-          $ref: '#/components/responses/authorizationError'
-      description: |-
-        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-
-        Add a new federated server.
-
-        ### Changelog
-        | Version      | Description |
-        | ------------ | ------------|
-        |6.0.0         | Added       |
-      tags:
-        - Federation
-      parameters:
-        - $ref: '#/components/parameters/X-User-Id'
-        - $ref: '#/components/parameters/X-Auth-Token'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                serverName:
-                  type: string
-                  description: The public server name.
-              required:
-                - serverName
-            examples:
-              Example:
-                value:
-                  serverName: my-server.rocket.chat
-  /api/v1/federation/listServersByUser:
-    parameters: []
-    get:
-      summary: Get Federated Servers
-      operationId: get-api-v1-federation-listServersByUser
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  servers:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        name:
-                          type: string
-                        default:
-                          type: boolean
-                        local:
-                          type: boolean
-                  success:
-                    type: boolean
-              examples:
-                Success Example:
-                  value:
-                    servers:
-                      - name: my-local.server
-                        default: true
-                        local: true
-                      - name: matrix.org
-                        default: true
-                        local: false
-                      - name: gitter.im
-                        default: true
-                        local: false
-                      - name: libera.chat
-                        default: true
-                        local: false
-                      - name: my-added-server.rocket.chat
-                        default: false
-                        local: false
-                    success: true
-        '401':
-          $ref: '#/components/responses/authorizationError'
-      parameters:
-        - $ref: '#/components/parameters/X-User-Id'
-        - $ref: '#/components/parameters/X-Auth-Token'
-      description: |-
-        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-
-        Lists all the servers the user has already saved.
-
-        ### Changelog
-        | Version      | Description |
-        | ---------------- | ------------|
-        |6.0.0            | Added       |
-      tags:
-        - Federation
-  /api/v1/federation/removeServerByUser:
-    parameters: []
-    post:
-      summary: Remove Federated Server
-      operationId: post-api-v1-federation-removeServerByUser
-      responses:
-        '200':
-          $ref: '#/components/responses/trueSuccess'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  error:
-                    type: string
-              examples:
-                Example:
-                  value:
-                    success: false
-                    error: cannot-remove-default-server
-        '401':
-          $ref: '#/components/responses/authorizationError'
-      description: |-
-
-        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-
-
-        Remove a federated server.
-
-
-        ### Changelog
-        | Version      | Description |
-        | ------------ | ------------|
-        |6.0.0          Added       |
-      tags:
-        - Federation
-      parameters:
-        - $ref: '#/components/parameters/X-User-Id'
-        - $ref: '#/components/parameters/X-Auth-Token'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              x-examples:
-                Example:
-                  serverName: my-server.rocket.chat
-              properties:
-                serverName:
-                  type: string
-                  description: The public server name that you want to remove.
-                  example: my-server.rocket.chat
-              required:
-                - serverName
-  /api/v1/federation/searchPublicRooms:
-    parameters: []
-    get:
-      summary: Search Public Rooms
-      operationId: get-api-v1-federation-searchPublicRooms
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  rooms:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                        name:
-                          type: string
-                        canJoin:
-                          type: boolean
-                        canonicalAlias:
-                          type: string
-                        joinedMembers:
-                          type: integer
-                        topic:
-                          type: string
-                  count:
-                    type: integer
-                  total:
-                    type: integer
-                  nextPageToken:
-                    type: string
-                  prevPageToken:
-                    type: string
-                  success:
-                    type: boolean
-              examples:
-                Success Example:
-                  value:
-                    rooms:
-                      - id: '!OGEhHVWSdvArJzumhm:matrix.org'
-                        name: Matrix HQ
-                        canJoin: true
-                        canonicalAlias: '#matrix:matrix.org'
-                        joinedMembers: 44461
-                        topic: 'The Official Matrix HQ - chat about Matrix here! | https://matrix.org | https://spec.matrix.org | To support Matrix.org development: https://patreon.com/matrixdotorg | Code of Conduct: https://matrix.org/legal/code-of-conduct/ | This is an English speaking room'
-                    count: 1
-                    total: 73080
-                    nextPageToken: g6FtzZa3oXK+IUpkemFiTlVQUFh6bENKQWhFbDpmYWJyaWMucHVioWTD
-                    prevPageToken: g6FtzYqIoXK+IWNOd2pkUXdWcFJNc0lNa1VweDptYXRyaXgub3JnoWTC
-                    success: true
-        '401':
-          $ref: '#/components/responses/authorizationError'
-      description: |-
-        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-
-        Search for federated public rooms by the server name or room name.
-
-        ### Changelog
-        | Version      | Description |
-        | ------------ | ------------|
-        |6.0.0         | Added       |
-      parameters:
-        - $ref: '#/components/parameters/X-User-Id'
-        - $ref: '#/components/parameters/X-Auth-Token'
-        - schema:
-            type: string
-          example: matrix.org
-          in: query
-          name: serverName
-          description: The server name.
-          required: true
-        - schema:
-            type: string
-          example: my public room name
-          in: query
-          name: roomName
-          description: The room name you want to search for in the server.
-        - schema:
-            type: string
-          example: g6FtzRlCoXK+IUpmS
-          in: query
-          name: pageToken
-          description: 'The page you want to retrieve, use it for pagination. Make sure to URL encode this.'
-        - $ref: '#/components/parameters/count'
-      tags:
-        - Federation
-  /api/v1/federation/joinExternalPublicRoom:
-    parameters: []
-    post:
-      summary: Join External Public Room
-      operationId: post-api-v1-federation-joinExternalPublicRoom
-      responses:
-        '200':
-          $ref: '#/components/responses/trueSuccess'
-        '401':
-          $ref: '#/components/responses/authorizationError'
-      description: |-
-        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
-
-        Join a public external federated room.
-
-        ### Changelog
-        | Version      | Description |
-        | ------------ | ------------|
-        |6.0.0         | Added       |
-      parameters:
-        - $ref: '#/components/parameters/X-User-Id'
-        - $ref: '#/components/parameters/X-Auth-Token'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                externalRoomId:
-                  type: string
-                  description: The external public room ID.
-                  example: '!externalRoomId:server.com'
-              required:
-                - externalRoomId
-            examples:
-              Example:
-                value:
-                  externalRoomId: '!externalRoomId:server.com'
-      tags:
-        - Federation
   /api/v1/moderation.reportsByUsers:
     parameters: []
     get:
@@ -6807,7 +6519,7 @@ paths:
 
         Lists the audit searches performed during a specified period. This endpoint requires a license that includes the `auditing` module. Dates use ISO 8601 format. Requests are limited to ten per minute.
 
-        This endpoint replaces the deprecated `auditGetAuditions` real-time method, which remains available until 9.0.0.
+        This endpoint replaces the `auditGetAuditions` real-time method, which was removed in 9.0.0.
 
         **Permission required**:
         - `can-audit-log`
@@ -6948,7 +6660,7 @@ paths:
 
         Searches messages for an audit and records the search in the audit log. This endpoint requires a license that includes the `auditing` module. Dates use ISO 8601 format. Requests are limited to ten per minute.
 
-        This endpoint replaces the deprecated `auditGetMessages` real-time method, which remains available until 9.0.0.
+        This endpoint replaces the `auditGetMessages` real-time method, which was removed in 9.0.0.
 
         **Permission required**:
         - `can-audit`
@@ -7103,7 +6815,7 @@ paths:
 
         Searches <a href="https://docs.rocket.chat/docs/omnichannel" target="_blank">Omnichannel</a> messages for an audit and records the search in the audit log. This endpoint requires a license that includes the `auditing` module. Dates use ISO 8601 format. Requests are limited to ten per minute.
 
-        This endpoint replaces the deprecated `auditGetOmnichannelMessages` real-time method, which remains available until 9.0.0.
+        This endpoint replaces the `auditGetOmnichannelMessages` real-time method, which was removed in 9.0.0.
 
         **Permission required**:
         - `can-audit`
@@ -7252,7 +6964,6 @@ tags:
   - name: Import
   - name: Bulk User Import
   - name: Instances
-  - name: Federation
   - name: Moderation
   - name: Device Management
   - name: Password policy
@@ -7298,18 +7009,6 @@ components:
       required: false
       schema: {}
       description: 'List of fields to order by, and in which direction. This is a JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending. For example, {"value": -1, "_id": 1}. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
-    query:
-      name: query
-      in: query
-      required: false
-      schema: {}
-      description: 'This parameter allows you to use MongoDB query operators to search for specific data. For example, to query users with a name that contains the letter "g": `query={ "name": { "$regex": "g" } }`. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more. '
-    fields:
-      name: fields
-      in: query
-      required: false
-      schema: {}
-      description: 'This parameter accepts a JSON object with properties that have a value of 1 or 0 to include or exclude them in the response. For example, to only retrieve the usernames of users: `fields={ "username": 1 }`. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more.'
     x-2fa-code:
       name: x-2fa-code
       in: header
