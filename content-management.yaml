@@ -386,6 +386,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |9.0.0   | Removed the `query` parameter.       |
         | 2.4.0            | Added       |
         | 2.4.0            | Added `name` query parameter for filtering.      |
       operationId: get-api-v1-custom-sounds.list
@@ -394,7 +395,6 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/query'
         - name: name
           in: query
           description: Filter list by the name of the custom sound.
@@ -463,7 +463,7 @@ paths:
 
         - The file size must not exceed `5 MB` (5242880 bytes), and the file MIME type must be one of `audio/mpeg`, `audio/mp3`, `audio/wav`, or `audio/x-wav`.
 
-        This endpoint replaces the deprecated DDP methods `insertOrUpdateSound` and `uploadCustomSound`, which will be removed in `9.0.0`.
+        This endpoint replaces the DDP methods `insertOrUpdateSound` and `uploadCustomSound`, which were removed in 9.0.0.
 
         Permission required: `manage-sounds`
 
@@ -585,7 +585,7 @@ paths:
 
         - When a new file is provided, the file size must not exceed `5 MB` (5242880 bytes), and the file MIME type must be one of `audio/mpeg`, `audio/mp3`, `audio/wav`, or `audio/x-wav`.
 
-        This endpoint replaces the deprecated DDP methods `insertOrUpdateSound` and `uploadCustomSound`, which will be removed in `9.0.0`.
+        This endpoint replaces the DDP methods `insertOrUpdateSound` and `uploadCustomSound`, which were removed in 9.0.0.
 
         Permission required: `manage-sounds`
 
@@ -1182,7 +1182,7 @@ paths:
         - Custom Sounds
       summary: Delete Custom Sound
       description: |-
-        Delete a custom sound from the workspace by its `_id`. This also removes the associated audio file from storage. This endpoint replaces the deprecated DDP method `deleteCustomSound`, which now logs a deprecation warning and is scheduled for removal in `9.0.0`.
+        Delete a custom sound from the workspace by its `_id`. This also removes the associated audio file from storage. This endpoint replaces the DDP method `deleteCustomSound`, which was removed in 9.0.0.
 
         Permission required: `manage-sounds`
 
@@ -1409,19 +1409,6 @@ components:
       description: 'List of fields to order by, and in which direction. This is a JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending. For example, {"value": -1, "_id": 1}. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
       required: false
       schema: {}
-    query:
-      name: query
-      in: query
-      description: 'This parameter allows you to use MongoDB query operators to search for specific data. For example, to query users with a name that contains the letter "g": query={ "name": { "$regex": "g" } }. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more.'
-      required: false
-      schema: {}
-    fields:
-      name: fields
-      in: query
-      description: 'This parameter accepts a JSON object with properties that have a value of 1 or 0 to include or exclude them in the response. For example, to only retrieve the usernames of users: fields={ "username": 1 }. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more.'
-      required: false
-      schema:
-        type: string
     Auth-Token:
       name: X-Auth-Token
       in: header
