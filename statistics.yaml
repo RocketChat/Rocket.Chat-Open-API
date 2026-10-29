@@ -25,6 +25,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |9.0.0   | Removed the `fields` and `query` parameters, retired OAuth provider statistics, and the `allowUnsafeQueryAndFieldsApiParamsEnabled` field.       |
         |8.7.0             | Added the `fips` field to statistics records. |        
         |0.51.0            | Added       |
       operationId: get-api-v1-statistics.list
@@ -34,8 +35,6 @@ paths:
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/fields'
-        - $ref: '#/components/parameters/query'
       responses:
         '200':
           description: OK
@@ -558,35 +557,7 @@ paths:
                                       type: boolean
                                     users:
                                       type: integer
-                                dolphin:
-                                  type: object
-                                  properties:
-                                    enabled:
-                                      type: boolean
-                                    users:
-                                      type: integer
-                                drupal:
-                                  type: object
-                                  properties:
-                                    enabled:
-                                      type: boolean
-                                    users:
-                                      type: integer
-                                facebook:
-                                  type: object
-                                  properties:
-                                    enabled:
-                                      type: boolean
-                                    users:
-                                      type: integer
                                 github:
-                                  type: object
-                                  properties:
-                                    enabled:
-                                      type: boolean
-                                    users:
-                                      type: integer
-                                githubEnterprise:
                                   type: object
                                   properties:
                                     enabled:
@@ -607,35 +578,7 @@ paths:
                                       type: boolean
                                     users:
                                       type: integer
-                                linkedin:
-                                  type: object
-                                  properties:
-                                    enabled:
-                                      type: boolean
-                                    users:
-                                      type: integer
-                                meteor:
-                                  type: object
-                                  properties:
-                                    enabled:
-                                      type: boolean
-                                    users:
-                                      type: integer
                                 nextcloud:
-                                  type: object
-                                  properties:
-                                    enabled:
-                                      type: boolean
-                                    users:
-                                      type: integer
-                                twitter:
-                                  type: object
-                                  properties:
-                                    enabled:
-                                      type: boolean
-                                    users:
-                                      type: integer
-                                wordpress:
                                   type: object
                                   properties:
                                     enabled:
@@ -986,8 +929,6 @@ paths:
                                   items:
                                     type: object
                                     properties: {}
-                        allowUnsafeQueryAndFieldsApiParamsEnabled:
-                          type: boolean
                         createdAt:
                           type: string
                         _updatedAt:
@@ -1233,19 +1174,7 @@ paths:
                             apple:
                               enabled: false
                               users: 0
-                            dolphin:
-                              enabled: false
-                              users: 0
-                            drupal:
-                              enabled: false
-                              users: 0
-                            facebook:
-                              enabled: false
-                              users: 0
                             github:
-                              enabled: false
-                              users: 0
-                            githubEnterprise:
                               enabled: false
                               users: 0
                             gitlab:
@@ -1254,19 +1183,7 @@ paths:
                             google:
                               enabled: false
                               users: 0
-                            linkedin:
-                              enabled: false
-                              users: 0
-                            meteor:
-                              enabled: false
-                              users: 0
                             nextcloud:
-                              enabled: false
-                              users: 0
-                            twitter:
-                              enabled: false
-                              users: 0
-                            wordpress:
                               enabled: false
                               users: 0
                             custom: {}
@@ -1444,7 +1361,6 @@ paths:
                           externalConnectedServers:
                             quantity: 0
                             servers: []
-                        allowUnsafeQueryAndFieldsApiParamsEnabled: false
                         createdAt: '2026-08-03T12:10:31.265Z'
                         _updatedAt: '2026-08-03T12:10:31.426Z'
                         statsToken: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3b3Jrc3BhY2VJZCI6IiIsInVuaXF1ZUlkIjoiMmQzYWQ0ZmItZDUxNS00ZjA5LThmMDItMGYxODZjOGNjOTI5IiwicmVjb3JkSWQiOiI2YTcwODUzN2M4ZmMzYzY1YjE4MDhiYWYiLCJ0aW1lc3RhbXAiOiIyMDI2LTA4LTAzVDEyOjEwOjMxLjQwNzk5NzEyOFoiLCJpbmZvIjp7InRvdGFsVXNlcnMiOjAsImFjdGl2ZVVzZXJzIjowLCJ0b3RhbENvbm5lY3RlZFVzZXJzIjowLCJvbW5pQ2hhbm5lbENvbnZlcnNhdGlvbnMiOjAsInRvdGFsUm9vbXMiOjAsInRvdGFsTWVzc2FnZXMiOjAsInVwbG9hZHNUb3RhbFNpemUiOjAsIm1pY3Jvc2VydmljZUVuYWJsZWQiOnRydWUsImZpbGVTdG9yZVR5cGUiOiJHcmlkRlMifX0.JnBb7z--brY2k00kIkC_Rp502P8wdKVcC2kAxEKK0OBFJlAgLM4ezZ5m_xG2w1wX3wCTNKnrjO3D5Mi-bzYNmNNBcJQbujP2uUGWMnr42UUAbyPY9VWKCf4L3H9cgzB9WjJX94KiVlwLjnbqle9TE0wAubP-NR1lzZn06GrnD9bAFSdz2E5lI4s6qozfUW5z8ZmSgXs5MBSbhBQczUbmQkQoj2XjKs5Mkqow0qLeBsCrc0F2m_92YeO1S6StRGvLIVyce-qvm0DLT8hXhpoJyRRgLz_3JyOzOE6hfxcgWI43YUZ4o4n7QruSYDhSFnAjuAlZjHasBCKPfs9ht9vRtQ
@@ -1484,6 +1400,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |9.0.0   | Removed retired OAuth provider statistics and the `allowUnsafeQueryAndFieldsApiParamsEnabled` field.       |
         |8.7.0             | Added the `fips` field to statistics records. |        
         |0.51.0            | Added       |
       operationId: get-api-v1-statistics
@@ -2013,35 +1930,7 @@ paths:
                                 type: boolean
                               users:
                                 type: integer
-                          dolphin:
-                            type: object
-                            properties:
-                              enabled:
-                                type: boolean
-                              users:
-                                type: integer
-                          drupal:
-                            type: object
-                            properties:
-                              enabled:
-                                type: boolean
-                              users:
-                                type: integer
-                          facebook:
-                            type: object
-                            properties:
-                              enabled:
-                                type: boolean
-                              users:
-                                type: integer
                           github:
-                            type: object
-                            properties:
-                              enabled:
-                                type: boolean
-                              users:
-                                type: integer
-                          githubEnterprise:
                             type: object
                             properties:
                               enabled:
@@ -2062,35 +1951,7 @@ paths:
                                 type: boolean
                               users:
                                 type: integer
-                          linkedin:
-                            type: object
-                            properties:
-                              enabled:
-                                type: boolean
-                              users:
-                                type: integer
-                          meteor:
-                            type: object
-                            properties:
-                              enabled:
-                                type: boolean
-                              users:
-                                type: integer
                           nextcloud:
-                            type: object
-                            properties:
-                              enabled:
-                                type: boolean
-                              users:
-                                type: integer
-                          twitter:
-                            type: object
-                            properties:
-                              enabled:
-                                type: boolean
-                              users:
-                                type: integer
-                          wordpress:
                             type: object
                             properties:
                               enabled:
@@ -2441,8 +2302,6 @@ paths:
                             items:
                               type: object
                               properties: {}
-                  allowUnsafeQueryAndFieldsApiParamsEnabled:
-                    type: boolean
                   createdAt:
                     type: string
                   _updatedAt:
@@ -2681,19 +2540,7 @@ paths:
                         apple:
                           enabled: false
                           users: 0
-                        dolphin:
-                          enabled: false
-                          users: 0
-                        drupal:
-                          enabled: false
-                          users: 0
-                        facebook:
-                          enabled: false
-                          users: 0
                         github:
-                          enabled: false
-                          users: 0
-                        githubEnterprise:
                           enabled: false
                           users: 0
                         gitlab:
@@ -2702,19 +2549,7 @@ paths:
                         google:
                           enabled: false
                           users: 0
-                        linkedin:
-                          enabled: false
-                          users: 0
-                        meteor:
-                          enabled: false
-                          users: 0
                         nextcloud:
-                          enabled: false
-                          users: 0
-                        twitter:
-                          enabled: false
-                          users: 0
-                        wordpress:
                           enabled: false
                           users: 0
                         custom: {}
@@ -2892,7 +2727,6 @@ paths:
                       externalConnectedServers:
                         quantity: 0
                         servers: []
-                    allowUnsafeQueryAndFieldsApiParamsEnabled: false
                     createdAt: '2026-08-03T12:10:31.265Z'
                     _updatedAt: '2026-08-03T12:10:31.426Z'
                     statsToken: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3b3Jrc3BhY2VJZCI6IiIsInVuaXF1ZUlkIjoiMmQzYWQ0ZmItZDUxNS00ZjA5LThmMDItMGYxODZjOGNjOTI5IiwicmVjb3JkSWQiOiI2YTcwODUzN2M4ZmMzYzY1YjE4MDhiYWYiLCJ0aW1lc3RhbXAiOiIyMDI2LTA4LTAzVDEyOjEwOjMxLjQwNzk5NzEyOFoiLCJpbmZvIjp7InRvdGFsVXNlcnMiOjAsImFjdGl2ZVVzZXJzIjowLCJ0b3RhbENvbm5lY3RlZFVzZXJzIjowLCJvbW5pQ2hhbm5lbENvbnZlcnNhdGlvbnMiOjAsInRvdGFsUm9vbXMiOjAsInRvdGFsTWVzc2FnZXMiOjAsInVwbG9hZHNUb3RhbFNpemUiOjAsIm1pY3Jvc2VydmljZUVuYWJsZWQiOnRydWUsImZpbGVTdG9yZVR5cGUiOiJHcmlkRlMifX0.JnBb7z--brY2k00kIkC_Rp502P8wdKVcC2kAxEKK0OBFJlAgLM4ezZ5m_xG2w1wX3wCTNKnrjO3D5Mi-bzYNmNNBcJQbujP2uUGWMnr42UUAbyPY9VWKCf4L3H9cgzB9WjJX94KiVlwLjnbqle9TE0wAubP-NR1lzZn06GrnD9bAFSdz2E5lI4s6qozfUW5z8ZmSgXs5MBSbhBQczUbmQkQoj2XjKs5Mkqow0qLeBsCrc0F2m_92YeO1S6StRGvLIVyce-qvm0DLT8hXhpoJyRRgLz_3JyOzOE6hfxcgWI43YUZ4o4n7QruSYDhSFnAjuAlZjHasBCKPfs9ht9vRtQ
@@ -3835,18 +3669,6 @@ components:
       required: false
       schema: {}
       description: 'List of fields to order by, and in which direction. JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending. For example, `{"value": -1, "_id": 1}`.  Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
-    fields:
-      name: fields
-      in: query
-      required: false
-      schema: {}
-      description: 'This parameter accepts a JSON object with properties that have a value of 1 or 0 to include or exclude them in the response. For example, to only retrieve the usernames of users: fields=`{ "username": 1 }`. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more.'
-    query:
-      name: query
-      in: query
-      required: false
-      schema: {}
-      description: 'This parameter allows you to use MongoDB query operators to search for specific data. For example, to query users with a name that contains the letter "g": query=`{ "name": { "$regex": "g" } }`. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more.'
   schemas: {}
   responses:
     authorizationError:
