@@ -1885,15 +1885,16 @@ components:
           schema:
             type: object
             properties:
-              status:
-                type: string
-              message:
+              success:
+                type: boolean
+              error:
                 type: string
           examples:
             Authorization Error:
               value:
-                status: error
-                message: You must be logged in to do this.
+                success: false
+                error: You must be logged in to do this.
+
     forbiddenError:
       description: Forbidden
       content:

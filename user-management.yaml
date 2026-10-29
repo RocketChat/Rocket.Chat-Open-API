@@ -252,7 +252,7 @@ paths:
                   value:
                     success: false
                     error: "must have required property 'role'"
-                    errorType: invalid-params
+                    errorType: error-invalid-params
                 Permission does not exist:
                   value:
                     success: false
@@ -355,7 +355,7 @@ paths:
                   value:
                     success: false
                     error: "must have required property 'role'"
-                    errorType: invalid-params
+                    errorType: error-invalid-params
                 Permission not found:
                   value:
                     success: false
@@ -491,7 +491,7 @@ paths:
                 Missing Parameter:
                   value:
                     success: false
-                    errorType: invalid-params
+                    errorType: error-invalid-params
                     error: "must have required property 'name'"
                 Role Already Exists:
                   value:
@@ -626,7 +626,7 @@ paths:
                 Missing Parameter:
                   value:
                     success: false
-                    errorType: invalid-params
+                    errorType: error-invalid-params
                     error: "must have required property 'name'"
                 Access Permission not Allowed:
                   value:
@@ -983,8 +983,9 @@ paths:
       parameters:
         - name: updatedSince
           in: query
-          description: Date as ISO string.
-          required: true
+          description: |-
+            Date as ISO string. If you include this parameter, the `update` and `remove` fields in the response contain only the roles updated and deleted since this date and time. If you omit it, the response contains all roles.
+          required: false
           schema:
             type: string
           example: '2017-11-25T15:08:17.248Z'
@@ -1023,6 +1024,8 @@ paths:
                           properties:
                             _id:
                               type: string
+                            name:
+                              type: string
                             description:
                               type: string
                             mandatory2fa:
@@ -1031,6 +1034,14 @@ paths:
                               type: boolean
                             scope:
                               type: string
+                            _updatedAt:
+                              type: string
+                            _deletedAt:
+                              type: string
+                              description: When the role was deleted.
+                            __collection__:
+                              type: string
+                              description: The collection the deleted record came from. The value is `roles`.
                   success:
                     type: boolean
               examples:
@@ -1044,11 +1055,15 @@ paths:
                           protected: true
                           scope: Users
                       remove:
-                        - _id: user
-                          description: User
+                        - _id: 6579adcf2dd9f9d9514f6
+                          name: Test Role
+                          description: Testing Role for API
                           mandatory2fa: false
-                          protected: true
+                          protected: false
                           scope: Users
+                          _updatedAt: '2026-10-20T14:30:02.000Z'
+                          _deletedAt: '2026-10-20T14:32:11.000Z'
+                          __collection__: roles
                     success: true
         '400':
           description: Bad Request
@@ -1061,11 +1076,14 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
               examples:
                 Example 1:
                   value:
                     success: false
-                    error: 'Match error: Missing key ''updatedSince'''
+                    error: updatedSince must be a valid date string [error-invalid-param]
+                    errorType: error-invalid-param
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/roles.delete:
@@ -1270,6 +1288,9 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |9.0.0             | Renamed the `freeSwitchExtension` parameter to `sipExtension`. |
+        |9.0.0             | Added the `presenceDisabledByAdmin` parameter. |
+        |9.0.0             | Added `phones` parameter. Replaced the `phone` user field with the `phones` array. |
         |0.48.0            | `role` property is now `roles` which is an array of strings for the roles to create the user with.       |
         |0.45.0            | Users created via this now join the default channels.       |
         |0.40.0            | Added       |
@@ -1309,6 +1330,10 @@ paths:
                   description: 'Set the users'' active status.  If the user is deactivated, they can not login. By default, the user is active.'
                   example: true
                   default: true
+                presenceDisabledByAdmin:
+                  type: boolean
+                  description: Optional. Set to `true` to turn the user's status off. The user then always appears offline and cannot change their status. Requires the **Manage user status** setting to be on and the `edit-other-user-info` permission. Otherwise the request fails with `error-action-not-allowed`.
+                  example: false
                 nickname:
                   type: string
                   description: 'The nickname for the user. '
@@ -1357,6 +1382,37 @@ paths:
                   description: Should the user's email address be verified when created? It is set to `false` by default.
                   example: false
                   default: false
+                phones:
+                  type: array
+                  maxItems: 10
+                  description: |-
+                    The phone numbers of the user, up to 10 entries, stored in the order you send them. Each `number` must match the `basic_phone_number` format, for example `+15551234567` or `15551234567`. Otherwise the request fails with `must match format "basic_phone_number"`. Spaces in `number` are removed before validation. Numbers with dashes, parentheses, dots, or letters are rejected. Each entry accepts only `number` and `label`.
+                  items:
+                    type: object
+                    required:
+                      - number
+                    additionalProperties: false
+                    properties:
+                      number:
+                        type: string
+                        description: The phone number. Leading and trailing spaces are removed.
+                        example: '+15551234567'
+                      label:
+                        type: string
+                        minLength: 1
+                        maxLength: 50
+                        description: An optional label for the phone number, such as `Work` or `Mobile`. It can have up to 50 characters and cannot be an empty string. To add a number without a label, omit `label`.
+                        example: Work
+                sipExtension:
+                  type: string
+                  description: |-
+                    Optional. The SIP voice call extension to assign to the user. It is shown as **Voice call extension** in the admin UI.
+
+                    * The **SIP integration enabled** setting under **Manage** > **Workspace** > **Settings** > **Team voice calls (VoIP)** > **SIP integration** must be on. Otherwise the request fails with `error-action-not-allowed` and the user is not created.
+                    * The extension must not be assigned to another user. Otherwise the request fails with `error-extension-not-available`.
+
+                    Replaces `freeSwitchExtension` since 9.0.0. Requests that still send `freeSwitchExtension` fail with `must NOT have additional properties`.
+                  example: '1234'
                 customFields:
                   type: object
                   example:
@@ -1411,10 +1467,26 @@ paths:
                         type: string
                       nickname:
                         type: string
+                      phones:
+                        type: array
+                        description: The phone numbers of the user, in the order they were sent. Entries without a label have no `label` key. The field is absent when the user has no phone numbers.
+                        items:
+                          type: object
+                          properties:
+                            number:
+                              type: string
+                            label:
+                              type: string
                       requirePasswordChange:
                         type: boolean
                       settings:
                         type: object
+                      presenceDisabledByAdmin:
+                        type: boolean
+                        description: Whether an admin has turned the user's status off. Returned when the request sets `presenceDisabledByAdmin`.
+                      sipExtension:
+                        type: string
+                        description: The SIP voice call extension assigned to the user. Replaces `freeSwitchExtension` since 9.0.0.
                   success:
                     type: boolean
               examples:
@@ -1437,7 +1509,12 @@ paths:
                         - user
                       _updatedAt: '2016-09-13T14:57:56.175Z'
                       name: name
+                      phones:
+                        - number: '+15551234567'
+                          label: Work
+                        - number: '+15557654321'
                       settings: {}
+                      sipExtension: '1234'
                     success: true
         '400':
           description: Bad Request
@@ -1468,6 +1545,31 @@ paths:
                     details:
                       method: insertOrUpdateUser
                       action: Adding_user
+                Invalid phone number:
+                  value:
+                    success: false
+                    error: must match format "basic_phone_number"
+                    errorType: error-invalid-params
+                Too many phone numbers:
+                  value:
+                    success: false
+                    error: must NOT have more than 10 items
+                    errorType: error-invalid-params
+                Extension already assigned:
+                  value:
+                    success: false
+                    error: Extension is already assigned to another user [error-extension-not-available]
+                    errorType: error-extension-not-available
+                SIP integration off:
+                  value:
+                    success: false
+                    error: Setting user voice call extension is not allowed
+                    errorType: error-action-not-allowed
+                Legacy freeSwitchExtension parameter:
+                  value:
+                    success: false
+                    error: must NOT have additional properties
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/users.register:
@@ -1573,8 +1675,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''pass'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''pass'' [error-invalid-params]'
+                    errorType: error-invalid-params
     parameters: []
   /api/v1/users.update:
     post:
@@ -1592,6 +1694,9 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |9.0.0             | Renamed the `freeSwitchExtension` parameter to `sipExtension`. |
+        |9.0.0             | Added the `presenceDisabledByAdmin` and `statusVisibilityDeniedByAdmin` parameters to `data`. |
+        |9.0.0             | Added `phones` parameter to `data`. Replaced the `phone` user field with the `phones` array. |
         |7.0.0             | Removed upsert behaviour and stopped allowing `joinDefaultChannels` param|
         |0.48.0            | Renamed to `users.update`       |
         |0.35.0            | Added       |
@@ -1654,6 +1759,21 @@ paths:
                         `user-last-owner` unless `confirmRelinquish` is also
                         `true`. See `confirmRelinquish`.
                       default: true
+                    presenceDisabledByAdmin:
+                      type: boolean
+                      description: Optional. Set to `true` to turn the user's status off, or `false` to turn it back on. A user whose status is off always appears offline and cannot change it. Requires the **Manage user status** setting to be on and the `edit-other-user-info` permission. Otherwise the request fails with `error-action-not-allowed`.
+                      example: true
+                    statusVisibilityDeniedByAdmin:
+                      type: array
+                      description: Optional. Usernames of the people who must not see this user's status. Use usernames, not user IDs. Replaces the current list. Send an empty array to clear it. Usernames that do not match a user are dropped without an error. The user's own username is ignored. Requires the **Manage user status** setting to be on and the `edit-other-user-info` permission. Otherwise the request fails with `error-action-not-allowed`.
+                      items:
+                        type: string
+                      example:
+                        - external.contractor
+                    statusText:
+                      type: string
+                      description: Optional. The user's status message. It replaces any status message the user set. Send an empty string to clear it.
+                      example: On vacation
                     roles:
                       type: array
                       description: The roles the user has been assigned.
@@ -1667,14 +1787,45 @@ paths:
                       type: boolean
                       default: false
                       description: Whether the user should get a welcome email.
-                    freeSwitchExtension:
+                    sipExtension:
                       type: string
-                      deprecated: true
-                      description: The voice call extension. In Rocket.Chat 9.0.0, this field will be renamed to `sipExtension`.
+                      description: |-
+                        Optional. The SIP voice call extension to assign to the user. It is shown as **Voice call extension** in the admin UI. Send an empty string to remove the user's extension. The `sipExtension` field is then removed from the user.
+
+                        * To change the extension, the **SIP integration enabled** setting under **Manage** > **Workspace** > **Settings** > **Team voice calls (VoIP)** > **SIP integration** must be on. Otherwise the request fails with `error-action-not-allowed`. Sending the user's current extension unchanged succeeds while the setting is off.
+                        * The extension must not be assigned to another user. Otherwise the request fails with `error-extension-not-available`.
+
+                        Replaces `freeSwitchExtension` since 9.0.0. Requests that still send `freeSwitchExtension` in `data` fail with `must NOT have additional properties`.
+                      example: '1234'
                     verified:
                       type: boolean
                       description: Whether the user's email address should be verified.
                       default: true
+                    phones:
+                      type: array
+                      maxItems: 10
+                      description: |-
+                        The phone numbers of the user, up to 10 entries, stored in the order you send them. Each `number` must match the `basic_phone_number` format, for example `+15551234567` or `15551234567`. Otherwise the request fails with `must match format "basic_phone_number"`. Spaces in `number` are removed before validation. Numbers with dashes, parentheses, dots, or letters are rejected. Each entry accepts only `number` and `label`.
+
+                        The array replaces the user's existing phone numbers. It is not merged with them. Send an empty array to remove all phone numbers. The `phones` field is then removed from the user.
+
+                        This parameter replaces the `phone` parameter. Requests that still send `phone` in `data` fail with `must NOT have additional properties`.
+                      items:
+                        type: object
+                        required:
+                          - number
+                        additionalProperties: false
+                        properties:
+                          number:
+                            type: string
+                            description: The phone number. Leading and trailing spaces are removed.
+                            example: '+15551234567'
+                          label:
+                            type: string
+                            minLength: 1
+                            maxLength: 50
+                            description: An optional label for the phone number, such as `Work` or `Mobile`. It can have up to 50 characters and cannot be an empty string. To add a number without a label, omit `label`.
+                            example: Work
                     customFields:
                       type: object
                       example:
@@ -1759,10 +1910,26 @@ paths:
                         properties: {}
                       statusText:
                         type: string
+                      presenceDisabledByAdmin:
+                        type: boolean
+                        description: Whether an admin has turned the user's status off.
                       livechatStatusSystemModified:
                         type: boolean
                       statusLivechat:
                         type: string
+                      sipExtension:
+                        type: string
+                        description: The SIP voice call extension assigned to the user. Replaces `freeSwitchExtension` since 9.0.0.
+                      phones:
+                        type: array
+                        description: The phone numbers of the user, in the order they were sent. Entries without a label have no `label` key. The field is absent when the user has no phone numbers.
+                        items:
+                          type: object
+                          properties:
+                            number:
+                              type: string
+                            label:
+                              type: string
                   success:
                     type: boolean
               examples:
@@ -1791,6 +1958,10 @@ paths:
                       statusText: ''
                       livechatStatusSystemModified: false
                       statusLivechat: not-available
+                      phones:
+                        - number: '+15551234567'
+                          label: Office
+                      sipExtension: '1234'
                     success: true
         '400':
           description: Bad Request
@@ -1829,6 +2000,56 @@ paths:
                     details:
                       method: insertOrUpdateUser
                       action: Editing_user
+                Manage user status setting off:
+                  value:
+                    success: false
+                    error: 'Edit user presence is not allowed [error-action-not-allowed]'
+                    errorType: error-action-not-allowed
+                    details:
+                      method: insertOrUpdateUser
+                      action: Update_user
+                Invalid parameter type:
+                  value:
+                    success: false
+                    error: must be boolean
+                    errorType: error-invalid-params
+                Invalid phone number:
+                  value:
+                    success: false
+                    error: must match format "basic_phone_number"
+                    errorType: error-invalid-params
+                Phone label too long:
+                  value:
+                    success: false
+                    error: must NOT have more than 50 characters
+                    errorType: error-invalid-params
+                Too many phone numbers:
+                  value:
+                    success: false
+                    error: must NOT have more than 10 items
+                    errorType: error-invalid-params
+                Extension already assigned:
+                  value:
+                    success: false
+                    error: Extension is already assigned to another user [error-extension-not-available]
+                    errorType: error-extension-not-available
+                SIP integration off:
+                  value:
+                    success: false
+                    error: Edit user voice call extension is not allowed [error-action-not-allowed]
+                    errorType: error-action-not-allowed
+                    details:
+                      method: insertOrUpdateUser
+                      action: Update_user
+                Legacy freeSwitchExtension parameter:
+                  value:
+                    success: false
+                    error: must NOT have additional properties
+                    errorType: error-invalid-params
+                Legacy phone parameter:
+                  value:
+                    success: false
+                    error: must NOT have additional properties
                 user-last-owner:
                   value:
                     success: false
@@ -1854,6 +2075,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |9.0.0            | Added `phones` parameter to `data`. |
         |6.4.0            | Add `bio` and `statusType` parameters.       |
         |0.62.2            | Added       |
       operationId: post-api-v1-users.updateOwnBasicInfo
@@ -1867,20 +2089,6 @@ paths:
           application/json:
             schema:
               type: object
-              x-examples:
-                Example 1:
-                  data:
-                    email: test@test.com
-                    newPassword: testbb
-                    currentPassword: >-
-                      aa856615052ee58e557a2945d53bc90a228915e7d7687ea250f3b4b1581d6e53
-                    nickname: baby girl
-                    bio: Auspicious baby
-                    username: roxie
-                    name: test test
-                    statusType: offline
-                    statusText: On a vacation
-                  customFields: {}
               properties:
                 data:
                   type: object
@@ -1926,6 +2134,29 @@ paths:
                       type: string
                       example: On a vacation
                       description: The status text of the user.
+                    phones:
+                      type: array
+                      maxItems: 10
+                      description: |-
+                        Your phone numbers, up to 10 entries, stored in the order you send them. Each `number` must match the `basic_phone_number` format, for example `+15551234567` or `15551234567`. Otherwise the request fails with `must match format "basic_phone_number"`. Spaces in `number` are removed before validation. Numbers with dashes, parentheses, dots, or letters are rejected. Each entry accepts only `number` and `label`.
+
+                        The array replaces your existing phone numbers. Send an empty array to remove all phone numbers. Changing only `phones` does not require `currentPassword`.
+                      items:
+                        type: object
+                        required:
+                          - number
+                        additionalProperties: false
+                        properties:
+                          number:
+                            type: string
+                            description: The phone number. Leading and trailing spaces are removed.
+                            example: '+15551234567'
+                          label:
+                            type: string
+                            minLength: 1
+                            maxLength: 50
+                            description: An optional label for the phone number, such as `Work` or `Mobile`. It can have up to 50 characters and cannot be an empty string. To add a number without a label, omit `label`.
+                            example: Work
                 customFields:
                   type: object
                   description: Any custom fields the user should have on their account. You must define the custom fields in the workspace settings.
@@ -2116,6 +2347,16 @@ paths:
                         type: string
                       nickname:
                         type: string
+                      phones:
+                        type: array
+                        description: Your phone numbers, in the order they were sent. Entries without a label have no `label` key. The field is absent when you have no phone numbers.
+                        items:
+                          type: object
+                          properties:
+                            number:
+                              type: string
+                            label:
+                              type: string
                   success:
                     type: boolean
               examples:
@@ -2213,6 +2454,10 @@ paths:
                         maxNumberSimultaneousChat: ''
                       bio: Engineer
                       nickname: ''
+                      phones:
+                        - number: '+15551234567'
+                          label: Home
+                        - number: '+15557654321'
                     success: true
         '400':
           description: Bad Request
@@ -2231,8 +2476,18 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''data'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''data'' [error-invalid-params]'
+                    errorType: error-invalid-params
+                Invalid phone number:
+                  value:
+                    success: false
+                    error: must match format "basic_phone_number"
+                    errorType: error-invalid-params
+                Phone label too long:
+                  value:
+                    success: false
+                    error: must NOT have more than 50 characters
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
 
@@ -2242,17 +2497,17 @@ paths:
         - Users
       summary: Get User's Info
       description: |-
-        Retrieves information about a user, limited to the details the caller is allowed to view. Look up the user by `userId`, `username`, `importId`, `email`, or `freeSwitchExtension`. Provide exactly one of these parameters per request.
+        Retrieves information about a user, limited to the details the caller is allowed to view. Look up the user by `userId`, `username`, `importId`, `email`, or `sipExtension`. Provide exactly one of these parameters per request.
 
         Starting in version 7.0.0, this endpoint no longer supports the `fields` parameter, even when the `ALLOW_UNSAFE_QUERY_AND_FIELDS_API_PARAMS` environment variable is set to `true`. Use `includeUserRooms` instead.
 
         When the Premium **User status hiding** feature is enabled and the requested user has hidden their status from the caller, the response shows the user as `offline` and omits `statusText`, `statusSource`, `statusExpiresAt`, `statusDefault`, and `statusConnection`. This restriction also applies to administrators. Users always see their own status.
 
-        In Rocket.Chat 9.0.0, the `freeSwitchExtension` parameter will be renamed to `sipExtension`.
-
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |9.0.0             | Renamed the `freeSwitchExtension` query parameter and response field to `sipExtension`. |
+        |9.0.0             | Replaced the `phone` field in the response with the `phones` array. |
         |8.8.0             | Added status visibility filtering |
         |8.5.0             | Added `freeSwitchExtension` query parameter for user lookup |
         |8.4.0             | Added `email` query parameter for user lookup |
@@ -2268,7 +2523,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: userId
           in: query
-          description: 'The `userId` of the user. Alternatively, you can use `username`, `importId`, `email`, or `freeSwitchExtension` to retrieve user information.'
+          description: 'The `userId` of the user. Alternatively, you can use `username`, `importId`, `email`, or `sipExtension` to retrieve user information.'
           required: false
           schema:
             type: string
@@ -2277,12 +2532,12 @@ paths:
             type: string
           in: query
           name: username
-          description: 'The username of the user. Alternatively, you can use `userId`, `importId`, `email`, or `freeSwitchExtension` to retrieve user information.'
+          description: 'The username of the user. Alternatively, you can use `userId`, `importId`, `email`, or `sipExtension` to retrieve user information.'
         - schema:
             type: string
           in: query
           name: importId
-          description: 'The import ID of the user. Alternatively, you can use `userId`, `username`, `email`, or `freeSwitchExtension` to retrieve user information.'
+          description: 'The import ID of the user. Alternatively, you can use `userId`, `username`, `email`, or `sipExtension` to retrieve user information.'
         - schema:
             type: string
           in: query
@@ -2291,15 +2546,14 @@ paths:
         - name: email
           in: query
           required: false
-          description: Filter the results by entering the user's email. Alternatively, you can use `userId`, `username`, `importId`, or `freeSwitchExtension` to retrieve user information.
+          description: Filter the results by entering the user's email. Alternatively, you can use `userId`, `username`, `importId`, or `sipExtension` to retrieve user information.
           schema:
             type: string
           example: john@example.com
-        - name: freeSwitchExtension
+        - name: sipExtension
           in: query
           required: false
-          deprecated: true
-          description: 'The FreeSwitch voice call extension assigned to the user. Alternatively, you can use `userId`, `username`, `importId`, or `email` to retrieve user information. In Rocket.Chat 9.0.0, this parameter will be renamed to `sipExtension`.'
+          description: 'The SIP voice call extension assigned to the user. Alternatively, you can use `userId`, `username`, `importId`, or `email` to retrieve user information. Replaces `freeSwitchExtension` since 9.0.0.'
           schema:
             type: string
           example: '1234'
@@ -2349,12 +2603,21 @@ paths:
                         type: string
                       utcOffset:
                         type: integer
-                      freeSwitchExtension:
+                      sipExtension:
                         type: string
-                        deprecated: true
-                        description: The voice call extension. In Rocket.Chat 9.0.0, this field will be renamed to `sipExtension`.
+                        description: The SIP voice call extension assigned to the user. Returned to any caller, including a regular user who looks up another user. The field is absent when the user has no extension. Replaces `freeSwitchExtension` since 9.0.0, and the response no longer contains `freeSwitchExtension`.
                       canViewAllInfo:
                         type: boolean
+                      phones:
+                        type: array
+                        description: The phone numbers of the user, in the order they were saved. Returned only when `canViewAllInfo` is `true`, for example when the caller has the `view-full-other-user-info` permission. A regular user who looks up another user does not receive this field. Entries without a label have no `label` key. The field is absent when the user has no phone numbers.
+                        items:
+                          type: object
+                          properties:
+                            number:
+                              type: string
+                            label:
+                              type: string
                   success:
                     type: boolean
               examples:
@@ -2394,8 +2657,12 @@ paths:
                       statusText: ''
                       avatarETag: GFoEi6wv3uAxnzDcD
                       nickname: tesuser2
-                      freeSwitchExtension: '1234'
+                      sipExtension: '1234'
                       canViewAllInfo: true
+                      phones:
+                        - number: '+15551234567'
+                          label: Work
+                        - number: '+15557654321'
                       rooms:
                         - _id: 651667dda2f73c7460e18cce
                           unread: 1
@@ -2459,8 +2726,8 @@ paths:
                       must have required property 'userId'
                        must have required property 'username'
                        must have required property 'importId'
-                       must match a schema in anyOf [invalid-params]
-                    errorType: invalid-params
+                       must match a schema in anyOf [error-invalid-params]
+                    errorType: error-invalid-params
                 User not found:
                   value:
                     success: false
@@ -2474,18 +2741,21 @@ paths:
       summary: Get Users List
       description: |-
         Retrieves workspace users and the information the caller is allowed to view.
-        Use `query` to locate a user and obtain their `userId` for the `users.info` endpoint. The `query` parameter is considered unsafe and is deprecated. Its support is expected to be removed in a future major version, and there is currently no direct replacement for email-based lookup.
+        Filter by `username`, `email`, or custom field values to locate a user and obtain their `userId` for the `users.info` endpoint.
 
-        When the Premium **User status hiding** feature is enabled, users who have hidden their status from the caller appear as `offline`, and their detailed status fields are omitted. If `query` filters on a status field, those users are excluded from the filtered results.
+        The response only contains the default user fields. To read `customFields`, set `includeCustomFields` to `true`. Other fields, such as `utcOffset`, `nickname`, `bio`, and `statusText`, are not returned by this endpoint. Use the `users.info` endpoint instead.
+
+        When the Premium **User status hiding** feature is enabled, users who have hidden their status from the caller appear as `offline`, and their detailed status fields are omitted.
 
         **Permissions required**:
         - `view-d-room`: View direct messages.
-        - `view-full-other-user-info`: View complete user details, such as account creation and last login.
+        - `view-full-other-user-info`: View complete user details, such as account creation and last login. Also required to use the `customFields` and `includeCustomFields` parameters.
         - `view-outside-room`: View users outside the caller's rooms when `Apply_permission_view-outside-room` is enabled under **Settings** > **General** > **REST API**.
 
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        | 9.0.0            | Removed the `query` and `fields` parameters. Requests that include them return a `400` error. Added the `username`, `customFields`, and `includeCustomFields` query parameters. |
         |8.8.0             | Added status visibility filtering |
         |8.4.0             | Added `email` query parameter for filtering |
         |0.49.0            | `Count` and `offset` query parameters supported.       |
@@ -2494,8 +2764,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
-        - $ref: '#/components/parameters/query'
-        - $ref: '#/components/parameters/fields'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - schema:
@@ -2513,6 +2781,37 @@ paths:
             minLength: 1
             nullable: true
           example: user@example.com
+        - name: username
+          in: query
+          required: false
+          description: |-
+            Filter users whose username contains this value. The match is not case-sensitive and checks the username only, not the display name. Regular expression characters are matched literally. Minimum length: 1 character. An empty value returns a `400` error.
+          schema:
+            type: string
+            minLength: 1
+            nullable: true
+          example: john
+        - name: customFields
+          in: query
+          required: false
+          style: deepObject
+          explode: true
+          description: |-
+            Filter users by exact custom field values, in the format `customFields[<key>]=<value>`. For example, `customFields[department]=Sales`. The value match is case-sensitive. When you send more than one key, a user must match all of them. The filter works without `includeCustomFields`. Sending the parameter as a JSON string, such as `customFields={"department":"Sales"}`, returns a `400` error. Requires the `view-full-other-user-info` permission.
+          schema:
+            type: object
+            additionalProperties:
+              type: string
+          example:
+            department: Sales
+        - name: includeCustomFields
+          in: query
+          required: false
+          description: |-
+            Whether to include each user's full `customFields` object in the response. Users without custom fields are returned without the `customFields` key. The value must be `true` or `false`; other values return a `400` error. Requires the `view-full-other-user-info` permission. Defaults to `false`.
+          schema:
+            type: boolean
+          example: true
       responses:
         '200':
           description: OK
@@ -2553,10 +2852,14 @@ paths:
                           type: string
                         lastLogin:
                           type: string
+                          description: Returned only for users who have logged in.
                         nameInsensitive:
                           type: string
                         avatarETag:
                           type: string
+                        customFields:
+                          type: object
+                          description: Returned only when `includeCustomFields` is `true` and the user has custom fields.
                   count:
                     type: integer
                   offset:
@@ -2610,8 +2913,58 @@ paths:
                     offset: 0
                     total: 3
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Removed or unknown parameter:
+                  value:
+                    success: false
+                    error: must NOT have additional properties
+                    errorType: error-invalid-params
+                Empty username:
+                  value:
+                    success: false
+                    error: must NOT have fewer than 1 characters
+                    errorType: error-invalid-params
+                customFields sent as a JSON string:
+                  value:
+                    success: false
+                    error: must be object
+                    errorType: error-invalid-params
+                Invalid includeCustomFields value:
+                  value:
+                    success: false
+                    error: must be boolean
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: forbidden
 
   /api/v1/users.setAvatar:
     post:
@@ -2847,6 +3200,13 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
               examples:
                 Missing status or message parameter:
                   value:
@@ -2857,16 +3217,25 @@ paths:
                     success: false
                     error: 'expiresAt must be a future date [error-invalid-date]'
                     errorType: error-invalid-date
+                Status turned off:
+                  value:
+                    success: false
+                    error: 'Presence is disabled for this user [error-presence-disabled]'
+                    errorType: error-presence-disabled
+                    details:
+                      method: setStatus
         '401':
           $ref: '#/components/responses/authorizationError'
       description: |-
         * You can set the status for yourself or another user. The `AllowUserStatusMessageChange` setting must be enabled in the `Accounts` workspace settings.
         * To change another user's status, you must have the `edit-other-user-info` permission.
         * According to your workspace settings (under **Accounts**), you will only be able to set the invisible or `offline` status if the `Allow Invisible status option` setting is enabled.
-          
+        * The request fails with `error-presence-disabled` when an admin has turned the user's status off (`presenceDisabledByAdmin`), or when the **Show status** setting (`Accounts_UserStatus_Enabled`) is off.
+
           ### Changelog
           | Version      | Description |
           | ---------------- | ------------|
+          |9.0.0            | Added the `error-presence-disabled` error for users whose status is turned off. |
           |8.6.0            | Added `expiresAt` request parameter for timed status expiration. |
           |1.2.0            | Added       |
       parameters:
@@ -3023,8 +3392,8 @@ paths:
                     success: false
                     error: |-
                       must have required property 'activeStatus'
-                      [invalid-params]
-                    errorType: invalid-params
+                      [error-invalid-params]
+                    errorType: error-invalid-params
                 user-last-owner:
                   value:
                     success: false
@@ -3131,8 +3500,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''daysIdle'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''daysIdle'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -3150,7 +3519,7 @@ paths:
                 Permission Error:
                   value:
                     success: false
-                    error: unauthorized
+                    error: forbidden
       description: |-
         Automatically deactivate idle users in your workspace based on the number of days and roles.
 
@@ -3439,7 +3808,7 @@ paths:
                 Permission Error:
                   value:
                     success: false
-                    error: unauthorized
+                    error: forbidden
   /api/v1/users.deleteOwnAccount:
     post:
       tags:
@@ -3517,6 +3886,7 @@ paths:
         ### Changelog
           | Version      | Description |
           | ---------------- | ------------|
+          |9.0.0             | Returns `403` instead of `400` when the secret is invalid or the permission is missing. |
           |8.7.0             | Enforced the `user-generate-access-token` permission when generating a token for another user.|
           |8.0.0             | Added `CREATE_TOKENS_FOR_USERS_SECRET` <a href="https://docs.rocket.chat/docs/deployment-environment-variables" target="_blank">environment variable</a> to define a shared secret that will be used to authorize this endpoint.|
           |2.1.0            | Added ENV VAR to be able to use this endpoint (process.env.CREATE_TOKENS_FOR_USERS).       |
@@ -3594,18 +3964,28 @@ paths:
                       The required "userId" or "username" param was not provided
                       [error-user-param-not-provided]
                     errorType: error-user-param-not-provided
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
                 Invalid secret:
                   value:
                     success: false
                     error: 'Not authorized [error-not-authorized]'
-                    errorType: error-not-authorized
-                Missing permission:
+                Permission Error:
                   value:
                     success: false
                     error: 'Not authorized [error-not-authorized]'
-                    errorType: error-not-authorized
-        '401':
-          $ref: '#/components/responses/authorizationError'
     parameters: []
   /api/v1/users.getPreferences:
     get:
@@ -3862,8 +4242,8 @@ paths:
                 Invalid Parameter:
                   value:
                     success: false
-                    error: 'must have required property ''data'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''data'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       description: |-
@@ -4396,8 +4776,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''username'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''username'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
@@ -4982,8 +5362,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''selector'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''selector'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       description: List the users whose names match a given pattern.
@@ -5284,8 +5664,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''userId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''userId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/moderation.reportUser:
@@ -5312,8 +5692,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''userId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''userId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       tags:
@@ -5402,10 +5782,20 @@ paths:
         Make sure LDAP is enabled in **Settings** > **LDAP** > **Enable** before using this endpoint.
 
         Permission required: `sync-auth-services-users`.
-        
+
+        This endpoint requires a license that includes the `ldap-enterprise` module. Without it, the request returns a `400` error with `errorType` `error-action-not-allowed`.
+
+        The request fails with a `400` error in these cases:
+        * `LDAP_Background_Sync_disabled`: none of the background sync settings is enabled (`LDAP_Background_Sync`, `LDAP_Background_Sync_Avatars`, or `LDAP_Background_Sync_ABAC_Attributes` with ABAC enabled).
+        * `LDAP_Sync_failed`: the sync could not run, for example because the LDAP server is unreachable. `details.error` contains the cause, for example `Timeout`.
+
+        <!-- DoneDone: observed on 9.0.0-rc.0 (implementation failure, DOCS-1808 TC-02): a bind failure with the authentication user DN returned 200 Sync_in_progress instead of an error. Not documented as intended behavior; confirm with the API owner. -->
+
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |9.0.0            | Requires a license with the `ldap-enterprise` module. |
+        |9.0.0            | Added the `LDAP_Background_Sync_disabled` and `LDAP_Sync_failed` errors. |
         |5.2.0            | Include `syncAvatars`       |
         |4.0.0            | Added       |
       operationId: post-api-v1-ldap.syncNow
@@ -5415,6 +5805,7 @@ paths:
         - $ref: '#/components/parameters/x-2fa-code'
         - $ref: '#/components/parameters/x-2fa-method'
       responses:
+        # DoneDone: observed behavior; implementation failure (DOCS-1808 TC-02), a bind failure returned 200 Sync_in_progress instead of an error; confirm with API owner
         '200':
           description: OK
           content:
@@ -5455,6 +5846,9 @@ paths:
                         type: array
                         items:
                           type: string
+                      error:
+                        type: string
+                        description: The error that stopped the sync. Returned with `LDAP_Sync_failed`.
               examples:
                 Example 1:
                   value:
@@ -5474,6 +5868,22 @@ paths:
                   value:
                     success: false
                     error: error-not-authorized
+                # DoneDone: unverified, DOCS-1808 TC-08 could not trigger LDAP_Background_Sync_disabled (which settings must be off is not defined); confirm with API owner
+                Background Sync Disabled:
+                  value:
+                    success: false
+                    error: LDAP_Background_Sync_disabled
+                License Required:
+                  value:
+                    success: false
+                    error: 'This is an enterprise feature [error-action-not-allowed]'
+                    errorType: error-action-not-allowed
+                Sync Failed:
+                  value:
+                    success: false
+                    error: LDAP_Sync_failed
+                    details:
+                      error: Timeout
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/ldap.testConnection:
@@ -5482,10 +5892,25 @@ paths:
         - LDAP
       summary: Test LDAP Connection
       description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+
         Test if Rocket.Chat can connect to the specified LDAP server using the port and host provided in the Rocket.Chat settings.
         Make sure LDAP is enabled in **Settings** > **LDAP** > **Enable** before using this endpoint.
 
         Permission required: `test-admin-options`
+
+        This endpoint requires a license that includes the `ldap-enterprise` module. Without it, the request returns a `400` error with `errorType` `error-action-not-allowed`.
+
+        If the test fails, the request returns a `400` error:
+        * `LDAP_Bind_failed`: Rocket.Chat couldn't bind to the LDAP server with the authentication user DN and password. `details.error` contains the LDAP server's error.
+        * `LDAP_Connection_failed_reason` (`errorType`: `error-ldap-connection-failed`): the connection failed for another reason, for example because the server is unreachable. `details.reason` contains the error.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 9.0.0   | Moved to premium plans. Requires a license with the `ldap-enterprise` module. |
+        | 9.0.0   | Added the `LDAP_Bind_failed` and `LDAP_Connection_failed_reason` errors. Removed the `Connection_failed` error. |
+        <!-- TODO: add the row for the version that introduced ldap.testConnection; it was not verified from the 9.0.0 diff. -->
       operationId: post-api-v1-ldap.testConnection
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -5505,10 +5930,72 @@ paths:
               examples:
                 Success Example:
                   value:
-                    message: Connection_success
+                    message: LDAP_Connection_successful
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      error:
+                        type: string
+                        description: The LDAP server's error. Returned with `LDAP_Bind_failed`.
+                      reason:
+                        type: string
+                        description: The connection error. Returned with `LDAP_Connection_failed_reason`.
+              examples:
+                Bind Failed:
+                  value:
+                    success: false
+                    error: LDAP_Bind_failed
+                    details:
+                      error: Invalid Credentials
+                Connection Failed:
+                  value:
+                    success: false
+                    error: LDAP_Connection_failed_reason
+                    errorType: error-ldap-connection-failed
+                    details:
+                      reason: Timeout
+                # DoneDone: unverified, DOCS-1808 did not observe License Required or LDAP Disabled (workspace licensed, LDAP enabled)
+                License Required:
+                  value:
+                    success: false
+                    error: 'This is an enterprise feature [error-action-not-allowed]'
+                    errorType: error-action-not-allowed
+                LDAP Disabled:
+                  value:
+                    success: false
+                    error: LDAP_disabled
         '401':
           $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: User does not have the permissions required for this action [error-unauthorized]
     parameters: []
   /api/v1/ldap.testSearch:
     post:
@@ -5516,10 +6003,30 @@ paths:
         - LDAP
       summary: Test LDAP User Search
       description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+
         Test if a given username can be found in the LDAP server using the authentication and filter <a href='https://docs.rocket.chat/docs/configure-ldap-connection' target='_blank'>settings</a> provided to Rocket.Chat.
         Make sure LDAP is enabled in **Settings** > **LDAP** > **Enable** before using this endpoint.
         
         Permission required: `test-admin-options`
+
+        This endpoint requires a license that includes the `ldap-enterprise` module. Without it, the request returns a `400` error with `errorType` `error-action-not-allowed`.
+
+        If the search fails, the request returns a `400` error:
+        * `LDAP_Bind_failed`: Rocket.Chat couldn't bind to the LDAP server with the authentication user DN and password. `details.error` contains the LDAP server's error.
+        * `LDAP_User_not_found`: no LDAP user matches the username.
+        * `LDAP_Multiple_users_found`: more than one LDAP user matches the username. `details.total` contains the number of matches.
+        * `LDAP_search_failed`: the search failed for another reason.
+        <!-- DoneDone: observed (DOCS-1808 TC-09, implementation failure): an empty username returns LDAP_search_failed instead of a validation error. -->
+
+        If `username` is missing, the request returns a `400` error with `errorType` `error-invalid-params`. Wildcard characters in `username` are not expanded: a search for `*` returns `LDAP_User_not_found`.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 9.0.0   | Moved to premium plans. Requires a license with the `ldap-enterprise` module. |
+        | 9.0.0   | Added the `LDAP_Bind_failed`, `LDAP_User_not_found`, and `LDAP_Multiple_users_found` errors. |
+        <!-- TODO: add the row for the version that introduced ldap.testSearch; it was not verified from the 9.0.0 diff. -->
       operationId: post-api-v1-ldap.testSearch
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -5553,13 +6060,67 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      error:
+                        type: string
+                        description: The LDAP server's error. Returned with `LDAP_Bind_failed`.
+                      total:
+                        type: string
+                        description: The number of matching users. Returned with `LDAP_Multiple_users_found`.
               examples:
-                Example 1:
+                Missing Username:
                   value:
                     success: false
-                    error: 'Match error: Missing key ''username'''
+                    error: must have required property 'username'
+                    errorType: error-invalid-params
+                Bind Failed:
+                  value:
+                    success: false
+                    error: LDAP_Bind_failed
+                    details:
+                      error: Invalid Credentials
+                User Not Found:
+                  value:
+                    success: false
+                    error: LDAP_User_not_found
+                Multiple Users Found:
+                  value:
+                    success: false
+                    error: LDAP_Multiple_users_found
+                    details:
+                      total: '2'
+                # DoneDone: unverified, DOCS-1808 did not observe License Required (workspace licensed)
+                License Required:
+                  value:
+                    success: false
+                    error: 'This is an enterprise feature [error-action-not-allowed]'
+                    errorType: error-action-not-allowed
+                Search Failed:
+                  value:
+                    success: false
+                    error: LDAP_search_failed
         '401':
           $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: User does not have the permissions required for this action [error-unauthorized]
       requestBody:
         content:
           application/json:
@@ -5730,8 +6291,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''emails'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''emails'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: post-api-v1-sendInvitationEmail
@@ -5783,8 +6344,8 @@ paths:
                 Missing parameter:
                   value:
                     success: false
-                    error: 'must have required property ''email'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''email'' [error-invalid-params]'
+                    errorType: error-invalid-params
       operationId: post-api-v1-users.sendConfirmationEmail
       description: |-
        Send an email to verify a user's email address. The user receives the email and they must click the confirmation button to confirm their email address. Rate limit applies: One request can be sent every 60000ms. This endpoint does not require authentication. An unverified user can call it from the login screen to resend their own verification email.
@@ -5858,8 +6419,8 @@ paths:
                 Missing token:
                   value:
                     success: false
-                    error: 'must have required property ''token'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''token'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Verification link expired:
                   value:
                     success: false
@@ -5874,6 +6435,8 @@ paths:
 
         When the Premium **User status hiding** feature is enabled, users who have hidden their status from the caller remain in the response but appear as `offline`, and their detailed status fields are omitted.
 
+        When the **Show status** setting (`Accounts_UserStatus_Enabled`) is off, every user in the response has `status` set to `offline`.
+
         **Permissions required**:
         - `view-d-room`: View direct messages.
         - `view-outside-room`: View users outside the caller's rooms when `Apply_permission_view-outside-room` is enabled under **Settings** > **General** > **REST API**.
@@ -5881,6 +6444,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |9.0.0            | Added the `statusManagement` parameter. |
         |8.8.0            | Added status visibility filtering. |
         |6.8.0            | Added       |
       operationId: get-api-v1-users.listByStatus
@@ -5892,7 +6456,7 @@ paths:
         - $ref: '#/components/parameters/count'
         - name: status
           in: query
-          description: Filter users based on their activation status. It can either  be `active` or `deactivated`
+          description: Filter users based on their activation status. It can either be `active` or `deactivated`. Presence values such as `online` or `offline` are not accepted and return a `400` error.
           schema:
             type: string
             example: active
@@ -5926,6 +6490,18 @@ paths:
           in: query
           name: 'inactiveReason[]'
           description: 'Filter the users based on the reason for inactive status. The options are: `idle_too_long`, `deactivated`, and `pending_approval`.'
+        - name: statusManagement
+          in: query
+          required: false
+          description: |-
+            Optional. Filter users by whether an admin manages their status. Use `managed` to return only users whose status an admin has turned off or hidden from specific people, or `default` to return only the other users.
+            Requires the **Manage user status** setting to be on and the `edit-other-user-info` and `view-full-other-user-info` permissions. Otherwise the request fails with `403`.
+          schema:
+            type: string
+            enum:
+              - default
+              - managed
+          example: managed
       responses:
         '200':
           description: OK
@@ -5959,6 +6535,8 @@ paths:
                           items:
                             type: string
                         status:
+                          type: string
+                        statusConnection:
                           type: string
                         active:
                           type: boolean
@@ -6043,14 +6621,177 @@ paths:
                     offset: 0
                     total: 5
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Invalid parameter value:
+                  value:
+                    success: false
+                    error: must be equal to one of the allowed values
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: forbidden
+  /api/v1/users.listStatusVisibility:
+    get:
+      tags:
+        - Users
+      summary: List Users with Admin-Managed Status
+      description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+
+        Lists the users whose status an admin manages, sorted by username. A user is included when an admin has turned their status off (`presenceDisabledByAdmin`) or hidden it from specific people (`statusVisibilityDeniedByAdmin`). This is the list shown in the **Managed users** tab of **Manage** > **Workspace** > **Status and presence**. A user created or updated with `presenceDisabledByAdmin` set to `true` appears in this list right away.
+
+        The **Manage user status** setting (`Accounts_StatusVisibility_Admin_Enabled`) must be on. When it is off, the endpoint returns an empty list.
+
+        Permissions required: `edit-other-user-info` and `view-full-other-user-info`
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 9.0.0   | Added |
+      operationId: get-api-v1-users.listStatusVisibility
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - name: searchTerm
+          in: query
+          required: false
+          description: Optional. Returns only users whose username or name contains this text (case-insensitive).
+          schema:
+            type: string
+          example: jane
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        username:
+                          type: string
+                        name:
+                          type: string
+                        status:
+                          type: string
+                        statusText:
+                          type: string
+                        presenceDisabledByAdmin:
+                          type: boolean
+                          description: Whether an admin has turned the user's status off. A user whose status is off always appears offline and cannot change it.
+                        statusVisibilityDeniedByAdmin:
+                          type: array
+                          description: Usernames of the people an admin has hidden this user's status from.
+                          items:
+                            type: string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    users:
+                      - _id: aB3dE5fG7hJ9kL1mN
+                        username: jane.doe
+                        name: Jane Doe
+                        status: offline
+                        presenceDisabledByAdmin: true
+                        statusVisibilityDeniedByAdmin: []
+                      - _id: pQ2rS4tU6vW8xY0zA
+                        username: john.roe
+                        name: John Roe
+                        status: online
+                        statusText: In a meeting
+                        presenceDisabledByAdmin: false
+                        statusVisibilityDeniedByAdmin:
+                          - external.contractor
+                    count: 2
+                    offset: 0
+                    total: 2
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Unknown query parameter:
+                  value:
+                    success: false
+                    error: must NOT have additional properties
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: User does not have the permissions required for this action [error-unauthorized]
   /api/v1/saml.parseMetadata:
     post:
       tags:
         - SAML
       summary: Parse SAML IdP Metadata
       description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+
         Fetches and parses a SAML identity provider (IdP) metadata document from a URL. It returns the IdP certificate, sign-in URL, sign-out URL, and identifier format when those values are available in the metadata.
 
         The **Import IdP metadata** button at the top of **Manage** > **Workspace** > **Settings** > **SAML** uses this endpoint to prefill the corresponding SAML settings. The imported values can be reviewed and edited before they are saved. This endpoint does not save or change any workspace settings.
@@ -6060,9 +6801,12 @@ paths:
         **Permission required**:
         - `test-admin-options`
 
+        This endpoint requires a license that includes the `saml-enterprise` module. Without it, the request returns a `400` error with `errorType` `error-action-not-allowed`.
+
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |9.0.0            | Moved to premium plans. Requires a license with the `saml-enterprise` module. |
         |8.8.0            | Added       |
       operationId: post-api-v1-saml.parseMetadata
       parameters:
@@ -6163,6 +6907,11 @@ paths:
                   value:
                     success: false
                     error: SAML_Metadata_too_large
+                License Required:
+                  value:
+                    success: false
+                    error: 'This is an enterprise feature [error-action-not-allowed]'
+                    errorType: error-action-not-allowed
                 Invalid metadata:
                   value:
                     success: false
@@ -6248,10 +6997,10 @@ components:
       required: false
       schema:
         type: integer
+        minimum: 0
       example: 50
       description: >-
-        Number of items to "skip" in the query, i.e. requests return count
-        items, skipping the first offset items. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.
+        How many items to skip before this page. Use a non-negative integer. Endpoints that validate their query parameters reject negative or fractional values. Refer to the <a href="https://developer.rocket.chat/apidocs/query-parameters#pagination" target="_blank">official documentation</a> to learn more.
     sort:
       name: sort
       in: query
@@ -6267,8 +7016,10 @@ components:
       required: false
       schema:
         type: integer
+        minimum: 0
       example: 50
-      description: 'How many items to return. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
+      description: >-
+        How many items to return. Use a non-negative integer. Endpoints that validate their query parameters reject negative or fractional values. Each workspace sets a maximum page size (`API_Upper_Count_Limit`) and lowers any larger value to it, so a response can hold fewer items than requested. Page by the number of items returned. When omitted, the workspace default page size (`API_Default_Count`) is used. `0` returns every item if `API_Allow_Infinite_Count` is enabled, and the default page size otherwise. Refer to the <a href="https://developer.rocket.chat/apidocs/query-parameters#pagination" target="_blank">official documentation</a> to learn more.
   responses:
     authorizationError:
       description: Unauthorized
@@ -6277,15 +7028,16 @@ components:
           schema:
             type: object
             properties:
-              status:
-                type: string
-              message:
+              success:
+                type: boolean
+              error:
                 type: string
           examples:
             Authorization Error:
               value:
-                status: error
-                message: You must be logged in to do this.
+                success: false
+                error: You must be logged in to do this.
+
     trueSuccess:
       description: OK
       content:

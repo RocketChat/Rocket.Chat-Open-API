@@ -25,6 +25,7 @@ paths:
 
         | Version | Description               |
         | ------- | ------------------------- |
+        | 9.0.0   | Added the `extraData.xmppFederated` parameter. |
         | 6.4.1   | Added `excludeSelf` param |
         | 0.13.0  | Added                     |
       operationId: post-api-v1-channels.create
@@ -77,6 +78,14 @@ paths:
                     federated:
                       type: boolean
                       description: Whether the channel should be federated (Matrix federation).
+                    xmppFederated:
+                      type: boolean
+                      description: |-
+                        Set to `true` to create the channel as an XMPP federated room that users on remote XMPP servers can join. Its XMPP address is built from the channel name, the MUC subdomain, and the domain set for the native XMPP server.
+                        The native XMPP server must be enabled with a valid domain. Otherwise, the request fails with `error-xmpp-federation-disabled`. You can't combine it with `federated`, `encrypted`, `broadcast`, or `readOnly`; the request fails with `error-xmpp-room-options-not-allowed`.
+                        The created channel is returned with an `xmppFederation` object that holds its XMPP address in `muc`. A value that is not a boolean fails with `error-invalid-params`.
+                        <!-- TODO: confirm the license requirement (federation module) for extraData.xmppFederated and the response when the workspace has no such license. -->
+                      example: true
               required:
                 - name
             examples:
@@ -93,6 +102,11 @@ paths:
                     broadcast: true
                     encrypted: false
                     teamId: 658441562dd9f928ad9951aa
+              XMPP federated channel:
+                value:
+                  name: xmpp-public
+                  extraData:
+                    xmppFederated: true
       responses:
         '200':
           description: OK
@@ -137,6 +151,8 @@ paths:
                         type: boolean
                       sysMes:
                         type: boolean
+                      xmppFederation:
+                        $ref: '#/components/schemas/XmppFederation'
                   success:
                     type: boolean
               examples:
@@ -154,6 +170,58 @@ paths:
                         username: example
                       ts: '2016-05-30T13:42:25.304Z'
                     success: true
+                XMPP federated channel:
+                  value:
+                    channel:
+                      _id: Xq7RmT2pLw9KdZ4bN
+                      fname: xmpp-public
+                      _updatedAt: '2026-10-29T13:05:12.481Z'
+                      name: xmpp-public
+                      t: c
+                      msgs: 0
+                      usersCount: 1
+                      u:
+                        _id: aobEdbYhXfu5hkeqG
+                        username: example
+                      ts: '2026-10-29T13:05:12.402Z'
+                      ro: false
+                      default: false
+                      sysMes: true
+                      xmppFederation:
+                        version: 1
+                        role: host-muc
+                        muc: xmpp-public@conference.chat.example.com
+                        origin: chat.example.com
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                XMPP federation not enabled:
+                  value:
+                    success: false
+                    error: XMPP federation is not enabled [error-xmpp-federation-disabled]
+                    errorType: error-xmpp-federation-disabled
+                XMPP room options not allowed:
+                  value:
+                    success: false
+                    error: An XMPP federated room cannot also be Matrix federated, encrypted, read-only or broadcast [error-xmpp-room-options-not-allowed]
+                    errorType: error-xmpp-room-options-not-allowed
+                Invalid xmppFederated value:
+                  value:
+                    success: false
+                    error: must be boolean
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/channels.addAll:
@@ -515,6 +583,7 @@ paths:
         ### Changelog
         | Version | Description               |
         | ------- | ------------------------- |
+        | 9.0.0   | Removed the `query` and `fields` parameters. |
         | 1.2.0   | Added                     |
       operationId: get-api-v1-channels.anonymousread
       parameters:
@@ -523,8 +592,6 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/query'
-        - $ref: '#/components/parameters/fields'
       responses:
         '200':
           description: OK
@@ -942,10 +1009,14 @@ paths:
       summary: Get Channel Files
       description: |-
         Retrieves all the media files from a channel.
-        
+
+        Files uploaded on version 9.0.0 or later return `path` as `/file-upload/<fileId>/<fileName>` and `url` as the absolute form of the same link. For files uploaded before 9.0.0, `url` can still contain a legacy `/ufs/...` link. Legacy `/ufs` links no longer return the file; the request returns the web client instead. To download the file, use `path` or build `/file-upload/<_id>/<name>`.
+
         ### Changelog
         | Version | Description               |
         | ------- | ------------------------- |
+        | 9.0.0   | Removed the `query` and `fields` parameters. |
+        | 9.0.0   | Removed the legacy `/ufs` file download path. File links use `/file-upload/<fileId>/<fileName>`. |
         | 0.64.0 | Change userId to user object in response                    |
         | 0.59.0  | Added                  |
       operationId: get-api-v1-channels.files
@@ -954,8 +1025,6 @@ paths:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/Optional-RoomId'
         - $ref: '#/components/parameters/Optional-RoomName'
-        - $ref: '#/components/parameters/fields'
-        - $ref: '#/components/parameters/query'
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/offset'
@@ -1041,56 +1110,35 @@ paths:
                 Example:
                   value:
                     files:
-                      - _id: 651227bea2f73c7460e18c63
+                      - _id: 64f0c1d2e3a4b5c6d7e8f901
                         name: Screenshot (317).png
-                        size: 288727
+                        size: 99
                         type: image/png
-                        rid: siyr2oWQJBjQjhLwr
+                        rid: 64f0c1d2e3a4b5c6d7e8f902
                         userId: rbAXPnMktTFbNpwtJ
                         store: 'GridFS:Uploads'
-                        _updatedAt: '2023-09-26T00:37:19.598Z'
+                        _updatedAt: '2026-10-28T22:28:16.126Z'
                         identify:
                           format: png
                           size:
-                            width: 1920
-                            height: 1080
+                            width: 32
+                            height: 32
                         complete: true
-                        etag: 2Q2D8hSxCdhQLzcpx
-                        path: '/ufs/GridFS:Uploads/651227bea2f73c7460e18c63/Screenshot%20(317).png'
+                        etag: 2ow2PcBpDMHGgKfxk
+                        path: /file-upload/64f0c1d2e3a4b5c6d7e8f901/Screenshot%20(317).png
                         progress: 1
-                        token: da2aCAf88a
-                        uploadedAt: '2023-09-26T00:37:18.168Z'
+                        token: 7b4AC88a9a
+                        uploadedAt: '2026-10-28T22:28:05.742Z'
                         uploading: false
-                        url: 'http://localhost:3000/ufs/GridFS:Uploads/651227bea2f73c7460e18c63/Screenshot%20(317).png'
+                        url: 'http://localhost:3000/file-upload/64f0c1d2e3a4b5c6d7e8f901/Screenshot%20(317).png'
                         typeGroup: image
                         user:
                           _id: rbAXPnMktTFbNpwtJ
                           username: roxie
                           name: test test
-                      - _id: 64b589e6aa5ad4273bfc4db6
-                        name: eicar.zip
-                        size: 266
-                        type: application/x-zip-compressed
-                        rid: siyr2oWQJBjQjhLwr
-                        userId: rbAXPnMktTFbNpwtJ
-                        store: 'GridFS:Uploads'
-                        _updatedAt: '2023-07-17T18:35:18.242Z'
-                        complete: true
-                        etag: JYaAzzFQSnxYQ7rWW
-                        path: '/ufs/GridFS:Uploads/64b589e6aa5ad4273bfc4db6/eicar.zip'
-                        progress: 1
-                        token: 7a1A38Cb5a
-                        uploadedAt: '2023-07-17T18:35:18.216Z'
-                        uploading: false
-                        url: 'http://localhost:3000/ufs/GridFS:Uploads/64b589e6aa5ad4273bfc4db6/eicar.zip'
-                        typeGroup: application
-                        user:
-                          _id: rbAXPnMktTFbNpwtJ
-                          username: roxie
-                          name: test test
-                    count: 2
+                    count: 1
                     offset: 0
-                    total: 2
+                    total: 1
                     success: true
         
   /api/v1/channels.history:
@@ -1415,6 +1463,7 @@ paths:
       tags:
         - Channels
       summary: Add Users to Channel
+      # DoneDone: unverified, DOCS-1809 TC-07 could not confirm bare JID invites (400 error-user-not-found; xmpp-server-service deployment unknown); confirm with API owner
       description: |-
         Add a user or bulk users to a channel.
 
@@ -1423,10 +1472,19 @@ paths:
         - The user is part of a public room `(t: 'c')` and has the `add-user-to-any-c-room` permission.
         - The user is part of a private room `(t: 'p')` and has the `add-user-to-any-p-room` permission.
 
+        In a channel that is not XMPP federated, a bare JID such as `alice@xmpp.example.org` is removed from the invite list. If no other users remain, the request fails with `invalid-user-invite-list`.
+        <!-- TODO: confirm inviting users of remote XMPP servers by bare JID (for example, `alice@xmpp.example.org`) in `usernames` or `username` to an XMPP federated room hosted by this workspace. In 9.0.0-rc.0 testing, a bare JID returned `error-user-not-found`, the same as a username that does not exist. Confirm whether the XMPP server service must be running. -->
+
+        You can identify the channel by `roomId` or `roomName`, and the users either by ID (`userId`, `userIds`) or by username (`username`, `user`, `usernames`). You cannot mix IDs and usernames in the same request.
+
+        If `userIds` or `usernames` contains users that do not exist, they are skipped and the valid users are invited. If none of the listed users exist, the request fails with `invalid-user-invite-list`. Users who are already members of the channel are ignored, and the request still succeeds.
+
         ### Changelog
 
         | Version | Description               |
         | ------- | ------------------------- |
+        | 9.0.0   | Added the `userIds` and `usernames` parameters to invite multiple users in one request. |
+        | 9.0.0   | Added inviting remote XMPP users by bare JID to XMPP federated rooms. <!-- TODO: confirm; not observed in DOCS-1809 testing. --> |
         | 0.48.0  | Added                  |
       operationId: post-api-v1-channels.invite
       parameters:
@@ -1437,39 +1495,60 @@ paths:
           application/json:
             schema:
               type: object
-              oneOf:
-                - type: object
-                  properties:
-                    roomId:
-                      type: string
-                      description: The channel's ID.
-                      example: nSYqWzZ4GsKTX4dyK
-                    userId:
-                      type: string
-                      description: The user id to be invited.
-                      example: ByehQjC44FwMeiLbX
-                  required:
-                    - roomId
-                    - userId
-                - type: object
-                  properties:
-                    roomId:
-                      type: string
-                      description: The channel's id
-                      example: nSYqWzZ4GsKTX4dyK
-                    userIds:
-                      type: array
-                      description: An array of the userId of users to be invited
-                      items:
-                        type: object
-                        properties:
-                          type:
-                            type: string
-                          value:
-                            type: string
-                  required:
-                    - roomId
-                    - userIds
+              properties:
+                roomId:
+                  type: string
+                  description: The channel's ID. This parameter is required if no `roomName` is provided.
+                  example: nSYqWzZ4GsKTX4dyK
+                roomName:
+                  type: string
+                  description: The channel's name. This parameter is required if no `roomId` is provided.
+                  example: general
+                userId:
+                  type: string
+                  description: The ID of the user to invite. Cannot be combined with `username`, `user`, or `usernames`.
+                  example: ByehQjC44FwMeiLbX
+                userIds:
+                  type: array
+                  description: An array of IDs of the users to invite. Cannot be combined with `username`, `user`, or `usernames`.
+                  items:
+                    type: string
+                  example:
+                    - ByehQjC44FwMeiLbX
+                    - Wq3kLm8TzR2vNpX5d
+                username:
+                  type: string
+                  description: The username of the user to invite. Cannot be combined with `userId` or `userIds`.
+                  example: john.doe
+                user:
+                  type: string
+                  description: The username of the user to invite. Alternative to `username`. Cannot be combined with `userId` or `userIds`.
+                  example: john.doe
+                usernames:
+                  type: array
+                  description: An array of usernames of the users to invite. Cannot be combined with `userId` or `userIds`.
+                  items:
+                    type: string
+                  example:
+                    - john.doe
+                    - jane.doe
+            examples:
+              Invite by ID:
+                value:
+                  roomId: nSYqWzZ4GsKTX4dyK
+                  userId: ByehQjC44FwMeiLbX
+              Invite multiple users by ID:
+                value:
+                  roomId: nSYqWzZ4GsKTX4dyK
+                  userIds:
+                    - ByehQjC44FwMeiLbX
+                    - Wq3kLm8TzR2vNpX5d
+              Invite multiple users by username:
+                value:
+                  roomName: general
+                  usernames:
+                    - john.doe
+                    - jane.doe
       responses:
         '200':
           description: OK
@@ -1602,6 +1681,55 @@ paths:
                       _updatedAt: '2016-12-09T12:50:51.575Z'
                       lm: '2016-12-09T12:50:51.555Z'
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+              examples:
+                IDs and Usernames Combined:
+                  value:
+                    success: false
+                    errorType: error-invalid-params
+                    error: must NOT be valid
+                User parameter required:
+                  value:
+                    success: false
+                    error: 'Please provide "userId" or "username" or "userIds" or "usernames" as param [error-users-params-not-provided]'
+                    errorType: error-users-params-not-provided
+                User not found:
+                  value:
+                    success: false
+                    error: User not found [error-user-not-found]
+                    errorType: error-user-not-found
+                    details:
+                      method: addUsersToRoom
+                Not allowed:
+                  value:
+                    success: false
+                    error: Not allowed [error-not-allowed]
+                    errorType: error-not-allowed
+                    details:
+                      method: addUsersToRoom
+                # DoneDone: for engineering, DOCS-1831 observed error and errorType swapped in this response on 9.0.0-rc.0 (code in error, message in errorType); possible implementation bug, example kept verbatim
+                No users to invite:
+                  value:
+                    success: false
+                    error: invalid-user-invite-list
+                    errorType: Cannot invite if no users are provided
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/channels.join:
@@ -2023,6 +2151,7 @@ paths:
         ### Changelog
         | Version | Description                                  |
         | ------- | -------------------------------------------- |
+        | 9.0.0   | Removed the `query` and `fields` parameters. |
         | 0.62.0  | Add `query` parameter support.               |
         | 0.49.0  | Count and offset query parameters supported. |
         | 0.48.0  | Added                                        |
@@ -2033,8 +2162,6 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/query'
-        - $ref: '#/components/parameters/fields'
       responses:
         '200':
           description: OK
@@ -2207,6 +2334,7 @@ paths:
         ### Changelog
         | Version | Description                                  |
         | ------- | -------------------------------------------- |
+        | 9.0.0   | Removed the `query` and `fields` parameters. Requests that include them return a `400` error. |
         | 0.49.0  | Count and offset query parameters supported. |
         | 0.48.0  | Added                                        |
       operationId: get-api-v1-channels.list
@@ -2215,8 +2343,6 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/query'
-        - $ref: '#/components/parameters/fields'
         - schema:
             type: string
           in: query
@@ -2420,6 +2546,25 @@ paths:
                     offset: 0
                     total: 3
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Removed or unknown parameter:
+                  value:
+                    success: false
+                    error: must NOT have additional properties
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/channels.members:
@@ -2810,6 +2955,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 9.0.0   | Removed the `query` parameter. The `_id` parameter is required. |
         |0.52.0   | Added       |
         |7.0.0   | Replaced `query` parameter with `_id` parameter       |
       operationId: get-api-v1-channels.online
@@ -4420,6 +4566,7 @@ paths:
         ### Changelog
         | Version | Description                                     |
         | ------- | -------------------------------------------------- |
+        | 9.0.0   | Removed the `query` and `fields` parameters. |
         | 1.1.0   | Separate permissions in `incoming` and `outgoing`. |
         | 0.49.0  | Added                                              |
       operationId: get-api-v1-channels.getIntegrations
@@ -4429,8 +4576,6 @@ paths:
         - $ref: '#/components/parameters/RoomId'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/fields'
-        - $ref: '#/components/parameters/query'
         - $ref: '#/components/parameters/count'
       responses:
         '200':
@@ -4638,7 +4783,7 @@ paths:
                 Missing channel permissions:
                   value:
                     success: false
-                    error: unauthorized
+                    error: forbidden
   /api/v1/rooms.saveNotification:
     post:
       tags:
@@ -5263,7 +5408,7 @@ paths:
                 Permission Error:
                   value:
                     success: false
-                    error: unauthorized
+                    error: forbidden
         '404':
           description: Not Found. The room does not exist, or the message in `aroundId` is not a visible message in the room.
           content:
@@ -5285,12 +5430,20 @@ paths:
       tags:
         - Rooms
       summary: Get Room Information
+      # DoneDone: observed behavior; requirement failure (TC-10), confirm with API owner
       description: |-
         Retrieves the information about the room.
-        
+
+        Users with the `view-room-administration` permission can also retrieve public and private rooms they are not a member of, except private rooms managed by ABAC. Users without this permission who request a private room they are not a member of receive a `400` error with `not-allowed`.
+
+        The endpoint ignores the removed `fields` and `query` parameters and returns the full room object.
+
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 9.0.0   | Removed the `fields` parameter. The endpoint ignores it and returns the full room object. Users with the `view-room-administration` permission can read public and private rooms they are not a member of, except rooms managed by ABAC. |
+        | 9.0.0   | Added the `classificationBanner` response field. The ABAC classification banner configuration is no longer exposed as a public setting. |
+        | 9.0.0   | Added the `abacRequiredAttributes` response field, returned while ABAC enforcement across all workspace rooms is on. |
         |0.72.0   | Added       |
       operationId: get-api-v1-rooms.info
       parameters:
@@ -5298,7 +5451,6 @@ paths:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/Optional-RoomId'
         - $ref: '#/components/parameters/Optional-RoomName'
-        - $ref: '#/components/parameters/fields'
       responses:
         '200':
           description: |-
@@ -5307,6 +5459,8 @@ paths:
             The response includes the following objects:
             * `parent`: Represents the parent of a room. For discussions, this is the room where the discussion was created, identified by `prid`. For rooms inside a team, the parent will be the team's main room, identified by `team.roomId`. For other rooms, this property is undefined.
             * `team`: Represents the team a room is part of. For rooms inside a team, this is the team identified by the `teamId` property. For everything else, this is undefined.
+            * `classificationBanner`: The ABAC classification banner that applies to the room, returned at the top level next to `room`. Returned only when the workspace has the ABAC license, ABAC and classification banners are enabled, and a configured banner applies. An ABAC-managed room gets the banner built from its attributes. Rooms that are not ABAC managed, including public and private channels, DMs and discussions, get a banner only from the optional non-ABAC banner list (`nonAbacBanner`) in the banner configuration. Omnichannel rooms never get a banner. The response holds only the resolved banner, never the banner configuration.
+            * `abacRequiredAttributes`: The attribute keys that every ABAC room must carry. Returned only when ABAC is enabled and **Enforce ABAC across all workspace rooms** is on. The list is empty when no attribute is required.
           content:
             application/json:
               schema:
@@ -5391,6 +5545,43 @@ paths:
                             type: string
                       lm:
                         type: string
+                  classificationBanner:
+                    type: object
+                    description: The classification banner that applies to the room. Present only when a configured banner applies. Contains the resolved banner only, not the banner configuration.
+                    properties:
+                      style:
+                        type: string
+                        enum:
+                          - classic
+                      uppercase:
+                        type: boolean
+                      monospace:
+                        type: boolean
+                      text:
+                        type: string
+                        description: The banner text shown in the room.
+                      segments:
+                        type: array
+                        description: One entry per attribute shown in the banner of an ABAC-managed room. Empty for a banner from the non-ABAC banner list.
+                        items:
+                          type: object
+                          properties:
+                            attrId:
+                              type: string
+                              description: The `id` of the attribute entry in the banner configuration.
+                            text:
+                              type: string
+                      backgroundColor:
+                        type: string
+                        description: The banner background color, in `#RRGGBB` format.
+                      color:
+                        type: string
+                        description: The banner text color, in `#RRGGBB` format.
+                  abacRequiredAttributes:
+                    type: array
+                    description: Attribute keys required in every ABAC room. Present only while ABAC enforcement across all workspace rooms is on.
+                    items:
+                      type: string
                   success:
                     type: boolean
               examples:
@@ -5448,6 +5639,82 @@ paths:
                       name: test-team
                       t: c
                     success: true
+                ABAC enforcement on:
+                  value:
+                    room:
+                      _id: 66ed2dba40141d95f32c292c
+                      fname: locked-room
+                      _updatedAt: '2026-10-28T14:44:10.512Z'
+                      name: locked-room
+                      t: p
+                      msgs: 0
+                      usersCount: 1
+                      u:
+                        _id: C38WSSzrGd2NCjzqJ
+                        username: test.cat
+                        name: test.cat
+                      ts: '2026-10-28T14:40:02.118Z'
+                      ro: false
+                      default: false
+                      sysMes: true
+                    abacRequiredAttributes:
+                      - clearance
+                    success: true
+                ABAC room with classification banner:
+                  value:
+                    room:
+                      _id: 66ed2dba40141d95f32c292d
+                      fname: navigation-control
+                      _updatedAt: '2026-10-28T18:20:41.208Z'
+                      name: navigation-control
+                      t: p
+                      msgs: 0
+                      usersCount: 1
+                      u:
+                        _id: C38WSSzrGd2NCjzqJ
+                        username: test.cat
+                        name: test.cat
+                      ts: '2026-10-28T18:20:40.917Z'
+                      ro: false
+                      default: false
+                      sysMes: true
+                    classificationBanner:
+                      style: classic
+                      uppercase: false
+                      monospace: false
+                      text: NAV CONTROL
+                      segments:
+                        - attrId: dept
+                          text: NAV CONTROL
+                      backgroundColor: '#007a33'
+                      color: '#FFFFFF'
+                    success: true
+                Non-ABAC room with classification banner:
+                  value:
+                    room:
+                      _id: 66ed2dba40141d95f32c292e
+                      fname: general-updates
+                      _updatedAt: '2026-10-28T18:05:12.330Z'
+                      name: general-updates
+                      t: c
+                      msgs: 0
+                      usersCount: 1
+                      u:
+                        _id: C38WSSzrGd2NCjzqJ
+                        username: test.cat
+                      ts: '2026-10-28T18:05:12.104Z'
+                      ro: false
+                      default: false
+                      sysMes: true
+                    classificationBanner:
+                      style: classic
+                      uppercase: false
+                      monospace: false
+                      text: UNCLASSIFIED
+                      segments: []
+                      backgroundColor: '#1d74f5'
+                      color: '#FFFFFF'
+                    success: true
         '400':
           description: Bad Request
           content:
@@ -5467,6 +5734,21 @@ paths:
                     success: false
                     error: 'The parameter "roomId" or "roomName" is required [error-roomid-param-not-provided]'
                     errorType: error-roomid-param-not-provided
+                Room not found:
+                  value:
+                    success: false
+                    error: 'The required "roomId" or "roomName" param provided does not match any channel [error-room-not-found]'
+                    errorType: error-room-not-found
+                ABAC room the caller cannot access:
+                  value:
+                    success: false
+                    error: not-allowed
+                    errorType: Not Allowed
+                Private room the caller is not a member of:
+                  value:
+                    success: false
+                    error: not-allowed
+                    errorType: Not Allowed
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/rooms.getDiscussions:
@@ -5480,6 +5762,7 @@ paths:
         ### Changelog
         | Version | Description   |
         | ------- | --------------|
+        | 9.0.0   | Removed the `query` and `fields` parameters. |
         | 1.0.0   | Added         |
       operationId: get-api-v1-rooms.getDiscussions
       parameters:
@@ -5487,9 +5770,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/Optional-RoomName'
         - $ref: '#/components/parameters/Optional-RoomId'
-        - $ref: '#/components/parameters/query'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/fields'
         - $ref: '#/components/parameters/offset'
         - schema:
             type: string
@@ -6767,8 +7048,8 @@ paths:
                 roomName is required:
                   value:
                     success: false
-                    error: 'must have required property ''roomName'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''roomName'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: get-api-v1-rooms.nameExists
@@ -7040,8 +7321,8 @@ paths:
                     error: |-
                       must have required property 'userId'
                        must have required property 'username'
-                       must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params
+                       must match exactly one schema in oneOf [error-invalid-params]
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
   
@@ -7107,8 +7388,8 @@ paths:
                     error: |-
                       must have required property 'userId'
                        must have required property 'username'
-                       must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params
+                       must match exactly one schema in oneOf [error-invalid-params]
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
   
@@ -7117,14 +7398,18 @@ paths:
       tags:
         - Rooms
       summary: Create Discussion
+      # DoneDone: unverified: app exemption from the membership check could not be exercised (TC-09, no installed app creates discussions); confirm with API owner
       description: |-
         Creates a new discussion for the room. It requires at least one of the following permissions: `start-discussion` OR `start-discussion-other-user`, AND must be with the following setting enabled: `Discussion_enabled`.
 
         When **Force end-to-end encryption on private rooms** is enabled, you cannot create a discussion under an unencrypted private room. Make the parent room public or enable encryption on it before creating the discussion.
-        
+
+        You must be a member of the parent room to create a discussion in it, including in public channels. This also applies to admins. Apps are exempt from this check.
+
         ### Changelog
         | Version | Description                                                                                   |
         | ------- | --------------------------------------------------------------------------------------------- |
+        | 9.0.0   | Added a parent room membership check, including for public channels. Non-members receive the `error-user-not-in-room` error. |
         | 8.8.0   | Added forced encryption checks for private-room discussions.                                      |
         | 1.0.0   | Added                                                                                         |
       operationId: post-api-v1-rooms.createDiscussion
@@ -7245,12 +7530,34 @@ paths:
                     type: string
                   errorType:
                     type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
               examples:
                 Private room encryption is enforced:
                   value:
                     success: false
                     error: 'Workspace policy requires all private rooms to be encrypted. To create this discussion, make the parent channel public or enable encryption on it. [error-encrypted-private-rooms-enforced-discussion]'
                     errorType: error-encrypted-private-rooms-enforced-discussion
+                User is not in the parent room:
+                  value:
+                    success: false
+                    error: 'You must join the room to create a discussion [error-user-not-in-room]'
+                    errorType: error-user-not-in-room
+                    details:
+                      method: DiscussionCreation
+                Parent room not found:
+                  value:
+                    success: false
+                    error: '[error-invalid-room]'
+                    errorType: error-invalid-room
+                Missing parent room ID:
+                  value:
+                    success: false
+                    error: "must have required property 'prid'"
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/rooms.images:
@@ -7258,7 +7565,15 @@ paths:
       tags:
         - Rooms
       summary: Get Room Images
-      description: Retrieves the images of a room that you are a member of.
+      description: |-
+        Retrieves the images of a room that you are a member of.
+
+        Images uploaded on version 9.0.0 or later return `path` as `/file-upload/<fileId>/<fileName>` and `url` as the absolute form of the same link. Legacy `/ufs` links no longer return the file; the request returns the web client instead.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 9.0.0   | Removed the legacy `/ufs` file download path. File links use `/file-upload/<fileId>/<fileName>`. |
       operationId: get-api-v1-rooms.images
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -7351,53 +7666,31 @@ paths:
                 Success:
                   value:
                     files:
-                      - _id: 666fdecb4ac1a8e6404ededd
+                      - _id: 64f0c1d2e3a4b5c6d7e8f901
                         name: oauth-screen.png
-                        size: 78441
+                        size: 99
                         type: image/png
-                        rid: 6630e42b72f069422b1022c1
+                        rid: 64f0c1d2e3a4b5c6d7e8f902
                         userId: yuT9xp9eEd6HqB3n8
                         store: 'GridFS:Uploads'
-                        _updatedAt: '2024-06-17T06:59:23.608Z'
+                        _updatedAt: '2026-10-28T22:28:16.126Z'
                         identify:
                           format: png
                           size:
-                            width: 1580
-                            height: 884
+                            width: 32
+                            height: 32
                         complete: true
-                        etag: yvaG9cjz6YRRdMg4L
-                        path: '/ufs/GridFS:Uploads/666fdecb4ac1a8e6404ededd/oauth-screen.png'
+                        etag: 2ow2PcBpDMHGgKfxk
+                        path: /file-upload/64f0c1d2e3a4b5c6d7e8f901/oauth-screen.png
                         progress: 1
-                        token: 1888eA0A0B
-                        uploadedAt: '2024-06-17T06:59:23.602Z'
+                        token: 7b4AC88a9a
+                        uploadedAt: '2026-10-28T22:28:05.742Z'
                         uploading: false
-                        url: 'https://pro.writing-demo.dev.rocket.chat/ufs/GridFS:Uploads/666fdecb4ac1a8e6404ededd/oauth-screen.png'
-                        typeGroup: image
-                      - _id: 666fddea4ac1a8e6404eded7
-                        name: 11.jpg
-                        size: 83832
-                        type: image/jpeg
-                        rid: 6630e42b72f069422b1022c1
-                        userId: yuT9xp9eEd6HqB3n8
-                        store: 'GridFS:Uploads'
-                        _updatedAt: '2024-06-17T06:55:38.044Z'
-                        identify:
-                          format: jpeg
-                          size:
-                            width: 839
-                            height: 932
-                        complete: true
-                        etag: 3jZf7SJZFCPpf9JK8
-                        path: '/ufs/GridFS:Uploads/666fddea4ac1a8e6404eded7/11.jpg'
-                        progress: 1
-                        token: 498bb849C8
-                        uploadedAt: '2024-06-17T06:55:38.029Z'
-                        uploading: false
-                        url: 'https://pro.writing-demo.dev.rocket.chat/ufs/GridFS:Uploads/666fddea4ac1a8e6404eded7/11.jpg'
+                        url: 'http://localhost:3000/file-upload/64f0c1d2e3a4b5c6d7e8f901/oauth-screen.png'
                         typeGroup: image
                     count: 50
                     offset: 0
-                    total: 2
+                    total: 1
                     success: true
         '400':
           description: Bad Request
@@ -7416,8 +7709,8 @@ paths:
                 Invalid Params:
                   value:
                     success: false
-                    error: 'must have required property ''roomId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''roomId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
 
@@ -7488,8 +7781,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''roomId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''roomId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -7619,10 +7912,26 @@ paths:
                     error: |-
                       must have required property 'roomId'
                        must have required property 'roomName'
-                       must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params
+                       must match exactly one schema in oneOf [error-invalid-params]
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: forbidden
       operationId: get-api-v1-rooms.membersOrderedByRole
       description: |-
         Get room members ordered by their roles. This endpoint sorts the members according to their role in the room in the order `Owners` > `Moderators` > all other members. This can be reversed using the query paramter `sort={"rolePriority":-1}`. You need not be a member of the room.
@@ -7632,6 +7941,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 9.0.0   | Returns `403` instead of `401` when the user lacks the `view-broadcast-member-list` permission for a broadcast room. |
         | 7.3.0   | Added       |
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -7681,11 +7991,17 @@ paths:
       description: |-
         Create a new public or private team in the workspace.
 
-        Permission required: `create-team`. When you create a team from an existing room by passing `room.id`, you also need the `edit-room` permission for that room.
+        Permission required: `create-team`. When you create a team from an existing room by passing `room.id`, you also need the `edit-room` permission for that room. To create an ABAC-managed private team with `abacAttributes`, you also need the `create-abac-managed-room` permission.
+
+        While **Enforce ABAC across all workspace rooms** is on, new private teams must be ABAC-managed and carry every attribute listed in **Attributes required in all ABAC rooms**.
+
+        Creating a team from an existing room with `room.id` removes that room's ABAC attributes and records the removal in the ABAC audit log. If the room has attributes, you also need the `abac-management` and `manage-abac-admin-rooms` permissions or `edit-room-abac-attributes` in that room.
 
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 9.0.0   | Creating a team from an existing room removes the room's ABAC attributes. |
+        | 9.0.0   | Added the `abacAttributes` parameter and the `skippedMembers` response field. |
         | 8.7.0   | Enforced room permission checks when creating a team from an existing room. |
         | 3.13.0  | Added |
       operationId: post-api-v1-teams.create
@@ -7703,7 +8019,10 @@ paths:
                   description: The team name.
                 type:
                   type: integer
-                  description: 'Privacy of the team (0 - Public, 1 - Private).'
+                  enum:
+                    - 0
+                    - 1
+                  description: 'Privacy of the team (0 - Public, 1 - Private). Any other value is rejected with a 400 error.'
                 members:
                   type: array
                   description: The user IDs to add to the team when it is created.
@@ -7730,6 +8049,18 @@ paths:
                 owner:
                   type: string
                   description: Set the owner of the team.
+                abacAttributes:
+                  type: object
+                  description: |-
+                    Optional. Creates the team as an ABAC-managed private team with these attributes. Map of attribute keys to the values to assign, for example `{ "clearance": ["secret"] }`. Keys and values can contain letters, digits, `_` and `-`. Use 1 to 10 keys, each with 1 to 10 unique values.
+                    Requires ABAC to be enabled and the `create-abac-managed-room` permission. The team `type` must be `1` (private); a public team (`type` `0`) is rejected with `error-abac-attributes-private-rooms-only`, not converted to private. You cannot combine it with `room.id`, and `owner`, if sent, must be the caller. You can only assign values returned by `GET /api/v1/abac/attributes.listAssignable`. You must meet the attributes yourself; otherwise the request fails with `error-abac-creator-not-admitted` and no team is created. Members who do not meet the attributes are not added and are listed in `skippedMembers`.
+                  additionalProperties:
+                    type: array
+                    items:
+                      type: string
+                  example:
+                    clearance:
+                      - secret
               required:
                 - name
                 - type
@@ -7752,6 +8083,15 @@ paths:
                   type: 0
                   room:
                     id: 6513afeda2f73c7460e18c86
+              Create an ABAC-managed private team:
+                value:
+                  name: secret-projects-team
+                  type: 1
+                  members:
+                    - aB3dE5fG7hJ9kL1mN
+                  abacAttributes:
+                    clearance:
+                      - secret
       responses:
         '200':
           description: |-
@@ -7785,6 +8125,11 @@ paths:
                         type: string
                       roomId:
                         type: string
+                  skippedMembers:
+                    type: array
+                    description: Usernames of the requested members who were not added because they do not meet the team's ABAC attributes. Returned only when `abacAttributes` was sent and at least one member was skipped.
+                    items:
+                      type: string
                   success:
                     type: boolean
               examples:
@@ -7801,6 +8146,71 @@ paths:
                       _updatedAt: '2023-09-29T00:27:15.189Z'
                       roomId: 651619e3a2f73c7460e18cc7
                     success: true
+                ABAC-managed private team created:
+                  value:
+                    team:
+                      _id: 6720f2b4c4d5e6f7a8b9c0e2
+                      name: secret-projects-team
+                      type: 1
+                      createdAt: '2026-10-28T15:25:40.117Z'
+                      createdBy:
+                        _id: aB3dE5fG7hJ9kL1mN
+                        username: jane.doe
+                      _updatedAt: '2026-10-28T15:25:40.117Z'
+                      roomId: 6720f2b4c4d5e6f7a8b9c0e4
+                    skippedMembers:
+                      - john.roe
+                      - max.poe
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    description: Present only when a specific attribute or cause is at fault.
+              examples:
+                Invalid team type:
+                  value:
+                    success: false
+                    error: must be equal to one of the allowed values
+                    errorType: error-invalid-params
+                ABAC not enabled:
+                  value:
+                    success: false
+                    error: error-abac-not-enabled
+                    errorType: error-abac-not-enabled
+                ABAC attributes on a public team:
+                  value:
+                    success: false
+                    error: error-abac-attributes-private-rooms-only
+                    errorType: error-abac-attributes-private-rooms-only
+                Creator does not meet the ABAC attributes:
+                  value:
+                    success: false
+                    error: error-abac-creator-not-admitted
+                    errorType: error-abac-creator-not-admitted
+                    details:
+                      cause: error-only-compliant-users-can-be-added-to-abac-rooms
+                ABAC attributes with an existing room:
+                  value:
+                    success: false
+                    error: error-abac-attributes-room-conversion
+                    errorType: error-abac-attributes-room-conversion
+                ABAC attributes with another owner:
+                  value:
+                    success: false
+                    error: error-abac-attributes-owner-must-be-caller
+                    errorType: error-abac-attributes-owner-must-be-caller
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -7818,7 +8228,7 @@ paths:
                 Missing room permissions:
                   value:
                     success: false
-                    error: unauthorized
+                    error: forbidden
   /api/v1/teams.listAll:
     get:
       tags:
@@ -7928,7 +8338,15 @@ paths:
       tags:
         - Teams
       summary: Get List of Teams
-      description: Lists the public and private teams the request sender is part of.
+      # DoneDone: unverified: whether query and fields are rejected, ignored, or applied could not be confirmed (TC-13, no teams on the test workspace); confirm with API owner
+      description: |-
+        Lists the public and private teams the request sender is part of.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 9.0.0   | Removed the `query` parameter. |
+        <!-- TODO: add the row for the version that introduced teams.list; the existing operation has no changelog and the 8.9.0..9.0.0-rc.0 diff does not show it. -->
       operationId: get-api-v1-teams.list
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -7936,7 +8354,6 @@ paths:
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/query'
       responses:
         '200':
           description: |-
@@ -8089,6 +8506,14 @@ paths:
         Updates an existing team (name and type). 
         
         Permission required: `edit-team`
+        
+        While ABAC is enabled, an ABAC-managed private team cannot be made public. The request fails with `error-action-not-allowed` and no change is applied, including a name change sent in the same request. While ABAC is disabled, making the team public removes the team room's ABAC attributes. In that case, you also need the `abac-management` and `manage-abac-admin-rooms` permissions or `edit-room-abac-attributes` in the team room.
+        
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 9.0.0   | Refused making an ABAC-managed team public while ABAC is enabled, with `error-action-not-allowed`. Making a team public while ABAC is disabled removes its ABAC attributes. |
+        <!-- TODO: Add the row for the version that introduced this endpoint (the "Added" row is missing from this changelog). -->
       operationId: post-api-v1-teams.update
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -8123,6 +8548,25 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                ABAC-managed team cannot be made public:
+                  value:
+                    success: false
+                    error: Changing an ABAC managed private room to public is not allowed [error-action-not-allowed]
+                    errorType: error-action-not-allowed
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/teams.addMembers:
@@ -8134,6 +8578,16 @@ paths:
         Add members to a team.
         
         Permissions required: `add-team-member` or `edit-team-member`
+
+        To assign roles in `members[].roles`, you also need the permission for each role in the team's main room: `set-owner` for `owner`, `set-moderator` for `moderator`, and `set-leader` for `leader`. Any other role except `member` requires `access-permissions`, and the `admin` role also requires `assign-admin-role`. If you don't have them, the request fails with a `403` error.
+
+        By default, only the `admin` and `owner` roles have `set-owner`, `set-moderator`, and `set-leader`. A team moderator can add members with the `member` role only.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 9.0.0   | Added permission checks for the roles in `members[].roles`. |
+        <!-- TODO: add the row for the version that introduced teams.addMembers; it was not verified from the 9.0.0 diff. -->
       operationId: post-api-v1-teams.addMembers
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -8173,8 +8627,46 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Invalid Params:
+                  value:
+                    success: false
+                    error: |-
+                      must have required property 'members'
+                       must have required property 'teamName'
+                       must match exactly one schema in oneOf
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: forbidden
   /api/v1/teams.members:
     get:
       tags:
@@ -8308,6 +8800,16 @@ paths:
         Updates a team member's roles. 
 
         Permission required: `edit-team-member`
+
+        You also need the permission for each role you add or remove, in the team's main room: `set-owner` for `owner`, `set-moderator` for `moderator`, and `set-leader` for `leader`. Any other role except `member` requires `access-permissions`, and the `admin` role also requires `assign-admin-role`. If you don't have them, the request fails with a `403` error.
+
+        By default, only the `admin` and `owner` roles have `set-owner`, `set-moderator`, and `set-leader`. A team moderator cannot give these roles to team members.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 9.0.0   | Added permission checks for the roles added or removed in `member.roles`. |
+        <!-- TODO: add the row for the version that introduced teams.updateMember; it was not verified from the 9.0.0 diff. -->
       operationId: post-api-v1-teams.updateMembers
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -8346,8 +8848,50 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Invalid Params:
+                  value:
+                    success: false
+                    error: |-
+                      must have required property 'member'
+                       must have required property 'teamName'
+                       must match exactly one schema in oneOf
+                    errorType: error-invalid-params
+                Invalid Team Id:
+                  value:
+                    success: false
+                    error: team-does-not-exist
         '401':
           $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: forbidden
   /api/v1/teams.leave:
     post:
       tags:
@@ -8543,6 +9087,16 @@ paths:
       summary: Convert Team to Channel
       description: |-
         Convert a team to a channel. Permission required: `convert-team`
+        
+        The team's main room loses its ABAC attributes in this operation. The removal is recorded in the ABAC audit log as an `abac.object.attributes.removed` event for the room, with `reason` `api` and `change` `all-deleted`. If the team room has attributes, you also need the `abac-management` and `manage-abac-admin-rooms` permissions or `edit-room-abac-attributes` in the team room. Otherwise the request fails with `error-abac-not-authorized-to-modify-room` before anything changes.
+        Rooms that leave the team keep their attributes.
+        <!-- TODO: Confirm the HTTP status and response body (error and errorType) returned for error-abac-not-authorized-to-modify-room on this endpoint. -->
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 9.0.0   | Converting a team to a channel removes the team room's ABAC attributes. |
+        <!-- TODO: Add the row for the version that introduced this endpoint (the "Added" row is missing from this changelog). -->
       operationId: post-api-v1-teams.convertToChannel
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -8597,6 +9151,16 @@ paths:
         Add existing rooms to a team.
         
         Permission required: `move-room-to-team`
+        
+        Rooms moved into the team lose their ABAC attributes. Each removal is recorded in the ABAC audit log as an `abac.object.attributes.removed` event for the room, with `reason` `api` and `change` `all-deleted`. If a room has attributes, you also need the `abac-management` and `manage-abac-admin-rooms` permissions or `edit-room-abac-attributes` in that room. Otherwise the request fails with `error-abac-not-authorized-to-modify-room` before anything changes.
+        If you are not a member of a private room in `rooms`, the request fails with `invalid-room` and no room is moved, even with administrator permissions.
+        <!-- TODO: Confirm the HTTP status and response body (error and errorType) returned for error-abac-not-authorized-to-modify-room on this endpoint. -->
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 9.0.0   | Moving a room into a team removes its ABAC attributes. |
+        <!-- TODO: Add the row for the version that introduced this endpoint (the "Added" row is missing from this changelog). -->
       operationId: post-api-v1-teams.addRooms
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -8779,6 +9343,22 @@ paths:
                           channels: [ ]
                         teamId: 63f3efc4b000b6b6d86704b2
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Room not accessible:
+                  value:
+                    success: false
+                    error: invalid-room
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/teams.removeRoom:
@@ -9807,8 +10387,8 @@ paths:
                       must have required property 'teamId'
                        must have required property 'teamName'
                        must have required property 'roomId'
-                       must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params
+                       must match exactly one schema in oneOf [error-invalid-params]
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
 
@@ -9823,6 +10403,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 9.0.0   | Removed the `query` parameter. The `_id` parameter is required. |
         | 0.52.0  | Added       |
         |7.0.0   | Replaced `query` parameter with `_id` parameter       |        
       operationId: get-api-v1-groups.online
@@ -9908,6 +10489,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 9.0.0   | Removed the `query` and `fields` parameters. |
         | 1.1.0  | Separate permissions in incoming and outgoing. |
         | 0.49.0 | Added                                          |
       operationId: get-api-v1-groups.getIntegrations
@@ -9927,8 +10509,6 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/query'
-        - $ref: '#/components/parameters/fields'
       responses:
         '200':
           description: OK
@@ -10401,6 +10981,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 9.0.0   | Returns `403` instead of `400` when the user lacks the `archive-room` permission. <!-- TODO: document the room-not-found 400 case of groups.archive; only the invalid-body 400 was observed (DOCS-1801 TC-07). --> |
         | 0.48.0  | Added       |
       operationId: post-api-v1-groups.archive
       parameters:
@@ -10437,21 +11018,33 @@ paths:
                     type: string
                   errorType:
                     type: string
-                  details:
-                    type: object
-                    properties:
-                      method:
-                        type: string
               examples:
-                No permission:
+                Missing roomId:
+                  value:
+                    success: false
+                    errorType: error-invalid-params
+                    error: |-
+                      must have required property 'roomId'
+                       must have required property 'roomName'
+                       must match exactly one schema in oneOf
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
                   value:
                     success: false
                     error: 'Not authorized [error-not-authorized]'
-                    errorType: error-not-authorized
-                    details:
-                      method: archiveRoom
-        '401':
-          $ref: '#/components/responses/authorizationError'
   /api/v1/groups.close:
     post:
       tags:
@@ -10609,10 +11202,15 @@ paths:
         The following permissions are required:
         * `create-p`: This permission is required to create a private channel.
         * `create-team-group`: This permission is required if you want to create a private channel from an existing team.
+        * `create-abac-managed-room`: This permission is required if you send `abacAttributes`.
+        
+        While **Enforce ABAC across all workspace rooms** is on, new private channels must be ABAC-managed and carry every attribute listed in **Attributes required in all ABAC rooms**.
         
         ### Changelog
         | Version | Description                                                                                 |
         | ------- | ------------------------------------------------------------------------------------------- |
+        | 9.0.0   | Added the `extraData.xmppFederated` parameter.                                              |
+        | 9.0.0   | Added the `abacAttributes` parameter and the `skippedMembers` response field.               |
         | 8.8.0   | Added support for enforcing end-to-end encryption when creating private rooms.             |
         | 6.4.1   | Added `excludeSelf` param                                                                   |
         | 0.35.0  | Added                                                                                       |
@@ -10648,6 +11246,18 @@ paths:
                   type: object
                   description: |-
                    You add custom fields for private rooms using this parameter. Enter the key and value that you want to associate with this room. For example, `{ "company": "sell-and-more" }`. The custom fields are not displayed in the workspace UI.
+                abacAttributes:
+                  type: object
+                  description: |-
+                    Optional. Creates the private channel as an ABAC-managed room with these attributes. Map of attribute keys to the values to assign, for example `{ "clearance": ["secret"] }`. Keys and values can contain letters, digits, `_` and `-`. Use 1 to 10 keys, each with 1 to 10 unique values.
+                    Requires ABAC to be enabled and the `create-abac-managed-room` permission. You can only assign values returned by `GET /api/v1/abac/attributes.listAssignable`. You must meet the attributes yourself; otherwise the request fails with `error-abac-creator-not-admitted` and no room is created. A value outside the values you are offered returns `error-abac-invalid-attributes`. Members who do not meet the attributes are not added and are listed in `skippedMembers`.
+                  additionalProperties:
+                    type: array
+                    items:
+                      type: string
+                  example:
+                    clearance:
+                      - secret
                 extraData:
                   type: object
                   description: |-
@@ -10664,6 +11274,14 @@ paths:
                     teamId:
                       type: string
                       description: Enter the team ID for which you want to create a group. You will get an error if the team does not exist.
+                    xmppFederated:
+                      type: boolean
+                      description: |-
+                        Set to `true` to create the private channel as an XMPP federated room that users on remote XMPP servers can join. Its XMPP address is built from the private channel name, the MUC subdomain, and the domain set for the native XMPP server.
+                        The native XMPP server must be enabled with a valid domain. Otherwise, the request fails with `error-xmpp-federation-disabled`. You can't combine it with `federated`, `encrypted`, `broadcast`, or `readOnly`; the request fails with `error-xmpp-room-options-not-allowed`. With `abacAttributes`, the request fails with `error-abac-federated-room-attributes`.
+                        The created private channel is returned with an `xmppFederation` object that holds its XMPP address in `muc`.
+                        <!-- TODO: confirm the license requirement (federation module) for extraData.xmppFederated and the response when the workspace has no such license. -->
+                      example: true
               required:
                 - name
             examples:
@@ -10680,6 +11298,20 @@ paths:
                     broadcast: true
                     encrypted: true
                     teamId: 658441562dd9f928ad9951aa
+              ABAC-managed private channel:
+                value:
+                  name: secret-projects
+                  members:
+                    - jane.doe
+                    - john.roe
+                  abacAttributes:
+                    clearance:
+                      - secret
+              XMPP federated private channel:
+                value:
+                  name: xmpp-private
+                  extraData:
+                    xmppFederated: true
       responses:
         '200':
           description: OK
@@ -10714,6 +11346,27 @@ paths:
                         type: boolean
                       _updatedAt:
                         type: string
+                      usersCount:
+                        type: integer
+                      abacAttributes:
+                        type: array
+                        description: The room's ABAC attributes. Returned when the private channel was created with `abacAttributes`.
+                        items:
+                          type: object
+                          properties:
+                            key:
+                              type: string
+                            values:
+                              type: array
+                              items:
+                                type: string
+                      xmppFederation:
+                        $ref: '#/components/schemas/XmppFederation'
+                  skippedMembers:
+                    type: array
+                    description: Usernames of the requested members who were not added because they do not meet the room's ABAC attributes. Returned only when `abacAttributes` was sent and at least one member was skipped.
+                    items:
+                      type: string
                   success:
                     type: boolean
               examples:
@@ -10732,6 +11385,50 @@ paths:
                       sysMes: true
                       _updatedAt: '2016-12-09T16:53:06.761Z'
                     success: true
+                ABAC-managed private channel:
+                  value:
+                    group:
+                      _id: 6720f1a3c4d5e6f7a8b9c0d1
+                      name: secret-projects
+                      t: p
+                      msgs: 0
+                      usersCount: 1
+                      u:
+                        _id: aB3dE5fG7hJ9kL1mN
+                        username: jane.doe
+                      ts: '2026-10-28T15:20:11.402Z'
+                      ro: false
+                      sysMes: true
+                      _updatedAt: '2026-10-28T15:20:11.402Z'
+                      abacAttributes:
+                        - key: department
+                          values:
+                            - engineering
+                    skippedMembers:
+                      - john.roe
+                      - max.poe
+                    success: true
+                XMPP federated private channel:
+                  value:
+                    group:
+                      _id: Hn4WcV8sQe2YtJ6aR
+                      name: xmpp-private
+                      t: p
+                      msgs: 0
+                      usersCount: 1
+                      u:
+                        _id: aobEdbYhXfu5hkeqG
+                        username: tester
+                      ts: '2026-10-29T13:06:40.118Z'
+                      ro: false
+                      sysMes: true
+                      _updatedAt: '2026-10-29T13:06:40.190Z'
+                      xmppFederation:
+                        version: 1
+                        role: host-muc
+                        muc: xmpp-private@conference.chat.example.com
+                        origin: chat.example.com
+                    success: true
         '400':
           description: Bad Request
           content:
@@ -10745,6 +11442,9 @@ paths:
                     type: string
                   errorType:
                     type: string
+                  details:
+                    type: object
+                    description: Present only when a specific attribute or cause is at fault.
               examples:
                 Name is required:
                   value:
@@ -10755,6 +11455,51 @@ paths:
                     success: false
                     error: 'Workspace policy requires all private rooms to be encrypted. [error-encrypted-private-rooms-enforced]'
                     errorType: error-encrypted-private-rooms-enforced
+                ABAC not enabled:
+                  value:
+                    success: false
+                    error: error-abac-not-enabled
+                    errorType: error-abac-not-enabled
+                ABAC attributes not allowed:
+                  value:
+                    success: false
+                    error: error-abac-attributes-not-allowed
+                    errorType: error-abac-attributes-not-allowed
+                ABAC value not assignable:
+                  value:
+                    success: false
+                    error: error-abac-attribute-not-assignable
+                    errorType: error-abac-attribute-not-assignable
+                    details:
+                      cause: error-invalid-attribute-values
+                      attributes:
+                        - key: clearance
+                          values:
+                            - topsecret
+                Creator does not meet the ABAC attributes:
+                  value:
+                    success: false
+                    error: error-abac-creator-not-admitted
+                    errorType: error-abac-creator-not-admitted
+                    details:
+                      cause: error-only-compliant-users-can-be-added-to-abac-rooms
+                Invalid ABAC attribute values:
+                  value:
+                    success: false
+                    error: error-abac-invalid-attributes
+                    errorType: error-abac-invalid-attributes
+                    details:
+                      cause: error-invalid-attribute-values
+                Required ABAC attributes missing:
+                  value:
+                    success: false
+                    error: error-abac-attributes-required
+                    errorType: error-abac-attributes-required
+                XMPP federation not enabled:
+                  value:
+                    success: false
+                    error: XMPP federation is not enabled [error-xmpp-federation-disabled]
+                    errorType: error-xmpp-federation-disabled
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/groups.delete:
@@ -11085,16 +11830,20 @@ paths:
       tags:
         - Groups
       summary: Invite Users to Group
+      # DoneDone: unverified, DOCS-1809 TC-07 could not confirm bare JID invites (400 error-user-not-found; xmpp-server-service deployment unknown); confirm with API owner
       description: |-
         Invite one user or bulk users to a private channel. Any of the following permissions are required:
         * `add-user-to-joined-room`: This permission is required if you want to add users to the channel that you have joined.
         * `add-user-to-any-p-room`: This permission is required to add users to any private channel.
 
         You can identify the group by `roomId` or `roomName`, and the user(s) by `userId`, `username`, `userIds`, or `usernames`.
-        
+
+        <!-- TODO: confirm inviting users of remote XMPP servers by bare JID (for example, `alice@xmpp.example.org`) in `usernames` or `username` to an XMPP federated room hosted by this workspace. In 9.0.0-rc.0 testing, a bare JID returned `error-user-not-found`. Confirm whether the XMPP server service must be running. -->
+
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 9.0.0   | Added inviting remote XMPP users by bare JID to XMPP federated rooms. <!-- TODO: confirm; not observed in DOCS-1809 testing. --> |
         | 0.48.0  | Added       |
       operationId: post-api-v1-groups.invite
       parameters:
@@ -11247,6 +11996,13 @@ paths:
                     success: false
                     error: 'Please provide "userId" or "username" or "userIds" or "usernames" as param [error-users-params-not-provided]'
                     errorType: error-users-params-not-provided
+                User not found:
+                  value:
+                    success: false
+                    error: User not found [error-user-not-found]
+                    errorType: error-user-not-found
+                    details:
+                      method: addUsersToRoom
                 Permission required:
                   value:
                     success: false
@@ -11503,6 +12259,7 @@ paths:
       tags:
         - Groups
       summary: Get List of User Groups
+      # DoneDone: observed behavior; requirement failure (TC-12), confirm with API owner
       description: |-
         Lists all the private groups/channels of the workspace.
         
@@ -11511,6 +12268,7 @@ paths:
         ### Changelog
         | Version | Description                    |
         | ------- | ------------------------------ |
+        | 9.0.0   | Removed the `query` and `fields` parameters. The endpoint ignores them and returns unfiltered results with full group objects. |
         | 0.62.0  | Add 'query' parameter support. |
         | 0.59.0  | Added                          |
       operationId: get-api-v1-groups.listAll
@@ -11520,8 +12278,6 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/query'
-        - $ref: '#/components/parameters/fields'
       responses:
         '200':
           description: OK
@@ -11821,6 +12577,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 9.0.0   | Removed the `fields` parameter. |
         | 7.0.0  | Added `mentionIds`, `starredIds`, `pinned` query parameters.|
         | 0.59.0  | Added       |
 
@@ -11830,7 +12587,6 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/Optional-RoomId'
         - $ref: '#/components/parameters/Optional-RoomName'
-        - $ref: '#/components/parameters/fields'
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
@@ -11978,7 +12734,7 @@ paths:
                     error: |-
                       must have required property 'roomId'
                        must have required property 'roomName'
-                       must match exactly one schema in oneOf [invalid-params]
+                       must match exactly one schema in oneOf [error-invalid-params]
                     errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -13295,11 +14051,15 @@ paths:
         - Groups
       summary: Get Group Files
       description: |-
-        Get all media files shared in a private channel.  
-        
+        Get all media files shared in a private channel.
+
+        Files uploaded on version 9.0.0 or later return `path` as `/file-upload/<fileId>/<fileName>` and `url` as the absolute form of the same link. For files uploaded before 9.0.0, `url` can still contain a legacy `/ufs/...` link. Legacy `/ufs` links no longer return the file; the request returns the web client instead. To download the file, use `path` or build `/file-upload/<_id>/<name>`.
+
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 9.0.0   | Removed the `query` and `fields` parameters. |
+        | 9.0.0   | Removed the legacy `/ufs` file download path. File links use `/file-upload/<fileId>/<fileName>`. |
         | 0.64.0  | Change userId to user object in response       |
         | 0.59.0  | Added                                          |
       operationId: get-api-v1-groups.files
@@ -13311,8 +14071,6 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/query'
-        - $ref: '#/components/parameters/fields'
         - $ref: '#/components/parameters/filterTypeGroup'
         - $ref: '#/components/parameters/filterName'
       responses:
@@ -13385,7 +14143,7 @@ paths:
                 Example:
                   value:
                     files:
-                      - _id: S78TNnvaWGwdYRaCD
+                      - _id: 64f0c1d2e3a4b5c6d7e8f903
                         name: images.jpeg
                         size: 9778
                         type: image/jpeg
@@ -13403,10 +14161,10 @@ paths:
                         _updatedAt: '2018-03-08T14:47:37.003Z'
                         instanceId: uZG54xuoKauKHykbQ
                         etag: jPaviS9qG22xC5sDC
-                        path: '/ufs/GridFS:Uploads/S78TNnvaWGwdYRaCD/images.jpeg'
+                        path: /file-upload/64f0c1d2e3a4b5c6d7e8f903/images.jpeg
                         token: 28cAb868d9
                         uploadedAt: '2018-03-08T14:47:37.295Z'
-                        url: '/ufs/GridFS:Uploads/S78TNnvaWGwdYRaCD/images.jpeg'
+                        url: 'http://localhost:3000/file-upload/64f0c1d2e3a4b5c6d7e8f903/images.jpeg'
                     count: 1
                     offset: 0
                     total: 1
@@ -13576,9 +14334,14 @@ paths:
       description: |-
         Convert a private channel to a team. Permissions required: `create-team`, `edit-room`
         
+        The private channel loses its ABAC attributes in this operation. The removal is recorded in the ABAC audit log as an `abac.object.attributes.removed` event for the room, with `reason` `api` and `change` `all-deleted`. If the channel has attributes, you also need the `abac-management` and `manage-abac-admin-rooms` permissions or `edit-room-abac-attributes` in the channel. Otherwise the request fails with `error-abac-not-authorized-to-modify-room` before anything changes.
+        If you are not a member of the private channel, the request fails with `error-room-not-found`, even with administrator permissions.
+        <!-- TODO: Confirm the HTTP status and response body (error and errorType) returned for error-abac-not-authorized-to-modify-room on this endpoint. -->
+
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 9.0.0   | Converting a private channel to a team removes its ABAC attributes. |
         | 3.13.0  | Added       |
       operationId: post-api-v1-groups.convertToTeam
       parameters:
@@ -13657,15 +14420,21 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
               examples:
                 Team name exists:
                   value:
                     success: false
                     error: team-name-already-exists
-                Room name is required:
+                Room ID is required:
                   value:
                     success: false
-                    error: The parameter "roomId" or "roomName" is required
+                    error: |-
+                      must have required property 'roomId'
+                       must have required property 'roomName'
+                       must match exactly one schema in oneOf
+                    errorType: error-invalid-params
                 Room not found:
                   value:
                     success: false
@@ -13775,6 +14544,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 9.0.0   | Removed the `query` and `fields` parameters. Use `text`, `type`, and `workspace` instead. |
         | 8.9.0   | Changed the rate limit to 100 requests every 100 seconds per client IP addres. |
         | 7.0.0   | Added `type`, `workspace` and `text` query parameters |
         | 1.0.0   | Added workspace query param |
@@ -13804,16 +14574,9 @@ paths:
           schema:
             type: string
           example: "local"
-        - name: query
-          in: query
-          description: 'The query to search the workspace directory. When `type` is users you can send an additional workspace field, that can be local (default) or all. Workspace=all will work only if <a href="https://docs.rocket.chat/use-rocket.chat/rocket.chat-federation" target="_blank">federation</a> is enabled.'
-          required: true
-          schema:
-            example: '{"text": "rocket", "type": "users", "workspace": "local"}'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/fields'
       responses:
         '200':
           description: OK
@@ -13919,8 +14682,8 @@ paths:
                 Missing roomId:
                   value:
                     success: false
-                    error: 'must have required property ''roomId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''roomId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/rooms.hide:
@@ -13958,23 +14721,20 @@ paths:
                     type: string
                   errorType:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: 'must have required property ''roomId'' [invalid-params]'
-                    errorType: invalid-params
               examples:
                 Error due to missing roomId:
                   value:
                     success: false
-                    error: 'must have required property ''roomId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: must have required property 'roomId'
+                    errorType: error-invalid-params
                 Room already hidden error:
                   value:
                     success: false
                     error: error-room-already-hidden
         '401':
-          description: Unauthorized
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -13984,15 +14744,11 @@ paths:
                     type: boolean
                   error:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: unauthorized
               examples:
-                Example 1:
+                Permission Error:
                   value:
                     success: false
-                    error: unauthorized
+                    error: forbidden
       operationId: post-api-v1-rooms.hide
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -14019,6 +14775,7 @@ paths:
 
         | Version | Description                          |
         | ------- | ------------------------------------ |
+        | 9.0.0   | Returns `403` instead of `401` when the user cannot access the room. |
         | 7.4.0   | Added                                |
 
   /api/v1/findOrCreateInvite:
@@ -14276,8 +15033,8 @@ paths:
                     error: |-
                       must have required property 'userId'
                        must have required property 'username'
-                       must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params
+                       must match exactly one schema in oneOf [error-invalid-params]
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: get-api-v1-rooms.isMember
@@ -14727,7 +15484,7 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    errorType: invalid-params
+                    errorType: error-invalid-params
                     error: must have required property 'fileId'
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -15000,6 +15757,12 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
+                    description: Returned for ABAC error contract keys. Holds the same key as `error`.
+                  details:
+                    type: object
+                    description: Returned for some ABAC error contract keys. Lists the refused values (`attributes`) or required keys (`keys`).
               examples:
                 ABAC not enabled:
                   value:
@@ -15013,6 +15776,39 @@ paths:
                   value:
                     success: false
                     error: error-invalid-attribute-values
+                Federated room:
+                  value:
+                    success: false
+                    error: error-abac-federated-room-attributes
+                    errorType: error-abac-federated-room-attributes
+                Discussion:
+                  value:
+                    success: false
+                    error: error-abac-discussion-room-attributes
+                    errorType: error-abac-discussion-room-attributes
+                Value not assignable:
+                  value:
+                    success: false
+                    error: error-abac-attribute-not-assignable
+                    errorType: error-abac-attribute-not-assignable
+                    details:
+                      attributes:
+                        - key: destination
+                          values:
+                            - Brazil
+                Required attributes removed:
+                  value:
+                    success: false
+                    error: error-abac-required-attributes-removed
+                    errorType: error-abac-required-attributes-removed
+                    details:
+                      keys:
+                        - clearance
+                All attributes cleared:
+                  value:
+                    success: false
+                    error: error-abac-room-attributes-cleared
+                    errorType: error-abac-room-attributes-cleared
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -15030,7 +15826,7 @@ paths:
                 Missing required ABAC permissions:
                   value:
                     success: false
-                    error: error-not-authorized
+                    error: User does not have the permissions required for this action [error-unauthorized]
       operationId: post-abac-rooms-rid-attributes
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -15039,12 +15835,20 @@ paths:
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Defense.svg" alt="Defense" style="display: block; margin: auto"></div>
 
         - Replaces the full ABAC attribute set for a room.
-        - Sets the complete set of ABAC attributes on the specified room by providing an attributes object that maps attribute keys to arrays of allowed values; any previously assigned attributes not included in the request are removed.
-        - Requires the ABAC license, the `abac-management` and `manage-abac-admin-rooms` permissions, and the global setting `ABAC_Enabled` to be turned on.
+        - Sets the complete set of ABAC attributes on the specified room by providing an attributes object that maps attribute keys to arrays of allowed values; any previously assigned attributes not included in the request are removed. Send an empty `attributes` object to remove every attribute from the room.
+        - Requires the ABAC license and the global setting `ABAC_Enabled` to be turned on.
+        - Permissions required: `abac-management` and `manage-abac-admin-rooms`, or `edit-room-abac-attributes` in the room. Administrators and room owners have `edit-room-abac-attributes` by default.
+        - Users who edit through `edit-room-abac-attributes` have extra limits. With the local Policy Decision Point and **Restrict room creators and editors to attributes they hold** on (the default), they can only add values they hold. While **Enforce ABAC across all workspace rooms** is on and attributes are required, they cannot remove a required attribute or every attribute. These errors use the ABAC error contract: the key is in both `error` and `errorType`, and `details` lists the refused values or keys. ABAC administrators are not subject to these limits.
+        - With **Restrict room creators and editors to attributes they hold** off, a room owner can add a value they do not hold. The owner then loses access to the room along with every other member who does not hold it.
+        - Room members without `edit-room-abac-attributes` and users who are not room members receive a `403` error.
+        - The change applies as soon as the request succeeds. Members who do not hold every value listed for each key are removed from the room, including the caller. To see who would lose access before saving, call `POST /api/v1/abac/rooms.evaluateMembership` with the room ID and the proposed attributes.
+        - Errors outside the ABAC error contract, such as `error-abac-not-enabled`, `error-invalid-attribute-values` and `error-attribute-definition-not-found`, return only `error`, without `errorType`.
+        - Adding attributes to a federated room or a discussion is refused for every user.
 
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 9.0.0   | Added the `edit-room-abac-attributes` room permission as an alternative to the ABAC administration permissions. An empty `attributes` object now clears the room. Federated rooms and discussions are refused. |
         | 8.0.0   | Added |
         | 8.5.0   | Added the `manage-abac-admin-rooms` granular permission requirement. |
       requestBody:
@@ -15052,6 +15856,18 @@ paths:
           application/json:
             schema:
               type: object
+              properties:
+                attributes:
+                  type: object
+                  description: |-
+                    Map of attribute keys to the values the room requires, for example `{ "department": ["navControl"] }`. Replaces every attribute the room has. A member must hold every value listed for a key to keep access. Send an empty object to remove all attributes.
+                  additionalProperties:
+                    type: array
+                    items:
+                      type: string
+                  example:
+                    department:
+                      - navControl
             examples:
               Example 1:
                 value:
@@ -15062,6 +15878,9 @@ paths:
                     region:
                       - asia
                       - europa
+              Clear all attributes:
+                value:
+                  attributes: {}
     delete:
       summary: Delete all ABAC attributes
       tags:
@@ -15175,6 +15994,9 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
+                    description: Returned for ABAC error contract keys. Holds the same key as `error`.
               examples:
                 ABAC not enabled:
                   value:
@@ -15192,10 +16014,16 @@ paths:
                   value:
                     success: false
                     error: error-duplicate-attribute-key
-                Cannot convert default room to ABAC:
+                Federated room:
                   value:
                     success: false
-                    error: error-cannot-convert-default-room-to-abac
+                    error: error-abac-federated-room-attributes
+                    errorType: error-abac-federated-room-attributes
+                Discussion:
+                  value:
+                    success: false
+                    error: error-abac-discussion-room-attributes
+                    errorType: error-abac-discussion-room-attributes
                 Room not found:
                   value:
                     success: false
@@ -15231,18 +16059,24 @@ paths:
                 Missing required ABAC permissions:
                   value:
                     success: false
-                    error: error-not-authorized
+                    error: User does not have the permissions required for this action [error-unauthorized]
       operationId: post-abac-rooms-rid-attributes-key
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Defense.svg" alt="Defense" style="display: block; margin: auto"></div>
 
         - Adds a single ABAC attribute key to a room.
         - Creates a new ABAC attribute on the specified room for the given key, assigning it the provided values array; fails if the room already has this key or if the key/values are not allowed by the global attribute definition.
+        - Members who do not hold the attribute are removed from the room as soon as the attribute is added, including the room owner and the administrator who made the call.
+        - Default rooms and team default rooms can carry attributes. New users and team members are only added automatically to the attributed rooms they qualify for.
         - Requires the ABAC license, the `abac-management` and `manage-abac-admin-rooms` permissions, and the global setting `ABAC_Enabled` to be turned on.
+        - The `edit-room-abac-attributes` room permission does not grant access to this endpoint. Room owners who hold only that permission receive a `403` error. They can change a room's attributes with `POST /api/v1/abac/rooms/:rid/attributes`.
+        - Errors such as `error-duplicate-attribute-key`, `error-room-not-found` and `error-invalid-attribute-values` return only `error`, without `errorType` or `details`.
 
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 9.0.0   | Federated rooms and discussions are refused with `error-abac-federated-room-attributes` and `error-abac-discussion-room-attributes`. |
+        | 9.0.0   | Default rooms can carry ABAC attributes. Removed the `error-cannot-convert-default-room-to-abac` error. |
         | 8.0.0   | Added |
         | 8.5.0   | Added the `manage-abac-admin-rooms` granular permission requirement. |
       parameters:
@@ -15294,6 +16128,9 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
+                    description: Returned for ABAC error contract keys. Holds the same key as `error`.
               examples:
                 Attribute definition missing:
                   value:
@@ -15307,14 +16144,25 @@ paths:
                   value:
                     success: false
                     error: error-room-not-found
-                Cannot convert default room to ABAC:
-                  value:
-                    success: false
-                    error: error-cannot-convert-default-room-to-abac
                 ABAC not enabled:
                   value:
                     success: false
                     error: error-abac-not-enabled
+                Federated room:
+                  value:
+                    success: false
+                    error: error-abac-federated-room-attributes
+                    errorType: error-abac-federated-room-attributes
+                Discussion:
+                  value:
+                    success: false
+                    error: error-abac-discussion-room-attributes
+                    errorType: error-abac-discussion-room-attributes
+                Empty values array:
+                  value:
+                    success: false
+                    error: must NOT have fewer than 1 items
+                    errorType: error-invalid-params
         '401':
           description: Unauthorized
           content:
@@ -15346,18 +16194,23 @@ paths:
                 Missing required ABAC permissions:
                   value:
                     success: false
-                    error: error-not-authorized
+                    error: User does not have the permissions required for this action [error-unauthorized]
       operationId: put-abac-rooms-rid-attributes-key
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Defense.svg" alt="Defense" style="display: block; margin: auto"></div>
 
         - Sets the values of a single ABAC attribute on a room.
-        - Replaces the existing values for the given attribute key on the specified room with the provided values array (or creates the attribute if it does not yet exist), enforcing the global attribute definition and ABAC validation rules.
+        - Replaces the existing values for the given attribute key on the specified room with the provided values array (or creates the attribute if it does not yet exist), enforcing the global attribute definition and ABAC validation rules. Other keys on the room are not changed.
+        - Members who do not hold every value of the key are removed from the room as soon as the values are saved.
         - Requires the ABAC license, the `abac-management` and `manage-abac-admin-rooms` permissions, and the global setting `ABAC_Enabled` to be turned on.
+        - The `edit-room-abac-attributes` room permission does not grant access to this endpoint. Room owners who hold only that permission receive a `403` error. They can change a room's attributes with `POST /api/v1/abac/rooms/:rid/attributes`.
+        - Errors such as `error-room-not-found` and `error-invalid-attribute-values` return only `error`, without `errorType` or `details`. An empty `values` array returns `error-invalid-params`.
 
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 9.0.0   | Federated rooms and discussions are refused with `error-abac-federated-room-attributes` and `error-abac-discussion-room-attributes`. |
+        | 9.0.0   | Default rooms can carry ABAC attributes. Removed the `error-cannot-convert-default-room-to-abac` error. |
         | 8.0.0   | Added |
         | 8.5.0   | Added the `manage-abac-admin-rooms` granular permission requirement. |
       parameters:
@@ -16241,6 +17094,186 @@ paths:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
     parameters: []
+  /api/v1/abac/attributes.listKeys:
+    get:
+      tags:
+        - ABAC
+      summary: List ABAC Attribute Keys
+      description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Defense.svg" alt="Defense" style="display: block; margin: auto"></div>
+
+        Lists the attribute keys in the active attribute store, sorted alphabetically. Use the returned keys as the values of the **Attributes required in all ABAC rooms** setting (`ABAC_Required_Attributes`), which applies while **Enforce ABAC across all workspace rooms** is on.
+
+        Each item has a `key` and a `label`. Both hold the attribute key.
+
+        Permission required: `manage-abac-admin-settings`
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 9.0.0   | Added |
+      operationId: get-api-v1-abac-attributes.listKeys
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        key:
+                          type: string
+                        label:
+                          type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    data:
+                      - key: clearance
+                        label: clearance
+                      - key: department
+                        label: department
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: User does not have the permissions required for this action [error-unauthorized]
+  /api/v1/abac/attributes.listAssignable:
+    get:
+      tags:
+        - ABAC
+      summary: List Assignable ABAC Attributes
+      description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Defense.svg" alt="Defense" style="display: block; margin: auto"></div>
+
+        Lists the ABAC attributes and values the caller can assign, sorted by key. ABAC must be enabled.
+
+        * Without `rid`, the list covers a new ABAC-managed private room or team. Permission required: `create-abac-managed-room`.
+        * With `rid`, the list covers the attributes of that existing room. Permissions required: `abac-management` and `manage-abac-admin-rooms`, or `edit-room-abac-attributes` in that room.
+
+        With the local attribute store, the list contains every attribute definition. When **Restrict room creators and editors to attributes they hold** is on, it is limited to the values the caller holds plus, with `rid`, the values the room already has. ABAC administrators editing an existing room and users with `bypass-abac-store-validation` are not limited. With an external attribute store such as Virtru, the list contains the caller's entitlements.
+
+        `requiredKeys` lists the attribute keys every ABAC room must carry while **Enforce ABAC across all workspace rooms** is on. It is empty otherwise.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 9.0.0   | Added |
+      operationId: get-api-v1-abac-attributes.listAssignable
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - name: rid
+          in: query
+          required: false
+          description: |-
+            Optional. The ID of an existing room. Include it to list the attributes you can assign to that room. Omit it to list the attributes you can assign when creating a room.
+          schema:
+            type: string
+          example: 64f0a1c2b3d4e5f6a7b8c9d0
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  attributes:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        key:
+                          type: string
+                        values:
+                          type: array
+                          items:
+                            type: string
+                  requiredKeys:
+                    type: array
+                    items:
+                      type: string
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    attributes:
+                      - key: clearance
+                        values:
+                          - confidential
+                          - secret
+                      - key: department
+                        values:
+                          - engineering
+                    requiredKeys:
+                      - clearance
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    description: Present only when a specific attribute or cause is at fault.
+              examples:
+                ABAC not enabled:
+                  value:
+                    success: false
+                    error: error-abac-not-enabled
+                    errorType: error-abac-not-enabled
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: User does not have the permissions required for this action [error-unauthorized]
   /api/v1/abac/rooms:
     get:
       summary: List rooms with ABAC attributes
@@ -16412,6 +17445,349 @@ paths:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
     parameters: []
+  /api/v1/abac/rooms.evaluateMembership:
+    post:
+      tags:
+        - ABAC
+      summary: Evaluate ABAC Room Membership
+      description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Defense.svg" alt="Defense" style="display: block; margin: auto"></div>
+
+        Previews which users would be admitted to a private room with the given ABAC attributes, without saving anything. ABAC must be enabled. The request body takes one of two forms:
+
+        * **New room**: send `members` and `attributes` (and optionally `excludeSelf`) to preview who would be added when creating an ABAC-managed private room or team. The response sorts the named users into `compliant`, `nonCompliant` and `inconclusive`, and returns the caller's own verdict in `creator`. If the caller does not meet the attributes and `excludeSelf` is not `true`, the request fails with `error-abac-creator-not-admitted`. Permission required: `create-abac-managed-room`. The named users, plus the caller unless `excludeSelf` is `true`, cannot exceed the **API_User_Limit** setting.
+        * **Existing room**: send `rid` and the proposed `attributes` to preview which current members keep or lose access if the room's attributes change. Results are paginated with the `after` cursor and can be narrowed with `filter` and `group`. Each member has a `verdict`. On the first page, `editor` holds the caller's own verdict when the caller is a member. Permissions required: `abac-management` and `manage-abac-admin-rooms`, or `edit-room-abac-attributes` in that room. Room members without that permission and users who are not room members receive a `403` error.
+
+        A member is `compliant` only if they hold every value listed for each key. The existing room form does not accept `count` or `offset` in the body (`error-invalid-params`), and ignores them as query parameters.
+
+        Successful new room previews are recorded in the ABAC audit log as an `abac.membership.evaluated` event. Existing room previews and failed requests are not recorded. The endpoint is rate limited to 20 requests every 10 seconds, except for users with the `abac-management` and `manage-abac-admin-rooms` permissions.
+
+        ABAC errors such as `error-abac-not-enabled` use the ABAC error contract: the key is returned in both `error` and `errorType`, and `details` names the attribute or cause at fault when there is one. `error-room-not-found` and `error-invalid-attribute-values` return only `error`, without `errorType`.
+
+        <!-- TODO: Confirm the page size of the existing-room preview with an external PDP (Virtru). The local PDP scans up to 1000 members per page (LOCAL_PREVIEW_PAGE_SIZE). -->
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 9.0.0   | Added |
+      operationId: post-api-v1-abac-rooms.evaluateMembership
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                members:
+                  type: array
+                  description: New room form only (required). Usernames of the users to evaluate. Values must be unique.
+                  items:
+                    type: string
+                  example:
+                    - jane.doe
+                    - john.roe
+                excludeSelf:
+                  type: boolean
+                  description: New room form only. If `true`, the caller is not evaluated as a member. Defaults to `false`.
+                  default: false
+                  example: false
+                rid:
+                  type: string
+                  description: Existing room form only (required). The ID of the private room whose members you want to evaluate.
+                  example: 64f0a1c2b3d4e5f6a7b8c9d0
+                attributes:
+                  type: object
+                  description: |-
+                    Required. Map of attribute keys to the values to evaluate. Keys and values can contain letters, digits, `_` and `-`. Each key takes 1 to 10 unique values, and up to 10 keys are allowed.
+                    In the new room form, at least one key is required. In the existing room form, an empty object previews clearing all attributes.
+                  additionalProperties:
+                    type: array
+                    items:
+                      type: string
+                  example:
+                    clearance:
+                      - secret
+                filter:
+                  type: string
+                  description: Existing room form only. Text to search members by. Matches the username or the name.
+                  example: jane
+                group:
+                  type: string
+                  enum:
+                    - loses
+                    - retains
+                  description: Existing room form only. Return only the members who would lose access (`loses`) or keep it (`retains`).
+                  example: loses
+                after:
+                  type: object
+                  description: Existing room form only. The `next` cursor from the previous response, used to fetch the next page.
+                  properties:
+                    _id:
+                      type: string
+                    username:
+                      type: string
+                  example:
+                    _id: aB3dE5fG7hJ9kL1mN
+                    username: jane.doe
+              required:
+                - attributes
+            examples:
+              New room:
+                value:
+                  members:
+                    - jane.doe
+                    - john.roe
+                  attributes:
+                    clearance:
+                      - secret
+                    department:
+                      - engineering
+                  excludeSelf: false
+              Existing room:
+                value:
+                  rid: 64f0a1c2b3d4e5f6a7b8c9d0
+                  attributes:
+                    clearance:
+                      - secret
+                  group: loses
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  compliant:
+                    type: array
+                    description: New room form. Users who would be added.
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        username:
+                          type: string
+                        name:
+                          type: string
+                  nonCompliant:
+                    type: array
+                    description: New room form. Users who would be skipped.
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        username:
+                          type: string
+                        name:
+                          type: string
+                  inconclusive:
+                    type: array
+                    description: New room form. Users whose access could not be decided.
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        username:
+                          type: string
+                        name:
+                          type: string
+                  creator:
+                    type: string
+                    description: New room form. The caller's verdict.
+                    enum:
+                      - compliant
+                      - nonCompliant
+                      - inconclusive
+                  members:
+                    type: array
+                    description: Existing room form. The evaluated members on this page.
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        username:
+                          type: string
+                        name:
+                          type: string
+                        verdict:
+                          type: string
+                          enum:
+                            - compliant
+                            - nonCompliant
+                            - inconclusive
+                        roles:
+                          type: array
+                          description: The member's room roles, for example `owner`. Omitted for members without a room role.
+                          items:
+                            type: string
+                  count:
+                    type: integer
+                    description: Existing room form. Number of members returned on this page.
+                  checked:
+                    type: integer
+                    description: Existing room form. Number of members checked to build this page.
+                  total:
+                    type: integer
+                    description: Existing room form. Total number of room members, when known.
+                  next:
+                    type: object
+                    description: Existing room form. Cursor to pass as `after` for the next page. Absent on the last page.
+                    properties:
+                      _id:
+                        type: string
+                      username:
+                        type: string
+                  editor:
+                    type: string
+                    description: Existing room form, first page only. The caller's verdict when the caller is a room member.
+                    enum:
+                      - compliant
+                      - nonCompliant
+                      - inconclusive
+                  success:
+                    type: boolean
+              examples:
+                New room:
+                  value:
+                    compliant:
+                      - _id: aB3dE5fG7hJ9kL1mN
+                        username: jane.doe
+                        name: Jane Doe
+                    nonCompliant:
+                      - _id: pQ2rS4tU6vW8xY0zA
+                        username: john.roe
+                        name: John Roe
+                    inconclusive: []
+                    creator: compliant
+                    success: true
+                Existing room:
+                  value:
+                    members:
+                      - _id: pQ2rS4tU6vW8xY0zA
+                        username: john.roe
+                        name: John Roe
+                        verdict: nonCompliant
+                        roles:
+                          - owner
+                    count: 1
+                    checked: 12
+                    total: 12
+                    editor: compliant
+                    success: true
+                Existing room, all members:
+                  value:
+                    members:
+                      - _id: aB3dE5fG7hJ9kL1mN
+                        username: jane.doe
+                        name: Jane Doe
+                        verdict: compliant
+                        roles:
+                          - owner
+                      - _id: pQ2rS4tU6vW8xY0zA
+                        username: john.roe
+                        name: John Roe
+                        verdict: nonCompliant
+                    checked: 2
+                    total: 2
+                    count: 2
+                    editor: compliant
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    description: Present only when a specific attribute or cause is at fault.
+              examples:
+                ABAC not enabled:
+                  value:
+                    success: false
+                    error: error-abac-not-enabled
+                    errorType: error-abac-not-enabled
+                Too many members:
+                  value:
+                    success: false
+                    error: error-abac-preview-too-many-members
+                    errorType: error-abac-preview-too-many-members
+                Value not assignable:
+                  value:
+                    success: false
+                    error: error-abac-attribute-not-assignable
+                    errorType: error-abac-attribute-not-assignable
+                    details:
+                      cause: error-invalid-attribute-values
+                      attributes:
+                        - key: clearance
+                          values:
+                            - topsecret
+                Creator not admitted:
+                  value:
+                    success: false
+                    error: error-abac-creator-not-admitted
+                    errorType: error-abac-creator-not-admitted
+                Missing members or rid:
+                  value:
+                    success: false
+                    error: |-
+                      must have required property 'members'
+                       must have required property 'rid'
+                       must match exactly one schema in oneOf
+                    errorType: error-invalid-params
+                Missing attributes:
+                  value:
+                    success: false
+                    error: |-
+                      must have required property 'members'
+                       must have required property 'attributes'
+                       must match exactly one schema in oneOf
+                    errorType: error-invalid-params
+                Room not found:
+                  value:
+                    success: false
+                    error: error-room-not-found
+                Invalid attribute values:
+                  value:
+                    success: false
+                    error: error-invalid-attribute-values
+                Decision unavailable:
+                  value:
+                    success: false
+                    error: error-abac-decision-unavailable
+                    errorType: error-abac-decision-unavailable
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: User does not have the permissions required for this action [error-unauthorized]
   /api/v1/abac/audit:
     get:
       summary: List ABAC audit events
@@ -16434,56 +17810,65 @@ paths:
                       properties:
                         _id:
                           type: string
-                        t:
-                          type: string
                         ts:
                           type: string
+                        t:
+                          type: string
+                          description: 'The event type, for example `abac.membership.evaluated`, `abac.attribute.changed`, `abac.object.attribute.changed` or `abac.action.performed`.'
                         actor:
                           type: object
                           properties:
+                            type:
+                              type: string
                             _id:
                               type: string
                             username:
                               type: string
-                            name:
+                            ip:
+                              type: string
+                            useragent:
                               type: string
                         data:
-                          type: object
-                          properties: {}
+                          type: array
+                          description: Event details as a list of key and value pairs. The keys depend on the event type.
+                          items:
+                            type: object
+                            properties:
+                              key:
+                                type: string
+                              value: {}
                   offset:
                     type: integer
                   count:
                     type: integer
                   total:
                     type: integer
-                x-examples:
-                  Example 1:
-                    success: true
-                    events:
-                      - _id: EVENT_ID
-                        t: abac.object.attribute.changed
-                        ts: '2026-01-30T12:34:56.789Z'
-                        actor:
-                          _id: USER_ID
-                          username: admin
-                          name: Admin
-                        data: {}
-                    offset: 0
-                    count: 25
-                    total: 1
               examples:
                 Success:
                   value:
                     success: true
                     events:
-                      - _id: EVENT_ID
-                        t: abac.object.attribute.changed
-                        ts: '2026-01-30T12:34:56.789Z'
+                      - _id: 6720f3c5c4d5e6f7a8b9c0f3
+                        t: abac.membership.evaluated
+                        ts: '2026-10-28T15:30:02.215Z'
                         actor:
-                          _id: USER_ID
-                          username: admin
-                          name: Admin
-                        data: {}
+                          type: user
+                          _id: aB3dE5fG7hJ9kL1mN
+                          username: jane.doe
+                          ip: 203.0.113.10
+                          useragent: Mozilla/5.0
+                        data:
+                          - key: reason
+                            value: api
+                          - key: attributes
+                            value:
+                              - key: clearance
+                                values:
+                                  - secret
+                          - key: subjects
+                            value:
+                              - _id: pQ2rS4tU6vW8xY0zA
+                                username: john.roe
                     offset: 0
                     count: 25
                     total: 1
@@ -16552,12 +17937,14 @@ paths:
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Defense.svg" alt="Defense" style="display: block; margin: auto"></div>
 
         - Lists ABAC audit events.
-        - Returns a paginated audit log of ABAC-related actions (attribute changes, room attribute changes/removals, and ABAC actions), filterable by time range (`start`, `end`) and optional `actor`, with optional sorting.
+        - Returns a paginated audit log of ABAC-related actions (attribute changes, room attribute changes/removals, ABAC actions, and membership previews), filterable by time range (`start`, `end`) and optional `actor`, with optional sorting.
+        - Membership previews are recorded only for successful new room previews from `POST /api/v1/abac/rooms.evaluateMembership`. Existing room previews and failed requests are not recorded.
         - Requires the ABAC and Auditing licenses, the `abac-management` and `view-abac-admin-audit` permissions.
 
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 9.0.0   | Added the `abac.membership.evaluated` event, recorded by `POST /api/v1/abac/rooms.evaluateMembership`. |
         | 8.0.0   | Added |
         | 8.5.0   | Added the `view-abac-admin-audit` granular permission requirement. |
       parameters:
@@ -16844,8 +18231,8 @@ paths:
                 Invalid Parameter:
                   value:
                     success: false
-                    error: 'must have required property ''roomId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''roomId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       tags:
@@ -16879,8 +18266,8 @@ paths:
                     error: |-
                       must have required property 'rid'
                        must have required property 'roomId'
-                       must match a schema in anyOf [invalid-params]
-                    errorType: invalid-params
+                       must match a schema in anyOf [error-invalid-params]
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       parameters:
@@ -16953,8 +18340,8 @@ paths:
                     error: |-
                       must have required property 'roomId'
                        must have required property 'firstUnreadMessage'
-                       must match a schema in anyOf [invalid-params]
-                    errorType: invalid-params
+                       must match a schema in anyOf [error-invalid-params]
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       parameters:
@@ -17100,6 +18487,26 @@ components:
           description: The unfinished thread reply drafts, keyed by the ID of each thread's main message.
           additionalProperties:
             type: string
+    XmppFederation:
+      type: object
+      description: XMPP federation details of a room created with `extraData.xmppFederated` set to `true`. Returned only for XMPP federated rooms.
+      properties:
+        version:
+          type: integer
+          description: The version of the XMPP federation data.
+          example: 1
+        role:
+          type: string
+          description: The workspace's role for the room. Rooms created on this workspace have the `host-muc` role.
+          example: host-muc
+        muc:
+          type: string
+          description: The room's XMPP address, built as `<room name>@<MUC subdomain>.<XMPP domain>`.
+          example: xmpp-public@conference.chat.example.com
+        origin:
+          type: string
+          description: The XMPP domain of the server that hosts the room.
+          example: chat.example.com
   parameters:
     Optional-RoomId:
       name: roomId
@@ -17142,18 +18549,22 @@ components:
     offset:
       name: offset
       in: query
-      description: 'Number of items to "skip" in the query, i.e. requests return count items, skipping the first offset items. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
+      description: >-
+        How many items to skip before this page. Use a non-negative integer. Endpoints that validate their query parameters reject negative or fractional values. Refer to the <a href="https://developer.rocket.chat/apidocs/query-parameters#pagination" target="_blank">official documentation</a> to learn more.
       required: false
       schema:
         type: integer
+        minimum: 0
       example: 50
     count:
       name: count
       in: query
-      description: 'The number of items to return. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
+      description: >-
+        How many items to return. Use a non-negative integer. Endpoints that validate their query parameters reject negative or fractional values. Each workspace sets a maximum page size (`API_Upper_Count_Limit`) and lowers any larger value to it, so a response can hold fewer items than requested. Page by the number of items returned. When omitted, the workspace default page size (`API_Default_Count`) is used. `0` returns every item if `API_Allow_Infinite_Count` is enabled, and the default page size otherwise. Refer to the <a href="https://developer.rocket.chat/apidocs/query-parameters#pagination" target="_blank">official documentation</a> to learn more.
       required: false
       schema:
         type: integer
+        minimum: 0
       example: 50
     sort:
       name: sort
@@ -17232,15 +18643,16 @@ components:
           schema:
             type: object
             properties:
-              status:
-                type: string
-              message:
+              success:
+                type: boolean
+              error:
                 type: string
           examples:
             Authorization Error:
               value:
-                status: error
-                message: You must be logged in to do this.
+                success: false
+                error: You must be logged in to do this.
+
     forbiddenError:
       description: Forbidden
       content:

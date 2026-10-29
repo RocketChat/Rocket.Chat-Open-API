@@ -485,13 +485,13 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''messageId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''messageId'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
-                    error: 'must have required property ''description'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''description'' [error-invalid-params]'
+                    errorType: error-invalid-params
   /api/v1/chat.followMessage:
     post:
       tags:
@@ -758,6 +758,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        | 9.0.0   | Removed the `query` and `fields` parameters. |
         |1.0.0             | Added       |
       operationId: get-chat.getThreadsList
       parameters:
@@ -766,8 +767,6 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/query'
-        - $ref: '#/components/parameters/fields'
         - name: rid
           in: query
           description: The room ID.
@@ -1773,8 +1772,8 @@ paths:
                 Missing Parameter:
                   value:
                     success: false
-                    error: 'must have required property ''messageIds'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''messageIds'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -1792,7 +1791,7 @@ paths:
                 Permission Error:
                   value:
                     success: false
-                    error: unauthorized
+                    error: forbidden
         '404':
           description: Not Found. None of the IDs match a visible message.
           content:
@@ -1948,6 +1947,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ------------ | ------------|
+        | 9.0.0   | Removed the `query` and `fields` parameters. |
         | 8.8.0        | Added the `aroundId` parameter and excluded hidden message-history records from results and pagination totals |
         | 1.2.0        | Remove `tlm` field which is not supported |
         | 1.1.0        | Update example results - original message in thread is not returned |
@@ -1959,8 +1959,6 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/query'
-        - $ref: '#/components/parameters/fields'
         - name: tmid
           in: query
           description: The thread message ID.
@@ -2452,10 +2450,15 @@ paths:
         Send messages to channels or users on your workspace.
         
         **Note**: You can only send alias and avatar properties if your user has the `message-impersonate permission`. We implemented this rule to avoid users impersonating other users. By default, only the bot role has this permission, but that can be changed in **Manage** -> **Permissions** -> **message-impersonate**. 
-        
+
+        The server removes markdown trees (`md` and `descriptionMd`) from `attachments` before it saves the message. It does not generate a new `md` for the attachment.
+
+        The request body accepts only the properties listed here. Any other property, such as `blocks` or a message field that only the server sets (for example `pinned`, `u`, or `ts`), fails with a `400` `error-invalid-params` error that includes `must NOT have additional properties`. To send blocks, use `chat.sendMessage`.
+
         ### Change Log
         | Version | Description |
         | ------- |---------------------------------------------------------------------------- |
+        | 9.0.0   | Removed `md` and `descriptionMd` from `attachments`.                         |
         | 6.8.0   | Allow custom fields in messages                                              | 
         | 2.4.1   | Document existing method to post reply/threaded messages                     |
         | 2.4.0   | Added validation on user's identity                                          |
@@ -2788,6 +2791,16 @@ paths:
                     success: false
                     error: '[invalid-channel]'
                     errorType: invalid-channel
+                Missing Room ID and Channel:
+                  value:
+                    success: false
+                    error: "must have required property 'roomId'\n must have required property 'channel'\n must match exactly one schema in oneOf"
+                    errorType: error-invalid-params
+                Unsupported Properties:
+                  value:
+                    success: false
+                    error: "must NOT have additional properties\n must have required property 'channel'\n must match exactly one schema in oneOf"
+                    errorType: error-invalid-params
 
   /api/v1/chat.search:
     get:
@@ -2916,10 +2929,23 @@ paths:
         The difference between `chat.postMessage` and `chat.sendMessage` is that `chat.sendMessage` allows for passing a value for `_id` and the other one doesn't. Also, `chat.sendMessage` only sends it to one channel whereas the other one allows for sending to more than one channel at a time.
         
         **Note**: You can only send alias and avatar properties if your user has the `message-impersonate permission`. We implemented this rule to avoid users impersonating other users. By default, only the bot role has this permission, but that can be changed in **Manage** -> **Permissions** -> **message-impersonate**.
-        
+
+        The `message` object accepts only the fields listed in the request body. If it contains any other field, such as a field that only the server sets (for example `u`, `ts`, `md`, `urls`, or `pinned`) or an unknown field, the request fails with a `400` error and no message is created. The error text lists every rejected field, in the order sent and separated by commas, for example `The message fields cannot be set through 'chat.sendMessage': pinned, ts`. This error has no `errorType`.
+
+        Setting `t` to a system message type, such as `uj`, fails with `Cannot send system messages using 'chat.sendMessage'`. If the request also contains unsupported fields, the unsupported fields error is returned instead.
+
+        The server checks the structure of `blocks`, not block types or text content. The request fails with a `400` `error-invalid-params` error, such as `must be array` or `must be object`, when:
+        * `blocks` is not an array, or one of its items is not an object.
+        * The `elements` of an `actions` or `context` block is not an array of objects.
+
+        Blocks with an unknown `type` or an unexpected `text` shape are accepted and saved as sent.
+
+        The server removes markdown trees (`md` and `descriptionMd`) from `attachments` before it saves the message. It does not generate a new `md` for the attachment.
+
         ### Change Log
         | Version | Description                         |
         | ------- | ----------------------------------- |
+        | 9.0.0   | Rejected `message` fields that are not part of the request body, such as fields that only the server sets, and `blocks` with an invalid structure. Removed `md` and `descriptionMd` from `attachments`. |
         | 6.8.0   | Allow custom fields in messages     |      
         | 6.4.0   | Add `previewUrls` param             |
         | 2.4.0   | Added validation on user's identity |
@@ -2948,7 +2974,7 @@ paths:
                   properties:
                     t:
                       type: string
-                      description: The message type e.g. e2e
+                      description: The message type, for example `e2e`. System message types, such as `uj`, are rejected.
                     rid:
                       type: string
                       description: The room ID where the message is to be sent.
@@ -3071,6 +3097,42 @@ paths:
 
                         You must enable this option and define the validation in the workspace settings. See the <a href='https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/message' target='_blank'>Message</a> settings for further information.
                       example: {"priority": "high"}
+                    _id:
+                      type: string
+                      description: The ID to give the new message. If you don't send it, the server generates one.
+                      example: Kx7Pq2LmZr4TnB9vW
+                    location:
+                      type: object
+                      description: |-
+                        A GeoJSON point to attach to the message, with `type` set to `Point` and `coordinates` as `[longitude, latitude]`. The web client shows it as a **Shared location** link to a map.
+                      example: {"type": "Point", "coordinates": [-46.6333, -23.5505]}
+                    groupable:
+                      type: boolean
+                      description: Set to `false` to show the message with its own header instead of grouping it with the sender's previous message.
+                      example: false
+                    parseUrls:
+                      type: boolean
+                      description: |-
+                        Set to `false` to stop the server from extracting URLs from the message text. The message is saved with no `urls` entries and no link preview. Links in the message markdown (`md`) are still parsed.
+                      example: true
+                    text:
+                      type: string
+                      description: |-
+                        A separate text field that the server saves as sent. It is not an alias of `msg`: the server does not generate `md` from it, and the web client does not display it. Use `msg` for the message text.
+                      example: Hello from the API
+                    e2e:
+                      type: string
+                      description: 'The encryption state of an end-to-end encrypted message: `pending` or `done`.'
+                      example: pending
+                    e2eMentions:
+                      type: object
+                      description: Mentions in an end-to-end encrypted message, as `e2eUserMentions` and `e2eChannelMentions` arrays.
+                      example: {"e2eUserMentions": ["@john.doe"], "e2eChannelMentions": []}
+                    content:
+                      type: object
+                      description: |-
+                        The encrypted content of an end-to-end encrypted message, with `algorithm`, `ciphertext`, and `kid` properties. The server saves the object as sent and does not validate its properties.
+                      example: {"algorithm": "rc.v2.aes-sha2", "ciphertext": "kTnW8xZq0r2YbPpL3sVd", "kid": "a1b2c3d4-kid"}
                   required:
                     - rid
                 previewUrls:
@@ -3166,11 +3228,19 @@ paths:
                             type: string
                       unread:
                         type: boolean
+                      md:
+                        type: array
+                        items:
+                          type: object
                       mentions:
                         type: array
                         items:
                           type: object
                       channels:
+                        type: array
+                        items:
+                          type: object
+                      urls:
                         type: array
                         items:
                           type: object
@@ -3192,8 +3262,14 @@ paths:
                         username: rocket.cat
                         name: test
                       unread: true
+                      md:
+                        - type: PARAGRAPH
+                          value:
+                            - type: PLAIN_TEXT
+                              value: '123456789'
                       mentions: []
                       channels: []
+                      urls: []
                       _updatedAt: '2018-03-01T18:02:26.828Z'
                       _id: LnCSJxxNkCy6K9X8X
                     success: true
@@ -3212,12 +3288,25 @@ paths:
                     type: string
                   errorType:
                     type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
               examples:
                 Example 1:
                   value:
                     success: false
                     error: 'The "message" parameter must be provided. [error-invalid-params]'
                     errorType: error-invalid-params
+                # DoneDone: unverified, Example 1 was not re-tested in DOCS-1801; confirm the current missing-message body
+                Thread Show Without Thread ID:
+                  value:
+                    success: false
+                    error: tshow provided but missing tmid [invalid-params]
+                    errorType: invalid-params
+                    details:
+                      method: sendMessage
                 Example 2:
                   value:
                     success: false
@@ -3226,6 +3315,25 @@ paths:
                   value:
                     success: false
                     error: error-invalid-room
+                Unsupported Message Fields:
+                  value:
+                    success: false
+                    error: "The message fields cannot be set through 'chat.sendMessage': ts, u"
+                System Message Type:
+                  value:
+                    success: false
+                    error: "Cannot send system messages using 'chat.sendMessage'"
+                # DoneDone: unverified, DOCS-1804 did not observe the input element, linear_scale (100 points) or nesting depth (10 levels) block rules from the release patch; confirm with PR #42975
+                Invalid Blocks:
+                  value:
+                    success: false
+                    error: must be array
+                    errorType: error-invalid-params
+                Invalid Block Item:
+                  value:
+                    success: false
+                    error: must be object
+                    errorType: error-invalid-params
   /api/v1/chat.starMessage:
     post:
       tags:
@@ -3357,13 +3465,12 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ------------ | ------------|
+        | 9.0.0   | Removed the `query` and `fields` parameters. |
         | 1.0.0        | Added       |
       operationId: get-api-v1-chat.syncThreadsList
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
-        - $ref: '#/components/parameters/fields'
-        - $ref: '#/components/parameters/query'
         - $ref: '#/components/parameters/sort'
         - name: rid
           in: query
@@ -3572,6 +3679,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ------------ | ------------|
+        | 9.0.0   | Removed the `query` and `fields` parameters. |
         | 1.0.0        | Added       |
       operationId: get-api-v1-chat.syncThreadMessages
       parameters:
@@ -3580,8 +3688,6 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/query'
-        - $ref: '#/components/parameters/fields'
         - name: updatedSince
           in: query
           description: Date as an ISO string. When you provide the `updatedSince` query parameter, the `update` and `remove` parameters in the response will contain only those updated and removed since this date and time.
@@ -3980,13 +4086,13 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''url'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''url'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
-                    error: 'must have required property ''roomId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''roomId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: get-api-v1-chat.getURLPreview
@@ -4229,15 +4335,31 @@ paths:
       tags:
         - Direct Messages
       summary: Create DM
+      # DoneDone: unverified, DOCS-1809 TC-08 sent a bare JID in username or usernames with the native XMPP server enabled and got 200 with the caller's own self-DM (the JID was dropped, no remote user created); DM with a remote XMPP user not confirmed
       description: |-
         Create a direct message session with another user or more than one user.
-        
-        #### Change Log
+
+        Every username in `username` or `usernames` must belong to a user in the workspace, unless it is a federated username and federation is enabled. If one does not, the request fails with `error-invalid-user` and no room is created.
+        <!-- DoneDone: unverified, DOCS-1830 testing did not cover the federated username exception (federation disabled on writing-demo); confirm with API owner -->
+
+        With `excludeSelf` set to `true`, the direct message is created between the listed users only, without you as a participant. Send at least two usernames in `usernames`. A single username, in `username` or `usernames`, fails with `error-invalid-user`. An empty `usernames` value fails with `invalid username`.
+
+        Permission required to use `excludeSelf`: `create-d-other-users` (**Create direct messages for other users**). By default, the `admin`, `bot`, and `app` roles have this permission. Without it, the request fails with `error-not-allowed`. The `view-room-administration` permission alone does not allow `excludeSelf`.
+
+        The response returns only the room's `_id`, `rid`, `t`, and `usernames`. `rid` has the same value as `_id`.
+
+        A malformed JID, or a bare JID such as `alice@xmpp.example.org` while the native XMPP server is disabled, fails with `error-invalid-user`.
+        <!-- TODO: confirm starting a direct message with a user on a remote XMPP server by bare JID (for example, `alice@xmpp.example.org`) when the native XMPP server is enabled. In 9.0.0-rc.0 testing, the request returned 200 with the caller's own direct message room and the JID was dropped. Confirm whether the XMPP server service must be running. -->
+
+        ### Changelog
         | Version | Description              |
         | ------- | ------------------------ |
-        | 0.59.0  | Added                    |
-        | 3.1.0   | Added usernames fields   |
+        | 9.0.0   | Required the `create-d-other-users` permission instead of `view-room-administration` to use `excludeSelf`. Limited the response `room` object to `_id`, `rid`, `t`, and `usernames`. |
+        | 9.0.0   | Added direct messages with remote XMPP users by bare JID. <!-- TODO: confirm; not observed in DOCS-1809 testing. --> |
+        | 9.0.0   | Returned `error-invalid-user` when a username does not exist, instead of creating the room without that user. |
         | 3.18.0  | Added excludeSelf option |
+        | 3.1.0   | Added usernames fields   |
+        | 0.59.0  | Added                    |
       operationId: post-api-v1-im.create
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -4252,21 +4374,28 @@ paths:
                     username:
                       type: string
                       description: 'The username of the user to open a direct message session.'
+                      example: kim.dok
                     excludeSelf:
                       type: boolean
-                      description: Creates the direct message session excluding the current authenticated user. The session will only be opened if the current user has the `view-room-administration` permission
+                      description: Creates the direct message session excluding the current authenticated user. Requires the `create-d-other-users` permission. Without it, the request fails with `error-not-allowed`. With a single `username`, the request fails with `error-invalid-user`. Use `usernames` with at least two usernames instead.
+                      example: false
                 - type: object
                   properties:
                     usernames:
                       type: string
-                      description: 'Comma-seperated list of usernames to open a multiple direct message session. '
+                      description: 'Comma-separated list of usernames to open a multiple direct message session.'
+                      example: kim.dok,g1
                     excludeSelf:
                       type: boolean
-                      description: Creates the direct message session excluding the current authenticated user. The session will only be opened if the current user has the `view-room-administration` permission
+                      description: Creates the direct message session excluding the current authenticated user. Requires the `create-d-other-users` permission. Without it, the request fails with `error-not-allowed`. Include at least two usernames.
+                      example: true
             examples:
               Example:
                 value:
                   username: kim.dok
+              Exclude Self:
+                value:
+                  usernames: kim.dok,g1
                   excludeSelf: true
       responses:
         '200':
@@ -4279,6 +4408,8 @@ paths:
                   room:
                     type: object
                     properties:
+                      _id:
+                        type: string
                       t:
                         type: string
                       rid:
@@ -4293,11 +4424,22 @@ paths:
                 Example:
                   value:
                     room:
+                      _id: 6a1f0c9e2b7d4e8f9a3c5b21
                       t: d
-                      rid: PMrDaS4axRqkjY7errocket.cat
+                      rid: 6a1f0c9e2b7d4e8f9a3c5b21
                       usernames:
                         - g1
                         - rocket.cat
+                    success: true
+                Exclude Self:
+                  value:
+                    room:
+                      _id: 64f1a2b3c4d5e6f708192a3b
+                      rid: 64f1a2b3c4d5e6f708192a3b
+                      t: d
+                      usernames:
+                        - kim.dok
+                        - g1
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -4314,20 +4456,36 @@ paths:
                     type: string
                   errorType:
                     type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
               examples:
+                Empty Usernames:
+                  value:
+                    success: false
+                    error: invalid username
                 Missing parameter:
                   value:
                     success: false
                     error: |-
                       must have required property 'usernames'
                        must have required property 'username'
-                       must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params
+                       must match exactly one schema in oneOf
+                    errorType: error-invalid-params
                 Invalid User:
                   value:
                     success: false
                     error: 'Invalid user [error-invalid-user]'
                     errorType: error-invalid-user
+                    details:
+                      method: createDirectMessage
+                Permission Error:
+                  value:
+                    success: false
+                    error: 'Not allowed [error-not-allowed]'
+                    errorType: error-not-allowed
                     details:
                       method: createDirectMessage
   /api/v1/dm.delete:
@@ -4390,8 +4548,8 @@ paths:
                     error: |-
                       must have required property 'roomId'
                        must have required property 'username'
-                       must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params
+                       must match exactly one schema in oneOf [error-invalid-params]
+                    errorType: error-invalid-params
                 Invalid room ID or username:
                   value:
                     success: false
@@ -4405,11 +4563,15 @@ paths:
         - Direct Messages
       summary: Get DM Files
       description: |-
-        Get all files in a DM. 
+        Get all files in a DM.
+
+        Files uploaded on version 9.0.0 or later return `path` as `/file-upload/<fileId>/<fileName>` and `url` as the absolute form of the same link. For files uploaded before 9.0.0, `url` can still contain a legacy `/ufs/...` link. Legacy `/ufs` links no longer return the file; the request returns the web client instead. To download the file, use `path` or build `/file-upload/<_id>/<name>`.
 
         ### Changelog
-        | Version      | Description | 
+        | Version      | Description |
         | ---------------- | ------------|
+        | 9.0.0   | Removed the `query` and `fields` parameters. |
+        | 9.0.0   | Removed the legacy `/ufs` file download path. File links use `/file-upload/<fileId>/<fileName>`. |
         |0.64.0            | Change `userId` to `user` object in response|
         |0.59.0            | Added       |
       operationId: get-api-v1-im.files
@@ -4419,8 +4581,6 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/query'
-        - $ref: '#/components/parameters/fields'
         - $ref: '#/components/parameters/filterTypeGroup'
         - $ref: '#/components/parameters/filterName'
         - name: roomId
@@ -4507,12 +4667,12 @@ paths:
                         _updatedAt: '2023-11-01T23:46:29.216Z'
                         complete: true
                         etag: 7qDc9jBurptfmrAxr
-                        path: '/ufs/GridFS:Uploads/6542e355a2f73c7460e18ef6/2023-11-01_21-13-38.snagx'
+                        path: /file-upload/6542e355a2f73c7460e18ef6/2023-11-01_21-13-38.snagx
                         progress: 1
                         token: eAD959d9A8
                         uploadedAt: '2023-11-01T23:46:29.196Z'
                         uploading: false
-                        url: 'http://localhost:3000//ufs/GridFS:Uploads/6542e355a2f73c7460e18ef6/2023-11-01_21-13-38.snagx'
+                        url: 'http://localhost:3000/file-upload/6542e355a2f73c7460e18ef6/2023-11-01_21-13-38.snagx'
                         typeGroup: application
                         user:
                           _id: 5fRTXMt7DMJbpPJfh
@@ -4670,8 +4830,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''roomId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''roomId'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
@@ -4690,6 +4850,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ------------ | ------------|
+        | 9.0.0   | Removed the `query` and `fields` parameters. |
         |0.49.0        | Added       |
       operationId: get-api-v1-im.list.everyone
       parameters:
@@ -4698,8 +4859,6 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/query'
-        - $ref: '#/components/parameters/fields'
       responses:
         '200':
           description: OK
@@ -5165,6 +5324,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        | 9.0.0   | Removed the `query` parameter. |
         |0.59.0             | Added       |
       operationId: get-api-v1-im.members
       parameters:
@@ -5173,7 +5333,6 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/query'
         - name: roomId
           in: query
           description: The room ID of the DM. It is required if `username` is not provided.
@@ -5260,8 +5419,8 @@ paths:
                     error: |-
                       must have required property 'roomId'
                        must have required property 'username'
-                       must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params
+                       must match exactly one schema in oneOf [error-invalid-params]
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
@@ -5278,6 +5437,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        | 9.0.0   | Removed the `query` and `fields` parameters. |
         | 7.0.0  | Added `mentionIds`, `starredIds`, `pinned` query parameters.|         
         |0.59.0            | Added       |
       operationId: get-api-v1-im.messages
@@ -5286,8 +5446,6 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/fields'
-        - $ref: '#/components/parameters/query'
         - name: roomId
           in: query
           description: The room ID of the DM. It is required if `username` is not provided.
@@ -5471,8 +5629,8 @@ paths:
                     error: |-
                       must have required property 'roomId'
                        must have required property 'username'
-                       must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params
+                       must match exactly one schema in oneOf [error-invalid-params]
+                    errorType: error-invalid-params
                 Invalid Channel:
                   value:
                     success: false
@@ -5490,6 +5648,7 @@ paths:
         ### Change Log
         | Version | Description             |
         | ------- | ----------------------- |
+        | 9.0.0   | Removed the `query` and `fields` parameters. |
         | 0.50.0  | Added                   |
       operationId: get-api-v1-im.messages.others
       parameters:
@@ -5499,8 +5658,6 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/query'
-        - $ref: '#/components/parameters/fields'
       responses:
         '200':
           description: OK
@@ -5913,8 +6070,8 @@ paths:
                 Target Language Required:
                   value:
                     success: false
-                    error: 'must have required property ''targetLanguage'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''targetLanguage'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/autotranslate.saveSettings:
@@ -6112,7 +6269,7 @@ paths:
                 Permission Error:
                   value:
                     success: false
-                    error: unauthorized
+                    error: forbidden
 
 tags:
   - name: Chat
@@ -6169,18 +6326,22 @@ components:
     offset:
       name: offset
       in: query
-      description: 'Number of items to "skip" in the query, i.e. requests return count items, skipping the first offset items. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
+      description: >-
+        How many items to skip before this page. Use a non-negative integer. Endpoints that validate their query parameters reject negative or fractional values. Refer to the <a href="https://developer.rocket.chat/apidocs/query-parameters#pagination" target="_blank">official documentation</a> to learn more.
       required: false
       schema:
         type: integer
+        minimum: 0
       example: 50
     count:
       name: count
       in: query
-      description: 'The number of items to return.  Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
+      description: >-
+        How many items to return. Use a non-negative integer. Endpoints that validate their query parameters reject negative or fractional values. Each workspace sets a maximum page size (`API_Upper_Count_Limit`) and lowers any larger value to it, so a response can hold fewer items than requested. Page by the number of items returned. When omitted, the workspace default page size (`API_Default_Count`) is used. `0` returns every item if `API_Allow_Infinite_Count` is enabled, and the default page size otherwise. Refer to the <a href="https://developer.rocket.chat/apidocs/query-parameters#pagination" target="_blank">official documentation</a> to learn more.
       required: false
       schema:
         type: integer
+        minimum: 0
       example: 50
     sort:
       name: sort
@@ -6243,12 +6404,13 @@ components:
           schema:
             type: object
             properties:
-              status:
-                type: string
-              message:
+              success:
+                type: boolean
+              error:
                 type: string
           examples:
             Authorization Error:
               value:
-                status: error
-                message: You must be logged in to do this.
+                success: false
+                error: You must be logged in to do this.
+

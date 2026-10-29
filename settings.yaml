@@ -51,14 +51,33 @@ paths:
                 Success Example:
                   value:
                     settings:
-                      - _id: API_Drupal_URL
-                        value: ''
+                      - _id: Site_Name
+                        value: Rocket.Chat
                       - _id: API_Embed
                         value: true
                     count: 2
                     offset: 0
                     total: 2
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Removed or unknown parameter:
+                  value:
+                    success: false
+                    error: must NOT have additional properties
+                    errorType: error-invalid-params
       tags:
         - Settings
       description: |-
@@ -67,18 +86,18 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        | 9.0.0   | Removed the `fields` parameter. Requests that include `fields` or `query` return a `400` error. |
         |7.0.0            | Added the `_id` query parameter for filtering.|
         |7.0.0            | Removed the `query` parameter.      |
       parameters:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/fields'
         - name: _id
           in: query
-          description: 'Filter by the `_id` of the settings.'
+          description: 'Filter by the `_id` of the settings. To request several settings, enter a comma-separated list of IDs.'
           schema:
             type: string
-          example: Site_Url, LDAP_Enable
+          example: Site_Name,Language
         - schema:
             type: string
           in: query
@@ -142,7 +161,7 @@ paths:
                           type: boolean
                         hideButtonOnMobile:
                           type: boolean
-                          description: Whether mobile clients should hide the service's login button. For SAML, this is `true` when `Accounts_OAuth_Use_Modern_Flow` is enabled and `false` otherwise.
+                          description: Whether mobile clients should hide the service's login button. `false` for Apple, CAS, and LDAP. `true` for all other services, including SAML and custom OAuth services.
                         clientConfig:
                           type: object
                           description: Client configuration for the login service.
@@ -227,14 +246,14 @@ paths:
                   value:
                     services:
                       - _id: iJeY7x4wxnh2p3pLr
-                        name: facebook
+                        name: google
                         clientId: test
                         buttonLabelText: test
                         buttonColor: '#13679A'
                         buttonLabelColor: '#FFFFFF'
                         custom: false
                       - _id: iJeY7x4wxnh2p3pLr
-                        name: twitter
+                        name: github
                         clientId: test
                         buttonLabelText: ''
                         buttonColor: ''
@@ -275,11 +294,14 @@ paths:
       description: |-
         Lists the <a href="https://docs.rocket.chat/docs/oauth" target="_blank">login service</a> configurations available to login clients. This public endpoint does not require authentication.
 
-        For SAML, the response contains the stored service configuration but excludes the `secret` object. Starting in 8.8.0, `hideButtonOnMobile` follows `Accounts_OAuth_Use_Modern_Flow`. When this setting is enabled, mobile and desktop apps can open SAML authentication in the system browser and receive the credential through the `rocketchat://auth` link.
+        For SAML, the response contains the stored service configuration but excludes the `secret` object. Mobile and desktop apps can open SAML authentication in the system browser and receive the credential through the `rocketchat://auth` link.
+
+        `hideButtonOnMobile` is `false` for Apple, CAS, and LDAP, and `true` for all other services, including SAML and custom OAuth services. The built-in Drupal, Facebook, GitHub Enterprise, LinkedIn, Meteor, Twitter, WordPress, and Dolphin services are no longer returned.
 
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |9.0.0            | Removed the `Accounts_OAuth_Use_Modern_Flow` dependency. `hideButtonOnMobile` is always `true` except for Apple, CAS, and LDAP. Removed the Drupal, Facebook, GitHub Enterprise, LinkedIn, Meteor, Twitter, WordPress, and Dolphin services. |
         |8.8.0            | Updated `hideButtonOnMobile` for the SAML system-browser login flow. |
         |0.64.0            | Renamed field `appId` to `clientId` and added flag `custom` to indicate whether the OAuth service is customized and fix `id` inconsistence (set all cases to `_id`)       |
         |0.63.0            | Added       |
@@ -434,8 +456,8 @@ paths:
                 Invalid Params:
                   value:
                     success: false
-                    error: 'must have required property ''settings'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''settings'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -475,12 +497,22 @@ paths:
     parameters: []
     post:
       description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+
         Add a <a href="https://docs.rocket.chat/docs/oauth#add-custom-oauth" target="_blank">custom OAuth integration</a> to your workspace. Two-factor authentication is required.
 
-        In Rocket.Chat 9.0.0, custom OAuth will be available only on paid plans (Commercial, Government, and Defense). On other plans, this endpoint will reject the request. See <a href="https://docs.rocket.chat/docs/our-plans" target="_blank">Our Plans</a> for details.
+        The new service is created disabled. Its enable setting, `Accounts_OAuth_Custom-<Name>`, is `false` until you turn it on.
+
+        Custom OAuth requires a license that includes the `oauth-enterprise` module, available on paid plans (Commercial, Government, and Defense). Without it, the request returns a `400` error with `errorType` `error-action-not-allowed`. See <a href="https://docs.rocket.chat/docs/our-plans" target="_blank">Our Plans</a> for details.
 
         **Permission required**:
         - `add-oauth-service`
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 9.0.0   | Moved to premium plans. Requires a license with the `oauth-enterprise` module. |
+        <!-- TODO: add the row for the version that introduced settings.addCustomOAuth; it was not verified from the 9.0.0 diff. -->
       summary: Add Custom OAuth
       operationId: post-api-v1-settings.addCustomOAuth
       responses:
@@ -503,8 +535,14 @@ paths:
                 Missing name param:
                   value:
                     success: false
-                    error: 'The parameter "name" is required [error-name-param-not-provided]'
-                    errorType: error-name-param-not-provided
+                    errorType: error-invalid-params
+                    error: 'must have required property ''name'''
+                # DoneDone: unverified - license-required body not reproducible on a workspace licensed with oauth-enterprise
+                License Required:
+                  value:
+                    success: false
+                    error: 'This is an enterprise feature [error-action-not-allowed]'
+                    errorType: error-action-not-allowed
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -524,10 +562,14 @@ paths:
               properties:
                 name:
                   type: string
-                  description: The name of the custom OAuth method that you want to add.
+                  description: The name of the custom OAuth service that you want to add. Hyphens are removed and the first letter is capitalized, so `my-provider` creates the service `Myprovider` with settings named `Accounts_OAuth_Custom-Myprovider-*`.
                   example: MyCustomOAuth
               required:
                 - name
+            examples:
+              Example:
+                value:
+                  name: MyCustomOAuth
   /api/v1/settings.removeCustomOAuth:
     parameters: []
     post:
@@ -837,7 +879,7 @@ paths:
                 Permission Error:
                   value:
                     success: false
-                    error: unauthorized
+                    error: forbidden
   /api/v1/service.configurations:
     parameters: []
     get:
@@ -932,8 +974,8 @@ paths:
                 Invalid Parameter:
                   value:
                     success: false
-                    error: 'must have required property ''token'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''token'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Failed to Connect:
                   value:
                     success: false
@@ -1251,8 +1293,8 @@ paths:
                 Invalid Params:
                   value:
                     success: false
-                    error: 'must have required property ''rid'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''rid'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Invalid Room:
                   value:
                     success: false
@@ -1299,8 +1341,8 @@ paths:
                 Invalid Params:
                   value:
                     success: false
-                    error: 'must have required property ''rid'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''rid'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 E2E Key Exists:
                   value:
                     success: false
@@ -1360,8 +1402,8 @@ paths:
                 Invalid Params:
                   value:
                     success: false
-                    error: 'must have required property ''public_key'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''public_key'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       tags:
@@ -1413,8 +1455,8 @@ paths:
                 Invalid Params:
                   value:
                     success: false
-                    error: 'must have required property ''rid'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''rid'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       tags:
@@ -1526,7 +1568,7 @@ paths:
                   value:
                     success: false
                     error: 'must have required property ''rid'''
-                    errorType: invalid-params
+                    errorType: error-invalid-params
                 Subscription Not Found:
                   value:
                     success: false
@@ -1601,7 +1643,7 @@ paths:
                   value:
                     success: false
                     error: 'must have required property ''rid'''
-                    errorType: invalid-params
+                    errorType: error-invalid-params
                 Subscription Not Found:
                   value:
                     success: false
@@ -1792,7 +1834,7 @@ paths:
                   value:
                     success: false
                     error: 'must have required property ''usersSuggestedGroupKeys'''
-                    errorType: invalid-params
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/e2e.resetRoomKey:
@@ -1865,7 +1907,7 @@ paths:
                   value:
                     success: false
                     error: 'must have required property ''e2eKeyId'''
-                    errorType: invalid-params
+                    errorType: error-invalid-params
                 Reset in Progress:
                   value:
                     success: false
@@ -2973,6 +3015,7 @@ paths:
   /api/v1/federation/addServerByUser:
     parameters: []
     post:
+      deprecated: true
       summary: Add Federated Server
       operationId: post-api-v1-federation-addServerByUser
       responses:
@@ -2983,11 +3026,14 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
 
+        This endpoint is no longer available. Requests to it return a `404` status with the plain-text body `404 Not Found`, the same response as any undefined route.
+
         Add a new federated server.
 
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
+        | 9.0.0        | Removed with the legacy Matrix bridge federation. The server no longer provides this endpoint. <!-- TODO: confirm with engineering the version in which the route handler was removed; 8.9.0 source already had only the REST typings (removed in PR #41940) and no API.v1 route for this path. --> |
         |6.0.0         | Added       |
       tags:
         - Federation
@@ -3012,6 +3058,7 @@ paths:
   /api/v1/federation/listServersByUser:
     parameters: []
     get:
+      deprecated: true
       summary: Get Federated Servers
       operationId: get-api-v1-federation-listServersByUser
       responses:
@@ -3063,17 +3110,21 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
 
+        This endpoint is no longer available. Requests to it return a `404` status with the plain-text body `404 Not Found`, the same response as any undefined route.
+
         Lists all the servers the user has already saved.
 
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        | 9.0.0        | Removed with the legacy Matrix bridge federation. The server no longer provides this endpoint. <!-- TODO: confirm with engineering the version in which the route handler was removed; 8.9.0 source already had only the REST typings (removed in PR #41940) and no API.v1 route for this path. --> |
         |6.0.0            | Added       |
       tags:
         - Federation
   /api/v1/federation/removeServerByUser:
     parameters: []
     post:
+      deprecated: true
       summary: Remove Federated Server
       operationId: post-api-v1-federation-removeServerByUser
       responses:
@@ -3102,12 +3153,15 @@ paths:
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
 
 
+        This endpoint is no longer available. Requests to it return a `404` status with the plain-text body `404 Not Found`, the same response as any undefined route.
+
         Remove a federated server.
 
 
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
+        | 9.0.0        | Removed with the legacy Matrix bridge federation. The server no longer provides this endpoint. <!-- TODO: confirm with engineering the version in which the route handler was removed; 8.9.0 source already had only the REST typings (removed in PR #41940) and no API.v1 route for this path. --> |
         |6.0.0          Added       |
       tags:
         - Federation
@@ -3132,6 +3186,7 @@ paths:
   /api/v1/federation/searchPublicRooms:
     parameters: []
     get:
+      deprecated: true
       summary: Search Public Rooms
       operationId: get-api-v1-federation-searchPublicRooms
       responses:
@@ -3189,11 +3244,14 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
 
+        This endpoint is no longer available. Requests to it return a `404` status with the plain-text body `404 Not Found`, the same response as any undefined route.
+
         Search for federated public rooms by the server name or room name.
 
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
+        | 9.0.0        | Removed with the legacy Matrix bridge federation. The server no longer provides this endpoint. <!-- TODO: confirm with engineering the version in which the route handler was removed; 8.9.0 source already had only the REST typings (removed in PR #41940) and no API.v1 route for this path. --> |
         |6.0.0         | Added       |
       parameters:
         - $ref: '#/components/parameters/X-User-Id'
@@ -3223,6 +3281,7 @@ paths:
   /api/v1/federation/joinExternalPublicRoom:
     parameters: []
     post:
+      deprecated: true
       summary: Join External Public Room
       operationId: post-api-v1-federation-joinExternalPublicRoom
       responses:
@@ -3233,11 +3292,14 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
 
+        This endpoint is no longer available. Requests to it return a `404` status with the plain-text body `404 Not Found`, the same response as any undefined route.
+
         Join a public external federated room.
 
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
+        | 9.0.0        | Removed with the legacy Matrix bridge federation. The server no longer provides this endpoint. <!-- TODO: confirm with engineering the version in which the route handler was removed; 8.9.0 source already had only the REST typings (removed in PR #41940) and no API.v1 route for this path. --> |
         |6.0.0         | Added       |
       parameters:
         - $ref: '#/components/parameters/X-User-Id'
@@ -3782,8 +3844,8 @@ paths:
                     error: |-
                       must have required property 'msgId'
                        must have required property 'userId'
-                       must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params
+                       must match exactly one schema in oneOf [error-invalid-params]
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: post-api-v1-moderation.dismissUserReports
@@ -3957,8 +4019,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''userId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''userId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: get-api-v1-moderation.user.reportsByUserId
@@ -5156,8 +5218,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''roomId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''roomId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: get-api-v1-video-conference.list
@@ -5354,8 +5416,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''callId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''callId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: get-api-v1-video-conference.info
@@ -5470,8 +5532,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''roomId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''roomId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: post-api-v1-video-conference.start
@@ -5554,8 +5616,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''callId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''callId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: post-api-v1-video-conference.join
@@ -5625,8 +5687,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''callId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''callId'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
@@ -5706,8 +5768,8 @@ paths:
                 Missing Parameter:
                   value:
                     success: false
-                    error: 'must have required property ''callId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''callId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '404':
@@ -5782,8 +5844,8 @@ paths:
                 Missing Parameter:
                   value:
                     success: false
-                    error: 'must have required property ''callId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''callId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '404':
@@ -5858,8 +5920,8 @@ paths:
                 Missing Parameter:
                   value:
                     success: false
-                    error: 'must have required property ''callId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''callId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '404':
@@ -5957,8 +6019,8 @@ paths:
                 Missing Parameter:
                   value:
                     success: false
-                    error: 'must have required property ''callId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''callId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -6075,8 +6137,8 @@ paths:
                 Missing Parameter:
                   value:
                     success: false
-                    error: 'must have required property ''callId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''callId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '404':
@@ -6159,8 +6221,8 @@ paths:
                 Missing Parameter:
                   value:
                     success: false
-                    error: 'must have required property ''callId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''callId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '404':
@@ -6262,8 +6324,8 @@ paths:
                 Missing Parameter:
                   value:
                     success: false
-                    error: 'must have required property ''callId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''callId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '404':
@@ -6776,8 +6838,8 @@ paths:
                 Missing Parameter:
                   value:
                     success: false
-                    error: 'must have required property ''callId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''callId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '404':
@@ -7282,16 +7344,20 @@ components:
       required: false
       schema:
         type: integer
+        minimum: 0
       example: 50
-      description: 'Number of items to "skip" in the query, i.e. requests return count items, skipping the first offset items. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
+      description: >-
+        How many items to skip before this page. Use a non-negative integer. Endpoints that validate their query parameters reject negative or fractional values. Refer to the <a href="https://developer.rocket.chat/apidocs/query-parameters#pagination" target="_blank">official documentation</a> to learn more.
     count:
       name: count
       in: query
       required: false
       schema:
         type: integer
+        minimum: 0
       example: 50
-      description: 'How many items to return. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
+      description: >-
+        How many items to return. Use a non-negative integer. Endpoints that validate their query parameters reject negative or fractional values. Each workspace sets a maximum page size (`API_Upper_Count_Limit`) and lowers any larger value to it, so a response can hold fewer items than requested. Page by the number of items returned. When omitted, the workspace default page size (`API_Default_Count`) is used. `0` returns every item if `API_Allow_Infinite_Count` is enabled, and the default page size otherwise. Refer to the <a href="https://developer.rocket.chat/apidocs/query-parameters#pagination" target="_blank">official documentation</a> to learn more.
     sort:
       name: sort
       in: query
@@ -7333,15 +7399,16 @@ components:
           schema:
             type: object
             properties:
-              status:
-                type: string
-              message:
+              success:
+                type: boolean
+              error:
                 type: string
           examples:
             Authorization Error:
               value:
-                status: error
-                message: You must be logged in to do this.
+                success: false
+                error: You must be logged in to do this.
+
     trueSuccess:
       description: OK
       content:

@@ -386,6 +386,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        | 9.0.0   | Removed the `query` parameter. Requests that include `query` or `fields` return a `400` error. |
         | 2.4.0            | Added       |
         | 2.4.0            | Added `name` query parameter for filtering.      |
       operationId: get-api-v1-custom-sounds.list
@@ -394,7 +395,6 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/query'
         - name: name
           in: query
           description: Filter list by the name of the custom sound.
@@ -449,6 +449,25 @@ paths:
                     offset: 0
                     total: 1
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Removed or unknown parameter:
+                  value:
+                    success: false
+                    error: must NOT have additional properties
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/custom-sounds.create:
@@ -463,13 +482,14 @@ paths:
 
         - The file size must not exceed `5 MB` (5242880 bytes), and the file MIME type must be one of `audio/mpeg`, `audio/mp3`, `audio/wav`, or `audio/x-wav`.
 
-        This endpoint replaces the deprecated DDP methods `insertOrUpdateSound` and `uploadCustomSound`, which will be removed in `9.0.0`.
+        This endpoint replaces the DDP methods `insertOrUpdateSound` and `uploadCustomSound`, which were removed in `9.0.0`. Calls to the removed methods through `/api/v1/method.call` or `/api/v1/method.callAnon` return the error `Method '<name>' not found [404]`.
 
         Permission required: `manage-sounds`
 
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 9.0.0   | Removed the deprecated DDP methods `insertOrUpdateSound` and `uploadCustomSound`. Use this endpoint instead. |
         | 8.5.0   | Added       |
       operationId: post-api-v1-custom-sounds.create
       parameters:
@@ -550,8 +570,8 @@ paths:
                 Missing required field:
                   value:
                     success: false
-                    error: 'must have required property ''name'' [invalid-params]'
-                    errorType: invalid-params
+                    error: '[Invalid fields  must have required property ''name'']'
+                    errorType: 'Invalid fields  must have required property ''name'''
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -565,14 +585,11 @@ paths:
                     type: boolean
                   error:
                     type: string
-                  errorType:
-                    type: string
               examples:
                 Permission Error:
                   value:
                     success: false
                     error: 'User does not have the permissions required for this action [error-unauthorized]'
-                    errorType: error-unauthorized
   /api/v1/custom-sounds.update:
     post:
       tags:
@@ -585,13 +602,14 @@ paths:
 
         - When a new file is provided, the file size must not exceed `5 MB` (5242880 bytes), and the file MIME type must be one of `audio/mpeg`, `audio/mp3`, `audio/wav`, or `audio/x-wav`.
 
-        This endpoint replaces the deprecated DDP methods `insertOrUpdateSound` and `uploadCustomSound`, which will be removed in `9.0.0`.
+        This endpoint replaces the DDP methods `insertOrUpdateSound` and `uploadCustomSound`, which were removed in `9.0.0`. Calls to the removed methods through `/api/v1/method.call` or `/api/v1/method.callAnon` return the error `Method '<name>' not found [404]`.
 
         Permission required: `manage-sounds`
 
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 9.0.0   | Removed the deprecated DDP methods `insertOrUpdateSound` and `uploadCustomSound`. Use this endpoint instead. |
         | 8.5.0   | Added       |
       operationId: post-api-v1-custom-sounds.update
       parameters:
@@ -663,8 +681,8 @@ paths:
                 Missing required field:
                   value:
                     success: false
-                    error: 'must have required property ''_id'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''_id'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -1172,8 +1190,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''assetName'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''assetName'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/custom-sounds.delete:
@@ -1182,13 +1200,14 @@ paths:
         - Custom Sounds
       summary: Delete Custom Sound
       description: |-
-        Delete a custom sound from the workspace by its `_id`. This also removes the associated audio file from storage. This endpoint replaces the deprecated DDP method `deleteCustomSound`, which now logs a deprecation warning and is scheduled for removal in `9.0.0`.
+        Delete a custom sound from the workspace by its `_id`. This also removes the associated audio file from storage. This endpoint replaces the DDP method `deleteCustomSound`, which was removed in `9.0.0`. Calls to the removed method through `/api/v1/method.call` or `/api/v1/method.callAnon` return the error `Method 'deleteCustomSound' not found [404]`.
 
         Permission required: `manage-sounds`
 
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 9.0.0   | Removed the deprecated DDP method `deleteCustomSound`. Use this endpoint instead. |
         | 8.6.0   | Added       |
       operationId: post-api-v1-custom-sounds.delete
       parameters:
@@ -1234,8 +1253,8 @@ paths:
                 Missing required field:
                   value:
                     success: false
-                    error: 'must have required property ''_id'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''_id'''
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -1328,21 +1347,7 @@ paths:
                     success: false
                     error: Custom Sound not found.
         '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                  message:
-                    type: string
-              examples:
-                Unauthorized login attempt:
-                  value:
-                    status: error
-                    message: You must be logged in to do this.
+          $ref: '#/components/responses/authorizationError'
         '403':
           description: Forbidden
           content:
@@ -1390,18 +1395,22 @@ components:
     offset:
       name: offset
       in: query
-      description: 'Number of items to "skip" in the query, i.e. requests return count items, skipping the first offset items.  Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#paginations) to learn more.'
+      description: >-
+        How many items to skip before this page. Use a non-negative integer. Endpoints that validate their query parameters reject negative or fractional values. Refer to the <a href="https://developer.rocket.chat/apidocs/query-parameters#pagination" target="_blank">official documentation</a> to learn more.
       required: false
       schema:
         type: integer
+        minimum: 0
       example: 50
     count:
       name: count
       in: query
-      description: 'The number of items to return. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
+      description: >-
+        How many items to return. Use a non-negative integer. Endpoints that validate their query parameters reject negative or fractional values. Each workspace sets a maximum page size (`API_Upper_Count_Limit`) and lowers any larger value to it, so a response can hold fewer items than requested. Page by the number of items returned. When omitted, the workspace default page size (`API_Default_Count`) is used. `0` returns every item if `API_Allow_Infinite_Count` is enabled, and the default page size otherwise. Refer to the <a href="https://developer.rocket.chat/apidocs/query-parameters#pagination" target="_blank">official documentation</a> to learn more.
       required: false
       schema:
         type: integer
+        minimum: 0
       example: 50
     sort:
       name: sort
@@ -1459,12 +1468,13 @@ components:
           schema:
             type: object
             properties:
-              status:
-                type: string
-              message:
+              success:
+                type: boolean
+              error:
                 type: string
           examples:
             Authorization Error:
               value:
-                status: error
-                message: You must be logged in to do this.
+                success: false
+                error: You must be logged in to do this.
+

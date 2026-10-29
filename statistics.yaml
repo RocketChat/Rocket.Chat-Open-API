@@ -17,6 +17,7 @@ paths:
       tags:
         - Statistics
       summary: Get Statistics List
+      # DoneDone: observed behavior; requirement failure (TC-16), confirm with API owner
       description: |-
         Get statistics about the Rocket.Chat workspace. 
       
@@ -25,6 +26,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        | 9.0.0   | Removed the `query` and `fields` parameters. The endpoint ignores them and returns unfiltered results with full statistics records. |
         |8.7.0             | Added the `fips` field to statistics records. |        
         |0.51.0            | Added       |
       operationId: get-api-v1-statistics.list
@@ -34,8 +36,6 @@ paths:
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/fields'
-        - $ref: '#/components/parameters/query'
       responses:
         '200':
           description: OK
@@ -3006,27 +3006,27 @@ paths:
                   value:
                     success: false
                     error: must have required property 'params'
-                    errorType: invalid-params
+                    errorType: error-invalid-params
                 Invalid Params Type:
                   value:
                     success: false
                     error: must be array
-                    errorType: invalid-params
+                    errorType: error-invalid-params
                 Missing Event Name:
                   value:
                     success: false
                     error: must have required property 'eventName'
-                    errorType: invalid-params
+                    errorType: error-invalid-params
                 Invalid Timestamp Type:
                   value:
                     success: false
                     error: must be number
-                    errorType: invalid-params
+                    errorType: error-invalid-params
                 Unknown Body Property:
                   value:
                     success: false
                     error: must NOT have additional properties
-                    errorType: invalid-params
+                    errorType: error-invalid-params
                 Unknown Event:
                   value:
                     success: false
@@ -3820,15 +3820,19 @@ components:
       required: false
       schema:
         type: integer
+        minimum: 0
       example: 50
-      description: 'The number of items to return. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
+      description: >-
+        How many items to return. Use a non-negative integer. Endpoints that validate their query parameters reject negative or fractional values. Each workspace sets a maximum page size (`API_Upper_Count_Limit`) and lowers any larger value to it, so a response can hold fewer items than requested. Page by the number of items returned. When omitted, the workspace default page size (`API_Default_Count`) is used. `0` returns every item if `API_Allow_Infinite_Count` is enabled, and the default page size otherwise. Refer to the <a href="https://developer.rocket.chat/apidocs/query-parameters#pagination" target="_blank">official documentation</a> to learn more.
     offset:
       name: offset
       in: query
       required: false
       schema:
         type: integer
-      description: 'Number of items to "skip" in the query, i.e. requests return `count` items, skipping the first `offset` items. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
+        minimum: 0
+      description: >-
+        How many items to skip before this page. Use a non-negative integer. Endpoints that validate their query parameters reject negative or fractional values. Refer to the <a href="https://developer.rocket.chat/apidocs/query-parameters#pagination" target="_blank">official documentation</a> to learn more.
     sort:
       name: sort
       in: query
@@ -3856,15 +3860,16 @@ components:
           schema:
             type: object
             properties:
-              status:
-                type: string
-              message:
+              success:
+                type: boolean
+              error:
                 type: string
           examples:
             Authorization Error:
               value:
-                status: error
-                message: You must be logged in to do this.
+                success: false
+                error: You must be logged in to do this.
+
     forbiddenError:
       description: Forbidden
       content:

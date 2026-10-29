@@ -18,6 +18,7 @@ paths:
         ### Change
         | Version      | Description |
         | ---------------- | ------------|
+        | 9.0.0   | Removed the `query` and `fields` parameters. |
         |3.11.0-rc.0         | Added       |
       operationId: get-api-v1-email-inbox.list
       parameters:
@@ -26,8 +27,6 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/query'
-        - $ref: '#/components/parameters/fields'
       responses:
         '200':
           description: OK
@@ -1281,7 +1280,7 @@ paths:
                 Missing Parameter:
                   value:
                     success: false
-                    errorType: invalid-params
+                    errorType: error-invalid-params
                     error: "must have required property 'license'"
   /api/v1/licenses.validate:
     post:
@@ -1594,7 +1593,16 @@ paths:
       tags:
         - Commands
       summary: Get Command's Preview Data
-      description: Fetches the command's preview data or executes the preview item
+      description: |-
+        Fetches the command's preview data.
+
+        If the command declares a permission, the user must have it in the room. When the command refuses the action with `error-not-authorized` or `error-not-allowed`, the endpoint returns `403` without an `errorType` field.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 9.0.0   | Returns `403` instead of `400` when the command refuses the action. Enforced the permission declared by the command. |
+        <!-- TODO: add the row for the version that introduced GET commands.preview; the existing operation has no changelog. -->
       operationId: get-api-v1-commands.preview
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -1633,21 +1641,61 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
               examples:
                 Example 1:
                   value:
                     success: false
                     error: You must provide a command to get the previews from.
+                Unknown Command:
+                  value:
+                    success: false
+                    error: The command provided does not exist (or is disabled).
+                No Previews:
+                  value:
+                    success: false
+                    error: Command Does Not Provide Previews [error-invalid-command]
+                    errorType: error-invalid-command
+                    details:
+                      method: executeSlashCommandPreview
         '401':
-          $ref: '#/components/responses/authorizationError'  
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          # DoneDone: unverified, the 403 body for commands.preview was not observed (no command on the test workspace provides previews or declares an app permission, TC-05); confirm with API owner
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: Not authorized [error-forbidden]
     post:
       tags:
         - Commands
       summary: Execute command's preview item
-      description: |- 
+      description: |-
+        Executes the selected preview item of the command.
+
+        If the command declares a permission, the user must have it in the room. When the command refuses the action with `error-not-authorized` or `error-not-allowed`, the endpoint returns `403` without an `errorType` field.
+
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |9.0.0      | Returns `403` instead of `400` when the command refuses the action. Enforced the permission declared by the command. |
         |3.0.0      | Added `tmid` and `triggerId` fields       |
         |0.65.0      | Added|
       operationId: post-api-v1-commands.preview
@@ -1723,13 +1771,44 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
               examples:
                 Example 1:
                   value:
                     success: false
                     error: You must provide a command to run the preview item on.
+                No Previews:
+                  value:
+                    success: false
+                    error: Command Does Not Provide Previews [error-invalid-command]
+                    errorType: error-invalid-command
+                    details:
+                      method: executeSlashCommandPreview
         '401':
           $ref: '#/components/responses/authorizationError'
+        '403':
+          # DoneDone: unverified, the 403 body for commands.preview was not observed (no command on the test workspace provides previews or declares an app permission, TC-06); confirm with API owner
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: Not authorized [error-forbidden]
   /api/v1/commands.run:
     post:
       tags:
@@ -1737,9 +1816,15 @@ paths:
       summary: Execute a Slash Command
       description: |- 
           Execute a slash command in the specified room.
+
+          If the command declares a permission, the user must have it in the room. When the command refuses the action with `error-not-authorized` or `error-not-allowed`, the endpoint returns `403` without an `errorType` field. The permission check runs before the command's own checks.
+
+          Some commands report errors to the caller as an ephemeral message in the room instead of in the response. For example, `/invite` with an unknown or banned user returns `200` with `success: true`, and only the caller sees a message such as `No user exists by the name of @username.` or `User is banned from this room`.
+
           ### Changelog
           | Version      | Description |
           | ---------------- | ------------|
+          |9.0.0      | Returns `403` instead of `400` when the command refuses the action. Enforced the permission declared by the command. |
           |3.0.0      | Added `triggerId` property       |
           |2.0.0      | Added `tmid` property      |
           |0.60.2      | Added        |
@@ -1793,13 +1878,40 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
               examples:
                 Example 1:
                   value:
                     success: false
                     error: You must provide a command to run.
+                Unknown Command:
+                  value:
+                    success: false
+                    error: The command provided does not exist (or is disabled).
+                Missing roomId:
+                  value:
+                    success: false
+                    error: must have required property 'roomId'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: Not authorized [error-forbidden]
   /api/v1/mailer:
     post:
       tags:
@@ -1969,8 +2081,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''date'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''date'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: get-api-v1-calendar-events.list
@@ -2060,8 +2172,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''id'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''id'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: get-api-v1-calendar-events.info
@@ -2175,8 +2287,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''eventId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''eventId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: post-api-v1-calendar-events.update
@@ -2313,8 +2425,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''externalId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''externalId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: post-api-v1-calendar-events.import
@@ -2664,18 +2776,22 @@ components:
     offset:
       name: offset
       in: query
-      description: 'Number of items to "skip" in the query, i.e. requests return count items, skipping the first offset items. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
+      description: >-
+        How many items to skip before this page. Use a non-negative integer. Endpoints that validate their query parameters reject negative or fractional values. Refer to the <a href="https://developer.rocket.chat/apidocs/query-parameters#pagination" target="_blank">official documentation</a> to learn more.
       required: false
       schema:
         type: integer
+        minimum: 0
       example: 50
     count:
       name: count
       in: query
-      description: 'The number of items to return.  Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
+      description: >-
+        How many items to return. Use a non-negative integer. Endpoints that validate their query parameters reject negative or fractional values. Each workspace sets a maximum page size (`API_Upper_Count_Limit`) and lowers any larger value to it, so a response can hold fewer items than requested. Page by the number of items returned. When omitted, the workspace default page size (`API_Default_Count`) is used. `0` returns every item if `API_Allow_Infinite_Count` is enabled, and the default page size otherwise. Refer to the <a href="https://developer.rocket.chat/apidocs/query-parameters#pagination" target="_blank">official documentation</a> to learn more.
       required: false
       schema:
         type: integer
+        minimum: 0
       example: 50
     sort:
       name: sort
@@ -2733,15 +2849,16 @@ components:
           schema:
             type: object
             properties:
-              status:
-                type: string
-              message:
+              success:
+                type: boolean
+              error:
                 type: string
           examples:
             Authorization Error:
               value:
-                status: error
-                message: You must be logged in to do this.
+                success: false
+                error: You must be logged in to do this.
+
     forbiddenError:
       description: Forbidden
       content:

@@ -100,8 +100,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''username'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''username'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -119,7 +119,7 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: unauthorized
+                    error: forbidden
       tags:
         - Omnichannel Users
     get:
@@ -401,7 +401,7 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: unauthorized
+                    error: forbidden
       tags:
         - Omnichannel Users
   '/api/v1/livechat/agent.info/{rid}/{token}':
@@ -971,8 +971,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''emails'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''emails'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
@@ -1187,8 +1187,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''emails'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''emails'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
@@ -1389,8 +1389,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''contactId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''contactId'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
@@ -1637,14 +1637,14 @@ paths:
                   value:
                     success: false
                     error: |-
-                      error: must have required property 'contactId' [invalid-params]
-                    errorType: invalid-params
+                      error: must have required property 'contactId' [error-invalid-params]
+                    errorType: error-invalid-params
                 Empty contact:
                   value:
                     success: false
                     error: |-
-                      must pass "isNotEmpty" keyword validation [invalid-params]
-                    errorType: invalid-params
+                      must pass "isNotEmpty" keyword validation [error-invalid-params]
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -1815,13 +1815,13 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must be number [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must be number [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
-                    error: 'must be boolean [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must be boolean [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -1944,24 +1944,10 @@ paths:
                 Bad Request Example:
                   value:
                     success: false
-                    error: 'must have required property ''contactId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''contactId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                  message:
-                    type: string
-              examples:
-                'Unauthorized Example ':
-                  value:
-                    status: error
-                    message: You must be logged in to do this.
+          $ref: '#/components/responses/authorizationError'
       operationId: get-api-v1-omnichannel-contacts.channels
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -2006,8 +1992,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''contactId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''contactId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -2100,8 +2086,8 @@ paths:
                       must have required property 'contactId'
                        must have required property 'email'
                        must have required property 'phone'
-                       must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params
+                       must match exactly one schema in oneOf [error-invalid-params]
+                    errorType: error-invalid-params
       operationId: get-api-v1-omnichannel-contacts.checkExistence
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -2160,8 +2146,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''visitor'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''visitor'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
@@ -2238,8 +2224,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''visitor'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''visitor'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
@@ -2397,18 +2383,18 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''name'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''name'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
-                    error: 'must have required property ''from'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''from'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 3:
                   value:
                     success: false
-                    error: 'must have required property ''to'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''to'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -2507,18 +2493,18 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''name'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''name'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
-                    error: 'must have required property ''from'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''from'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 3:
                   value:
                     success: false
-                    error: 'must have required property ''to'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''to'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -2803,6 +2789,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        | 9.0.0   | Removed the `query` and `fields` parameters. |
         |7.0.0             | Remove support of filtering by agent's username |
         |2.4.0             | Added support to the parameter `roomName`|
         |2.0.0             | Added       |
@@ -2881,8 +2868,6 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/fields'
-        - $ref: '#/components/parameters/query'
       responses:
         '200':
           description: OK
@@ -3392,13 +3377,13 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''token'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''token'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
-                    error: 'must have required property ''rid'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''rid'' [error-invalid-params]'
+                    errorType: error-invalid-params
       tags:
         - Omnichannel Rooms
       requestBody:
@@ -3452,8 +3437,8 @@ paths:
                 Invalid parameter:
                   value:
                     success: false
-                    error: 'must have required property ''rid'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''rid'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Room already closed:
                   value:
                     success: false
@@ -3555,8 +3540,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''roomId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''roomId'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
@@ -3663,13 +3648,13 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''guestData'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''guestData'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
-                    error: 'must have required property ''roomData'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''roomData'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -3734,8 +3719,8 @@ paths:
                 Example:
                   value:
                     success: false
-                    error: 'must have required property ''roomId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''roomId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       tags:
@@ -3931,8 +3916,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''token'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''token'' [error-invalid-params]'
+                    errorType: error-invalid-params
       tags:
         - Omnichannel Rooms
   /api/v1/livechat/room.onHold:
@@ -3981,8 +3966,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''roomId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''roomId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       tags:
@@ -4189,7 +4174,7 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: unauthorized
+                    error: forbidden
       tags:
         - Omnichannel Rooms
   '/api/v1/livechat/room/{rid}/priority':
@@ -4251,8 +4236,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''priorityId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''priorityId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -4375,7 +4360,7 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    errorType: invalid-params
+                    errorType: error-invalid-params
                     error: must have required property 'roomId'
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -4431,8 +4416,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''roomId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''roomId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: post-api-v1-livechat-room.resumeOnHold
@@ -4544,7 +4529,7 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    errorType: invalid-params
+                    errorType: error-invalid-params
                     error: must have required property 'token'
       operationId: post-api-v1-livechat-visitor-department.transfer
       description: This endpoint can be used by visitors to transfer an ongoing chat to another department.
@@ -4896,13 +4881,13 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''department'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''department'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
-                    error: 'must have required property ''name'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''name'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -5195,13 +5180,13 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''department'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''department'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
-                    error: 'must have required property ''name'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''name'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -5248,11 +5233,12 @@ paths:
           * `view-livechat-departments`
           * `view-l-room`
 
-        The `conditions` field in the `selector` parameter is deprecated and will be removed in Rocket.Chat 9.0.0. In 8.8, requests containing a non-empty `conditions` object continue to work, but the response includes deprecation headers and the server records a warning.
+        The `selector` parameter accepts only `term` and `exceptions`. Since Rocket.Chat 9.0.0, the server ignores any other field in `selector`, including `conditions`.
 
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 9.0.0   | Removed the `conditions` field from the `selector` parameter. The server ignores it and no longer returns deprecation headers. |
         | 8.8.0   | Deprecated the `conditions` field in the `selector` parameter. |
       operationId: get-api-v1-livechat-department.autocomplete
       parameters:
@@ -5260,7 +5246,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: selector
           in: query
-          description: A JSON string containing the search `term` and an optional array of department IDs to exclude in `exceptions`. The `conditions` field is deprecated and will be removed in Rocket.Chat 9.0.0.
+          description: A JSON string containing the search `term` and an optional array of department IDs to exclude in `exceptions`. Other fields, including `conditions`, are ignored.
           required: true
           schema:
             type: string
@@ -5278,68 +5264,30 @@ paths:
       responses:
         '200':
           description: OK
-          headers:
-            x-deprecation-type:
-              description: Returned as `parameter-deprecation` when the request contains a non-empty `selector.conditions` object.
-              schema:
-                type: string
-                example: parameter-deprecation
-            x-deprecation-message:
-              description: Describes the deprecated parameter and its removal version. Returned when the request contains a non-empty `selector.conditions` object.
-              schema:
-                type: string
-            x-deprecation-version:
-              description: The Rocket.Chat version in which the deprecated parameter will be removed. Returned when the request contains a non-empty `selector.conditions` object.
-              schema:
-                type: string
-                example: 9.0.0
           content:
             application/json:
               schema:
                 type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                  success:
+                    type: boolean
               examples:
-                Example 1:
+                Success Example:
                   value:
-                    departments:
-                      - _id: qajzu7WaBRoQBpq6Z
-                        enabled: true
-                        name: Brazil
-                        description: ''
-                        numAgents: 3
-                        showOnRegistration: false
-                        showOnOfflineForm: true
-                        email: brazil@rocketchat.com
-                        _updatedAt: '2021-06-23T06:02:02.931Z'
-                        chatClosingTags: []
-                        maxNumberSimultaneousChat: ''
-                        requestTagBeforeClosingChat: false
-                        type: d
-                        waitingQueueMessage: ''
-                        abandonedRoomsCloseCustomMessage: ''
-                        departmentsAllowedToForward: ''
-                        offlineMessageChannelName: ''
-                        visitorInactivityTimeoutInSeconds: ''
-                        ancestors: []
-                      - _id: NhnC9dBwFonZqSQ5m
-                        enabled: true
-                        name: CSM and Support
-                        description: ''
-                        showOnRegistration: true
-                        showOnOfflineForm: false
-                        requestTagBeforeClosingChat: false
-                        email: br@rocketchat.com
-                        chatClosingTags: []
-                        offlineMessageChannelName: ''
-                        abandonedRoomsCloseCustomMessage: ''
-                        waitingQueueMessage: ''
-                        departmentsAllowedToForward:
-                          - CAJioQNAvLnYWTy8i
-                          - Z2KWYBJQFR7AzfmQL
-                        _updatedAt: '2021-07-12T18:05:53.257Z'
-                        numAgents: 4
-                    count: 2
-                    offset: 0
-                    total: 2
+                    items:
+                      - _id: 64f0c2a1b3d4e5f6a7b8c9d0
+                        name: Sales
+                      - _id: 64f0c2a1b3d4e5f6a7b8c9d1
+                        name: Support
                     success: true
         '400':
           description: Bad Request
@@ -5357,6 +5305,10 @@ paths:
                   value:
                     success: false
                     error: The 'selector' param is required
+                Example 2:
+                  value:
+                    success: false
+                    error: Expected property name or '}' in JSON at position 1 (line 1 column 2)
         '401':
           $ref: '#/components/responses/authorizationError'
       tags:
@@ -6731,13 +6683,13 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''token'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''token'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
-                    error: 'must have required property ''key'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''key'' [error-invalid-params]'
+                    errorType: error-invalid-params
       tags:
         - Omnichannel Custom Fields
   /api/v1/livechat/custom.fields:
@@ -6838,13 +6790,13 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''token'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''token'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
-                    error: 'must have required property ''key'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''key'' [error-invalid-params]'
+                    errorType: error-invalid-params
       tags:
         - Omnichannel Custom Fields
   /api/v1/livechat/custom-fields:
@@ -7055,7 +7007,7 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    errorType: invalid-params
+                    errorType: error-invalid-params
                     error: must have required property 'customFieldId'
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -7217,13 +7169,13 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''token'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''token'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
-                    error: 'must have required property ''pageInfo'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''pageInfo'' [error-invalid-params]'
+                    errorType: error-invalid-params
   /api/v1/livechat/transcript:
     post:
       tags:
@@ -7298,13 +7250,13 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''rid'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''rid'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
-                    error: 'must have required property ''token'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''token'' [error-invalid-params]'
+                    errorType: error-invalid-params
   '/api/v1/livechat/transcript/{rid}':
     post:
       tags:
@@ -7369,13 +7321,13 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''email'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''email'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
-                    error: 'must have required property ''subject'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''subject'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -8088,8 +8040,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must be array [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must be array [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
@@ -8766,7 +8718,7 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    errorType: invalid-params
+                    errorType: error-invalid-params
                     error: must have required property '_id'
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -8822,7 +8774,7 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    errorType: invalid-params
+                    errorType: error-invalid-params
                     error: must have required property 'name'
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -9642,8 +9594,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''inquiryId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''inquiryId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -9958,8 +9910,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''roomId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''roomId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -10557,13 +10509,13 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''description'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''description'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
-                    error: 'must be equal to one of the allowed values [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must be equal to one of the allowed values [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -10857,8 +10809,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''webhookUrl'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''webhookUrl'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: post-api-v1-livechat-triggers-external-service-test
@@ -11085,7 +11037,7 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    errorType: invalid-params
+                    errorType: error-invalid-params
                     error: must have required property 'username'
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -11162,7 +11114,7 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    errorType: invalid-params
+                    errorType: error-invalid-params
                     error: must have required property 'username'
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -11397,8 +11349,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must match exactly one schema in oneOf [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must match exactly one schema in oneOf [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -11779,7 +11731,7 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    errorType: invalid-params
+                    errorType: error-invalid-params
                     error: must have required property 'tagData'
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -13106,13 +13058,13 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''name'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''name'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
-                    error: 'must have required property ''dueTimeInMinutes'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''dueTimeInMinutes'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -13254,13 +13206,13 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''name'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''name'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
-                    error: 'must have required property ''dueTimeInMinutes'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''dueTimeInMinutes'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -13681,8 +13633,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''visitorId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''visitorId'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
@@ -13864,8 +13816,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''term'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''term'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: get-api-v1-livechat-visitors-search
@@ -14371,30 +14323,16 @@ paths:
 
         Permission required: `view-l-room`
 
-        The `conditions` field in the `selector` parameter is deprecated and will be removed in Rocket.Chat 9.0.0. In 8.8, requests containing a non-empty `conditions` object continue to work, but the response includes deprecation headers and the server records a warning.
+        The `selector` parameter accepts only `term` and `exceptions`. Since Rocket.Chat 9.0.0, the server ignores any other field in `selector`, including `conditions`.
 
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 9.0.0   | Removed the `conditions` field from the `selector` parameter. The server ignores it and no longer returns deprecation headers. |
         | 8.8.0   | Deprecated the `conditions` field in the `selector` parameter. |
       responses:
         '200':
           description: OK
-          headers:
-            x-deprecation-type:
-              description: Returned as `parameter-deprecation` when the request contains a non-empty `selector.conditions` object.
-              schema:
-                type: string
-                example: parameter-deprecation
-            x-deprecation-message:
-              description: Describes the deprecated parameter and its removal version. Returned when the request contains a non-empty `selector.conditions` object.
-              schema:
-                type: string
-            x-deprecation-version:
-              description: The Rocket.Chat version in which the deprecated parameter will be removed. Returned when the request contains a non-empty `selector.conditions` object.
-              schema:
-                type: string
-                example: 9.0.0
           content:
             application/json:
               schema:
@@ -14422,7 +14360,7 @@ paths:
                       - _id: 6400be90fa0ed7dd90509300
                         username: guest-5
                         name: Jane
-                        custom_name: guest-5 - An agent
+                        custom_name: guest-5 - Jane
                     success: true
         '400':
           description: Bad Request
@@ -14441,8 +14379,12 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''selector'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''selector'' [error-invalid-params]'
+                    errorType: error-invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: Expected property name or '}' in JSON at position 1 (line 1 column 2)
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: get-api-v1-livechat-visitors.autocomplete
@@ -14451,7 +14393,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: selector
           in: query
-          description: A JSON string containing the search `term` and an optional array of visitor IDs to exclude in `exceptions`. The `conditions` field is deprecated and will be removed in Rocket.Chat 9.0.0.
+          description: A JSON string containing the search `term` and an optional array of visitor IDs to exclude in `exceptions`. Other fields, including `conditions`, are ignored.
           required: true
           schema:
             type: string
@@ -14628,13 +14570,13 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''shortcut'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''shortcut'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
-                    error: 'must have required property ''scope'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''scope'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 3:
                   value:
                     success: false
@@ -14662,6 +14604,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        | 9.0.0   | Removed the `fields` parameter. |
         |1.0.0            | Added       |
       operationId: get-api-v1-canned-responses
       parameters:
@@ -14695,7 +14638,6 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/fields'
         - schema:
             type: string
           in: query
@@ -14974,8 +14916,36 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'Canned Response not found [error-canned-response-not-found]'
+                    errorType: error-canned-response-not-found
+                    details:
+                      method: removeCannedResponse
         '401':
           $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/permissionError'
       operationId: delete-api-v1-canned-responses-_id
       description: |-
        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/Enterprise%20tag.svg" alt="Enterprise" style="display: block; margin: auto;"></div>
@@ -15103,8 +15073,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''token'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''token'' [error-invalid-params]'
+                    errorType: error-invalid-params
       description: Send a new message in a Livechat room.
       tags:
         - Livechat Messages
@@ -15207,8 +15177,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''visitor'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''visitor'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       description: Send an array of messsages in a Livechat room.
@@ -15441,13 +15411,13 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''rid'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''rid'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
-                    error: 'must have required property ''token'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''token'' [error-invalid-params]'
+                    errorType: error-invalid-params
       description: Retrieve specific livechat message information.
       parameters:
         - schema:
@@ -15511,8 +15481,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''token'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''token'' [error-invalid-params]'
+                    errorType: error-invalid-params
       operationId: delete-api-v1-livechat-message-_id
       description: |
        Remove a specific livechat message. You can only delete your messages if the **Allow Message Deleting** setting is enabled in the Rocket.Chat workspace.
@@ -15649,8 +15619,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''token'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''token'' [error-invalid-params]'
+                    errorType: error-invalid-params
       description: Get the entire message history of a conversation.
       tags:
         - Livechat Messages
@@ -15719,8 +15689,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''name'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''name'' [error-invalid-params]'
+                    errorType: error-invalid-params
       description: Send the offline message when no agent is available to attend the omnichannel conversation.
       requestBody:
         content:
@@ -16233,16 +16203,20 @@ components:
       required: false
       schema:
         type: integer
+        minimum: 0
       example: 50
-      description: 'Number of items to "skip" in the query, i.e. requests return count items, skipping the first offset items. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
+      description: >-
+        How many items to skip before this page. Use a non-negative integer. Endpoints that validate their query parameters reject negative or fractional values. Refer to the <a href="https://developer.rocket.chat/apidocs/query-parameters#pagination" target="_blank">official documentation</a> to learn more.
     count:
       name: count
       in: query
       required: false
       schema:
         type: integer
+        minimum: 0
       example: 25
-      description: 'The number of items to return. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
+      description: >-
+        How many items to return. Use a non-negative integer. Endpoints that validate their query parameters reject negative or fractional values. Each workspace sets a maximum page size (`API_Upper_Count_Limit`) and lowers any larger value to it, so a response can hold fewer items than requested. Page by the number of items returned. When omitted, the workspace default page size (`API_Default_Count`) is used. `0` returns every item if `API_Allow_Infinite_Count` is enabled, and the default page size otherwise. Refer to the <a href="https://developer.rocket.chat/apidocs/query-parameters#pagination" target="_blank">official documentation</a> to learn more.
     sort:
       name: sort
       in: query
@@ -16283,15 +16257,16 @@ components:
           schema:
             type: object
             properties:
-              status:
-                type: string
-              message:
+              success:
+                type: boolean
+              error:
                 type: string
           examples:
             Authorization Error:
               value:
-                status: error
-                message: You must be logged in to do this.
+                success: false
+                error: You must be logged in to do this.
+
     permissionError:
       description: Forbidden
       content:
@@ -16311,7 +16286,7 @@ components:
             Unauthorized:
               value:
                 success: false
-                error: unauthorized
+                error: forbidden
     startendError:
       description: Bad Request
       content:
@@ -16329,8 +16304,8 @@ components:
             Example 1:
               value:
                 success: false
-                error: 'must have required property ''start'' [invalid-params]'
-                errorType: invalid-params
+                error: 'must have required property ''start'' [error-invalid-params]'
+                errorType: error-invalid-params
             Example 2:
               value:
                 success: false
@@ -16338,8 +16313,8 @@ components:
             Example 3:
               value:
                 success: false
-                error: 'must have required property ''end'' [invalid-params]'
-                errorType: invalid-params
+                error: 'must have required property ''end'' [error-invalid-params]'
+                errorType: error-invalid-params
             Example 4:
               value:
                 success: false

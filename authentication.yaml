@@ -92,10 +92,13 @@ paths:
         - To authenticate a request, you need to pass the `userId` and `authToken` values from this JSON response object as headers in the request. The `authToken` is passed as `X-Auth-Token` header, while the `userId` as `X-User-Id` header.
 
         -  If LDAP authentication is enabled, you must maintain the login in the same way as you normally do. Similarly, if 2FA is enabled for an LDAP user, everything stays the same.
+
+        - If the user has two-factor authentication by email and you log in with `user` and `password` but without `code`, the request fails with a `401` `totp-required` error and the server emails a code to the user. The error's `details` object includes a `challengeId`. To send the user a new code, call `/api/v1/twoFactorChallenges.sendEmailCode` with this `challengeId`. The server sends at most one email code per user per minute.
           
         ### Changelog
         | Version      | Description | 
          | ---------------- | ------------|
+         |9.0.0            | Added `challengeId` to the `details` of the `totp-required` error for two-factor authentication by email. |
          |1.0.0            | Added `avatarUrl` property to response       |
          |0.64.0            | Added `me` property.      |
          |0.60.0            | Added      |
@@ -227,6 +230,26 @@ paths:
                         settings:
                           preferences: {}
                         avatarUrl: 'http://localhost:3000/avatar/test'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                Login Refused:
+                  value:
+                    success: false
+                    error: Unauthorized
+                    message: Unauthorized
+          # DoneDone: unverified, the totp-required 401 body (with details and errorType) was not observed in DOCS-1801; only the wrong-password refusal was tested
   /api/v1/login - with Facebook:
     post:
       tags:
@@ -234,11 +257,12 @@ paths:
       summary: Login with Facebook
       deprecated: true
       description: |-
-        This endpoint will be removed in Rocket.Chat 9.0.0.
+        This endpoint was removed in Rocket.Chat 9.0.0 together with the built-in Facebook login provider. To sign in with Facebook, configure it as a custom OAuth service where the provider supports standard OAuth2.
 
         ### Changelog
         | Version      | Description | 
          | ---------------- | ------------|
+         |9.0.0            | Removed. The access-token login for Facebook is no longer available. |
          |1.0.0            | Added `avatarUrl` property to response       |
          |0.64.0            | Added `me` property.      |
          |0.63.0            | Added      |
@@ -390,11 +414,12 @@ paths:
       summary: Login with Twitter
       deprecated: true
       description: |-
-        This endpoint will be removed in Rocket.Chat 9.0.0.
+        This endpoint was removed in Rocket.Chat 9.0.0 together with the built-in Twitter login provider. To sign in with Twitter, configure it as a custom OAuth service where the provider supports standard OAuth2.
 
         ### Changelog
         | Version      | Description | 
          | ---------------- | ------------|
+         |9.0.0            | Removed. The access-token login for Twitter is no longer available. |
          |1.0.0            | Added `avatarUrl` property to response       |
          |0.64.0            | Added `me` property.      |
          |0.63.0            | Added      |
@@ -558,10 +583,17 @@ paths:
       tags:
         - Authentication
       summary: Login with Google
+      deprecated: true
       description: |-
+        This endpoint was removed in Rocket.Chat 9.0.0 with the legacy Meteor OAuth flow. Google login now uses the server-side OAuth flow in the browser.
+
+        A request with `serviceName` set to `google` and an invalid access token returns `401 Unauthorized` with the body `{"success": false, "error": "Unauthorized", "message": "Unauthorized"}`. This is the same response as any failed login attempt, so it does not indicate whether the service is unsupported or the token is invalid.
+        <!-- TODO: team decision (PR #42369): the access-token login handler (server/lib/auth-providers/oauth/oauth.js and oauth/google.js) was deleted. Testing on 9.0.0-rc.0 with a dummy token returned only the generic 401, so engineering must still confirm that a valid Google access token is rejected, and the API owner must decide whether to delete the three login-with-provider operations. The server-side OAuth flow sentence above is also unverified: no provider was enabled during testing. -->
+
         ### Changelog
         | Version      | Description | 
          | ---------------- | ------------|
+         |9.0.0            | Removed. The access-token login for Google is no longer available. |
          |1.0.0            | Added `avatarUrl` property to response       |
          |0.64.0            | Added `me` property.      |
          |0.60.0            | Added      |
@@ -824,8 +856,8 @@ paths:
                 Invalid request:
                   value:
                     success: false
-                    error: must NOT have fewer than 64 characters [invalid-params]
-                    errorType: invalid-params
+                    error: must NOT have fewer than 64 characters [error-invalid-params]
+                    errorType: error-invalid-params
                 Invalid or expired code:
                   value:
                     success: false
@@ -1108,14 +1140,44 @@ paths:
                   errorType:
                     type: string
               examples:
-                Example 1:
+                Missing emailOrUsername:
                   value:
                     success: false
-                    error: 'emailOrUsername is required [error-parameter-required]'
-                    errorType: error-parameter-required
+                    error: must have required property 'emailOrUsername'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
-      description: ''
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Too many requests:
+                  value:
+                    success: false
+                    error: 'Error, too many requests. Please slow down. You must wait 35 seconds before trying this endpoint again. [error-too-many-requests]'
+      description: |-
+        Sends a two-factor authentication code to the verified email addresses of a user. This endpoint does not require authentication.
+
+        Every accepted request returns `success: true`, including a request for an email or username that doesn't match any user.
+
+        The server sends at most one email code per user per minute. A request made within a minute of the last code returns `success: true` but doesn't send a new email.
+        <!-- DoneDone: unverified, no mailbox was reachable and two-factor authentication was off during testing, so whether a repeat request within a minute sends an email was not observed. -->
+
+        Unauthenticated callers are limited to 5 requests per minute. The `X-RateLimit-Limit`, `X-RateLimit-Remaining`, and `X-RateLimit-Reset` response headers show the limit, and the sixth request within a minute returns a `429` error. Requests for unknown users count toward this limit.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 9.0.0   | Limited email codes to one per user per minute and requests to 5 per minute. |
+        <!-- TODO: add the row for the version that introduced users.2fa.sendEmailCode; it was not verified from the 9.0.0 diff. -->
       parameters:
         - $ref: '#/components/parameters/Auth-TokenNotRequired'
         - $ref: '#/components/parameters/UserIdNotRequired'
@@ -1620,9 +1682,14 @@ paths:
 
         This endpoint does not require authentication. The challenge must exist, must not be expired, and must use the `email` method. Requests are limited to 5 per minute per caller.
 
+        To resend the code for a password login, use the `challengeId` that `/api/v1/login` returns in the `details` of a `totp-required` error.
+
+        The server sends at most one email code per user per minute. A request made within a minute of the last code returns `success: true` but doesn't send a new email.
+
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 9.0.0   | Accepted the `challengeId` returned by `/api/v1/login` to resend a login code. Limited email codes to one per user per minute. |
         | 8.7.0   | Added       |
       operationId: post-api-v1-twoFactorChallenges.sendEmailCode
       requestBody:
@@ -1695,9 +1762,12 @@ paths:
 
         This endpoint does not require authentication. Requests are limited to 5 per minute per caller. The challenge is removed when the maximum number of failed attempts is reached.
 
+        The `challengeId` that `/api/v1/login` returns to resend an email code can't be verified here. It returns the `error-challenge-not-found` error.
+
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 9.0.0   | Rejected the resend `challengeId` returned by `/api/v1/login` with `error-challenge-not-found`. |
         | 8.7.0   | Added       |
       operationId: post-api-v1-twoFactorChallenges.verifyChallenge
       requestBody:
@@ -1853,16 +1923,13 @@ components:
           schema:
             type: object
             properties:
-              status:
+              success:
+                type: boolean
+              error:
                 type: string
-              message:
-                type: string
-            x-examples:
-              Authorization Error:
-                status: error
-                message: You must be logged in to do this.
           examples:
             Authorization Error:
               value:
-                status: error
-                message: You must be logged in to do this.
+                success: false
+                error: You must be logged in to do this.
+
