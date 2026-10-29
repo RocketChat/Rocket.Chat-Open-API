@@ -1280,7 +1280,7 @@ paths:
                 Missing Parameter:
                   value:
                     success: false
-                    errorType: invalid-params
+                    errorType: error-invalid-params
                     error: "must have required property 'license'"
   /api/v1/licenses.validate:
     post:
@@ -1480,6 +1480,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |9.0.0   | Removed the `fields` and `query` parameters.       |
         |0.60.2      | Added       |
       operationId: get-api-v1-commands.list
       parameters:
@@ -1593,7 +1594,13 @@ paths:
       tags:
         - Commands
       summary: Get Command's Preview Data
-      description: Fetches the command's preview data or executes the preview item
+      description: |-
+        Fetches the command's preview data or executes the preview item.
+
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |9.0.0   | Returns `403` instead of `400` when the command refuses the action, without `errorType`.       |
       operationId: get-api-v1-commands.preview
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -1739,6 +1746,7 @@ paths:
           ### Changelog
           | Version      | Description |
           | ---------------- | ------------|
+          |9.0.0   | Returns `403` instead of `400` when the command refuses the action, without `errorType`.       |
           |3.0.0      | Added `triggerId` property       |
           |2.0.0      | Added `tmid` property      |
           |0.60.2      | Added        |
@@ -1968,8 +1976,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''date'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''date'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: get-api-v1-calendar-events.list
@@ -2059,8 +2067,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''id'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''id'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: get-api-v1-calendar-events.info
@@ -2174,8 +2182,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''eventId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''eventId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: post-api-v1-calendar-events.update
@@ -2312,8 +2320,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''externalId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''externalId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: post-api-v1-calendar-events.import
@@ -2719,15 +2727,15 @@ components:
           schema:
             type: object
             properties:
-              status:
-                type: string
-              message:
+              success:
+                type: boolean
+              error:
                 type: string
           examples:
             Authorization Error:
               value:
-                status: error
-                message: You must be logged in to do this.
+                success: false
+                error: You must be logged in to do this.
     forbiddenError:
       description: Forbidden
       content:

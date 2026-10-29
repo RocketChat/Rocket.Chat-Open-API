@@ -2526,6 +2526,7 @@ paths:
         
         | Version | Description                                  |
         | ------- | -------------------------------------------- |
+        |9.0.0   | Removed the `query` parameter.       |
         | 7.0.0  | Added `mentionIds`, `starredIds`, `pinned` query parameters.|        
         | 0.59.0  | Added                                        |
 
@@ -2806,6 +2807,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        |9.0.0   | Made the `_id` parameter required.       |
         |0.52.0   | Added       |
         |7.0.0   | Replaced `query` parameter with `_id` parameter       |
       operationId: get-api-v1-channels.online
@@ -2860,6 +2862,7 @@ paths:
         
         | Version | Description |
         | ------- | ----------- |
+        |9.0.0   | Removed the `query` parameter.       |
         |0.48.0   | Added       |
       operationId: post-api-v1-channels.open
       parameters:
@@ -4274,6 +4277,7 @@ paths:
         ### Changelog
         | Version | Description|
         | ------- | -----------|
+        |9.0.0   | Removed the `query` parameter.       |
         |0.63.0  | Added       |
       operationId: get-api-v1-channels.getAllUserMentionsByChannel
       parameters:
@@ -4633,7 +4637,7 @@ paths:
                 Missing channel permissions:
                   value:
                     success: false
-                    error: unauthorized
+                    error: forbidden
   /api/v1/rooms.saveNotification:
     post:
       tags:
@@ -5258,7 +5262,7 @@ paths:
                 Permission Error:
                   value:
                     success: false
-                    error: unauthorized
+                    error: forbidden
         '404':
           description: Not Found. The room does not exist, or the message in `aroundId` is not a visible message in the room.
           content:
@@ -6761,8 +6765,8 @@ paths:
                 roomName is required:
                   value:
                     success: false
-                    error: 'must have required property ''roomName'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''roomName'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: get-api-v1-rooms.nameExists
@@ -7034,8 +7038,8 @@ paths:
                     error: |-
                       must have required property 'userId'
                        must have required property 'username'
-                       must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params
+                       must match exactly one schema in oneOf [error-invalid-params]
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
   
@@ -7101,8 +7105,8 @@ paths:
                     error: |-
                       must have required property 'userId'
                        must have required property 'username'
-                       must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params
+                       must match exactly one schema in oneOf [error-invalid-params]
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
   
@@ -7119,6 +7123,7 @@ paths:
         ### Changelog
         | Version | Description                                                                                   |
         | ------- | --------------------------------------------------------------------------------------------- |
+        |9.0.0   | Requires the caller to be a member of the parent channel.       |
         | 8.8.0   | Added forced encryption checks for private-room discussions.                                      |
         | 1.0.0   | Added                                                                                         |
       operationId: post-api-v1-rooms.createDiscussion
@@ -7410,8 +7415,8 @@ paths:
                 Invalid Params:
                   value:
                     success: false
-                    error: 'must have required property ''roomId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''roomId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
 
@@ -7482,8 +7487,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''roomId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''roomId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -7613,10 +7618,12 @@ paths:
                     error: |-
                       must have required property 'roomId'
                        must have required property 'roomName'
-                       must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params
+                       must match exactly one schema in oneOf [error-invalid-params]
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
+        '403':
+          $ref: '#/components/responses/forbiddenError'
       operationId: get-api-v1-rooms.membersOrderedByRole
       description: |-
         Get room members ordered by their roles. This endpoint sorts the members according to their role in the room in the order `Owners` > `Moderators` > all other members. This can be reversed using the query paramter `sort={"rolePriority":-1}`. You need not be a member of the room.
@@ -7626,6 +7633,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        |9.0.0   | Returns `403` instead of `401` when the caller is not authorized.       |
         | 7.3.0   | Added       |
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -7812,7 +7820,7 @@ paths:
                 Missing room permissions:
                   value:
                     success: false
-                    error: unauthorized
+                    error: forbidden
   /api/v1/teams.listAll:
     get:
       tags:
@@ -9806,8 +9814,8 @@ paths:
                       must have required property 'teamId'
                        must have required property 'teamName'
                        must have required property 'roomId'
-                       must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params
+                       must match exactly one schema in oneOf [error-invalid-params]
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
 
@@ -9822,6 +9830,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        |9.0.0   | Made the `_id` parameter required.       |
         | 0.52.0  | Added       |
         |7.0.0   | Replaced `query` parameter with `_id` parameter       |        
       operationId: get-api-v1-groups.online
@@ -11818,7 +11827,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
-        |9.0.0   | Removed the `fields` parameter.       |
+        |9.0.0   | Removed the `query` parameter.       |
         | 7.0.0  | Added `mentionIds`, `starredIds`, `pinned` query parameters.|
         | 0.59.0  | Added       |
 
@@ -11975,7 +11984,7 @@ paths:
                     error: |-
                       must have required property 'roomId'
                        must have required property 'roomName'
-                       must match exactly one schema in oneOf [invalid-params]
+                       must match exactly one schema in oneOf [error-invalid-params]
                     errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -13771,7 +13780,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
-        |9.0.0   | Removed the `fields` parameter.       |
+        |9.0.0   | Removed the `query` parameter.       |
         | 8.9.0   | Changed the rate limit to 100 requests every 100 seconds per client IP addres. |
         | 7.0.0   | Added `type`, `workspace` and `text` query parameters |
         | 1.0.0   | Added workspace query param |
@@ -13801,12 +13810,6 @@ paths:
           schema:
             type: string
           example: "local"
-        - name: query
-          in: query
-          description: 'The query to search the workspace directory. When `type` is users you can send an additional workspace field, that can be local (default) or all. Workspace=all will work only if <a href="https://docs.rocket.chat/use-rocket.chat/rocket.chat-federation" target="_blank">federation</a> is enabled.'
-          required: true
-          schema:
-            example: '{"text": "rocket", "type": "users", "workspace": "local"}'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
@@ -13915,8 +13918,8 @@ paths:
                 Missing roomId:
                   value:
                     success: false
-                    error: 'must have required property ''roomId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''roomId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/rooms.hide:
@@ -13957,20 +13960,22 @@ paths:
                 x-examples:
                   Example 1:
                     success: false
-                    error: 'must have required property ''roomId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''roomId'' [error-invalid-params]'
+                    errorType: error-invalid-params
               examples:
                 Error due to missing roomId:
                   value:
                     success: false
-                    error: 'must have required property ''roomId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''roomId'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Room already hidden error:
                   value:
                     success: false
                     error: error-room-already-hidden
         '401':
-          description: Unauthorized
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -13980,15 +13985,11 @@ paths:
                     type: boolean
                   error:
                     type: string
-                x-examples:
-                  Example 1:
-                    success: false
-                    error: unauthorized
               examples:
-                Example 1:
+                Forbidden:
                   value:
                     success: false
-                    error: unauthorized
+                    error: forbidden
       operationId: post-api-v1-rooms.hide
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -14015,6 +14016,7 @@ paths:
 
         | Version | Description                          |
         | ------- | ------------------------------------ |
+        |9.0.0   | Returns `403` instead of `401` when the caller is not authorized.       |
         | 7.4.0   | Added                                |
 
   /api/v1/findOrCreateInvite:
@@ -14272,8 +14274,8 @@ paths:
                     error: |-
                       must have required property 'userId'
                        must have required property 'username'
-                       must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params
+                       must match exactly one schema in oneOf [error-invalid-params]
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: get-api-v1-rooms.isMember
@@ -14723,7 +14725,7 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    errorType: invalid-params
+                    errorType: error-invalid-params
                     error: must have required property 'fileId'
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -16840,8 +16842,8 @@ paths:
                 Invalid Parameter:
                   value:
                     success: false
-                    error: 'must have required property ''roomId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''roomId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       tags:
@@ -16875,8 +16877,8 @@ paths:
                     error: |-
                       must have required property 'rid'
                        must have required property 'roomId'
-                       must match a schema in anyOf [invalid-params]
-                    errorType: invalid-params
+                       must match a schema in anyOf [error-invalid-params]
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       parameters:
@@ -16949,8 +16951,8 @@ paths:
                     error: |-
                       must have required property 'roomId'
                        must have required property 'firstUnreadMessage'
-                       must match a schema in anyOf [invalid-params]
-                    errorType: invalid-params
+                       must match a schema in anyOf [error-invalid-params]
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       parameters:
@@ -17215,15 +17217,15 @@ components:
           schema:
             type: object
             properties:
-              status:
-                type: string
-              message:
+              success:
+                type: boolean
+              error:
                 type: string
           examples:
             Authorization Error:
               value:
-                status: error
-                message: You must be logged in to do this.
+                success: false
+                error: You must be logged in to do this.
     forbiddenError:
       description: Forbidden
       content:

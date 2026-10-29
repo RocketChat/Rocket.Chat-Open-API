@@ -59,8 +59,8 @@ paths:
                 Invalid Params:
                   value:
                     success: false
-                    error: 'must have required property ''platform'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''platform'' [error-invalid-params]'
+                    errorType: error-invalid-params
   
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -117,8 +117,8 @@ paths:
                 Invalid Params:
                   value:
                     success: false
-                    error: 'must have required property ''platform'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''platform'' [error-invalid-params]'
+                    errorType: error-invalid-params
   
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -159,8 +159,8 @@ paths:
                 Invalid Params:
                   value:
                     success: false
-                    error: 'must have required property ''bannerId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''bannerId'' [error-invalid-params]'
+                    errorType: error-invalid-params
   
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -677,15 +677,15 @@ components:
           schema:
             type: object
             properties:
-              status:
-                type: string
-              message:
+              success:
+                type: boolean
+              error:
                 type: string
           examples:
             Authorization Error:
               value:
-                status: error
-                message: You must be logged in to do this.
+                success: false
+                error: You must be logged in to do this.
     trueSuccess:
       description: OK
       content:
