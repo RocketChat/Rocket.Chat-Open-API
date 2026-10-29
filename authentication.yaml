@@ -4,7 +4,7 @@ info:
   title: Authentication
   # description: |-
 
-  #   Rocket.Chat provides diverse authentication methods for secure API communication, spanning from basic username and password authentication to OAuth integration with services such as Google, Facebook, and Twitter.
+  #   Rocket.Chat provides diverse authentication methods for secure API communication, spanning from basic username and password authentication to OAuth integration with services such as Google, Apple, and GitHub.
 
   #   To access protected endpoints in the Rocket.Chat API, you must include the userId and a valid authentication token of the user as headers in the request. Add the authentication token as `x-Auth-Token` and the userId as `x-User-Id` in the headers of your request.
 
@@ -206,332 +206,6 @@ paths:
                         avatarUrl: 'http://localhost:3000/avatar/test'
               examples:
                 Login successful:
-                  value:
-                    status: success
-                    data:
-                      authToken: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq
-                      userId: aobEdbYhXfu5hkeqG
-                      me:
-                        _id: aYjNnig8BEAWeQzMh
-                        name: Rocket Cat
-                        emails:
-                          - address: rocket.cat@rocket.chat
-                            verified: false
-                        status: offline
-                        statusConnection: offline
-                        username: rocket.cat
-                        utcOffset: -3
-                        active: true
-                        roles:
-                          - admin
-                        settings:
-                          preferences: {}
-                        avatarUrl: 'http://localhost:3000/avatar/test'
-  /api/v1/login - with Facebook:
-    post:
-      tags:
-        - Authentication
-      summary: Login with Facebook
-      deprecated: true
-      description: |-
-        This endpoint will be removed in Rocket.Chat 9.0.0.
-
-        ### Changelog
-        | Version      | Description | 
-         | ---------------- | ------------|
-         |1.0.0            | Added `avatarUrl` property to response       |
-         |0.64.0            | Added `me` property.      |
-         |0.63.0            | Added      |
-      operationId: post-api-v1-login-facebook
-      requestBody:
-        description: ''
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                serviceName:
-                  type: string
-                  description: 'The desired OAuth service name. In this case, `facebook`.'
-                  example: facebook
-                accessToken:
-                  type: string
-                  description: Access token provided by Facebook oauth.
-                  example: hash
-                secret:
-                  type: string
-                  description: The secret provided by Facebook.
-                  example: hash
-                expiresIn:
-                  type: integer
-                  description: Lifetime of token (in seconds).
-                  example: 200
-              required:
-                - serviceName
-                - accessToken
-                - secret
-                - expiresIn
-              x-examples:
-                Example:
-                  serviceName: facebook
-                  accessToken: hash
-                  secret: hash
-                  expiresIn: 200
-            examples:
-              Example:
-                value:
-                  serviceName: facebook
-                  accessToken: hash
-                  secret: hash
-                  expiresIn: 200
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                  data:
-                    type: object
-                    properties:
-                      authToken:
-                        type: string
-                      userId:
-                        type: string
-                      me:
-                        type: object
-                        properties:
-                          _id:
-                            type: string
-                          name:
-                            type: string
-                          emails:
-                            type: array
-                            items:
-                              type: object
-                              properties:
-                                address:
-                                  type: string
-                                verified:
-                                  type: boolean
-                          status:
-                            type: string
-                          statusConnection:
-                            type: string
-                          username:
-                            type: string
-                          utcOffset:
-                            type: integer
-                          active:
-                            type: boolean
-                          roles:
-                            type: array
-                            items:
-                              type: string
-                          settings:
-                            type: object
-                            properties:
-                              preferences:
-                                type: object
-                          avatarUrl:
-                            type: string
-                x-examples:
-                  Example:
-                    status: success
-                    data:
-                      authToken: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq
-                      userId: aobEdbYhXfu5hkeqG
-                      me:
-                        _id: aYjNnig8BEAWeQzMh
-                        name: Rocket Cat
-                        emails:
-                          - address: rocket.cat@rocket.chat
-                            verified: false
-                        status: offline
-                        statusConnection: offline
-                        username: rocket.cat
-                        utcOffset: -3
-                        active: true
-                        roles:
-                          - admin
-                        settings:
-                          preferences: {}
-                        avatarUrl: 'http://localhost:3000/avatar/test'
-              examples:
-                Success Example:
-                  value:
-                    status: success
-                    data:
-                      authToken: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq
-                      userId: aobEdbYhXfu5hkeqG
-                      me:
-                        _id: aYjNnig8BEAWeQzMh
-                        name: Rocket Cat
-                        emails:
-                          - address: rocket.cat@rocket.chat
-                            verified: false
-                        status: offline
-                        statusConnection: offline
-                        username: rocket.cat
-                        utcOffset: -3
-                        active: true
-                        roles:
-                          - admin
-                        settings:
-                          preferences: {}
-                        avatarUrl: 'http://localhost:3000/avatar/test'
-  /api/v1/login - with Twitter:
-    post:
-      tags:
-        - Authentication
-      summary: Login with Twitter
-      deprecated: true
-      description: |-
-        This endpoint will be removed in Rocket.Chat 9.0.0.
-
-        ### Changelog
-        | Version      | Description | 
-         | ---------------- | ------------|
-         |1.0.0            | Added `avatarUrl` property to response       |
-         |0.64.0            | Added `me` property.      |
-         |0.63.0            | Added      |
-      operationId: post-api-v1-login-twitter
-      requestBody:
-        description: ''
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                serviceName:
-                  type: string
-                  description: 'The desired OAuth service name. In this case, `twitter`.'
-                  example: twitter
-                accessToken:
-                  type: string
-                  description: Access token provided by Twitter OAuth.
-                  example: hash
-                accessTokenSecret:
-                  type: string
-                  description: The access token secret provided by Twitter OAuth.
-                  example: hash
-                appSecret:
-                  type: string
-                  description: The app secret provided by Twitter.
-                  example: hash
-                appId:
-                  type: string
-                  description: The app ID provided by Twitter.
-                  example: hash
-                expiresIn:
-                  type: integer
-                  description: Lifetime of token (in seconds).
-                  example: 200
-              required:
-                - serviceName
-                - accessToken
-                - accessTokenSecret
-                - appSecret
-                - appId
-                - expiresIn
-              x-examples:
-                Example:
-                  serviceName: twitter
-                  accessToken: hash
-                  accessTokenSecret: hash
-                  appSecret: hash
-                  appId: hash
-                  expiresIn: 200
-            examples:
-              Example:
-                value:
-                  serviceName: twitter
-                  accessToken: hash
-                  accessTokenSecret: hash
-                  appSecret: hash
-                  appId: hash
-                  expiresIn: 200
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                  data:
-                    type: object
-                    properties:
-                      authToken:
-                        type: string
-                      userId:
-                        type: string
-                      me:
-                        type: object
-                        properties:
-                          _id:
-                            type: string
-                          name:
-                            type: string
-                          emails:
-                            type: array
-                            items:
-                              type: object
-                              properties:
-                                address:
-                                  type: string
-                                verified:
-                                  type: boolean
-                          status:
-                            type: string
-                          statusConnection:
-                            type: string
-                          username:
-                            type: string
-                          utcOffset:
-                            type: integer
-                          active:
-                            type: boolean
-                          roles:
-                            type: array
-                            items:
-                              type: string
-                          settings:
-                            type: object
-                            properties:
-                              preferences:
-                                type: object
-                          avatarUrl:
-                            type: string
-                x-examples:
-                  Example:
-                    status: success
-                    data:
-                      authToken: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq
-                      userId: aobEdbYhXfu5hkeqG
-                      me:
-                        _id: aYjNnig8BEAWeQzMh
-                        name: Rocket Cat
-                        emails:
-                          - address: rocket.cat@rocket.chat
-                            verified: false
-                        status: offline
-                        statusConnection: offline
-                        username: rocket.cat
-                        utcOffset: -3
-                        active: true
-                        roles:
-                          - admin
-                        settings:
-                          preferences: {}
-                        avatarUrl: 'http://localhost:3000/avatar/test'
-              examples:
-                Success Example:
                   value:
                     status: success
                     data:
@@ -1215,7 +889,7 @@ paths:
 
         This endpoint requires two-factor verification, so the account owner confirms their identity with an existing second factor before a new authenticator is registered. Requests are limited to five per minute.
 
-        This endpoint replaces the deprecated `2fa:enable` real-time method, which remains available until 9.0.0.
+        This endpoint replaces the `2fa:enable` real-time method, which was removed in 9.0.0.
 
         ### Changelog
         | Version | Description |
@@ -1308,7 +982,7 @@ paths:
 
         This endpoint requires two-factor verification. Requests are limited to five per minute.
 
-        This endpoint replaces the deprecated `2fa:validateTempToken` real-time method, which remains available until 9.0.0.
+        This endpoint replaces the `2fa:validateTempToken` real-time method, which was removed in 9.0.0.
 
         ### Changelog
         | Version | Description |
@@ -1403,7 +1077,7 @@ paths:
       description: |-
         Disables the authenticator app (TOTP) two-factor authentication of your own account. The code from the authenticator app is required in the body. Requests are limited to five per minute.
 
-        This endpoint replaces the deprecated `2fa:disable` real-time method, which remains available until 9.0.0.
+        This endpoint replaces the `2fa:disable` real-time method, which was removed in 9.0.0.
 
         ### Changelog
         | Version | Description |
@@ -1475,7 +1149,7 @@ paths:
       description: |-
         Generates a new set of backup codes for the authenticator app (TOTP) two-factor authentication of your own account and returns them. The previous backup codes stop working. The code from the authenticator app is required in the body. Requests are limited to five per minute.
 
-        This endpoint replaces the deprecated `2fa:regenerateCodes` real-time method, which remains available until 9.0.0.
+        This endpoint replaces the `2fa:regenerateCodes` real-time method, which was removed in 9.0.0.
 
         ### Changelog
         | Version | Description |
@@ -1558,7 +1232,7 @@ paths:
       description: |-
         Returns how many backup codes are left for the authenticator app (TOTP) two-factor authentication of your own account. Requests are limited to five per minute.
 
-        This endpoint replaces the deprecated `2fa:checkCodesRemaining` real-time method, which remains available until 9.0.0.
+        This endpoint replaces the `2fa:checkCodesRemaining` real-time method, which was removed in 9.0.0.
 
         ### Changelog
         | Version | Description |
