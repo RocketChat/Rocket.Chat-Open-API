@@ -485,13 +485,13 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''messageId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''messageId'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
-                    error: 'must have required property ''description'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''description'' [error-invalid-params]'
+                    errorType: error-invalid-params
   /api/v1/chat.followMessage:
     post:
       tags:
@@ -1772,8 +1772,8 @@ paths:
                 Missing Parameter:
                   value:
                     success: false
-                    error: 'must have required property ''messageIds'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''messageIds'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -1791,7 +1791,7 @@ paths:
                 Permission Error:
                   value:
                     success: false
-                    error: unauthorized
+                    error: forbidden
         '404':
           description: Not Found. None of the IDs match a visible message.
           content:
@@ -2918,6 +2918,7 @@ paths:
         ### Change Log
         | Version | Description                         |
         | ------- | ----------------------------------- |
+        |9.0.0   | Rejects unsupported `message` fields instead of ignoring them.       |
         | 6.8.0   | Allow custom fields in messages     |      
         | 6.4.0   | Add `previewUrls` param             |
         | 2.4.0   | Added validation on user's identity |
@@ -3976,13 +3977,13 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''url'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''url'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
-                    error: 'must have required property ''roomId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''roomId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: get-api-v1-chat.getURLPreview
@@ -4010,7 +4011,7 @@ paths:
         - Direct Messages
       summary: Block User in DM
       description: |-
-        Blocks or unblocks the other user in a direct message room. This endpoint replaces the deprecated `blockUser` and `unblockUser` DDP methods.
+        Blocks or unblocks the other user in a direct message room. This endpoint replaces the `blockUser` and `unblockUser` DDP methods, which were removed in 9.0.0.
 
         ### Changelog
         | Version      | Description |
@@ -4317,8 +4318,8 @@ paths:
                     error: |-
                       must have required property 'usernames'
                        must have required property 'username'
-                       must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params
+                       must match exactly one schema in oneOf [error-invalid-params]
+                    errorType: error-invalid-params
                 Invalid User:
                   value:
                     success: false
@@ -4386,8 +4387,8 @@ paths:
                     error: |-
                       must have required property 'roomId'
                        must have required property 'username'
-                       must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params
+                       must match exactly one schema in oneOf [error-invalid-params]
+                    errorType: error-invalid-params
                 Invalid room ID or username:
                   value:
                     success: false
@@ -4665,8 +4666,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''roomId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''roomId'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
@@ -4921,6 +4922,7 @@ paths:
 
         | Version | Description                                  |
         | ------- | -------------------------------------------- |
+        |9.0.0   | Removed the `fields` parameter.       |
         | 0.67.0  | Remove `query` parameter support.            |
         | 0.62.0  | Add `query` parameter support.               |
         | 0.49.0  | Count and offset query parameters supported. |
@@ -5254,8 +5256,8 @@ paths:
                     error: |-
                       must have required property 'roomId'
                        must have required property 'username'
-                       must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params
+                       must match exactly one schema in oneOf [error-invalid-params]
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
@@ -5464,8 +5466,8 @@ paths:
                     error: |-
                       must have required property 'roomId'
                        must have required property 'username'
-                       must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params
+                       must match exactly one schema in oneOf [error-invalid-params]
+                    errorType: error-invalid-params
                 Invalid Channel:
                   value:
                     success: false
@@ -5749,7 +5751,7 @@ paths:
       description: |-
         Lists the auto-translate providers registered in the workspace.
 
-        This endpoint replaces the deprecated `autoTranslate.getProviderUiMetadata` Realtime API method.
+        This endpoint replaces the `autoTranslate.getProviderUiMetadata` Realtime API method, which was removed in 9.0.0.
 
         ### Changelog
         | Version | Description |
@@ -5906,8 +5908,8 @@ paths:
                 Target Language Required:
                   value:
                     success: false
-                    error: 'must have required property ''targetLanguage'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''targetLanguage'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/autotranslate.saveSettings:
@@ -6105,7 +6107,7 @@ paths:
                 Permission Error:
                   value:
                     success: false
-                    error: unauthorized
+                    error: forbidden
 
 tags:
   - name: Chat
@@ -6223,12 +6225,12 @@ components:
           schema:
             type: object
             properties:
-              status:
-                type: string
-              message:
+              success:
+                type: boolean
+              error:
                 type: string
           examples:
             Authorization Error:
               value:
-                status: error
-                message: You must be logged in to do this.
+                success: false
+                error: You must be logged in to do this.

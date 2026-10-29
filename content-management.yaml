@@ -215,6 +215,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |9.0.0   | Removed the `query` parameter.       |
         |7.0.0            | Added  `_id` and  `_updatedAt` query parameter     |
         |0.75.0            | Added       |
       operationId: get-api-v1-emoji-custom.list
@@ -550,8 +551,8 @@ paths:
                 Missing required field:
                   value:
                     success: false
-                    error: 'must have required property ''name'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''name'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -663,8 +664,8 @@ paths:
                 Missing required field:
                   value:
                     success: false
-                    error: 'must have required property ''_id'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''_id'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -697,6 +698,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |9.0.0   | Removed the `query` parameter.       |
         |7.0.0           | Added `name` and `_id` query parameters for filtering.      |
         |2.4.0            | Added       |
       operationId: get-api-v1-custom-user-status.list
@@ -1172,8 +1174,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''assetName'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''assetName'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/custom-sounds.delete:
@@ -1234,8 +1236,8 @@ paths:
                 Missing required field:
                   value:
                     success: false
-                    error: 'must have required property ''_id'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''_id'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -1334,15 +1336,15 @@ paths:
               schema:
                 type: object
                 properties:
-                  status:
-                    type: string
-                  message:
+                  success:
+                    type: boolean
+                  error:
                     type: string
               examples:
                 Unauthorized login attempt:
                   value:
-                    status: error
-                    message: You must be logged in to do this.
+                    success: false
+                    error: You must be logged in to do this.
         '403':
           description: Forbidden
           content:
@@ -1446,12 +1448,12 @@ components:
           schema:
             type: object
             properties:
-              status:
-                type: string
-              message:
+              success:
+                type: boolean
+              error:
                 type: string
           examples:
             Authorization Error:
               value:
-                status: error
-                message: You must be logged in to do this.
+                success: false
+                error: You must be logged in to do this.

@@ -246,16 +246,16 @@ paths:
                     error: |-
                       must have required property 'type'
                        must have required property 'type'
-                       must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params
+                       must match exactly one schema in oneOf [error-invalid-params]
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
                     error: |-
                       must have required property 'username'
                        must have required property 'username'
-                       must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params
+                       must match exactly one schema in oneOf [error-invalid-params]
+                    errorType: error-invalid-params
   /api/v1/integrations.get:
     get:
       tags:
@@ -383,8 +383,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''integrationId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''integrationId'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
@@ -469,8 +469,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''id'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''id'' [error-invalid-params]'
+                    errorType: error-invalid-params
   /api/v1/integrations.clearHistory:
     post:
       tags:
@@ -538,8 +538,8 @@ paths:
                 Invalid Parameter:
                   value:
                     success: false
-                    error: 'must have required property ''integrationId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''integrationId'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Invalid Integration:
                   value:
                     success: false
@@ -625,7 +625,7 @@ paths:
                 Invalid Parameter:
                   value:
                     success: false
-                    errorType: invalid-params
+                    errorType: error-invalid-params
                     error: "must have required property 'historyId'"
 
                 Invalid Integration:
@@ -1030,16 +1030,16 @@ paths:
                     error: |-
                       must have required property 'type'
                        must have required property 'type'
-                       must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params
+                       must match exactly one schema in oneOf [error-invalid-params]
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
                     error: |-
                       must have required property 'integrationId'
                        must have required property 'type'
-                       must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params
+                       must match exactly one schema in oneOf [error-invalid-params]
+                    errorType: error-invalid-params
                 Example 3:
                   value:
                     success: false
@@ -1163,8 +1163,8 @@ paths:
                       must have required property 'type'
                        must have required property 'type'
                        must have required property 'type'
-                       must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params
+                       must match exactly one schema in oneOf [error-invalid-params]
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
@@ -1172,8 +1172,8 @@ paths:
                       must have required property 'integrationId'
                        must have required property 'target_url'
                        must have required property 'integrationId'
-                       must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params
+                       must match exactly one schema in oneOf [error-invalid-params]
+                    errorType: error-invalid-params
                 Example 3:
                   value:
                     success: false
@@ -1283,18 +1283,18 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''name'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''name'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
-                    error: 'must have required property ''active'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''active'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 3:
                   value:
                     success: false
-                    error: 'must have required property ''redirectUri'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''redirectUri'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/oauth-apps.update:
@@ -1413,23 +1413,23 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''name'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''name'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
-                    error: 'must have required property ''active'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''active'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 3:
                   value:
                     success: false
-                    error: 'must have required property ''redirectUri'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''redirectUri'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 4:
                   value:
                     success: false
-                    error: 'must have required property ''appId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''appId'' [error-invalid-params]'
+                    errorType: error-invalid-params
   /api/v1/oauth-apps.list:
     get:
       tags:
@@ -1605,8 +1605,8 @@ paths:
                       must have required property '_id'
                        must have required property 'clientId'
                        must have required property 'appId'
-                       must match exactly one schema in oneOf [invalid-params]
-                    errorType: invalid-params
+                       must match exactly one schema in oneOf [error-invalid-params]
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
@@ -1666,8 +1666,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''appId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''appId'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
@@ -1726,12 +1726,12 @@ components:
           schema:
             type: object
             properties:
-              status:
-                type: string
-              message:
+              success:
+                type: boolean
+              error:
                 type: string
           examples:
             Authorization Error:
               value:
-                status: error
-                message: You must be logged in to do this.
+                success: false
+                error: You must be logged in to do this.

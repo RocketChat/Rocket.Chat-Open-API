@@ -2840,27 +2840,27 @@ paths:
                   value:
                     success: false
                     error: must have required property 'params'
-                    errorType: invalid-params
+                    errorType: error-invalid-params
                 Invalid Params Type:
                   value:
                     success: false
                     error: must be array
-                    errorType: invalid-params
+                    errorType: error-invalid-params
                 Missing Event Name:
                   value:
                     success: false
                     error: must have required property 'eventName'
-                    errorType: invalid-params
+                    errorType: error-invalid-params
                 Invalid Timestamp Type:
                   value:
                     success: false
                     error: must be number
-                    errorType: invalid-params
+                    errorType: error-invalid-params
                 Unknown Body Property:
                   value:
                     success: false
                     error: must NOT have additional properties
-                    errorType: invalid-params
+                    errorType: error-invalid-params
                 Unknown Event:
                   value:
                     success: false
@@ -3678,15 +3678,15 @@ components:
           schema:
             type: object
             properties:
-              status:
-                type: string
-              message:
+              success:
+                type: boolean
+              error:
                 type: string
           examples:
             Authorization Error:
               value:
-                status: error
-                message: You must be logged in to do this.
+                success: false
+                error: You must be logged in to do this.
     forbiddenError:
       description: Forbidden
       content:

@@ -227,160 +227,6 @@ paths:
                         settings:
                           preferences: {}
                         avatarUrl: 'http://localhost:3000/avatar/test'
-  /api/v1/login - with Google:
-    post:
-      tags:
-        - Authentication
-      summary: Login with Google
-      description: |-
-        ### Changelog
-        | Version      | Description | 
-         | ---------------- | ------------|
-         |1.0.0            | Added `avatarUrl` property to response       |
-         |0.64.0            | Added `me` property.      |
-         |0.60.0            | Added      |
-      operationId: post-api-v1-login-google
-      requestBody:
-        description: ''
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                serviceName:
-                  type: string
-                  description: 'The desired OAuth service name. In this case, `google`.'
-                accessToken:
-                  type: string
-                  description: Access token provided by Google OAuth.
-                idToken:
-                  type: string
-                  description: The ID token provided by Google OAuth.
-                expiresIn:
-                  type: integer
-                  description: Lifetime of token (in seconds).
-                scope:
-                  type: string
-                  description: Google scopes for API.
-              required:
-                - serviceName
-                - accessToken
-                - idToken
-                - expiresIn
-              x-examples:
-                Example:
-                  serviceName: google
-                  accessToken: hash
-                  idToken: hash
-                  expiresIn: 200
-                  scope: profile
-            examples:
-              Example:
-                value:
-                  serviceName: google
-                  accessToken: hash
-                  idToken: hash
-                  expiresIn: 200
-                  scope: profile
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                  data:
-                    type: object
-                    properties:
-                      authToken:
-                        type: string
-                      userId:
-                        type: string
-                      me:
-                        type: object
-                        properties:
-                          _id:
-                            type: string
-                          name:
-                            type: string
-                          emails:
-                            type: array
-                            items:
-                              type: object
-                              properties:
-                                address:
-                                  type: string
-                                verified:
-                                  type: boolean
-                          status:
-                            type: string
-                          statusConnection:
-                            type: string
-                          username:
-                            type: string
-                          utcOffset:
-                            type: integer
-                          active:
-                            type: boolean
-                          roles:
-                            type: array
-                            items:
-                              type: string
-                          settings:
-                            type: object
-                            properties:
-                              preferences:
-                                type: object
-                          avatarUrl:
-                            type: string
-                x-examples:
-                  Login successful:
-                    status: success
-                    data:
-                      authToken: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq
-                      userId: aobEdbYhXfu5hkeqG
-                      me:
-                        _id: aYjNnig8BEAWeQzMh
-                        name: Rocket Cat
-                        emails:
-                          - address: rocket.cat@rocket.chat
-                            verified: false
-                        status: offline
-                        statusConnection: offline
-                        username: rocket.cat
-                        utcOffset: -3
-                        active: true
-                        roles:
-                          - admin
-                        settings:
-                          preferences: {}
-                        avatarUrl: 'http://localhost:3000/avatar/test'
-              examples:
-                Success Example:
-                  value:
-                    status: success
-                    data:
-                      authToken: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq
-                      userId: aobEdbYhXfu5hkeqG
-                      me:
-                        _id: aYjNnig8BEAWeQzMh
-                        name: Rocket Cat
-                        emails:
-                          - address: rocket.cat@rocket.chat
-                            verified: false
-                        status: offline
-                        statusConnection: offline
-                        username: rocket.cat
-                        utcOffset: -3
-                        active: true
-                        roles:
-                          - admin
-                        settings:
-                          preferences: {}
-                        avatarUrl: 'http://localhost:3000/avatar/test'
   /api/v1/logout:
     post:
       tags:
@@ -498,8 +344,8 @@ paths:
                 Invalid request:
                   value:
                     success: false
-                    error: must NOT have fewer than 64 characters [invalid-params]
-                    errorType: invalid-params
+                    error: must NOT have fewer than 64 characters [error-invalid-params]
+                    errorType: error-invalid-params
                 Invalid or expired code:
                   value:
                     success: false
@@ -1527,16 +1373,12 @@ components:
           schema:
             type: object
             properties:
-              status:
+              success:
+                type: boolean
+              error:
                 type: string
-              message:
-                type: string
-            x-examples:
-              Authorization Error:
-                status: error
-                message: You must be logged in to do this.
           examples:
             Authorization Error:
               value:
-                status: error
-                message: You must be logged in to do this.
+                success: false
+                error: You must be logged in to do this.

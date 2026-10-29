@@ -252,7 +252,7 @@ paths:
                   value:
                     success: false
                     error: "must have required property 'role'"
-                    errorType: invalid-params
+                    errorType: error-invalid-params
                 Permission does not exist:
                   value:
                     success: false
@@ -355,7 +355,7 @@ paths:
                   value:
                     success: false
                     error: "must have required property 'role'"
-                    errorType: invalid-params
+                    errorType: error-invalid-params
                 Permission not found:
                   value:
                     success: false
@@ -491,7 +491,7 @@ paths:
                 Missing Parameter:
                   value:
                     success: false
-                    errorType: invalid-params
+                    errorType: error-invalid-params
                     error: "must have required property 'name'"
                 Role Already Exists:
                   value:
@@ -626,7 +626,7 @@ paths:
                 Missing Parameter:
                   value:
                     success: false
-                    errorType: invalid-params
+                    errorType: error-invalid-params
                     error: "must have required property 'name'"
                 Access Permission not Allowed:
                   value:
@@ -943,11 +943,6 @@ paths:
                         protected: true
                         scope: Users
                       - _id: guest
-                        description: ''
-                        mandatory2fa: false
-                        protected: true
-                        scope: Users
-                      - _id: anonymous
                         description: ''
                         mandatory2fa: false
                         protected: true
@@ -1577,8 +1572,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''pass'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''pass'' [error-invalid-params]'
+                    errorType: error-invalid-params
     parameters: []
   /api/v1/users.update:
     post:
@@ -2235,8 +2230,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''data'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''data'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
 
@@ -2461,8 +2456,8 @@ paths:
                       must have required property 'userId'
                        must have required property 'username'
                        must have required property 'importId'
-                       must match a schema in anyOf [invalid-params]
-                    errorType: invalid-params
+                       must match a schema in anyOf [error-invalid-params]
+                    errorType: error-invalid-params
                 User not found:
                   value:
                     success: false
@@ -2488,7 +2483,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
-        |9.0.0            | Removed the `fields` and `query` parameters.       |
+        |9.0.0            | Removed the `fields` and `query` parameters. Fields outside the default projection (`customFields`, `utcOffset`, `nickname`, `bio`, `statusText`, `federated`, and `freeSwitchExtension`) are no longer reachable in bulk; use `users.info` instead.       |
         |8.8.0             | Added status visibility filtering |
         |8.4.0             | Added `email` query parameter for filtering |
         |0.49.0            | `Count` and `offset` query parameters supported.       |
@@ -2588,7 +2583,6 @@ paths:
                         type: user
                         status: offline
                         roles:
-                          - anonymous
                           - user
                         lastLogin: '2023-05-16T20:50:33.579Z'
                         username: user-0
@@ -2598,7 +2592,6 @@ paths:
                         type: user
                         status: offline
                         roles:
-                          - anonymous
                           - user
                         lastLogin: '2023-05-12T10:44:46.703Z'
                         username: user-00
@@ -3024,8 +3017,8 @@ paths:
                     success: false
                     error: |-
                       must have required property 'activeStatus'
-                      [invalid-params]
-                    errorType: invalid-params
+                      [error-invalid-params]
+                    errorType: error-invalid-params
                 user-last-owner:
                   value:
                     success: false
@@ -3132,8 +3125,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''daysIdle'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''daysIdle'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -3151,7 +3144,7 @@ paths:
                 Permission Error:
                   value:
                     success: false
-                    error: unauthorized
+                    error: forbidden
       description: |-
         Automatically deactivate idle users in your workspace based on the number of days and roles.
 
@@ -3440,7 +3433,7 @@ paths:
                 Permission Error:
                   value:
                     success: false
-                    error: unauthorized
+                    error: forbidden
   /api/v1/users.deleteOwnAccount:
     post:
       tags:
@@ -3863,8 +3856,8 @@ paths:
                 Invalid Parameter:
                   value:
                     success: false
-                    error: 'must have required property ''data'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''data'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       description: |-
@@ -4400,8 +4393,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''username'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''username'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
@@ -4986,8 +4979,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''selector'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''selector'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       description: List the users whose names match a given pattern.
@@ -5288,8 +5281,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''userId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''userId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/moderation.reportUser:
@@ -5316,8 +5309,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''userId'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''userId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       tags:
@@ -5786,8 +5779,8 @@ paths:
                 Example 1:
                   value:
                     success: false
-                    error: 'must have required property ''emails'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''emails'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: post-api-v1-sendInvitationEmail
@@ -5839,8 +5832,8 @@ paths:
                 Missing parameter:
                   value:
                     success: false
-                    error: 'must have required property ''email'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''email'' [error-invalid-params]'
+                    errorType: error-invalid-params
       operationId: post-api-v1-users.sendConfirmationEmail
       description: |-
        Send an email to verify a user's email address. The user receives the email and they must click the confirmation button to confirm their email address. Rate limit applies: One request can be sent every 60000ms. This endpoint does not require authentication. An unverified user can call it from the login screen to resend their own verification email.
@@ -5871,11 +5864,12 @@ paths:
         - Users
       summary: Verify User Email
       description: |-
-        Verifies a user's email address using the token embedded in the verification sent to thier email. If the user has the `anonymous` role, it is replaced with the `user` role as part of the verification.
+        Verifies a user's email address using the token embedded in the verification sent to their email.
 
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |9.0.0            | Removed the `anonymous` role swap on verification.       |
         |8.7.0            | Added       |
       operationId: post-api-v1-users.verifyEmail
       requestBody:
@@ -5914,8 +5908,8 @@ paths:
                 Missing token:
                   value:
                     success: false
-                    error: 'must have required property ''token'' [invalid-params]'
-                    errorType: invalid-params
+                    error: 'must have required property ''token'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Verification link expired:
                   value:
                     success: false
@@ -6325,15 +6319,15 @@ components:
           schema:
             type: object
             properties:
-              status:
-                type: string
-              message:
+              success:
+                type: boolean
+              error:
                 type: string
           examples:
             Authorization Error:
               value:
-                status: error
-                message: You must be logged in to do this.
+                success: false
+                error: You must be logged in to do this.
     trueSuccess:
       description: OK
       content:
