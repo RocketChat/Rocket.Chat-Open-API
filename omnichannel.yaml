@@ -2803,6 +2803,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |9.0.0   | Removed the `fields` and `query` parameters.       |
         |7.0.0             | Remove support of filtering by agent's username |
         |2.4.0             | Added support to the parameter `roomName`|
         |2.0.0             | Added       |
@@ -2881,8 +2882,6 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/fields'
-        - $ref: '#/components/parameters/query'
       responses:
         '200':
           description: OK
@@ -5248,11 +5247,11 @@ paths:
           * `view-livechat-departments`
           * `view-l-room`
 
-        The `conditions` field in the `selector` parameter is deprecated and will be removed in Rocket.Chat 9.0.0. In 8.8, requests containing a non-empty `conditions` object continue to work, but the response includes deprecation headers and the server records a warning.
 
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        |9.0.0   | Removed the `conditions` field from the `selector` parameter.       |
         | 8.8.0   | Deprecated the `conditions` field in the `selector` parameter. |
       operationId: get-api-v1-livechat-department.autocomplete
       parameters:
@@ -5260,7 +5259,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: selector
           in: query
-          description: A JSON string containing the search `term` and an optional array of department IDs to exclude in `exceptions`. The `conditions` field is deprecated and will be removed in Rocket.Chat 9.0.0.
+          description: A JSON string containing the search `term` and an optional array of department IDs to exclude in `exceptions`.
           required: true
           schema:
             type: string
@@ -5278,21 +5277,6 @@ paths:
       responses:
         '200':
           description: OK
-          headers:
-            x-deprecation-type:
-              description: Returned as `parameter-deprecation` when the request contains a non-empty `selector.conditions` object.
-              schema:
-                type: string
-                example: parameter-deprecation
-            x-deprecation-message:
-              description: Describes the deprecated parameter and its removal version. Returned when the request contains a non-empty `selector.conditions` object.
-              schema:
-                type: string
-            x-deprecation-version:
-              description: The Rocket.Chat version in which the deprecated parameter will be removed. Returned when the request contains a non-empty `selector.conditions` object.
-              schema:
-                type: string
-                example: 9.0.0
           content:
             application/json:
               schema:
@@ -14371,30 +14355,15 @@ paths:
 
         Permission required: `view-l-room`
 
-        The `conditions` field in the `selector` parameter is deprecated and will be removed in Rocket.Chat 9.0.0. In 8.8, requests containing a non-empty `conditions` object continue to work, but the response includes deprecation headers and the server records a warning.
 
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        |9.0.0   | Removed the `conditions` field from the `selector` parameter.       |
         | 8.8.0   | Deprecated the `conditions` field in the `selector` parameter. |
       responses:
         '200':
           description: OK
-          headers:
-            x-deprecation-type:
-              description: Returned as `parameter-deprecation` when the request contains a non-empty `selector.conditions` object.
-              schema:
-                type: string
-                example: parameter-deprecation
-            x-deprecation-message:
-              description: Describes the deprecated parameter and its removal version. Returned when the request contains a non-empty `selector.conditions` object.
-              schema:
-                type: string
-            x-deprecation-version:
-              description: The Rocket.Chat version in which the deprecated parameter will be removed. Returned when the request contains a non-empty `selector.conditions` object.
-              schema:
-                type: string
-                example: 9.0.0
           content:
             application/json:
               schema:
@@ -14451,7 +14420,7 @@ paths:
         - $ref: '#/components/parameters/UserId'
         - name: selector
           in: query
-          description: A JSON string containing the search `term` and an optional array of visitor IDs to exclude in `exceptions`. The `conditions` field is deprecated and will be removed in Rocket.Chat 9.0.0.
+          description: A JSON string containing the search `term` and an optional array of visitor IDs to exclude in `exceptions`.
           required: true
           schema:
             type: string
@@ -14662,6 +14631,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |9.0.0   | Removed the `fields` parameter.       |
         |1.0.0            | Added       |
       operationId: get-api-v1-canned-responses
       parameters:
@@ -14695,7 +14665,6 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/fields'
         - schema:
             type: string
           in: query
@@ -16250,17 +16219,6 @@ components:
       schema:
         format: object
       description: 'List of fields to order by, and in which direction. JSON object, with properties listed in desired order, with values of 1 for ascending, or -1 for descending. For example, sort = `{"value": -1, "_id": 1}`. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#pagination) to learn more.'
-    fields:
-      name: fields
-      in: query
-      schema: {}
-      description: 'This parameter accepts a JSON object with properties that have a value of 1 or 0 to include or exclude them in the response. For example, to only retrieve the usernames of users: fields = `{"username": 1}`. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more.'
-    query:
-      name: query
-      in: query
-      required: false
-      schema: {}
-      description: 'This parameter allows you to use MongoDB query operators to search for specific data. For example, to query users with a name that contains the letter "g": query = `{ "name": { "$regex": "g" } }`. Refer to the [official documentation](https://developer.rocket.chat/apidocs/query-parameters#query-and-fields) to learn more. '
   schemas: {}
   responses:
     trueSuccess:
