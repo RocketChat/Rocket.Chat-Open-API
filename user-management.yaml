@@ -4780,19 +4780,6 @@ paths:
                         createdAt: '2018-08-01T17:17:48.068Z'
                         lastTokenPart: R8Agh3
                     success: true
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  error:
-                    type: string
-                  errorType:
-                    type: string
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':

@@ -16287,15 +16287,14 @@ components:
                 type: boolean
               error:
                 type: string
+              errorType:
+                type: string
           examples:
             Permission Error:
               value:
                 success: false
-                error: 'User does not have the permissions required for this action [error-unauthorized]'
-            Unauthorized:
-              value:
-                success: false
-                error: forbidden
+                error: 'User does not have the permissions required for this action'
+                errorType: error-forbidden
     startendError:
       description: Bad Request
       content:
