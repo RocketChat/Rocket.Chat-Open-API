@@ -7250,6 +7250,11 @@ paths:
                     success: false
                     error: 'Workspace policy requires all private rooms to be encrypted. To create this discussion, make the parent channel public or enable encryption on it. [error-encrypted-private-rooms-enforced-discussion]'
                     errorType: error-encrypted-private-rooms-enforced-discussion
+                Not a member of the parent room:
+                  value:
+                    success: false
+                    error: 'You must join the room to create a discussion [error-user-not-in-room]'
+                    errorType: error-user-not-in-room
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/rooms.images:
@@ -9830,7 +9835,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
-        |9.0.0   | Made the `_id` parameter required.       |
+        |9.0.0   | Made the `_id` parameter required. Returns `403` with `errorType: error-forbidden` instead of `400` when refused.       |
         | 0.52.0  | Added       |
         |7.0.0   | Replaced `query` parameter with `_id` parameter       |        
       operationId: get-api-v1-groups.online
@@ -9889,17 +9894,31 @@ paths:
                   errorType:
                     type: string
               examples:
-                Error if you are not a member of the private channel:
-                  value:
-                    success: false
-                    error: 'Not Allowed [error-not-allowed]'
-                    errorType: error-not-allowed
                 Invalid or missing query parameter:
                   value:
                     success: false
                     error: Invalid query
         '401':
           $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Error if you are not a member of the private channel:
+                  value:
+                    success: false
+                    error: 'Not Allowed [error-not-allowed]'
+                    errorType: error-forbidden
   /api/v1/groups.getIntegrations:
     get:
       tags:
@@ -9916,7 +9935,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
-        |9.0.0   | Removed the `fields` and `query` parameters.       |
+        |9.0.0   | Removed the `fields` and `query` parameters. Returns `403` with `errorType: error-forbidden` instead of `400` when refused.       |
         | 1.1.0  | Separate permissions in incoming and outgoing. |
         | 0.49.0 | Added                                          |
       operationId: get-api-v1-groups.getIntegrations
@@ -10092,12 +10111,27 @@ paths:
                     success: false
                     error: 'The parameter "roomId" or "roomName" is required [error-room-param-not-provided]'
                     errorType: error-room-param-not-provided
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
                 Example 2:
                   value:
                     success: false
-                    error: 'User does not have the permissions required for this action [error-unauthorized]'
-        '401':
-          $ref: '#/components/responses/authorizationError'
+                    error: 'User does not have the permissions required for this action'
+                    errorType: error-forbidden
   /api/v1/groups.addAll:
     post:
       tags:
@@ -10408,6 +10442,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        |9.0.0   | Returns `403` with `errorType: error-forbidden` instead of `400` when the request is refused.       |
         | 0.48.0  | Added       |
       operationId: post-api-v1-groups.archive
       parameters:
@@ -10431,8 +10466,10 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-        '400':
-          description: Bad Request
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -10444,21 +10481,14 @@ paths:
                     type: string
                   errorType:
                     type: string
-                  details:
-                    type: object
-                    properties:
-                      method:
-                        type: string
               examples:
                 No permission:
                   value:
                     success: false
                     error: 'Not authorized [error-not-authorized]'
-                    errorType: error-not-authorized
+                    errorType: error-forbidden
                     details:
                       method: archiveRoom
-        '401':
-          $ref: '#/components/responses/authorizationError'
   /api/v1/groups.close:
     post:
       tags:
@@ -10779,6 +10809,7 @@ paths:
         ### Changelog
         | Version | Description              |
         | ------- | ------------------------ |
+        |9.0.0   | Returns `403` with `errorType: error-forbidden` instead of `400` when the request is refused.       |
         | 0.71.0  | Removed `group` property |
         | 0.49.0  | Added                    |
       operationId: post-api-v1-groups.delete
@@ -10805,8 +10836,10 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
-        '400':
-          description: Bad Request
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -10818,21 +10851,14 @@ paths:
                     type: string
                   errorType:
                     type: string
-                  details:
-                    type: object
-                    properties:
-                      method:
-                        type: string
               examples:
                 No permission:
                   value:
                     success: false
                     error: 'Not allowed [error-not-allowed]'
-                    errorType: error-not-allowed
+                    errorType: error-forbidden
                     details:
                       method: eraseRoom
-        '401':
-          $ref: '#/components/responses/authorizationError'
   /api/v1/groups.history:
     get:
       tags:
@@ -11102,6 +11128,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        |9.0.0   | Returns `403` with `errorType: error-forbidden` instead of `400` when the request is refused.       |
         | 0.48.0  | Added       |
       operationId: post-api-v1-groups.invite
       parameters:
@@ -11254,15 +11281,29 @@ paths:
                     success: false
                     error: 'Please provide "userId" or "username" or "userIds" or "usernames" as param [error-users-params-not-provided]'
                     errorType: error-users-params-not-provided
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
                 Permission required:
                   value:
                     success: false
                     error: Not allowed [error-not-allowed]
-                    errorType: error-not-allowed
+                    errorType: error-forbidden
                     details:
                       method: addUsersToRoom
-        '401':
-          $ref: '#/components/responses/authorizationError'
 
   /api/v1/groups.kick:
     post:
@@ -11275,6 +11316,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        |9.0.0   | Returns `403` with `errorType: error-forbidden` instead of `400` when the request is refused.       |
         | 0.48.0  | Added       |
       operationId: post-api-v1-groups.kick
       parameters:
@@ -11362,8 +11404,8 @@ paths:
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
-        '400':
-          description: Bad Request
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -11375,17 +11417,12 @@ paths:
                     type: string
                   errorType:
                     type: string
-                  details:
-                    type: object
-                    properties:
-                      method:
-                        type: string
               examples:
                 No permission:
                   value:
                     success: false
                     error: 'Not allowed [error-not-allowed]'
-                    errorType: error-not-allowed
+                    errorType: error-forbidden
                     details:
                       method: removeUserFromRoom
   /api/v1/groups.leave:
@@ -17237,8 +17274,11 @@ components:
                 type: boolean
               error:
                 type: string
+              errorType:
+                type: string
           examples:
             Permission Error:
               value:
                 success: false
-                error: 'User does not have the permissions required for this action [error-unauthorized]'
+                error: 'User does not have the permissions required for this action'
+                errorType: error-forbidden
