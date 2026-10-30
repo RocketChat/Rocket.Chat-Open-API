@@ -1028,6 +1028,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |9.0.0   | Returns `403` with `errorType: error-forbidden` instead of `400` when the request is refused.       |
         | 2.4.0            | Added       |
       operationId: get-api-v1-chat.getDiscussions
       parameters:
@@ -1135,10 +1136,25 @@ paths:
                     success: false
                     error: 'The required "roomId" query param is missing. [error-invalid-params]'
                     errorType: error-invalid-params
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
                 Incorrect room ID:
                   value:
                     success: false
                     error: error-not-allowed
+                    errorType: error-forbidden
   /api/v1/chat.getMentionedMessages:
     get:
       tags:
@@ -1150,6 +1166,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ------------ | ------------|
+        |9.0.0   | Returns `403` with `errorType: error-forbidden` instead of `400` when the request is refused.       |
         | 2.2.0        | Added       |
       operationId: get-api-v1-chat.getMentionedMessages
       parameters:
@@ -1313,10 +1330,25 @@ paths:
                     success: false
                     error: 'The required "roomId" query param is missing. [error-invalid-params]'
                     errorType: error-invalid-params
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
                 Incorrect room ID:
                   value:
                     success: false
                     error: error-not-allowed
+                    errorType: error-forbidden
   /api/v1/chat.getMessageReadReceipts:
     get:
       tags:
@@ -1421,6 +1453,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |9.0.0   | Returns `403` with `errorType: error-forbidden` instead of `400` when the request is refused.       |
         | 2.0.0           | Added       |
       operationId: get-api-v1-chat.getPinnedMessages
       parameters:
@@ -1635,11 +1668,25 @@ paths:
                     success: false
                     error: 'The required "roomId" query param is missing. [error-roomId-param-not-provided]'
                     errorType: error-roomId-param-not-provided
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
                 Incorrect room ID:
                   value:
                     success: false
                     error: 'Not allowed [error-not-allowed]'
-                    errorType: error-not-allowed
+                    errorType: error-forbidden
   /api/v1/chat.getMessages:
     post:
       tags:
@@ -1819,6 +1866,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ------------ | ------------|
+        |9.0.0   | Returns `403` with `errorType: error-forbidden` instead of `400` when the request is refused.       |
         | 2.2.0        | Added       |
       operationId: get-api-v1-chat.getStarredMessages
       parameters:
@@ -1930,10 +1978,25 @@ paths:
                     success: false
                     error: 'The required "roomId" query param is missing. [error-invalid-params]'
                     errorType: error-invalid-params
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
                 Incorrect room ID:
                   value:
                     success: false
                     error: error-not-allowed
+                    errorType: error-forbidden
   /api/v1/chat.getThreadMessages:
     get:
       tags:
@@ -2116,6 +2179,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |9.0.0   | Returns `403` with `errorType: error-forbidden` instead of `400` when the request is refused.       |
         |8.8.0            | Added       |
       operationId: post-api-v1-chat.readThread
       parameters:
@@ -2143,7 +2207,33 @@ paths:
         '200':
           $ref: '#/components/responses/trueSuccess'
         '400':
-          description: The request is invalid, threads are disabled, the message or room does not exist, or the user cannot access the room.
+          description: The request is invalid, or the message or room does not exist.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Invalid message:
+                  value:
+                    success: false
+                    error: Invalid Message [error-invalid-message]
+                    errorType: error-invalid-message
+                Room not found:
+                  value:
+                    success: false
+                    error: This room does not exist [error-room-does-not-exist]
+                    errorType: error-room-does-not-exist
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -2160,24 +2250,12 @@ paths:
                   value:
                     success: false
                     error: Threads Disabled [error-not-allowed]
-                    errorType: error-not-allowed
-                Invalid message:
-                  value:
-                    success: false
-                    error: Invalid Message [error-invalid-message]
-                    errorType: error-invalid-message
-                Room not found:
-                  value:
-                    success: false
-                    error: This room does not exist [error-room-does-not-exist]
-                    errorType: error-room-does-not-exist
+                    errorType: error-forbidden
                 Room access denied:
                   value:
                     success: false
                     error: Not Allowed [error-not-allowed]
-                    errorType: error-not-allowed
-        '401':
-          $ref: '#/components/responses/authorizationError'
+                    errorType: error-forbidden
   /api/v1/chat.ignoreUser:
     get:
       tags:
