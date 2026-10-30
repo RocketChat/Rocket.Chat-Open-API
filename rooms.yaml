@@ -10487,8 +10487,6 @@ paths:
                     success: false
                     error: 'Not authorized [error-not-authorized]'
                     errorType: error-forbidden
-                    details:
-                      method: archiveRoom
   /api/v1/groups.close:
     post:
       tags:
@@ -10857,8 +10855,6 @@ paths:
                     success: false
                     error: 'Not allowed [error-not-allowed]'
                     errorType: error-forbidden
-                    details:
-                      method: eraseRoom
   /api/v1/groups.history:
     get:
       tags:
@@ -11302,8 +11298,6 @@ paths:
                     success: false
                     error: Not allowed [error-not-allowed]
                     errorType: error-forbidden
-                    details:
-                      method: addUsersToRoom
 
   /api/v1/groups.kick:
     post:
@@ -11423,8 +11417,6 @@ paths:
                     success: false
                     error: 'Not allowed [error-not-allowed]'
                     errorType: error-forbidden
-                    details:
-                      method: removeUserFromRoom
   /api/v1/groups.leave:
     post:
       tags:
