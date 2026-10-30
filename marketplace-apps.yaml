@@ -1905,11 +1905,14 @@ components:
                 type: boolean
               error:
                 type: string
+              errorType:
+                type: string
           examples:
             Permission Error:
               value:
                 success: false
-                error: 'User does not have the permissions required for this action [error-unauthorized]'
+                error: 'User does not have the permissions required for this action'
+                errorType: error-forbidden
 
 tags:
   - name: Rasa App
