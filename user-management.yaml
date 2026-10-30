@@ -197,6 +197,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |9.0.0            | The `403` response returns `errorType: error-forbidden`.       |
         |8.7.0            | Added       |
       operationId: post-api-v1-permissions.addRole
       parameters:
@@ -282,11 +283,14 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
               examples:
                 Permission Error:
                   value:
                     success: false
-                    error: 'User does not have the permissions required for this action [error-unauthorized]'
+                    error: 'User does not have the permissions required for this action'
+                    errorType: error-forbidden
   /api/v1/permissions.removeRole:
     post:
       tags:
@@ -302,6 +306,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |9.0.0            | The `403` response returns `errorType: error-forbidden`.       |
         |8.7.0            | Added       |
       operationId: post-api-v1-permissions.removeRole
       parameters:
@@ -376,11 +381,14 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
               examples:
                 Permission Error:
                   value:
                     success: false
-                    error: 'User does not have the permissions required for this action [error-unauthorized]'
+                    error: 'User does not have the permissions required for this action'
+                    errorType: error-forbidden
   /api/v1/roles.create:
     post:
       tags:
@@ -1265,7 +1273,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
-        |9.0.0            | Renamed `freeSwitchExtension` to `sipExtension`.       |
+        |9.0.0            | Renamed `freeSwitchExtension` to `sipExtension`. Added the `phones` field.       |
         |0.48.0            | `role` property is now `roles` which is an array of strings for the roles to create the user with.       |
         |0.45.0            | Users created via this now join the default channels.       |
         |0.40.0            | Added       |
@@ -1351,6 +1359,22 @@ paths:
                 sipExtension:
                   type: string
                   description: The user's SIP extension (formerly `freeSwitchExtension`).
+                phones:
+                  type: array
+                  maxItems: 10
+                  description: The user's phone numbers. Up to 10 numbers, each with an optional label.
+                  items:
+                    type: object
+                    properties:
+                      number:
+                        type: string
+                        description: The phone number. Spaces are removed.
+                      label:
+                        type: string
+                        maxLength: 50
+                        description: A label for the number, for example `Work`.
+                    required:
+                      - number
                 verified:
                   type: boolean
                   description: Should the user's email address be verified when created? It is set to `false` by default.
@@ -1591,7 +1615,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
-        |9.0.0            | Renamed `freeSwitchExtension` to `sipExtension`.       |
+        |9.0.0            | Renamed `freeSwitchExtension` to `sipExtension`. Added the `phones` field.       |
         |7.0.0             | Removed upsert behaviour and stopped allowing `joinDefaultChannels` param|
         |0.48.0            | Renamed to `users.update`       |
         |0.35.0            | Added       |
@@ -1670,6 +1694,22 @@ paths:
                     sipExtension:
                       type: string
                       description: The user's SIP extension (formerly `freeSwitchExtension`).
+                    phones:
+                      type: array
+                      maxItems: 10
+                      description: The user's phone numbers. Up to 10 numbers, each with an optional label.
+                      items:
+                        type: object
+                        properties:
+                          number:
+                            type: string
+                            description: The phone number. Spaces are removed.
+                          label:
+                            type: string
+                            maxLength: 50
+                            description: A label for the number, for example `Work`.
+                        required:
+                          - number
                     verified:
                       type: boolean
                       description: Whether the user's email address should be verified.
@@ -1853,6 +1893,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |9.0.0            | Added the `phones` field.       |
         |6.4.0            | Add `bio` and `statusType` parameters.       |
         |0.62.2            | Added       |
       operationId: post-api-v1-users.updateOwnBasicInfo
@@ -1925,6 +1966,22 @@ paths:
                       type: string
                       example: On a vacation
                       description: The status text of the user.
+                    phones:
+                      type: array
+                      maxItems: 10
+                      description: The user's phone numbers. Up to 10 numbers, each with an optional label.
+                      items:
+                        type: object
+                        properties:
+                          number:
+                            type: string
+                            description: The phone number. Spaces are removed.
+                          label:
+                            type: string
+                            maxLength: 50
+                            description: A label for the number, for example `Work`.
+                        required:
+                          - number
                 customFields:
                   type: object
                   description: Any custom fields the user should have on their account. You must define the custom fields in the workspace settings.
@@ -2251,7 +2308,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
-        |9.0.0            | Renamed `freeSwitchExtension` to `sipExtension`.       |
+        |9.0.0            | Renamed `freeSwitchExtension` to `sipExtension`. Added the `phones` field.       |
         |8.8.0             | Added status visibility filtering |
         |8.5.0             | Added `freeSwitchExtension` query parameter for user lookup |
         |8.4.0             | Added `email` query parameter for user lookup |
@@ -2350,6 +2407,22 @@ paths:
                       sipExtension:
                         type: string
                         description: The user's SIP extension (formerly `freeSwitchExtension`).
+                      phones:
+                        type: array
+                        maxItems: 10
+                        description: The user's phone numbers. Up to 10 numbers, each with an optional label. Phones are returned only when the caller can see the user's full profile, for example their own user.
+                        items:
+                          type: object
+                          properties:
+                            number:
+                              type: string
+                              description: The phone number. Spaces are removed.
+                            label:
+                              type: string
+                              maxLength: 50
+                              description: A label for the number, for example `Work`.
+                          required:
+                            - number
                       canViewAllInfo:
                         type: boolean
                   success:
@@ -2392,6 +2465,9 @@ paths:
                       avatarETag: GFoEi6wv3uAxnzDcD
                       nickname: tesuser2
                       sipExtension: '1234'
+                      phones:
+                        - number: '+15551234567'
+                          label: Work
                       canViewAllInfo: true
                       rooms:
                         - _id: 651667dda2f73c7460e18cce
@@ -2483,7 +2559,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
-        |9.0.0            | Removed the `fields` and `query` parameters. Fields outside the default projection (`customFields`, `utcOffset`, `nickname`, `bio`, `statusText`, `federated`, and `freeSwitchExtension`) are no longer reachable in bulk; use `users.info` instead.       |
+        |9.0.0            | Removed the `fields` and `query` parameters. Fields outside the default projection (`customFields`, `utcOffset`, `nickname`, `bio`, `statusText`, `federated`, and `sipExtension`) are no longer reachable in bulk; use `users.info` instead.       |
         |8.8.0             | Added status visibility filtering |
         |8.4.0             | Added `email` query parameter for filtering |
         |0.49.0            | `Count` and `offset` query parameters supported.       |
@@ -2781,15 +2857,27 @@ paths:
                       The required "userId" or "username" param was not provided
                       [error-user-param-not-provided]
                     errorType: error-user-param-not-provided
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
                 Example 2:
                   value:
                     success: false
                     error: 'Reset avatar is not allowed [error-not-allowed]'
-                    errorType: error-not-allowed
-                    details:
-                      method: users.resetAvatar
-        '401':
-          $ref: '#/components/responses/authorizationError'
+                    errorType: error-forbidden
       description: |-
         Reset a user's avatar to the default icon. By default, icons contain the user's initials.
         Permissions required, if the setting `AllowUserAvatarChange` is enabled: 
@@ -2799,6 +2887,7 @@ paths:
           ### Changelog
           | Version      | Description |
           | ---------------- | ------------|
+          |9.0.0            | Returns `403` with `errorType: error-forbidden` instead of `400` when the request is refused.       |
           |0.55.0            | Added       |
       parameters:
         - $ref: '#/components/parameters/UserId'
@@ -3511,6 +3600,7 @@ paths:
         ### Changelog
           | Version      | Description |
           | ---------------- | ------------|
+          |9.0.0            | Returns `403` with `errorType: error-forbidden` instead of `400` when the request is refused.       |
           |8.7.0             | Enforced the `user-generate-access-token` permission when generating a token for another user.|
           |8.0.0             | Added `CREATE_TOKENS_FOR_USERS_SECRET` <a href="https://docs.rocket.chat/docs/deployment-environment-variables" target="_blank">environment variable</a> to define a shared secret that will be used to authorize this endpoint.|
           |2.1.0            | Added ENV VAR to be able to use this endpoint (process.env.CREATE_TOKENS_FOR_USERS).       |
@@ -3588,18 +3678,32 @@ paths:
                       The required "userId" or "username" param was not provided
                       [error-user-param-not-provided]
                     errorType: error-user-param-not-provided
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
                 Invalid secret:
                   value:
                     success: false
                     error: 'Not authorized [error-not-authorized]'
-                    errorType: error-not-authorized
+                    errorType: error-forbidden
                 Missing permission:
                   value:
                     success: false
                     error: 'Not authorized [error-not-authorized]'
-                    errorType: error-not-authorized
-        '401':
-          $ref: '#/components/responses/authorizationError'
+                    errorType: error-forbidden
     parameters: []
   /api/v1/users.getPreferences:
     get:
@@ -4466,15 +4570,27 @@ paths:
                   value:
                     success: false
                     error: The 'tokenName' param is required
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
                 Example 3:
                   value:
                     success: false
                     error: 'Not Authorized [not-authorized]'
-                    errorType: not-authorized
-                    details:
-                      method: 'personalAccessTokens:generateToken'
-        '401':
-          $ref: '#/components/responses/authorizationError'
+                    errorType: error-forbidden
       description: |-
         Permission required: `create-personal-access-tokens`. 
         
@@ -4487,6 +4603,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |9.0.0            | Returns `403` with `errorType: error-forbidden` instead of `400` when the request is refused.       |
         |3.1.0            | Added `bypassTwoFactor` param       |
         |0.69.0            | Added       |
       parameters:
@@ -4577,15 +4694,27 @@ paths:
                   value:
                     success: false
                     error: The 'tokenName' param is required
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
                 Example 3:
                   value:
                     success: false
                     error: 'Not Authorized [not-authorized]'
-                    errorType: not-authorized
-                    details:
-                      method: 'personalAccessTokens:generateToken'
-        '401':
-          $ref: '#/components/responses/authorizationError'
+                    errorType: error-forbidden
       description: |-
         Permission required: `create-personal-access-tokens`.
         This endpoint requires 2FA.
@@ -4593,6 +4722,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |9.0.0            | Returns `403` with `errorType: error-forbidden` instead of `400` when the request is refused.       |
         |0.69.0            | Added       |
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -4663,14 +4793,27 @@ paths:
                     type: string
                   errorType:
                     type: string
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
               examples:
                 Example 1:
                   value:
                     success: false
-                    error: 'Not Authorized [not-authorized]'
-                    errorType: not-authorized
-        '401':
-          $ref: '#/components/responses/authorizationError'
+                    error: 'User does not have the permissions required for this action'
+                    errorType: error-forbidden
       tags:
         - Users
       description: |-
@@ -4679,6 +4822,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |9.0.0            | Returns `403` with `errorType: error-forbidden` instead of `400` when the request is refused.       |
         |0.69.0            | Added       |
       parameters:
         - $ref: '#/components/parameters/UserId'
@@ -5061,11 +5205,6 @@ paths:
                       method: password
                       codeGenerated: false
                       availableMethods: []
-                Example 2:
-                  value:
-                    success: false
-                    error: 'Not allowed [error-not-allowed]'
-                    errorType: error-not-allowed
                 Example 3:
                   value:
                     success: false
@@ -5075,6 +5214,25 @@ paths:
                     errorType: error-invalid-user
         '401':
           $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 2:
+                  value:
+                    success: false
+                    error: 'Not allowed [error-not-allowed]'
+                    errorType: error-forbidden
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
@@ -5088,6 +5246,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |9.0.0            | Returns `403` with `errorType: error-forbidden` instead of `400` when the request is refused.       |
         |3.6.0            | Added       |
       tags:
         - Users
@@ -5149,11 +5308,6 @@ paths:
                       method: password
                       codeGenerated: false
                       availableMethods: []
-                Example 2:
-                  value:
-                    success: false
-                    error: 'Not allowed [error-not-allowed]'
-                    errorType: error-not-allowed
                 Example 3:
                   value:
                     success: false
@@ -5163,6 +5317,25 @@ paths:
                     errorType: error-invalid-user
         '401':
           $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 2:
+                  value:
+                    success: false
+                    error: 'Not allowed [error-not-allowed]'
+                    errorType: error-forbidden
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
@@ -5176,6 +5349,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |9.0.0            | Returns `403` with `errorType: error-forbidden` instead of `400` when the request is refused.       |
         |3.6.0            | Added       |
       tags:
         - Users
@@ -5405,7 +5579,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
-        |9.0.0            | Added premium plan availability details.       |
+        |9.0.0            | Added premium plan availability details. Returns `403` with `errorType: error-forbidden` instead of `400` when refused.       |
         |5.2.0            | Include `syncAvatars`       |
         |4.0.0            | Added       |
       operationId: post-api-v1-ldap.syncNow
@@ -5470,10 +5644,6 @@ paths:
                   value:
                     success: false
                     error: LDAP_disabled
-                Example 3:
-                  value:
-                    success: false
-                    error: error-not-authorized
                 Not available on Community workspaces:
                   value:
                     success: false
@@ -5481,6 +5651,25 @@ paths:
                     errorType: error-action-not-allowed
         '401':
           $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 3:
+                  value:
+                    success: false
+                    error: error-not-authorized
+                    errorType: error-forbidden
   /api/v1/ldap.testConnection:
     post:
       tags:
@@ -6117,7 +6306,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
-        |9.0.0            | Added premium plan availability details.       |
+        |9.0.0            | Added premium plan availability details. The `403` response returns `errorType: error-forbidden`.       |
         |8.8.0            | Added       |
       operationId: post-api-v1-saml.parseMetadata
       parameters:
@@ -6240,11 +6429,14 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
               examples:
                 Permission Error:
                   value:
                     success: false
-                    error: 'User does not have the permissions required for this action [error-unauthorized]'
+                    error: 'User does not have the permissions required for this action'
+                    errorType: error-forbidden
 tags:
   - name: LDAP
   - name: Permissions

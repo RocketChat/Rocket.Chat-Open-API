@@ -1816,6 +1816,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ------------|
+        |9.0.0            | Returns `403` with `errorType: error-forbidden` instead of `400` when the request is refused.       |
         | 8.3.0   | The `403` response returns `error-not-allowed` instead of `unauthorized` |
         | 7.0.0   | Added       |
       tags:
@@ -1877,10 +1878,6 @@ paths:
                   value:
                     success: false
                     error: error-e2e-key-reset-in-progress
-                No Room Access:
-                  value:
-                    success: false
-                    error: error-not-allowed
                 Reset Failed:
                   value:
                     success: false
@@ -1898,11 +1895,19 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
               examples:
+                No Room Access:
+                  value:
+                    success: false
+                    error: error-not-allowed
+                    errorType: error-forbidden
                 Permission Error:
                   value:
                     success: false
                     error: error-not-allowed
+                    errorType: error-forbidden
   /api/v1/uploadImportFile:
     parameters: []
     post:
@@ -7070,8 +7075,11 @@ components:
                 type: boolean
               error:
                 type: string
+              errorType:
+                type: string
           examples:
             Permission Error:
               value:
                 success: false
-                error: 'User does not have the permissions required for this action [error-unauthorized]'
+                error: 'User does not have the permissions required for this action'
+                errorType: error-forbidden

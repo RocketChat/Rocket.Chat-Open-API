@@ -471,6 +471,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        |9.0.0   | The `403` response returns `errorType: error-forbidden`.       |
         | 8.5.0   | Added       |
       operationId: post-api-v1-custom-sounds.create
       parameters:
@@ -572,8 +573,8 @@ paths:
                 Permission Error:
                   value:
                     success: false
-                    error: 'User does not have the permissions required for this action [error-unauthorized]'
-                    errorType: error-unauthorized
+                    error: 'User does not have the permissions required for this action'
+                    errorType: error-forbidden
   /api/v1/custom-sounds.update:
     post:
       tags:
@@ -593,6 +594,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        |9.0.0   | The `403` response returns `errorType: error-forbidden`.       |
         | 8.5.0   | Added       |
       operationId: post-api-v1-custom-sounds.update
       parameters:
@@ -685,8 +687,8 @@ paths:
                 Permission Error:
                   value:
                     success: false
-                    error: 'User does not have the permissions required for this action [error-unauthorized]'
-                    errorType: error-unauthorized
+                    error: 'User does not have the permissions required for this action'
+                    errorType: error-forbidden
   /api/v1/custom-user-status.list:
     get:
       tags:
@@ -1191,6 +1193,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        |9.0.0   | The `403` response returns `errorType: error-forbidden`.       |
         | 8.6.0   | Added       |
       operationId: post-api-v1-custom-sounds.delete
       parameters:
@@ -1257,8 +1260,8 @@ paths:
                 Permission Error:
                   value:
                     success: false
-                    error: 'User does not have the permissions required for this action [error-unauthorized]'
-                    errorType: error-unauthorized 
+                    error: 'User does not have the permissions required for this action'
+                    errorType: error-forbidden
   /api/v1/custom-sounds.getOne:
     get:
       summary: Get Custom Sound
@@ -1356,11 +1359,14 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
               examples:
                 No permission:
                   value:
                     success: false
-                    error: 'User does not have the permissions required for this action [error-unauthorized]'
+                    error: 'User does not have the permissions required for this action'
+                    errorType: error-forbidden
       operationId: get-api-v1-custom-sounds.getOne
       description: |-
         - Returns one custom sound record for the workspace. You must pass the sound’s `_id` as a query parameter.
@@ -1371,6 +1377,7 @@ paths:
 
         | Version | Description |
         | ------- | ----------- |
+        |9.0.0   | The `403` response returns `errorType: error-forbidden`.       |
         | 8.3.0   | Added       |
       parameters:
         - $ref: '#/components/parameters/Auth-Token'

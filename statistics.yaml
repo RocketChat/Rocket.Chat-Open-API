@@ -25,7 +25,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
-        |9.0.0   | Removed the `fields` and `query` parameters, retired OAuth provider statistics, and the `allowUnsafeQueryAndFieldsApiParamsEnabled` field.       |
+        |9.0.0   | Removed the `fields` and `query` parameters, retired OAuth provider statistics, and the `allowUnsafeQueryAndFieldsApiParamsEnabled` field. Returns `403` with `errorType: error-forbidden` instead of `400` when refused.       |
         |8.7.0             | Added the `fips` field to statistics records. |        
         |0.51.0            | Added       |
       operationId: get-api-v1-statistics.list
@@ -1368,8 +1368,10 @@ paths:
                     offset: 0
                     total: 1
                     success: true
-        '400':
-          description: Bad Request
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -1379,13 +1381,14 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
               examples:
                 Permission Error:
                   value:
                     success: false
                     error: error-not-allowed
-        '401':
-          $ref: '#/components/responses/authorizationError'
+                    errorType: error-forbidden
 
   /api/v1/statistics:
     get:
@@ -1400,7 +1403,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
-        |9.0.0   | Removed retired OAuth provider statistics and the `allowUnsafeQueryAndFieldsApiParamsEnabled` field.       |
+        |9.0.0   | Removed retired OAuth provider statistics and the `allowUnsafeQueryAndFieldsApiParamsEnabled` field. Returns `403` with `errorType: error-forbidden` instead of `400` when refused.       |
         |8.7.0             | Added the `fips` field to statistics records. |        
         |0.51.0            | Added       |
       operationId: get-api-v1-statistics
@@ -2731,8 +2734,10 @@ paths:
                     _updatedAt: '2026-08-03T12:10:31.426Z'
                     statsToken: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3b3Jrc3BhY2VJZCI6IiIsInVuaXF1ZUlkIjoiMmQzYWQ0ZmItZDUxNS00ZjA5LThmMDItMGYxODZjOGNjOTI5IiwicmVjb3JkSWQiOiI2YTcwODUzN2M4ZmMzYzY1YjE4MDhiYWYiLCJ0aW1lc3RhbXAiOiIyMDI2LTA4LTAzVDEyOjEwOjMxLjQwNzk5NzEyOFoiLCJpbmZvIjp7InRvdGFsVXNlcnMiOjAsImFjdGl2ZVVzZXJzIjowLCJ0b3RhbENvbm5lY3RlZFVzZXJzIjowLCJvbW5pQ2hhbm5lbENvbnZlcnNhdGlvbnMiOjAsInRvdGFsUm9vbXMiOjAsInRvdGFsTWVzc2FnZXMiOjAsInVwbG9hZHNUb3RhbFNpemUiOjAsIm1pY3Jvc2VydmljZUVuYWJsZWQiOnRydWUsImZpbGVTdG9yZVR5cGUiOiJHcmlkRlMifX0.JnBb7z--brY2k00kIkC_Rp502P8wdKVcC2kAxEKK0OBFJlAgLM4ezZ5m_xG2w1wX3wCTNKnrjO3D5Mi-bzYNmNNBcJQbujP2uUGWMnr42UUAbyPY9VWKCf4L3H9cgzB9WjJX94KiVlwLjnbqle9TE0wAubP-NR1lzZn06GrnD9bAFSdz2E5lI4s6qozfUW5z8ZmSgXs5MBSbhBQczUbmQkQoj2XjKs5Mkqow0qLeBsCrc0F2m_92YeO1S6StRGvLIVyce-qvm0DLT8hXhpoJyRRgLz_3JyOzOE6hfxcgWI43YUZ4o4n7QruSYDhSFnAjuAlZjHasBCKPfs9ht9vRtQ
                     success: true
-        '400':
-          description: Bad Request
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -2742,13 +2747,14 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
               examples:
                 Permission Error:
                   value:
                     success: false
                     error: error-not-allowed
-        '401':
-          $ref: '#/components/responses/authorizationError'
+                    errorType: error-forbidden
   /api/v1/statistics.telemetry:
     post:
       tags:
@@ -3698,11 +3704,14 @@ components:
                 type: boolean
               error:
                 type: string
+              errorType:
+                type: string
           examples:
             Permission Error:
               value:
                 success: false
-                error: 'User does not have the permissions required for this action [error-unauthorized]'
+                error: 'User does not have the permissions required for this action'
+                errorType: error-forbidden
     keyError:
       description: Bad Request
       content:

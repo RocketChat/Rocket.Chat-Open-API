@@ -831,6 +831,7 @@ paths:
         ### Changelog
         | Version | Description | 
         | ------- | ----------- | 
+        |9.0.0   | The `403` response returns `errorType: error-forbidden`.       |
         | 8.6.0 | Added an authorization check. Callers without the `manage-cloud` permission now receive a `403` error instead of a successful response. |
       operationId: post-api-v1-fingerprint
       parameters:
@@ -894,8 +895,8 @@ paths:
                 Permission Error:
                   value:
                     success: false
-                    error: 'User does not have the permissions required for this action [error-unauthorized]'
-                    errorType: error-unauthorized
+                    error: 'User does not have the permissions required for this action'
+                    errorType: error-forbidden
   /api/v1/licenses.info:
     get:
       tags:
@@ -1600,7 +1601,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
-        |9.0.0   | Returns `403` instead of `400` when the command refuses the action, without `errorType`.       |
+        |9.0.0   | Returns `403` with `errorType: error-forbidden` instead of `400` when the request is refused.       |
       operationId: get-api-v1-commands.preview
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -1645,7 +1646,26 @@ paths:
                     success: false
                     error: You must provide a command to get the previews from.
         '401':
-          $ref: '#/components/responses/authorizationError'  
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: You are not allowed to do this
+                    errorType: error-forbidden
     post:
       tags:
         - Commands
@@ -1654,6 +1674,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |9.0.0   | Returns `403` with `errorType: error-forbidden` instead of `400` when the request is refused.       |
         |3.0.0      | Added `tmid` and `triggerId` fields       |
         |0.65.0      | Added|
       operationId: post-api-v1-commands.preview
@@ -1736,6 +1757,25 @@ paths:
                     error: You must provide a command to run the preview item on.
         '401':
           $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: You are not allowed to do this
+                    errorType: error-forbidden
   /api/v1/commands.run:
     post:
       tags:
@@ -1746,7 +1786,7 @@ paths:
           ### Changelog
           | Version      | Description |
           | ---------------- | ------------|
-          |9.0.0   | Returns `403` instead of `400` when the command refuses the action, without `errorType`.       |
+          |9.0.0   | Returns `403` with `errorType: error-forbidden` instead of `400` when the request is refused.       |
           |3.0.0      | Added `triggerId` property       |
           |2.0.0      | Added `tmid` property      |
           |0.60.2      | Added        |
@@ -1807,6 +1847,25 @@ paths:
                     error: You must provide a command to run.
         '401':
           $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: You are not allowed to do this
+                    errorType: error-forbidden
   /api/v1/mailer:
     post:
       tags:
@@ -2747,8 +2806,11 @@ components:
                 type: boolean
               error:
                 type: string
+              errorType:
+                type: string
           examples:
             Permission Error:
               value:
                 success: false
-                error: 'User does not have the permissions required for this action [error-unauthorized]'
+                error: 'User does not have the permissions required for this action'
+                errorType: error-forbidden
