@@ -4306,14 +4306,17 @@ paths:
       summary: Create DM
       description: |-
         Create a direct message session with another user or more than one user.
-        
-        #### Change Log
+
+        The username must belong to a user in the workspace, unless it is a federated username and federation is enabled. 
+
+        ### Changelog
         | Version | Description              |
         | ------- | ------------------------ |
-        | 0.59.0  | Added                    |
-        | 3.1.0   | Added usernames fields   |
+        | 9.0.0   | Required the `create-d-other-users` permission instead of `view-room-administration` to use `excludeSelf`. Limited the response `room` object to `_id`, `rid`, `t`, and `usernames`. Rejected usernames that do not exist instead of creating the room without them. |
         | 3.18.0  | Added excludeSelf option |
-      operationId: post-api-v1-im.create
+        | 3.1.0   | Added usernames fields   |
+        | 0.59.0  | Added                    |
+      operationId: post-api-v1-dm.create
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
@@ -4323,25 +4326,36 @@ paths:
             schema:
               oneOf:
                 - type: object
+                  required: 
+                    - username
                   properties:
                     username:
                       type: string
                       description: 'The username of the user to open a direct message session.'
+                      example: kim.dok
                     excludeSelf:
                       type: boolean
-                      description: Creates the direct message session excluding the current authenticated user. The session will only be opened if the current user has the `view-room-administration` permission
+                      description: Creates the direct message session excluding the current authenticated user. Requires the `create-d-other-users` permission. Without it, the request fails with `error-not-allowed`. With a single `username`, the request fails with `error-invalid-user`. Use `usernames` with at least two usernames instead.
+                      example: false
                 - type: object
+                  required: 
+                    - usernames
                   properties:
                     usernames:
                       type: string
-                      description: 'Comma-seperated list of usernames to open a multiple direct message session. '
+                      description: 'Comma-separated list of usernames to open a multiple direct message session.'
+                      example: kim.dok,g1
                     excludeSelf:
                       type: boolean
-                      description: Creates the direct message session excluding the current authenticated user. The session will only be opened if the current user has the `view-room-administration` permission
+                      description: Creates the direct message session excluding the current authenticated user. Requires the `create-d-other-users` permission. Without it, the request fails with `error-not-allowed`. Include at least two usernames. A single username, in `username` or `usernames`, fails with `error-invalid-user`. An empty `usernames` value fails with `invalid username`.
+                      example: true
             examples:
               Example:
                 value:
                   username: kim.dok
+              Exclude Self:
+                value:
+                  usernames: kim.dok,g1
                   excludeSelf: true
       responses:
         '200':
@@ -4354,6 +4368,8 @@ paths:
                   room:
                     type: object
                     properties:
+                      _id:
+                        type: string
                       t:
                         type: string
                       rid:
@@ -4368,11 +4384,22 @@ paths:
                 Example:
                   value:
                     room:
+                      _id: 6a1f0c9e2b7d4e8f9a3c5b21
                       t: d
-                      rid: PMrDaS4axRqkjY7errocket.cat
+                      rid: 6a1f0c9e2b7d4e8f9a3c5b21
                       usernames:
                         - g1
                         - rocket.cat
+                    success: true
+                Exclude Self:
+                  value:
+                    room:
+                      _id: 64f1a2b3c4d5e6f708192a3b
+                      rid: 64f1a2b3c4d5e6f708192a3b
+                      t: d
+                      usernames:
+                        - kim.dok
+                        - g1
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -4389,20 +4416,36 @@ paths:
                     type: string
                   errorType:
                     type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
               examples:
+                Empty Usernames:
+                  value:
+                    success: false
+                    error: invalid username
                 Missing parameter:
                   value:
                     success: false
                     error: |-
                       must have required property 'usernames'
                        must have required property 'username'
-                       must match exactly one schema in oneOf [error-invalid-params]
+                       must match exactly one schema in oneOf
                     errorType: error-invalid-params
                 Invalid User:
                   value:
                     success: false
                     error: 'Invalid user [error-invalid-user]'
                     errorType: error-invalid-user
+                    details:
+                      method: createDirectMessage
+                Permission Error:
+                  value:
+                    success: false
+                    error: 'Not allowed [error-not-allowed]'
+                    errorType: error-not-allowed
                     details:
                       method: createDirectMessage
   /api/v1/dm.delete:
