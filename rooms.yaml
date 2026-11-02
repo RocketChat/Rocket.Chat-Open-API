@@ -1417,14 +1417,18 @@ paths:
         Add a user or bulk users to a channel.
 
         For a user to invite other users, they must match at least one of the following premises:
-        - The user is part of a room of any type and has the `add-user-to-joined-room` permission.
-        - The user is part of a public room `(t: 'c')` and has the `add-user-to-any-c-room` permission.
-        - The user is part of a private room `(t: 'p')` and has the `add-user-to-any-p-room` permission.
+        - The user is a member of the channel and has the `add-user-to-joined-room` (Add user to any joined channel) permission.
+        - The user has the `add-user-to-any-c-room` (Add user to any public channel) permission.
+        
+        You can identify the channel by `roomId` or `roomName`, and the users either by ID (`userId`, `userIds`) or by username (`username`, `user`, `usernames`). You cannot mix IDs and usernames in the same request.
+
+        Users that do not exist are skipped and the valid users are invited. If none of the users you provide exist, the request fails with `invalid-user-invite-list`. Users who are already members of the channel are ignored, and the request still succeeds.
 
         ### Changelog
 
         | Version | Description               |
         | ------- | ------------------------- |
+        | 9.0.0   | Added the `userIds` and `usernames` parameters to invite multiple users in one request. |
         | 0.48.0  | Added                  |
       operationId: post-api-v1-channels.invite
       parameters:
@@ -1435,39 +1439,60 @@ paths:
           application/json:
             schema:
               type: object
-              oneOf:
-                - type: object
-                  properties:
-                    roomId:
-                      type: string
-                      description: The channel's ID.
-                      example: nSYqWzZ4GsKTX4dyK
-                    userId:
-                      type: string
-                      description: The user id to be invited.
-                      example: ByehQjC44FwMeiLbX
-                  required:
-                    - roomId
-                    - userId
-                - type: object
-                  properties:
-                    roomId:
-                      type: string
-                      description: The channel's id
-                      example: nSYqWzZ4GsKTX4dyK
-                    userIds:
-                      type: array
-                      description: An array of the userId of users to be invited
-                      items:
-                        type: object
-                        properties:
-                          type:
-                            type: string
-                          value:
-                            type: string
-                  required:
-                    - roomId
-                    - userIds
+              properties:
+                roomId:
+                  type: string
+                  description: The channel's ID. This parameter is required if no `roomName` is provided.
+                  example: nSYqWzZ4GsKTX4dyK
+                roomName:
+                  type: string
+                  description: The channel's name. This parameter is required if no `roomId` is provided.
+                  example: general
+                userId:
+                  type: string
+                  description: The ID of the user to invite. Cannot be combined with `username`, `user`, or `usernames`.
+                  example: ByehQjC44FwMeiLbX
+                userIds:
+                  type: array
+                  description: An array of IDs of the users to invite. Cannot be combined with `username`, `user`, or `usernames`.
+                  items:
+                    type: string
+                  example:
+                    - ByehQjC44FwMeiLbX
+                    - Wq3kLm8TzR2vNpX5d
+                username:
+                  type: string
+                  description: The username of the user to invite. Cannot be combined with `userId` or `userIds`.
+                  example: john.doe
+                user:
+                  type: string
+                  description: The username of the user to invite. Alternative to `username`. Cannot be combined with `userId` or `userIds`.
+                  example: john.doe
+                usernames:
+                  type: array
+                  description: An array of usernames of the users to invite. Cannot be combined with `userId` or `userIds`.
+                  items:
+                    type: string
+                  example:
+                    - john.doe
+                    - jane.doe
+            examples:
+              Invite by ID:
+                value:
+                  roomId: nSYqWzZ4GsKTX4dyK
+                  userId: ByehQjC44FwMeiLbX
+              Invite multiple users by ID:
+                value:
+                  roomId: nSYqWzZ4GsKTX4dyK
+                  userIds:
+                    - ByehQjC44FwMeiLbX
+                    - Wq3kLm8TzR2vNpX5d
+              Invite multiple users by username:
+                value:
+                  roomName: general
+                  usernames:
+                    - john.doe
+                    - jane.doe
       responses:
         '200':
           description: OK
@@ -1577,29 +1602,82 @@ paths:
                 Add bulk users:
                   value:
                     channel:
-                      _id: ByehQjC44FwMeiLbX
-                      ts: '2016-11-30T21:23:04.737Z'
-                      t: c
+                      _id: nSYqWzZ4GsKTX4dyK
+                      fname: testing
+                      _updatedAt: '2026-11-02T20:32:22.790Z'
                       name: testing
-                      usernames:
-                        - testing
-                        - testing1
-                      msgs: 1
-                      _updatedAt: '2016-12-09T12:50:51.575Z'
-                      lm: '2016-12-09T12:50:51.555Z'
+                      t: c
+                      msgs: 2
+                      usersCount: 3
+                      u:
+                        _id: uXquEbv7EkGHfBLa3
+                        username: admin
+                        name: Admin
+                      ts: '2026-11-02T20:32:22.614Z'
+                      ro: false
+                      default: false
+                      sysMes: true
                     success: true
                 Add a user:
                   value:
                     channel:
-                      _id: ByehQjC44FwMeiLbX
-                      ts: '2016-11-30T21:23:04.737Z'
-                      t: c
+                      _id: nSYqWzZ4GsKTX4dyK
+                      fname: testing
+                      _updatedAt: '2026-11-02T20:32:22.790Z'
                       name: testing
-                      usernames: testing
+                      t: c
                       msgs: 1
-                      _updatedAt: '2016-12-09T12:50:51.575Z'
-                      lm: '2016-12-09T12:50:51.555Z'
+                      usersCount: 2
+                      u:
+                        _id: uXquEbv7EkGHfBLa3
+                        username: admin
+                        name: Admin
+                      ts: '2026-11-02T20:32:22.614Z'
+                      ro: false
+                      default: false
+                      sysMes: true
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+              examples:
+                IDs and Usernames Combined:
+                  value:
+                    success: false
+                    errorType: error-invalid-params
+                    error: must NOT be valid
+                User parameter required:
+                  value:
+                    success: false
+                    error: 'Please provide "userId" or "username" or "userIds" or "usernames" as param [error-users-params-not-provided]'
+                    errorType: error-users-params-not-provided
+                Not allowed:
+                  value:
+                    success: false
+                    error: Not allowed [error-not-allowed]
+                    errorType: error-not-allowed
+                    details:
+                      method: addUsersToRoom
+                No users to invite:
+                  value:
+                    success: false
+                    error: invalid-user-invite-list
+                    errorType: Cannot invite if no users are provided
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/channels.join:
