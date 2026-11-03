@@ -2527,13 +2527,18 @@ paths:
       description: |- 
         Send messages to channels or users on your workspace.
         
-        **Note**: You can only send alias and avatar properties if your user has the `message-impersonate permission`. We implemented this rule to avoid users impersonating other users. By default, only the bot role has this permission, but that can be changed in **Manage** -> **Permissions** -> **message-impersonate**. 
-        
+        **Note**: You can only send the `alias` and `avatar` properties if your user has the `message-impersonate` (**Impersonate other users**) permission. By default, only the `bot` and `app` roles have this permission.
+
+        The server removes markdown trees (`md` and `descriptionMd`) from `attachments` before it saves the message. It does not generate a new `md` for the attachment.
+
+        The request body accepts only the top-level properties listed here. Any other property, such as `blocks` or a message field that only the server sets (for example `pinned`, `u`, or `ts`), fails. To send blocks, use `chat.sendMessage`.
+
         ### Change Log
         | Version | Description |
         | ------- |---------------------------------------------------------------------------- |
-        | 6.8.0   | Allow custom fields in messages                                              | 
-        | 2.4.1   | Document existing method to post reply/threaded messages                     |
+        | 9.0.0   | Stripped `md` and `descriptionMd` from `attachments` before saving the message. |
+        | 6.8.0   | Added custom fields to messages.                                             |
+        | 6.2.0   | Rejected request body properties that are not listed.                        |
         | 2.4.0   | Added validation on user's identity                                          |
         | 0.49.0  | The `channel` can now be a room's id.                                        |
         | 0.48.0  | Information about the sent message is now returned.                          |
@@ -2554,24 +2559,28 @@ paths:
                   properties:
                     alias:
                       type: string
-                      description: 'This will cause the message''s name to appear as the given alias, but your username will still be displayed.'
+                      description: The name to display on the message instead of your name. Your username is still displayed.
                     avatar:
                       type: string
-                      description: 'If provided, the avatar will be displayed as the provided image URL.'
+                      description: The URL of an image to display as the message avatar.
                     emoji:
                       type: string
-                      description: 'If provided, the avatar will be displayed as an emoji.'
+                      description: An emoji to display as the message avatar.
                       example: ":smile:"
                     roomId:
-                      type: string
-                      description: The room ID or an array of room IDs where the message is to be sent. You can use channel name or username. The channel name must have the `#` prefix. `@` refers to username.
+                      oneOf:
+                        - type: string
+                        - type: array
+                          items:
+                            type: string
+                      description: The room ID or an array of room IDs where the message is to be sent. You can also use a room name, with or without the `#` prefix, or a username with the `@` prefix. Cannot be combined with `channel`. With an array, the message is posted to each room, and the response describes only the first one.
                       example: "#general"
                     text:
                       type: string
-                      description: 'The message text to send, it is optional because of attachments.'
+                      description: The message text to send.
                     parseUrls:
                       type: boolean
-                      description: 'Set `parseUrls` to `false` to prevent Rocket.Chat from generating link previews when the message in `text` contains a URL.'
+                      description: Set to `false` to stop the server from extracting URLs from `text`. The message is saved with no `urls` and no link preview. When the message has `attachments`, the default is `false`, and no link preview is generated even with `true`.
                     attachments:
                       type: array
                       items:
@@ -2596,7 +2605,7 @@ paths:
                           color:
                             type: string
                             description: |-
-                              See <a href='https://developer.mozilla.org/en-US/docs/Web/CSS/background-color'>background-css</a> for the supported colors.'
+                              See <a href='https://developer.mozilla.org/en-US/docs/Web/CSS/background-color'>background-css</a> for the supported colors.
                           fields:
                             type: array
                             items:
@@ -2616,16 +2625,16 @@ paths:
                                 - value
                           image_url:
                             type: string
-                            description: 'The image to display, will be big and easy to see.'
+                            description: The URL of the image to display in the attachment.
                           message_link:
                             type: string
                             description: 'Only applicable if the `ts` field is provided, as it makes the time clickable to this link.'
                           text:
                             type: string
-                            description: 'The text to display for this attachment, it is different than the message''s text.'
+                            description: The text to display in the attachment.
                           thumb_url:
                             type: string
-                            description: 'An image that displays to the left of the text, looks better when this is relatively small.'
+                            description: The URL of a thumbnail image to display to the left of the attachment text.
                           title:
                             type: string
                             description: 'Title to display for this attachment, displays under the author.'
@@ -2644,37 +2653,39 @@ paths:
                               Video file to attach. See the <a href='https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video'>HTML video element</a> for information.
                     tmid:
                       type: string
-                      description: The message ID of the original message to reply to or to create a thread on.
+                      description: The message ID of the original message to reply to or to create a thread on. Only available with `roomId`.
                     customFields:
                       type: object
                       description: |-
-                        You can add custom fields for messages. For example, set priorities for messages.
-    
-                        You must enable this option and define the validation in the workspace settings. See the <a href="https://docs.rocket.chat/docs/message" target="_blank">Message</a> settings for further information.
+                        Custom fields for the message, such as a priority. Custom fields must be enabled, and the value must match the validation defined in the <a href='https://docs.rocket.chat/docs/message' target='_blank'>Message</a> settings.
                       example: {"priority": "high"}
                 - type: object
                   required: ["channel"]
                   properties:
                     alias:
                       type: string
-                      description: 'This will cause the message''s name to appear as the given alias, but your username will still be displayed.'
+                      description: The name to display on the message instead of your name. Your username is still displayed.
                     avatar:
                       type: string
-                      description: 'If provided, the avatar will be displayed as the provided image URL.'
+                      description: The URL of an image to display as the message avatar.
                     channel:
-                      type: string
-                      description: The channel ID or an array of channel IDs where the message is to be sent. You can use channel name or username. The channel name must have the `#` prefix. `@` refers to username.
+                      oneOf:
+                        - type: string
+                        - type: array
+                          items:
+                            type: string
+                      description: The room ID or an array of room IDs where the message is to be sent. You can also use a room name, with or without the `#` prefix, or a username with the `@` prefix. Cannot be combined with `roomId`. With an array, the message is posted to each room, and the response describes only the first one.
                       example: "#test-room"
                     emoji:
                       type: string
-                      description: 'If provided, the avatar will be displayed as an emoji.'
+                      description: An emoji to display as the message avatar.
                       example: ":smile:"
                     text:
                       type: string
-                      description: 'The message text to send, it is optional because of attachments.'
+                      description: The message text to send.
                     parseUrls:
                       type: boolean
-                      description: 'Set `parseUrls` to `false` to prevent Rocket.Chat from generating link previews when the message in `text` contains a URL.'  
+                      description: Set to `false` to stop the server from extracting URLs from `text`. The message is saved with no `urls` and no link preview. When the message has `attachments`, the default is `false`, and no link preview is generated even with `true`.  
                     attachments:
                       type: array
                       items:
@@ -2699,7 +2710,7 @@ paths:
                           color:
                             type: string
                             description: |-
-                              See <a href='https://developer.mozilla.org/en-US/docs/Web/CSS/background-color'>background-css</a> for the supported colors.'
+                              See <a href='https://developer.mozilla.org/en-US/docs/Web/CSS/background-color'>background-css</a> for the supported colors.
                           fields:
                             type: array
                             items:
@@ -2719,16 +2730,16 @@ paths:
                                 - value
                           image_url:
                             type: string
-                            description: 'The image to display, will be big and easy to see.'
+                            description: The URL of the image to display in the attachment.
                           message_link:
                             type: string
                             description: 'Only applicable if the `ts` field is provided, as it makes the time clickable to this link.'
                           text:
                             type: string
-                            description: 'The text to display for this attachment, it is different than the message''s text.'
+                            description: The text to display in the attachment.
                           thumb_url:
                             type: string
-                            description: 'An image that displays to the left of the text, looks better when this is relatively small.'
+                            description: The URL of a thumbnail image to display to the left of the attachment text.
                           title:
                             type: string
                             description: 'Title to display for this attachment, displays under the author.'
@@ -2748,19 +2759,14 @@ paths:
                     customFields:
                       type: object
                       description: |-
-                        You can add custom fields for messages. For example, set priorities for messages.
-    
-                        You must enable this option and define the validation in the workspace settings. See the <a href="https://docs.rocket.chat/docs/message" target="_blank">Message</a> settings for further information.
+                        Custom fields for the message, such as a priority. Custom fields must be enabled, and the value must match the validation defined in the <a href='https://docs.rocket.chat/docs/message' target='_blank'>Message</a> settings.
                       example: {"priority": "high"}      
             
             examples:
               Example:
                 value:
-                  alias: Gruggy
-                  avatar: 'http://res.guggy.com/logo_128.png'
                   channel: '#general'
                   emoji: ':smirk:'
-                  roomId: Xnb2kLD2Pnhdwe3RH
                   text: Sample message
                   attachments:
                     - audio_url: 'http://www.w3schools.com/tags/horse.mp3'
@@ -2804,10 +2810,16 @@ paths:
                         type: string
                       msg:
                         type: string
+                      attachments:
+                        type: array
+                        items:
+                          type: object
                       parseUrls:
                         type: boolean
                       groupable:
                         type: boolean
+                      emoji:
+                        type: string
                       ts:
                         type: string
                       u:
@@ -2817,31 +2829,59 @@ paths:
                             type: string
                           username:
                             type: string
+                          name:
+                            type: string
                       rid:
-                        type: string
-                      _updatedAt:
                         type: string
                       _id:
                         type: string
+                      _updatedAt:
+                        type: string
+                      md:
+                        type: array
+                        items:
+                          type: object
+                      mentions:
+                        type: array
+                        items:
+                          type: object
+                      channels:
+                        type: array
+                        items:
+                          type: object
+                      urls:
+                        type: array
+                        items:
+                          type: object
                   success:
                     type: boolean
               examples:
                 Example:
                   value:
-                    ts: 1481748965123
-                    channel: general
+                    ts: 1793706003432
+                    channel: '#general'
                     message:
                       alias: ''
                       msg: This is a test!
+                      attachments: []
                       parseUrls: true
                       groupable: false
-                      ts: '2016-12-14T20:56:05.117Z'
+                      ts: '2026-11-03T11:40:03.388Z'
                       u:
                         _id: y65tAmHs93aDChMWu
                         username: graywolf336
+                        name: Gray Wolf
                       rid: GENERAL
-                      _updatedAt: '2016-12-14T20:56:05.119Z'
                       _id: jC9chsFddTvsbFQG7
+                      _updatedAt: '2026-11-03T11:40:03.392Z'
+                      md:
+                        - type: PARAGRAPH
+                          value:
+                            - type: PLAIN_TEXT
+                              value: This is a test!
+                      mentions: []
+                      channels: []
+                      urls: []
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -2859,11 +2899,42 @@ paths:
                   errorType:
                     type: string
               examples:
-                Missing or invalid room ID:
+                Invalid Room:
                   value:
                     success: false
                     error: '[invalid-channel]'
                     errorType: invalid-channel
+                Missing Room ID and Channel:
+                  value:
+                    success: false
+                    error: "must have required property 'roomId'\n must have required property 'channel'\n must match exactly one schema in oneOf"
+                    errorType: error-invalid-params
+                Unsupported Properties:
+                  value:
+                    success: false
+                    error: "must NOT have additional properties\n must have required property 'channel'\n must match exactly one schema in oneOf"
+                    errorType: error-invalid-params
+                Room ID and Channel Combined:
+                  value:
+                    success: false
+                    error: "must NOT have additional properties\n must NOT have additional properties\n must match exactly one schema in oneOf"
+                    errorType: error-invalid-params
+                Missing Permission for Alias or Avatar:
+                  value:
+                    success: false
+                    error: Not enough permission
+                Invalid Attachment Field:
+                  value:
+                    success: false
+                    error: Invalid attachment field, title and value is required
+                Custom Fields Not Enabled:
+                  value:
+                    success: false
+                    error: Custom fields not enabled
+                Invalid Custom Fields:
+                  value:
+                    success: false
+                    error: Invalid custom fields
 
   /api/v1/chat.search:
     get:
@@ -2989,16 +3060,18 @@ paths:
         - Chat
       summary: Send Message
       description: |- 
-        The difference between `chat.postMessage` and `chat.sendMessage` is that `chat.sendMessage` allows for passing a value for `_id` and the other one doesn't. Also, `chat.sendMessage` only sends it to one channel whereas the other one allows for sending to more than one channel at a time.
+        Send a message to one room. Unlike `chat.postMessage`, this endpoint accepts `_id`, `blocks`, and `tshow`, but it can't send to more than one room.
         
-        **Note**: You can only send alias and avatar properties if your user has the `message-impersonate permission`. We implemented this rule to avoid users impersonating other users. By default, only the bot role has this permission, but that can be changed in **Manage** -> **Permissions** -> **message-impersonate**.
-        
+        **Note**: You can only send the `alias` and `avatar` properties if your user has the `message-impersonate` (**Impersonate other users**) permission. By default, only the `bot` and `app` roles have this permission.
+
+        The server removes markdown trees (`md` and `descriptionMd`) from `attachments` before it saves the message. It does not generate a new `md` for the attachment.
+
         ### Change Log
         | Version | Description                         |
         | ------- | ----------------------------------- |
-        |9.0.0   | Rejects unsupported `message` fields instead of ignoring them.       |
-        | 6.8.0   | Allow custom fields in messages     |      
-        | 6.4.0   | Add `previewUrls` param             |
+        | 9.0.0   | Rejected `message` fields that are not part of the request body, such as fields that only the server sets, and `blocks` with an invalid structure. Stripped `md` and `descriptionMd` from `attachments` before saving the message. |
+        | 6.8.0   | Added custom fields to messages.    |
+        | 6.4.0   | Added the `previewUrls` parameter.  |
         | 2.4.0   | Added validation on user's identity |
         | 0.60.0  | Added                               |
       operationId: post-api-v1-chat.sendMessage
@@ -3008,11 +3081,12 @@ paths:
       requestBody:
         description: |- 
           **Some important things to note about the `previewUrls` parameter include:**
-          * If the `previewUrls` array is empty, no URL will be previewed.
-          * If the `previewUrls` parameter isn't sent, all URLs (up to a maximum of five external URLs) will be previewed.
+          * If you don't send `previewUrls`, all external URLs in the message are previewed.
+          * If you list URLs, only those URLs are previewed.
+          * If `previewUrls` is empty, no URL is previewed.
           * If the message contains attachments or quotes, no URL is previewed.
-          * Internal URLs are not considered in the `previewUrls` array.
-          * A maximum of five external URLs is previewed  per message. If there are more than 5 external URLs, no URL is previewed.
+          * Internal URLs are never previewed, even if you list them.
+          * A message can have at most five external URL previews. If it contains more than five external URLs, no URL is previewed.
           > URLs that include the same text as the <a href='https://docs.rocket.chat/docs/general' target='_blank'>**Site URL**</a> are referred to as Internal URLs.
         content:
           application/json:
@@ -3022,36 +3096,30 @@ paths:
               properties:
                 message:
                   type: object
+                  description: Accepts only the properties listed here. Any other property, such as an unknown property or one that only the server sets (for example `u`, `ts`, `md`, `urls`, or `pinned`), fails.
                   properties:
                     t:
                       type: string
-                      description: The message type e.g. e2e
+                      description: The message type, for example `e2e`. A system message type, such as `uj`, fails.
                     rid:
                       type: string
                       description: The room ID where the message is to be sent.
                     msg:
                       type: string
-                      description: 'The message text to send, it is optional because of attachments.'
+                      description: The message text to send.
                     alias:
                       type: string
-                      description: 'This will cause the message''s name to appear as the given alias, but your username will still be displayed. Requires the `impersonate-other-user` permission'
+                      description: The name to display on the message instead of your name. Your username is still displayed. Requires the `message-impersonate` permission.
                     emoji:
                       type: string
-                      description: 'If provided, the avatar will be displayed as the emoji. '
+                      description: An emoji to display as the message avatar.
                     avatar:
                       type: string
-                      description: 'If provided, the avatar will be displayed as the provided image url. Requires the  `impersonate-other-user` permission.'
+                      description: The URL of an image to display as the message avatar. Requires the `message-impersonate` permission.
                     attachments:
                       type: array
                       description: |-
-                        The attachment is an array of objects with any of the following properties. One attachment can have many sections, including:
-                        * General
-                        * Author Information
-                        * Title Information
-                        * Image
-                        * Audio
-                        * Video
-                        * Table/Fields
+                        An array of attachment objects with the following properties.
                       items:
                         type: object
                         properties:
@@ -3094,16 +3162,16 @@ paths:
                                 - value
                           image_url:
                             type: string
-                            description: 'The image to display, will be big and easy to see.'
+                            description: The URL of the image to display in the attachment.
                           message_link:
                             type: string
                             description: 'Only applicable if the `ts` parameter is provided, as it makes the time clickable to this link.'
                           text:
                             type: string
-                            description: 'The text to display for this attachment, it is different than the message''s text.'
+                            description: The text to display in the attachment.
                           thumb_url:
                             type: string
-                            description: 'An image that displays to the left of the text, looks better when this is relatively small.'
+                            description: The URL of a thumbnail image to display to the left of the attachment text.
                           title:
                             type: string
                             description: 'Title to display for this attachment, displays under the author.'
@@ -3119,13 +3187,13 @@ paths:
                           video_url:
                             type: string
                             description: |-
-                              Video file to attach. See the <a href='https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video' target='blank'>HTML video element</a> for information.
+                              Video file to attach. See the <a href='https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video' target='_blank'>HTML video element</a> for information.
                     tmid:
                       type: string
-                      description: The message ID to create a thread.
+                      description: The ID of the message to reply to in a thread.
                     tshow:
-                      type: string
-                      description: Used when replying in a thread. Message will be sent in channel also if value is true
+                      type: boolean
+                      description: Set to `true` to also show the thread reply in the room. Requires `tmid`.
                     blocks:
                       type: array
                       items:
@@ -3134,25 +3202,80 @@ paths:
                           type:
                             type: string
                           text:
-                            type: string
-                      description: |- 
-                        A message block is an array of objects with any of the following properties. To view the example on how to use this parameter, select **Show example** in this body parameters section. Above the example code block, select the drop-down menu, and select the **Message with Blocks** option. For comprehensive information on blocks, refer to the <a href='https://developer.rocket.chat/docs/blocks' target='_blank'>Apps-Engine UI Blocks documentation</a>.
-                        Blocks can have many sections:
-                        - type
-                        - text
-                        - fields
+                            type: object
+                            properties:
+                              type:
+                                type: string
+                              text:
+                                type: string
+                          fields:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                type:
+                                  type: string
+                                text:
+                                  type: string
+                      description: |-
+                        An array of UI Kit blocks to display in the message. See the **Message with Blocks** example and the <a href='https://developer.rocket.chat/docs/blocks' target='_blank'>Apps-Engine UI Blocks documentation</a>.
+
+                        The request fails if:
+                        * `blocks` is not an array of objects.
+                        * The `elements` of an `actions` or `context` block is missing or is not an array of objects.
+                        * The `fields` of a `section` block is not an array of objects.
+                        * An `input` block has no `element` object.
+                        * A `linear_scale` element has a non-numeric `minValue` or `maxValue`, or more than 100 points.
+                        * An `appId` contains characters other than letters, digits, `-`, and `_`.
+                        * A block is nested more than 10 levels deep.
+
+                        Blocks with an unknown `type` or an unexpected `text` shape are saved as sent.
                     customFields:
                       type: object
                       description: |-
-                        You can add custom fields for messages. For example, set priorities for messages.
-
-                        You must enable this option and define the validation in the workspace settings. See the <a href='https://docs.rocket.chat/use-rocket.chat/workspace-administration/settings/message' target='_blank'>Message</a> settings for further information.
+                        Custom fields for the message, such as a priority. Custom fields must be enabled, and the value must match the validation defined in the <a href='https://docs.rocket.chat/docs/message' target='_blank'>Message</a> settings.
                       example: {"priority": "high"}
+                    _id:
+                      type: string
+                      description: The ID to give the new message. It must not match the ID of an existing message. If you don't send it, the server generates one.
+                      example: Kx7Pq2LmZr4TnB9vW
+                    location:
+                      type: object
+                      description: |-
+                        A GeoJSON geometry to attach to the message, such as a `Point` with `coordinates` as `[longitude, latitude]`. Invalid GeoJSON, or a longitude or latitude out of range, fails. The server doesn't check the coordinate order, so swapped coordinates that are still in range are saved without an error. The web client shows a `Point` as a **Shared location** link to a map.
+                      example: {"type": "Point", "coordinates": [-46.6333, -23.5505]}
+                    groupable:
+                      type: boolean
+                      description: Set to `false` to show the message with its own header instead of grouping it with the sender's previous message.
+                      example: false
+                    parseUrls:
+                      type: boolean
+                      description: |-
+                        Set to `false` to stop the server from extracting URLs from the message text. The message is saved with no `urls` entries and no link preview. Links in the message markdown (`md`) are still parsed.
+                      example: true
+                    text:
+                      type: string
+                      description: |-
+                        A separate text field that the server saves as sent. It is not an alias of `msg`: the server does not generate `md` from it, and the web client does not display it. Use `msg` for the message text.
+                      example: Hello from the API
+                    e2e:
+                      type: string
+                      description: 'The encryption state of an end-to-end encrypted message: `pending` or `done`.'
+                      example: pending
+                    e2eMentions:
+                      type: object
+                      description: Mentions in an end-to-end encrypted message, as `e2eUserMentions` and `e2eChannelMentions` arrays.
+                      example: {"e2eUserMentions": ["@john.doe"], "e2eChannelMentions": []}
+                    content:
+                      type: object
+                      description: |-
+                        The encrypted content of an end-to-end encrypted message. Set `algorithm` to `rc.v1.aes-sha2` or `rc.v2.aes-sha2`, and `ciphertext` to the encrypted text. With `rc.v2.aes-sha2`, also send `iv` and `kid`. The server saves the object as sent and does not validate its properties.
+                      example: {"algorithm": "rc.v2.aes-sha2", "ciphertext": "kTnW8xZq0r2YbPpL3sVd", "iv": "c2FtcGxlLWl2LXZhbHVl", "kid": "a1b2c3d4-kid"}
                   required:
                     - rid
                 previewUrls:
                   type: array
-                  description: An array to define which URL previews should be retrieved from each message.
+                  description: The URLs in `msg` to preview.
                   items:
                     type: string
             examples:
@@ -3161,9 +3284,7 @@ paths:
                   message:
                     rid: Xnb2kLD2Pnhdwe3RH
                     msg: Sample message
-                    alias: Gruggy
                     emoji: ':smirk:'
-                    avatar: 'http://res.guggy.com/logo_128.png'
                     attachments:
                       - color: '#ff0000'
                         text: Yay for gruggy!
@@ -3241,13 +3362,19 @@ paths:
                             type: string
                           name:
                             type: string
-                      unread:
-                        type: boolean
+                      md:
+                        type: array
+                        items:
+                          type: object
                       mentions:
                         type: array
                         items:
                           type: object
                       channels:
+                        type: array
+                        items:
+                          type: object
+                      urls:
                         type: array
                         items:
                           type: object
@@ -3258,21 +3385,26 @@ paths:
                   success:
                     type: boolean
               examples:
-                Example 1:
+                Example:
                   value:
                     message:
                       rid: GENERAL
-                      msg: '123456789'
-                      ts: '2018-03-01T18:02:26.825Z'
+                      msg: Hello from the API
+                      ts: '2026-11-03T13:57:54.003Z'
                       u:
                         _id: i5FdM4ssFgAcQP62k
                         username: rocket.cat
-                        name: test
-                      unread: true
+                        name: Rocket.Cat
+                      _id: dy8Qx3XXH9wKR9AMP
+                      _updatedAt: '2026-11-03T13:57:54.056Z'
+                      md:
+                        - type: PARAGRAPH
+                          value:
+                            - type: PLAIN_TEXT
+                              value: Hello from the API
                       mentions: []
                       channels: []
-                      _updatedAt: '2018-03-01T18:02:26.828Z'
-                      _id: LnCSJxxNkCy6K9X8X
+                      urls: []
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -3289,20 +3421,92 @@ paths:
                     type: string
                   errorType:
                     type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
               examples:
-                Example 1:
+                Missing Message:
                   value:
                     success: false
-                    error: 'The "message" parameter must be provided. [error-invalid-params]'
+                    error: "must have required property 'message'"
                     errorType: error-invalid-params
-                Example 2:
+                Thread Show Without Thread ID:
+                  value:
+                    success: false
+                    error: tshow provided but missing tmid [invalid-params]
+                    errorType: invalid-params
+                    details:
+                      method: sendMessage
+                Missing Room ID:
                   value:
                     success: false
                     error: The 'rid' property on the message object is missing.
-                Example 3:
+                Invalid Room:
                   value:
                     success: false
                     error: error-invalid-room
+                Unsupported Message Fields:
+                  value:
+                    success: false
+                    error: "The message fields cannot be set through 'chat.sendMessage': ts, u"
+                System Message Type:
+                  value:
+                    success: false
+                    error: "Cannot send system messages using 'chat.sendMessage'"
+                Invalid Blocks:
+                  value:
+                    success: false
+                    error: must be array
+                    errorType: error-invalid-params
+                Invalid Block Item:
+                  value:
+                    success: false
+                    error: must be object
+                    errorType: error-invalid-params
+                Missing Input Element:
+                  value:
+                    success: false
+                    error: "must have required property 'element'"
+                    errorType: error-invalid-params
+                Linear Scale Not Numeric:
+                  value:
+                    success: false
+                    error: "Invalid blocks: blocks[0].elements[0] must have numeric minValue and maxValue"
+                Linear Scale Too Large:
+                  value:
+                    success: false
+                    error: "Invalid blocks: blocks[0].elements[0] cannot have more than 100 points"
+                Invalid App ID:
+                  value:
+                    success: false
+                    error: "Invalid blocks: blocks[0].appId must contain only letters, digits, \"-\" and \"_\""
+                Blocks Nested Too Deeply:
+                  value:
+                    success: false
+                    error: "Invalid blocks: blocks[0].d.a.a.a.a.a.a.a.a.a.a is nested too deeply"
+                Message Not an Object:
+                  value:
+                    success: false
+                    error: must be object
+                    errorType: error-invalid-params
+                Missing Permission for Alias or Avatar:
+                  value:
+                    success: false
+                    error: Not enough permission
+                Invalid Attachment Field:
+                  value:
+                    success: false
+                    error: Invalid attachment field, title and value is required
+                Custom Fields Not Enabled:
+                  value:
+                    success: false
+                    error: Custom fields not enabled
+                Invalid Custom Fields:
+                  value:
+                    success: false
+                    error: Invalid custom fields
   /api/v1/chat.starMessage:
     post:
       tags:
