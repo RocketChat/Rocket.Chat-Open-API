@@ -5290,49 +5290,26 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                  success:
+                    type: boolean
               examples:
-                Example 1:
+                Success Example:
                   value:
-                    departments:
-                      - _id: qajzu7WaBRoQBpq6Z
-                        enabled: true
-                        name: Brazil
-                        description: ''
-                        numAgents: 3
-                        showOnRegistration: false
-                        showOnOfflineForm: true
-                        email: brazil@rocketchat.com
-                        _updatedAt: '2021-06-23T06:02:02.931Z'
-                        chatClosingTags: []
-                        maxNumberSimultaneousChat: ''
-                        requestTagBeforeClosingChat: false
-                        type: d
-                        waitingQueueMessage: ''
-                        abandonedRoomsCloseCustomMessage: ''
-                        departmentsAllowedToForward: ''
-                        offlineMessageChannelName: ''
-                        visitorInactivityTimeoutInSeconds: ''
-                        ancestors: []
-                      - _id: NhnC9dBwFonZqSQ5m
-                        enabled: true
-                        name: CSM and Support
-                        description: ''
-                        showOnRegistration: true
-                        showOnOfflineForm: false
-                        requestTagBeforeClosingChat: false
-                        email: br@rocketchat.com
-                        chatClosingTags: []
-                        offlineMessageChannelName: ''
-                        abandonedRoomsCloseCustomMessage: ''
-                        waitingQueueMessage: ''
-                        departmentsAllowedToForward:
-                          - CAJioQNAvLnYWTy8i
-                          - Z2KWYBJQFR7AzfmQL
-                        _updatedAt: '2021-07-12T18:05:53.257Z'
-                        numAgents: 4
-                    count: 2
-                    offset: 0
-                    total: 2
+                    items:
+                      - _id: 64f0c2a1b3d4e5f6a7b8c9d0
+                        name: Sales
+                      - _id: 64f0c2a1b3d4e5f6a7b8c9d1
+                        name: Support
                     success: true
         '400':
           description: Bad Request

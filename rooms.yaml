@@ -5364,11 +5364,13 @@ paths:
       summary: Get Room Information
       description: |-
         Retrieves the information about the room.
-        
+
+        Users with the `view-room-administration` permission can also retrieve public and private rooms they are not a member of, except rooms managed by ABAC. Users without this permission who request a private room they are not a member of receive a `400` error with `not-allowed`.
+
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
-        |9.0.0   | Removed the `fields` parameter.       |
+        |9.0.0   | Removed the `fields` parameter. Users with the `view-room-administration` permission can read public and private rooms they are not a member of, except rooms managed by ABAC.       |
         |0.72.0   | Added       |
       operationId: get-api-v1-rooms.info
       parameters:
@@ -5544,6 +5546,21 @@ paths:
                     success: false
                     error: 'The parameter "roomId" or "roomName" is required [error-roomid-param-not-provided]'
                     errorType: error-roomid-param-not-provided
+                Room not found:
+                  value:
+                    success: false
+                    error: 'The required "roomId" or "roomName" param provided does not match any channel [error-room-not-found]'
+                    errorType: error-room-not-found
+                ABAC room the caller cannot access:
+                  value:
+                    success: false
+                    error: not-allowed
+                    errorType: Not Allowed
+                Private room the caller is not a member of:
+                  value:
+                    success: false
+                    error: not-allowed
+                    errorType: Not Allowed
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/rooms.getDiscussions:
