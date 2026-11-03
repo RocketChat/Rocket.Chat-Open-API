@@ -2527,11 +2527,16 @@ paths:
       description: |- 
         Send messages to channels or users on your workspace.
         
-        **Note**: You can only send alias and avatar properties if your user has the `message-impersonate permission`. We implemented this rule to avoid users impersonating other users. By default, only the bot role has this permission, but that can be changed in **Manage** -> **Permissions** -> **message-impersonate**. 
-        
+        **Note**: You can only send the `alias` and `avatar` properties if your user has the `message-impersonate` (**Impersonate other users**) permission. By default, only the `bot` and `app` roles have this permission.
+
+        The server removes markdown trees (`md` and `descriptionMd`) from `attachments` before it saves the message. It does not generate a new `md` for the attachment.
+
+        The request body accepts only the top-level properties listed here. Any other property, such as `blocks` or a message field that only the server sets (for example `pinned`, `u`, or `ts`), fails. To send blocks, use `chat.sendMessage`.
+
         ### Change Log
         | Version | Description |
         | ------- |---------------------------------------------------------------------------- |
+        | 9.0.0   | Removed `md` and `descriptionMd` from `attachments`.                        |
         | 6.8.0   | Allow custom fields in messages                                              | 
         | 2.4.1   | Document existing method to post reply/threaded messages                     |
         | 2.4.0   | Added validation on user's identity                                          |
@@ -2564,14 +2569,14 @@ paths:
                       example: ":smile:"
                     roomId:
                       type: string
-                      description: The room ID or an array of room IDs where the message is to be sent. You can use channel name or username. The channel name must have the `#` prefix. `@` refers to username.
+                      description: The room ID or an array of room IDs where the message is to be sent. You can also use a room name, with or without the `#` prefix, or a username with the `@` prefix. Cannot be combined with `channel`. With an array, the message is posted to each room, and the response describes only the first one.
                       example: "#general"
                     text:
                       type: string
                       description: 'The message text to send, it is optional because of attachments.'
                     parseUrls:
                       type: boolean
-                      description: 'Set `parseUrls` to `false` to prevent Rocket.Chat from generating link previews when the message in `text` contains a URL.'
+                      description: 'Set `parseUrls` to `false` to prevent Rocket.Chat from generating link previews when the message in `text` contains a URL. When the message has `attachments`, the default is `false`.'
                     attachments:
                       type: array
                       items:
@@ -2644,7 +2649,7 @@ paths:
                               Video file to attach. See the <a href='https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video'>HTML video element</a> for information.
                     tmid:
                       type: string
-                      description: The message ID of the original message to reply to or to create a thread on.
+                      description: The message ID of the original message to reply to or to create a thread on. Only available with `roomId`.
                     customFields:
                       type: object
                       description: |-
@@ -2663,7 +2668,7 @@ paths:
                       description: 'If provided, the avatar will be displayed as the provided image URL.'
                     channel:
                       type: string
-                      description: The channel ID or an array of channel IDs where the message is to be sent. You can use channel name or username. The channel name must have the `#` prefix. `@` refers to username.
+                      description: The channel ID or an array of channel IDs where the message is to be sent. You can also use a room name, with or without the `#` prefix, or a username with the `@` prefix. Cannot be combined with `roomId`. With an array, the message is posted to each room, and the response describes only the first one.
                       example: "#test-room"
                     emoji:
                       type: string
@@ -2674,7 +2679,7 @@ paths:
                       description: 'The message text to send, it is optional because of attachments.'
                     parseUrls:
                       type: boolean
-                      description: 'Set `parseUrls` to `false` to prevent Rocket.Chat from generating link previews when the message in `text` contains a URL.'  
+                      description: 'Set `parseUrls` to `false` to prevent Rocket.Chat from generating link previews when the message in `text` contains a URL. When the message has `attachments`, the default is `false`.'  
                     attachments:
                       type: array
                       items:
@@ -2760,7 +2765,6 @@ paths:
                   avatar: 'http://res.guggy.com/logo_128.png'
                   channel: '#general'
                   emoji: ':smirk:'
-                  roomId: Xnb2kLD2Pnhdwe3RH
                   text: Sample message
                   attachments:
                     - audio_url: 'http://www.w3schools.com/tags/horse.mp3'
@@ -2804,10 +2808,16 @@ paths:
                         type: string
                       msg:
                         type: string
+                      attachments:
+                        type: array
+                        items:
+                          type: object
                       parseUrls:
                         type: boolean
                       groupable:
                         type: boolean
+                      emoji:
+                        type: string
                       ts:
                         type: string
                       u:
@@ -2817,31 +2827,59 @@ paths:
                             type: string
                           username:
                             type: string
+                          name:
+                            type: string
                       rid:
-                        type: string
-                      _updatedAt:
                         type: string
                       _id:
                         type: string
+                      _updatedAt:
+                        type: string
+                      md:
+                        type: array
+                        items:
+                          type: object
+                      mentions:
+                        type: array
+                        items:
+                          type: object
+                      channels:
+                        type: array
+                        items:
+                          type: object
+                      urls:
+                        type: array
+                        items:
+                          type: object
                   success:
                     type: boolean
               examples:
                 Example:
                   value:
-                    ts: 1481748965123
-                    channel: general
+                    ts: 1793706003432
+                    channel: '#general'
                     message:
                       alias: ''
                       msg: This is a test!
+                      attachments: []
                       parseUrls: true
                       groupable: false
-                      ts: '2016-12-14T20:56:05.117Z'
+                      ts: '2026-11-03T11:40:03.388Z'
                       u:
                         _id: y65tAmHs93aDChMWu
                         username: graywolf336
+                        name: Gray Wolf
                       rid: GENERAL
-                      _updatedAt: '2016-12-14T20:56:05.119Z'
                       _id: jC9chsFddTvsbFQG7
+                      _updatedAt: '2026-11-03T11:40:03.392Z'
+                      md:
+                        - type: PARAGRAPH
+                          value:
+                            - type: PLAIN_TEXT
+                              value: This is a test!
+                      mentions: []
+                      channels: []
+                      urls: []
                     success: true
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -2864,6 +2902,33 @@ paths:
                     success: false
                     error: '[invalid-channel]'
                     errorType: invalid-channel
+                Missing Room ID and Channel:
+                  value:
+                    success: false
+                    error: "must have required property 'roomId'\n must have required property 'channel'\n must match exactly one schema in oneOf"
+                    errorType: error-invalid-params
+                Unsupported Properties:
+                  value:
+                    success: false
+                    error: "must NOT have additional properties\n must have required property 'channel'\n must match exactly one schema in oneOf"
+                    errorType: error-invalid-params
+                Room ID and Channel Combined:
+                  value:
+                    success: false
+                    error: "must NOT have additional properties\n must NOT have additional properties\n must match exactly one schema in oneOf"
+                    errorType: error-invalid-params
+                Missing Permission for Alias or Avatar:
+                  value:
+                    success: false
+                    error: Not enough permission
+                Invalid Attachment Field:
+                  value:
+                    success: false
+                    error: Invalid attachment field, title and value is required
+                Custom Fields Not Enabled:
+                  value:
+                    success: false
+                    error: Custom fields not enabled
 
   /api/v1/chat.search:
     get:
