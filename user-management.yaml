@@ -2547,19 +2547,21 @@ paths:
       summary: Get Users List
       description: |-
         Retrieves workspace users and the information the caller is allowed to view.
-        Use the `email` query parameter to filter the list, or use `users.info` to look up a single user.
+        Filter by `username`, `email`, or custom field values to locate a user and obtain their `userId` for the `users.info` endpoint.
+
+        The response only contains the default user fields. To read `customFields`, set `includeCustomFields` to `true`. Other fields, such as `utcOffset`, `nickname`, `bio`, and `statusText`, are not returned by this endpoint. Use the `users.info` endpoint instead.
 
         When the Premium **User status hiding** feature is enabled, users who have hidden their status from the caller appear as `offline`, and their detailed status fields are omitted.
 
         **Permissions required**:
         - `view-d-room`: View direct messages.
-        - `view-full-other-user-info`: View complete user details, such as account creation and last login.
+        - `view-full-other-user-info`: View complete user details, such as account creation and last login. Also required to use the `customFields` and `includeCustomFields` parameters.
         - `view-outside-room`: View users outside the caller's rooms when `Apply_permission_view-outside-room` is enabled under **Settings** > **General** > **REST API**.
 
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
-        |9.0.0            | Removed the `fields` and `query` parameters. Fields outside the default projection (`customFields`, `utcOffset`, `nickname`, `bio`, `statusText`, `federated`, and `sipExtension`) are no longer reachable in bulk; use `users.info` instead.       |
+        |9.0.0            | Removed the `query` and `fields` parameters. Requests that include them return a `400` error. Added the `username`, `customFields`, and `includeCustomFields` query parameters.       |
         |8.8.0             | Added status visibility filtering |
         |8.4.0             | Added `email` query parameter for filtering |
         |0.49.0            | `Count` and `offset` query parameters supported.       |
@@ -2585,6 +2587,37 @@ paths:
             minLength: 1
             nullable: true
           example: user@example.com
+        - name: username
+          in: query
+          required: false
+          description: |-
+            Filter users whose username contains this value. The match is not case-sensitive and checks the username only, not the display name. Regular expression characters are matched literally. Minimum length: 1 character. An empty value returns a `400` error.
+          schema:
+            type: string
+            minLength: 1
+            nullable: true
+          example: john
+        - name: customFields
+          in: query
+          required: false
+          style: deepObject
+          explode: true
+          description: |-
+            Filter users by exact custom field values, in the format `customFields[<key>]=<value>`. For example, `customFields[department]=Sales`. The value match is case-sensitive. When you send more than one key, a user must match all of them. The filter works without `includeCustomFields`. Sending the parameter as a JSON string, such as `customFields={"department":"Sales"}`, returns a `400` error. Requires the `view-full-other-user-info` permission.
+          schema:
+            type: object
+            additionalProperties:
+              type: string
+          example:
+            department: Sales
+        - name: includeCustomFields
+          in: query
+          required: false
+          description: |-
+            Whether to include each user's full `customFields` object in the response. Users without custom fields are returned without the `customFields` key. The value must be `true` or `false`; other values return a `400` error. Requires the `view-full-other-user-info` permission. Defaults to `false`.
+          schema:
+            type: boolean
+          example: true
       responses:
         '200':
           description: OK
@@ -2625,10 +2658,14 @@ paths:
                           type: string
                         lastLogin:
                           type: string
+                          description: Returned only for users who have logged in.
                         nameInsensitive:
                           type: string
                         avatarETag:
                           type: string
+                        customFields:
+                          type: object
+                          description: Returned only when `includeCustomFields` is `true` and the user has custom fields.
                   count:
                     type: integer
                   offset:
@@ -2680,8 +2717,58 @@ paths:
                     offset: 0
                     total: 3
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Removed or unknown parameter:
+                  value:
+                    success: false
+                    error: must NOT have additional properties
+                    errorType: error-invalid-params
+                Empty username:
+                  value:
+                    success: false
+                    error: must NOT have fewer than 1 characters
+                    errorType: error-invalid-params
+                customFields sent as a JSON string:
+                  value:
+                    success: false
+                    error: must be object
+                    errorType: error-invalid-params
+                Invalid includeCustomFields value:
+                  value:
+                    success: false
+                    error: must be boolean
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: forbidden
 
   /api/v1/users.setAvatar:
     post:
