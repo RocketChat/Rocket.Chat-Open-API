@@ -8241,6 +8241,11 @@ paths:
         Add members to a team.
         
         Permissions required: `add-team-member` or `edit-team-member`
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- | 
+        | 9.0.0   | Assigning roles now requires the matching permission: `set-owner`, `set-moderator` or `set-leader` for those roles, and `access-permissions` for any other role except `member`. |
       operationId: post-api-v1-teams.addMembers
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -8264,6 +8269,8 @@ paths:
                         type: string
                       roles:
                         type: array
+                        description: |-
+                          To assign roles, you also need the permission for each role in the team's main room: `set-owner` for `owner`, `set-moderator` for `moderator`, and `set-leader` for `leader`. Any other role except `member` requires `access-permissions`, and the `admin` role also requires `assign-admin-role`. If you don't have them, the request fails with a `403` error.
                         items:
                           type: string
               required:
@@ -8280,8 +8287,145 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Invalid Params:
+                  value:
+                    success: false
+                    error: |-
+                      must have required property 'members'
+                       must have required property 'teamName'
+                       must match exactly one schema in oneOf
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: forbidden
+  /api/v1/teams.updateMember:
+    post:
+      tags:
+        - Teams
+      summary: Update Team Member Info
+      description: |-
+        Updates a team member's roles. 
+
+        Permission required: `edit-team-member`
+
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 9.0.0   | Assigning roles now requires the matching permission: `set-owner`, `set-moderator` or `set-leader` for those roles, and `access-permissions` for any other role except `member`. |
+      operationId: post-api-v1-teams.updateMembers
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - teamId
+                - member
+              properties:
+                teamId:
+                  type: string
+                  description: 'Enter the team ID. Alternatively, enter the `teamName` parameter and provide the team''s name as the value.'
+                member:
+                  type: object
+                  description: The users (IDs and roles) to add or update in the team.
+                  properties:
+                    userId:
+                      type: string
+                      description: Enter the user ID.
+                    roles:
+                      type: array
+                      items: {}
+                      description: |-
+                        You also need the permission for each role you add or remove: `set-owner` for `owner`, `set-moderator` for `moderator`, and `set-leader` for `leader`. Any other role except `member` requires `access-permissions`, and the `admin` role also requires `assign-admin-role`. If you don't have them, the request fails with a `403` error. 
+            examples:
+              Example:
+                value:
+                  teamId: 63f3efc4b000b6b6d86704b2
+                  member:
+                    userId: rYhzFRd2QZjNwAAXX
+                    roles:
+                      - owner
+                      - leader
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Invalid Params:
+                  value:
+                    success: false
+                    error: |-
+                      must have required property 'member'
+                       must have required property 'teamName'
+                       must match exactly one schema in oneOf
+                    errorType: error-invalid-params
+                Invalid Team Id:
+                  value:
+                    success: false
+                    error: team-does-not-exist
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: forbidden
   /api/v1/teams.members:
     get:
       tags:
@@ -8404,55 +8548,6 @@ paths:
                     count: 2
                     offset: 0
                     success: true
-        '401':
-          $ref: '#/components/responses/authorizationError'
-  /api/v1/teams.updateMember:
-    post:
-      tags:
-        - Teams
-      summary: Update Team Member Info
-      description: |-
-        Updates a team member's roles. 
-
-        Permission required: `edit-team-member`
-      operationId: post-api-v1-teams.updateMembers
-      parameters:
-        - $ref: '#/components/parameters/Auth-Token'
-        - $ref: '#/components/parameters/UserId'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - teamId
-                - member
-              properties:
-                teamId:
-                  type: string
-                  description: 'Enter the team ID. Alternatively, enter the `teamName` parameter and provide the team''s name as the value.'
-                member:
-                  type: object
-                  description: The users (IDs and roles) to add or update in the team.
-                  properties:
-                    userId:
-                      type: string
-                      description: Enter the user ID.
-                    roles:
-                      type: array
-                      items: {}
-            examples:
-              Example:
-                value:
-                  teamId: 63f3efc4b000b6b6d86704b2
-                  member:
-                    userId: rYhzFRd2QZjNwAAXX
-                    roles:
-                      - owner
-                      - leader
-      responses:
-        '200':
-          $ref: '#/components/responses/trueSuccess'
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/teams.leave:
