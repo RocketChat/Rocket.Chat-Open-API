@@ -1140,9 +1140,14 @@ paths:
 
         This endpoint does not require authentication. The challenge must exist, must not be expired, and must use the `email` method. Requests are limited to 5 per minute per caller.
 
+        To resend the code for a password login, use the `challengeId` that `/api/v1/login` returns in the `details` of a `totp-required` error.
+
+        The server sends at most one email code per user per minute. A request made within a minute of the last code returns `success: true` but doesn't send a new email.
+
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 9.0.0   | Accepted the `challengeId` returned by `/api/v1/login` to resend a login code. Limited email codes to one per user per minute. |
         | 8.7.0   | Added       |
       operationId: post-api-v1-twoFactorChallenges.sendEmailCode
       requestBody:
@@ -1215,9 +1220,12 @@ paths:
 
         This endpoint does not require authentication. Requests are limited to 5 per minute per caller. The challenge is removed when the maximum number of failed attempts is reached.
 
+        The `challengeId` that `/api/v1/login` returns to resend an email code can't be verified here. It returns the `error-challenge-not-found` error.
+
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 9.0.0   | Rejected the resend `challengeId` returned by `/api/v1/login` with `error-challenge-not-found`. |
         | 8.7.0   | Added       |
       operationId: post-api-v1-twoFactorChallenges.verifyChallenge
       requestBody:
