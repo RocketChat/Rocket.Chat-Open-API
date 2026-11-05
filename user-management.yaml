@@ -5642,18 +5642,16 @@ paths:
       description: |-
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
         
-        Syncs your <a href="https://docs.rocket.chat/docs/ldap" target="_blank">LDAP data</a> based on the <a href="https://docs.rocket.chat/docs/ldap-data-sync-settings" target="_blank">data sync configurations</a>. This endpoint requires 2FA.
+        Syncs your <a href="https://docs.rocket.chat/use-rocket.chat/authentication/ldap" target="_blank">LDAP data</a> based on the <a href="https://docs.rocket.chat/use-rocket.chat/authentication/ldap/ldap-data-sync-settings" target="_blank">data sync configurations</a>. This endpoint requires 2FA.
         
-        Make sure LDAP is enabled in **Manage** → **Workspace** → **Settings** → **LDAP** → **Enable** before using this endpoint.
+        Make sure LDAP is enabled before using this endpoint.
 
         Permission required: `sync-auth-services-users`.
 
-        From Rocket.Chat 9.0.0, LDAP is available on Starter workspaces and on all premium plans (Commercial, Government, and Defense). It is not available on Community workspaces, where this endpoint returns `error-action-not-allowed`. See <a href="https://docs.rocket.chat/docs/our-plans" target="_blank">Our Plans</a> for details.
-        
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
-        |9.0.0            | Added premium plan availability details. Returns `403` with `errorType: error-forbidden` instead of `400` when refused.       |
+        |9.0.0            | Moved to premium plans. Added the `LDAP_Background_Sync_disabled` and `LDAP_Sync_failed` errors. |
         |5.2.0            | Include `syncAvatars`       |
         |4.0.0            | Added       |
       operationId: post-api-v1-ldap.syncNow
@@ -5703,8 +5701,13 @@ paths:
                         type: array
                         items:
                           type: string
+                      error:
+                        type: string
+                        description: The error that stopped the sync. Returned with `LDAP_Sync_failed`.
               examples:
-                Example 1:
+                2FA Required:
+                  summary: 2FA code missing
+                  description: The request has no valid `x-2fa-code` and `x-2fa-method` headers. `details.method` shows the 2FA method to use.
                   value:
                     success: false
                     error: 'TOTP Required [totp-required]'
@@ -5714,36 +5717,41 @@ paths:
                       codeGenerated: false
                       availableMethods:
                         - totp
-                Example 2:
+                LDAP Disabled:
+                  summary: LDAP is disabled
+                  description: LDAP is not enabled in the workspace (`LDAP_Enable` is off).
                   value:
                     success: false
                     error: LDAP_disabled
-                Not available on Community workspaces:
+                Not Authorized:
+                  summary: Missing permission
+                  description: The user doesn't have the `sync-auth-services-users` permission.
+                  value:
+                    success: false
+                    error: error-not-authorized
+                Background Sync Disabled:
+                  summary: Background sync is disabled
+                  description: None of the background sync settings is enabled (`LDAP_Background_Sync`, `LDAP_Background_Sync_Avatars`, or `LDAP_Background_Sync_ABAC_Attributes` with ABAC enabled).
+                  value:
+                    success: false
+                    error: LDAP_Background_Sync_disabled
+                License Required:
+                  summary: Premium license required
+                  description: The workspace doesn't have a premium license with the `ldap-enterprise` module.
                   value:
                     success: false
                     error: 'This is an enterprise feature [error-action-not-allowed]'
                     errorType: error-action-not-allowed
-        '401':
-          $ref: '#/components/responses/authorizationError'
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  error:
-                    type: string
-                  errorType:
-                    type: string
-              examples:
-                Example 3:
+                Sync Failed:
+                  summary: Sync could not run
+                  description: The sync could not run, for example because the LDAP server is unreachable. `details.error` contains the cause, for example `Timeout`.
                   value:
                     success: false
-                    error: error-not-authorized
-                    errorType: error-forbidden
+                    error: LDAP_Sync_failed
+                    details:
+                      error: Timeout
+        '401':
+          $ref: '#/components/responses/authorizationError'
   /api/v1/ldap.testConnection:
     post:
       tags:
@@ -5753,16 +5761,15 @@ paths:
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
 
         Test if Rocket.Chat can connect to the specified LDAP server using the port and host provided in the Rocket.Chat settings.
-        Make sure LDAP is enabled in **Manage** → **Workspace** → **Settings** → **LDAP** → **Enable** before using this endpoint.
+        Make sure LDAP is enabled before using this endpoint.
 
-        Permission required: `test-admin-options`
-
-        From Rocket.Chat 9.0.0, LDAP is available on Starter workspaces and on all premium plans (Commercial, Government, and Defense). It is not available on Community workspaces, where this endpoint returns `error-action-not-allowed`. See <a href="https://docs.rocket.chat/docs/our-plans" target="_blank">Our Plans</a> for details.
+        Permission required: `test-admin-options`.
 
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
-        |9.0.0            | Added premium plan availability details.       |
+        | 9.0.0   | Moved to premium plans. |
+        | 9.0.0   | Added the `LDAP_Bind_failed` and `LDAP_Connection_failed_reason` errors. Removed the `Connection_failed` error. |
       operationId: post-api-v1-ldap.testConnection
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -5782,7 +5789,7 @@ paths:
               examples:
                 Success Example:
                   value:
-                    message: Connection_success
+                    message: LDAP_Connection_successful
                     success: true
         '400':
           description: Bad Request
@@ -5797,14 +5804,66 @@ paths:
                     type: string
                   errorType:
                     type: string
+                  details:
+                    type: object
+                    properties:
+                      error:
+                        type: string
+                        description: The LDAP server's error. Returned with `LDAP_Bind_failed`.
+                      reason:
+                        type: string
+                        description: The connection error. Returned with `LDAP_Connection_failed_reason`.
               examples:
-                Not available on Community workspaces:
+                Bind Failed:
+                  summary: LDAP bind failed
+                  description: Rocket.Chat reached the LDAP server, but the server rejected the bind with the configured `LDAP_Authentication_UserDN` and `LDAP_Authentication_Password`. `details.error` contains the LDAP server's error, for example `Invalid Credentials`.
+                  value:
+                    success: false
+                    error: LDAP_Bind_failed
+                    details:
+                      error: Invalid Credentials
+                Connection Failed:
+                  summary: Can't connect to the LDAP server
+                  description: Rocket.Chat couldn't reach the LDAP server at the configured `LDAP_Host` and `LDAP_Port`. `details.reason` contains the connection error, for example `Timeout`, `connectRefused`, or `getaddrinfo ENOTFOUND`.
+                  value:
+                    success: false
+                    error: LDAP_Connection_failed_reason
+                    errorType: error-ldap-connection-failed
+                    details:
+                      reason: Timeout
+                License Required:
+                  summary: Premium license required
+                  description: The workspace doesn't have a premium license with the `ldap-enterprise` module.
                   value:
                     success: false
                     error: 'This is an enterprise feature [error-action-not-allowed]'
                     errorType: error-action-not-allowed
+                LDAP Disabled:
+                  summary: LDAP is disabled
+                  description: LDAP is not enabled in the workspace (`LDAP_Enable` is off).
+                  value:
+                    success: false
+                    error: LDAP_disabled
         '401':
           $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  summary: Missing permission
+                  description: The user doesn't have the `test-admin-options` permission.
+                  value:
+                    success: false
+                    error: User does not have the permissions required for this action [error-unauthorized]
     parameters: []
   /api/v1/ldap.testSearch:
     post:
@@ -5815,16 +5874,15 @@ paths:
         <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
 
         Test if a given username can be found in the LDAP server using the authentication and filter <a href='https://docs.rocket.chat/docs/configure-ldap-connection' target='_blank'>settings</a> provided to Rocket.Chat.
-        Make sure LDAP is enabled in **Manage** → **Workspace** → **Settings** → **LDAP** → **Enable** before using this endpoint.
+        Make sure LDAP is enabled in **Settings** > **LDAP** > **Enable** before using this endpoint.
         
-        Permission required: `test-admin-options`
-
-        From Rocket.Chat 9.0.0, LDAP is available on Starter workspaces and on all premium plans (Commercial, Government, and Defense). It is not available on Community workspaces, where this endpoint returns `error-action-not-allowed`. See <a href="https://docs.rocket.chat/docs/our-plans" target="_blank">Our Plans</a> for details.
+        Permission required: `test-admin-options`.
 
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
-        |9.0.0            | Added premium plan availability details.       |
+        | 9.0.0   | Moved to premium plans. Requires a license with the `ldap-enterprise` module. |
+        | 9.0.0   | Added the `LDAP_Bind_failed`, `LDAP_User_not_found`, and `LDAP_Multiple_users_found` errors. |
       operationId: post-api-v1-ldap.testSearch
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -5860,18 +5918,84 @@ paths:
                     type: string
                   errorType:
                     type: string
+                  details:
+                    type: object
+                    properties:
+                      error:
+                        type: string
+                        description: The LDAP server's error. Returned with `LDAP_Bind_failed`.
+                      total:
+                        type: string
+                        description: The number of matching users. Returned with `LDAP_Multiple_users_found`.
               examples:
-                Example 1:
+                Missing Username:
+                  summary: Username missing
+                  description: The request body doesn't include `username`.
                   value:
                     success: false
-                    error: 'Match error: Missing key ''username'''
-                Not available on Community workspaces:
+                    error: must have required property 'username'
+                    errorType: error-invalid-params
+                Bind Failed:
+                  summary: LDAP bind failed
+                  description: Rocket.Chat couldn't bind to the LDAP server with the authentication user DN and password. `details.error` contains the LDAP server's error.
+                  value:
+                    success: false
+                    error: LDAP_Bind_failed
+                    details:
+                      error: Invalid Credentials
+                User Not Found:
+                  summary: User not found
+                  description: No LDAP user matches the username. Wildcard characters in `username` are not expanded, so a search for `*` also returns this error.
+                  value:
+                    success: false
+                    error: LDAP_User_not_found
+                Multiple Users Found:
+                  summary: More than one user found
+                  description: More than one LDAP user matches the username. `details.total` contains the number of matches.
+                  value:
+                    success: false
+                    error: LDAP_Multiple_users_found
+                    details:
+                      total: '2'
+                License Required:
+                  summary: Premium license required
+                  description: The workspace doesn't have a premium license with the `ldap-enterprise` module.
                   value:
                     success: false
                     error: 'This is an enterprise feature [error-action-not-allowed]'
                     errorType: error-action-not-allowed
+                Search Failed:
+                  summary: Search failed
+                  description: The search failed for another reason, for example the LDAP server is unreachable, the base DN doesn't exist, the search filter is invalid, or `username` is empty.
+                  value:
+                    success: false
+                    error: LDAP_search_failed
+                LDAP Disabled:
+                  summary: LDAP is disabled
+                  description: LDAP is not enabled in the workspace (`LDAP_Enable` is off).
+                  value:
+                    success: false
+                    error: LDAP_disabled
         '401':
           $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  summary: Missing permission
+                  description: The user doesn't have the `test-admin-options` permission.
+                  value:
+                    success: false
+                    error: User does not have the permissions required for this action [error-unauthorized]
       requestBody:
         content:
           application/json:
