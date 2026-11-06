@@ -7212,13 +7212,14 @@ paths:
       summary: Create Discussion
       description: |-
         Creates a new discussion for the room. It requires at least one of the following permissions: `start-discussion` OR `start-discussion-other-user`, AND must be with the following setting enabled: `Discussion_enabled`.
+        The caller must be a member of the parent room. Apps are exempt from this check.
 
         When **Force end-to-end encryption on private rooms** is enabled, you cannot create a discussion under an unencrypted private room. Make the parent room public or enable encryption on it before creating the discussion.
         
         ### Changelog
         | Version | Description                                                                                   |
         | ------- | --------------------------------------------------------------------------------------------- |
-        |9.0.0   | Requires the caller to be a member of the parent channel.       |
+        | 9.0.0   | Requires the caller to be a member of the parent room. Apps are exempt.                       |
         | 8.8.0   | Added forced encryption checks for private-room discussions.                                      |
         | 1.0.0   | Added                                                                                         |
       operationId: post-api-v1-rooms.createDiscussion
@@ -7339,6 +7340,11 @@ paths:
                     type: string
                   errorType:
                     type: string
+                  details:
+                    type: object
+                    properties:
+                      method:
+                        type: string
               examples:
                 Private room encryption is enforced:
                   value:
@@ -7350,6 +7356,8 @@ paths:
                     success: false
                     error: 'You must join the room to create a discussion [error-user-not-in-room]'
                     errorType: error-user-not-in-room
+                    details:
+                      method: DiscussionCreation
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/rooms.images:
