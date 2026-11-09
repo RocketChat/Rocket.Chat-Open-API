@@ -976,8 +976,8 @@ paths:
         - Roles
       summary: Get Updated Roles
       description: |-
-        Gets all the roles in the workspace which are updated after a given date.
-        
+        Gets the roles in the workspace that were created, updated, or deleted after a given date. 
+
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
@@ -986,10 +986,11 @@ paths:
       parameters:
         - name: updatedSince
           in: query
-          description: Date as ISO string.
-          required: true
+          description: Date as an ISO string. Roles updated at or after this date are returned in `update`, and roles deleted after this date are returned in `remove`.
+          required: false
           schema:
             type: string
+            format: date-time
           example: '2017-11-25T15:08:17.248Z'
         - $ref: '#/components/parameters/UserId'
         - $ref: '#/components/parameters/Auth-Token'
@@ -1006,50 +1007,107 @@ paths:
                     properties:
                       update:
                         type: array
+                        description: Roles created or updated at or after the `updatedSince` date.
                         items:
                           type: object
                           properties:
                             _id:
                               type: string
-                            description:
+                              description: The role ID. For default roles, this is the same as the role name. For custom roles, this is a generated ID.
+                            name:
                               type: string
-                            mandatory2fa:
-                              type: boolean
-                            protected:
-                              type: boolean
+                              description: The role name.
                             scope:
                               type: string
+                              enum:
+                                - Users
+                                - Subscriptions
+                              description: Whether the role applies to the whole workspace (`Users`) or to rooms (`Subscriptions`).
+                            description:
+                              type: string
+                              description: The role description. Can be an empty string.
+                            mandatory2fa:
+                              type: boolean
+                              description: Whether users with this role must use two-factor authentication. This field is optional and can be missing from older roles.
+                            protected:
+                              type: boolean
+                              description: Whether the role is a protected default role that can't be deleted.
+                            _updatedAt:
+                              type: string
+                              format: date-time
+                              description: The date the role was last updated.
                       remove:
                         type: array
+                        description: Roles deleted after the `updatedSince` date.
                         items:
                           type: object
                           properties:
                             _id:
                               type: string
+                              description: The role ID.
+                            name:
+                              type: string
+                              description: The role name.
+                            scope:
+                              type: string
+                              enum:
+                                - Users
+                                - Subscriptions
                             description:
                               type: string
                             mandatory2fa:
                               type: boolean
                             protected:
                               type: boolean
-                            scope:
+                            __collection__:
                               type: string
+                              description: The collection the role was deleted from. Always `roles`.
+                            _deletedAt:
+                              type: string
+                              format: date-time
+                              description: The date the role was deleted.
+                            _updatedAt:
+                              type: string
+                              format: date-time
+                              description: The date the role was last updated before it was deleted.
                   success:
                     type: boolean
+                    enum:
+                      - true
               examples:
                 Success Example:
                   value:
                     roles:
                       update:
                         - _id: admin
+                          scope: Users
                           description: Admin
                           mandatory2fa: false
+                          name: admin
                           protected: true
-                          scope: Users
-                      remove:
-                        - _id: user
-                          description: User
+                          _updatedAt: '2026-11-07T02:22:08.393Z'
+                        - _id: moderator
+                          scope: Subscriptions
+                          description: Moderator
                           mandatory2fa: false
+                          name: moderator
+                          protected: true
+                          _updatedAt: '2026-11-07T02:22:08.408Z'
+                        - _id: 680fc8d0825d98f164760591
+                          name: TOTP
+                          scope: Users
+                          description: TOTP
+                          protected: false
+                          mandatory2fa: true
+                          _updatedAt: '2025-04-28T18:31:33.121Z'
+                      remove:
+                        - _id: anonymous
+                          __collection__: roles
+                          _deletedAt: '2026-10-27T19:31:44.643Z'
+                          _updatedAt: '2026-10-03T03:00:56.098Z'
+                          description: ''
+                          mandatory2fa: false
+                          name: anonymous
                           protected: true
                           scope: Users
                     success: true
@@ -1064,11 +1122,19 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
               examples:
-                Example 1:
+                Invalid date:
                   value:
                     success: false
-                    error: 'Match error: Missing key ''updatedSince'''
+                    error: 'updatedSince must be a valid date string [error-invalid-param]'
+                    errorType: error-invalid-param
+                Unknown query parameter:
+                  value:
+                    success: false
+                    error: must NOT have additional properties
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
   /api/v1/roles.delete:
