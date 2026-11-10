@@ -1339,7 +1339,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
-        |9.0.0            | Renamed `freeSwitchExtension` to `sipExtension`. Added the `phones` field.       |
+        |9.0.0            | Renamed `freeSwitchExtension` to `sipExtension`. Added the `phones` field. Added the `presenceDisabledByAdmin` parameter.  |
         |0.48.0            | `role` property is now `roles` which is an array of strings for the roles to create the user with.       |
         |0.45.0            | Users created via this now join the default channels.       |
         |0.40.0            | Added       |
@@ -1379,6 +1379,9 @@ paths:
                   description: 'Set the users'' active status.  If the user is deactivated, they can not login. By default, the user is active.'
                   example: true
                   default: true
+                presenceDisabledByAdmin:
+                  type: boolean
+                  description: Optional. Set to `true` to turn the user's status off. The user then always appears offline and cannot change their status. Requires the **Manage user status** setting to be on and the `edit-other-user-info` permission. Otherwise the request fails with `error-action-not-allowed`.
                 nickname:
                   type: string
                   description: 'The nickname for the user. '
@@ -1502,6 +1505,9 @@ paths:
                         type: string
                       requirePasswordChange:
                         type: boolean
+                      presenceDisabledByAdmin:
+                        type: boolean
+                        description: Whether an admin has turned the user's status off. Returned when the request sets `presenceDisabledByAdmin`.
                       settings:
                         type: object
                   success:
@@ -1681,7 +1687,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
-        |9.0.0            | Renamed `freeSwitchExtension` to `sipExtension`. Added the `phones` field.       |
+        |9.0.0            | Renamed `freeSwitchExtension` to `sipExtension`. Added the `phones` field. Added the `presenceDisabledByAdmin` and `statusVisibilityDeniedByAdmin` parameters to `data`.       |
         |7.0.0             | Removed upsert behaviour and stopped allowing `joinDefaultChannels` param|
         |0.48.0            | Renamed to `users.update`       |
         |0.35.0            | Added       |
@@ -1744,6 +1750,17 @@ paths:
                         `user-last-owner` unless `confirmRelinquish` is also
                         `true`. See `confirmRelinquish`.
                       default: true
+                    presenceDisabledByAdmin:
+                      type: boolean
+                      description: Optional. Set to `true` to turn the user's status off, or `false` to turn it back on. A user whose status is off always appears offline and cannot change it. Requires the **Manage user status** setting to be on and the `edit-other-user-info` permission. Otherwise the request fails with `error-action-not-allowed`.
+                      example: true
+                    statusVisibilityDeniedByAdmin:
+                      type: array
+                      description: Optional. Usernames of the people who must not see this user's status. Use usernames, not user IDs. Replaces the current list. Send an empty array to clear it. Usernames that do not match a user are dropped without an error. The user's own username is ignored. Requires the **Manage user status** setting to be on and the `edit-other-user-info` permission. Otherwise the request fails with `error-action-not-allowed`.
+                      items:
+                        type: string
+                      example:
+                        - external.contractor
                     roles:
                       type: array
                       description: The roles the user has been assigned.
@@ -6377,6 +6394,8 @@ paths:
 
         When the Premium **User status hiding** feature is enabled, users who have hidden their status from the caller remain in the response but appear as `offline`, and their detailed status fields are omitted.
 
+        When the **Show status** setting is off, every user in the response has `status` set to `offline`.
+
         **Permissions required**:
         - `view-d-room`: View direct messages.
         - `view-outside-room`: View users outside the caller's rooms when `Apply_permission_view-outside-room` is enabled under **Settings** > **General** > **REST API**.
@@ -6384,6 +6403,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |9.0.0            | Added the `statusManagement` parameter. |
         |8.8.0            | Added status visibility filtering. |
         |6.8.0            | Added       |
       operationId: get-api-v1-users.listByStatus
@@ -6395,7 +6415,7 @@ paths:
         - $ref: '#/components/parameters/count'
         - name: status
           in: query
-          description: Filter users based on their activation status. It can either  be `active` or `deactivated`
+          description: Filter users based on their activation status. It can either be `active` or `deactivated`. Presence values such as `online` or `offline` are not accepted and return a `400` error.
           schema:
             type: string
             example: active
@@ -6429,6 +6449,18 @@ paths:
           in: query
           name: 'inactiveReason[]'
           description: 'Filter the users based on the reason for inactive status. The options are: `idle_too_long`, `deactivated`, and `pending_approval`.'
+        - name: statusManagement
+          in: query
+          required: false
+          description: |-
+            Optional. Filter users by whether an admin manages their status. Use `managed` to return only users whose status an admin has turned off or hidden from specific people, or `default` to return only the other users.
+            Requires the **Manage user status** setting to be on and the `edit-other-user-info` and `view-full-other-user-info` permissions. Otherwise the request fails with `403`.
+          schema:
+            type: string
+            enum:
+              - default
+              - managed
+          example: managed
       responses:
         '200':
           description: OK
@@ -6462,6 +6494,8 @@ paths:
                           items:
                             type: string
                         status:
+                          type: string
+                        statusConnection:
                           type: string
                         active:
                           type: boolean
@@ -6546,8 +6580,169 @@ paths:
                     offset: 0
                     total: 5
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Invalid parameter value:
+                  value:
+                    success: false
+                    error: must be equal to one of the allowed values
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: forbidden
+  /api/v1/users.listStatusVisibility:
+    get:
+      tags:
+        - Users
+      summary: List Users with Admin-Managed Status
+      description: |-
+        <div style="text-align: center; margin: 1rem 0 1rem 0;"><img src="https://raw.githubusercontent.com/RocketChat/Rocket.Chat-Open-API/main/images/premium.svg" alt="Premium tag" style="display: block; margin: auto;"></div>
+
+        Lists the users whose status an admin manages, sorted by username. A user is included when an admin has turned their status off (`presenceDisabledByAdmin`) or hidden it from specific people (`statusVisibilityDeniedByAdmin`). This is the list shown in the **Managed users** tab of **Manage** > **Workspace** > **Status and presence**. A user created or updated with `presenceDisabledByAdmin` set to `true` appears in this list right away.
+
+        The **Manage user status** setting (`Accounts_StatusVisibility_Admin_Enabled`) must be on. When it is off, the endpoint returns an empty list.
+
+        Permissions required: `edit-other-user-info` and `view-full-other-user-info`
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 9.0.0   | Added |
+      operationId: get-api-v1-users.listStatusVisibility
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/count'
+        - name: searchTerm
+          in: query
+          required: false
+          description: Optional. Returns only users whose username or name contains this text (case-insensitive).
+          schema:
+            type: string
+          example: jane
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        username:
+                          type: string
+                        name:
+                          type: string
+                        status:
+                          type: string
+                        statusText:
+                          type: string
+                        presenceDisabledByAdmin:
+                          type: boolean
+                          description: Whether an admin has turned the user's status off. A user whose status is off always appears offline and cannot change it.
+                        statusVisibilityDeniedByAdmin:
+                          type: array
+                          description: Usernames of the people an admin has hidden this user's status from.
+                          items:
+                            type: string
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  total:
+                    type: integer
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    users:
+                      - _id: aB3dE5fG7hJ9kL1mN
+                        username: jane.doe
+                        name: Jane Doe
+                        status: offline
+                        presenceDisabledByAdmin: true
+                        statusVisibilityDeniedByAdmin: []
+                      - _id: pQ2rS4tU6vW8xY0zA
+                        username: john.roe
+                        name: John Roe
+                        status: online
+                        statusText: In a meeting
+                        presenceDisabledByAdmin: false
+                        statusVisibilityDeniedByAdmin:
+                          - external.contractor
+                    count: 2
+                    offset: 0
+                    total: 2
+                    success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Unknown query parameter:
+                  value:
+                    success: false
+                    error: must NOT have additional properties
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: User does not have the permissions required for this action [error-unauthorized]
   /api/v1/saml.parseMetadata:
     post:
       tags:
