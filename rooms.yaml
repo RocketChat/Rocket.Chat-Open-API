@@ -5373,9 +5373,8 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
-        | 9.0.0   | Removed the `fields` parameter. The endpoint ignores it and returns the full room object. Users with the `view-room-administration` permission can read public and private rooms they are not a member of, except rooms managed by ABAC. |
-        | 9.0.0   | Added the `classificationBanner` response field. The ABAC classification banner configuration is no longer exposed as a public setting. |
-        | 9.0.0   | Added the `abacRequiredAttributes` response field, returned while ABAC enforcement across all workspace rooms is on. |
+        | 9.0.0   | Removed the `fields` parameter. Users with `view-room-administration` can read rooms they are not a member of, except ABAC-managed rooms. |
+        | 9.0.0   | Added the `classificationBanner` and `abacRequiredAttributes` response fields. |
         |0.72.0   | Added       |
       operationId: get-api-v1-rooms.info
       parameters:
