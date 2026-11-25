@@ -3069,6 +3069,7 @@ paths:
         ### Change Log
         | Version | Description                         |
         | ------- | ----------------------------------- |
+        | 9.1.0   | Added the `error-invalid-blocks` error. When the **Reject invalid UI blocks** setting is enabled, `blocks` that don't match the UiKit block types or exceed the UiKit size limits fail. |
         | 9.0.0   | Rejected `message` fields that are not part of the request body, such as fields that only the server sets, and `blocks` with an invalid structure. Stripped `md` and `descriptionMd` from `attachments` before saving the message. |
         | 6.8.0   | Added custom fields to messages.    |
         | 6.4.0   | Added the `previewUrls` parameter.  |
@@ -3229,7 +3230,9 @@ paths:
                         * An `appId` contains characters other than letters, digits, `-`, and `_`.
                         * A block is nested more than 10 levels deep.
 
-                        Blocks with an unknown `type` or an unexpected `text` shape are saved as sent.
+                        The server also checks `blocks` against the UiKit block types and size limits, such as at most 50 blocks per message (blocks nested in layout and container blocks count), at most 2 `data_visualization` blocks, and maximum text lengths and option counts. What happens to blocks that fail this check, such as a block with an unknown `type` or an unexpected `text` shape, depends on the **Reject invalid UI blocks** setting in the <a href='https://docs.rocket.chat/docs/general' target='_blank'>General settings</a> (**Apps** section):
+                        * Disabled (default): the message is saved as sent, and the server logs an `Invalid UiKit blocks` warning.
+                        * Enabled: the request fails with the `error-invalid-blocks` error. The `error` text lists the first three problems as `<path>: expected <type>`, and `details.errors` lists up to 10 of them.
                     customFields:
                       type: object
                       description: |-
@@ -3426,6 +3429,16 @@ paths:
                     properties:
                       method:
                         type: string
+                      errors:
+                        type: array
+                        description: Returned with `error-invalid-blocks`. Up to 10 block problems, each with the `path` of the problem and the `expected` type or limit.
+                        items:
+                          type: object
+                          properties:
+                            path:
+                              type: string
+                            expected:
+                              type: string
               examples:
                 Missing Message:
                   value:
@@ -3486,6 +3499,16 @@ paths:
                   value:
                     success: false
                     error: "Invalid blocks: blocks[0].d.a.a.a.a.a.a.a.a.a.a is nested too deeply"
+                # <!-- TODO: Verify on a 9.1.0 workspace with Reject invalid UI blocks enabled that sending 51 section blocks to chat.sendMessage returns exactly this error, errorType and details.errors. Built from reportInvalidBlocks.ts and blockLimits.ts, not from a live response. -->
+                Too Many Blocks (Reject Invalid UI Blocks Enabled):
+                  value:
+                    success: false
+                    error: "Invalid blocks: $input: expected array of at most 50 blocks, counting those nested in layout and container blocks [error-invalid-blocks]"
+                    errorType: error-invalid-blocks
+                    details:
+                      errors:
+                        - path: $input
+                          expected: array of at most 50 blocks, counting those nested in layout and container blocks
                 Message Not an Object:
                   value:
                     success: false

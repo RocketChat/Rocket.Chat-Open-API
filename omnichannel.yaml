@@ -632,6 +632,11 @@ paths:
 
         Register a guest user as a new omnichannel contact.
         Permission required: `view-l-room`
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 9.1.0   | Changed the request validation error messages. Invalid requests return `errorType: error-invalid-params`. |
       operationId: post-api-v1-omnichannel-contact
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -702,11 +707,19 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
               examples:
                 Example 1:
                   value:
                     success: false
-                    error: 'Match error: Missing key ''token'''
+                    error: 'must have required property ''token'' [error-invalid-params]'
+                    errorType: error-invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: 'must NOT have additional properties [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -726,6 +739,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 9.1.0   | Changed the request validation error messages. Invalid requests return `errorType: error-invalid-params`. |
         | 8.9.0   | Removed the visitor `token` from the response. |
       operationId: get-api-v1-omnichannel-contact
       parameters:
@@ -795,6 +809,25 @@ paths:
                       visitorEmails:
                         - address: email@rocket.chat
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''contactId'' [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -823,6 +856,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 9.1.0   | Changed the request validation error messages. Query parameters other than `email`, `phone`, and `custom` return a `400` error with `errorType: error-invalid-params`. |
         | 8.9.0   | Removed the visitor `token` from the response. |
       operationId: get-api-v1-contact.search
       parameters:
@@ -921,11 +955,18 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
               examples:
                 Example 1:
                   value:
                     success: false
                     error: error-invalid-params
+                Unknown Parameter:
+                  value:
+                    success: false
+                    error: 'must NOT have additional properties [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -3071,7 +3112,13 @@ paths:
   /api/v1/livechat/room:
     get:
       summary: Get or Create Omnichannel Rooms
-      description: 'Get the data of an existing room of a visitor. If a room doesn''t exist for the visitor, a new room is created.'
+      description: |-
+        Get the data of an existing room of a visitor. If a room doesn't exist for the visitor, a new room is created.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 9.1.0   | Added schema validation for query parameters. The `sla` and `priority` parameters are accepted in every edition, and query parameters other than `token`, `rid`, `agentId`, `sla`, and `priority` return a `400` error. Changed the validation error messages. |
       operationId: get-api-v1-livechat-room
       parameters:
         - name: token
@@ -3093,6 +3140,18 @@ paths:
           schema:
             type: string
           example: XycfA5CetCPuEjqxw
+        - name: sla
+          in: query
+          description: The ID or name of the SLA policy to apply when a new room is created. SLA policies are applied only on Premium workspaces. If no SLA policy matches, the request fails with `error-invalid-sla`.
+          schema:
+            type: string
+          example: Urgent
+        - name: priority
+          in: query
+          description: The ID or name of the priority to apply to the inquiry when a new room is created. Priorities are applied only on Premium workspaces. If no priority matches, the request fails with `error-invalid-priority`.
+          schema:
+            type: string
+          example: High
       responses:
         '200':
           description: OK
@@ -3345,11 +3404,19 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
               examples:
                 Example 1:
                   value:
                     success: false
-                    error: 'Match error: Missing key ''token'''
+                    error: 'must have required property ''token'' [error-invalid-params]'
+                    errorType: error-invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: 'must NOT have additional properties [error-invalid-params]'
+                    errorType: error-invalid-params
       tags:
         - Omnichannel Rooms
   /api/v1/livechat/room.close:
@@ -4754,6 +4821,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |9.1.0           | Optional `department` fields no longer accept `null`. Additional `department` fields must be a string, integer, or boolean. The `count` and `order` fields in `agents` must be integers. |
         |1.0.0           | New fields for department updated |
         |0.42.0          | Added       |
       operationId: post-api-v1-livechat-department
@@ -5030,6 +5098,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |9.1.0             | Added schema validation for the request body. The `department` object must include all required fields, `agents[].agentId` is required, `agents[].count` and `agents[].order` must be integers, and `departmentUnit` accepts only `_id`. Changed the validation error messages. |
         |0.42.0            | Added       |
       operationId: put-api-v1-livechat-department-_id
       parameters:
@@ -5082,14 +5151,21 @@ paths:
                   type: array
                   items:
                     type: object
+                    required:
+                      - agentId
                     properties:
                       agentId:
                         type: string
                         description: The agent ID that you want to assign to the department.
+                      username:
+                        type: string
+                        description: The agent's username.
                       count:
-                        type: string
+                        type: integer
+                        description: The number of chats assigned to the agent in the department.
                       order:
-                        type: string
+                        type: integer
+                        description: Determines agent priority when multiple agents have the same chat count. Agents with lower order values are assigned chats before others.
                 departmentUnit:
                   type: object
                   description: |-
@@ -5099,7 +5175,7 @@ paths:
                     - Permission required: `manage-livechat-departments`
                     - If the user making the request is a [monitor](https://docs.rocket.chat/docs/monitors), they must be a supervisor of the specified unit.
                     - If the user is not a monitor (such as an admin or [manager](https://docs.rocket.chat/docs/managers)), any unit can be associated to the department.
-                    - Providing an empty object `({})`, undefined `({ _id: undefined})`, or null `({ _id: null})` for this parameter removes the department from the associated unit.
+                    - Providing an empty object (`{}`) or `null` for this parameter removes the department from the associated unit. If you include `_id`, it must be a string.
                   properties:
                     _id:
                       type: string
@@ -5209,6 +5285,11 @@ paths:
                   value:
                     success: false
                     error: 'must have required property ''name'' [error-invalid-params]'
+                    errorType: error-invalid-params
+                Example 3:
+                  value:
+                    success: false
+                    error: 'must NOT have additional properties [error-invalid-params]'
                     errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
@@ -11867,11 +11948,19 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
               examples:
                 Example 1:
                   value:
                     success: false
-                    error: 'Match error: Expected object, got undefined'
+                    error: 'must have required property ''unitData'' [error-invalid-params]'
+                    errorType: error-invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: 'must NOT have additional properties [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -11885,6 +11974,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
+        |9.1.0         | Added schema validation for the request body. Unknown fields at any level return a `400` error, and `unitData.name` and `unitData.visibility` cannot be empty. Changed the validation error messages. |
         |4.2.0         | Added       |
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -11913,6 +12003,22 @@ paths:
                     visibility:
                       type: string
                       description: 'The visibility of the unit. For example, `public` or `private`.'
+                    enabled:
+                      type: boolean
+                      description: Whether the unit is enabled.
+                      example: true
+                    description:
+                      type: string
+                      description: A description of the unit.
+                      example: Units for the sales team
+                    email:
+                      type: string
+                      description: The email address associated with the unit.
+                      example: sales-unit@example.com
+                    showOnOfflineForm:
+                      type: boolean
+                      description: Whether the unit is shown on the offline form.
+                      example: false
                 unitMonitors:
                   type: array
                   description: The object containing the unit monitors information.
@@ -12116,6 +12222,30 @@ paths:
                     _updatedAt: '2021-12-06T14:40:59.478Z'
                     _id: o5zNtKy7BcTMgyXtm
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'must have required property ''unitData'' [error-invalid-params]'
+                    errorType: error-invalid-params
+                Example 2:
+                  value:
+                    success: false
+                    error: 'must NOT have additional properties [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -12129,6 +12259,7 @@ paths:
         ### Changelog
         | Version      | Description |
         | ------------ | ------------|
+        |9.1.0         | Added schema validation for the request body. Unknown fields at any level return a `400` error, and `unitData.name` and `unitData.visibility` cannot be empty. Changed the validation error messages. |
         |4.2.0         | Added       |
       parameters:
         - $ref: '#/components/parameters/AuthToken'
@@ -12152,6 +12283,22 @@ paths:
                     visibility:
                       type: string
                       description: 'The visibility of the unit. For example, `public` or `private`.'
+                    enabled:
+                      type: boolean
+                      description: Whether the unit is enabled.
+                      example: true
+                    description:
+                      type: string
+                      description: A description of the unit.
+                      example: Units for the sales team
+                    email:
+                      type: string
+                      description: The email address associated with the unit.
+                      example: sales-unit@example.com
+                    showOnOfflineForm:
+                      type: boolean
+                      description: Whether the unit is shown on the offline form.
+                      example: false
                 unitMonitors:
                   type: array
                   description: The object containing the unit monitors information.
@@ -13372,15 +13519,19 @@ paths:
                     type: boolean
                   error:
                     type: string
+                  errorType:
+                    type: string
               examples:
                 Example 1:
                   value:
                     success: false
-                    error: 'Match error: Missing key ''visitor'''
+                    error: 'must have required property ''visitor'' [error-invalid-params]'
+                    errorType: error-invalid-params
                 Example 2:
                   value:
                     success: false
-                    error: 'Match error: Missing key ''token'' in field visitor'
+                    error: 'must have required property ''token'' [error-invalid-params]'
+                    errorType: error-invalid-params
       description: |-
         Register a visitor's information before creating a new Omnichannel room. You can set basic information such as name, phone, custom fields, and the initial department.
 
@@ -13389,6 +13540,7 @@ paths:
         ### Changelog
         | Version | Description |
         | ------- | ----------- |
+        | 9.1.0   | Changed the request validation error messages. Invalid requests return `errorType: error-invalid-params`. |
         | 8.4.0   | Added `externalIds` field to the visitor response. |
       requestBody:
         content:

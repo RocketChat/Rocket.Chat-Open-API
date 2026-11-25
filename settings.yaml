@@ -363,13 +363,16 @@ paths:
       summary: Update Settings in Bulk
       operationId: post-api-v1-settings
       description: |-
-        Updates multiple private workspace settings in a single request. 
+        Updates multiple private workspace settings in a single request.
+
+        The request is validated as a whole. If any value fails the setting's validation rules, for example an invalid cron expression in a cron-based setting, the endpoint returns a `400` error with `error-setting-validation-failed` and saves none of the values.
 
         Permission required: `edit-privileged-setting`
 
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |9.1.0            | Added cron expression validation for cron-based settings. Invalid expressions return `error-setting-validation-failed`. |
         |8.6.0            | Added       |
       tags:
         - Settings
@@ -431,6 +434,11 @@ paths:
                     success: false
                     error: 'must have required property ''settings'' [error-invalid-params]'
                     errorType: error-invalid-params
+                Invalid Cron Expression:
+                  value:
+                    success: false
+                    error: RetentionPolicy_Advanced_Precision_Cron_Invalid
+                    errorType: error-setting-validation-failed
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -649,11 +657,32 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/trueSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Invalid Cron Expression:
+                  value:
+                    success: false
+                    error: LDAP_Background_Sync_Avatars_Interval_Invalid
+                    errorType: error-setting-validation-failed
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: post-api-v1-settings-_id
       description: |-
         Permission required: `edit-privileged-setting`
+
+        If the value fails the setting's validation rules, the endpoint returns a `400` error with `error-setting-validation-failed` and does not save the value. The `error` field contains the setting `_id` followed by `_Invalid`. Cron-based settings accept only valid five-field cron expressions, such as `0 0 * * *`. These settings include `LDAP_Background_Sync_Avatars_Interval`, `LDAP_Sync_AutoLogout_Interval`, `LDAP_Background_Sync_ABAC_Attributes_Interval`, `ABAC_Virtru_Sync_Interval`, `Message_Read_Receipt_Archive_Cron`, and `RetentionPolicy_Advanced_Precision_Cron`.
 
         The `_id` of a setting is the first argument of the `RocketChat.settings.add` method used in `Rocket.Chat/packages/rocketchat-lib/server/startup/settings.js` (among other files).
 
@@ -678,6 +707,7 @@ paths:
           ### Changelog
           | Version      | Description |
           | ---------------- | ------------|
+          |9.1.0            | Added cron expression validation for cron-based settings. Invalid expressions return `error-setting-validation-failed`. |
           |0.65.0            | Added option to set a color and trigger an action       |
           |0.42.0            | Added       |
       parameters:

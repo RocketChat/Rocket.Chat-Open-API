@@ -2888,6 +2888,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |9.1.0            | Added schema validation for query parameters. Requests with unknown query parameters return a `400` error, and validation error messages changed. |
         |3.1.0            | Added       |
       operationId: get-api-v1-engagement-dashboard-users-new-users
       parameters:
@@ -2970,6 +2971,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |9.1.0            | Added schema validation for query parameters. Requests with unknown query parameters return a `400` error, and validation error messages changed. |
         |3.1.0            | Added       |
       operationId: get-api-v1-engagement-dashboard-users-active-users
       parameters:
@@ -3061,6 +3063,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |9.1.0            | Added schema validation for query parameters. Requests with unknown query parameters return a `400` error, and validation error messages changed. |
         |3.1.0            | Added       |
       operationId: get-api-v1-engagement-dashboard-users-users-by-time-of-the-day-in-a-week
       parameters:
@@ -3174,6 +3177,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |9.1.0            | Added schema validation for query parameters. Requests with unknown query parameters return a `400` error, and validation error messages changed. |
         |3.1.0            | Added       |
       operationId: get-api-v1-engagement-dashboard-users-chat-busier-hourly-data
       parameters:
@@ -3249,6 +3253,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |9.1.0            | Added schema validation for query parameters. Requests with unknown query parameters return a `400` error, and validation error messages changed. |
         |3.1.0            | Added       |
       operationId: get-api-v1-engagement-dashboard-users-chat-busier-weekly-data
       parameters:
@@ -3316,6 +3321,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |9.1.0            | Added schema validation for query parameters. Requests with unknown query parameters return a `400` error, and validation error messages changed. |
         |3.1.0            | Added       |
       operationId: get-api-v1-engagement-dashboard-messages-messages-sent
       parameters:
@@ -3392,6 +3398,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |9.1.0            | Added schema validation for query parameters. Requests with unknown query parameters return a `400` error, and validation error messages changed. |
         |3.1.0            | Added       |
       operationId: get-api-v1-engagement-dashboard-messages-origin
       parameters:
@@ -3454,6 +3461,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |9.1.0            | Added schema validation for query parameters. Requests with unknown query parameters return a `400` error, and validation error messages changed. |
         |3.1.0            | Added       |
       operationId: get-api-v1-engagement-dashboard-messages-top-five-popular-channels
       parameters:
@@ -3541,6 +3549,7 @@ paths:
         ### Changelog
         | Version      | Description | 
         | ---------------- | ------------|
+        |9.1.0            | Added schema validation for query parameters. Requests with unknown query parameters return a `400` error, and validation error messages changed. |
         |3.1.0            | Added       |
       operationId: get-api-v1-engagement-dashboard-channels-list
       parameters:
@@ -3625,7 +3634,7 @@ components:
     start:
       name: start
       in: query
-      description: The start date.
+      description: The start date in ISO 8601 format with milliseconds and the UTC time zone (`YYYY-MM-DDTHH:mm:ss.sssZ`), as returned by `Date.prototype.toISOString()`.
       required: true
       schema:
         type: string
@@ -3633,7 +3642,7 @@ components:
     end:
       name: end
       in: query
-      description: The end date.
+      description: The end date in ISO 8601 format with milliseconds and the UTC time zone (`YYYY-MM-DDTHH:mm:ss.sssZ`), as returned by `Date.prototype.toISOString()`.
       required: true
       schema:
         type: string
@@ -3723,15 +3732,24 @@ components:
                 type: boolean
               error:
                 type: string
+              errorType:
+                type: string
           examples:
             Missing key:
               value:
                 success: false
-                error: 'Match error: Missing key ''start'''
-            Example 2:
+                error: 'must have required property ''start'''
+                errorType: error-invalid-params
+            Invalid date format:
               value:
                 success: false
-                error: 'Match error: Failed Match.Where validation in field start'
+                error: 'must match format "date-time"'
+                errorType: error-invalid-params
+            Unknown parameter:
+              value:
+                success: false
+                error: must NOT have additional properties
+                errorType: error-invalid-params
     trueSuccess:
       description: OK
       content:

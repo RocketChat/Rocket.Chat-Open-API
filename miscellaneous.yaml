@@ -2039,8 +2039,18 @@ paths:
                     errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
+      # <!-- TODO: In 9.1.0 calendar-events.list computes the start of `date` from the caller's user utcOffset (startOfDayAt in packages/models CalendarEvent.findByUserIdAndDate) and ends the window 24 hours after `date`. Verify on writing-demo whether the `date` parameter description needs to mention the user's time zone. -->
       operationId: get-api-v1-calendar-events.list
-      description: Use this endpoint to view the list of your calendar events for a specific date.
+      description: |-
+        Use this endpoint to view the list of your calendar events for a specific date.
+
+        When the <a href='https://docs.rocket.chat/docs/outlook-calendar' target='_blank'>Microsoft Exchange</a> integration runs in server-to-server mode, it imports your Outlook events with `source` set to `outlook`. The response includes these events only if the workspace license includes the `outlook-calendar` module.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 9.1.0   | Excluded events imported by the Microsoft Exchange server-to-server sync when the workspace license does not include the `outlook-calendar` module. Imported events include the `source` and `seriesMasterId` fields. |
+        | 6.3.0   | Added |
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
@@ -2091,6 +2101,12 @@ paths:
                         type: boolean
                       _updatedAt:
                         type: string
+                      source:
+                        type: string
+                        description: The integration that owns the event. Set to `outlook` for events imported by the Microsoft Exchange server-to-server sync. Not present on events created in Rocket.Chat or imported by the legacy desktop integration.
+                      seriesMasterId:
+                        type: string
+                        description: The external ID of the recurring series that the event belongs to. Set on occurrences of recurring events imported by the Microsoft Exchange server-to-server sync.
                   success:
                     type: boolean
               examples:
@@ -2128,10 +2144,23 @@ paths:
                     success: false
                     error: 'must have required property ''id'' [error-invalid-params]'
                     errorType: error-invalid-params
+                Event not available:
+                  value:
+                    success: false
         '401':
           $ref: '#/components/responses/authorizationError'
+      # <!-- TODO: Verify on writing-demo that the 'Event not available' 400 body for an Outlook-imported event without the outlook-calendar license is exactly {success: false} with no error field (API.v1.failure() called with no arguments). The same body is returned when the event belongs to another user. -->
       operationId: get-api-v1-calendar-events.info
-      description: Use this endpoint to get information about a specific calendar event.
+      description: |-
+        Use this endpoint to get information about a specific calendar event.
+
+        If the event was imported by the <a href='https://docs.rocket.chat/docs/outlook-calendar' target='_blank'>Microsoft Exchange</a> server-to-server sync (`source` is `outlook`) and the workspace license does not include the `outlook-calendar` module, the endpoint returns a `400` error.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 9.1.0   | Added the `source` and `seriesMasterId` response fields. Events imported by the Microsoft Exchange server-to-server sync return an error when the workspace license does not include the `outlook-calendar` module. |
+        | 6.3.0   | Added |
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
@@ -2165,10 +2194,37 @@ paths:
                   value:
                     id: 690b08674e7e8bcf6985b2d5
                     success: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Managed by server sync:
+                  value:
+                    success: false
+                    error: error-calendar-managed-by-server-sync
         '401':
           $ref: '#/components/responses/authorizationError'
+      # <!-- TODO: Code checks only Exchange_Mode === 'server' (isServerManaged), not Outlook_Calendar_Enabled or the outlook-calendar license. Confirm with SME whether error-calendar-managed-by-server-sync should be described as also occurring when the integration is disabled but Integration mode is still set to server-to-server. Same applies to calendar-events.import. -->
       operationId: post-api-v1-calendar-events.create
-      description: Create a new calendar event.
+      description: |-
+        Create a new calendar event.
+
+        When the <a href='https://docs.rocket.chat/docs/outlook-calendar' target='_blank'>Microsoft Exchange</a> integration mode is set to server-to-server, the workspace syncs Outlook events on the server. In that mode, requests that include `externalId` fail with `error-calendar-managed-by-server-sync`. Requests without `externalId` still create a Rocket.Chat event.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 9.1.0   | Added the `error-calendar-managed-by-server-sync` error for requests that include `externalId` while the Microsoft Exchange integration runs in server-to-server mode. |
+        | 7.6.0   | Added `busy` parameter. |
+        | 6.3.0   | Added |
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
@@ -2243,10 +2299,24 @@ paths:
                     success: false
                     error: 'must have required property ''eventId'' [error-invalid-params]'
                     errorType: error-invalid-params
+                Owned by Outlook sync:
+                  value:
+                    success: false
+                    error: error-calendar-event-owned-by-outlook-sync
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: post-api-v1-calendar-events.update
-      description: Update an existing calendar event.
+      description: |-
+        Update an existing calendar event.
+
+        You can't update events imported by the <a href='https://docs.rocket.chat/docs/outlook-calendar' target='_blank'>Microsoft Exchange</a> server-to-server sync (`source` is `outlook`). The request fails with `error-calendar-event-owned-by-outlook-sync`. Change these events in Outlook instead.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 9.1.0   | Added the `error-calendar-event-owned-by-outlook-sync` error for events imported by the Microsoft Exchange server-to-server sync. |
+        | 7.6.0   | Added `busy` parameter. |
+        | 6.3.0   | Added |
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
@@ -2316,10 +2386,23 @@ paths:
                   value:
                     success: false
                     error: invalid-calendar-event
+                Owned by Outlook sync:
+                  value:
+                    success: false
+                    error: error-calendar-event-owned-by-outlook-sync
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: post-api-v1-calendar-events.delete
-      description: Delete a specific calendar event.
+      description: |-
+        Delete a specific calendar event.
+
+        You can't delete events imported by the <a href='https://docs.rocket.chat/docs/outlook-calendar' target='_blank'>Microsoft Exchange</a> server-to-server sync (`source` is `outlook`). The request fails with `error-calendar-event-owned-by-outlook-sync`. Delete these events in Outlook instead.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 9.1.0   | Added the `error-calendar-event-owned-by-outlook-sync` error for events imported by the Microsoft Exchange server-to-server sync. |
+        | 6.3.0   | Added |
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
@@ -2381,10 +2464,24 @@ paths:
                     success: false
                     error: 'must have required property ''externalId'' [error-invalid-params]'
                     errorType: error-invalid-params
+                Managed by server sync:
+                  value:
+                    success: false
+                    error: error-calendar-managed-by-server-sync
         '401':
           $ref: '#/components/responses/authorizationError'
       operationId: post-api-v1-calendar-events.import
-      description: Use this endpoint to import an exteral calendar event.
+      description: |-
+        Use this endpoint to import an exteral calendar event.
+
+        When the <a href='https://docs.rocket.chat/docs/outlook-calendar' target='_blank'>Microsoft Exchange</a> integration mode is set to server-to-server, the workspace syncs Outlook events on the server and this endpoint fails with `error-calendar-managed-by-server-sync`.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 9.1.0   | Added the `error-calendar-managed-by-server-sync` error. The endpoint rejects all requests while the Microsoft Exchange integration runs in server-to-server mode. |
+        | 7.6.0   | Added `busy` parameter. |
+        | 6.3.0   | Added |
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
         - $ref: '#/components/parameters/UserId'
