@@ -3499,7 +3499,6 @@ paths:
                   value:
                     success: false
                     error: "Invalid blocks: blocks[0].d.a.a.a.a.a.a.a.a.a.a is nested too deeply"
-                # <!-- TODO: Verify on a 9.1.0 workspace with Reject invalid UI blocks enabled that sending 51 section blocks to chat.sendMessage returns exactly this error, errorType and details.errors. Built from reportInvalidBlocks.ts and blockLimits.ts, not from a live response. -->
                 Too Many Blocks (Reject Invalid UI Blocks Enabled):
                   value:
                     success: false
