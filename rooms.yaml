@@ -5067,9 +5067,9 @@ paths:
         ### Changelog
         | Version | Description            |
         | ------- | ---------------------- |
-        | 9.1.0   | Added `ignoreDiscussionOrigin` parameter. |
-        | 0.64.0  | Added                  |
+        | 9.1.0   | Added the `ignoreDiscussionOrigin` parameter to keep the message each discussion started from, and its files. |
         | 0.67.0  | Added fields `limit`, `excludePinned`, `filesOnly` and `users` |
+        | 0.64.0  | Added                  |
       operationId: get-api-v1-rooms.cleanHistory
       parameters:
         - $ref: '#/components/parameters/Auth-Token'
@@ -5108,10 +5108,11 @@ paths:
                   description: 'The amount of messages to prune. By default, the value is 0 (all).'
                 ignoreDiscussion:
                   type: boolean
-                  description: 'Determines if messages from discussions should be pruned. By default, the value is true.'
+                  description: 'Whether to keep the discussions in the room and their messages. If `true`, the discussions and their messages are kept. If `false`, they are deleted. By default, the value is `false`.'
+                  default: false
                 ignoreDiscussionOrigin:
                   type: boolean
-                  description: 'Whether to keep the message that each discussion in the room started from, and its files. It only applies when `ignoreDiscussion` is `true`, and only to discussions started on version 9.1.0 or later. By default, the value is false.'
+                  description: 'Whether to keep the message each discussion in the room started from, and its files. Applies only when `ignoreDiscussion` is `true`. Discussions created before the workspace was updated to support this parameter do not keep their origin message. By default, the value is `false`.'
                   default: false
                   example: true
                 ignoreThreads:
