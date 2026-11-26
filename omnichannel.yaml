@@ -5080,7 +5080,6 @@ paths:
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
-        |9.1.0             | Changed the validation error messages and added a `400` error for unknown top-level fields in the request body. |
         |0.42.0            | Added       |
       operationId: put-api-v1-livechat-department-_id
       parameters:
@@ -5260,11 +5259,6 @@ paths:
                   value:
                     success: false
                     error: 'must have required property ''name'' [error-invalid-params]'
-                    errorType: error-invalid-params
-                Example 3:
-                  value:
-                    success: false
-                    error: 'must NOT have additional properties [error-invalid-params]'
                     errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
