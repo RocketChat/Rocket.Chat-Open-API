@@ -714,6 +714,7 @@ paths:
                   value:
                     success: false
                     error: 'must NOT have additional properties [error-invalid-params]'
+                    errorType: error-invalid-params
         '401':
           $ref: '#/components/responses/authorizationError'
         '403':
@@ -3398,6 +3399,7 @@ paths:
                   value:
                     success: false
                     error: 'must NOT have additional properties [error-invalid-params]'
+                    errorType: error-invalid-params
       tags:
         - Omnichannel Rooms
   /api/v1/livechat/room.close:
