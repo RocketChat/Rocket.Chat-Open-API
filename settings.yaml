@@ -365,7 +365,7 @@ paths:
       description: |-
         Updates multiple private workspace settings in a single request.
 
-        The request is validated as a whole. If any value fails the setting's validation rules, for example an invalid cron expression in a cron-based setting, the endpoint returns a `400` error with `error-setting-validation-failed` and saves none of the values.
+        If a value fails the setting's validation rules, for example an invalid cron expression in a cron-based setting, the endpoint returns a `400` error with `error-setting-validation-failed` and does not save that value.
 
         Permission required: `edit-privileged-setting`
 
@@ -437,7 +437,7 @@ paths:
                 Invalid Cron Expression:
                   value:
                     success: false
-                    error: RetentionPolicy_Advanced_Precision_Cron_Invalid
+                    error: LDAP_Background_Sync_Avatars_Interval_Invalid
                     errorType: error-setting-validation-failed
         '401':
           $ref: '#/components/responses/authorizationError'
