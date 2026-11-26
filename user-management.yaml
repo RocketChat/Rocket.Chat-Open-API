@@ -1956,7 +1956,7 @@ paths:
         * To change your email or password, you must confirm it using TOTP. If you don't have 2FA enabled in your account (token code or email), TOTP will require the current password method. Note that if 2FA is not enabled in the workspace, the 2FA headers are not required.
         * If you add the `currentPassword` encrypted in SHA256 to the request body, the request won't require TOTP again.
 
-        Requests are limited to 5 per minute per client IP address. Users with the `api-bypass-rate-limit` permission are not rate limited.
+        Requests are limited to 5 per minute. Users with the `api-bypass-rate-limit` permission are not rate limited.
 
         ### Changelog
         | Version      | Description |
