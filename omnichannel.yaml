@@ -9374,7 +9374,7 @@ paths:
         '403':
           $ref: '#/components/responses/permissionError'
 
-  /api/v1/livechat/livechat/analytics/dashboards/charts-data:
+  /api/v1/livechat/analytics/dashboards/charts-data:
     get:
       summary: Get Analytics Chart Data
       tags:
@@ -9440,7 +9440,7 @@ paths:
                     success: false
                     error: 'User does not have the permissions required for this action'
                     errorType: error-forbidden
-      operationId: get-api-v1-livechat-livechat-analytics-dashboards-charts-data
+      operationId: get-api-v1-livechat-analytics-dashboards-charts-data
       description: |-
        View the Omnichannel analytics chart data by chart name within a specific duration. On the workspace UI, you can access this feature by going to `Manage` > `Omnichannel` > `Analytics`.
        
