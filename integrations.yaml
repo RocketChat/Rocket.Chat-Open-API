@@ -1178,6 +1178,129 @@ paths:
                   value:
                     success: false
                     error: No integration found.
+  /hooks/{integrationId}/{token}:
+    parameters:
+      - name: integrationId
+        in: path
+        description: The incoming integration ID.
+        required: true
+        schema:
+          type: string
+        example: SJwYdrorJ5upc4SWT
+      - name: token
+        in: path
+        description: The webhook token for the incoming integration.
+        required: true
+        schema:
+          type: string
+        example: mEbn7LYASuwCbX9cRGHYzwFQBEFxNxTveZGxnhv7GW6X2unL
+    post:
+      tags:
+        - Incoming Webhooks
+      summary: Execute Incoming Webhook
+      description: |-
+        Send data to an incoming webhook created under **Manage** → **Workspace** → **Integrations**. For setup details, see <a href='https://docs.rocket.chat/docs/integrations' target='_blank'>Integrations</a>.
+
+        Authentication uses the integration ID and token in the URL. User auth headers are not required.
+
+        Requests are limited by the workspace API rate limiter (**Manage** → **Workspace** → **Settings** → **Rate Limiter** → **API Rate Limiter**). The limit is applied to the webhook path. The same webhook shares one rate-limit budget across different query strings and hosts.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 9.1.0   | Rate limit keyed by webhook path only, ignoring query string and host. |
+      operationId: post-hooks-integrationId-token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+                  description: The message text to post.
+              required:
+                - text
+            examples:
+              Example 1:
+                value:
+                  text: Example message
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    success: true
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'Error, too many requests. Please slow down. You must wait 28 seconds before trying this endpoint again. [error-too-many-requests]'
+    get:
+      tags:
+        - Incoming Webhooks
+      summary: Execute Incoming Webhook
+      description: |-
+        Send data to an incoming webhook created under **Manage** → **Workspace** → **Integrations**. For setup details, see <a href='https://docs.rocket.chat/docs/integrations' target='_blank'>Integrations</a>.
+
+        Authentication uses the integration ID and token in the URL. User auth headers are not required.
+
+        Requests are limited by the workspace API rate limiter (**Manage** → **Workspace** → **Settings** → **Rate Limiter** → **API Rate Limiter**). The limit is applied to the webhook path. The same webhook shares one rate-limit budget across different query strings and hosts.
+
+        ### Changelog
+        | Version | Description |
+        | ------- | ----------- |
+        | 9.1.0   | Rate limit keyed by webhook path only, ignoring query string and host. |
+      operationId: get-hooks-integrationId-token
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              examples:
+                Example 1:
+                  value:
+                    success: true
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+              examples:
+                Example 1:
+                  value:
+                    success: false
+                    error: 'Error, too many requests. Please slow down. You must wait 28 seconds before trying this endpoint again. [error-too-many-requests]'
   /api/v1/oauth-apps.create:
     post:
       tags:
@@ -1677,6 +1800,7 @@ paths:
                       method: deleteOAuthApp
 tags:
   - name: Integration
+  - name: Incoming Webhooks
   - name: OAuth Apps
 components:
   parameters:
