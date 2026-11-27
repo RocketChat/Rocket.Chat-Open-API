@@ -1956,9 +1956,12 @@ paths:
         * To change your email or password, you must confirm it using TOTP. If you don't have 2FA enabled in your account (token code or email), TOTP will require the current password method. Note that if 2FA is not enabled in the workspace, the 2FA headers are not required.
         * If you add the `currentPassword` encrypted in SHA256 to the request body, the request won't require TOTP again.
 
+        Requests are limited to 5 per minute per client IP address. Users with the `api-bypass-rate-limit` permission are not rate limited.
+
         ### Changelog
         | Version      | Description |
         | ---------------- | ------------|
+        |9.1.0            | Rate limit raised to 5/min. `newPassword` limited to 256 characters. |
         |9.0.0            | Added the `phones` field.       |
         |6.4.0            | Add `bio` and `statusType` parameters.       |
         |0.62.2            | Added       |
@@ -1973,20 +1976,6 @@ paths:
           application/json:
             schema:
               type: object
-              x-examples:
-                Example 1:
-                  data:
-                    email: test@test.com
-                    newPassword: testbb
-                    currentPassword: >-
-                      aa856615052ee58e557a2945d53bc90a228915e7d7687ea250f3b4b1581d6e53
-                    nickname: baby girl
-                    bio: Auspicious baby
-                    username: roxie
-                    name: test test
-                    statusType: offline
-                    statusText: On a vacation
-                  customFields: {}
               properties:
                 data:
                   type: object
@@ -1999,8 +1988,9 @@ paths:
                       description: Email ID of the user.
                     newPassword:
                       type: string
+                      maxLength: 256
                       example: passw0rd
-                      description: The new password of the user.
+                      description: The new password of the user. Up to 256 characters.
                     currentPassword:
                       type: string
                       description: The password for the user encrypted in SHA256.
