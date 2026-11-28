@@ -3565,6 +3565,113 @@ paths:
         |1.1.0            | Added       |
       tags:
         - Users
+  /api/v1/presence.getConnections:
+    get:
+      summary: Get Presence Connections
+      operationId: get-api-v1-presence.getConnections
+      tags:
+        - Users
+      description: |-
+        Returns the number of user connections currently tracked by the presence service and the maximum number of connections allowed before presence broadcasting is turned off. Permission required: `manage-user-status`
+
+        When the number of connections exceeds `max`, Rocket.Chat turns off presence broadcasting and sets the `Presence_broadcast_disabled` setting to `true`. Workspaces with a license that includes the unlimited presence or scalability module are not affected by this limit. Use the Enable Presence Broadcast endpoint to turn broadcasting back on.
+
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |6.0.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  current:
+                    type: number
+                    description: The number of connections currently tracked by the presence service.
+                  max:
+                    type: number
+                    description: The maximum number of connections allowed before presence broadcasting is turned off.
+                  success:
+                    type: boolean
+              examples:
+                Success Example:
+                  value:
+                    current: 12
+                    max: 200
+                    success: true
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: 'User does not have the permissions required for this action'
+                    errorType: error-forbidden
+  /api/v1/presence.enableBroadcast:
+    post:
+      summary: Enable Presence Broadcast
+      operationId: post-api-v1-presence.enableBroadcast
+      tags:
+        - Users
+      description: |-
+        Turns presence broadcasting back on after it was turned off because the number of connections exceeded the limit. This also sets the `Presence_broadcast_disabled` setting to `false`. Permission required: `manage-user-status`
+
+        Without a license that includes the unlimited presence or scalability module, the request fails if the workspace currently has more than 200 connections.
+
+        This endpoint requires two-factor authentication. See the <a href="https://developer.rocket.chat/apidocs/introduction-to-two-factor-authentication" target="_blank">Introduction to Two-Factor Authentication</a> document for details.
+
+        ### Changelog
+        | Version      | Description |
+        | ---------------- | ------------|
+        |6.0.0            | Added       |
+      parameters:
+        - $ref: '#/components/parameters/Auth-Token'
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/x-2fa-code'
+        - $ref: '#/components/parameters/x-2fa-method'
+      responses:
+        '200':
+          $ref: '#/components/responses/trueSuccess'
+        '401':
+          $ref: '#/components/responses/authorizationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  errorType:
+                    type: string
+              examples:
+                Permission Error:
+                  value:
+                    success: false
+                    error: 'User does not have the permissions required for this action'
+                    errorType: error-forbidden
   /api/v1/users.delete:
     post:
       tags:
